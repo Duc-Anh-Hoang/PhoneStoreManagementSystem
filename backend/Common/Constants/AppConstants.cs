@@ -1,0 +1,29 @@
+namespace PhoneStoreAPI.Common.Constants;
+
+public static class AppConstants
+{
+    public static class Roles
+    {
+        public const string Admin = "admin";
+        public const string Manager = "manager";
+        public const string Sales = "sales";
+        public const string Cashier = "cashier";
+        public const string Stock = "stock";
+        public const string Tech = "tech";
+    }
+
+    public static class OrderStatus
+    {
+        public const string ChoXacNhan = "cho_xac_nhan";
+        public const string DaXacNhan = "da_xac_nhan";
+        public const string DangGiao = "dang_giao";
+        public const string HoanThanh = "hoan_thanh";
+        public const string DaHuy = "da_huy";
+    }
+
+    public static class SaleChannels
+    {
+        public const string TaiQuay = "tai_quay";
+        public const string Online = "online";
+    }
+}
