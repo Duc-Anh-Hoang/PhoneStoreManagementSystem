@@ -1330,7 +1330,8 @@ async function renderNhanVienTable() {
         <td class="p-3.5 text-xs text-slate-500 whitespace-nowrap">${nv.email || '-'}</td>
         <td class="p-3.5 text-xs text-center whitespace-nowrap">${Format.statusBadge(nv.trangThai)}</td>
         <td class="p-3.5 text-xs text-right whitespace-nowrap space-x-1.5">
-          <span class="text-xs font-semibold text-slate-400">Hệ thống</span>
+          <button onclick="editNhanVien('${nv.maNV}')" class="px-2.5 py-1 text-xs font-bold text-indigo-600 hover:bg-indigo-50 border border-indigo-200 rounded-lg transition-colors">Sửa</button>
+          <button onclick="deleteNhanVien('${nv.maNV}')" class="px-2.5 py-1 text-xs font-bold text-rose-600 hover:bg-rose-50 border border-rose-200 rounded-lg transition-colors">Xóa</button>
         </td>
       </tr>
     `).join('');

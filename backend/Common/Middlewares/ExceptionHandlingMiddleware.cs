@@ -1,7 +1,7 @@
 using System.Net;
 using System.Text.Json;
+using FluentValidation;
 using PhoneStoreAPI.Common.Exceptions;
-using PhoneStoreAPI.Common.Responses;
 
 namespace PhoneStoreAPI.Common.Middlewares;
 
@@ -24,30 +24,59 @@ public class ExceptionHandlingMiddleware
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Unhandled exception: {Message}", ex.Message);
             await HandleExceptionAsync(context, ex);
         }
     }
 
-    private static async Task HandleExceptionAsync(HttpContext context, Exception exception)
+    private async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         context.Response.ContentType = "application/json";
 
-        var statusCode = exception switch
+        int statusCode;
+        string message;
+        List<string>? errors = null;
+
+        switch (exception)
         {
-            AppException appEx => (int)appEx.StatusCode,
-            _ => (int)HttpStatusCode.InternalServerError
-        };
+            case ValidationException valEx:
+                statusCode = (int)HttpStatusCode.BadRequest;
+                message = "Dữ liệu không hợp lệ.";
+                errors = valEx.Errors.Select(e => e.ErrorMessage).ToList();
+                _logger.LogWarning("Validation failure [{TraceId}]: {Message} - Errors: {@Errors}", 
+                    context.TraceIdentifier, message, errors);
+                break;
+
+            case AppException appEx:
+                statusCode = (int)appEx.StatusCode;
+                message = appEx.Message;
+                errors = appEx.Errors;
+                _logger.LogWarning("Application error [{TraceId}] (Status {StatusCode}): {Message}", 
+                    context.TraceIdentifier, statusCode, message);
+                break;
+
+            default:
+                statusCode = (int)HttpStatusCode.InternalServerError;
+                message = "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.";
+                _logger.LogError(exception, "Unhandled server error [{TraceId}]: {Message}", 
+                    context.TraceIdentifier, exception.Message);
+                break;
+        }
 
         context.Response.StatusCode = statusCode;
 
-        var response = ApiResponse<object>.Fail(
-            statusCode == (int)HttpStatusCode.InternalServerError 
-                ? "Đã xảy ra lỗi máy chủ nội bộ. Vui lòng thử lại sau." 
-                : exception.Message
-        );
+        var responsePayload = new
+        {
+            message,
+            errors,
+            traceId = context.TraceIdentifier
+        };
 
-        var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
-        await context.Response.WriteAsync(JsonSerializer.Serialize(response, options));
+        var options = new JsonSerializerOptions 
+        { 
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
+        };
+
+        await context.Response.WriteAsync(JsonSerializer.Serialize(responsePayload, options));
     }
 }

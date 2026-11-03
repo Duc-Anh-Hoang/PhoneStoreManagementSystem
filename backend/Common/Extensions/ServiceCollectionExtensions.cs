@@ -1,8 +1,13 @@
+using System.Net;
+using System.Security.Claims;
 using System.Text;
+using System.Threading.RateLimiting;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
+using PhoneStoreAPI.Common.Services;
 using PhoneStoreAPI.Features.Auth;
 using PhoneStoreAPI.Features.Customers;
 using PhoneStoreAPI.Features.Dashboard;
@@ -30,7 +35,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddAppAuth(this IServiceCollection services, IConfiguration configuration)
     {
         var jwtSettings = configuration.GetSection("Jwt");
-        var key = Encoding.UTF8.GetBytes(jwtSettings["Key"] ?? "PhoneStoreManagementSystem_SuperSecretKey_2026_AspNetCore10");
+        var key = Encoding.UTF8.GetBytes(jwtSettings["Key"] ?? "PhoneStoreManagementSystem_SuperSecretKey_2026_AspNetCore10_StrongSecretKey!");
 
         services.AddAuthentication(options =>
         {
@@ -60,12 +65,20 @@ public static class ServiceCollectionExtensions
     }
 
     /// <summary>
-    /// Bước 4. Đăng ký toàn bộ Services theo từng Feature
+    /// Đăng ký toàn bộ Services, CodeGenerator và CurrentUser
     /// </summary>
     public static IServiceCollection AddFeatureServices(this IServiceCollection services)
     {
+        services.AddHttpContextAccessor();
+
+        // Common Shared Services
+        services.AddScoped<ICurrentUser, CurrentUser>();
+        services.AddScoped<ICodeGenerator, CodeGenerator>();
+
+        // Feature Services
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IStaffService, StaffService>();
+        services.AddScoped<ITaiKhoanService, TaiKhoanService>();
         services.AddScoped<ICustomerService, CustomerService>();
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<ICategoryService, CategoryService>();
@@ -81,7 +94,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IDashboardService, DashboardService>();
         services.AddScoped<ISystemSettingService, SystemSettingService>();
 
-        // Bước 7. Đăng ký FluentValidation
+        // FluentValidation tự động đăng ký tất cả validator trong assembly
         services.AddValidatorsFromAssembly(typeof(ServiceCollectionExtensions).Assembly);
 
         return services;
@@ -92,7 +105,8 @@ public static class ServiceCollectionExtensions
     /// </summary>
     public static IServiceCollection AddAppCors(this IServiceCollection services, IConfiguration configuration)
     {
-        var origins = configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? new[] { "http://localhost", "http://localhost:80" };
+        var origins = configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() 
+            ?? new[] { "http://localhost", "http://localhost:80", "http://localhost:5500" };
 
         services.AddCors(options =>
         {
@@ -100,7 +114,8 @@ public static class ServiceCollectionExtensions
             {
                 policy.AllowAnyOrigin()
                       .AllowAnyMethod()
-                      .AllowAnyHeader();
+                      .AllowAnyHeader()
+                      .WithExposedHeaders("X-Total-Count");
             });
 
             options.AddPolicy("ProductionCors", policy =>
@@ -108,7 +123,8 @@ public static class ServiceCollectionExtensions
                 policy.WithOrigins(origins)
                       .AllowAnyMethod()
                       .AllowAnyHeader()
-                      .AllowCredentials();
+                      .AllowCredentials()
+                      .WithExposedHeaders("X-Total-Count");
             });
         });
 
@@ -116,7 +132,57 @@ public static class ServiceCollectionExtensions
     }
 
     /// <summary>
-    /// Bước 5. Cấu hình Swagger / OpenAPI kèm nút Authorize Bearer Token
+    /// P1-09: Rate Limiter (login 5/phút/IP, public-lookup 30/phút/IP)
+    /// </summary>
+    public static IServiceCollection AddAppRateLimiting(this IServiceCollection services)
+    {
+        services.AddRateLimiter(options =>
+        {
+            options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+            options.OnRejected = async (context, token) =>
+            {
+                context.HttpContext.Response.ContentType = "application/json";
+                var payload = new
+                {
+                    message = "Bạn đã gửi quá nhiều yêu cầu. Vui lòng thử lại sau.",
+                    errors = new[] { "Giới hạn tần suất yêu cầu (Rate limit exceeded)." }
+                };
+                await context.HttpContext.Response.WriteAsync(
+                    System.Text.Json.JsonSerializer.Serialize(payload), token);
+            };
+
+            // Login policy: 5 lần/phút/IP
+            options.AddPolicy("login", httpContext =>
+            {
+                var clientIp = httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+                return RateLimitPartition.GetFixedWindowLimiter(clientIp, _ => new FixedWindowRateLimiterOptions
+                {
+                    PermitLimit = 5,
+                    Window = TimeSpan.FromMinutes(1),
+                    QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                    QueueLimit = 0
+                });
+            });
+
+            // Public lookup policy: 30 lần/phút/IP
+            options.AddPolicy("public-lookup", httpContext =>
+            {
+                var clientIp = httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+                return RateLimitPartition.GetFixedWindowLimiter(clientIp, _ => new FixedWindowRateLimiterOptions
+                {
+                    PermitLimit = 30,
+                    Window = TimeSpan.FromMinutes(1),
+                    QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                    QueueLimit = 0
+                });
+            });
+        });
+
+        return services;
+    }
+
+    /// <summary>
+    /// Cấu hình Swagger / OpenAPI kèm nút Authorize Bearer Token
     /// </summary>
     public static IServiceCollection AddAppSwagger(this IServiceCollection services)
     {

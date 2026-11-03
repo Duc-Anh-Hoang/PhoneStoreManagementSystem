@@ -39,7 +39,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('backend/PhoneStoreAPI.csproj', 'PhoneStoreManagementSystem.slnx') }}
+          key: ${{ runner.os }}-nuget-${{ hashFiles('backend/PhoneStoreAPI.csproj', 'backend.Tests/backend.Tests.csproj', 'PhoneStoreManagementSystem.slnx') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
 
@@ -49,9 +49,8 @@ jobs:
       - name: Build Solution
         run: dotnet build PhoneStoreManagementSystem.slnx -c Release --no-restore
 
-      - name: Run Tests (if any)
-        run: |
-          dotnet test PhoneStoreManagementSystem.slnx -c Release --no-build --verbosity normal || echo "No test projects detected yet."
+      - name: Run Tests
+        run: dotnet test PhoneStoreManagementSystem.slnx -c Release --no-build --verbosity normal
 
   # ==============================================================================
   # 2. DATABASE SCHEMA VALIDATION JOB (PostgreSQL 16)

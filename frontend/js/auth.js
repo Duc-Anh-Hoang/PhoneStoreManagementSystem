@@ -56,15 +56,15 @@
           body: JSON.stringify({ username, password })
         });
         const data = await resp.json().catch(() => ({}));
-        if (resp.ok && (data.user || data.success)) {
+        if (resp.ok && (data.user || data.token)) {
           const u = data.user || {};
-          const role = (data.role || u.maQuyen || 'ADMIN').toUpperCase();
+          const role = (u.role || data.role || u.maQuyen || 'ADMIN').toUpperCase();
           const userObj = {
             type: data.type || 'staff',
             username: u.username || username,
-            tenNhanVien: u.tenNhanVien || username,
+            tenNhanVien: u.hoTen || u.tenNhanVien || username,
             tenQuyen: u.tenQuyen || role,
-            maNV: u.maNV || 'NV001',
+            maNV: u.maNV || '',
             role: role,
             token: data.token
           };
@@ -74,7 +74,7 @@
           this.setUser(userObj);
           return { success: true, redirect: data.redirect || 'admin.html', user: userObj };
         } else {
-          throw new Error(data.error || 'Tên đăng nhập hoặc mật khẩu không chính xác');
+          throw new Error(data.message || data.error || 'Tên đăng nhập hoặc mật khẩu không chính xác');
         }
       } catch (err) {
         throw new Error(err.message || 'Lỗi kết nối máy chủ xác thực');
@@ -115,7 +115,7 @@
           this.setUser(userObj);
           return { success: true, redirect: 'index.html', user: userObj };
         } else {
-          throw new Error(data.error || 'Số điện thoại chưa có trên hệ thống. Quý khách vui lòng đặt hàng để đăng ký!');
+          throw new Error(data.message || data.error || 'Số điện thoại chưa có trên hệ thống. Quý khách vui lòng đặt hàng để đăng ký!');
         }
       } catch (err) {
         throw new Error(err.message || 'Lỗi kết nối máy chủ');
