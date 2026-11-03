@@ -23,11 +23,17 @@ builder.Host.UseSerilog();
 // 2. Cấu hình Database PostgreSQL qua EF Core
 var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection")
     ?? builder.Configuration.GetConnectionString("DefaultConnection") 
-    ?? "Host=postgres;Port=5432;Database=PhoneStoreDB;Username=postgres;Password=postgres";
+    ?? "Host=postgres;Port=5432;Database=PhoneStoreDB;Username=postgres;Password=postgres_secure_pass_2026";
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseNpgsql(connectionString);
+    options.UseNpgsql(connectionString, npgsqlOptions =>
+    {
+        npgsqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(5),
+            errorCodesToAdd: null);
+    });
 });
 
 // 3. Đăng ký toàn bộ Feature Services và FluentValidation (1 dòng duy nhất)
@@ -71,7 +77,7 @@ using (var scope = app.Services.CreateScope())
     }
     catch (Exception ex)
     {
-        logger.LogError(ex, "Không thể seed dữ liệu khi khởi động.");
+        logger.LogError(ex, "Không thể seed dữ liệu khi khởi động: {Message}", ex.Message);
     }
 }
 

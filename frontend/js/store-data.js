@@ -109,7 +109,7 @@
 
     getFeaturedPhones(brand = 'all') {
       return this.products.filter(p => {
-        const isPhone = p.maNhom === 'NH01';
+        const isPhone = p.maNhom === 'NH01' || p.maNhom === 'DIENTHOAI';
         if (!isPhone) return false;
         if (!brand || brand === 'all') return true;
         return (p.nhanHieu || '').toLowerCase().includes(brand.toLowerCase());
@@ -133,7 +133,7 @@
     }
 
     getAccessories() {
-      return this.products.filter(p => p.maNhom === 'NH02' || p.maNhom === 'NH03');
+      return this.products.filter(p => p.maNhom === 'NH02' || p.maNhom === 'NH03' || p.maNhom === 'PHUKIEN' || p.maNhom === 'AMTHANH');
     }
 
     getProductsByBrand(brand = 'all') {

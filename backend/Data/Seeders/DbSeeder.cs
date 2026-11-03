@@ -10,6 +10,12 @@ public static class DbSeeder
     {
         try
         {
+            if (!await context.Database.CanConnectAsync())
+            {
+                logger.LogWarning("Không thể kết nối đến Database để seed dữ liệu. Vui lòng kiểm tra lại PostgreSQL container hoặc ConnectionString.");
+                return;
+            }
+
             // 1. Seed ThamSo (kiểm tra độc lập)
             if (!await context.ThamSos.AnyAsync())
             {
@@ -20,6 +26,7 @@ public static class DbSeeder
                     new ThamSo { MaThamSo = "HAN_DOITRA_NGAY", TenThamSo = "Hạn đổi trả tính từ ngày lập hóa đơn", GiaTri = 30, DonVi = "ngày" }
                 );
                 await context.SaveChangesAsync();
+                logger.LogInformation("Seed ThamSo thành công.");
             }
 
             // 2. Seed PhanQuyen (kiểm tra độc lập)
@@ -35,6 +42,7 @@ public static class DbSeeder
                     new PhanQuyen { MaQuyen = AppConstants.Roles.Tech, TenQuyen = "Kỹ thuật viên", MoTa = "Bảo hành và sửa chữa thiết bị" }
                 );
                 await context.SaveChangesAsync();
+                logger.LogInformation("Seed PhanQuyen thành công.");
             }
 
             // 3. Seed NhanVien (kiểm tra độc lập)
@@ -49,6 +57,7 @@ public static class DbSeeder
                     new NhanVien { MaNV = "NV005", HoTen = "Hoàng Kỹ Thuật", ChucVu = "Kỹ thuật & Bảo hành", Sdt = "0945678901", Email = "kythuat@cellphones.vn", NgayVaoLam = DateTime.UtcNow, TrangThai = AppConstants.EmployeeStatus.DangLam }
                 );
                 await context.SaveChangesAsync();
+                logger.LogInformation("Seed NhanVien thành công.");
             }
 
             // 4. Seed TaiKhoan (kiểm tra độc lập)
@@ -63,11 +72,38 @@ public static class DbSeeder
                     new TaiKhoan { UserName = "banhang", PasswordHash = passwordHash, MaNV = "NV003", MaQuyen = AppConstants.Roles.Sales, TrangThai = AppConstants.AccountStatus.HoatDong, NgayTao = DateTime.UtcNow }
                 );
                 await context.SaveChangesAsync();
+                logger.LogInformation("Seed TaiKhoan admin thành công.");
+            }
+
+            // Đảm bảo các tài khoản mẫu luôn có hash BCrypt hợp lệ của mật khẩu 'admin123'
+            var accounts = await context.TaiKhoans.ToListAsync();
+            string validHash = BCrypt.Net.BCrypt.HashPassword("admin123");
+            bool updated = false;
+            foreach (var acc in accounts)
+            {
+                try
+                {
+                    if (!BCrypt.Net.BCrypt.Verify("admin123", acc.PasswordHash))
+                    {
+                        acc.PasswordHash = validHash;
+                        updated = true;
+                    }
+                }
+                catch
+                {
+                    acc.PasswordHash = validHash;
+                    updated = true;
+                }
+            }
+            if (updated)
+            {
+                await context.SaveChangesAsync();
+                logger.LogInformation("Đã cập nhật mật khẩu mặc định 'admin123' cho các tài khoản seed.");
             }
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Lỗi xảy ra trong quá trình Seed dữ liệu.");
+            logger.LogError(ex, "Lỗi xảy ra trong quá trình seed dữ liệu.");
         }
     }
 }
