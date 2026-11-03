@@ -54,7 +54,7 @@ jobs:
 
       - name: Test Nginx Configuration Syntax
         run: |
-          docker run --rm phonestore-frontend:test nginx -t
+          docker run --rm --add-host backend:127.0.0.1 phonestore-frontend:test nginx -t
 
   publish-ghcr:
     name: Publish to GHCR
