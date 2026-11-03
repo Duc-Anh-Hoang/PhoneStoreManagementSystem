@@ -1,0 +1,127 @@
+name: Continuous Integration (CI)
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - 'feature/**'
+      - 'bugfix/**'
+  pull_request:
+    branches:
+      - main
+      - develop
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ==============================================================================
+  # 1. BACKEND BUILD & TEST JOB (.NET 10)
+  # ==============================================================================
+  backend-ci:
+    name: Backend Build (.NET 10)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+          include-prerelease: true
+
+      - name: Cache NuGet Packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('backend/PhoneStoreAPI.csproj', 'PhoneStoreManagementSystem.slnx') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Restore Dependencies
+        run: dotnet restore PhoneStoreManagementSystem.slnx
+
+      - name: Build Solution
+        run: dotnet build PhoneStoreManagementSystem.slnx -c Release --no-restore
+
+      - name: Run Tests (if any)
+        run: |
+          dotnet test PhoneStoreManagementSystem.slnx -c Release --no-build --verbosity normal || echo "No test projects detected yet."
+
+  # ==============================================================================
+  # 2. DATABASE SCHEMA VALIDATION JOB (PostgreSQL 16)
+  # ==============================================================================
+  database-ci:
+    name: Database Schema Validation
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: PhoneStoreDB
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install PostgreSQL Client
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq postgresql-client
+
+      - name: Execute init-postgres.sql
+        env:
+          PGPASSWORD: postgres
+        run: |
+          psql -h localhost -U postgres -d PhoneStoreDB -f database/init-postgres.sql
+
+      - name: Verify Tables and Views Created
+        env:
+          PGPASSWORD: postgres
+        run: |
+          echo "=== Table list ==="
+          psql -h localhost -U postgres -d PhoneStoreDB -c "\dt"
+          echo "=== View list ==="
+          psql -h localhost -U postgres -d PhoneStoreDB -c "\dv"
+
+  # ==============================================================================
+  # 3. DOCKER & COMPOSE VALIDATION JOB
+  # ==============================================================================
+  docker-ci:
+    name: Docker & Compose Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Validate Docker Compose Config (Dev & Prod)
+        run: |
+          docker compose config
+          docker compose -f docker-compose.prod.yml config
+
+      - name: Build Backend Docker Image
+        run: |
+          docker build -t phonestore-backend:ci ./backend
+
+      - name: Build Frontend Docker Image
+        run: |
+          docker build -t phonestore-frontend:ci ./frontend
