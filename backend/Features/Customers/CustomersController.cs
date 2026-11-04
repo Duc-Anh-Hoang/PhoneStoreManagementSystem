@@ -1,7 +1,7 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using PhoneStoreAPI.Data;
-using PhoneStoreAPI.Models.Entities;
+using PhoneStoreAPI.Common.Constants;
+using PhoneStoreAPI.Features.Customers.DTOs;
 
 namespace PhoneStoreAPI.Features.Customers;
 
@@ -10,33 +10,59 @@ namespace PhoneStoreAPI.Features.Customers;
 [Route("api/customers")]
 public class CustomersController : ControllerBase
 {
-    private readonly AppDbContext _context;
+    private readonly ICustomerService _customerService;
 
-    public CustomersController(AppDbContext context)
+    public CustomersController(ICustomerService customerService)
     {
-        _context = context;
+        _customerService = customerService;
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    [Authorize(Roles = $"{AppConstants.Roles.Admin},{AppConstants.Roles.Manager},{AppConstants.Roles.Sales},{AppConstants.Roles.Cashier}")]
+    public async Task<IActionResult> GetAll([FromQuery] string? keyword, [FromQuery] int? page, [FromQuery] int? pageSize)
     {
-        var list = await _context.KhachHangs.AsNoTracking().ToListAsync();
-        return Ok(list);
+        var (items, totalCount) = await _customerService.GetAllAsync(keyword, page, pageSize);
+        Response.Headers.Append("X-Total-Count", totalCount.ToString());
+        return Ok(items);
     }
 
     [HttpGet("{id}")]
+    [Authorize(Roles = $"{AppConstants.Roles.Admin},{AppConstants.Roles.Manager},{AppConstants.Roles.Sales},{AppConstants.Roles.Cashier}")]
     public async Task<IActionResult> GetById(string id)
     {
-        var item = await _context.KhachHangs.FindAsync(id);
-        if (item == null) return NotFound();
+        var item = await _customerService.GetByIdAsync(id);
+        return Ok(item);
+    }
+
+    [HttpGet("sdt/{sdt}")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetByPhone(string sdt)
+    {
+        var item = await _customerService.GetByPhoneAsync(sdt);
         return Ok(item);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] KhachHang kh)
+    [Authorize(Roles = $"{AppConstants.Roles.Admin},{AppConstants.Roles.Manager},{AppConstants.Roles.Sales},{AppConstants.Roles.Cashier}")]
+    public async Task<IActionResult> Create([FromBody] CreateCustomerRequest request)
     {
-        _context.KhachHangs.Add(kh);
-        await _context.SaveChangesAsync();
-        return Ok(kh);
+        var created = await _customerService.CreateAsync(request);
+        return CreatedAtAction(nameof(GetById), new { id = created.MaKH }, created);
+    }
+
+    [HttpPut("{id}")]
+    [Authorize(Roles = $"{AppConstants.Roles.Admin},{AppConstants.Roles.Manager},{AppConstants.Roles.Sales},{AppConstants.Roles.Cashier}")]
+    public async Task<IActionResult> Update(string id, [FromBody] UpdateCustomerRequest request)
+    {
+        var updated = await _customerService.UpdateAsync(id, request);
+        return Ok(updated);
+    }
+
+    [HttpDelete("{id}")]
+    [Authorize(Roles = $"{AppConstants.Roles.Admin},{AppConstants.Roles.Manager},{AppConstants.Roles.Sales},{AppConstants.Roles.Cashier}")]
+    public async Task<IActionResult> Delete(string id)
+    {
+        await _customerService.DeleteAsync(id);
+        return Ok(new { message = $"Đã xóa khách hàng {id} thành công." });
     }
 }

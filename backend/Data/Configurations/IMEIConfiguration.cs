@@ -11,17 +11,43 @@ public class IMEIConfiguration : IEntityTypeConfiguration<IMEI>
         builder.ToTable("imei");
         builder.HasKey(i => i.MaIMEI);
 
-        builder.Property(i => i.MaIMEI).HasColumnName("maimei").HasMaxLength(20).IsRequired();
-        builder.Property(i => i.MaHang).HasColumnName("mahang").HasMaxLength(10).IsRequired();
-        builder.Property(i => i.SoPN).HasColumnName("sopn").HasMaxLength(15).IsRequired();
-        builder.Property(i => i.SoIMEI).HasColumnName("soimei").HasMaxLength(20).IsRequired();
-        builder.Property(i => i.TrangThai).HasColumnName("trangthai").HasMaxLength(20).IsRequired();
+        builder.Property(i => i.MaIMEI)
+            .HasColumnName("maimei")
+            .HasMaxLength(20)
+            .IsRequired();
 
-        builder.HasIndex(i => i.SoIMEI).IsUnique();
+        builder.Property(i => i.MaHang)
+            .HasColumnName("mahang")
+            .HasMaxLength(10)
+            .IsRequired();
+
+        builder.Property(i => i.SoPN)
+            .HasColumnName("sopn")
+            .HasMaxLength(15)
+            .IsRequired();
+
+        builder.Property(i => i.SoIMEI)
+            .HasColumnName("soimei")
+            .HasMaxLength(20)
+            .IsRequired();
+
+        builder.HasIndex(i => i.SoIMEI)
+            .IsUnique();
+
+        builder.Property(i => i.TrangThai)
+            .HasColumnName("trangthai")
+            .HasMaxLength(20)
+            .HasDefaultValue("con_hang")
+            .IsRequired();
 
         builder.HasOne(i => i.MatHang)
             .WithMany()
             .HasForeignKey(i => i.MaHang)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne<PhieuNhap>()
+            .WithMany()
+            .HasForeignKey(i => i.SoPN)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

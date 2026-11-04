@@ -75,6 +75,7 @@ public static class ServiceCollectionExtensions
         // Common Shared Services
         services.AddScoped<ICurrentUser, CurrentUser>();
         services.AddScoped<ICodeGenerator, CodeGenerator>();
+        services.AddScoped<IThamSoProvider, ThamSoProvider>();
 
         // Feature Services
         services.AddScoped<IAuthService, AuthService>();

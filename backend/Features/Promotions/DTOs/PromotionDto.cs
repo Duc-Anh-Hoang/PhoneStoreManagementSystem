@@ -1,0 +1,13 @@
+namespace PhoneStoreAPI.Features.Promotions.DTOs;
+
+public class PromotionDto
+{
+    public string MaKM { get; set; } = string.Empty;
+    public string TenKM { get; set; } = string.Empty;
+    public decimal PhanTramGiam { get; set; }
+    public DateTime NgayBD { get; set; }
+    public DateTime NgayKT { get; set; }
+    public bool TamDung { get; set; }
+    public string TrangThai { get; set; } = "dang_ap_dung";
+}
+

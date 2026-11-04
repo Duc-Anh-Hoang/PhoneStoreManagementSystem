@@ -1,13 +1,14 @@
-using PhoneStoreAPI.Models.Entities;
+using PhoneStoreAPI.Features.Promotions.DTOs;
 
 namespace PhoneStoreAPI.Features.Promotions;
 
 public interface IPromotionService
 {
-    Task<List<KhuyenMai>> GetAllPromotionsAsync();
-    Task<List<KhuyenMai>> GetActivePromotionsAsync();
-    Task<KhuyenMai?> GetPromotionByIdAsync(string id);
-    Task<KhuyenMai> CreatePromotionAsync(KhuyenMai km);
+    Task<List<PromotionDto>> GetAllPromotionsAsync();
+    Task<List<ActivePromotionDto>> GetActivePromotionsAsync();
+    Task<PromotionDto> GetPromotionByIdAsync(string id);
+    Task<PromotionDto> CreatePromotionAsync(CreatePromotionRequest request);
+    Task<PromotionDto> UpdatePromotionAsync(string id, UpdatePromotionRequest request);
     Task<bool> UpdateStatusAsync(string id, bool tamDung);
-    Task<bool> DeletePromotionAsync(string id);
+    Task DeletePromotionAsync(string id);
 }
