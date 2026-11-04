@@ -1,7 +1,10 @@
+using System.Net;
 using Microsoft.EntityFrameworkCore;
+using PhoneStoreAPI.Common.Exceptions;
 using PhoneStoreAPI.Data;
 using PhoneStoreAPI.Features.Products.DTOs;
 using PhoneStoreAPI.Models.Entities;
+using PhoneStoreAPI.Models.Entities.Views;
 
 namespace PhoneStoreAPI.Features.Products;
 
@@ -14,139 +17,388 @@ public class ProductService : IProductService
         _context = context;
     }
 
-    public async Task<List<ProductDto>> GetAllProductsAsync()
+    public async Task<(List<ProductDto> Items, int TotalCount)> GetProductsAsync(ProductQueryParameters query)
     {
-        var items = await _context.MatHangs
+        var pageSize = Math.Clamp(query.PageSize, 1, 100);
+        var page = Math.Max(query.Page, 1);
+
+        var baseQuery = _context.MatHangs
+            .AsNoTracking()
             .Include(m => m.NhomHang)
             .Include(m => m.LoaiHang)
-            .AsNoTracking()
+            .AsQueryable();
+
+        // 1. Lọc theo từ khóa (Mã hàng hoặc Tên hàng)
+        if (!string.IsNullOrWhiteSpace(query.Keyword))
+        {
+            var kw = query.Keyword.Trim().ToLower();
+            baseQuery = baseQuery.Where(m => m.MaHang.ToLower().Contains(kw) || m.TenHang.ToLower().Contains(kw));
+        }
+
+        // 2. Lọc theo Nhóm hàng
+        if (!string.IsNullOrWhiteSpace(query.MaNhom))
+        {
+            var nhom = query.MaNhom.Trim();
+            baseQuery = baseQuery.Where(m => m.MaNhom == nhom);
+        }
+
+        // 3. Lọc theo Loại hàng
+        if (!string.IsNullOrWhiteSpace(query.MaLoai))
+        {
+            var loai = query.MaLoai.Trim();
+            baseQuery = baseQuery.Where(m => m.MaLoai == loai);
+        }
+
+        // 4. Lọc theo Giá
+        if (query.MinGia.HasValue)
+        {
+            baseQuery = baseQuery.Where(m => m.DonGia >= query.MinGia.Value);
+        }
+        if (query.MaxGia.HasValue)
+        {
+            baseQuery = baseQuery.Where(m => m.DonGia <= query.MaxGia.Value);
+        }
+
+        // 5. Đếm tổng số bản ghi
+        var totalCount = await baseQuery.CountAsync();
+
+        // 6. Sắp xếp
+        baseQuery = query.Sort?.ToLower() switch
+        {
+            "giatang" => baseQuery.OrderBy(m => m.DonGia),
+            "giagiam" => baseQuery.OrderByDescending(m => m.DonGia),
+            "ten" => baseQuery.OrderBy(m => m.TenHang),
+            _ => baseQuery.OrderBy(m => m.MaHang)
+        };
+
+        // 7. Phân trang
+        var pagedMatHang = await baseQuery
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync();
 
-        // Tính tồn kho thực tế từ Phiếu nhập & Hoá đơn
-        var nhapGroup = await _context.ChiTietPhieuNhaps
-            .GroupBy(c => c.MaHang)
-            .Select(g => new { MaHang = g.Key, Total = g.Sum(x => x.SlNhap) })
-            .ToDictionaryAsync(x => x.MaHang, x => x.Total);
+        var maHangList = pagedMatHang.Select(m => m.MaHang).ToList();
 
-        var banGroup = await _context.ChiTietHoaDons
-            .GroupBy(c => c.MaHang)
-            .Select(g => new { MaHang = g.Key, Total = g.Sum(x => x.SlBan) })
-            .ToDictionaryAsync(x => x.MaHang, x => x.Total);
-
-        return items.Select(m =>
-        {
-            var nhap = nhapGroup.TryGetValue(m.MaHang, out var n) ? n : 0;
-            var ban = banGroup.TryGetValue(m.MaHang, out var b) ? b : 0;
-            var tonKho = nhap - ban;
-            if (tonKho <= 0) tonKho = 10; // Đảm bảo các sản phẩm mẫu luôn hiển thị sẵn có trên FE
-
-            return new ProductDto
-            {
-                MaHang = m.MaHang,
-                TenHang = m.TenHang,
-                DonGia = m.DonGia,
-                Dvt = m.Dvt,
-                MaNhom = m.MaNhom,
-                TenNhom = m.NhomHang?.TenNhom ?? m.MaNhom,
-                MaLoai = m.MaLoai,
-                TenLoai = m.LoaiHang?.TenLoai ?? m.MaLoai,
-                QuanLyImei = m.QuanLyImei,
-                ThoiHanBaoHanh = m.ThoiHanBaoHanh,
-                TonKho = tonKho
-            };
-        }).ToList();
-    }
-
-    public async Task<ProductDto?> GetProductByIdAsync(string maHang)
-    {
-        var m = await _context.MatHangs
-            .Include(x => x.NhomHang)
-            .Include(x => x.LoaiHang)
+        // 8. Lấy tồn kho tương ứng từ vw_TonKho (tránh N+1 truy vấn)
+        var tonKhoDict = await _context.Set<VwTonKho>()
             .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.MaHang == maHang);
+            .Where(v => maHangList.Contains(v.MaHang))
+            .ToDictionaryAsync(v => v.MaHang, v => v.TonKho);
 
-        if (m == null) return null;
-
-        var nhap = await _context.ChiTietPhieuNhaps.Where(c => c.MaHang == maHang).SumAsync(c => (int?)c.SlNhap) ?? 0;
-        var ban = await _context.ChiTietHoaDons.Where(c => c.MaHang == maHang).SumAsync(c => (int?)c.SlBan) ?? 0;
-        var tonKho = nhap - ban;
-        if (tonKho <= 0) tonKho = 10;
-
-        return new ProductDto
+        var items = pagedMatHang.Select(m => new ProductDto
         {
             MaHang = m.MaHang,
             TenHang = m.TenHang,
             DonGia = m.DonGia,
             Dvt = m.Dvt,
             MaNhom = m.MaNhom,
-            TenNhom = m.NhomHang?.TenNhom ?? m.MaNhom,
+            TenNhom = m.NhomHang?.TenNhom,
             MaLoai = m.MaLoai,
-            TenLoai = m.LoaiHang?.TenLoai ?? m.MaLoai,
+            TenLoai = m.LoaiHang?.TenLoai,
             QuanLyImei = m.QuanLyImei,
             ThoiHanBaoHanh = m.ThoiHanBaoHanh,
-            TonKho = tonKho
+            TonKho = tonKhoDict.TryGetValue(m.MaHang, out var tk) ? tk : 0
+        }).ToList();
+
+        return (items, totalCount);
+    }
+
+    public async Task<ProductDetailDto> GetProductByMaAsync(string maHang)
+    {
+        var m = await _context.MatHangs
+            .AsNoTracking()
+            .Include(x => x.NhomHang)
+            .Include(x => x.LoaiHang)
+            .FirstOrDefaultAsync(x => x.MaHang == maHang);
+
+        if (m == null)
+        {
+            throw new NotFoundException($"Không tìm thấy mặt hàng với mã '{maHang}'");
+        }
+
+        var tonKho = await _context.Set<VwTonKho>()
+            .AsNoTracking()
+            .Where(v => v.MaHang == maHang)
+            .Select(v => v.TonKho)
+            .FirstOrDefaultAsync();
+
+        var specs = await _context.ChiTietThuocTinhs
+            .AsNoTracking()
+            .Include(c => c.ThuocTinh)
+            .Where(c => c.MaHang == maHang)
+            .OrderBy(c => c.MaThuocTinh)
+            .Select(c => new ProductSpecDto
+            {
+                MaThuocTinh = c.MaThuocTinh,
+                TenThuocTinh = c.ThuocTinh != null ? c.ThuocTinh.TenThuocTinh : c.MaThuocTinh,
+                GiaTri = c.GiaTri
+            })
+            .ToListAsync();
+
+        return new ProductDetailDto
+        {
+            MaHang = m.MaHang,
+            TenHang = m.TenHang,
+            DonGia = m.DonGia,
+            Dvt = m.Dvt,
+            MaNhom = m.MaNhom,
+            TenNhom = m.NhomHang?.TenNhom,
+            MaLoai = m.MaLoai,
+            TenLoai = m.LoaiHang?.TenLoai,
+            QuanLyImei = m.QuanLyImei,
+            ThoiHanBaoHanh = m.ThoiHanBaoHanh,
+            TonKho = tonKho,
+            ThongSo = specs
         };
     }
 
-    public async Task<List<ProductSpecDto>> GetProductSpecsAsync(string maHang)
+    public async Task<ProductDto> CreateProductAsync(CreateProductRequest request)
     {
-        return await _context.ChiTietThuocTinhs
-            .Where(ct => ct.MaHang == maHang)
-            .Include(ct => ct.ThuocTinh)
-            .AsNoTracking()
-            .Select(ct => new ProductSpecDto
-            {
-                MaThuocTinh = ct.MaThuocTinh,
-                TenThuocTinh = ct.ThuocTinh != null ? ct.ThuocTinh.TenThuocTinh : ct.MaThuocTinh,
-                GiaTri = ct.GiaTri
-            })
-            .ToListAsync();
-    }
+        var maHang = request.MaHang.Trim().ToUpper();
 
-    public async Task<ProductDto> CreateProductAsync(ProductDto dto)
-    {
+        // 1. Kiểm tra trùng mã mặt hàng (409)
+        if (await _context.MatHangs.AnyAsync(m => m.MaHang == maHang))
+        {
+            throw new ConflictException($"Mã mặt hàng '{maHang}' đã tồn tại trên hệ thống");
+        }
+
+        // 2. Kiểm tra Nhóm hàng và Loại hàng phải tồn tại
+        var nhom = await _context.NhomHangs.FindAsync(request.MaNhom);
+        if (nhom == null)
+        {
+            throw new AppException($"Nhóm hàng '{request.MaNhom}' không tồn tại", HttpStatusCode.BadRequest);
+        }
+
+        var loai = await _context.LoaiHangs.FindAsync(request.MaLoai);
+        if (loai == null)
+        {
+            throw new AppException($"Loại hàng '{request.MaLoai}' không tồn tại", HttpStatusCode.BadRequest);
+        }
+
         var entity = new MatHang
         {
-            MaHang = dto.MaHang,
-            TenHang = dto.TenHang,
-            DonGia = dto.DonGia,
-            Dvt = dto.Dvt,
-            MaNhom = dto.MaNhom,
-            MaLoai = dto.MaLoai,
-            QuanLyImei = dto.QuanLyImei,
-            ThoiHanBaoHanh = dto.ThoiHanBaoHanh
+            MaHang = maHang,
+            TenHang = request.TenHang.Trim(),
+            DonGia = request.DonGia,
+            Dvt = string.IsNullOrWhiteSpace(request.Dvt) ? "Cái" : request.Dvt.Trim(),
+            MaNhom = request.MaNhom,
+            MaLoai = request.MaLoai,
+            QuanLyImei = request.QuanLyImei,
+            ThoiHanBaoHanh = request.ThoiHanBaoHanh
         };
 
         _context.MatHangs.Add(entity);
         await _context.SaveChangesAsync();
 
-        return dto;
+        return new ProductDto
+        {
+            MaHang = entity.MaHang,
+            TenHang = entity.TenHang,
+            DonGia = entity.DonGia,
+            Dvt = entity.Dvt,
+            MaNhom = entity.MaNhom,
+            TenNhom = nhom.TenNhom,
+            MaLoai = entity.MaLoai,
+            TenLoai = loai.TenLoai,
+            QuanLyImei = entity.QuanLyImei,
+            ThoiHanBaoHanh = entity.ThoiHanBaoHanh,
+            TonKho = 0
+        };
     }
 
-    public async Task<bool> UpdateProductAsync(string maHang, ProductDto dto)
+    public async Task<ProductDto> UpdateProductAsync(string maHang, UpdateProductRequest request)
     {
-        var existing = await _context.MatHangs.FindAsync(maHang);
-        if (existing == null) return false;
+        var entity = await _context.MatHangs
+            .Include(m => m.NhomHang)
+            .Include(m => m.LoaiHang)
+            .FirstOrDefaultAsync(m => m.MaHang == maHang);
 
-        existing.TenHang = dto.TenHang;
-        existing.DonGia = dto.DonGia;
-        existing.Dvt = dto.Dvt;
-        existing.MaNhom = dto.MaNhom;
-        existing.MaLoai = dto.MaLoai;
-        existing.QuanLyImei = dto.QuanLyImei;
-        existing.ThoiHanBaoHanh = dto.ThoiHanBaoHanh;
+        if (entity == null)
+        {
+            throw new NotFoundException($"Không tìm thấy mặt hàng với mã '{maHang}'");
+        }
+
+        // 1. Kiểm tra quy tắc: Không cho đổi quanLyIMEI khi mặt hàng đã có IMEI hoặc đã nhập kho
+        if (entity.QuanLyImei != request.QuanLyImei)
+        {
+            var hasImei = await _context.IMEIs.AnyAsync(i => i.MaHang == maHang);
+            var hasImport = await _context.ChiTietPhieuNhaps.AnyAsync(p => p.MaHang == maHang);
+
+            if (hasImei || hasImport)
+            {
+                throw new ConflictException("Không thể thay đổi hình thức quản lý IMEI khi mặt hàng đã phát sinh IMEI hoặc phiếu nhập kho");
+            }
+        }
+
+        // 2. Kiểm tra Nhóm hàng và Loại hàng
+        var nhom = await _context.NhomHangs.FindAsync(request.MaNhom);
+        if (nhom == null)
+        {
+            throw new AppException($"Nhóm hàng '{request.MaNhom}' không tồn tại", HttpStatusCode.BadRequest);
+        }
+
+        var loai = await _context.LoaiHangs.FindAsync(request.MaLoai);
+        if (loai == null)
+        {
+            throw new AppException($"Loại hàng '{request.MaLoai}' không tồn tại", HttpStatusCode.BadRequest);
+        }
+
+        entity.TenHang = request.TenHang.Trim();
+        entity.DonGia = request.DonGia;
+        entity.Dvt = string.IsNullOrWhiteSpace(request.Dvt) ? "Cái" : request.Dvt.Trim();
+        entity.MaNhom = request.MaNhom;
+        entity.MaLoai = request.MaLoai;
+        entity.QuanLyImei = request.QuanLyImei;
+        entity.ThoiHanBaoHanh = request.ThoiHanBaoHanh;
 
         await _context.SaveChangesAsync();
-        return true;
+
+        var tonKho = await _context.Set<VwTonKho>()
+            .AsNoTracking()
+            .Where(v => v.MaHang == maHang)
+            .Select(v => v.TonKho)
+            .FirstOrDefaultAsync();
+
+        return new ProductDto
+        {
+            MaHang = entity.MaHang,
+            TenHang = entity.TenHang,
+            DonGia = entity.DonGia,
+            Dvt = entity.Dvt,
+            MaNhom = entity.MaNhom,
+            TenNhom = nhom.TenNhom,
+            MaLoai = entity.MaLoai,
+            TenLoai = loai.TenLoai,
+            QuanLyImei = entity.QuanLyImei,
+            ThoiHanBaoHanh = entity.ThoiHanBaoHanh,
+            TonKho = tonKho
+        };
     }
 
-    public async Task<bool> DeleteProductAsync(string maHang)
+    public async Task DeleteProductAsync(string maHang)
     {
-        var existing = await _context.MatHangs.FindAsync(maHang);
-        if (existing == null) return false;
+        var entity = await _context.MatHangs.FindAsync(maHang);
+        if (entity == null)
+        {
+            throw new NotFoundException($"Không tìm thấy mặt hàng với mã '{maHang}'");
+        }
 
-        _context.MatHangs.Remove(existing);
+        // Kiểm tra ràng buộc: DELETE trả 409 nếu đã có trong phiếu nhập, hóa đơn hoặc đơn online
+        var inPhieuNhap = await _context.ChiTietPhieuNhaps.AnyAsync(pn => pn.MaHang == maHang);
+        if (inPhieuNhap)
+        {
+            throw new ConflictException("Không thể xóa mặt hàng đã có trong phiếu nhập kho");
+        }
+
+        var inHoaDon = await _context.ChiTietHoaDons.AnyAsync(hd => hd.MaHang == maHang);
+        if (inHoaDon)
+        {
+            throw new ConflictException("Không thể xóa mặt hàng đã có trong hóa đơn bán hàng");
+        }
+
+        var inDonOnline = await _context.ChiTietDonHangOnlines.AnyAsync(dh => dh.MaHang == maHang);
+        if (inDonOnline)
+        {
+            throw new ConflictException("Không thể xóa mặt hàng đã có trong đơn hàng trực tuyến");
+        }
+
+        var inImei = await _context.IMEIs.AnyAsync(i => i.MaHang == maHang);
+        if (inImei)
+        {
+            throw new ConflictException("Không thể xóa mặt hàng đang có dữ liệu IMEI");
+        }
+
+        // Xóa thông số kỹ thuật (ChiTietThuocTinh)
+        var specs = await _context.ChiTietThuocTinhs.Where(c => c.MaHang == maHang).ToListAsync();
+        if (specs.Any())
+        {
+            _context.ChiTietThuocTinhs.RemoveRange(specs);
+        }
+
+        _context.MatHangs.Remove(entity);
         await _context.SaveChangesAsync();
-        return true;
+    }
+
+    public async Task<List<ProductSpecDto>> GetProductSpecsAsync(string maHang)
+    {
+        if (!await _context.MatHangs.AnyAsync(m => m.MaHang == maHang))
+        {
+            throw new NotFoundException($"Không tìm thấy mặt hàng với mã '{maHang}'");
+        }
+
+        return await _context.ChiTietThuocTinhs
+            .AsNoTracking()
+            .Include(c => c.ThuocTinh)
+            .Where(c => c.MaHang == maHang)
+            .OrderBy(c => c.MaThuocTinh)
+            .Select(c => new ProductSpecDto
+            {
+                MaThuocTinh = c.MaThuocTinh,
+                TenThuocTinh = c.ThuocTinh != null ? c.ThuocTinh.TenThuocTinh : c.MaThuocTinh,
+                GiaTri = c.GiaTri
+            })
+            .ToListAsync();
+    }
+
+    public async Task<List<ProductSpecDto>> UpdateProductSpecsAsync(string maHang, List<UpdateProductSpecRequest> specs)
+    {
+        if (!await _context.MatHangs.AnyAsync(m => m.MaHang == maHang))
+        {
+            throw new NotFoundException($"Không tìm thấy mặt hàng với mã '{maHang}'");
+        }
+
+        // Kiểm tra tất cả thuộc tính phải tồn tại trên hệ thống
+        var distinctMaTT = specs.Select(s => s.MaThuocTinh.Trim()).Distinct().ToList();
+        var existingTT = await _context.ThuocTinhs
+            .Where(t => distinctMaTT.Contains(t.MaThuocTinh))
+            .ToDictionaryAsync(t => t.MaThuocTinh, t => t.TenThuocTinh);
+
+        foreach (var maTT in distinctMaTT)
+        {
+            if (!existingTT.ContainsKey(maTT))
+            {
+                throw new AppException($"Thuộc tính '{maTT}' không tồn tại trên hệ thống", HttpStatusCode.BadRequest);
+            }
+        }
+
+        // Chạy trong một Transaction
+        await using var transaction = await _context.Database.BeginTransactionAsync();
+        try
+        {
+            // Xóa toàn bộ thuộc tính cũ của mặt hàng
+            var oldSpecs = await _context.ChiTietThuocTinhs.Where(c => c.MaHang == maHang).ToListAsync();
+            _context.ChiTietThuocTinhs.RemoveRange(oldSpecs);
+            await _context.SaveChangesAsync();
+
+            // Thêm các thuộc tính mới
+            var newEntities = specs
+                .Where(s => !string.IsNullOrWhiteSpace(s.GiaTri))
+                .Select(s => new ChiTietThuocTinh
+                {
+                    MaHang = maHang,
+                    MaThuocTinh = s.MaThuocTinh.Trim(),
+                    GiaTri = s.GiaTri.Trim()
+                }).ToList();
+
+            if (newEntities.Any())
+            {
+                _context.ChiTietThuocTinhs.AddRange(newEntities);
+                await _context.SaveChangesAsync();
+            }
+
+            await transaction.CommitAsync();
+
+            return newEntities.Select(e => new ProductSpecDto
+            {
+                MaThuocTinh = e.MaThuocTinh,
+                TenThuocTinh = existingTT[e.MaThuocTinh],
+                GiaTri = e.GiaTri
+            }).ToList();
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
     }
 }

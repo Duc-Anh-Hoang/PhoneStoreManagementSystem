@@ -1,11 +1,12 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PhoneStoreAPI.Common.Constants;
 using PhoneStoreAPI.Features.Products.DTOs;
 
 namespace PhoneStoreAPI.Features.Products;
 
 [ApiController]
 [Route("api/mathang")]
-[Route("api/products")]
 public class ProductsController : ControllerBase
 {
     private readonly IProductService _productService;
@@ -15,53 +16,81 @@ public class ProductsController : ControllerBase
         _productService = productService;
     }
 
+    /// <summary>
+    /// P2-02: Lấy danh sách mặt hàng (công khai) kèm lọc, tìm kiếm, phân trang
+    /// </summary>
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    [AllowAnonymous]
+    public async Task<IActionResult> GetProducts([FromQuery] ProductQueryParameters query)
     {
-        var products = await _productService.GetAllProductsAsync();
-        return Ok(products);
+        var (items, totalCount) = await _productService.GetProductsAsync(query);
+        Response.Headers["X-Total-Count"] = totalCount.ToString();
+        return Ok(items);
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(string id)
+    /// <summary>
+    /// P2-03: Xem chi tiết một mặt hàng
+    /// </summary>
+    [HttpGet("{ma}")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetProductByMa([FromRoute] string ma)
     {
-        var product = await _productService.GetProductByIdAsync(id);
-        if (product == null) return NotFound(new { message = $"Không tìm thấy mặt hàng với mã {id}" });
-        return Ok(product);
+        var item = await _productService.GetProductByMaAsync(ma);
+        return Ok(item);
     }
 
-    [HttpGet("{id}/thongso")]
-    public async Task<IActionResult> GetSpecs(string id)
+    /// <summary>
+    /// P2-04: Thêm mới mặt hàng
+    /// </summary>
+    [HttpPost]
+    [Authorize(Roles = $"{AppConstants.Roles.Admin},{AppConstants.Roles.Manager},{AppConstants.Roles.Stock}")]
+    public async Task<IActionResult> CreateProduct([FromBody] CreateProductRequest request)
     {
-        var specs = await _productService.GetProductSpecsAsync(id);
+        var created = await _productService.CreateProductAsync(request);
+        return StatusCode(StatusCodes.Status201Created, created);
+    }
+
+    /// <summary>
+    /// P2-04: Cập nhật thông tin mặt hàng
+    /// </summary>
+    [HttpPut("{ma}")]
+    [Authorize(Roles = $"{AppConstants.Roles.Admin},{AppConstants.Roles.Manager},{AppConstants.Roles.Stock}")]
+    public async Task<IActionResult> UpdateProduct([FromRoute] string ma, [FromBody] UpdateProductRequest request)
+    {
+        var updated = await _productService.UpdateProductAsync(ma, request);
+        return Ok(updated);
+    }
+
+    /// <summary>
+    /// P2-04: Xóa mặt hàng
+    /// </summary>
+    [HttpDelete("{ma}")]
+    [Authorize(Roles = $"{AppConstants.Roles.Admin},{AppConstants.Roles.Manager},{AppConstants.Roles.Stock}")]
+    public async Task<IActionResult> DeleteProduct([FromRoute] string ma)
+    {
+        await _productService.DeleteProductAsync(ma);
+        return Ok(new { success = true, message = $"Đã xóa thành công mặt hàng '{ma}'" });
+    }
+
+    /// <summary>
+    /// P2-05: Lấy thông số kỹ thuật của mặt hàng
+    /// </summary>
+    [HttpGet("{ma}/thongso")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetProductSpecs([FromRoute] string ma)
+    {
+        var specs = await _productService.GetProductSpecsAsync(ma);
         return Ok(specs);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> Create([FromBody] ProductDto dto)
+    /// <summary>
+    /// P2-05: Ghi đè toàn bộ thông số kỹ thuật của mặt hàng
+    /// </summary>
+    [HttpPut("{ma}/thongso")]
+    [Authorize(Roles = $"{AppConstants.Roles.Admin},{AppConstants.Roles.Manager},{AppConstants.Roles.Stock}")]
+    public async Task<IActionResult> UpdateProductSpecs([FromRoute] string ma, [FromBody] List<UpdateProductSpecRequest> specs)
     {
-        if (string.IsNullOrWhiteSpace(dto.MaHang) || string.IsNullOrWhiteSpace(dto.TenHang))
-        {
-            return BadRequest(new { message = "Mã hàng và tên hàng không được để trống" });
-        }
-
-        var created = await _productService.CreateProductAsync(dto);
-        return CreatedAtAction(nameof(GetById), new { id = created.MaHang }, created);
-    }
-
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Update(string id, [FromBody] ProductDto dto)
-    {
-        var success = await _productService.UpdateProductAsync(id, dto);
-        if (!success) return NotFound(new { message = $"Không tìm thấy mặt hàng {id} để cập nhật" });
-        return Ok(new { message = "Cập nhật mặt hàng thành công" });
-    }
-
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(string id)
-    {
-        var success = await _productService.DeleteProductAsync(id);
-        if (!success) return NotFound(new { message = $"Không tìm thấy mặt hàng {id} để xóa" });
-        return Ok(new { message = "Xóa mặt hàng thành công" });
+        var updated = await _productService.UpdateProductSpecsAsync(ma, specs);
+        return Ok(updated);
     }
 }

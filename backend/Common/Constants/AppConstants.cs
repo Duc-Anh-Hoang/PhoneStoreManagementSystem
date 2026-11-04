@@ -40,6 +40,18 @@ public static class AppConstants
         public const string Online = "online";
     }
 
+    public static class InventoryConstants
+    {
+        public const int CanhBaoTonToiThieu = 5;
+    }
+
+    public static class ImeiStatus
+    {
+        public const string ConHang = "con_hang";
+        public const string DaBan = "da_ban";
+        public const string TraHang = "tra_hang";
+    }
+
     public static readonly string[] ValidPositions = new[]
     {
         "Quản lý",
