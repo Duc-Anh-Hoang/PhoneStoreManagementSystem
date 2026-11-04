@@ -266,9 +266,9 @@ ON CONFLICT (MANV) DO NOTHING;
 -- Mật khẩu mặc định là 'admin123' cho admin (hash BCrypt)
 -- Hash BCrypt: $2a$11$eE0m1j3f4zK3wH0Z65d8v.JzY3ZgT42Y2U8eD2u3F7r3lC0N8lO.. (hoặc cập nhật qua API)
 INSERT INTO TaiKhoan (USERNAME, PASSWORD_HASH, MANV, MAQUYEN, TRANGTHAI) VALUES
-    ('admin', '$2a$11$0jNvh8c3p2R5wFp1E7h1n.aK2B8O8i3D8U2zZz3A1F4S6H7J8K9Lm', 'NV001', 'admin', 'hoat_dong'),
-    ('thungan', '$2a$11$0jNvh8c3p2R5wFp1E7h1n.aK2B8O8i3D8U2zZz3A1F4S6H7J8K9Lm', 'NV002', 'cashier', 'hoat_dong'),
-    ('banhang', '$2a$11$0jNvh8c3p2R5wFp1E7h1n.aK2B8O8i3D8U2zZz3A1F4S6H7J8K9Lm', 'NV003', 'sales', 'hoat_dong')
+    ('admin', '$2a$11$glFkyPzGBW1gpIZgTz7wIOkTdHjqshkTd1W.e3M2O/rhhWZUbgrPC', 'NV001', 'admin', 'hoat_dong'),
+    ('thungan', '$2a$11$glFkyPzGBW1gpIZgTz7wIOkTdHjqshkTd1W.e3M2O/rhhWZUbgrPC', 'NV002', 'cashier', 'hoat_dong'),
+    ('banhang', '$2a$11$glFkyPzGBW1gpIZgTz7wIOkTdHjqshkTd1W.e3M2O/rhhWZUbgrPC', 'NV003', 'sales', 'hoat_dong')
 ON CONFLICT (USERNAME) DO NOTHING;
 
 INSERT INTO NhomHang (MANHOM, TENNHOM) VALUES

@@ -80,7 +80,18 @@ const Format = {
 
   date(d) {
     if (!d) return '-';
-    return d.toString();
+    try {
+      const dt = new Date(d);
+      if (isNaN(dt.getTime())) return d.toString();
+      const pad = n => String(n).padStart(2, '0');
+      const hasTime = typeof d === 'string' && (d.includes('T') || d.includes(' '));
+      if (hasTime) {
+        return `${pad(dt.getDate())}/${pad(dt.getMonth() + 1)}/${dt.getFullYear()} ${pad(dt.getHours())}:${pad(dt.getMinutes())}`;
+      }
+      return `${pad(dt.getDate())}/${pad(dt.getMonth() + 1)}/${dt.getFullYear()}`;
+    } catch (e) {
+      return d.toString();
+    }
   },
 
   statusBadge(status) {
@@ -220,22 +231,22 @@ function renderSection(sectionId) {
     currentActiveSection = 'view-dashboard';
   }
 
-  // Cập nhật trạng thái active sidebar (Phong cách #80ffbf: nền #eafff5, viền #80ffbf, chữ #064e29)
+  // Cập nhật trạng thái active sidebar (Tone màu chuẩn: Primary #1E3A8A, Active #EFF6FF, Border #2563EB)
   document.querySelectorAll('.admin-nav-link').forEach(link => {
     const isTarget = link.getAttribute('data-target') === sectionId || link.getAttribute('data-target') === currentActiveSection;
     const icon = link.querySelector('i');
     if (isTarget) {
-      link.classList.add('bg-[#eafff5]', 'text-[#064e29]', 'font-bold', 'border-l-4', 'border-[#80ffbf]');
-      link.classList.remove('text-slate-600', 'hover:bg-[#F9FAFB]', 'hover:text-slate-900', 'text-slate-300', 'hover:bg-slate-800', 'hover:text-white', 'bg-blue-600', 'text-white', 'bg-[#F0FDF4]', 'text-[#15803D]', 'bg-[#dbf9eb]', 'text-[#00483d]');
+      link.classList.add('bg-[#EFF6FF]', 'text-[#1E3A8A]', 'font-bold', 'border-l-4', 'border-[#2563EB]');
+      link.classList.remove('text-slate-600', 'hover:bg-[#F8FAFC]', 'hover:text-slate-900', 'hover:bg-[#F9FAFB]', 'bg-[#eafff5]', 'text-[#064e29]', 'border-[#80ffbf]', 'bg-blue-600', 'text-white', 'bg-[#F0FDF4]', 'text-[#15803D]', 'bg-[#dbf9eb]', 'text-[#00483d]');
       if (icon) {
-        icon.classList.remove('text-slate-400');
-        icon.classList.add('text-[#064e29]');
+        icon.classList.remove('text-slate-400', 'text-[#064e29]', 'text-[#0a4a1f]', 'text-[#00483d]', 'text-[#15803D]');
+        icon.classList.add('text-[#2563EB]');
       }
     } else {
-      link.classList.remove('bg-[#eafff5]', 'text-[#064e29]', 'font-bold', 'border-l-4', 'border-[#80ffbf]', 'bg-[#dbf9eb]', 'text-[#00483d]', 'bg-blue-600', 'text-white', 'bg-[#F0FDF4]', 'text-[#15803D]');
-      link.classList.add('text-slate-600', 'hover:bg-[#F9FAFB]', 'hover:text-slate-900');
+      link.classList.remove('bg-[#EFF6FF]', 'text-[#1E3A8A]', 'font-bold', 'border-l-4', 'border-[#2563EB]', 'bg-[#eafff5]', 'text-[#064e29]', 'border-[#80ffbf]', 'bg-[#dbf9eb]', 'text-[#00483d]', 'bg-blue-600', 'text-white', 'bg-[#F0FDF4]', 'text-[#15803D]');
+      link.classList.add('text-slate-600', 'hover:bg-[#F8FAFC]', 'hover:text-slate-900');
       if (icon) {
-        icon.classList.remove('text-[#064e29]', 'text-[#0a4a1f]', 'text-[#00483d]', 'text-[#15803D]');
+        icon.classList.remove('text-[#2563EB]', 'text-[#1E3A8A]', 'text-[#064e29]', 'text-[#0a4a1f]', 'text-[#00483d]', 'text-[#15803D]');
         icon.classList.add('text-slate-400');
       }
     }
@@ -303,7 +314,7 @@ function renderSection(sectionId) {
 }
 
 // -------------------------------------------------------------
-// 1. DASHBOARD
+// 1. DASHBOARD (P5-06, P5-08)
 // -------------------------------------------------------------
 async function renderDashboard() {
   try {
@@ -314,18 +325,20 @@ async function renderDashboard() {
       api.get('/donhangonline').catch(() => [])
     ]);
 
-    // 1. Card Doanh Thu
+    // 1. Card Doanh Thu (Hôm nay / Tháng / Tổng)
     const revEl = document.getElementById('dash-revenue');
-    if (revEl) revEl.textContent = Format.currency(th.tongDoanhThu || 0);
+    const revenueVal = th.doanhThuHomNay != null ? th.doanhThuHomNay : (th.doanhThuThang != null ? th.doanhThuThang : (th.tongDoanhThu || 0));
+    if (revEl) revEl.textContent = Format.currency(revenueVal);
 
     const revSubText = document.getElementById('dash-revenue-sub-text');
     if (revSubText) {
-      revSubText.textContent = (th.tongHoaDon > 0) ? `${th.tongHoaDon} hóa đơn đã hoàn tất` : 'Chưa có hóa đơn phát sinh';
+      const invoiceCount = th.soHoaDonHomNay != null ? th.soHoaDonHomNay : (th.tongHoaDon || 0);
+      revSubText.textContent = (invoiceCount > 0) ? `${invoiceCount} hóa đơn phát sinh` : 'Chưa có hóa đơn phát sinh';
     }
 
     // 2. Card Đơn Chờ Duyệt
     const pendingOrders = (orders || []).filter(o => o.trangThai === 'cho_xac_nhan');
-    const pendingCount = pendingOrders.length;
+    const pendingCount = th.donOnlineChoXacNhan != null ? th.donOnlineChoXacNhan : pendingOrders.length;
     const pendingEl = document.getElementById('dash-pending-orders');
     if (pendingEl) pendingEl.textContent = pendingCount + ' đơn';
 
@@ -333,38 +346,39 @@ async function renderDashboard() {
     if (pendingSub) {
       if (pendingCount > 0) {
         pendingSub.textContent = 'Cần duyệt & xuất hóa đơn';
-        pendingSub.className = 'text-[11px] text-amber-600 font-bold mt-1.5 truncate whitespace-nowrap';
+        pendingSub.className = 'text-[11px] text-[#F59E0B] font-bold mt-1.5 truncate whitespace-nowrap';
       } else {
         pendingSub.textContent = 'Đã xử lý hết đơn hàng';
         pendingSub.className = 'text-[11px] text-slate-500 font-medium mt-1.5 truncate whitespace-nowrap';
       }
     }
 
-    // 3. Card Tổng Tồn Kho Máy
+    // 3. Card Tổng Tồn Kho Máy & Cảnh báo sắp hết
     const stockEl = document.getElementById('dash-total-stock');
     const totalMatHang = th.tongMatHang != null ? Number(th.tongMatHang) : 0;
     const totalTonKho = th.tongTonKho != null ? Number(th.tongTonKho) : 0;
+    const lowStockCount = th.soMatHangSapHet != null ? Number(th.soMatHangSapHet) : 0;
     
     if (stockEl) {
-      stockEl.textContent = totalMatHang + ' mặt hàng';
+      stockEl.textContent = (totalTonKho > 0 ? totalTonKho + ' máy' : (totalMatHang + ' mặt hàng'));
     }
 
     const stockSub = document.getElementById('dash-total-stock-sub');
     if (stockSub) {
-      if (totalMatHang === 0 || totalTonKho === 0) {
-        stockSub.textContent = 'Hết hàng';
-        stockSub.className = 'text-[11px] text-rose-600 font-bold mt-1.5 truncate whitespace-nowrap';
-      } else if (totalTonKho <= 5) {
-        stockSub.textContent = `Cảnh báo sắp hết (${totalTonKho} máy)`;
-        stockSub.className = 'text-[11px] text-amber-600 font-bold mt-1.5 truncate whitespace-nowrap';
+      if (lowStockCount > 0) {
+        stockSub.textContent = `Cảnh báo ${lowStockCount} mặt hàng sắp hết`;
+        stockSub.className = 'text-[11px] text-[#EF4444] font-bold mt-1.5 truncate whitespace-nowrap';
+      } else if (totalMatHang === 0 || totalTonKho === 0) {
+        stockSub.textContent = 'Hết hàng trong kho';
+        stockSub.className = 'text-[11px] text-[#EF4444] font-bold mt-1.5 truncate whitespace-nowrap';
       } else {
         stockSub.textContent = `Đang còn hàng (${totalTonKho} máy)`;
-        stockSub.className = 'text-[11px] text-emerald-700 font-medium mt-1.5 truncate whitespace-nowrap';
+        stockSub.className = 'text-[11px] text-[#22C55E] font-medium mt-1.5 truncate whitespace-nowrap';
       }
     }
 
     // 4. Card Bảo Hành
-    const warrantyCount = th.mayBaoHanh != null ? Number(th.mayBaoHanh) : 0;
+    const warrantyCount = th.soBaoHanhDangXuLy != null ? Number(th.soBaoHanhDangXuLy) : (th.mayBaoHanh != null ? Number(th.mayBaoHanh) : 0);
     const invoiceEl = document.getElementById('dash-warranty-count');
     if (invoiceEl) {
       invoiceEl.textContent = warrantyCount + ' máy';
@@ -374,29 +388,31 @@ async function renderDashboard() {
     if (warrantySub) {
       if (warrantyCount > 0) {
         warrantySub.textContent = 'Tiếp nhận & đang sửa chữa';
-        warrantySub.className = 'text-[11px] text-indigo-600 font-bold mt-1.5 truncate whitespace-nowrap';
+        warrantySub.className = 'text-[11px] text-[#2563EB] font-bold mt-1.5 truncate whitespace-nowrap';
       } else {
         warrantySub.textContent = 'Không có máy đang sửa';
         warrantySub.className = 'text-[11px] text-slate-500 font-medium mt-1.5 truncate whitespace-nowrap';
       }
     }
 
-    // 5. Render Doanh Thu Theo Kênh Bán (FR25)
+    // 5. Render Doanh Thu Theo Kênh Bán (P5-06, P5-08)
     const channelContainer = document.getElementById('dash-channel-stats');
     if (channelContainer) {
       const channelList = Array.isArray(dtKenh) && dtKenh.length > 0 ? dtKenh : [];
-      const totalRev = channelList.reduce((acc, c) => acc + (Number(c.DOANHTHU) || 0), 0);
+      const totalRev = channelList.reduce((acc, c) => acc + (Number(c.doanhThu ?? c.DOANHTHU) || 0), 0);
       
       if (channelList.length === 0) {
         channelContainer.innerHTML = '<div class="text-slate-400 italic py-3 text-center">Chưa có số liệu doanh thu kênh bán</div>';
       } else {
         channelContainer.innerHTML = channelList.map(c => {
-          const rev = Number(c.DOANHTHU) || 0;
+          const rev = Number(c.doanhThu ?? c.DOANHTHU) || 0;
+          const soHD = c.soHoaDon ?? c.SOHOADON ?? 0;
           const pct = totalRev > 0 ? Math.round((rev / totalRev) * 100) : 0;
-          const isOnline = c.KENHBAN === 'online';
+          const channelKey = (c.kenhBan ?? c.KENHBAN ?? '').toLowerCase();
+          const isOnline = channelKey === 'online';
           const name = isOnline ? 'Đơn Đặt Online (Website)' : 'Bán Tại Quầy (POS)';
-          const icon = isOnline ? 'fa-globe text-blue-500' : 'fa-cash-register text-emerald-600';
-          const barColor = isOnline ? 'bg-blue-600' : 'bg-emerald-600';
+          const icon = isOnline ? 'fa-globe text-[#2563EB]' : 'fa-cash-register text-[#1E3A8A]';
+          const barColor = isOnline ? 'bg-[#2563EB]' : 'bg-[#1E3A8A]';
 
           return `
             <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
@@ -408,7 +424,7 @@ async function renderDashboard() {
                 <span class="font-mono font-bold text-slate-900">${Format.currency(rev)}</span>
               </div>
               <div class="flex items-center justify-between text-[11px] text-slate-500 mb-1.5">
-                <span>Số lượng: <b>${c.SOHOADON || 0} hóa đơn</b></span>
+                <span>Số lượng: <b>${soHD} hóa đơn</b></span>
                 <span class="font-bold text-slate-700">${pct}%</span>
               </div>
               <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
@@ -420,24 +436,26 @@ async function renderDashboard() {
       }
     }
 
-    // 6. Render Doanh Thu Theo Nhóm Hàng (FR25)
+    // 6. Render Doanh Thu Theo Nhóm Hàng (P5-06, P5-08)
     const catContainer = document.getElementById('dash-category-stats');
     if (catContainer) {
       const catList = Array.isArray(dtNhom) && dtNhom.length > 0 ? dtNhom : [];
-      const totalCatRev = catList.reduce((acc, c) => acc + (Number(c.DOANHTHU) || 0), 0);
+      const totalCatRev = catList.reduce((acc, c) => acc + (Number(c.doanhThu ?? c.DOANHTHU) || 0), 0);
 
       if (catList.length === 0) {
         catContainer.innerHTML = '<div class="text-slate-400 italic py-3 text-center">Chưa có số liệu doanh thu nhóm hàng</div>';
       } else {
         const colors = [
-          { bar: 'bg-purple-600', icon: 'fa-mobile-screen text-purple-600' },
-          { bar: 'bg-amber-500', icon: 'fa-headphones text-amber-500' },
-          { bar: 'bg-teal-500', icon: 'fa-plug text-teal-500' },
-          { bar: 'bg-indigo-500', icon: 'fa-layer-group text-indigo-500' }
+          { bar: 'bg-[#1E3A8A]', icon: 'fa-mobile-screen text-[#1E3A8A]' },
+          { bar: 'bg-[#2563EB]', icon: 'fa-headphones text-[#2563EB]' },
+          { bar: 'bg-[#F59E0B]', icon: 'fa-plug text-[#F59E0B]' },
+          { bar: 'bg-[#0F172A]', icon: 'fa-layer-group text-slate-800' }
         ];
 
         catContainer.innerHTML = catList.map((c, idx) => {
-          const rev = Number(c.DOANHTHU) || 0;
+          const rev = Number(c.doanhThu ?? c.DOANHTHU) || 0;
+          const soLuong = c.soLuong ?? c.soLuongBan ?? c.SOLUONGBAN ?? 0;
+          const tenNhom = c.tenNhom ?? c.TENNHOM ?? '-';
           const pct = totalCatRev > 0 ? Math.round((rev / totalCatRev) * 100) : 0;
           const colorObj = colors[idx % colors.length];
 
@@ -446,12 +464,12 @@ async function renderDashboard() {
               <div class="flex items-center justify-between mb-1.5">
                 <span class="font-bold text-slate-800 flex items-center gap-1.5">
                   <i class="fa-solid ${colorObj.icon}"></i>
-                  ${c.TENNHOM}
+                  ${tenNhom}
                 </span>
                 <span class="font-mono font-bold text-slate-900">${Format.currency(rev)}</span>
               </div>
               <div class="flex items-center justify-between text-[11px] text-slate-500 mb-1.5">
-                <span>Đã bán: <b>${c.SOLUONGBAN || 0} sản phẩm</b></span>
+                <span>Đã bán: <b>${soLuong} sản phẩm</b></span>
                 <span class="font-bold text-slate-700">${pct}%</span>
               </div>
               <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
@@ -472,13 +490,13 @@ async function renderDashboard() {
       } else {
         tbody.innerHTML = recentOrders.map(o => `
           <tr class="border-b border-slate-100 hover:bg-slate-50">
-            <td class="p-3 font-mono font-bold text-[#15803D] text-xs whitespace-nowrap">${o.maDH}</td>
+            <td class="p-3 font-mono font-bold text-[#1E3A8A] text-xs whitespace-nowrap">${o.maDH}</td>
             <td class="p-3 font-semibold text-xs text-navy whitespace-nowrap">${o.tenNguoiNhan || '-'}</td>
             <td class="p-3 text-xs text-slate-600 min-w-[150px] truncate">${o.diaChiGiao || '-'}</td>
             <td class="p-3 font-bold text-xs text-navy text-right whitespace-nowrap">${Format.currency(o.tongTien)}</td>
             <td class="p-3 text-xs text-center whitespace-nowrap">${Format.statusBadge(o.trangThai)}</td>
             <td class="p-3 text-xs text-right whitespace-nowrap">
-              <button onclick="renderSection('view-donhang')" class="px-2.5 py-1 bg-blue-50 text-[#166534] hover:bg-blue-100 font-bold rounded-lg text-xs whitespace-nowrap transition-colors">Xem đơn</button>
+              <button onclick="renderSection('view-donhang')" class="px-2.5 py-1 bg-[#EFF6FF] text-[#1E3A8A] hover:bg-blue-100 font-bold rounded-lg text-xs whitespace-nowrap transition-colors cursor-pointer">Xem đơn</button>
             </td>
           </tr>
         `).join('');
@@ -678,7 +696,7 @@ async function renderDonHangTable(filter = 'all') {
       if (o.trangThai === 'cho_xac_nhan') {
         actions = `
           <div class="flex items-center justify-end gap-1.5">
-            <button onclick="approveOrder('${o.maDH}')" class="px-3 py-1.5 bg-[#80ffbf] hover:bg-[#66e6a5] text-[#061a0f] font-black rounded-xl text-xs transition-colors shadow-sm" title="Duyệt đơn sang Đã xác nhận">
+            <button onclick="approveOrder('${o.maDH}')" class="px-3 py-1.5 bg-[#1E3A8A] hover:bg-[#172554] text-white font-bold rounded-xl text-xs transition-colors shadow-sm" title="Duyệt đơn sang Đã xác nhận">
               Duyệt đơn
             </button>
             <button onclick="cancelOrder('${o.maDH}')" class="px-2.5 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold rounded-xl text-xs transition-colors border border-rose-200" title="Hủy đơn">
@@ -1095,75 +1113,254 @@ async function viewChiTietNhapKho(soPN) {
 }
 
 // -------------------------------------------------------------
-// 6. TIẾP NHẬN BẢO HÀNH & SỬA CHỮA (B6 - API TRỰC TIẾP)
+// 6. TIẾP NHẬN BẢO HÀNH & SỬA CHỮA (P5-04, P5-05, P5-07)
 // -------------------------------------------------------------
+const baoHanhState = {
+  statusFilter: '',
+  searchKeyword: '',
+  page: 1,
+  pageSize: 20,
+  totalCount: 0,
+  rawList: []
+};
+
+function updateBaoHanhCounters(list) {
+  if (!Array.isArray(list)) return;
+  const counts = { all: list.length, tiep_nhan: 0, dang_sua: 0, cho_linh_kien: 0, hoan_thanh: 0, da_tra: 0 };
+  list.forEach(item => {
+    const s = (item.trangThai || '').toLowerCase();
+    if (counts[s] !== undefined) counts[s]++;
+  });
+  const setEl = (id, val) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = val;
+  };
+  setEl('baohanh-count-all', counts.all);
+  setEl('baohanh-count-tiepnhan', counts.tiep_nhan);
+  setEl('baohanh-count-dangsua', counts.dang_sua);
+  setEl('baohanh-count-cholinhkien', counts.cho_linh_kien);
+  setEl('baohanh-count-hoanthanh', counts.hoan_thanh);
+  setEl('baohanh-count-datra', counts.da_tra);
+}
+
+function updateBaoHanhPaginationUI(renderedCount, totalFiltered) {
+  const total = totalFiltered || baoHanhState.totalCount;
+  const maxPage = Math.ceil(total / baoHanhState.pageSize) || 1;
+  const infoEl = document.getElementById('baohanh-pagination-info');
+  const pageEl = document.getElementById('baohanh-current-page');
+  const prevBtn = document.getElementById('btn-baohanh-prev');
+  const nextBtn = document.getElementById('btn-baohanh-next');
+
+  if (infoEl) {
+    if (total === 0) {
+      infoEl.textContent = 'Không có dữ liệu';
+    } else {
+      const from = (baoHanhState.page - 1) * baoHanhState.pageSize + 1;
+      const to = Math.min(from + renderedCount - 1, total);
+      infoEl.textContent = `Hiển thị ${from} - ${to} trên tổng ${total} phiếu`;
+    }
+  }
+  if (pageEl) pageEl.textContent = `${baoHanhState.page} / ${maxPage}`;
+  if (prevBtn) prevBtn.disabled = (baoHanhState.page <= 1);
+  if (nextBtn) nextBtn.disabled = (baoHanhState.page >= maxPage);
+}
+
+function setBaoHanhStatusFilter(status) {
+  baoHanhState.statusFilter = status;
+  baoHanhState.page = 1;
+  document.querySelectorAll('.baohanh-tab-btn').forEach(btn => {
+    const s = btn.getAttribute('data-status') || '';
+    if (s === status) {
+      btn.className = 'baohanh-tab-btn px-3.5 py-1.5 rounded-lg text-xs font-bold transition-colors bg-[#EFF6FF] text-[#1E3A8A] border border-blue-200';
+    } else {
+      btn.className = 'baohanh-tab-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors';
+    }
+  });
+  renderBaoHanhTable();
+}
+
+let baoHanhSearchTimeout = null;
+function handleBaoHanhSearch(event) {
+  clearTimeout(baoHanhSearchTimeout);
+  baoHanhSearchTimeout = setTimeout(() => {
+    baoHanhState.searchKeyword = (event.target.value || '').trim();
+    baoHanhState.page = 1;
+    renderBaoHanhTable();
+  }, 250);
+}
+
+function refreshBaoHanhTable() {
+  renderBaoHanhTable();
+}
+
+function changeBaoHanhPageSize(size) {
+  baoHanhState.pageSize = parseInt(size, 10) || 20;
+  baoHanhState.page = 1;
+  renderBaoHanhTable();
+}
+
+function changeBaoHanhPage(delta) {
+  const newPage = baoHanhState.page + delta;
+  if (newPage < 1) return;
+  const maxPage = Math.ceil(baoHanhState.totalCount / baoHanhState.pageSize) || 1;
+  if (newPage > maxPage) return;
+  baoHanhState.page = newPage;
+  renderBaoHanhTable();
+}
+
 async function renderBaoHanhTable() {
   const tbody = document.getElementById('table-baohanh-body');
   if (!tbody) return;
 
-  tbody.innerHTML = '<tr><td colspan="9" class="p-4 text-center text-slate-500">Đang tải phiếu bảo hành...</td></tr>';
+  tbody.innerHTML = '<tr><td colspan="9" class="p-6 text-center text-slate-500 font-medium"><i class="fa-solid fa-spinner fa-spin text-base text-[#2563EB] mr-2"></i>Đang tải danh sách bảo hành...</td></tr>';
 
   try {
-    const list = await api.get('/tiepnhanbaohanh');
-    if (!list || list.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="9" class="p-4 text-center text-slate-400">Chưa có phiếu bảo hành nào</td></tr>';
+    let url = `/tiepnhanbaohanh?page=${baoHanhState.page}&pageSize=${baoHanhState.pageSize}`;
+    if (baoHanhState.statusFilter) {
+      url += `&trangThai=${encodeURIComponent(baoHanhState.statusFilter)}`;
+    }
+
+    let items = [];
+    let total = 0;
+
+    try {
+      const res = await api.getWithHeaders(url);
+      if (Array.isArray(res.data)) {
+        items = res.data;
+        total = res.totalCount || items.length;
+      } else if (Array.isArray(res)) {
+        items = res;
+        total = items.length;
+      }
+    } catch (e) {
+      const data = await api.get('/tiepnhanbaohanh');
+      if (Array.isArray(data)) {
+        items = data;
+        total = items.length;
+      }
+    }
+
+    if (!baoHanhState.statusFilter && !baoHanhState.searchKeyword && items.length > 0) {
+      baoHanhState.rawList = items;
+    }
+    updateBaoHanhCounters(baoHanhState.rawList.length > 0 ? baoHanhState.rawList : items);
+
+    let filtered = items;
+    if (baoHanhState.statusFilter) {
+      filtered = filtered.filter(x => (x.trangThai || '').toLowerCase() === baoHanhState.statusFilter.toLowerCase());
+    }
+    if (baoHanhState.searchKeyword) {
+      const kw = baoHanhState.searchKeyword.toLowerCase();
+      filtered = filtered.filter(x => 
+        (x.maTN && x.maTN.toLowerCase().includes(kw)) ||
+        (x.soIMEI && x.soIMEI.toLowerCase().includes(kw)) ||
+        (x.maIMEI && x.maIMEI.toLowerCase().includes(kw)) ||
+        (x.tinhTrangLoi && x.tinhTrangLoi.toLowerCase().includes(kw))
+      );
+    }
+
+    baoHanhState.totalCount = total > filtered.length ? total : filtered.length;
+
+    const startIdx = (baoHanhState.page - 1) * baoHanhState.pageSize;
+    const pagedItems = (filtered.length > baoHanhState.pageSize && items.length === total)
+      ? filtered.slice(startIdx, startIdx + baoHanhState.pageSize)
+      : filtered;
+
+    updateBaoHanhPaginationUI(pagedItems.length, filtered.length);
+
+    if (pagedItems.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="9" class="p-8 text-center text-slate-400 font-medium">Không tìm thấy phiếu tiếp nhận bảo hành nào phù hợp.</td></tr>';
       return;
     }
 
-    tbody.innerHTML = list.map(t => {
-      const ngay = t.ngayNhan ? t.ngayNhan.replace('T', ' ').substring(0, 16) : '-';
-      let actions = '';
+    tbody.innerHTML = pagedItems.map(t => {
+      const imei = t.soIMEI || t.maIMEI || t.soImei || '-';
+      const ngayNhanStr = t.ngayNhan ? Format.date(t.ngayNhan) : '-';
+      const ngayHenTraStr = t.ngayHenTra ? Format.date(t.ngayHenTra) : '-';
+      const ktv = t.tenNVKyThuat || t.maNVKyThuat || 'Chưa phân công';
+
+      // State Machine nghiêm ngặt theo P5-05:
+      // tiep_nhan -> dang_sua
+      // dang_sua <-> cho_linh_kien
+      // dang_sua / cho_linh_kien -> hoan_thanh
+      // hoan_thanh -> da_tra
+      // da_tra -> kết thúc
+      let actionHtml = '';
       if (t.trangThai === 'tiep_nhan') {
-        actions = `
-          <button onclick="updateTiepNhanStatus('${t.maTN}', 'dang_sua')" class="px-2.5 py-1 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-lg text-xs transition-colors shadow-sm">
-            Sửa chữa
-          </button>
-          <button onclick="updateTiepNhanStatus('${t.maTN}', 'cho_linh_kien')" class="ml-1 px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-lg text-xs transition-colors">
-            Chờ LK
+        actionHtml = `
+          <button type="button" onclick="updateTiepNhanStatus('${t.maTN}', 'dang_sua', this)" class="px-2.5 py-1.5 bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold rounded-lg text-xs transition-colors shadow-sm inline-flex items-center gap-1 cursor-pointer" title="Bắt đầu sửa máy">
+            <i class="fa-solid fa-play text-[10px]"></i> Bắt đầu sửa
           </button>
         `;
-      } else if (t.trangThai === 'dang_sua' || t.trangThai === 'cho_linh_kien') {
-        actions = `
-          <button onclick="updateTiepNhanStatus('${t.maTN}', 'hoan_thanh')" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-xs transition-colors shadow-sm">
-            Xong sửa
-          </button>
+      } else if (t.trangThai === 'dang_sua') {
+        actionHtml = `
+          <div class="flex items-center justify-end gap-1.5">
+            <button type="button" onclick="updateTiepNhanStatus('${t.maTN}', 'cho_linh_kien', this)" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-lg text-xs transition-colors border border-slate-200 inline-flex items-center gap-1 cursor-pointer" title="Chuyển sang Chờ linh kiện">
+              <i class="fa-solid fa-clock text-[10px] text-amber-600"></i> Chờ LK
+            </button>
+            <button type="button" onclick="updateTiepNhanStatus('${t.maTN}', 'hoan_thanh', this)" class="px-2.5 py-1.5 bg-[#22C55E] hover:bg-[#16A34A] text-white font-bold rounded-lg text-xs transition-colors shadow-sm inline-flex items-center gap-1 cursor-pointer" title="Xác nhận sửa xong máy">
+              <i class="fa-solid fa-check text-[10px]"></i> Xong sửa
+            </button>
+          </div>
+        `;
+      } else if (t.trangThai === 'cho_linh_kien') {
+        actionHtml = `
+          <div class="flex items-center justify-end gap-1.5">
+            <button type="button" onclick="updateTiepNhanStatus('${t.maTN}', 'dang_sua', this)" class="px-2.5 py-1.5 bg-[#F59E0B] hover:bg-[#D97706] text-white font-bold rounded-lg text-xs transition-colors shadow-sm inline-flex items-center gap-1 cursor-pointer" title="Linh kiện đã về, tiếp tục sửa">
+              <i class="fa-solid fa-screwdriver-wrench text-[10px]"></i> Sửa tiếp
+            </button>
+            <button type="button" onclick="updateTiepNhanStatus('${t.maTN}', 'hoan_thanh', this)" class="px-2.5 py-1.5 bg-[#22C55E] hover:bg-[#16A34A] text-white font-bold rounded-lg text-xs transition-colors shadow-sm inline-flex items-center gap-1 cursor-pointer" title="Sửa xong trực tiếp">
+              <i class="fa-solid fa-check text-[10px]"></i> Xong sửa
+            </button>
+          </div>
         `;
       } else if (t.trangThai === 'hoan_thanh') {
-        actions = `
-          <button onclick="updateTiepNhanStatus('${t.maTN}', 'da_tra')" class="px-2.5 py-1 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-xs transition-colors shadow-sm">
-            Trả máy
+        actionHtml = `
+          <button type="button" onclick="updateTiepNhanStatus('${t.maTN}', 'da_tra', this)" class="px-3 py-1.5 bg-[#1E3A8A] hover:bg-[#172554] text-white font-bold rounded-lg text-xs transition-colors shadow-sm inline-flex items-center gap-1 cursor-pointer" title="Bàn giao máy lại cho khách">
+            <i class="fa-solid fa-handshake text-[10px] text-[#F59E0B]"></i> Trả máy khách
           </button>
         `;
       } else {
-        actions = '<span class="text-xs text-emerald-600 font-bold">Đã trả khách</span>';
+        actionHtml = '<span class="text-xs text-[#22C55E] font-bold inline-flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Đã trả khách</span>';
       }
 
       return `
-        <tr class="border-b border-slate-200 hover:bg-slate-50 transition-colors">
-          <td class="p-3.5 font-mono font-bold text-xs text-[#15803D] whitespace-nowrap">${t.maTN}</td>
-          <td class="p-3.5 text-xs text-slate-500 whitespace-nowrap">${ngay}</td>
-          <td class="p-3.5 font-mono font-bold text-xs text-slate-700 whitespace-nowrap">${t.soIMEI || t.maIMEI || '-'}</td>
-          <td class="p-3.5 text-xs text-slate-700 max-w-[200px] truncate" title="${t.tinhTrangLoi || ''}">${t.tinhTrangLoi || '-'}</td>
-          <td class="p-3.5 text-xs text-slate-600 whitespace-nowrap">${t.tenNVTiepNhan || t.maNVTiepNhan || '-'}</td>
-          <td class="p-3.5 text-xs text-slate-600 whitespace-nowrap">${t.tenNVKyThuat || t.maNVKyThuat || 'Chưa phân công'}</td>
-          <td class="p-3.5 font-bold text-xs text-right whitespace-nowrap">${Format.currency(t.chiPhi || 0)}</td>
+        <tr class="border-b border-slate-100 hover:bg-slate-50/80 transition-colors">
+          <td class="p-3.5 font-mono font-bold text-xs text-[#1E3A8A] whitespace-nowrap">${t.maTN}</td>
+          <td class="p-3.5 font-mono font-bold text-xs text-slate-800 whitespace-nowrap">${imei}</td>
+          <td class="p-3.5 text-xs text-slate-600 whitespace-nowrap">${ngayNhanStr}</td>
+          <td class="p-3.5 text-xs text-slate-700 max-w-[220px] truncate" title="${t.tinhTrangLoi || ''}">${t.tinhTrangLoi || '-'}</td>
+          <td class="p-3.5 text-xs text-slate-600 whitespace-nowrap">${ktv}</td>
+          <td class="p-3.5 text-xs text-slate-600 whitespace-nowrap">${ngayHenTraStr}</td>
+          <td class="p-3.5 font-bold text-xs text-right whitespace-nowrap text-slate-900">${Format.currency(t.chiPhi || 0)}</td>
           <td class="p-3.5 text-xs text-center whitespace-nowrap">${Format.statusBadge(t.trangThai)}</td>
-          <td class="p-3.5 text-xs text-right whitespace-nowrap">${actions}</td>
+          <td class="p-3.5 text-xs text-right whitespace-nowrap">${actionHtml}</td>
         </tr>
       `;
     }).join('');
   } catch (err) {
-    tbody.innerHTML = `<tr><td colspan="9" class="p-4 text-center text-rose-500">Lỗi tải bảo hành: ${err.message}</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="9" class="p-6 text-center text-rose-600 font-medium">Lỗi tải danh sách bảo hành: ${err.message}</td></tr>`;
   }
 }
 
-async function updateTiepNhanStatus(maTN, trangThai) {
+async function updateTiepNhanStatus(maTN, trangThai, btnEl) {
+  const originalHtml = btnEl ? btnEl.innerHTML : '';
+  if (btnEl) {
+    btnEl.disabled = true;
+    btnEl.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-xs"></i>';
+  }
+
   try {
     await api.put('/tiepnhanbaohanh/' + encodeURIComponent(maTN) + '/trangthai', { trangThai });
-    showToast('Cập nhật trạng thái bảo hành thành công: ' + trangThai, 'success');
+    showToast(`Đã chuyển phiếu ${maTN} sang trạng thái thành công`, 'success');
     await renderBaoHanhTable();
   } catch (err) {
-    alert('Lỗi cập nhật trạng thái bảo hành: ' + err.message);
+    showToast(err.message || 'Không thể chuyển trạng thái bảo hành', 'error');
+  } finally {
+    if (btnEl) {
+      btnEl.disabled = false;
+      btnEl.innerHTML = originalHtml;
+    }
   }
 }
 
@@ -1171,25 +1368,82 @@ async function openTiepNhanBaoHanhModal() {
   const modal = document.getElementById('modal-tiepnhan-baohanh');
   if (!modal) return;
   modal.classList.remove('hidden');
+
+  const form = document.getElementById('form-tiepnhan-baohanh');
+  if (form) form.reset();
+
+  const selectKtv = document.getElementById('tn-maNVKyThuat');
+  if (selectKtv) {
+    try {
+      const staffList = await api.get('/nhanvien');
+      if (Array.isArray(staffList) && staffList.length > 0) {
+        const techs = staffList.filter(s => {
+          const cv = (s.chucVu || '').toLowerCase();
+          return cv.includes('kỹ thuật') || cv.includes('ky thuat') || cv.includes('bảo hành') || cv.includes('bao hanh');
+        });
+        const listToRender = techs.length > 0 ? techs : staffList;
+        selectKtv.innerHTML = '<option value="">-- Chọn kỹ thuật viên --</option>' +
+          listToRender.map(s => `<option value="${s.maNV}">${s.hoTen || s.tenNV || s.maNV} (${s.chucVu || 'Kỹ thuật viên'})</option>`).join('');
+      }
+    } catch (e) {
+      if (selectKtv.options.length <= 1) {
+        selectKtv.innerHTML = `
+          <option value="">-- Chọn kỹ thuật viên --</option>
+          <option value="NV004" selected>Phạm Kỹ Thuật (Kỹ thuật & Bảo hành)</option>
+        `;
+      }
+    }
+  }
 }
 
 async function saveTiepNhanBaoHanh(e) {
   e.preventDefault();
   const form = e.target;
+  const submitBtn = document.getElementById('btn-submit-tiepnhan');
+  const originalHtml = submitBtn ? submitBtn.innerHTML : '';
+
+  const soIMEI = (form.soIMEI ? form.soIMEI.value : (form.soImei ? form.soImei.value : '')).trim();
+  const tinhTrangLoi = (form.tinhTrangLoi ? form.tinhTrangLoi.value : '').trim();
+  const maNVKyThuat = form.maNVKyThuat ? form.maNVKyThuat.value : '';
+  const ngayHenTra = form.ngayHenTra ? form.ngayHenTra.value : '';
+  const chiPhi = Number(form.chiPhi ? form.chiPhi.value : 0) || 0;
+
+  if (!soIMEI) {
+    showToast('Vui lòng nhập số IMEI máy cần bảo hành', 'error');
+    return;
+  }
+  if (!tinhTrangLoi) {
+    showToast('Vui lòng nhập mô tả tình trạng lỗi', 'error');
+    return;
+  }
+
   const payload = {
-    soIMEI: form.soIMEI.value.trim(),
-    tinhTrangLoi: form.tinhTrangLoi.value.trim(),
-    chiPhi: Number(form.chiPhi ? form.chiPhi.value : 0) || 0
+    soIMEI,
+    tinhTrangLoi,
+    chiPhi
   };
+  if (maNVKyThuat) payload.maNVKyThuat = maNVKyThuat;
+  if (ngayHenTra) payload.ngayHenTra = ngayHenTra;
+
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-xs"></i> <span>Đang xử lý...</span>';
+  }
 
   try {
     const res = await api.post('/tiepnhanbaohanh', payload);
-    showToast('Đã tiếp nhận bảo hành máy: ' + res.maTN, 'success');
+    const maTN = res && res.maTN ? res.maTN : '';
+    showToast('Đã tiếp nhận bảo hành máy thành công' + (maTN ? ': ' + maTN : ''), 'success');
     closeModal('modal-tiepnhan-baohanh');
     form.reset();
     await renderBaoHanhTable();
   } catch (err) {
-    alert('Lỗi tiếp nhận bảo hành: ' + err.message);
+    showToast(err.message || 'Lỗi khi lập phiếu tiếp nhận bảo hành', 'error');
+  } finally {
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalHtml;
+    }
   }
 }
 
@@ -1330,7 +1584,8 @@ async function renderNhanVienTable() {
         <td class="p-3.5 text-xs text-slate-500 whitespace-nowrap">${nv.email || '-'}</td>
         <td class="p-3.5 text-xs text-center whitespace-nowrap">${Format.statusBadge(nv.trangThai)}</td>
         <td class="p-3.5 text-xs text-right whitespace-nowrap space-x-1.5">
-          <span class="text-xs font-semibold text-slate-400">Hệ thống</span>
+          <button onclick="editNhanVien('${nv.maNV}')" class="px-2.5 py-1 text-xs font-bold text-indigo-600 hover:bg-indigo-50 border border-indigo-200 rounded-lg transition-colors">Sửa</button>
+          <button onclick="deleteNhanVien('${nv.maNV}')" class="px-2.5 py-1 text-xs font-bold text-rose-600 hover:bg-rose-50 border border-rose-200 rounded-lg transition-colors">Xóa</button>
         </td>
       </tr>
     `).join('');
@@ -2704,7 +2959,7 @@ window.handleAdminLoginScreenSubmit = async function(event) {
   } finally {
     if (submitBtn) {
       submitBtn.disabled = false;
-      submitBtn.innerHTML = '<i class="fa-solid fa-right-to-bracket text-[#80ffbf]"></i><span>Đăng Nhập</span>';
+      submitBtn.innerHTML = '<i class="fa-solid fa-right-to-bracket text-[#F59E0B]"></i><span>Đăng Nhập</span>';
     }
   }
 };
@@ -3270,6 +3525,11 @@ window.viewChiTietNhapKho = viewChiTietNhapKho;
 window.openTiepNhanBaoHanhModal = openTiepNhanBaoHanhModal;
 window.saveTiepNhanBaoHanh = saveTiepNhanBaoHanh;
 window.updateTiepNhanStatus = updateTiepNhanStatus;
+window.setBaoHanhStatusFilter = setBaoHanhStatusFilter;
+window.handleBaoHanhSearch = handleBaoHanhSearch;
+window.refreshBaoHanhTable = refreshBaoHanhTable;
+window.changeBaoHanhPageSize = changeBaoHanhPageSize;
+window.changeBaoHanhPage = changeBaoHanhPage;
 
 window.openTraHangModal = openTraHangModal;
 window.saveTraHang = saveTraHang;

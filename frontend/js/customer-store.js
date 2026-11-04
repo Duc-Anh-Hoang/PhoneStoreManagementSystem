@@ -780,10 +780,10 @@
       });
       let icon = 'fa-mobile-screen';
       let color = 'text-[#16A34A]';
-      if (nh.maNhom === 'NH02') { icon = 'fa-plug'; color = 'text-amber-600'; }
-      else if (nh.maNhom === 'NH03') { icon = 'fa-headphones'; color = 'text-blue-600'; }
-      else if (nh.maNhom === 'NH04') { icon = 'fa-tablet-screen-button'; color = 'text-indigo-600'; }
-      else if (nh.maNhom === 'NH05') { icon = 'fa-clock'; color = 'text-purple-600'; }
+      if (nh.maNhom === 'NH02' || nh.maNhom === 'PHUKIEN') { icon = 'fa-plug'; color = 'text-amber-600'; }
+      else if (nh.maNhom === 'NH03' || nh.maNhom === 'AMTHANH') { icon = 'fa-headphones'; color = 'text-blue-600'; }
+      else if (nh.maNhom === 'NH04' || nh.maNhom === 'TABLET') { icon = 'fa-tablet-screen-button'; color = 'text-indigo-600'; }
+      else if (nh.maNhom === 'NH05' || nh.maNhom === 'LAPTOP') { icon = 'fa-laptop'; color = 'text-purple-600'; }
 
       html += `
         <div class="space-y-3">
@@ -852,7 +852,7 @@
   };
 
   window.filterByNhomHang = function (maNhom) {
-    if (maNhom === 'NH01') {
+    if (maNhom === 'NH01' || maNhom === 'DIENTHOAI') {
       const shelf = document.getElementById('shelf-phones');
       if (shelf) shelf.scrollIntoView({ behavior: 'smooth' });
     } else {

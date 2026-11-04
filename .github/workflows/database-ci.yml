@@ -1,0 +1,89 @@
+name: Database CI
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+    paths:
+      - "database/**"
+      - ".github/workflows/database-ci.yml"
+  pull_request:
+    branches: [ "main", "develop" ]
+    paths:
+      - "database/**"
+      - ".github/workflows/database-ci.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-schema-and-seed:
+    name: Test PostgreSQL 16 Init & Migration Scripts
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres_secure_pass_2026
+          POSTGRES_DB: phonestoredb
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install PostgreSQL client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
+
+      - name: Execute init-postgres.sql
+        env:
+          PGPASSWORD: postgres_secure_pass_2026
+        run: |
+          echo "Executing database/init-postgres.sql against clean PostgreSQL 16 container..."
+          psql -h localhost -U postgres -d phonestoredb -f database/init-postgres.sql
+
+      - name: Verify Schema and Seed Data
+        env:
+          PGPASSWORD: postgres_secure_pass_2026
+        run: |
+          echo "Verifying tables and seed records..."
+          
+          # Check MatHang count (should have 10 products)
+          MATHANG_COUNT=$(psql -h localhost -U postgres -d phonestoredb -t -c "SELECT count(*) FROM MatHang;" | xargs)
+          echo "MatHang count: $MATHANG_COUNT"
+          if [ "$MATHANG_COUNT" -lt 1 ]; then
+            echo "Error: MatHang table has no records!"
+            exit 1
+          fi
+
+          # Check TaiKhoan count (admin, staff accounts)
+          TAIKHOAN_COUNT=$(psql -h localhost -U postgres -d phonestoredb -t -c "SELECT count(*) FROM TaiKhoan;" | xargs)
+          echo "TaiKhoan count: $TAIKHOAN_COUNT"
+          if [ "$TAIKHOAN_COUNT" -lt 1 ]; then
+            echo "Error: TaiKhoan table has no records!"
+            exit 1
+          fi
+
+          # Check NhomHang count
+          NHOMHANG_COUNT=$(psql -h localhost -U postgres -d phonestoredb -t -c "SELECT count(*) FROM NhomHang;" | xargs)
+          echo "NhomHang count: $NHOMHANG_COUNT"
+          if [ "$NHOMHANG_COUNT" -lt 1 ]; then
+            echo "Error: NhomHang table has no records!"
+            exit 1
+          fi
+
+          # Check ChiTietThuocTinh count
+          SPECS_COUNT=$(psql -h localhost -U postgres -d phonestoredb -t -c "SELECT count(*) FROM ChiTietThuocTinh;" | xargs)
+          echo "ChiTietThuocTinh count: $SPECS_COUNT"
+
+          echo "Database verification completed successfully!"
