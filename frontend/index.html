@@ -3,18 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CellphoneS - 241 Lê Văn Việt | Điện Thoại, Phụ Kiện Chính Hãng</title>
-  <meta name="description" content="CellphoneS - 241 Lê Văn Việt - Chuyên kinh doanh điện thoại thông minh, phụ kiện công nghệ chính hãng. Bảo hành chính hãng, giá tốt nhất.">
+  <title>Sama Mobile</title>
+  <meta name="description" content="SAMAMOBILE.COM - Hệ thống bán lẻ điện thoại thông minh, máy tính bảng và phụ kiện công nghệ chính hãng. Trả góp 0%, bảo hành chính hãng, giao hàng toàn quốc.">
 
-  <!-- Google Fonts: Plus Jakarta Sans -->
+  <!-- Favicon / Browser Tab Icon (Icon SM SAMAMOBILE) -->
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon.png?v=2">
+  <link rel="icon" type="image/x-icon" href="images/favicon.ico?v=2">
+  <link rel="shortcut icon" href="images/favicon.ico?v=2">
+  <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png?v=2">
+
+  <!-- Google Fonts: Inter & Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Font Awesome 6 Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-  
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -24,12 +28,12 @@
       theme: {
         extend: {
           fontFamily: {
-            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+            sans: ['Inter', '"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
           },
           colors: {
             primary: {
-              DEFAULT: '#1E3A8A',
-              hover: '#172554',
+              DEFAULT: '#FF7A00',
+              hover: '#1D4ED8',
               50: '#EFF6FF',
               100: '#DBEAFE',
               200: '#BFDBFE',
@@ -40,7 +44,7 @@
               700: '#1D4ED8',
               800: '#1E40AF',
               900: '#1E3A8A',
-              950: '#172554'
+              950: '#0F172A'
             },
             secondary: {
               DEFAULT: '#2563EB',
@@ -52,12 +56,12 @@
               700: '#1E40AF'
             },
             accent: {
-              DEFAULT: '#F59E0B',
-              hover: '#D97706',
-              50: '#FFFBEB',
-              100: '#FEF3C7',
-              500: '#F59E0B',
-              600: '#D97706'
+              DEFAULT: '#FF7A00',
+              hover: '#E06800',
+              50: '#FFF7ED',
+              100: '#FFEDD5',
+              500: '#FF7A00',
+              600: '#E06800'
             },
             danger: {
               DEFAULT: '#EF4444',
@@ -97,7 +101,7 @@
   </script>
 
   <!-- Custom CSS -->
-  <link rel="stylesheet" href="css/style.css?v=3.2">
+  <link rel="stylesheet" href="css/style.css?v=5.5">
   <style>
     @keyframes marqueeScroll {
       0% { transform: translate3d(0, 0, 0); }
@@ -119,125 +123,81 @@
       flex-shrink: 0 !important;
       white-space: nowrap !important;
     }
-    #hero-slider-container {
-      display: flex;
-      width: 100%;
-      transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
-      will-change: transform;
+        /* Grid phân cách cho Danh mục nổi bật */
+    .featured-cat-item {
+      border-right: 1px solid #f1f5f9;
+      border-bottom: 1px solid #f1f5f9;
     }
-    .hero-slide {
-      flex: 0 0 100%;
+    @media (max-width: 767px) {
+      .featured-cat-item:nth-child(4n) {
+        border-right: none;
+      }
+      .featured-cat-item:nth-child(n+13) {
+        border-bottom: none;
+      }
+    }
+    @media (min-width: 768px) {
+      .featured-cat-item:nth-child(8n) {
+        border-right: none;
+      }
+      .featured-cat-item:nth-child(n+9) {
+        border-bottom: none;
+      }
+    }
+    #hero-slider-container {
+      position: relative;
       width: 100%;
+      height: 100%;
     }
   </style>
 </head>
 <body class="bg-[#F8FAFC] text-[#111827] antialiased selection:bg-[#2563EB] selection:text-white pb-16 md:pb-0">
 
-  <!-- =========================================================================
-       1. TOP ANNOUNCEMENT BAR (Dải thông báo - Nền tối công nghệ #0F172A & Accent #F59E0B)
-       ========================================================================= -->
-  <div class="bg-[#0F172A] text-white text-xs py-2 px-3 sm:px-4 border-b border-[#2563EB]/20 overflow-hidden">
-    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4 flex-nowrap">
-      
-      <!-- Dải chữ chạy ngang (Marquee tự động chạy vô tận) -->
-      <div class="flex-1 overflow-hidden relative" style="mask-image: linear-gradient(to right, transparent, black 16px, black calc(100% - 16px), transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 16px, black calc(100% - 16px), transparent);">
-        <div class="marquee-track flex items-center whitespace-nowrap" style="display: flex; width: max-content; white-space: nowrap; animation: marqueeScroll 25s linear infinite;">
-          
-          <!-- Nhóm 1 -->
-          <div class="flex items-center gap-8 pr-8 flex-shrink-0">
-            <span class="marquee-item inline-flex items-center gap-1.5 flex-shrink-0 whitespace-nowrap">
-              <span class="bg-[#F59E0B] text-slate-950 font-black text-[10px] uppercase px-1.5 py-0.5 rounded shadow-sm">Hot</span> Mở bán iPhone 16 Pro Max chính hãng VN/A - Ưu đãi giảm ngay 3.500.000đ
-            </span>
-            <span class="marquee-item inline-flex items-center gap-1.5 flex-shrink-0 whitespace-nowrap">
-              <i class="fa-solid fa-truck-fast text-[#F59E0B]"></i> Miễn phí vận chuyển toàn quốc đơn từ 500.000đ
-            </span>
-            <span class="marquee-item inline-flex items-center gap-1.5 flex-shrink-0 whitespace-nowrap">
-              <i class="fa-solid fa-shield-halved text-[#F59E0B]"></i> 100% Hàng chính hãng - Đã gồm VAT
-            </span>
-            <span class="marquee-item inline-flex items-center gap-1.5 flex-shrink-0 whitespace-nowrap">
-              <i class="fa-solid fa-arrows-rotate text-[#F59E0B]"></i> Thu cũ đổi mới trợ giá lên đến 2.500.000đ
-            </span>
-            <span class="marquee-item inline-flex items-center gap-1.5 flex-shrink-0 whitespace-nowrap">
-              <i class="fa-solid fa-phone-volume text-amber-300"></i> Hotline tư vấn miễn phí: 1800 6868
-            </span>
-          </div>
 
-          <!-- Nhóm 2 (Bản sao đối xứng để chạy vô tận không giật) -->
-          <div class="flex items-center gap-8 pr-8 flex-shrink-0" aria-hidden="true">
-            <span class="marquee-item inline-flex items-center gap-1.5 flex-shrink-0 whitespace-nowrap">
-              <span class="bg-[#F59E0B] text-slate-950 font-black text-[10px] uppercase px-1.5 py-0.5 rounded shadow-sm">Hot</span> Mở bán iPhone 16 Pro Max chính hãng VN/A - Ưu đãi giảm ngay 3.500.000đ
-            </span>
-            <span class="marquee-item inline-flex items-center gap-1.5 flex-shrink-0 whitespace-nowrap">
-              <i class="fa-solid fa-truck-fast text-[#F59E0B]"></i> Miễn phí vận chuyển toàn quốc đơn từ 500.000đ
-            </span>
-            <span class="marquee-item inline-flex items-center gap-1.5 flex-shrink-0 whitespace-nowrap">
-              <i class="fa-solid fa-shield-halved text-[#F59E0B]"></i> 100% Hàng chính hãng - Đã gồm VAT
-            </span>
-            <span class="marquee-item inline-flex items-center gap-1.5 flex-shrink-0 whitespace-nowrap">
-              <i class="fa-solid fa-arrows-rotate text-[#F59E0B]"></i> Thu cũ đổi mới trợ giá lên đến 2.500.000đ
-            </span>
-            <span class="marquee-item inline-flex items-center gap-1.5 flex-shrink-0 whitespace-nowrap">
-              <i class="fa-solid fa-phone-volume text-amber-300"></i> Hotline tư vấn miễn phí: 1800 6868
-            </span>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- Đếm ngược & Liên kết nhanh bên phải -->
-      <div class="flex items-center gap-3 sm:gap-4 text-[11px] font-medium flex-shrink-0 whitespace-nowrap">
-        
-        <button type="button" onclick="window.CellphoneSLookup.openModal('order')" class="hover:text-[#F59E0B] transition-colors hidden sm:inline-flex items-center gap-1 cursor-pointer">
-          <i class="fa-solid fa-truck-ramp-box"></i> Tra cứu đơn
-        </button>
-        <button type="button" onclick="window.CellphoneSLookup.openModal('warranty')" class="hover:text-[#F59E0B] transition-colors hidden sm:inline-flex items-center gap-1 cursor-pointer">
-          <i class="fa-solid fa-shield-halved"></i> Tra cứu BH
-        </button>
-        <a href="tel:18006868" class="inline-flex items-center gap-1 text-[#F59E0B] font-bold hover:underline">
-          <i class="fa-solid fa-phone-volume"></i> 1800 6868
-        </a>
-      </div>
-    </div>
-  </div>
 
   <!-- =========================================================================
-       2. STICKY HEADER (Tone Xanh Primary #1E3A8A & Nút Nền Trắng)
+       2. STICKY HEADER (Tầng 2: Header Trắng 70px & Tầng 3: Navigation Navy 42px)
        ========================================================================= -->
-  <header id="main-header" class="sticky top-0 z-40 transition-all duration-300 bg-[#1E3A8A] text-white shadow-lg border-b border-[#2563EB]/30">
-    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-18 sm:h-20 gap-2 sm:gap-3">
+  <header id="main-header" class="header-blue-banner sticky top-0 z-40 transition-all duration-300 shadow-xl" style="background-color: #0b45a6; background-image: url('data:image/jpeg;base64,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'), url('images/header-bg.jpg'); background-position: center center; background-size: cover; background-repeat: no-repeat;">
+    
+    <!-- Hàng chính: Logo + Danh mục + Search + Action Buttons (Chuẩn Style Hoàng Hà Mobile & Nền Xanh Dương Tăng Chiều Cao Thoáng Đãng) -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-7 lg:px-9 pt-7 pb-6 sm:pt-9 sm:pb-8 lg:pt-11 lg:pb-10">
+      <div class="flex items-center justify-between gap-2.5 sm:gap-4.5 lg:gap-6">
         
-        <!-- Logo CellphoneS - 241 Lê Văn Việt -->
-        <a href="#hero-store" class="flex items-center gap-2 sm:gap-3 group flex-shrink-0">
-          <div class="h-11 w-11 rounded-xl bg-white text-slate-900 border border-slate-200/80 flex items-center justify-center font-black shadow-sm group-hover:scale-105 transition-transform">
-            <i class="fa-solid fa-mobile-screen-button text-lg text-[#2563EB]"></i>
-          </div>
-          <div>
-            <span class="text-lg sm:text-xl font-black tracking-tight text-white flex items-center gap-1">
-              <span class="text-[#F59E0B] font-black tracking-tight text-xl sm:text-2xl">Sama<span class="text-white">Phone</span></span>
-            </span>
-          </div>
+        <!-- 1. Logo SAMAMOBILE.COM (Chữ trắng nguyên bản trên nền trong suốt) -->
+        <a href="#hero-store" class="flex items-center flex-shrink-0 py-0.5 cursor-pointer" title="SAMAMOBILE.COM - Về trang chủ">
+          <img src="images/samamobile-logo.png" alt="SAMAMOBILE.COM" class="h-10 sm:h-12 md:h-14 lg:h-[58px] w-auto object-contain filter drop-shadow">
         </a>
 
-        <!-- Nút Danh mục Mega Menu (Cùng kích thước h-11, nền trắng chữ đen) -->
-        <div class="relative">
-          <button id="btn-mega-menu-toggle" type="button" onclick="window.toggleMegaMenu()" class="h-11 inline-flex items-center gap-2 px-4 rounded-xl bg-white hover:bg-slate-50 border border-slate-200/80 text-slate-900 font-black text-xs sm:text-sm shadow-sm transition-all cursor-pointer active:scale-95" aria-label="Danh mục sản phẩm">
-            <i class="fa-solid fa-bars text-[#2563EB] text-sm"></i>
-            <span class="hidden md:inline font-black text-slate-900">Danh Mục</span>
-            <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
-          </button>
-        </div>
+        <!-- 2. Nút Danh Mục (Pill trắng bóng 3D chuẩn Hoàng Hà) -->
+        <button id="btn-mega-menu-toggle" type="button" onclick="window.toggleMegaMenu()" class="btn-header-glossy h-12 inline-flex items-center gap-2.5 px-4 sm:px-5 rounded-full text-[#1E3A8A] font-extrabold text-xs sm:text-sm active:scale-95 cursor-pointer flex-shrink-0" aria-label="Danh mục sản phẩm">
+          <i class="fa-solid fa-layer-group text-[#2563EB] text-sm"></i>
+          <span class="font-extrabold text-[#1E3A8A] hidden sm:inline">Danh mục</span>
+          <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
+        </button>
 
-        <!-- Thanh Tìm kiếm trung tâm (Cùng kích thước h-11) -->
-        <div class="flex-1 max-w-xl relative">
-          <div class="h-11 relative flex items-center bg-white rounded-full p-1 pl-4 sm:pl-5 shadow-sm border border-slate-200/80">
-            <input type="text" id="search-input" placeholder="Bạn cần tìm điện thoại, phụ kiện gì hôm nay?..." autocomplete="off" class="w-full py-1.5 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 bg-transparent focus:outline-none">
-            <button id="btn-clear-search" type="button" class="hidden text-slate-400 hover:text-slate-600 px-2 text-xs">
+        <!-- 3. Thanh Tìm Kiếm Trung Tâm Lớn (Pill trắng bóng 3D + Tags gợi ý bên dưới) -->
+        <div class="flex-1 max-w-3xl relative mx-1 sm:mx-2">
+          <!-- Search Input Pill -->
+          <div class="btn-header-glossy h-12 relative flex items-center rounded-full px-4 sm:px-5 focus-within:ring-2 focus-within:ring-blue-300 transition-all">
+            <input type="text" id="search-input" placeholder="Hôm nay bạn muốn tìm kiếm gì?..." autocomplete="off" class="w-full py-2 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 bg-transparent focus:outline-none">
+            
+            <button id="btn-clear-search" type="button" class="hidden text-slate-400 hover:text-slate-600 px-1 text-xs">
               <i class="fa-solid fa-xmark"></i>
             </button>
-            <button type="button" onclick="window.applySearchFilters ? window.applySearchFilters() : null" class="w-9 h-9 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white flex items-center justify-center flex-shrink-0 transition-transform active:scale-95 cursor-pointer shadow-sm ml-1" title="Tìm kiếm">
-              <i class="fa-solid fa-magnifying-glass text-xs sm:text-sm text-white"></i>
+            
+            <button type="button" onclick="window.applySearchFilters ? window.applySearchFilters() : null" class="w-9 h-9 rounded-full text-[#2563EB] hover:text-[#1E3A8A] hover:bg-blue-50/80 flex items-center justify-center flex-shrink-0 transition-all active:scale-95 cursor-pointer ml-1" title="Tìm kiếm">
+              <i class="fa-solid fa-magnifying-glass text-sm"></i>
             </button>
+          </div>
+
+          <!-- Quick tags dưới ô tìm kiếm (Chuẩn Hoàng Hà Mobile) -->
+          <div class="hidden lg:flex items-center gap-3 mt-1.5 px-3 text-[11px] text-white/90 overflow-hidden whitespace-nowrap">
+            <button type="button" onclick="window.quickSearchTag('Galaxy S24 Ultra')" class="hover:text-orange-300 font-semibold transition-colors cursor-pointer">Galaxy S24 Ultra</button>
+            <button type="button" onclick="window.quickSearchTag('iPhone 16 Pro Max')" class="hover:text-orange-300 font-semibold transition-colors cursor-pointer">iPhone 16 Pro Max</button>
+            <button type="button" onclick="window.quickSearchTag('Xiaomi 14')" class="hover:text-orange-300 font-semibold transition-colors cursor-pointer">Xiaomi 14</button>
+            <button type="button" onclick="window.quickSearchTag('AirPods Pro 2')" class="hover:text-orange-300 font-semibold transition-colors cursor-pointer">AirPods Pro 2</button>
+            <button type="button" onclick="window.quickSearchTag('Sạc 20W')" class="hover:text-orange-300 font-semibold transition-colors cursor-pointer">Củ sạc 20W</button>
           </div>
 
           <!-- Autocomplete Dropdown Popover -->
@@ -246,55 +206,132 @@
           </div>
         </div>
 
-        <!-- Khu vực Tiện ích, Giỏ hàng, Đăng nhập & Ngôn ngữ (Cùng kích thước h-11, nền trắng chữ đen) -->
-        <div class="flex items-center gap-1.5 sm:gap-2 flex-shrink-0 flex-nowrap">
+        <!-- 4. Cụm Action Buttons: 2 Nút Tròn + 1 Nút Pill Giỏ Hàng (Trắng bóng 3D đồng bộ) -->
+        <div class="flex items-center gap-2 sm:gap-2.5 flex-shrink-0 flex-nowrap">
           
-          <!-- Nút Tra cứu nhanh (Desktop) -->
-          <button type="button" onclick="window.CellphoneSLookup.openModal()" class="h-11 hidden xl:inline-flex items-center gap-1.5 px-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-200/80 text-slate-900 font-black text-xs shadow-sm transition-all active:scale-95 cursor-pointer whitespace-nowrap">
-            <i class="fa-solid fa-truck-fast text-[#2563EB]"></i>
-            <span class="font-black text-slate-900">Tra cứu</span>
+          <!-- Nút Tròn 1: Thông báo (Chuẩn Hoàng Hà Mobile) -->
+          <div class="relative">
+            <button id="btn-notification-toggle" type="button" onclick="window.toggleNotificationPopover()" class="btn-header-glossy w-12 h-12 rounded-full text-[#1E3A8A] flex items-center justify-center active:scale-95 cursor-pointer flex-shrink-0 relative" title="Thông báo">
+              <i class="fa-solid fa-bell text-[#2563EB] text-base"></i>
+              <!-- Badge chấm đỏ báo tin mới (mặc định ẩn, bật lên khi có sự kiện realtime) -->
+              <span id="notification-badge" class="hidden absolute top-2.5 right-2.5 w-2.5 h-2.5 rounded-full bg-rose-500 ring-2 ring-white"></span>
+            </button>
+
+            <!-- Dropdown Thông Báo Popover -->
+            <div id="notification-popover" class="hidden absolute right-0 top-full mt-2 w-80 sm:w-96 bg-white rounded-2xl border border-slate-200 shadow-2xl z-50 overflow-hidden divide-y divide-slate-100">
+              <div class="px-4 py-3 bg-gradient-to-r from-blue-50 to-white flex items-center justify-between border-b border-slate-100">
+                <div class="flex items-center gap-2">
+                  <i class="fa-solid fa-bell text-[#2563EB]"></i>
+                  <span class="font-extrabold text-slate-900 text-xs sm:text-sm">Thông Báo</span>
+                </div>
+                <span id="notification-count-badge" class="hidden text-[10px] bg-blue-100 text-[#1E3A8A] font-bold px-2 py-0.5 rounded-full">0 tin mới</span>
+              </div>
+              <div id="notification-list" class="max-h-72 overflow-y-auto divide-y divide-slate-100 text-xs text-slate-700">
+                <!-- Empty state mặc định khi chưa có thông báo realtime -->
+                <div id="notification-empty" class="py-8 px-4 text-center text-slate-400 space-y-2">
+                  <i class="fa-regular fa-bell-slash text-2xl text-slate-300"></i>
+                  <p class="text-xs">Hiện chưa có thông báo mới</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Nút Tròn 2: Tài khoản / Đăng nhập (Khi chưa đăng nhập) -->
+          <button id="btn-header-login" type="button" onclick="window.CellphoneSCustomerPortal.openLoginModal()" class="btn-header-glossy w-12 h-12 rounded-full text-[#1E3A8A] flex items-center justify-center active:scale-95 cursor-pointer flex-shrink-0" title="Tài khoản khách hàng">
+            <i class="fa-solid fa-user text-[#2563EB] text-base"></i>
           </button>
 
-          <!-- Nút Giỏ Hàng -->
-          <button type="button" onclick="window.CellphoneSCart.openDrawer()" class="h-11 relative inline-flex items-center gap-2 px-3.5 sm:px-4 rounded-xl bg-white hover:bg-slate-50 border border-slate-200/80 text-slate-900 font-black text-xs sm:text-sm shadow-sm transition-all active:scale-95 cursor-pointer whitespace-nowrap" aria-label="Giỏ hàng của bạn">
-            <i class="fa-solid fa-cart-shopping text-base text-[#2563EB]"></i>
-            <span class="hidden lg:inline font-black text-slate-900">Giỏ Hàng</span>
-            <span class="cart-badge-count hidden absolute -top-1.5 -right-1.5 bg-[#EF4444] text-white font-extrabold text-[10px] px-1.5 py-0.5 rounded-full shadow-md min-w-[20px] text-center animate-pulse">0</span>
-          </button>
-
-          
-
-          <!-- Nút Đăng Nhập (Khi chưa đăng nhập) -->
-          <button id="btn-header-login" type="button" onclick="window.CellphoneSCustomerPortal.openLoginModal()" class="h-11 inline-flex items-center gap-1.5 px-3.5 sm:px-4 rounded-xl bg-white hover:bg-slate-50 border border-slate-200/80 text-slate-900 font-black text-xs shadow-sm transition-all active:scale-95 whitespace-nowrap flex-shrink-0 cursor-pointer" title="Đăng nhập khách hàng S-Member">
-            <i class="fa-regular fa-circle-user text-base text-[#2563EB] pointer-events-none"></i>
-            <span class="hidden sm:inline font-black text-slate-900">Đăng Nhập</span>
-          </button>
-
-          <!-- Menu Khách Hàng (Khi đã đăng nhập SĐT/Khách) -->
+          <!-- Menu Khách Hàng (Khi đã đăng nhập) -->
           <div id="header-customer-menu" class="hidden items-center gap-1.5 flex-shrink-0 flex-nowrap" style="display: none;">
-            <button type="button" onclick="window.CellphoneSCustomerPortal.openPortal()" class="h-11 inline-flex items-center gap-2 px-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-200/80 text-slate-900 text-xs font-black shadow-sm transition-colors cursor-pointer whitespace-nowrap" title="Xem tài khoản & đơn hàng">
-              <span class="w-6 h-6 rounded-full bg-blue-100 text-[#1E3A8A] flex items-center justify-center text-[10px] font-black flex-shrink-0">
+            <button type="button" onclick="window.CellphoneSCustomerPortal.openPortal()" class="btn-header-glossy h-12 inline-flex items-center gap-2 px-3.5 sm:px-4 rounded-full text-slate-900 text-xs font-bold transition-colors cursor-pointer whitespace-nowrap" title="Xem tài khoản & đơn hàng">
+              <span class="w-6 h-6 rounded-full bg-blue-100 text-[#1E3A8A] flex items-center justify-center text-[10px] font-bold flex-shrink-0">
                 <i class="fa-solid fa-user"></i>
               </span>
-              <span id="customer-header-name" class="max-w-[90px] sm:max-w-[120px] truncate text-slate-900 font-black">Khách hàng</span>
-              <span id="customer-header-points" class="hidden md:inline px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 text-[10px] font-black">150 Đ</span>
+              <span id="customer-header-name" class="max-w-[80px] sm:max-w-[110px] truncate text-slate-900 font-bold">Khách hàng</span>
+              <span id="customer-header-points" class="hidden sm:inline px-1.5 py-0.5 rounded-full bg-blue-100 text-[#1E3A8A] text-[10px] font-bold">150 Đ</span>
             </button>
-            <button type="button" onclick="if(window.CellphoneSAuth) window.CellphoneSAuth.logout();" class="h-11 w-11 rounded-xl bg-white hover:bg-rose-50 border border-slate-200/80 text-slate-700 hover:text-rose-600 inline-flex items-center justify-center shadow-sm transition-colors text-xs flex-shrink-0 cursor-pointer" title="Đăng xuất">
+            <button type="button" onclick="if(window.CellphoneSAuth) window.CellphoneSAuth.logout();" class="btn-header-glossy h-12 w-12 rounded-full text-slate-700 hover:text-rose-600 inline-flex items-center justify-center transition-colors text-xs flex-shrink-0 cursor-pointer" title="Đăng xuất">
               <i class="fa-solid fa-arrow-right-from-bracket"></i>
             </button>
           </div>
 
           <!-- Menu Quản Trị Viên / Nhân Viên (Khi nhân viên đăng nhập) -->
           <div id="header-staff-menu" class="hidden items-center gap-1.5 flex-shrink-0 flex-nowrap" style="display: none;">
-            <div class="h-11 inline-flex items-center gap-2 px-3.5 rounded-xl bg-white border border-slate-200/80 text-slate-900 text-xs font-black whitespace-nowrap shadow-sm">
-              <span class="w-6 h-6 rounded-full bg-blue-100 text-[#1E3A8A] flex items-center justify-center text-[10px] font-black flex-shrink-0">
+            <div class="btn-header-glossy h-12 inline-flex items-center gap-2 px-4 rounded-full text-slate-900 text-xs font-bold whitespace-nowrap">
+              <span class="w-6 h-6 rounded-full bg-blue-100 text-[#1E3A8A] flex items-center justify-center text-[10px] font-bold flex-shrink-0">
                 <i class="fa-solid fa-user"></i>
               </span>
-              <span id="staff-header-name" class="text-slate-900 font-black whitespace-nowrap">Nhân viên</span>
+              <span id="staff-header-name" class="text-slate-900 font-bold whitespace-nowrap">Nhân viên</span>
             </div>
-            <button type="button" onclick="if(window.CellphoneSAuth) window.CellphoneSAuth.logout();" class="h-11 w-11 rounded-xl bg-white hover:bg-rose-50 border border-slate-200/80 text-slate-700 hover:text-rose-600 inline-flex items-center justify-center shadow-sm transition-colors text-xs flex-shrink-0 cursor-pointer" title="Đăng xuất">
+            <button type="button" onclick="if(window.CellphoneSAuth) window.CellphoneSAuth.logout();" class="btn-header-glossy h-12 w-12 rounded-full text-slate-700 hover:text-rose-600 inline-flex items-center justify-center transition-colors text-xs flex-shrink-0 cursor-pointer" title="Đăng xuất">
               <i class="fa-solid fa-arrow-right-from-bracket"></i>
             </button>
+          </div>
+
+          <!-- Nút Pill 3: Giỏ Hàng (Icon màu xanh đồng bộ, đổ trắng bóng 3D chuẩn Hoàng Hà) -->
+          <button type="button" onclick="window.CellphoneSCart.openDrawer()" class="btn-header-glossy h-12 relative inline-flex items-center gap-2.5 px-4 sm:px-5 rounded-full text-[#1E3A8A] font-extrabold text-xs sm:text-sm active:scale-95 cursor-pointer whitespace-nowrap flex-shrink-0" aria-label="Giỏ hàng của bạn">
+            <i class="fa-solid fa-cart-shopping text-base text-[#2563EB]"></i>
+            <span class="hidden sm:inline font-extrabold text-[#1E3A8A]">Giỏ hàng</span>
+            <span class="cart-badge-count hidden absolute -top-1.5 -right-1.5 bg-[#EF4444] text-white font-extrabold text-[10px] px-1.5 py-0.5 rounded-full shadow-md min-w-[20px] text-center animate-pulse">0</span>
+          </button>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Dải tiện ích phụ trắng chuẩn Hoàng Hà Mobile (Thay thế thanh nav cũ) -->
+    <div class="bg-white border-b border-slate-200 shadow-sm text-slate-700 relative z-30">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between sm:justify-end min-h-[42px] overflow-x-auto lg:overflow-visible no-scrollbar gap-3 sm:gap-5 lg:gap-6 text-xs sm:text-[13px] md:text-sm font-bold whitespace-nowrap text-slate-700">
+          
+          <!-- 1. Thu cũ giá tốt -->
+          <button type="button" onclick="window.CellphoneSLookup.openTradeInModal ? window.CellphoneSLookup.openTradeInModal() : (window.CellphoneSLookup && window.CellphoneSLookup.openModal('warranty'))" class="inline-flex items-center gap-2 hover:text-[#2563EB] transition-colors cursor-pointer py-1.5 flex-shrink-0">
+            <i class="fa-solid fa-arrows-rotate text-[#2563EB] text-sm"></i>
+            <span>Thu cũ đổi mới - Trợ giá đến 5 triệu</span>
+          </button>
+          <span class="hidden sm:inline text-slate-300">|</span>
+
+          <!-- 2. Sản phẩm đã xem -->
+          <a href="#shelf-recently-viewed" class="inline-flex items-center gap-2 hover:text-[#2563EB] transition-colors cursor-pointer py-1.5 flex-shrink-0">
+            <i class="fa-regular fa-clock text-slate-500 text-sm"></i>
+            <span>Sản phẩm đã xem</span>
+          </a>
+          <span class="hidden sm:inline text-slate-300">|</span>
+
+          <!-- 3. Tra cứu đơn hàng -->
+          <button type="button" onclick="window.CellphoneSLookup.openModal('order')" class="inline-flex items-center gap-2 hover:text-[#2563EB] transition-colors cursor-pointer py-1.5 flex-shrink-0">
+            <i class="fa-solid fa-magnifying-glass text-slate-500 text-sm"></i>
+            <span>Tra cứu đơn hàng</span>
+          </button>
+          <span class="hidden sm:inline text-slate-300">|</span>
+
+          <!-- 4. Hotline liên hệ -->
+          <a href="tel:18006868" class="inline-flex items-center gap-2 hover:text-[#2563EB] transition-colors cursor-pointer py-1.5 flex-shrink-0">
+            <i class="fa-solid fa-phone text-[#2563EB] text-sm"></i>
+            <span>Liên hệ: <strong class="text-slate-900 font-extrabold hover:text-[#2563EB]">1800 6868</strong></span>
+          </a>
+          <span class="hidden sm:inline text-slate-300">|</span>
+
+          <!-- 5. Xem cửa hàng gần bạn -->
+          <div class="relative group flex-shrink-0">
+            <button type="button" class="inline-flex items-center gap-2 text-rose-600 font-extrabold hover:text-rose-700 transition-colors cursor-pointer py-1.5">
+              <i class="fa-solid fa-location-dot text-rose-600 text-sm"></i>
+              <span>Xem cửa hàng gần bạn</span>
+              <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
+            </button>
+            <!-- Dropdown địa chỉ cửa hàng -->
+            <div class="hidden group-hover:block absolute right-0 top-full pt-1.5 z-50">
+              <div class="bg-white border border-slate-200 rounded-xl shadow-xl p-4 w-80 text-xs space-y-1.5 text-slate-700 text-left">
+                <div class="font-bold text-slate-900 flex items-center gap-1.5 text-rose-600 text-sm">
+                  <i class="fa-solid fa-store"></i> SAMAMOBILE.COM
+                </div>
+                <div class="text-xs text-slate-600">241 Lê Văn Việt, Tăng Nhơn Phú B, TP. Thủ Đức, TP. Hồ Chí Minh</div>
+                <div class="text-[11px] text-emerald-600 font-bold flex items-center gap-1.5 pt-1 border-t border-slate-100">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Mở cửa 8:00 - 22:00 (Cả CN & Lễ)
+                </div>
+              </div>
+            </div>
           </div>
 
         </div>
@@ -392,407 +429,273 @@
   <main id="main-content">
 
     <!-- =========================================================================
-         HERO SECTION: CELLPHONES STYLE (Slider Banner + 3 Banner phụ + Mega Menu)
+         HERO SECTION: BANNER TRƯỢT FULL-WIDTH (Chuẩn Hoàng Hà Mobile)
          ========================================================================= -->
-    <section id="hero-store" class="pt-4 pb-8 bg-[#F8FAFC]">
-      <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+    <section id="hero-store" class="pt-4 pb-6 bg-[#F8FAFC]">
+      <div class="max-w-7xl mx-auto px-4 sm:px-7 lg:px-9">
         
-        <!-- Bố cục 3 cột Hero -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
+        <!-- Ô Màu Trắng To Bao Phủ Cả Cụm Banner + Tabs (Chuẩn 100% mẫu người dùng gửi) -->
+        <div class="relative w-full bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-md p-2.5 sm:p-3.5 pb-2 sm:pb-2.5">
           
-          <!-- Cột 1 (Desktop): Menu danh mục dọc liên kết nhanh -->
-          <div class="hidden lg:block lg:col-span-3 bg-white rounded-2xl border border-slate-200/80 p-3.5 shadow-sm space-y-1">
-            <div class="text-[11px] font-black uppercase text-slate-400 px-3 py-1.5 tracking-wider">
-              Danh mục sản phẩm
-            </div>
-            <button type="button" data-brand="Apple" onclick="window.filterPhoneBrand('Apple', true)" class="sidebar-brand-btn w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-[#EFF6FF] hover:text-[#1E3A8A] transition-colors text-left cursor-pointer">
-              <span class="flex items-center gap-2.5">
-                <i class="fa-brands fa-apple text-sm text-slate-800"></i> Apple iPhone
-              </span>
-              <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i>
-            </button>
-            <button type="button" data-brand="Samsung" onclick="window.filterPhoneBrand('Samsung', true)" class="sidebar-brand-btn w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-[#EFF6FF] hover:text-[#1E3A8A] transition-colors text-left cursor-pointer">
-              <span class="flex items-center gap-2.5">
-                <i class="fa-solid fa-mobile text-sm text-[#2563EB]"></i> Samsung Galaxy
-              </span>
-              <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i>
-            </button>
-            <button type="button" data-brand="Xiaomi" onclick="window.filterPhoneBrand('Xiaomi', true)" class="sidebar-brand-btn w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-[#EFF6FF] hover:text-[#1E3A8A] transition-colors text-left cursor-pointer">
-              <span class="flex items-center gap-2.5">
-                <i class="fa-solid fa-mobile-screen text-sm text-amber-500"></i> Xiaomi
-              </span>
-              <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i>
-            </button>
-            <button type="button" data-brand="OPPO" onclick="window.filterPhoneBrand('OPPO', true)" class="sidebar-brand-btn w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-[#EFF6FF] hover:text-[#1E3A8A] transition-colors text-left cursor-pointer">
-              <span class="flex items-center gap-2.5">
-                <i class="fa-solid fa-mobile-retro text-sm text-emerald-500"></i> OPPO Reno
-              </span>
-              <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i>
-            </button>
-            <button type="button" onclick="window.CellphoneSProductModal.open('MH006')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-[#EFF6FF] hover:text-[#1E3A8A] transition-colors text-left cursor-pointer">
-              <span class="flex items-center gap-2.5">
-                <i class="fa-solid fa-plug text-sm text-rose-500"></i> Củ sạc Apple 20W
-              </span>
-              <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i>
-            </button>
-            <button type="button" onclick="window.CellphoneSProductModal.open('MH007')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-[#EFF6FF] hover:text-[#1E3A8A] transition-colors text-left cursor-pointer">
-              <span class="flex items-center gap-2.5">
-                <i class="fa-solid fa-bolt text-sm text-amber-500"></i> Cáp Type-C 60W
-              </span>
-              <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i>
-            </button>
-            <button type="button" onclick="window.CellphoneSProductModal.open('MH008')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-[#EFF6FF] hover:text-[#1E3A8A] transition-colors text-left cursor-pointer">
-              <span class="flex items-center gap-2.5">
-                <i class="fa-solid fa-headphones text-sm text-indigo-500"></i> Tai nghe AirPods Pro 2
-              </span>
-              <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i>
-            </button>
-            <button type="button" onclick="window.CellphoneSProductModal.open('MH009')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-[#EFF6FF] hover:text-[#1E3A8A] transition-colors text-left cursor-pointer">
-              <span class="flex items-center gap-2.5">
-                <i class="fa-solid fa-shield text-sm text-teal-500"></i> Ốp MagSafe iPhone 16
-              </span>
-              <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i>
-            </button>
-          </div>
-
-          <!-- Cột 2 (Giữa): Main Banner Slider -->
-          <div class="lg:col-span-6 relative flex flex-col justify-between">
-            <div class="relative overflow-hidden rounded-2xl shadow-sm">
-              <div id="hero-slider-container" class="flex transition-transform duration-500">
-                <!-- Render động bởi customer-store.js -->
-              </div>
-
-              <!-- Nút trượt trái/phải -->
-              <button type="button" onclick="window.prevHeroSlide()" class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white hover:bg-slate-100 text-slate-900 shadow-md flex items-center justify-center transition-transform hover:scale-110 active:scale-95 cursor-pointer z-20 border border-slate-200" aria-label="Slide trước">
-                <i class="fa-solid fa-chevron-left text-xs text-slate-900"></i>
-              </button>
-              <button type="button" onclick="window.nextHeroSlide()" class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white hover:bg-slate-100 text-slate-900 shadow-md flex items-center justify-center transition-transform hover:scale-110 active:scale-95 cursor-pointer z-20 border border-slate-200" aria-label="Slide tiếp theo">
-                <i class="fa-solid fa-chevron-right text-xs text-slate-900"></i>
-              </button>
+          <!-- Khung Banner Ảnh Bo Góc Nằm Lọt Lòng Trong Ô Trắng (Aspect 16:5 chuẩn) -->
+          <div class="relative w-full aspect-[16/5] bg-slate-100 rounded-xl sm:rounded-2xl overflow-hidden shadow-sm">
+            <!-- Slides Container (Hiệu ứng mờ dần Cross-fade) -->
+            <div id="hero-slider-container" class="relative w-full h-full">
+              <!-- Render động bởi customer-store.js -->
             </div>
 
-            <!-- Dots Indicator -->
-            <div id="hero-slider-dots" class="flex items-center justify-center gap-2 mt-3">
+            <!-- Nút Prev / Next -->
+            <button type="button" onclick="window.prevHeroSlide()" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/90 hover:bg-white text-slate-900 shadow-md flex items-center justify-center transition-all hover:scale-105 active:scale-95 cursor-pointer z-20 border border-slate-200/80" aria-label="Slide trước">
+              <i class="fa-solid fa-chevron-left text-xs sm:text-sm text-slate-900"></i>
+            </button>
+            <button type="button" onclick="window.nextHeroSlide()" class="absolute right-3.5 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/90 hover:bg-white text-slate-900 shadow-md flex items-center justify-center transition-all hover:scale-105 active:scale-95 cursor-pointer z-20 border border-slate-200/80" aria-label="Slide tiếp theo">
+              <i class="fa-solid fa-chevron-right text-xs sm:text-sm text-slate-900"></i>
+            </button>
+
+            <!-- Dots Indicator nổi trên ảnh góc dưới (Chuẩn style user gửi) -->
+            <div id="hero-slider-dots" class="absolute bottom-2.5 sm:bottom-3.5 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-20 pointer-events-auto">
               <!-- Render động -->
             </div>
           </div>
 
-          <!-- Cột 3 (Phải): 3 Banner phụ khuyến mãi CellphoneS Style -->
-          <div class="lg:col-span-3 grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-3">
-            
-            <!-- Banner phụ 1 -->
-            <div class="relative rounded-2xl overflow-hidden bg-gradient-to-br from-amber-500 to-rose-600 p-4 text-white shadow-sm flex items-center justify-between cursor-pointer group" onclick="window.CellphoneSCustomerPortal.openLoginModal()">
-              <div class="space-y-1 z-10">
-                <span class="px-2 py-0.5 rounded bg-black/20 text-[10px] font-extrabold uppercase">S-Member</span>
-                <h4 class="font-bold text-xs sm:text-sm leading-tight">Voucher 500K Đăng Ký</h4>
-                <p class="text-[10px] text-amber-100">Dành riêng cho khách hàng mới</p>
-                <div class="pt-1">
-                  <span class="inline-block px-2.5 py-1 rounded-lg bg-white text-slate-900 text-[10px] font-black shadow-sm group-hover:bg-slate-100 transition-colors">Đăng ký &rarr;</span>
-                </div>
-              </div>
-              <div class="w-14 h-14 rounded-xl bg-white/20 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
-                <i class="fa-solid fa-gift text-white"></i>
+          <!-- Thanh Tabs Tiêu Đề Dưới Banner (Trượt liên tục từng cột 1|2|3|4 -> 2|3|4|5, đệm khoảng trắng cột đầu/cuối, đệm chiều cao +4px) -->
+          <div id="hero-tabs-wrapper" class="relative bg-white group/tabs mt-2 sm:mt-2.5 px-2 sm:px-4">
+            <div id="hero-tabs-viewport" class="relative overflow-hidden w-full">
+              <div id="hero-banner-tabs" class="flex">
+                <!-- Render động 3 set vòng lặp bởi customer-store.js -->
               </div>
             </div>
-
-            <!-- Banner phụ 2 -->
-            <div class="relative rounded-2xl overflow-hidden bg-gradient-to-br from-[#1E3A8A] to-[#0F172A] border border-[#2563EB]/40 p-4 text-white shadow-sm flex items-center justify-between cursor-pointer group" onclick="window.CellphoneSLookup.openModal('warranty')">
-              <div class="space-y-1 z-10">
-                <span class="px-2 py-0.5 rounded bg-[#2563EB] text-white text-[10px] font-black uppercase">Chính hãng</span>
-                <h4 class="font-bold text-xs sm:text-sm leading-tight text-white">Bảo Hành 12 Tháng</h4>
-                <p class="text-[10px] text-slate-300">Tra cứu bảo hành nhanh theo IMEI</p>
-                <div class="pt-1">
-                  <span class="inline-block px-2.5 py-1 rounded-lg bg-white text-slate-900 text-[10px] font-black shadow-sm group-hover:bg-slate-100 transition-colors">Tra cứu ngay &rarr;</span>
-                </div>
-              </div>
-              <div class="w-14 h-14 rounded-xl bg-[#2563EB]/25 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
-                <i class="fa-solid fa-shield-halved text-[#60A5FA]"></i>
-              </div>
-            </div>
-
-            <!-- Banner phụ 3 -->
-            <div class="relative rounded-2xl overflow-hidden bg-gradient-to-br from-[#172554] to-[#1E3A8A] border border-[#2563EB]/40 p-4 text-white shadow-sm flex items-center justify-between cursor-pointer group" onclick="window.quickSearchTag('Học sinh sinh viên')">
-              <div class="space-y-1 z-10">
-                <span class="px-2 py-0.5 rounded bg-[#F59E0B] text-slate-950 text-[10px] font-black uppercase">Học sinh sinh viên</span>
-                <h4 class="font-bold text-xs sm:text-sm leading-tight text-white">Giảm Thêm 5% (500K)</h4>
-                <p class="text-[10px] text-slate-300">Áp dụng kèm mọi khuyến mãi</p>
-                <div class="pt-1">
-                  <span class="inline-block px-2.5 py-1 rounded-lg bg-white text-slate-900 text-[10px] font-black shadow-sm group-hover:bg-slate-100 transition-colors">Xem ưu đãi &rarr;</span>
-                </div>
-              </div>
-              <div class="w-14 h-14 rounded-xl bg-[#F59E0B]/20 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
-                <i class="fa-solid fa-graduation-cap text-[#F59E0B]"></i>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-        <!-- Thanh Quick Tags (Gợi ý tìm kiếm nhanh) -->
-        <div class="mt-4 flex items-center gap-2 overflow-x-auto pb-1 text-xs">
-          <span class="font-bold text-slate-400 whitespace-nowrap flex items-center gap-1.5 text-[11px]">
-            <i class="fa-solid fa-arrow-trend-up text-rose-500"></i> Tìm nhiều:
-          </span>
-          <button type="button" onclick="window.quickSearchTag('iPhone 16 Pro Max')" class="px-3 py-1 rounded-full bg-white hover:bg-[#EFF6FF] hover:text-[#1E3A8A] text-slate-700 border border-slate-200 font-semibold whitespace-nowrap transition-colors">
-            iPhone 16 Pro Max
-          </button>
-          <button type="button" onclick="window.quickSearchTag('Galaxy S24 Ultra')" class="px-3 py-1 rounded-full bg-white hover:bg-[#EFF6FF] hover:text-[#1E3A8A] text-slate-700 border border-slate-200 font-semibold whitespace-nowrap transition-colors">
-            Galaxy S24 Ultra
-          </button>
-          <button type="button" onclick="window.quickSearchTag('Xiaomi 14')" class="px-3 py-1 rounded-full bg-white hover:bg-[#EFF6FF] hover:text-[#1E3A8A] text-slate-700 border border-slate-200 font-semibold whitespace-nowrap transition-colors">
-            Xiaomi 14 Ultra
-          </button>
-          <button type="button" onclick="window.quickSearchTag('Sạc 20W')" class="px-3 py-1 rounded-full bg-white hover:bg-[#EFF6FF] hover:text-[#1E3A8A] text-slate-700 border border-slate-200 font-semibold whitespace-nowrap transition-colors">
-            Củ sạc Apple 20W
-          </button>
-          <button type="button" onclick="window.quickSearchTag('iPad M4')" class="px-3 py-1 rounded-full bg-white hover:bg-[#EFF6FF] hover:text-[#1E3A8A] text-slate-700 border border-slate-200 font-semibold whitespace-nowrap transition-colors">
-            iPad Pro M4
-          </button>
-          <button type="button" onclick="window.quickSearchTag('AirPods Pro')" class="px-3 py-1 rounded-full bg-white hover:bg-[#EFF6FF] hover:text-[#1E3A8A] text-slate-700 border border-slate-200 font-semibold whitespace-nowrap transition-colors">
-            AirPods Pro 2
-          </button>
-          <button type="button" onclick="window.quickSearchTag('Ốp lưng')" class="px-3 py-1 rounded-full bg-white hover:bg-[#EFF6FF] hover:text-[#1E3A8A] text-slate-700 border border-slate-200 font-semibold whitespace-nowrap transition-colors">
-            Ốp MagSafe
-          </button>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- =========================================================================
-         DẢI KHUYẾN MÃI ĐANG HOẠT ĐỘNG (Từ /api/khuyenmai/hoatdong)
-         ========================================================================= -->
-    <section id="shelf-promotions" class="py-6 bg-[#FEF2F2] border-y border-rose-200/60 hidden">
-      <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between mb-4">
-          <div class="flex items-center gap-2.5">
-            <span class="w-8 h-8 rounded-full bg-[#d70018] text-white flex items-center justify-center font-bold text-sm shadow-sm">
-              <i class="fa-solid fa-gift"></i>
-            </span>
-            <div>
-              <h2 class="text-base sm:text-lg font-black text-[#d70018] tracking-tight">CHƯƠNG TRÌNH KHUYẾN MÃI ĐANG DIỄN RA</h2>
-              <p class="text-[11px] text-slate-500">Mã giảm giá áp dụng trực tiếp khi thanh toán đơn hàng online</p>
-            </div>
-          </div>
-        </div>
-        <div id="promotions-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          <!-- Render động từ GET /api/khuyenmai/hoatdong -->
-        </div>
-      </div>
-    </section>
-
-    <!-- =========================================================================
-         DẢI 2: ĐIỆN THOẠI NỔI BẬT (Tabs chọn thương hiệu: Apple, Samsung, Xiaomi, OPPO)
-         ========================================================================= -->
-    <section id="shelf-phones" class="py-8 bg-white border-y border-slate-200/60">
-      <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-        
-        <!-- Header Dải Điện Thoại & Tabs thương hiệu -->
-        <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
-          <div>
-            <h2 class="text-xl sm:text-2xl font-black text-navy tracking-tight flex items-center gap-2">
-              <i class="fa-solid fa-mobile-screen-button text-[#2563EB]"></i>
-              <span id="shelf-phones-title-text">ĐIỆN THOẠI NỔI BẬT</span>
-            </h2>
-            <p class="text-xs text-slate-500 mt-0.5">Top flagship chính hãng VN/A được săn đón nhiều nhất</p>
-          </div>
-
-          <!-- Tabs chọn hãng -->
-          <div class="flex items-center gap-2 overflow-x-auto pb-1">
-            <button type="button" data-brand="all" onclick="window.filterPhoneBrand('all')" class="tab-phone-brand px-3.5 py-1.5 rounded-full text-xs font-black bg-[#1E3A8A] text-white shadow-sm transition-all cursor-pointer">
-              Tất Cả
+            <!-- Nút điều hướng lướt từng cột (nằm gọn trong vùng đệm khoảng trắng hai bên) -->
+            <button type="button" onclick="window.prevHeroSlide()" class="absolute left-0.5 sm:left-1 top-1/2 -translate-y-1/2 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white shadow-md border border-slate-200 text-slate-700 flex items-center justify-center opacity-0 group-hover/tabs:opacity-100 transition-all hover:bg-blue-50 hover:text-[#2563EB] hover:scale-105 active:scale-95 z-20 cursor-pointer" aria-label="Cột trước">
+              <i class="fa-solid fa-chevron-left text-xs"></i>
             </button>
-            <button type="button" data-brand="Apple" onclick="window.filterPhoneBrand('Apple')" class="tab-phone-brand px-3.5 py-1.5 rounded-full text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all cursor-pointer">
-              Apple iPhone
-            </button>
-            <button type="button" data-brand="Samsung" onclick="window.filterPhoneBrand('Samsung')" class="tab-phone-brand px-3.5 py-1.5 rounded-full text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all cursor-pointer">
-              Samsung Galaxy
-            </button>
-            <button type="button" data-brand="Xiaomi" onclick="window.filterPhoneBrand('Xiaomi')" class="tab-phone-brand px-3.5 py-1.5 rounded-full text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all cursor-pointer">
-              Xiaomi
-            </button>
-            <button type="button" data-brand="OPPO" onclick="window.filterPhoneBrand('OPPO')" class="tab-phone-brand px-3.5 py-1.5 rounded-full text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all cursor-pointer">
-              OPPO Reno
-            </button>
-            <button type="button" id="shelf-phones-view-all" class="hidden px-3.5 py-1.5 rounded-full text-xs font-bold text-[#1E3A8A] bg-[#EFF6FF] hover:bg-[#DBEAFE] border border-[#2563EB]/40 transition-all cursor-pointer whitespace-nowrap">
+            <button type="button" onclick="window.nextHeroSlide()" class="absolute right-0.5 sm:right-1 top-1/2 -translate-y-1/2 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white shadow-md border border-slate-200 text-slate-700 flex items-center justify-center opacity-0 group-hover/tabs:opacity-100 transition-all hover:bg-blue-50 hover:text-[#2563EB] hover:scale-105 active:scale-95 z-20 cursor-pointer" aria-label="Cột tiếp theo">
+              <i class="fa-solid fa-chevron-right text-xs"></i>
             </button>
           </div>
+
         </div>
 
-        <!-- Lưới sản phẩm Điện thoại -->
-        <div id="shelf-phones-items" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
-          <!-- Render động -->
+        <!-- Banner Ngang Khuyến Mãi: Ưu Đãi Sinh Viên (Kích thước chiều dài ngang bằng banner chuẩn CellphoneS) -->
+        <div class="mt-3.5 sm:mt-4.5 w-full rounded-xl sm:rounded-2xl overflow-hidden shadow-sm border border-slate-200/90 hover:shadow-md transition-all cursor-pointer group" onclick="window.showStudentPromo()" title="Chương trình S-Edu Ưu Đãi Sinh Viên">
+          <img alt="ƯU ĐÃI SINH VIÊN" loading="lazy" width="1200" height="75" decoding="async" class="w-full h-auto object-cover block group-hover:scale-[1.008] transition-transform duration-500 rounded-xl sm:rounded-2xl" src="images/s-edu-special-desk.gif" onerror="this.onerror=null; this.src='https://cdn2.cellphones.com.vn/insecure/rs:fill:1200:75/q:100/plain/https://media-asset.cellphones.com.vn/dashboard-v1/s-edu-2-0-special-desk.gif';">
         </div>
-
-      </div>
-    </section>
-
-    <!-- =========================================================================
-         DẢI 3: SIÊU PHẨM MỚI VỀ 2026 & BÁN CHẠY NHẤT
-         ========================================================================= -->
-    <section id="shelf-new-and-bestseller" class="py-8 bg-[#F8FAFC]">
-      <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 space-y-10">
-        
-        <!-- Khối Mới về 2026 -->
-        <div>
-          <div class="flex items-center justify-between mb-4">
-            <div>
-              <h2 class="text-xl sm:text-2xl font-black text-navy tracking-tight flex items-center gap-2">
-                <i class="fa-solid fa-sparkles text-amber-500"></i>
-                <span>SẢN PHẨM MỚI VỀ 2026</span>
-              </h2>
-              <p class="text-xs text-slate-500 mt-0.5">Cập nhật công nghệ đột phá dẫn đầu xu thế</p>
-            </div>
-            <button type="button" onclick="window.openSearchModal('')" class="text-xs font-bold text-[#2563EB] hover:text-[#1E3A8A] flex items-center gap-1 cursor-pointer">
-              Xem tất cả <i class="fa-solid fa-chevron-right text-[10px]"></i>
-            </button>
-          </div>
-          <div id="shelf-new-items" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
-            <!-- Render động -->
-          </div>
-        </div>
-
-        <!-- Khối Bán chạy nhất -->
-        <div class="pt-6 border-t border-slate-200/80">
-          <div class="flex items-center justify-between mb-4">
-            <div>
-              <h2 class="text-xl sm:text-2xl font-black text-navy tracking-tight flex items-center gap-2">
-                <i class="fa-solid fa-medal text-rose-600"></i>
-                <span>BÁN CHẠY NHẤT</span>
-              </h2>
-              <p class="text-xs text-slate-500 mt-0.5">Những siêu phẩm được khách hàng đánh giá cao nhất</p>
-            </div>
-            <button type="button" onclick="window.openSearchModal('')" class="text-xs font-bold text-[#2563EB] hover:text-[#1E3A8A] flex items-center gap-1 cursor-pointer">
-              Xem tất cả <i class="fa-solid fa-chevron-right text-[10px]"></i>
-            </button>
-          </div>
-          <div id="shelf-bestseller-items" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
-            <!-- Render động -->
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- =========================================================================
-         DẢI 4: PHỤ KIỆN CHÍNH HÃNG GIÁ SỐC
-         ========================================================================= -->
-    <section id="shelf-accessories" class="py-8 bg-white border-y border-slate-200/60">
-      <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between mb-5">
-          <div>
-            <h2 class="text-xl sm:text-2xl font-black text-navy tracking-tight flex items-center gap-2">
-              <i class="fa-solid fa-plug-circle-check text-[#2563EB]"></i>
-              <span>PHỤ KIỆN CHÍNH HÃNG GIÁ SỐC</span>
-            </h2>
-            <p class="text-xs text-slate-500 mt-0.5">Củ sạc, ốp lưng, tai nghe và pin dự phòng chuẩn Apple & Anker</p>
-          </div>
-          <button type="button" onclick="window.quickSearchTag('Phụ kiện')" class="text-xs font-bold text-[#2563EB] hover:text-[#1E3A8A] flex items-center gap-1 cursor-pointer">
-            Xem tất cả phụ kiện <i class="fa-solid fa-chevron-right text-[10px]"></i>
-          </button>
-        </div>
-
-        <div id="shelf-accessories-items" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
-          <!-- Render động -->
-        </div>
-      </div>
-    </section>
-
-    <!-- =========================================================================
-         DẢI 5: GỢI Ý DÀNH RIÊNG CHO BẠN (Sản phẩm đã xem gần đây)
-         ========================================================================= -->
-    <section id="section-recently-viewed" class="py-8 bg-[#F8FAFC] hidden">
-      <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between mb-5">
-          <h2 class="text-xl sm:text-2xl font-black text-navy tracking-tight flex items-center gap-2">
-            <i class="fa-solid fa-clock-rotate-left text-indigo-600"></i>
-            <span>GỢI Ý DÀNH CHO BẠN (SẢN PHẨM ĐÃ XEM)</span>
-          </h2>
-        </div>
-        <div id="shelf-recent-items" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
-          <!-- Render động -->
-        </div>
-      </div>
-    </section>
-
 
         <!-- =========================================================================
-         SECTION 4: CAM KẾT DỊCH VỤ & TIỆN ÍCH MUA SẮM CellphoneS - 241 Lê Văn Việt
-         ========================================================================= -->
-    <section id="order" class="py-16 sm:py-20 bg-gradient-to-b from-slate-50 to-white border-t border-slate-200">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        <div class="text-center max-w-3xl mx-auto mb-12">
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#EFF6FF] text-[#1E3A8A] text-xs font-black uppercase tracking-wider mb-3">
-            <i class="fa-solid fa-shield-halved text-[#2563EB]"></i>
-            <span>Dịch Vụ Khách Hàng Chuẩn 5 Sao</span>
-          </div>
-          <h2 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
-            Mua Sắm An Tâm Tuyệt Đối Tại CellphoneS - 241 Lê Văn Việt
-          </h2>
-          <p class="mt-3 text-sm sm:text-base text-slate-600 font-medium">
-            Tất cả sản phẩm điện thoại, máy tính bảng và phụ kiện đều là hàng chính hãng 100%, bảo hành toàn diện với chính sách hậu mãi hàng đầu thị trường.
-          </p>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          
-          <div class="bg-white p-6 rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition-shadow group">
-            <div class="w-14 h-14 rounded-2xl bg-blue-100/70 text-[#2563EB] flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
-              <i class="fa-solid fa-truck-fast"></i>
-            </div>
-            <h3 class="text-base font-black text-slate-900 mb-2">Giao Hỏa Tốc 2 Giờ</h3>
-            <p class="text-xs text-slate-600 leading-relaxed">
-              Giao nhanh miễn phí nội thành Hà Nội & TP.HCM. Kiểm tra máy tận nơi, ưng ý mới thanh toán tiền mặt hoặc quẹt thẻ.
-            </p>
+             KHỐI DANH MỤC NỔI BẬT (16 Ngành hàng & Dịch vụ chuẩn mẫu CellphoneS)
+             ========================================================================= -->
+        <div class="mt-3.5 sm:mt-4.5 w-full bg-white rounded-xl sm:rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden select-none">
+          <!-- Tiêu đề khối -->
+          <div class="px-4 sm:px-6 pt-3.5 sm:pt-4 pb-2">
+            <h2 class="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
+              Danh mục nổi bật
+            </h2>
           </div>
 
-          <div class="bg-white p-6 rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition-shadow group">
-            <div class="w-14 h-14 rounded-2xl bg-blue-100/70 text-[#2563EB] flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
-              <i class="fa-solid fa-rotate text-[#2563EB]"></i>
-            </div>
-            <h3 class="text-base font-black text-slate-900 mb-2">1 Đổi 1 Trong 30 Ngày</h3>
-            <p class="text-xs text-slate-600 leading-relaxed">
-              Nếu phát sinh lỗi phần cứng từ nhà sản xuất, khách hàng được đổi ngay máy mới nguyên seal nhanh chóng không mất phí.
-            </p>
-          </div>
+          <!-- Lưới 16 Danh mục (Hàng 1: 8 mục, Hàng 2: 8 mục trên Desktop / 4 cột trên Mobile) -->
+          <div class="grid grid-cols-4 md:grid-cols-8">
+            <!-- 1. Điện thoại -->
+            <a href="javascript:void(0)" onclick="window.quickSearchTag('Điện thoại')" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-slate-50/90 transition-colors group cursor-pointer" title="Điện thoại">
+              <div class="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center mb-1.5 sm:mb-2">
+                <img src="images/categories/dien-thoai.png" onerror="this.onerror=null; this.src='images/categories/dien-thoai.svg';" alt="Điện thoại" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+              </div>
+              <span class="text-xs sm:text-[13px] font-medium text-slate-700 leading-snug line-clamp-2 min-h-[32px] sm:min-h-[36px] flex items-center justify-center group-hover:text-blue-600 transition-colors">Điện thoại</span>
+            </a>
 
-          <div class="bg-white p-6 rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition-shadow group">
-            <div class="w-14 h-14 rounded-2xl bg-blue-100/70 text-[#2563EB] flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
-              <i class="fa-solid fa-award"></i>
-            </div>
-            <h3 class="text-base font-black text-slate-900 mb-2">Bảo Hành Chính Hãng</h3>
-            <p class="text-xs text-slate-600 leading-relaxed">
-              Bảo hành 12 - 24 tháng tại các trung tâm ủy quyền Apple, Samsung, Xiaomi toàn quốc. Kích hoạt bảo hành điện tử tức thì.
-            </p>
-          </div>
+            <!-- 2. Laptop -->
+            <a href="javascript:void(0)" onclick="window.quickSearchTag('Laptop')" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-slate-50/90 transition-colors group cursor-pointer" title="Laptop">
+              <div class="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center mb-1.5 sm:mb-2">
+                <img src="images/categories/laptop.png" onerror="this.onerror=null; this.src='images/categories/laptop.svg';" alt="Laptop" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+              </div>
+              <span class="text-xs sm:text-[13px] font-medium text-slate-700 leading-snug line-clamp-2 min-h-[32px] sm:min-h-[36px] flex items-center justify-center group-hover:text-blue-600 transition-colors">Laptop</span>
+            </a>
 
-          <div class="bg-white p-6 rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition-shadow group">
-            <div class="w-14 h-14 rounded-2xl bg-blue-100/70 text-[#2563EB] flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
-              <i class="fa-solid fa-percent"></i>
-            </div>
-            <h3 class="text-base font-black text-slate-900 mb-2">Trả Góp 0% Linh Hoạt</h3>
-            <p class="text-xs text-slate-600 leading-relaxed">
-              Hỗ trợ trả góp 0% lãi suất qua thẻ tín dụng và công ty tài chính hàng đầu, xét duyệt hồ sơ online nhanh gọn trong 5 phút.
-            </p>
-          </div>
+            <!-- 3. Tablet -->
+            <a href="javascript:void(0)" onclick="window.quickSearchTag('iPad')" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-slate-50/90 transition-colors group cursor-pointer" title="Tablet">
+              <div class="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center mb-1.5 sm:mb-2">
+                <img src="images/categories/tablet.png" onerror="this.onerror=null; this.src='images/categories/tablet.svg';" alt="Tablet" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+              </div>
+              <span class="text-xs sm:text-[13px] font-medium text-slate-700 leading-snug line-clamp-2 min-h-[32px] sm:min-h-[36px] flex items-center justify-center group-hover:text-blue-600 transition-colors">Tablet</span>
+            </a>
 
-        </div>
+            <!-- 4. Màn hình -->
+            <a href="javascript:void(0)" onclick="window.quickSearchTag('Màn hình')" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-slate-50/90 transition-colors group cursor-pointer" title="Màn hình">
+              <div class="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center mb-1.5 sm:mb-2">
+                <img src="images/categories/man-hinh.png" onerror="this.onerror=null; this.src='images/categories/man-hinh.svg';" alt="Màn hình" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+              </div>
+              <span class="text-xs sm:text-[13px] font-medium text-slate-700 leading-snug line-clamp-2 min-h-[32px] sm:min-h-[36px] flex items-center justify-center group-hover:text-blue-600 transition-colors">Màn hình</span>
+            </a>
 
-        <!-- Banner kêu gọi xem sản phẩm -->
-        <div class="mt-12 bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
-          <div class="space-y-1 text-center md:text-left">
-            <h3 class="text-xl font-black text-slate-900">Sẵn sàng trải nghiệm thiết bị công nghệ mới nhất?</h3>
-            <p class="text-xs sm:text-sm text-slate-600 font-medium">Khám phá hơn 25+ mẫu điện thoại, máy tính bảng và phụ kiện chính hãng với giá tốt nhất hôm nay.</p>
+            <!-- 5. PC, linh kiện máy tính -->
+            <a href="javascript:void(0)" onclick="window.quickSearchTag('PC')" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-slate-50/90 transition-colors group cursor-pointer" title="PC, linh kiện máy tính">
+              <div class="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center mb-1.5 sm:mb-2">
+                <img src="images/categories/pc-linh-kien.png" onerror="this.onerror=null; this.src='images/categories/pc-linh-kien.svg';" alt="PC, linh kiện máy tính" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+              </div>
+              <span class="text-xs sm:text-[13px] font-medium text-slate-700 leading-snug line-clamp-2 min-h-[32px] sm:min-h-[36px] flex items-center justify-center group-hover:text-blue-600 transition-colors">PC, linh kiện máy tính</span>
+            </a>
+
+            <!-- 6. Đồng hồ -->
+            <a href="javascript:void(0)" onclick="window.quickSearchTag('Đồng hồ')" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-slate-50/90 transition-colors group cursor-pointer" title="Đồng hồ">
+              <div class="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center mb-1.5 sm:mb-2">
+                <img src="images/categories/dong-ho.png" onerror="this.onerror=null; this.src='images/categories/dong-ho.svg';" alt="Đồng hồ" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+              </div>
+              <span class="text-xs sm:text-[13px] font-medium text-slate-700 leading-snug line-clamp-2 min-h-[32px] sm:min-h-[36px] flex items-center justify-center group-hover:text-blue-600 transition-colors">Đồng hồ</span>
+            </a>
+
+            <!-- 7. Âm thanh -->
+            <a href="javascript:void(0)" onclick="window.quickSearchTag('Tai nghe')" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-slate-50/90 transition-colors group cursor-pointer" title="Âm thanh">
+              <div class="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center mb-1.5 sm:mb-2">
+                <img src="images/categories/am-thanh.png" onerror="this.onerror=null; this.src='images/categories/am-thanh.svg';" alt="Âm thanh" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+              </div>
+              <span class="text-xs sm:text-[13px] font-medium text-slate-700 leading-snug line-clamp-2 min-h-[32px] sm:min-h-[36px] flex items-center justify-center group-hover:text-blue-600 transition-colors">Âm thanh</span>
+            </a>
+
+            <!-- 8. Tivi, Điện máy -->
+            <a href="javascript:void(0)" onclick="window.quickSearchTag('Tivi')" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-slate-50/90 transition-colors group cursor-pointer" title="Tivi, Điện máy">
+              <div class="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center mb-1.5 sm:mb-2">
+                <img src="images/categories/tivi-dien-may.png" onerror="this.onerror=null; this.src='images/categories/tivi-dien-may.svg';" alt="Tivi, Điện máy" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+              </div>
+              <span class="text-xs sm:text-[13px] font-medium text-slate-700 leading-snug line-clamp-2 min-h-[32px] sm:min-h-[36px] flex items-center justify-center group-hover:text-blue-600 transition-colors">Tivi, Điện máy</span>
+            </a>
+
+            <!-- 9. Smart home -->
+            <a href="javascript:void(0)" onclick="window.quickSearchTag('Smart home')" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-slate-50/90 transition-colors group cursor-pointer" title="Smart home">
+              <div class="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center mb-1.5 sm:mb-2">
+                <img src="images/categories/smart-home.png" onerror="this.onerror=null; this.src='images/categories/smart-home.svg';" alt="Smart home" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+              </div>
+              <span class="text-xs sm:text-[13px] font-medium text-slate-700 leading-snug line-clamp-2 min-h-[32px] sm:min-h-[36px] flex items-center justify-center group-hover:text-blue-600 transition-colors">Smart home</span>
+            </a>
+
+            <!-- 10. Camera -->
+            <a href="javascript:void(0)" onclick="window.quickSearchTag('Camera')" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-slate-50/90 transition-colors group cursor-pointer" title="Camera">
+              <div class="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center mb-1.5 sm:mb-2">
+                <img src="images/categories/camera.png" onerror="this.onerror=null; this.src='images/categories/camera.svg';" alt="Camera" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+              </div>
+              <span class="text-xs sm:text-[13px] font-medium text-slate-700 leading-snug line-clamp-2 min-h-[32px] sm:min-h-[36px] flex items-center justify-center group-hover:text-blue-600 transition-colors">Camera</span>
+            </a>
+
+            <!-- 11. Thiết bị mạng -->
+            <a href="javascript:void(0)" onclick="window.quickSearchTag('Router')" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-slate-50/90 transition-colors group cursor-pointer" title="Thiết bị mạng">
+              <div class="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center mb-1.5 sm:mb-2">
+                <img src="images/categories/thiet-bi-mang.png" onerror="this.onerror=null; this.src='images/categories/thiet-bi-mang.svg';" alt="Thiết bị mạng" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+              </div>
+              <span class="text-xs sm:text-[13px] font-medium text-slate-700 leading-snug line-clamp-2 min-h-[32px] sm:min-h-[36px] flex items-center justify-center group-hover:text-blue-600 transition-colors">Thiết bị mạng</span>
+            </a>
+
+            <!-- 12. Phụ kiện -->
+            <a href="javascript:void(0)" onclick="window.quickSearchTag('Phụ kiện')" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-slate-50/90 transition-colors group cursor-pointer" title="Phụ kiện">
+              <div class="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center mb-1.5 sm:mb-2">
+                <img src="images/categories/phu-kien.png" onerror="this.onerror=null; this.src='images/categories/phu-kien.svg';" alt="Phụ kiện" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+              </div>
+              <span class="text-xs sm:text-[13px] font-medium text-slate-700 leading-snug line-clamp-2 min-h-[32px] sm:min-h-[36px] flex items-center justify-center group-hover:text-blue-600 transition-colors">Phụ kiện</span>
+            </a>
+
+            <!-- 13. Hàng cũ -->
+            <a href="javascript:void(0)" onclick="window.quickSearchTag('Cũ')" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-slate-50/90 transition-colors group cursor-pointer" title="Hàng cũ">
+              <div class="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center mb-1.5 sm:mb-2">
+                <img src="images/categories/hang-cu.png" onerror="this.onerror=null; this.src='images/categories/hang-cu.svg';" alt="Hàng cũ" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+              </div>
+              <span class="text-xs sm:text-[13px] font-medium text-slate-700 leading-snug line-clamp-2 min-h-[32px] sm:min-h-[36px] flex items-center justify-center group-hover:text-blue-600 transition-colors">Hàng cũ</span>
+            </a>
+
+            <!-- 14. Thu cũ đổi mới -->
+            <a href="javascript:void(0)" onclick="if(window.CellphoneSLookup?.openTradeInModal){window.CellphoneSLookup.openTradeInModal()}else{window.quickSearchTag('Thu cũ')}" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-slate-50/90 transition-colors group cursor-pointer" title="Thu cũ đổi mới">
+              <div class="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center mb-1.5 sm:mb-2">
+                <img src="images/categories/thu-cu-doi-moi.png" onerror="this.onerror=null; this.src='images/categories/thu-cu-doi-moi.svg';" alt="Thu cũ đổi mới" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+              </div>
+              <span class="text-xs sm:text-[13px] font-medium text-slate-700 leading-snug line-clamp-2 min-h-[32px] sm:min-h-[36px] flex items-center justify-center group-hover:text-blue-600 transition-colors">Thu cũ đổi mới</span>
+            </a>
+
+            <!-- 15. Dịch vụ SIM thẻ -->
+            <a href="javascript:void(0)" onclick="if(typeof window.showToast==='function'){window.showToast('Dịch vụ SIM thẻ & Nạp thẻ chính hãng sẵn sàng tại showroom!','info')}else{window.quickSearchTag('SIM')}" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-slate-50/90 transition-colors group cursor-pointer" title="Dịch vụ SIM thẻ">
+              <div class="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center mb-1.5 sm:mb-2">
+                <img src="images/categories/dich-vu-sim.png" onerror="this.onerror=null; this.src='images/categories/dich-vu-sim.svg';" alt="Dịch vụ SIM thẻ" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+              </div>
+              <span class="text-xs sm:text-[13px] font-medium text-slate-700 leading-snug line-clamp-2 min-h-[32px] sm:min-h-[36px] flex items-center justify-center group-hover:text-blue-600 transition-colors">Dịch vụ SIM thẻ</span>
+            </a>
+
+            <!-- 16. Khuyến mại -->
+            <a href="javascript:void(0)" onclick="if(typeof window.showStudentPromo==='function'){window.showStudentPromo()}else{window.quickSearchTag('Khuyến mại')}" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-slate-50/90 transition-colors group cursor-pointer" title="Khuyến mại">
+              <div class="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center mb-1.5 sm:mb-2">
+                <img src="images/categories/khuyen-mai.png" onerror="this.onerror=null; this.src='images/categories/khuyen-mai.svg';" alt="Khuyến mại" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+              </div>
+              <span class="text-xs sm:text-[13px] font-medium text-slate-700 leading-snug line-clamp-2 min-h-[32px] sm:min-h-[36px] flex items-center justify-center group-hover:text-blue-600 transition-colors">Khuyến mại</span>
+            </a>
           </div>
-          <a href="#featured-products" class="h-12 inline-flex items-center gap-2 px-6 rounded-xl bg-[#1E3A8A] hover:bg-[#2563EB] text-white font-black text-sm shadow-md transition-all active:scale-95 flex-shrink-0 cursor-pointer">
-            <span>Xem Danh Mục Sản Phẩm</span>
-            <i class="fa-solid fa-arrow-right text-xs"></i>
-          </a>
         </div>
 
       </div>
     </section>
+
+    <!-- =========================================================================
+         VUNG NOI DUNG SAN SANG SETUP CAC MUC MOI
+         ========================================================================= -->
+        <!-- =========================================================================
+         KHỐI TRẠM TIẾP SỨC ONLINE - GIÁ TỐT MỖI NGÀY (Chuẩn 100% mẫu người dùng gửi)
+         ========================================================================= -->
+    <section id="section-tram-tiep-suc" class="pt-20 sm:pt-28 lg:pt-36 pb-10 bg-[#F8FAFC]">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Khung Xanh SamaMobile Thống Nhất (Chuẩn 100% tỷ lệ mẫu người dùng gửi) -->
+        <div class="relative w-full rounded-2xl sm:rounded-3xl shadow-xl p-2 sm:p-3 lg:p-3.5 pb-3 sm:pb-4" style="background: linear-gradient(180deg, #0265B8 0%, #004FA3 100%);">
+          
+          <!-- Banner Header 3D Pop-out: Mép trên khung xanh cắt ngang 1/2 biển hiệu, Tòa nhà & Mèo nhô 2/3 lên nền web xám, Chân đặt ngay trên mép card trắng KHÔNG đè lên tab -->
+          <div class="relative w-full select-none z-20 pointer-events-none -mt-10 sm:-mt-20 lg:-mt-32 mb-1.5 sm:mb-2 lg:mb-2.5">
+            <img src="images/tram-tiep-suc-header.png?v=8.0" alt="Trạm Tiếp Sức Online - Giá Tốt Mỗi Ngày" class="w-full h-auto block drop-shadow-md" />
+          </div>
+
+          <!-- Khối Card Trắng Liền Mạch (Chứa 6 Tab Ngành Hàng & Carousel Sản Phẩm) -->
+          <div class="bg-white rounded-xl sm:rounded-2xl shadow-sm border border-slate-100 overflow-hidden relative z-10">
+            
+            <!-- Dải 6 Tab Ngành Hàng (Tab 1 Điện Thoại Giá Hời Active với nền kem sáng #FEFCE8) -->
+            <div id="deal-tabs-container" class="grid grid-cols-3 sm:grid-cols-6 border-b border-slate-200 bg-white select-none">
+              <button type="button" onclick="window.switchDealCategory('dienthoai')" data-deal-cat="dienthoai" class="deal-tab-btn flex items-center justify-center p-2 sm:p-2.5 border-r border-slate-200 hover:bg-slate-50 transition-all cursor-pointer relative group active-deal-tab" title="Điện thoại giá hời">
+                <img src="images/deal-tabs/deal-tab-phone.jpg" alt="Điện thoại giá hời" class="max-h-8 sm:max-h-11 w-auto object-contain transition-transform group-hover:scale-105" />
+              </button>
+              <button type="button" onclick="window.switchDealCategory('tablet')" data-deal-cat="tablet" class="deal-tab-btn flex items-center justify-center p-2 sm:p-2.5 border-r border-slate-200 hover:bg-slate-50 transition-all cursor-pointer relative group" title="Máy tính bảng giá tốt">
+                <img src="images/deal-tabs/deal-tab-tablet.jpg" alt="Máy tính bảng giá tốt" class="max-h-8 sm:max-h-11 w-auto object-contain transition-transform group-hover:scale-105" />
+              </button>
+              <button type="button" onclick="window.switchDealCategory('amthanh')" data-deal-cat="amthanh" class="deal-tab-btn flex items-center justify-center p-2 sm:p-2.5 border-r border-slate-200 hover:bg-slate-50 transition-all cursor-pointer relative group" title="Âm thanh đỉnh cao">
+                <img src="images/deal-tabs/deal-tab-audio.jpg" alt="Âm thanh đỉnh cao" class="max-h-8 sm:max-h-11 w-auto object-contain transition-transform group-hover:scale-105" />
+              </button>
+              <button type="button" onclick="window.switchDealCategory('dongho')" data-deal-cat="dongho" class="deal-tab-btn flex items-center justify-center p-2 sm:p-2.5 border-r border-slate-200 hover:bg-slate-50 transition-all cursor-pointer relative group" title="Đồng hồ thông minh">
+                <img src="images/deal-tabs/deal-tab-watch.jpg" alt="Đồng hồ thông minh" class="max-h-8 sm:max-h-11 w-auto object-contain transition-transform group-hover:scale-105" />
+              </button>
+              <button type="button" onclick="window.switchDealCategory('phukien')" data-deal-cat="phukien" class="deal-tab-btn flex items-center justify-center p-2 sm:p-2.5 border-r border-slate-200 hover:bg-slate-50 transition-all cursor-pointer relative group" title="Phụ kiện hiện đại">
+                <img src="images/deal-tabs/deal-tab-accessory.jpg" alt="Phụ kiện hiện đại" class="max-h-8 sm:max-h-11 w-auto object-contain transition-transform group-hover:scale-105" />
+              </button>
+              <button type="button" onclick="window.switchDealCategory('laptop')" data-deal-cat="laptop" class="deal-tab-btn flex items-center justify-center p-2 sm:p-2.5 hover:bg-slate-50 transition-all cursor-pointer relative group" title="Laptop / Màn hình siêu hot">
+                <img src="images/deal-tabs/deal-tab-laptop.jpg" alt="Laptop / Màn hình siêu hot" class="max-h-8 sm:max-h-11 w-auto object-contain transition-transform group-hover:scale-105" />
+              </button>
+            </div>
+
+            <!-- Khu vực Carousel Sản Phẩm (Liền mạch, vách ngăn mờ giữa các cột) -->
+            <div class="relative group/deal px-1 sm:px-2 py-3 sm:py-4">
+              <!-- Viewport -->
+              <div id="deal-products-viewport" class="overflow-hidden w-full">
+                <div id="deal-products-track" class="flex transition-transform duration-500 ease-out">
+                  <!-- Render động bởi customer-store.js -->
+                </div>
+              </div>
+
+              <!-- Nút Next & Prev Lướt Sản Phẩm (Nút tròn trắng viền đổ bóng nổi hai bên) -->
+              <button type="button" onclick="window.prevDealProduct()" class="absolute -left-2 sm:-left-3.5 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white text-[#0057B7] shadow-lg border border-slate-200 flex items-center justify-center hover:bg-blue-50 hover:scale-105 active:scale-95 transition-all z-20 cursor-pointer" aria-label="Sản phẩm trước">
+                <i class="fa-solid fa-chevron-left text-xs sm:text-sm"></i>
+              </button>
+              <button type="button" onclick="window.nextDealProduct()" class="absolute -right-2 sm:-right-3.5 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white text-[#0057B7] shadow-lg border border-slate-200 flex items-center justify-center hover:bg-blue-50 hover:scale-105 active:scale-95 transition-all z-20 cursor-pointer" aria-label="Sản phẩm tiếp theo">
+                <i class="fa-solid fa-chevron-right text-xs sm:text-sm"></i>
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <div id="store-content-area" class="min-h-[20px]"></div>
+
+  </main>
 
     <!-- =========================================================================
        FOOTER: THÔNG TIN LIÊN HỆ, PHÁP LÝ VÀ ĐỐI TÁC
@@ -805,21 +708,15 @@
         <!-- Cột 1: Thông tin thương hiệu -->
         <div class="lg:col-span-2 space-y-4">
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-[#1E3A8A] flex items-center justify-center text-white text-lg">
-              <i class="fa-solid fa-mobile-screen-button"></i>
-            </div>
-            <div>
-              <span class="text-xl font-extrabold text-white tracking-tight">Sama<span class="text-[#F59E0B]">Phone</span></span>
-              <span class="text-[10px] block font-semibold text-slate-500 uppercase -mt-1">Apple Authorized Reseller Demo</span>
-            </div>
+            <img src="images/samamobile-logo.png" alt="SAMAMOBILE.COM" class="h-10 sm:h-12 w-auto object-contain">
           </div>
           <p class="text-slate-400 text-xs leading-relaxed max-w-sm">
-            CellphoneS - 241 Lê Văn Việt là hệ thống bán lẻ các thiết bị công nghệ Apple chính hãng hàng đầu tại Việt Nam. Cam kết 100% hàng mới nguyên seal, chính sách bảo hành minh bạch và trải nghiệm dịch vụ khách hàng 5 sao.
+            SAMAMOBILE.COM là hệ thống bán lẻ các thiết bị công nghệ điện thoại, máy tính bảng và phụ kiện chính hãng hàng đầu tại Việt Nam. Cam kết 100% hàng mới nguyên seal, chính sách bảo hành minh bạch và trải nghiệm dịch vụ khách hàng 5 sao.
           </p>
           <div class="space-y-1.5 text-xs text-slate-300">
-            <div><strong class="text-white">Địa chỉ:</strong> Tòa nhà CellphoneS Tower, 128 Trần Duy Hưng, Cầu Giấy, Hà Nội</div>
-            <div><strong class="text-white">Tổng đài tư vấn:</strong> <a href="tel:18006868" class="text-[#F59E0B] hover:underline">1800 6868</a> (8:00 - 22:00)</div>
-            <div><strong class="text-white">Email hỗ trợ:</strong> hotro@CellphoneS - 241 Lê Văn Việt.vn</div>
+            <div><strong class="text-white">Địa chỉ:</strong> 241 Lê Văn Việt, Tăng Nhơn Phú B, TP. Thủ Đức, TP. Hồ Chí Minh</div>
+            <div><strong class="text-white">Tổng đài tư vấn:</strong> <a href="tel:18006868" class="text-[#FF7A00] hover:underline">1800 6868</a> (8:00 - 22:00)</div>
+            <div><strong class="text-white">Email hỗ trợ:</strong> hotro@samamobile.com</div>
           </div>
         </div>
 
@@ -872,7 +769,7 @@
       <!-- Bản quyền & Lưu ý -->
       <div class="pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-slate-500">
         <div>
-          © 2026 CellphoneS - 241 Lê Văn Việt. Bản quyền giao diện Landing Page thuộc về dự án PTTKYC.
+          © 2026 SAMAMOBILE.COM - 241 Lê Văn Việt. Hệ thống bán lẻ thiết bị công nghệ chính hãng.
         </div>
         <div class="flex items-center gap-4 text-base text-slate-400">
           <a href="#" class="hover:text-[#60A5FA] transition-colors" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
@@ -913,7 +810,10 @@
         <!-- Tóm tắt máy đang chọn -->
         <div class="bg-[#F0FDF4]/70 p-4 rounded-2xl border border-[#DCFCE7] flex items-center gap-4">
           <div class="w-16 h-20 bg-white rounded-xl p-1.5 border border-slate-200 flex-shrink-0 flex items-center justify-center">
-            <img id="modal-product-img" src="images/phone-desert.svg" alt="Preview máy" class="w-full h-full object-contain">
+            <img id="modal-product-img" src="" alt="Preview máy" class="w-full h-full object-contain hidden">
+            <div id="modal-product-img-placeholder" class="text-slate-300 text-xl flex items-center justify-center">
+              <i class="fa-solid fa-mobile-screen-button"></i>
+            </div>
           </div>
           <div class="space-y-1 flex-1">
             <div class="font-extrabold text-navy text-sm sm:text-base">iPhone 16 Pro Max Chính Hãng VN/A</div>
@@ -1582,8 +1482,12 @@
           
           <!-- Cột 1: Thư viện ảnh -->
           <div class="md:col-span-5 flex flex-col items-center">
-            <div class="w-full aspect-square bg-slate-50 rounded-2xl p-6 border border-slate-100 flex items-center justify-center overflow-hidden">
-              <img id="pmodal-main-image" src="" alt="" class="max-w-full max-h-full object-contain filter drop-shadow-xl transition-transform duration-300 hover:scale-105">
+            <div class="w-full aspect-square bg-slate-50 rounded-2xl p-6 border border-slate-100 flex items-center justify-center overflow-hidden relative">
+              <img id="pmodal-main-image" src="" alt="" class="max-w-full max-h-full object-contain filter drop-shadow-xl transition-transform duration-300 hover:scale-105 hidden">
+              <div id="pmodal-image-placeholder" class="flex flex-col items-center justify-center text-slate-300 gap-2">
+                <i class="fa-solid fa-mobile-screen-button text-5xl"></i>
+                <span class="text-xs font-semibold text-slate-400">Chờ cập nhật ảnh</span>
+              </div>
             </div>
             
             <!-- Cam kết chính hãng -->
@@ -1977,14 +1881,14 @@
 
       <!-- SCRIPT MODULES -->
   <script src="js/api.js?v=3.2"></script>
-  <script src="js/store-data.js?v=3.2"></script>
-  <script src="js/cart.js?v=3.2"></script>
+  <script src="js/store-data.js?v=3.8"></script>
+  <script src="js/cart.js?v=3.7"></script>
   <script src="js/checkout.js?v=3.2"></script>
   <script src="js/customer-portal.js?v=3.2"></script>
   <script src="js/lookup.js?v=3.2"></script>
-  <script src="js/product-modal.js?v=3.2"></script>
+  <script src="js/product-modal.js?v=3.7"></script>
   <script src="js/auth.js?v=3.2"></script>
-  <script src="js/customer-store.js?v=3.2"></script>
+  <script src="js/customer-store.js?v=6.2"></script>
   <script src="js/main.js?v=3.2"></script>
 </body>
 </html>

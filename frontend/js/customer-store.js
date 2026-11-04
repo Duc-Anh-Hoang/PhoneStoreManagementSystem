@@ -34,6 +34,7 @@
     renderMegaMenu();
     renderHeroSlider();
     renderShelves();
+    initTramTiepSucSection();
     console.log('>>> [CUSTOMER STORE] renderShelves completed');
     initSearchAutocomplete();
     initScrollToTop();
@@ -44,12 +45,6 @@
       updateAuthHeader();
       if ((window.CellphoneSCart || window.Cart)) (window.CellphoneSCart || window.Cart).updateUI();
     });
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initApp);
-  } else {
-    initApp();
   }
 
   /**
@@ -120,190 +115,356 @@
   }
 
   /**
-   * Hero Slider
+   * Hero Slider - 8 Banner Marketing Nét Chuẩn Hoàng Hà Mobile từ images/banner/
    */
   const DEFAULT_HERO_SLIDES = [
     {
       id: "slide-1",
-      title: "iPhone 16 Pro Max",
-      subtitle: "ĐỈNH CAO TITAN SA MẠC - CHIP A18 PRO 3NM",
-      desc: "Màn hình 6.9 inch viền siêu mỏng, Camera 48MP Zoom 5x, Phím Camera Control thế hệ mới.",
-      badge: "Mở Bán Siêu Phẩm 2026",
-      priceText: "Từ 31.490.000 đ",
-      oldPriceText: "34.990.000 đ",
-      discountText: "Giảm 3.500.000 đ",
-      image: "images/phone-desert.svg",
-      targetMaHang: "MH001",
-      btnText: "Mua Ngay Giảm 10%",
-      bgGradient: "from-[#061a0f] via-[#092b19] to-[#04120a]",
-      themeColor: "#80ffbf"
+      title: "Săn vé Galaxy Festival Concert",
+      subtitle: "Cùng SAMAMOBILE",
+      image: "images/banner/960301_samsung-festival-web.jpg",
+      targetMaHang: "MH003",
+      brand: "Samsung"
     },
     {
       id: "slide-2",
-      title: "Galaxy S24 Ultra 5G",
-      subtitle: "QUYỀN NĂNG GALAXY AI - KHUNG VIỀN TITAN",
-      desc: "Bút S-Pen quyền năng, Camera 200MP Mắt Thần Bóng Đêm, Màn hình Dynamic AMOLED 2X 2600 nits.",
-      badge: "Flagship Đỉnh Cao",
-      priceText: "28.490.000 đ",
-      oldPriceText: "33.990.000 đ",
-      discountText: "Giảm 5.500.000 đ",
-      image: "images/galaxy-s24.svg",
+      title: "Galaxy S26 Series.",
+      subtitle: "Mua Ngay",
+      image: "images/banner/471331_S26-Series-1200x375.jpg",
       targetMaHang: "MH003",
-      btnText: "Xem Chi Tiết",
-      bgGradient: "from-slate-950 via-indigo-950 to-slate-900",
-      themeColor: "#6366F1"
+      brand: "Samsung"
     },
     {
       id: "slide-3",
-      title: "Đại Tiệc Phụ Kiện Cao Cấp",
-      subtitle: "CHÍNH HÃNG APPLE & ANKER GIẢM ĐẾN 40%",
-      desc: "Củ sạc 20W USB-C, Ốp lưng MagSafe, Cáp sạc bọc dù chống đứt, Tai nghe AirPods Pro 2.",
-      badge: "Deal Hot Trong Ngày",
-      priceText: "Chỉ từ 450.000 đ",
-      oldPriceText: "650.000 đ",
-      discountText: "Ưu Đãi Lớn",
-      image: "images/accessories-pack.svg",
-      targetMaHang: "MH006",
-      btnText: "Săn Deal Ngay",
-      bgGradient: "from-amber-950 via-rose-950 to-slate-950",
-      themeColor: "#F59E0B"
+      title: "REDMAGIC Astra 2 Gaming",
+      subtitle: "Đặt mua ngay",
+      image: "images/banner/astra-2-web-083724546.jpg",
+      targetMaHang: "MH002",
+      brand: "Tablet"
     },
     {
       id: "slide-4",
-      title: "Thu Cũ Đổi Mới Lên Đời",
-      subtitle: "TRỢ GIÁ ĐẾN 2.500.000 Đ - KHÔNG LO BÙ TIỀN",
-      desc: "Thu mua máy cũ giá cao nhất thị trường. Kiểm tra định giá nhanh trong 5 phút. Trả góp 0%.",
-      badge: "Thu Cũ Trợ Giá Cao",
-      priceText: "Thu đổi mọi thương hiệu",
-      oldPriceText: "",
-      discountText: "Trợ giá tới 2.5TR",
-      image: "images/phone-natural.svg",
+      title: "Huawei Watch GT 7 Series",
+      subtitle: "Chase the Wild",
+      image: "images/banner/666649_KV-HUAWEI-WATCH-GT-7-Series-1200x375.jpg",
+      targetMaHang: "MH008",
+      brand: "Phụ kiện"
+    },
+    {
+      id: "slide-5",
+      title: "iPhone Duo",
+      subtitle: "Đặt mua ngay hôm nay",
+      image: "images/banner/iphone-duo-web-084156526.jpg",
       targetMaHang: "MH001",
-      btnText: "Định Giá Máy Cũ",
-      bgGradient: "from-emerald-950 via-teal-950 to-slate-900",
-      themeColor: "#80ffbf"
+      brand: "Apple"
+    },
+    {
+      id: "slide-6",
+      title: "OPPO Find X10 Series",
+      subtitle: "Đặt Trước Rước Ngay",
+      image: "images/banner/860851_OPPO-Find-X10-Series-web.jpg",
+      targetMaHang: "MH006",
+      brand: "OPPO"
+    },
+    {
+      id: "slide-7",
+      title: "iPhone 18 Pro Max",
+      subtitle: "Đặt mua ngay",
+      image: "images/banner/iphone-18-web-082925157.jpg",
+      targetMaHang: "MH001",
+      brand: "Apple"
+    },
+    {
+      id: "slide-8",
+      title: "Galaxy A18 | A08",
+      subtitle: "Bền mượt cực đã",
+      image: "images/banner/702904_KV-SS-A18-_-A08-1200x375-25w.jpg",
+      targetMaHang: "MH004",
+      brand: "Samsung"
     }
   ];
+
+  // Quản lý Hero Slider & Dải Tab trượt liên tục từng cột (1|2|3|4 -> 2|3|4|5)
+  let heroCurrentIndex = 8; // Bắt đầu ở Set 1 (index 8..15 cho 8 slides)
+  let heroTotalSlides = 8;
+
+  function getTabColWidth() {
+    const viewport = document.getElementById('hero-tabs-viewport') || document.getElementById('hero-tabs-wrapper');
+    if (!viewport) return 0;
+    const isDesktop = window.innerWidth >= 768;
+    const itemsVisible = isDesktop ? 4 : 2;
+    return viewport.clientWidth / itemsVisible;
+  }
+
+  function applyTabsPosition(animate = true) {
+    const tabsTrack = document.getElementById('hero-banner-tabs');
+    if (!tabsTrack) return;
+    const colWidth = getTabColWidth();
+    const offset = heroCurrentIndex * colWidth;
+
+    if (animate) {
+      tabsTrack.style.transition = 'transform 0.45s cubic-bezier(0.25, 1, 0.5, 1)';
+    } else {
+      tabsTrack.style.transition = 'none';
+    }
+    tabsTrack.style.transform = `translateX(-${offset}px)`;
+  }
+
+  function updateActiveSlideUI() {
+    const activeSlide = ((heroCurrentIndex % heroTotalSlides) + heroTotalSlides) % heroTotalSlides;
+    const slides = document.querySelectorAll('.hero-fade-slide');
+    const dots = document.querySelectorAll('#hero-slider-dots button');
+    const tabs = document.querySelectorAll('.hero-tab-item');
+
+    // 1. Chuyển cảnh mờ dần ảnh banner
+    slides.forEach((s, i) => {
+      if (i === activeSlide) s.classList.add('active-slide');
+      else s.classList.remove('active-slide');
+    });
+
+    // 2. Cập nhật dots
+    dots.forEach((d, i) => {
+      if (i === activeSlide) {
+        d.className = 'w-6 h-1.5 rounded-full bg-[#2563EB] transition-all cursor-pointer shadow-sm';
+      } else {
+        d.className = 'w-2 h-1.5 rounded-full bg-white/70 hover:bg-white transition-all cursor-pointer';
+      }
+    });
+
+    // 3. Cập nhật active tab: Cột đầu tiên trong khung hiển thị (tại heroCurrentIndex) là active (chỉ đổi màu chữ và gạch chân dưới, không đổi màu nền)
+    tabs.forEach((tab) => {
+      const domIdx = parseInt(tab.getAttribute('data-dom-index'), 10);
+      const title = tab.querySelector('.tab-title');
+      const subtitle = tab.querySelector('.tab-subtitle');
+      if (domIdx === heroCurrentIndex) {
+        tab.classList.add('active-tab');
+        if (title) {
+          title.className = 'tab-title text-[14px] sm:text-[16px] lg:text-[18px] font-extrabold leading-tight line-clamp-2 w-full text-center min-h-[40px] flex items-center justify-center text-[#2563EB]';
+        }
+        if (subtitle) {
+          subtitle.className = 'tab-subtitle text-xs sm:text-[13px] font-semibold leading-tight truncate w-full text-center mt-1.5 text-[#2563EB]';
+        }
+      } else {
+        tab.classList.remove('active-tab');
+        if (title) {
+          title.className = 'tab-title text-[14px] sm:text-[16px] lg:text-[18px] font-bold leading-tight line-clamp-2 w-full text-center min-h-[40px] flex items-center justify-center text-slate-800';
+        }
+        if (subtitle) {
+          subtitle.className = 'tab-subtitle text-xs sm:text-[13px] leading-tight truncate w-full text-center mt-1.5 text-slate-500';
+        }
+      }
+    });
+  }
+
+  function startHeroSliderAuto() {
+    if (heroSlideInterval) clearInterval(heroSlideInterval);
+    heroSlideInterval = setInterval(() => {
+      heroCurrentIndex++;
+      applyTabsPosition(true);
+      updateActiveSlideUI();
+    }, 3000); // Tự động chuyển slide đều đặn đúng mỗi 3 giây
+  }
+
+  // Chuyển tới slide kế tiếp (dịch 1 cột: 1|2|3|4 -> ẩn 1 hiện 2|3|4|5)
+  window.nextHeroSlide = function () {
+    heroCurrentIndex++;
+    applyTabsPosition(true);
+    updateActiveSlideUI();
+    startHeroSliderAuto();
+  };
+
+  // Quay lại slide trước (dịch 1 cột ngược lại)
+  window.prevHeroSlide = function () {
+    heroCurrentIndex--;
+    applyTabsPosition(true);
+    updateActiveSlideUI();
+    startHeroSliderAuto();
+  };
+
+  // Alias tương thích
+  window.prevTabGroup = window.prevHeroSlide;
+  window.nextTabGroup = window.nextHeroSlide;
+
+  // Chuyển trực tiếp tới slide theo index (0..7) từ dot
+  window.setHeroSlide = function (targetSlideIdx) {
+    const currentSlide = ((heroCurrentIndex % heroTotalSlides) + heroTotalSlides) % heroTotalSlides;
+    let diff = targetSlideIdx - currentSlide;
+    if (diff === 0) return;
+    heroCurrentIndex += diff;
+    applyTabsPosition(true);
+    updateActiveSlideUI();
+    startHeroSliderAuto();
+  };
+
+  // Click vào một tab cụ thể trên dải tab: dịch đưa tab đó lên vị trí cột đầu tiên (active)
+  window.onTabItemClick = function (domIdx) {
+    if (domIdx === heroCurrentIndex) return;
+    heroCurrentIndex = domIdx;
+    applyTabsPosition(true);
+    updateActiveSlideUI();
+    startHeroSliderAuto();
+  };
+
+  window.addEventListener('resize', () => {
+    applyTabsPosition(false);
+  });
+
+  window.addEventListener('load', () => {
+    applyTabsPosition(false);
+  });
+
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) {
+      const total = heroTotalSlides;
+      heroCurrentIndex = (((heroCurrentIndex % total) + total) % total) + total;
+      applyTabsPosition(false);
+      updateActiveSlideUI();
+      startHeroSliderAuto();
+    }
+  });
 
   function renderHeroSlider() {
     const slidesContainer = document.getElementById('hero-slider-container');
     const dotsContainer = document.getElementById('hero-slider-dots');
+    const tabsContainer = document.getElementById('hero-banner-tabs');
     if (!slidesContainer) return;
 
     let slides = ((window.CellphoneSData || window.StoreData)?.config?.banners?.heroSlides);
     if (!slides || !slides.length) {
       slides = DEFAULT_HERO_SLIDES;
     }
+    heroTotalSlides = slides.length; // 8
 
+    // 1. Render các slide hiệu ứng mờ dần (Cross-fade)
     slidesContainer.innerHTML = slides.map((s, idx) => `
-      <div class="hero-slide flex-shrink-0 w-full ${idx === 0 ? 'active-slide' : ''}" data-slide-index="${idx}">
-        <div class="relative rounded-2xl overflow-hidden bg-gradient-to-r ${s.bgGradient} p-6 sm:p-10 text-white min-h-[340px] sm:min-h-[400px] flex items-center shadow-xl">
-          <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center w-full z-10">
-            <div class="md:col-span-7 space-y-3.5 transition-all duration-700 ease-out" style="${idx === 0 ? 'transform: translateY(0); opacity: 1;' : 'transform: translateY(6px); opacity: 0.7;'}">
-              <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-amber-300 font-bold text-xs uppercase tracking-wider">
-                <i class="fa-solid fa-bolt text-amber-400"></i> ${s.badge}
-              </span>
-              <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight">${s.title}</h2>
-              <p class="text-xs sm:text-sm text-slate-200 line-clamp-2 max-w-lg">${s.desc}</p>
-              
-              <div class="flex items-baseline gap-3 pt-1">
-                <span class="text-2xl sm:text-3xl font-extrabold text-amber-300">${s.priceText}</span>
-                ${s.oldPriceText ? `<span class="text-sm text-slate-400 line-through">${s.oldPriceText}</span>` : ''}
-                ${s.discountText ? `<span class="px-2 py-0.5 rounded-full bg-rose-500 text-white text-[11px] font-bold">${s.discountText}</span>` : ''}
-              </div>
-
-              <div class="pt-2 flex flex-wrap gap-3">
-                <button type="button" onclick="(window.CellphoneSProductModal || window.ProductModal).open('${s.targetMaHang}')" class="px-5 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-slate-900 font-black text-xs sm:text-sm shadow-xl hover:shadow-2xl transition-all active:scale-95 flex items-center gap-2 cursor-pointer border border-white">
-                  <i class="fa-solid fa-cart-shopping text-emerald-600"></i> ${s.btnText}
-                </button>
-                <button type="button" onclick="(window.CellphoneSLookup || window.Lookup).openTradeInModal()" class="px-4 py-2.5 rounded-xl bg-white/95 hover:bg-white text-slate-900 font-extrabold text-xs sm:text-sm shadow-md transition-all active:scale-95 flex items-center gap-1.5 cursor-pointer border border-white/80">
-                  <i class="fa-solid fa-arrows-rotate text-emerald-600"></i> Thu cũ đổi mới
-                </button>
-              </div>
-            </div>
-
-            <div class="md:col-span-5 flex justify-center">
-              <div class="relative w-48 h-48 sm:w-64 sm:h-64 group cursor-pointer" onclick="(window.CellphoneSProductModal || window.ProductModal).open('${s.targetMaHang}')">
-                <div class="absolute inset-0 bg-[#80ffbf]/20 rounded-full blur-2xl transform group-hover:scale-110 transition-transform"></div>
-                <img src="${s.image}" alt="${s.title}" class="relative w-full h-full object-contain filter drop-shadow-2xl transition-all duration-700 ease-out group-hover:scale-105" style="${idx === 0 ? 'transform: scale(1); opacity: 1;' : 'transform: scale(0.92); opacity: 0.7;'}">
-              </div>
-            </div>
-          </div>
-        </div>
+      <div class="hero-fade-slide cursor-pointer select-none group ${idx === 0 ? 'active-slide' : ''}" data-slide-index="${idx}" onclick="window.onBannerClick('${s.targetMaHang || 'MH001'}', '${s.brand || 'all'}')">
+        <img src="${s.image}?v=4" alt="${s.title}" class="w-full h-full object-cover select-none transition-transform duration-700 group-hover:scale-[1.01]" loading="${idx === 0 ? 'eager' : 'lazy'}">
       </div>
     `).join('');
 
+    // 2. Render dots chỉ số trên ảnh (Active là thanh capsule xanh dương #2563EB)
     if (dotsContainer) {
       dotsContainer.innerHTML = slides.map((_, idx) => `
-        <button type="button" onclick="window.setHeroSlide(${idx})" class="w-2.5 h-2.5 rounded-full transition-all cursor-pointer ${idx === 0 ? 'w-7 bg-[#80ffbf]' : 'bg-slate-300 hover:bg-slate-400'}" aria-label="Slide ${idx + 1}"></button>
+        <button type="button" onclick="window.setHeroSlide(${idx})" class="transition-all cursor-pointer ${idx === 0 ? 'w-6 h-1.5 rounded-full bg-[#2563EB]' : 'w-2 h-1.5 rounded-full bg-white/70 hover:bg-white'}" aria-label="Slide ${idx + 1}"></button>
       `).join('');
     }
 
-    startHeroSliderAuto(slides.length);
+    // 3. Render 3 bộ tabs liên tục (Set 0, Set 1, Set 2) để trượt vô tận từng cột (1|2|3|4 -> 2|3|4|5)
+    if (tabsContainer) {
+      const tripleSlides = [...slides, ...slides, ...slides];
+      tabsContainer.innerHTML = tripleSlides.map((s, domIdx) => {
+        const slideIdx = domIdx % slides.length;
+        const isActive = domIdx === 8;
+        return `
+          <button type="button" onclick="window.onTabItemClick(${domIdx})" data-dom-index="${domIdx}" data-slide-index="${slideIdx}" class="hero-tab-item w-1/2 md:w-1/4 flex-shrink-0 py-3.5 sm:py-4 px-2.5 sm:px-3 flex flex-col items-center justify-center cursor-pointer transition-colors ${isActive ? 'active-tab' : ''}">
+            <span class="tab-title text-[14px] sm:text-[16px] lg:text-[18px] font-bold leading-tight line-clamp-2 w-full text-center min-h-[40px] flex items-center justify-center ${isActive ? 'text-[#2563EB] font-extrabold' : 'text-slate-800'}">${s.title}</span>
+            <span class="tab-subtitle text-xs sm:text-[13px] leading-tight truncate w-full text-center mt-1.5 ${isActive ? 'text-[#2563EB] font-semibold' : 'text-slate-500'}">${s.subtitle || ''}</span>
+          </button>
+        `;
+      }).join('');
+
+      // Lắng nghe transitionend để chuẩn hóa vòng lặp vô tận (Set 1 <-> Set 2 <-> Set 0)
+      if (!tabsContainer._hasTransitionListener) {
+        tabsContainer._hasTransitionListener = true;
+        tabsContainer.addEventListener('transitionend', (e) => {
+          if (e && (e.target !== tabsContainer || e.propertyName !== 'transform')) return;
+          const total = heroTotalSlides;
+          if (heroCurrentIndex >= 2 * total || heroCurrentIndex < total) {
+            heroCurrentIndex = (((heroCurrentIndex % total) + total) % total) + total;
+            applyTabsPosition(false);
+          }
+        });
+      }
+    }
+
+    // Khởi tạo vị trí ban đầu (Set 1: slide 0)
+    heroCurrentIndex = heroTotalSlides; // 8
+    requestAnimationFrame(() => {
+      applyTabsPosition(false);
+      updateActiveSlideUI();
+    });
+    startHeroSliderAuto();
   }
 
-  function startHeroSliderAuto(total) {
-    if (heroSlideInterval) clearInterval(heroSlideInterval);
-    heroSlideInterval = setInterval(() => {
-      window.setHeroSlide((heroCurrentSlide + 1) % total);
-    }, 5500);
-  }
+  window.onBannerClick = function(targetMaHang, brand) {
+    if (targetMaHang && (window.CellphoneSProductModal || window.ProductModal)) {
+      (window.CellphoneSProductModal || window.ProductModal).open(targetMaHang);
+    } else if (brand && window.filterPhoneBrand) {
+      window.filterPhoneBrand(brand, true);
+    }
+  };
 
-  window.setHeroSlide = function (idx) {
-    const slidesContainer = document.getElementById('hero-slider-container');
-    const slides = document.querySelectorAll('.hero-slide');
-    const dots = document.querySelectorAll('#hero-slider-dots button');
-    if (!slides.length || !slidesContainer) return;
+  window.showStudentPromo = function() {
+    const shelf = document.getElementById('promotions-shelf') || document.getElementById('products-grid');
+    if (shelf) {
+      shelf.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
 
-    heroCurrentSlide = idx;
-    slidesContainer.style.transform = `translateX(-${idx * 100}%)`;
-
-    slides.forEach((s, i) => {
-      const img = s.querySelector('img');
-      const textGroup = s.querySelector('.md\\:col-span-7');
-      if (i === idx) {
-        s.classList.add('active-slide');
-        if (img) {
-          img.style.transform = 'scale(1)';
-          img.style.opacity = '1';
-        }
-        if (textGroup) {
-          textGroup.style.transform = 'translateY(0)';
-          textGroup.style.opacity = '1';
+  // Quản lý thông báo Realtime (sẵn sàng kết nối WebSocket / SSE / API)
+  window.NotificationCenter = {
+    toggle: function() {
+      const pop = document.getElementById('notification-popover');
+      if (pop) pop.classList.toggle('hidden');
+    },
+    setBadge: function(count) {
+      const badge = document.getElementById('notification-badge');
+      const countBadge = document.getElementById('notification-count-badge');
+      if (count && count > 0) {
+        if (badge) badge.classList.remove('hidden');
+        if (countBadge) {
+          countBadge.textContent = `${count} tin mới`;
+          countBadge.classList.remove('hidden');
         }
       } else {
-        s.classList.remove('active-slide');
-        if (img) {
-          img.style.transform = 'scale(0.92)';
-          img.style.opacity = '0.7';
-        }
-        if (textGroup) {
-          textGroup.style.transform = 'translateY(6px)';
-          textGroup.style.opacity = '0.7';
-        }
+        if (badge) badge.classList.add('hidden');
+        if (countBadge) countBadge.classList.add('hidden');
       }
-    });
-
-    dots.forEach((d, i) => {
-      if (i === idx) {
-        d.className = 'w-7 h-2.5 rounded-full bg-[#00483d] transition-all cursor-pointer';
-      } else {
-        d.className = 'w-2.5 h-2.5 rounded-full bg-slate-300 hover:bg-slate-400 transition-all cursor-pointer';
+    },
+    render: function(notifications) {
+      const listEl = document.getElementById('notification-list');
+      if (!listEl) return;
+      if (!Array.isArray(notifications) || notifications.length === 0) {
+        listEl.innerHTML = `
+          <div id="notification-empty" class="py-8 px-4 text-center text-slate-400 space-y-2">
+            <i class="fa-regular fa-bell-slash text-2xl text-slate-300"></i>
+            <p class="text-xs">Hiện chưa có thông báo mới</p>
+          </div>
+        `;
+        this.setBadge(0);
+        return;
       }
-    });
+      this.setBadge(notifications.length);
+      listEl.innerHTML = notifications.map(item => `
+        <div class="p-3.5 hover:bg-slate-50 transition-colors cursor-pointer flex gap-3 items-start" onclick="${item.onClick || ''}">
+          <div class="w-8 h-8 rounded-lg ${item.bgClass || 'bg-blue-100'} ${item.colorClass || 'text-[#2563EB]'} flex items-center justify-center flex-shrink-0 text-xs">
+            <i class="${item.icon || 'fa-solid fa-bell'}"></i>
+          </div>
+          <div class="space-y-0.5 min-w-0">
+            <p class="font-bold text-slate-900 text-xs truncate">${item.title || ''}</p>
+            <p class="text-[11px] text-slate-500 line-clamp-2">${item.message || ''}</p>
+            <span class="text-[10px] text-slate-400">${item.time || 'Vừa xong'}</span>
+          </div>
+        </div>
+      `).join('');
+    }
   };
 
-  window.prevHeroSlide = function () {
-    const total = document.querySelectorAll('.hero-slide').length;
-    window.setHeroSlide((heroCurrentSlide - 1 + total) % total);
-    startHeroSliderAuto(total);
+  window.toggleNotificationPopover = function() {
+    window.NotificationCenter.toggle();
   };
 
-  window.nextHeroSlide = function () {
-    const total = document.querySelectorAll('.hero-slide').length;
-    window.setHeroSlide((heroCurrentSlide + 1) % total);
-    startHeroSliderAuto(total);
-  };
+  document.addEventListener('click', (e) => {
+    const pop = document.getElementById('notification-popover');
+    const btn = document.getElementById('btn-notification-toggle');
+    if (pop && !pop.classList.contains('hidden')) {
+      if (btn && !btn.contains(e.target) && !pop.contains(e.target)) {
+        pop.classList.add('hidden');
+      }
+    }
+  });
+
+
 
   /**
    * Render các dải sản phẩm (Shelves)
@@ -376,15 +537,15 @@
       }
     });
 
-    // Cập nhật nút active trên sidebar danh mục nổi bật (Hero)
-    const sidebarBtns = document.querySelectorAll('.sidebar-brand-btn');
-    sidebarBtns.forEach(btn => {
+    // Cập nhật nút active trên dải chip danh mục ngang (Horizontal Chip Bar)
+    const chipBtns = document.querySelectorAll('.chip-cat-btn');
+    chipBtns.forEach(btn => {
       if (btn.dataset.brand === brand) {
-        btn.classList.add('bg-[#eafff5]', 'text-[#064e29]', 'border', 'border-[#80ffbf]');
-        btn.classList.remove('text-slate-700');
+        btn.classList.add('bg-[#1E3A8A]', 'text-white');
+        btn.classList.remove('bg-white', 'text-slate-800', 'hover:bg-blue-50', 'border-slate-200');
       } else {
-        btn.classList.remove('bg-[#eafff5]', 'text-[#064e29]', 'border', 'border-[#80ffbf]');
-        btn.classList.add('text-slate-700');
+        btn.classList.remove('bg-[#1E3A8A]', 'text-white');
+        btn.classList.add('bg-white', 'text-slate-800', 'hover:bg-blue-50', 'border-slate-200');
       }
     });
 
@@ -485,32 +646,39 @@
       : '';
 
     return `
-      <div class="product-card group relative flex flex-col justify-between bg-white rounded-2xl border border-slate-200/80 p-3.5 sm:p-4 hover:border-[#80ffbf] hover:shadow-xl transition-all duration-300">
+      <div class="product-card group relative flex flex-col justify-between bg-white rounded-[16px] border border-slate-200/90 p-4 sm:p-5 hover:border-blue-300 hover:shadow-[0_12px_28px_rgba(0,0,0,0.12)] hover:-translate-y-1 transition-all duration-250">
         <!-- Badges góc trên -->
         <div class="flex items-center justify-between gap-1 mb-2 z-10">
           <div class="flex flex-wrap gap-1">
-            ${p.tenLoai ? `<span class="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 text-[10px] font-bold uppercase">${p.tenLoai}</span>` : ''}
+            ${p.tenLoai ? `<span class="px-2 py-0.5 rounded-[6px] bg-slate-100 text-slate-700 text-[10px] font-bold uppercase">${p.tenLoai}</span>` : ''}
           </div>
           ${discountPercent > 0 ? `
-            <span class="px-2 py-0.5 rounded-md bg-rose-600 text-white text-[10px] font-extrabold uppercase tracking-tight">
+            <span class="px-2 py-0.5 rounded-[6px] bg-[#FF7A00] text-white text-[10px] font-extrabold uppercase tracking-tight shadow-sm">
               Giảm ${discountPercent}%
             </span>` : ''}
         </div>
 
         <!-- Ảnh sản phẩm -->
         <div class="relative w-full h-40 sm:h-48 my-2 flex items-center justify-center p-2 cursor-pointer overflow-hidden" onclick="(window.CellphoneSProductModal || window.ProductModal).open('${p.maHang}')">
-          <img src="${p.anhChinh}" alt="${p.tenHang}" class="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-300">
+          ${p.anhChinh ? `
+            <img src="${p.anhChinh}" alt="${p.tenHang}" class="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-300">
+          ` : `
+            <div class="w-full h-full flex flex-col items-center justify-center text-slate-300 group-hover:text-[#2563EB] transition-colors bg-slate-50/70 rounded-xl border border-dashed border-slate-200">
+              <i class="fa-solid fa-mobile-screen-button text-3xl mb-1 text-slate-300 group-hover:text-[#2563EB]"></i>
+              <span class="text-[10px] text-slate-400 font-medium">Chờ cập nhật ảnh</span>
+            </div>
+          `}
         </div>
 
         <!-- Tên sản phẩm -->
         <div class="mt-2 flex-1">
-          <h3 class="text-xs sm:text-sm font-bold text-navy hover:text-[#064e29] line-clamp-2 cursor-pointer transition-colors" onclick="(window.CellphoneSProductModal || window.ProductModal).open('${p.maHang}')" title="${p.tenHang}">
+          <h3 class="text-xs sm:text-sm font-bold text-[#111827] hover:text-[#1E3A8A] line-clamp-2 cursor-pointer transition-colors" onclick="(window.CellphoneSProductModal || window.ProductModal).open('${p.maHang}')" title="${p.tenHang}">
             ${p.tenHang}
           </h3>
 
           <!-- Giá bán -->
           <div class="flex flex-wrap items-baseline gap-2 mt-2">
-            <span class="text-sm sm:text-base font-extrabold text-[#e11b1e]">${(window.CellphoneSCart || window.Cart) ? (window.CellphoneSCart || window.Cart).formatMoney(p.donGia) : p.donGia}</span>
+            <span class="text-sm sm:text-base font-black text-[#FF7A00] font-mono">${(window.CellphoneSCart || window.Cart) ? (window.CellphoneSCart || window.Cart).formatMoney(p.donGia) : p.donGia}</span>
             ${p.giaGoc > p.donGia ? `<span class="text-[11px] text-slate-400 line-through">${(window.CellphoneSCart || window.Cart).formatMoney(p.giaGoc)}</span>` : ''}
           </div>
 
@@ -521,12 +689,12 @@
           </div>
         </div>
 
-        <!-- Nút hành động chuẩn W5: "Xem cấu hình" và "Mua ngay" -->
+        <!-- Nút hành động chuẩn: "Xem cấu hình" và "Mua ngay" -->
         <div class="mt-3.5 pt-3 border-t border-slate-100 flex items-center gap-2">
-          <button type="button" onclick="(window.CellphoneSProductModal || window.ProductModal).open('${p.maHang}')" class="flex-1 py-2 px-2 rounded-xl border border-blue-600 text-blue-600 hover:bg-blue-50 font-bold text-xs transition-colors text-center cursor-pointer">
+          <button type="button" onclick="(window.CellphoneSProductModal || window.ProductModal).open('${p.maHang}')" class="flex-1 h-[40px] px-2 rounded-[12px] border border-[#2563EB] text-[#2563EB] hover:bg-blue-50 font-bold text-xs transition-colors flex items-center justify-center cursor-pointer">
             Xem cấu hình
           </button>
-          <button type="button" ${tonKho <= 0 ? 'disabled' : ''} onclick="window.quickBuy('${p.maHang}')" class="flex-1 py-2 px-2 rounded-xl ${tonKho > 0 ? 'bg-[#d70018] hover:bg-[#b80014] text-white cursor-pointer shadow-sm' : 'bg-slate-200 text-slate-400 cursor-not-allowed'} font-bold text-xs transition-colors text-center">
+          <button type="button" ${tonKho <= 0 ? 'disabled' : ''} onclick="window.quickBuy('${p.maHang}')" class="flex-1 h-[40px] px-2 rounded-[12px] ${tonKho > 0 ? 'bg-[#FF7A00] hover:bg-[#E06800] text-white cursor-pointer shadow-md shadow-orange-500/20' : 'bg-slate-200 text-slate-400 cursor-not-allowed'} font-extrabold text-xs transition-all flex items-center justify-center">
             ${tonKho > 0 ? 'Mua ngay' : 'Hết hàng'}
           </button>
         </div>
@@ -590,7 +758,13 @@
           <div class="divide-y divide-slate-100">
             ${results.map(p => `
               <div class="p-2.5 flex items-center gap-3 hover:bg-slate-50 rounded-xl cursor-pointer transition-colors" onclick="(window.CellphoneSProductModal || window.ProductModal).open('${p.maHang}'); document.getElementById('search-autocomplete-dropdown').classList.add('hidden');">
-                <img src="${p.anhChinh}" class="w-10 h-10 object-contain p-1 rounded-lg bg-slate-50 border border-slate-100 flex-shrink-0" alt="${p.tenHang}">
+                <div class="w-10 h-10 object-contain p-1 rounded-lg bg-slate-50 border border-slate-100 flex-shrink-0 flex items-center justify-center">
+                  ${p.anhChinh ? `
+                    <img src="${p.anhChinh}" class="w-full h-full object-contain" alt="${p.tenHang}">
+                  ` : `
+                    <i class="fa-solid fa-mobile-screen-button text-slate-300 text-xs"></i>
+                  `}
+                </div>
                 <div class="flex-1 min-w-0">
                   <h4 class="text-xs font-bold text-navy truncate">${p.tenHang}</h4>
                   <div class="flex items-center gap-2 mt-0.5">
@@ -864,11 +1038,626 @@
   /**
    * Mega Menu Toggle (Mobile & Desktop)
    */
+  /**
+   * =========================================================================
+   * KHỐI TRẠM TIẾP SỨC ONLINE - GIÁ TỐT MỖI NGÀY (Chuẩn mẫu Hoàng Hà Mobile)
+   * =========================================================================
+   */
+  const dealCategoriesData = {
+    amthanh: [
+      {
+        id: 'DEAL-AT-01',
+        name: 'Loa Bluetooth hiệu Alpha Works Classic V21',
+        price: 2690000,
+        oldPrice: 2990000,
+        discount: 10,
+        image: 'images/products/alpha-works-classic.png'
+      },
+      {
+        id: 'DEAL-AT-02',
+        name: 'Tai nghe AirPods Pro 3 (Chính hãng Apple)',
+        price: 5790000,
+        oldPrice: 6790000,
+        discount: 15,
+        image: 'images/products/airpods-pro-3.png'
+      },
+      {
+        id: 'DEAL-AT-03',
+        name: 'Tai nghe Sennheiser ACCENTUM Wireless',
+        price: 1990000,
+        oldPrice: 2390000,
+        discount: 17,
+        image: 'images/products/sennheiser-accentum.png'
+      },
+      {
+        id: 'DEAL-AT-04',
+        name: 'Loa di động không dây Sony ULT FIELD 1',
+        price: 3290000,
+        oldPrice: 3590000,
+        discount: 8,
+        image: 'images/products/sony-ult-field-1.png'
+      },
+      {
+        id: 'DEAL-AT-05',
+        name: 'Tai nghe chống ồn Sony WH-1000XM5 Hi-Res',
+        price: 9790000,
+        oldPrice: 11990000,
+        discount: 18,
+        image: 'images/products/airpods-pro-3.png'
+      },
+      {
+        id: 'DEAL-AT-06',
+        name: 'Loa Bluetooth JBL Charge 5 Siêu Trầm Bass',
+        price: 3490000,
+        oldPrice: 3990000,
+        discount: 12,
+        image: 'images/deal-tabs/deal-tab-audio.jpg'
+      },
+      {
+        id: 'DEAL-AT-07',
+        name: 'Tai nghe Marshall Major IV Bluetooth Cổ Điển',
+        price: 3190000,
+        oldPrice: 3690000,
+        discount: 14,
+        image: 'images/deal-tabs/deal-tab-audio.jpg'
+      }
+    ],
+    dienthoai: [
+      {
+        id: 'DEAL-DT-01',
+        name: 'iPhone 16 Pro 256GB - Chính Hãng VN/A',
+        price: 28490000,
+        oldPrice: 31990000,
+        discount: 11,
+        image: 'images/products/mh123.png',
+        status: 'Sẵn hàng'
+      },
+      {
+        id: 'DEAL-DT-02',
+        name: 'Samsung Galaxy S26 Ultra 12GB/256GB',
+        price: 30490000,
+        oldPrice: 32990000,
+        discount: 8,
+        image: 'images/products/mh109.png',
+        status: 'Sẵn hàng'
+      },
+      {
+        id: 'DEAL-DT-03',
+        name: 'Gaming REDMAGIC 10 PRO 16GB/512GB Quốc Tế',
+        price: 17990000,
+        oldPrice: 19990000,
+        discount: 10,
+        image: 'images/products/mh189.png',
+        status: 'Sẵn hàng'
+      },
+      {
+        id: 'DEAL-DT-04',
+        name: 'Xiaomi Redmi Note 14 Pro+ 5G 8GB/256GB',
+        price: 9490000,
+        oldPrice: 10990000,
+        discount: 14,
+        image: 'images/products/mh178.png',
+        status: 'Sẵn hàng'
+      },
+      {
+        id: 'DEAL-DT-05',
+        name: 'Xiaomi Redmi Note 14 8GB/128GB',
+        price: 4990000,
+        oldPrice: 5790000,
+        discount: 14,
+        image: 'images/products/mh161.png',
+        status: 'Sẵn hàng'
+      },
+      {
+        id: 'DEAL-DT-06',
+        name: 'TECNO POVA CURVE 2 5G 8GB/128GB',
+        price: 5490000,
+        oldPrice: 6490000,
+        discount: 15,
+        image: 'images/products/mh159.png',
+        status: 'Sẵn hàng'
+      },
+      {
+        id: 'DEAL-DT-07',
+        name: 'OPPO Find X10 Pro Max 16GB/512GB',
+        price: 34990000,
+        oldPrice: 37990000,
+        discount: 8,
+        image: 'images/products/mh129.png',
+        status: 'Sẵn hàng'
+      },
+      {
+        id: 'DEAL-DT-08',
+        name: 'REALME C75X 6GB/128GB',
+        price: 4190000,
+        oldPrice: 4690000,
+        discount: 11,
+        image: 'images/products/mh174.png',
+        status: 'Sẵn hàng'
+      },
+      {
+        id: 'DEAL-DT-09',
+        name: 'Tecno Camon 40 Pro 8GB/256GB',
+        price: 5990000,
+        oldPrice: 6990000,
+        discount: 14,
+        image: 'images/products/mh172.png',
+        status: 'Sẵn hàng'
+      },
+      {
+        id: 'DEAL-DT-10',
+        name: 'HONOR 400 PRO 5G 12GB/512GB',
+        price: 15990000,
+        oldPrice: 17990000,
+        discount: 11,
+        image: 'images/products/mh152.png',
+        status: 'Sẵn hàng'
+      }
+    ],
+    tablet: [
+      {
+        id: 'DEAL-TB-01',
+        name: 'iPad Air M2 11 inch Wi-Fi 128GB VN/A Siêu Mỏng',
+        price: 15890000,
+        oldPrice: 16990000,
+        discount: 6,
+        image: 'images/products/ipad-air-m2.webp'
+      },
+      {
+        id: 'DEAL-TB-02',
+        name: 'iPad Pro M4 11 inch Ultra Retina XDR 256GB',
+        price: 27990000,
+        oldPrice: 29990000,
+        discount: 7,
+        image: 'images/products/ipad-air-m2.webp'
+      },
+      {
+        id: 'DEAL-TB-03',
+        name: 'iPad Gen 10 10.9 inch Wi-Fi 64GB Đủ Màu',
+        price: 8990000,
+        oldPrice: 9990000,
+        discount: 10,
+        image: 'images/deal-tabs/deal-tab-tablet.jpg'
+      },
+      {
+        id: 'DEAL-TB-04',
+        name: 'Samsung Galaxy Tab S9 FE Wi-Fi 128GB Kèm Bút S-Pen',
+        price: 8490000,
+        oldPrice: 9990000,
+        discount: 15,
+        image: 'images/deal-tabs/deal-tab-tablet.jpg'
+      },
+      {
+        id: 'DEAL-TB-05',
+        name: 'Xiaomi Pad 6 8GB/256GB Màn Hình 144Hz 2.8K',
+        price: 7290000,
+        oldPrice: 8490000,
+        discount: 14,
+        image: 'images/deal-tabs/deal-tab-tablet.jpg'
+      },
+      {
+        id: 'DEAL-TB-06',
+        name: 'Bút cảm ứng Apple Pencil Pro Dành Cho iPad M4/M2',
+        price: 3290000,
+        oldPrice: 3490000,
+        discount: 6,
+        image: 'images/deal-tabs/deal-tab-tablet.jpg'
+      }
+    ],
+    dongho: [
+      {
+        id: 'DEAL-DH-01',
+        name: 'Apple Watch Series 10 Nhôm 42mm GPS Dây Thể Thao',
+        price: 9990000,
+        oldPrice: 10990000,
+        discount: 9,
+        image: 'images/deal-tabs/deal-tab-watch.jpg'
+      },
+      {
+        id: 'DEAL-DH-02',
+        name: 'Apple Watch Ultra 2 Titanium 49mm GPS + Cellular',
+        price: 19990000,
+        oldPrice: 21990000,
+        discount: 9,
+        image: 'images/deal-tabs/deal-tab-watch.jpg'
+      },
+      {
+        id: 'DEAL-DH-03',
+        name: 'Samsung Galaxy Watch7 40mm Bluetooth Galaxy AI',
+        price: 5490000,
+        oldPrice: 6490000,
+        discount: 15,
+        image: 'images/deal-tabs/deal-tab-watch.jpg'
+      },
+      {
+        id: 'DEAL-DH-04',
+        name: 'Huawei Watch GT 5 Pro Dây Titanium Sang Trọng',
+        price: 7990000,
+        oldPrice: 8990000,
+        discount: 11,
+        image: 'images/deal-tabs/deal-tab-watch.jpg'
+      },
+      {
+        id: 'DEAL-DH-05',
+        name: 'Xiaomi Redmi Watch 4 Màn AMOLED Pin 20 Ngày',
+        price: 2190000,
+        oldPrice: 2690000,
+        discount: 18,
+        image: 'images/deal-tabs/deal-tab-watch.jpg'
+      },
+      {
+        id: 'DEAL-DH-06',
+        name: 'Đồng hồ thể thao Garmin Forerunner 165 Music',
+        price: 6990000,
+        oldPrice: 7990000,
+        discount: 12,
+        image: 'images/deal-tabs/deal-tab-watch.jpg'
+      }
+    ],
+    phukien: [
+      {
+        id: 'DEAL-PK-01',
+        name: 'Củ sạc nhanh Apple 20W Type-C Chính Hãng VN/A',
+        price: 490000,
+        oldPrice: 590000,
+        discount: 17,
+        image: 'images/deal-tabs/deal-tab-accessory.jpg'
+      },
+      {
+        id: 'DEAL-PK-02',
+        name: 'Cáp sạc C to C Apple Woven 1m Siêu Bền Dù',
+        price: 390000,
+        oldPrice: 550000,
+        discount: 29,
+        image: 'images/deal-tabs/deal-tab-accessory.jpg'
+      },
+      {
+        id: 'DEAL-PK-03',
+        name: 'Pin dự phòng MagSafe 10000mAh Không Dây Hút Nam Châm',
+        price: 690000,
+        oldPrice: 890000,
+        discount: 22,
+        image: 'images/deal-tabs/deal-tab-accessory.jpg'
+      },
+      {
+        id: 'DEAL-PK-04',
+        name: 'Ốp lưng iPhone 16 Pro Max MagSafe Trong Suốt Chống Ố',
+        price: 290000,
+        oldPrice: 450000,
+        discount: 35,
+        image: 'images/deal-tabs/deal-tab-accessory.jpg'
+      },
+      {
+        id: 'DEAL-PK-05',
+        name: 'Củ sạc Anker 30W GaN Nano II Nhỏ Gọn Sạc Nhanh',
+        price: 380000,
+        oldPrice: 450000,
+        discount: 15,
+        image: 'images/deal-tabs/deal-tab-accessory.jpg'
+      },
+      {
+        id: 'DEAL-PK-06',
+        name: 'Kính cường lực KingKong Chống Nhìn Trộm Cao Cấp',
+        price: 150000,
+        oldPrice: 220000,
+        discount: 32,
+        image: 'images/deal-tabs/deal-tab-accessory.jpg'
+      }
+    ],
+    laptop: [
+      {
+        id: 'DEAL-LT-01',
+        name: 'MacBook Air M3 13 inch 16GB/256GB Chính Hãng Apple',
+        price: 26990000,
+        oldPrice: 28990000,
+        discount: 7,
+        image: 'images/deal-tabs/deal-tab-laptop.jpg'
+      },
+      {
+        id: 'DEAL-LT-02',
+        name: 'MacBook Pro M3 Pro 14 inch 18GB/512GB Space Black',
+        price: 47990000,
+        oldPrice: 49990000,
+        discount: 4,
+        image: 'images/deal-tabs/deal-tab-laptop.jpg'
+      },
+      {
+        id: 'DEAL-LT-03',
+        name: 'Laptop ASUS Zenbook 14 OLED Intel Core Ultra 7 Mới',
+        price: 28490000,
+        oldPrice: 31990000,
+        discount: 11,
+        image: 'images/deal-tabs/deal-tab-laptop.jpg'
+      },
+      {
+        id: 'DEAL-LT-04',
+        name: 'Màn hình Gaming LG UltraGear 27 inch 165Hz IPS 1ms',
+        price: 4990000,
+        oldPrice: 6290000,
+        discount: 21,
+        image: 'images/deal-tabs/deal-tab-laptop.jpg'
+      },
+      {
+        id: 'DEAL-LT-05',
+        name: 'Màn hình Dell UltraSharp U2724D 27 inch 2K IPS Black',
+        price: 9490000,
+        oldPrice: 10990000,
+        discount: 14,
+        image: 'images/deal-tabs/deal-tab-laptop.jpg'
+      },
+      {
+        id: 'DEAL-LT-06',
+        name: 'Laptop Dell Inspiron 15 3520 i5 1235U / 16GB / 512GB',
+        price: 13990000,
+        oldPrice: 15490000,
+        discount: 10,
+        image: 'images/deal-tabs/deal-tab-laptop.jpg'
+      },
+      {
+        id: 'DEAL-LT-07',
+        name: 'Laptop Lenovo ThinkPad E14 Gen 5 Ryzen 5 7530U',
+        price: 15490000,
+        oldPrice: 17290000,
+        discount: 10,
+        image: 'images/deal-tabs/deal-tab-laptop.jpg'
+      },
+      {
+        id: 'DEAL-LT-08',
+        name: 'Laptop HP Pavilion 15 Core i5 1335U / 16GB / 512GB',
+        price: 16890000,
+        oldPrice: 18990000,
+        discount: 11,
+        image: 'images/deal-tabs/deal-tab-laptop.jpg'
+      },
+      {
+        id: 'DEAL-LT-09',
+        name: 'Màn hình ASUS ProArt PA278CV 27 inch 2K IPS Chuẩn Màu',
+        price: 8690000,
+        oldPrice: 9990000,
+        discount: 13,
+        image: 'images/deal-tabs/deal-tab-laptop.jpg'
+      },
+      {
+        id: 'DEAL-LT-10',
+        name: 'Laptop Gaming Acer Nitro 5 Tiger Core i5 RTX 3050',
+        price: 18990000,
+        oldPrice: 21990000,
+        discount: 14,
+        image: 'images/deal-tabs/deal-tab-laptop.jpg'
+      }
+    ]
+  };
+
+  let currentDealCategory = 'dienthoai';
+  let currentDealIndex = 0;
+
+  async function loadDealProductsFromJson() {
+    try {
+      const res = await fetch('products-meta.json');
+      if (!res.ok) return;
+      const metaMap = await res.json();
+      const allItems = Object.values(metaMap || {});
+      if (!allItems.length) return;
+
+      const mapCat = {
+        dienthoai: allItems.filter(p => p.maNhom === 'DIENTHOAI'),
+        tablet: allItems.filter(p => p.maNhom === 'TABLET'),
+        amthanh: allItems.filter(p => p.maNhom === 'AMTHANH'),
+        dongho: allItems.filter(p => p.maNhom === 'DONGHO'),
+        phukien: allItems.filter(p => p.maNhom === 'PHUKIEN'),
+        laptop: allItems.filter(p => p.maNhom === 'LAPTOP' || (p.tenHang || '').toLowerCase().includes('laptop') || (p.tenHang || '').toLowerCase().includes('macbook') || (p.tenHang || '').toLowerCase().includes('màn hình'))
+      };
+
+      const toDealItem = (p) => {
+        const price = Number(p.donGia) || 0;
+        const oldPrice = p.giaGoc ? Number(p.giaGoc) : (price > 0 ? Math.round(price * 1.08) : null);
+        const discount = (oldPrice && oldPrice > price) ? Math.round((1 - price / oldPrice) * 100) : null;
+        return {
+          id: p.maHang,
+          name: p.tenHang,
+          price: price,
+          oldPrice: oldPrice,
+          discount: discount,
+          image: p.anhChinh || 'images/deal-tabs/deal-tab-phone.jpg',
+          status: 'Sẵn hàng',
+          rawProduct: p
+        };
+      };
+
+      // Cập nhật đủ cả 6 tab ngành hàng từ products-meta.json (tối thiểu 10 sản phẩm mỗi tab)
+      ['dienthoai', 'tablet', 'amthanh', 'dongho', 'phukien', 'laptop'].forEach(cat => {
+        if (mapCat[cat] && mapCat[cat].length > 0) {
+          dealCategoriesData[cat] = mapCat[cat].map(toDealItem).slice(0, 12);
+        }
+      });
+
+      // Render lại giao diện sau khi nạp xong dữ liệu đầy đủ
+      renderDealProducts();
+    } catch (err) {
+      console.warn('Load products-meta.json error:', err);
+    }
+  }
+
+  function debounce(func, wait) {
+    let timeout;
+    return function (...args) {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func.apply(this, args), wait);
+    };
+  }
+
+  function initTramTiepSucSection() {
+    const track = document.getElementById('deal-products-track');
+    if (!track) return;
+    renderDealProducts();
+    loadDealProductsFromJson();
+    window.addEventListener('resize', debounce(() => {
+      applyDealSliderPosition();
+    }, 150));
+  }
+
+  function getCardsPerView() {
+    const w = window.innerWidth;
+    if (w >= 1024) return 5;
+    if (w >= 640) return 3;
+    return 2;
+  }
+
+  function formatCurrency(amount) {
+    if (amount === null || amount === undefined || isNaN(amount)) return '';
+    return Number(amount).toLocaleString('vi-VN') + '₫';
+  }
+
+  function renderDealProducts() {
+    const track = document.getElementById('deal-products-track');
+    if (!track) return;
+
+    const list = dealCategoriesData[currentDealCategory] || [];
+    track.innerHTML = list.map(item => `
+      <div class="w-1/2 sm:w-1/3 lg:w-1/5 flex-shrink-0 px-2.5 sm:px-3.5 py-2 border-r border-slate-100 last:border-r-0">
+        <div class="deal-product-item h-full flex flex-col justify-between group/card select-none cursor-pointer" onclick="window.onDealProductClick('${item.id}')">
+          <!-- Ảnh Sản Phẩm (Nền trắng tinh, kích thước to rõ nét) -->
+          <div class="relative w-full h-44 sm:h-52 lg:h-56 mb-2 flex items-center justify-center p-0.5 overflow-hidden">
+            <img src="${item.image}" alt="${item.name}" class="h-full w-full object-contain block mx-auto transition-transform duration-300 transform scale-105 group-hover/card:scale-115" loading="lazy" onerror="this.onerror=null; this.src='images/deal-tabs/deal-tab-phone.jpg';" />
+          </div>
+
+          <!-- Tiêu Đề Sản Phẩm -->
+          <h4 class="text-xs sm:text-[13px] font-semibold text-slate-800 line-clamp-2 min-h-[38px] leading-snug hover:text-[#0057B7] transition-colors mb-2" title="${item.name}">
+            ${item.name}
+          </h4>
+
+          <!-- Giá & Giảm Giá -->
+          <div class="mb-2.5">
+            <div class="flex items-baseline gap-1.5 flex-wrap">
+              <span class="text-sm sm:text-base font-bold text-[#E11B1E]">${formatCurrency(item.price)}</span>
+              ${item.discount ? `<span class="text-[10px] font-bold text-[#E11B1E] bg-rose-50 px-1 py-0.5 rounded border border-rose-100">-${item.discount}%</span>` : ''}
+            </div>
+            ${item.oldPrice ? `<div class="text-[11px] text-slate-400 line-through mt-0.5">${formatCurrency(item.oldPrice)}</div>` : '<div class="h-[18px]"></div>'}
+          </div>
+
+          <!-- Footer: Sẵn hàng + Nút thêm giỏ hàng màu xanh dương thương hiệu -->
+          <div class="flex items-center justify-between pt-2 border-t border-slate-100 text-xs">
+            <div class="flex items-center gap-1 text-[11px] text-emerald-600 font-normal">
+              <i class="fa-regular fa-circle-check text-xs"></i>
+              <span>Sẵn hàng</span>
+            </div>
+            <button type="button" onclick="window.addDealToCart('${item.id}', event)" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-blue-50 hover:bg-[#0057B7] text-[#0057B7] hover:text-white border border-blue-200 flex items-center justify-center transition-all active:scale-90 cursor-pointer shadow-2xs" title="Thêm vào giỏ hàng">
+              <i class="fa-solid fa-cart-shopping text-xs"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+
+    applyDealSliderPosition();
+  }
+
+  function applyDealSliderPosition() {
+    const track = document.getElementById('deal-products-track');
+    if (!track) return;
+    const cardsPerView = getCardsPerView();
+    const list = dealCategoriesData[currentDealCategory] || [];
+    const maxIndex = Math.max(0, list.length - cardsPerView);
+    if (currentDealIndex > maxIndex) currentDealIndex = maxIndex;
+    if (currentDealIndex < 0) currentDealIndex = 0;
+
+    const colWidthPercent = 100 / cardsPerView;
+    track.style.transform = `translateX(-${currentDealIndex * colWidthPercent}%)`;
+  }
+
+  window.switchDealCategory = function (cat) {
+    if (!dealCategoriesData[cat]) return;
+    currentDealCategory = cat;
+    currentDealIndex = 0;
+
+    // Cập nhật tab active
+    const tabs = document.querySelectorAll('.deal-tab-btn');
+    tabs.forEach(btn => {
+      if (btn.dataset.dealCat === cat) {
+        btn.classList.add('active-deal-tab');
+      } else {
+        btn.classList.remove('active-deal-tab');
+      }
+    });
+
+    renderDealProducts();
+  };
+
+  window.nextDealProduct = function () {
+    const cardsPerView = getCardsPerView();
+    const list = dealCategoriesData[currentDealCategory] || [];
+    const maxIndex = Math.max(0, list.length - cardsPerView);
+    if (currentDealIndex < maxIndex) {
+      currentDealIndex++;
+    } else {
+      currentDealIndex = 0;
+    }
+    applyDealSliderPosition();
+  };
+
+  window.prevDealProduct = function () {
+    const cardsPerView = getCardsPerView();
+    const list = dealCategoriesData[currentDealCategory] || [];
+    const maxIndex = Math.max(0, list.length - cardsPerView);
+    if (currentDealIndex > 0) {
+      currentDealIndex--;
+    } else {
+      currentDealIndex = maxIndex;
+    }
+    applyDealSliderPosition();
+  };
+
+  window.addDealToCart = function (id, event) {
+    if (event) event.stopPropagation();
+    const list = dealCategoriesData[currentDealCategory] || [];
+    const item = list.find(p => p.id === id);
+    if (!item) return;
+
+    if (window.CellphoneSCart || window.Cart) {
+      (window.CellphoneSCart || window.Cart).addItem({
+        maHang: item.id,
+        tenHang: item.name,
+        donGia: item.price,
+        giaGoc: item.oldPrice || item.price,
+        anhChinh: item.image,
+        mauSac: 'Mặc định',
+        phienBan: 'Tiêu chuẩn'
+      }, 1);
+
+      (window.CellphoneSCart || window.Cart).openDrawer();
+    }
+  };
+
+  window.onDealProductClick = function (id) {
+    const list = dealCategoriesData[currentDealCategory] || [];
+    const item = list.find(p => p.id === id);
+    if (!item) return;
+
+    if (window.CellphoneSProductModal || window.ProductModal) {
+      const modal = window.CellphoneSProductModal || window.ProductModal;
+      // Nạp rawProduct vào StoreData nếu chưa có để modal đọc được full màu sắc, cấu hình
+      if (item.rawProduct && (window.CellphoneSData || window.StoreData)) {
+        const store = window.CellphoneSData || window.StoreData;
+        if (!store.getProductById(item.id)) {
+          store.products.push(item.rawProduct);
+        }
+      }
+      modal.open(item.id);
+    }
+  };
+
   window.toggleMegaMenu = function () {
     const menu = document.getElementById('mega-menu-flyout');
     if (menu) {
       menu.classList.toggle('hidden');
     }
   };
+
+  // Khởi động toàn bộ ứng dụng sau khi toàn bộ hằng số và hàm đã được định nghĩa
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initApp);
+  } else {
+    initApp();
+  }
 
 })();

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * CellphoneS - 241 Lê Văn Việt
  * Xử lý xem chi tiết sản phẩm:
  * - Thư viện ảnh, đổi ảnh theo màu sắc
@@ -44,7 +44,7 @@
               donGia: Number(item.donGia),
               thoiHanBaoHanh: item.thoiHanBaoHanh,
               tonKho: item.tonKho || 0,
-              anhChinh: item.maNhom === 'NH02' ? 'images/accessories-pack.svg' : 'images/phone-desert.svg',
+              anhChinh: item.hinhAnh || '',
               phienBan: [{ id: 'std', dungLuong: 'Tiêu chuẩn', gia: Number(item.donGia), giaGoc: Math.round(Number(item.donGia) * 1.05), tonKho: item.tonKho || 0 }]
             };
           }
@@ -178,15 +178,23 @@
 
     updateGallery() {
       const mainImg = document.getElementById('pmodal-main-image');
+      const placeholder = document.getElementById('pmodal-image-placeholder');
       if (mainImg) {
         const imgSrc = (this.selectedColor && this.selectedColor.anh) 
           ? this.selectedColor.anh 
-          : this.currentProduct.anhChinh;
-        mainImg.src = imgSrc;
-        mainImg.alt = this.currentProduct.tenHang;
+          : (this.currentProduct ? this.currentProduct.anhChinh : '');
+        if (imgSrc) {
+          mainImg.src = imgSrc;
+          mainImg.alt = this.currentProduct ? this.currentProduct.tenHang : '';
+          mainImg.classList.remove('hidden');
+          if (placeholder) placeholder.classList.add('hidden');
+        } else {
+          mainImg.src = '';
+          mainImg.classList.add('hidden');
+          if (placeholder) placeholder.classList.remove('hidden');
+        }
       }
     }
-
     updatePriceAndStock() {
       const currentPrice = this.selectedVariant ? this.selectedVariant.gia : this.currentProduct.donGia;
       const oldPrice = this.selectedVariant ? this.selectedVariant.giaGoc : (this.currentProduct.giaGoc || currentPrice);
