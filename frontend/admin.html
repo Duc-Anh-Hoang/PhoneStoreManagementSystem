@@ -25,32 +25,54 @@
           },
           colors: {
             primary: {
-              DEFAULT: '#80ffbf',
-              hover: '#66e6a5',
-              deep: '#064e29',
-              50: '#eafff5',
-              100: '#dcffed',
-              500: '#80ffbf',
-              600: '#66e6a5',
-              700: '#4ddb90',
-              800: '#064e29',
+              DEFAULT: '#1E3A8A',
+              hover: '#172554',
+              deep: '#0F172A',
+              50: '#EFF6FF',
+              100: '#DBEAFE',
+              500: '#3B82F6',
+              600: '#2563EB',
+              700: '#1D4ED8',
+              800: '#1E40AF',
+              900: '#1E3A8A',
+            },
+            secondary: {
+              DEFAULT: '#2563EB',
+              hover: '#1D4ED8',
+              50: '#EFF6FF',
+              100: '#DBEAFE',
+              500: '#2563EB',
+            },
+            accent: {
+              DEFAULT: '#F59E0B',
+              hover: '#D97706',
+              50: '#FFFBEB',
+              100: '#FEF3C7',
+            },
+            danger: {
+              DEFAULT: '#EF4444',
+              hover: '#DC2626',
+            },
+            success: {
+              DEFAULT: '#22C55E',
+              hover: '#16A34A',
             },
             brand: {
-              DEFAULT: '#80ffbf',
-              50: '#eafff5',
-              100: '#dcffed',
-              500: '#80ffbf',
-              600: '#66e6a5',
-              700: '#4ddb90',
-              800: '#064e29',
+              DEFAULT: '#1E3A8A',
+              50: '#EFF6FF',
+              100: '#DBEAFE',
+              500: '#2563EB',
+              600: '#1D4ED8',
+              700: '#1E40AF',
+              800: '#1E3A8A',
             },
-            appbg: '#F3F4F6',
+            appbg: '#F8FAFC',
             surface: '#FFFFFF',
             textprimary: '#111827',
-            textsecondary: '#6B7280',
+            textsecondary: '#64748B',
             bordercolor: '#E5E7EB',
             navy: '#111827',
-            darkside: '#0B1329',
+            darkside: '#0F172A',
           },
           boxShadow: {
             'card-sleek': '0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.03)',
@@ -92,15 +114,15 @@
     }
   </style>
 </head>
-<body class="h-full font-sans text-slate-900 antialiased flex overflow-hidden bg-[#F3F4F6]">
+<body class="h-full font-sans text-slate-900 antialiased flex overflow-hidden bg-[#F8FAFC]">
   <!-- MÀN HÌNH ĐĂNG NHẬP CHUYÊN BIỆT CHO TRANG QUẢN TRỊ -->
   <div id="admin-login-screen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/95 backdrop-blur-md">
     <div class="bg-white w-full max-w-md rounded-3xl overflow-hidden shadow-2xl border border-slate-200">
       
       <!-- Header Form Đăng nhập -->
-      <div class="p-6 bg-slate-900 text-white flex items-center justify-between border-b border-slate-800">
+      <div class="p-6 bg-[#0F172A] text-white flex items-center justify-between border-b border-slate-800">
         <div class="flex items-center gap-3">
-          <div class="w-12 h-12 rounded-2xl bg-[#80ffbf] text-[#061a0f] flex items-center justify-center font-black text-xl shadow-md">
+          <div class="w-12 h-12 rounded-2xl bg-[#1E3A8A] text-[#F59E0B] flex items-center justify-center font-black text-xl shadow-md border border-white/10">
             <i class="fa-solid fa-layer-group"></i>
           </div>
           <div>
@@ -119,7 +141,7 @@
             <label class="block text-xs font-bold text-slate-700 mb-1.5">Tên đăng nhập</label>
             <div class="relative">
               <i class="fa-solid fa-user absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-              <input type="text" id="admin-login-screen-username" required placeholder="admin / quanly / banhang / thungan / kho / kythuat" class="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-semibold focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600">
+              <input type="text" id="admin-login-screen-username" required placeholder="admin / quanly / banhang / thungan / kho / kythuat" class="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-semibold focus:outline-none focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB]">
             </div>
           </div>
 
@@ -127,12 +149,12 @@
             <label class="block text-xs font-bold text-slate-700 mb-1.5">Mật khẩu</label>
             <div class="relative">
               <i class="fa-solid fa-lock absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-              <input type="password" id="admin-login-screen-password" required value="123456" placeholder="Mật khẩu" class="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-semibold focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600">
+              <input type="password" id="admin-login-screen-password" required value="123456" placeholder="Mật khẩu" class="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-semibold focus:outline-none focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB]">
             </div>
           </div>
 
-          <button type="submit" id="btn-submit-admin-login" class="w-full py-3 rounded-xl bg-slate-900 hover:bg-black text-white font-extrabold text-xs sm:text-sm shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer">
-            <i class="fa-solid fa-right-to-bracket text-[#80ffbf]"></i>
+          <button type="submit" id="btn-submit-admin-login" class="w-full py-3 rounded-xl bg-[#1E3A8A] hover:bg-[#172554] text-white font-extrabold text-xs sm:text-sm shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer">
+            <i class="fa-solid fa-right-to-bracket text-[#F59E0B]"></i>
             <span>Đăng Nhập</span>
           </button>
         </form>
@@ -140,12 +162,12 @@
         <div class="pt-3 border-t border-slate-100 text-xs text-slate-500">
           <span class="font-bold text-slate-700">Đăng nhập nhanh tài khoản mẫu:</span>
           <div class="grid grid-cols-3 gap-1.5 mt-2">
-            <button type="button" onclick="window.quickFillAdminLogin('quanly')" class="px-2 py-1.5 bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-[11px] font-bold rounded-lg border border-slate-200 transition-colors">quanly</button>
-            <button type="button" onclick="window.quickFillAdminLogin('banhang')" class="px-2 py-1.5 bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-[11px] font-bold rounded-lg border border-slate-200 transition-colors">banhang</button>
-            <button type="button" onclick="window.quickFillAdminLogin('thungan')" class="px-2 py-1.5 bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-[11px] font-bold rounded-lg border border-slate-200 transition-colors">thungan</button>
-            <button type="button" onclick="window.quickFillAdminLogin('kho')" class="px-2 py-1.5 bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-[11px] font-bold rounded-lg border border-slate-200 transition-colors">kho</button>
-            <button type="button" onclick="window.quickFillAdminLogin('kythuat')" class="px-2 py-1.5 bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-[11px] font-bold rounded-lg border border-slate-200 transition-colors">kythuat</button>
-            <button type="button" onclick="window.quickFillAdminLogin('admin')" class="px-2 py-1.5 bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-[11px] font-bold rounded-lg border border-slate-200 transition-colors">admin</button>
+            <button type="button" onclick="window.quickFillAdminLogin('quanly')" class="px-2 py-1.5 bg-slate-100 hover:bg-blue-50 hover:text-[#1E3A8A] text-[11px] font-bold rounded-lg border border-slate-200 transition-colors">quanly</button>
+            <button type="button" onclick="window.quickFillAdminLogin('banhang')" class="px-2 py-1.5 bg-slate-100 hover:bg-blue-50 hover:text-[#1E3A8A] text-[11px] font-bold rounded-lg border border-slate-200 transition-colors">banhang</button>
+            <button type="button" onclick="window.quickFillAdminLogin('thungan')" class="px-2 py-1.5 bg-slate-100 hover:bg-blue-50 hover:text-[#1E3A8A] text-[11px] font-bold rounded-lg border border-slate-200 transition-colors">thungan</button>
+            <button type="button" onclick="window.quickFillAdminLogin('kho')" class="px-2 py-1.5 bg-slate-100 hover:bg-blue-50 hover:text-[#1E3A8A] text-[11px] font-bold rounded-lg border border-slate-200 transition-colors">kho</button>
+            <button type="button" onclick="window.quickFillAdminLogin('kythuat')" class="px-2 py-1.5 bg-slate-100 hover:bg-blue-50 hover:text-[#1E3A8A] text-[11px] font-bold rounded-lg border border-slate-200 transition-colors">kythuat</button>
+            <button type="button" onclick="window.quickFillAdminLogin('admin')" class="px-2 py-1.5 bg-slate-100 hover:bg-blue-50 hover:text-[#1E3A8A] text-[11px] font-bold rounded-lg border border-slate-200 transition-colors">admin</button>
           </div>
         </div>
 
@@ -158,18 +180,18 @@
 
 
   <!-- =========================================================================
-       SIDEBAR NAVIGATION (Phong cách hiện đại: Logo #80ffbf, Menu chọn #eafff5 + chữ #064e29)
+       SIDEBAR NAVIGATION (Tone màu chuẩn: Primary #1E3A8A, Accent #F59E0B, Active #EFF6FF + #2563EB)
        ========================================================================= -->
   <aside id="admin-sidebar" class="w-64 bg-white text-slate-600 flex flex-col flex-shrink-0 z-30 shadow-sm select-none border-r border-slate-200 transition-all duration-300">
     
     <!-- Logo & Thương hiệu -->
     <div class="h-16 px-5 flex items-center justify-between border-b border-slate-200 bg-white">
       <a href="admin.html" class="flex items-center gap-2.5 group">
-        <div class="w-8 h-8 rounded-lg bg-[#80ffbf] flex items-center justify-center text-[#061a0f] font-black text-sm shadow-sm">
-          <i class="fa-solid fa-layer-group text-xs text-[#061a0f]"></i>
+        <div class="w-8 h-8 rounded-lg bg-[#1E3A8A] flex items-center justify-center text-white font-black text-sm shadow-sm">
+          <i class="fa-solid fa-layer-group text-xs text-[#F59E0B]"></i>
         </div>
         <div>
-          <span class="text-sm font-black text-slate-900 tracking-tight">SamaPhone <span class="text-[#064e29] bg-[#eafff5] px-1.5 py-0.5 rounded text-xs font-black">ADMIN</span></span>
+          <span class="text-sm font-black text-slate-900 tracking-tight">SamaPhone <span class="text-[#1E3A8A] bg-[#EFF6FF] px-1.5 py-0.5 rounded text-xs font-black">ADMIN</span></span>
         </div>
       </a>
       <button id="btn-close-sidebar" class="lg:hidden p-1.5 text-slate-400 hover:text-slate-700 rounded-lg">
@@ -185,8 +207,8 @@
         <div class="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">
           TỔNG QUAN
         </div>
-        <a href="#" data-target="view-dashboard" onclick="renderSection('view-dashboard'); return false;" class="admin-nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg bg-[#eafff5] text-[#064e29] font-bold border-l-4 border-[#80ffbf] transition-colors">
-          <i class="fa-solid fa-chart-pie text-xs w-4 text-[#064e29]"></i>
+        <a href="#" data-target="view-dashboard" onclick="renderSection('view-dashboard'); return false;" class="admin-nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg bg-[#EFF6FF] text-[#1E3A8A] font-bold border-l-4 border-[#2563EB] transition-colors">
+          <i class="fa-solid fa-chart-pie text-xs w-4 text-[#2563EB]"></i>
           <span>Dashboard</span>
         </a>
       </div>
@@ -660,20 +682,64 @@
       </section>
 
       <!-- =====================================================================
-           SECTION 6: XỬ LÝ: TIẾP NHẬN BẢO HÀNH & SỬA CHỮA
+           SECTION 6: XỬ LÝ: TIẾP NHẬN BẢO HÀNH & SỬA CHỮA (P5-04, P5-05, P5-07)
            ===================================================================== -->
       <section id="view-baohanh" class="admin-view-section hidden space-y-6">
+        <!-- Header & Action -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h2 class="text-xl font-extrabold text-navy tracking-tight">Tiếp Nhận & Sửa Chữa BH</h2>
-            <p class="text-xs text-slate-500 mt-0.5">Ghi nhận tình trạng lỗi, phân công kỹ thuật viên, theo dõi tiến độ sửa chữa và hẹn trả máy</p>
+            <div class="flex items-center gap-2.5">
+              <span class="w-8 h-8 rounded-lg bg-blue-50 text-[#1E3A8A] flex items-center justify-center font-bold text-sm">
+                <i class="fa-solid fa-wrench"></i>
+              </span>
+              <h2 class="text-xl font-extrabold text-navy tracking-tight">Tiếp Nhận & Sửa Chữa BH</h2>
+            </div>
+            <p class="text-xs text-slate-500 mt-1">Ghi nhận tình trạng lỗi, phân công kỹ thuật viên, theo dõi tiến độ sửa chữa theo chuẩn State Machine</p>
           </div>
-          <button onclick="openTiepNhanBaoHanhModal()" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white font-semibold text-xs rounded-xl transition-colors flex-shrink-0">
-            <i class="fa-solid fa-wrench text-xs"></i> <span>Tiếp Nhận Máy Bảo Hành</span>
+          <button onclick="openTiepNhanBaoHanhModal()" class="inline-flex items-center gap-2 px-4 py-2 bg-[#1E3A8A] hover:bg-[#172554] text-white font-bold text-xs rounded-xl shadow-md shadow-blue-900/10 transition-colors flex-shrink-0 cursor-pointer">
+            <i class="fa-solid fa-plus text-xs"></i> <span>Tiếp Nhận Máy Mới</span>
           </button>
         </div>
 
-        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-card-sleek p-5">
+        <!-- Filter Tabs & Search Bar -->
+        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-card-sleek p-5 space-y-4">
+          <!-- Status Filter Tabs -->
+          <div class="flex flex-wrap items-center gap-2 border-b border-slate-100 pb-3" id="baohanh-status-tabs">
+            <button type="button" onclick="setBaoHanhStatusFilter('')" data-status="" class="baohanh-tab-btn px-3.5 py-1.5 rounded-lg text-xs font-bold transition-colors bg-[#EFF6FF] text-[#1E3A8A] border border-blue-200">
+              Tất cả (<span id="baohanh-count-all">0</span>)
+            </button>
+            <button type="button" onclick="setBaoHanhStatusFilter('tiep_nhan')" data-status="tiep_nhan" class="baohanh-tab-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors">
+              Tiếp nhận (<span id="baohanh-count-tiepnhan">0</span>)
+            </button>
+            <button type="button" onclick="setBaoHanhStatusFilter('dang_sua')" data-status="dang_sua" class="baohanh-tab-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors">
+              Đang sửa (<span id="baohanh-count-dangsua">0</span>)
+            </button>
+            <button type="button" onclick="setBaoHanhStatusFilter('cho_linh_kien')" data-status="cho_linh_kien" class="baohanh-tab-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors">
+              Chờ linh kiện (<span id="baohanh-count-cholinhkien">0</span>)
+            </button>
+            <button type="button" onclick="setBaoHanhStatusFilter('hoan_thanh')" data-status="hoan_thanh" class="baohanh-tab-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors">
+              Hoàn thành (<span id="baohanh-count-hoanthanh">0</span>)
+            </button>
+            <button type="button" onclick="setBaoHanhStatusFilter('da_tra')" data-status="da_tra" class="baohanh-tab-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors">
+              Đã trả máy (<span id="baohanh-count-datra">0</span>)
+            </button>
+          </div>
+
+          <!-- Search & Controls -->
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+            <div class="relative flex-1 max-w-md">
+              <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+              <input type="text" id="baohanh-search-input" onkeyup="handleBaoHanhSearch(event)" placeholder="Tìm theo số IMEI hoặc mã phiếu..." class="w-full pl-9 pr-3.5 py-2 rounded-xl border border-slate-200 text-xs font-medium focus:outline-none focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB]">
+            </div>
+            <div class="flex items-center gap-2 justify-end">
+              <button type="button" onclick="refreshBaoHanhTable()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-colors inline-flex items-center gap-1.5" title="Tải lại danh sách">
+                <i class="fa-solid fa-rotate-right text-xs"></i>
+                <span class="hidden sm:inline">Làm mới</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Table Container -->
           <div class="overflow-x-auto rounded-xl border border-slate-200/80">
             <table class="w-full text-left border-collapse min-w-[1050px]">
               <thead>
@@ -686,11 +752,35 @@
                   <th class="p-3.5 w-32 min-w-[120px] whitespace-nowrap">Hẹn Trả</th>
                   <th class="p-3.5 w-32 min-w-[120px] whitespace-nowrap text-right">Chi Phí</th>
                   <th class="p-3.5 w-44 min-w-[160px] whitespace-nowrap text-center">Trạng Thái</th>
-                  <th class="p-3.5 w-28 min-w-[110px] whitespace-nowrap text-right">Thao Tác</th>
+                  <th class="p-3.5 w-48 min-w-[180px] whitespace-nowrap text-right">Thao Tác</th>
                 </tr>
               </thead>
               <tbody id="table-baohanh-body"></tbody>
             </table>
+          </div>
+
+          <!-- Pagination Bar -->
+          <div id="baohanh-pagination" class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2 text-xs text-slate-500">
+            <div id="baohanh-pagination-info" class="font-medium">
+              Đang tải danh sách...
+            </div>
+            <div class="flex items-center gap-2">
+              <label class="text-xs text-slate-500">Hiển thị:</label>
+              <select id="baohanh-pagesize-select" onchange="changeBaoHanhPageSize(this.value)" class="px-2 py-1 border border-slate-200 rounded-lg text-xs bg-white focus:outline-none focus:border-[#2563EB]">
+                <option value="10">10 dòng</option>
+                <option value="20" selected>20 dòng</option>
+                <option value="50">50 dòng</option>
+              </select>
+              <div class="flex items-center gap-1 ml-2">
+                <button type="button" id="btn-baohanh-prev" onclick="changeBaoHanhPage(-1)" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
+                  <i class="fa-solid fa-chevron-left text-[10px]"></i>
+                </button>
+                <span id="baohanh-current-page" class="px-3 py-1 font-bold text-slate-800">1</span>
+                <button type="button" id="btn-baohanh-next" onclick="changeBaoHanhPage(1)" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
+                  <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -1359,48 +1449,56 @@
   </div>
 
   <!-- =========================================================================
-       MODAL: TIẾP NHẬN BẢO HÀNH
+       MODAL: TIẾP NHẬN BẢO HÀNH (P5-04)
        ========================================================================= -->
   <div id="modal-tiepnhan-baohanh" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-md overflow-y-auto">
     <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-slate-100 p-6 space-y-5 animate-in fade-in duration-200">
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-        <h3 class="font-extrabold text-navy text-base truncate">Tiếp Nhận Máy Bảo Hành (sp_TiepNhanBaoHanh)</h3>
-        <button onclick="closeModal('modal-tiepnhan-baohanh')" class="text-slate-400 hover:text-navy p-1 flex-shrink-0"><i class="fa-solid fa-xmark text-lg"></i></button>
+        <div class="flex items-center gap-2">
+          <span class="w-7 h-7 rounded-lg bg-blue-50 text-[#1E3A8A] flex items-center justify-center font-bold text-xs">
+            <i class="fa-solid fa-file-circle-plus"></i>
+          </span>
+          <h3 class="font-extrabold text-navy text-base truncate">Tiếp Nhận Máy Bảo Hành</h3>
+        </div>
+        <button onclick="closeModal('modal-tiepnhan-baohanh')" class="text-slate-400 hover:text-navy p-1 flex-shrink-0 cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
       </div>
-      <form onsubmit="saveTiepNhanBaoHanh(event)" class="space-y-4 text-xs">
+      <form id="form-tiepnhan-baohanh" onsubmit="saveTiepNhanBaoHanh(event)" class="space-y-4 text-xs">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1.5 h-4 leading-4 truncate">Mã phiếu tiếp nhận:</label>
-            <input type="text" id="tn-maTN" name="maTN" readonly class="w-full h-10 px-3.5 border border-slate-200 rounded-xl bg-slate-50 font-mono">
+            <input type="text" id="tn-maTN" name="maTN" placeholder="(Hệ thống tự sinh)" readonly class="w-full h-10 px-3.5 border border-slate-200 rounded-xl bg-slate-50 font-mono text-slate-400">
           </div>
           <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1.5 h-4 leading-4 truncate">Số IMEI cần bảo hành:</label>
-            <input type="text" name="soImei" placeholder="Nhập 15 số IMEI..." required class="w-full h-10 px-3.5 border border-slate-200 rounded-xl font-mono focus:outline-none focus:border-indigo-500">
+            <label class="block text-xs font-bold text-slate-700 mb-1.5 h-4 leading-4 truncate">Số IMEI cần bảo hành <span class="text-rose-500">*</span>:</label>
+            <input type="text" name="soIMEI" id="tn-soIMEI" placeholder="Nhập 15 số IMEI..." required maxlength="15" class="w-full h-10 px-3.5 border border-slate-200 rounded-xl font-mono focus:outline-none focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB]">
           </div>
         </div>
         <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1.5 h-4 leading-4 truncate">Tình trạng lỗi mô tả:</label>
-          <input type="text" name="tinhTrangLoi" placeholder="Ví dụ: Không lên nguồn, loa rè, lỗi camera..." required class="w-full h-10 px-3.5 border border-slate-200 rounded-xl focus:outline-none focus:border-indigo-500">
+          <label class="block text-xs font-bold text-slate-700 mb-1.5 h-4 leading-4 truncate">Tình trạng lỗi mô tả <span class="text-rose-500">*</span>:</label>
+          <input type="text" name="tinhTrangLoi" id="tn-tinhTrangLoi" placeholder="Ví dụ: Không lên nguồn, loa rè, lỗi camera..." required class="w-full h-10 px-3.5 border border-slate-200 rounded-xl focus:outline-none focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB]">
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1.5 h-4 leading-4 truncate">Kỹ thuật viên phụ trách:</label>
-            <select name="nvKyThuat" class="w-full h-10 px-3.5 border border-slate-200 rounded-xl bg-white focus:outline-none focus:border-indigo-500">
-              <option value="NV004">Phạm Kỹ Thuật (Kỹ thuật viên 1)</option>
+            <select name="maNVKyThuat" id="tn-maNVKyThuat" class="w-full h-10 px-3.5 border border-slate-200 rounded-xl bg-white focus:outline-none focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB]">
+              <option value="">-- Chọn kỹ thuật viên --</option>
             </select>
           </div>
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1.5 h-4 leading-4 truncate">Ngày hẹn trả máy:</label>
-            <input type="date" name="ngayHenTra" required class="w-full h-10 px-3.5 border border-slate-200 rounded-xl focus:outline-none focus:border-indigo-500">
+            <input type="date" name="ngayHenTra" id="tn-ngayHenTra" class="w-full h-10 px-3.5 border border-slate-200 rounded-xl focus:outline-none focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB]">
           </div>
         </div>
         <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1.5 h-4 leading-4 truncate">Chi phí phát sinh (nếu có):</label>
-          <input type="number" name="chiPhi" value="0" min="0" class="w-full h-10 px-3.5 border border-slate-200 rounded-xl focus:outline-none focus:border-indigo-500">
+          <label class="block text-xs font-bold text-slate-700 mb-1.5 h-4 leading-4 truncate">Chi phí sửa chữa dự kiến (VNĐ):</label>
+          <input type="number" name="chiPhi" id="tn-chiPhi" value="0" min="0" step="1000" class="w-full h-10 px-3.5 border border-slate-200 rounded-xl focus:outline-none focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB]">
         </div>
         <div class="pt-3 border-t flex justify-end gap-2.5">
-          <button type="button" onclick="closeModal('modal-tiepnhan-baohanh')" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 font-bold rounded-xl text-slate-700 transition-colors">Hủy</button>
-          <button type="submit" class="px-5 py-2 bg-indigo-600 font-bold rounded-xl text-white hover:bg-indigo-700 shadow-md shadow-indigo-500/20 transition-colors">Lập Phiếu Tiếp Nhận</button>
+          <button type="button" onclick="closeModal('modal-tiepnhan-baohanh')" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 font-bold rounded-xl text-slate-700 transition-colors cursor-pointer">Hủy</button>
+          <button type="submit" id="btn-submit-tiepnhan" class="px-5 py-2 bg-[#1E3A8A] hover:bg-[#172554] font-bold rounded-xl text-white shadow-md shadow-blue-900/10 transition-colors cursor-pointer flex items-center gap-2">
+            <i class="fa-solid fa-check"></i>
+            <span>Lập Phiếu Tiếp Nhận</span>
+          </button>
         </div>
       </form>
     </div>
