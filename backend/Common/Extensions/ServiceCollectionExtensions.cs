@@ -69,6 +69,7 @@ public static class ServiceCollectionExtensions
     /// </summary>
     public static IServiceCollection AddFeatureServices(this IServiceCollection services)
     {
+        services.AddMemoryCache();
         services.AddHttpContextAccessor();
 
         // Common Shared Services
