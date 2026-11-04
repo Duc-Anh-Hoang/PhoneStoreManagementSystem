@@ -84,6 +84,21 @@ const api = {
         return res.json();
     },
 
+    async getWithHeaders(path) {
+        const url = path.startsWith('http') ? path : `${API_BASE}${path.startsWith('/') ? '' : '/'}${path}`;
+        const res = await fetch(url, {
+            headers: getAuthHeaders()
+        });
+        if (!res.ok) {
+            handleAuthStatus(res);
+            const errorMsg = await parseErrorMessage(res, `GET ${path} thất bại (${res.status})`);
+            throw new Error(errorMsg);
+        }
+        const totalCount = parseInt(res.headers.get('X-Total-Count') || res.headers.get('x-total-count') || '0', 10);
+        const data = await res.json();
+        return { data, totalCount, headers: res.headers };
+    },
+
     async post(path, data) {
         const url = path.startsWith('http') ? path : `${API_BASE}${path.startsWith('/') ? '' : '/'}${path}`;
         const res = await fetch(url, {
