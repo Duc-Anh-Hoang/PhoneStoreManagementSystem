@@ -460,6 +460,11 @@
     // Cập nhật title trình duyệt
     document.title = `${prod.tenHang} - SAMAMOBILE.COM`;
 
+    // Lưu vào danh sách Sản phẩm đã xem
+    if (window.addRecentlyViewed) {
+      window.addRecentlyViewed(prod);
+    }
+
     // 1. Breadcrumbs
     const bcCat = document.getElementById('bc-category');
     const bcProd = document.getElementById('bc-product-name');

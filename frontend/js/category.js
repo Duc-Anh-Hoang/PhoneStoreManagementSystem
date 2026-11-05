@@ -1153,6 +1153,7 @@
     if (item) {
       try {
         sessionStorage.setItem('current_view_product', JSON.stringify(item));
+        if (window.addRecentlyViewed) window.addRecentlyViewed(item);
       } catch (e) {}
     }
     window.location.href = 'product-detail.html?id=' + encodeURIComponent(maHang);
