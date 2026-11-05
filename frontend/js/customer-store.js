@@ -748,7 +748,7 @@
         dropdown.innerHTML = `
           <div class="p-4 text-center text-xs text-slate-500">
             Không tìm thấy sản phẩm khớp với "<strong>${q}</strong>".
-            <div class="mt-2 text-[#16A34A] font-semibold cursor-pointer" onclick="window.quickSearchTag('iPhone')">Gợi ý: Tìm "iPhone", "Samsung"</div>
+            <div class="mt-2 text-[#0057B7] font-semibold cursor-pointer" onclick="window.quickSearchTag('iPhone')">Gợi ý: Tìm "iPhone", "Samsung"</div>
           </div>
         `;
       } else {
@@ -778,7 +778,7 @@
             `).join('')}
           </div>
           <div class="p-2 border-t border-slate-100 text-center">
-            <button type="button" onclick="window.openSearchModal('${q}')" class="text-xs font-bold text-[#16A34A] hover:text-[#15803D]">
+            <button type="button" onclick="window.openSearchModal('${q}')" class="text-xs font-bold text-[#0057B7] hover:text-[#004494]">
               Xem tất cả kết quả cho "${q}" &rarr;
             </button>
           </div>
@@ -954,7 +954,7 @@
         return store.products.some(p => p.maNhom === nh.maNhom && p.maLoai === l.maLoai);
       });
       let icon = 'fa-mobile-screen';
-      let color = 'text-[#16A34A]';
+      let color = 'text-[#0057B7]';
       if (nh.maNhom === 'NH02' || nh.maNhom === 'PHUKIEN') { icon = 'fa-plug'; color = 'text-amber-600'; }
       else if (nh.maNhom === 'NH03' || nh.maNhom === 'AMTHANH') { icon = 'fa-headphones'; color = 'text-blue-600'; }
       else if (nh.maNhom === 'NH04' || nh.maNhom === 'TABLET') { icon = 'fa-tablet-screen-button'; color = 'text-indigo-600'; }
@@ -969,13 +969,13 @@
           <ul class="space-y-2 text-slate-600">
             ${loaiOfNhom.map(l => `
               <li>
-                <button type="button" onclick="window.filterByLoaiHang('${l.tenLoai}'); window.toggleMegaMenu();" class="hover:text-[#16A34A] font-semibold text-left">
+                <button type="button" onclick="window.filterByLoaiHang('${l.tenLoai}'); window.toggleMegaMenu();" class="hover:text-[#0057B7] font-semibold text-left">
                   ${l.tenLoai}
                 </button>
               </li>
             `).join('')}
             <li>
-              <button type="button" onclick="window.filterByNhomHang('${nh.maNhom}'); window.toggleMegaMenu();" class="hover:text-[#16A34A] text-[#16A34A] font-bold">
+              <button type="button" onclick="window.filterByNhomHang('${nh.maNhom}'); window.toggleMegaMenu();" class="hover:text-[#0057B7] text-[#0057B7] font-bold">
                 Xem tất cả ${nh.tenNhom} &rarr;
               </button>
             </li>
@@ -1007,7 +1007,7 @@
 
       <!-- Cột S-Member -->
       <div class="space-y-3 bg-gradient-to-br from-[#F0FDF4] to-indigo-50 p-4 rounded-2xl border border-[#DCFCE7]">
-        <div class="font-extrabold text-[#15803D] text-xs uppercase flex items-center gap-1.5">
+        <div class="font-extrabold text-[#004494] text-xs uppercase flex items-center gap-1.5">
           <i class="fa-solid fa-award text-amber-500"></i>
           <span>Thành Viên S-Member</span>
         </div>
@@ -2275,7 +2275,7 @@
             ${oldPriceDisplay}
 
             <!-- 5. Dòng gợi ý trả góp màu xanh lục -->
-            <div class="text-[#059669] text-[11px] font-semibold mt-1">
+            <div class="text-[#0057B7] text-[11px] font-semibold mt-1">
               ${installmentText}
             </div>
 
@@ -2284,13 +2284,13 @@
               <span class="h-7 sm:h-7.5 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-purple-400 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="TPBank Evo">
                 <img src="images/brands/tpbank.png" alt="TPBank" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full" onerror="this.outerHTML='<span class=\'text-[11px] font-bold text-purple-700\'>TPBank</span>'" loading="lazy" />
               </span>
-              <span class="h-7 sm:h-7.5 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-emerald-400 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="VPBank">
-                <img src="images/brands/vpbank.png" alt="VPBank" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full" onerror="this.outerHTML='<span class=\'text-[11px] font-bold text-emerald-700\'>VPBank</span>'" loading="lazy" />
+              <span class="h-7 sm:h-7.5 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-blue-400 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="VPBank">
+                <img src="images/brands/vpbank.png" alt="VPBank" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full" onerror="this.outerHTML='<span class=\'text-[11px] font-bold text-blue-700\'>VPBank</span>'" loading="lazy" />
               </span>
               <span class="h-7 sm:h-7.5 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-blue-400 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="VIB">
                 <img src="images/brands/vib.png" alt="VIB" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full" onerror="this.outerHTML='<span class=\'text-[11px] font-bold text-blue-700\'>VIB</span>'" loading="lazy" />
               </span>
-              <span class="h-7 sm:h-7.5 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-emerald-400 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="Trả góp 0%">
+              <span class="h-7 sm:h-7.5 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-blue-400 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="Trả góp 0%">
                 <img src="images/brands/icon-2_639047641516424460.png" alt="Trả góp 0%" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full" onerror="this.src='images/brands/homecredit.png'" loading="lazy" />
               </span>
             </div>
@@ -2706,7 +2706,7 @@
               ${oldPriceDisplay}
             </div>
 
-            <div class="mt-1.5 text-[#059669] text-[11px] font-semibold flex items-center gap-1">
+            <div class="mt-1.5 text-[#0057B7] text-[11px] font-semibold flex items-center gap-1">
               <i class="fa-solid fa-credit-card text-[10px]"></i>
               <span>${installmentText}</span>
             </div>
@@ -2715,13 +2715,13 @@
               <span class="h-7 sm:h-7.5 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-purple-400 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="TPBank Evo">
                 <img src="images/brands/tpbank.png" alt="TPBank" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full" onerror="this.outerHTML='<span class=\\'text-[11px] font-bold text-purple-700\\'>TPBank</span>'" loading="lazy" />
               </span>
-              <span class="h-7 sm:h-7.5 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-emerald-400 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="VPBank">
-                <img src="images/brands/vpbank.png" alt="VPBank" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full" onerror="this.outerHTML='<span class=\\'text-[11px] font-bold text-emerald-700\\'>VPBank</span>'" loading="lazy" />
+              <span class="h-7 sm:h-7.5 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-blue-400 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="VPBank">
+                <img src="images/brands/vpbank.png" alt="VPBank" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full" onerror="this.outerHTML='<span class=\\'text-[11px] font-bold text-blue-700\\'>VPBank</span>'" loading="lazy" />
               </span>
               <span class="h-7 sm:h-7.5 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-blue-400 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="VIB">
                 <img src="images/brands/vib.png" alt="VIB" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full" onerror="this.outerHTML='<span class=\\'text-[11px] font-bold text-blue-700\\'>VIB</span>'" loading="lazy" />
               </span>
-              <span class="h-7 sm:h-7.5 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-emerald-400 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="Trả góp 0%">
+              <span class="h-7 sm:h-7.5 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-blue-400 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="Trả góp 0%">
                 <img src="images/brands/icon-2_639047641516424460.png" alt="Trả góp 0%" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full" onerror="this.src=\\'images/brands/homecredit.png\\'" loading="lazy" />
               </span>
             </div>
@@ -2811,7 +2811,7 @@
           </div>
 
           <!-- Installment -->
-          <div class="mt-1 text-[#059669] text-[11px] font-semibold flex items-center gap-1">
+          <div class="mt-1 text-[#0057B7] text-[11px] font-semibold flex items-center gap-1">
             <i class="fa-solid fa-credit-card text-[10px]"></i>
             <span>${installmentText}</span>
           </div>
@@ -2821,13 +2821,13 @@
             <span class="h-6 sm:h-7 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-purple-400 hover:shadow-xs transition-all flex items-center justify-center p-0.5 w-full" title="TPBank Evo">
               <img src="images/brands/tpbank.png" alt="TPBank" class="h-3.5 sm:h-4 w-auto object-contain max-w-[85%] max-h-full" onerror="this.outerHTML='<span class=\'text-[10px] font-bold text-purple-700\'>TPBank</span>'" loading="lazy" />
             </span>
-            <span class="h-6 sm:h-7 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-emerald-400 hover:shadow-xs transition-all flex items-center justify-center p-0.5 w-full" title="VPBank">
-              <img src="images/brands/vpbank.png" alt="VPBank" class="h-3.5 sm:h-4 w-auto object-contain max-w-[85%] max-h-full" onerror="this.outerHTML='<span class=\'text-[10px] font-bold text-emerald-700\'>VPBank</span>'" loading="lazy" />
+            <span class="h-6 sm:h-7 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-blue-400 hover:shadow-xs transition-all flex items-center justify-center p-0.5 w-full" title="VPBank">
+              <img src="images/brands/vpbank.png" alt="VPBank" class="h-3.5 sm:h-4 w-auto object-contain max-w-[85%] max-h-full" onerror="this.outerHTML='<span class=\'text-[10px] font-bold text-blue-700\'>VPBank</span>'" loading="lazy" />
             </span>
             <span class="h-6 sm:h-7 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-blue-400 hover:shadow-xs transition-all flex items-center justify-center p-0.5 w-full" title="VIB">
               <img src="images/brands/vib.png" alt="VIB" class="h-3.5 sm:h-4 w-auto object-contain max-w-[85%] max-h-full" onerror="this.outerHTML='<span class=\'text-[10px] font-bold text-blue-700\'>VIB</span>'" loading="lazy" />
             </span>
-            <span class="h-6 sm:h-7 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-emerald-400 hover:shadow-xs transition-all flex items-center justify-center p-0.5 w-full" title="Trả góp 0%">
+            <span class="h-6 sm:h-7 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-blue-400 hover:shadow-xs transition-all flex items-center justify-center p-0.5 w-full" title="Trả góp 0%">
               <img src="images/brands/icon-2_639047641516424460.png" alt="Trả góp 0%" class="h-3.5 sm:h-4 w-auto object-contain max-w-[85%] max-h-full" onerror="this.src=\'images/brands/homecredit.png\'" loading="lazy" />
             </span>
           </div>
