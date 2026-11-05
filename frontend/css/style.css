@@ -440,36 +440,60 @@ body {
   background-repeat: no-repeat !important;
 }
 
-/* Dual Category Tabs (Phone & Tablet - Hoang Ha Mobile Style) */
+/* Dual Category Tabs (Phone & Tablet, Laptop, etc. - Bright Blue Header-BG Theme) */
 .dual-cat-tab-active {
-  background-color: #0b45a6 !important;
-  background-image: url('../images/header-bg.jpg') !important;
-  background-size: cover !important;
-  background-position: center center !important;
-  background-repeat: no-repeat !important;
+  background: url('../images/header-bg.jpg') center center / cover no-repeat !important;
   color: #ffffff !important;
-  box-shadow: 0 4px 14px rgba(11, 69, 166, 0.22) !important;
-  border-bottom: none !important;
+  box-shadow: 0 4px 18px rgba(0, 102, 255, 0.38) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
   z-index: 10;
+}
+
+.dual-cat-tab-active:hover {
+  filter: brightness(1.08) !important;
+  box-shadow: 0 6px 24px rgba(0, 102, 255, 0.48) !important;
+  transform: translateY(-1.5px) !important;
 }
 
 .dual-cat-tab-inactive {
   background-color: #ffffff !important;
   background-image: none !important;
-  color: #334155 !important;
-  border-bottom: 2px solid #e2e8f0 !important;
+  color: #1e3a8a !important;
+  border: 1.5px solid #e2e8f0 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
+/* Hover trên tab không active: Sử dụng nền header-bg sáng rực rỡ với hiệu ứng nổi 3D */
 .dual-cat-tab-inactive:hover {
-  background-color: #f8fafc !important;
-  color: #0b45a6 !important;
+  background: linear-gradient(135deg, rgba(14, 116, 255, 0.88), rgba(0, 85, 220, 0.92)), url('../images/header-bg.jpg') center center / cover no-repeat !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  box-shadow: 0 6px 22px rgba(0, 102, 255, 0.38) !important;
+  transform: translateY(-1.5px) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+}
+
+.dual-brand-pill {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.dual-brand-pill:hover {
+  border-color: #0066FF !important;
+  color: #0066FF !important;
+  background-color: #eff6ff !important;
+  box-shadow: 0 2px 8px rgba(0, 102, 255, 0.18) !important;
+  transform: translateY(-1px) !important;
 }
 
 .dual-brand-pill.active-brand-pill {
-  background-color: #0b45a6 !important;
+  background: linear-gradient(135deg, #0077ff, #0055ee) !important;
   color: #ffffff !important;
-  border-color: #0b45a6 !important;
-  box-shadow: 0 2px 8px rgba(11, 69, 166, 0.25) !important;
+  border-color: #0066ff !important;
+  box-shadow: 0 3px 12px rgba(0, 102, 255, 0.35) !important;
+  transform: translateY(-1px) !important;
 }
 
 .dual-brand-pill.active-brand-pill img {
@@ -614,5 +638,13 @@ body {
 .deal-product-card:hover,
 .deal-product-item:hover {
   transform: translateY(-2px);
+}
+
+/* Accessory Categories Carousel */
+#accessory-viewport {
+  touch-action: pan-y pinch-zoom;
+}
+#accessory-track {
+  will-change: transform;
 }
 

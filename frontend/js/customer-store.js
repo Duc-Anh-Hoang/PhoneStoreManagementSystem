@@ -1484,6 +1484,53 @@
         discount: 14,
         image: 'images/deal-tabs/deal-tab-laptop.jpg'
       }
+    ],
+    pc: [
+      {
+        id: 'MH604',
+        name: 'PC MSI PRO DP180 I5 (9S6-B0A741-1482)',
+        price: 21990000,
+        oldPrice: 24990000,
+        discount: 12,
+        brand: 'MSI',
+        image: 'https://i.hoanghamobile.vn/Uploads/2026/08/10/msi-pro-dp180-i5-9s6-b0a741-1482-1-111909999.png'
+      },
+      {
+        id: 'MH603',
+        name: 'PC Mini MSI Cubi NUC AI+ 2MG-019BVN (936-B20611-019)',
+        price: 21000000,
+        oldPrice: 23500000,
+        discount: 11,
+        brand: 'MSI',
+        image: 'https://i.hoanghamobile.vn/Uploads/2026/08/10/2mg-019bvn-5-100337539.png'
+      },
+      {
+        id: 'MH605',
+        name: 'Mac Mini M4 2024 16GB/512GB',
+        price: 25490000,
+        oldPrice: 27990000,
+        discount: 9,
+        brand: 'Apple',
+        image: 'https://i.hoanghamobile.vn/Uploads/2024/11/04/mac-mini-m4.png'
+      },
+      {
+        id: 'MH606',
+        name: 'PC GAMING MSI MAG Infinite E1 AI Gaming 14-238VN 9S6-B91111-238',
+        price: 28990000,
+        oldPrice: 32990000,
+        discount: 12,
+        brand: 'MSI',
+        image: 'https://i.hoanghamobile.vn/Uploads/2026/08/08/ninite-e1-3-112032182.png'
+      },
+      {
+        id: 'MH607',
+        name: 'PC Mini MSI Cubi NUC AI 1UMG 936-B20911-062',
+        price: 17990000,
+        oldPrice: 19990000,
+        discount: 10,
+        brand: 'MSI',
+        image: 'https://i.hoanghamobile.vn/Uploads/2026/08/08/msi-cubi-nuc-ai-1umg-936-b20911-062-5-112302464.png'
+      }
     ]
   };
 
@@ -1504,7 +1551,48 @@
         amthanh: allItems.filter(p => p.maNhom === 'AMTHANH'),
         dongho: allItems.filter(p => p.maNhom === 'DONGHO'),
         phukien: allItems.filter(p => p.maNhom === 'PHUKIEN'),
-        laptop: allItems.filter(p => p.maNhom === 'LAPTOP' || (p.tenHang || '').toLowerCase().includes('laptop') || (p.tenHang || '').toLowerCase().includes('macbook') || (p.tenHang || '').toLowerCase().includes('màn hình'))
+        laptop: allItems.filter(p => p.maNhom === 'LAPTOP' || (p.tenHang || '').toLowerCase().includes('laptop') || (p.tenHang || '').toLowerCase().includes('macbook')),
+        pc: allItems.filter(p => p.maNhom === 'PC' || (p.tenHang || '').toLowerCase().includes('pc ') || (p.tenHang || '').toLowerCase().includes('mac mini') || (p.tenHang || '').toLowerCase().includes('imac')),
+        chuot_banphim: allItems.filter(p => {
+          const n = (p.tenHang || '').toLowerCase();
+          return n.includes('bàn phím') || n.includes('chuột') || n.includes('keyboard') || n.includes('mouse');
+        }),
+        thietbi_mang: allItems.filter(p => {
+          const n = (p.tenHang || '').toLowerCase();
+          const l = (p.maLoai || '').toLowerCase();
+          return n.includes('wifi') || n.includes('router') || n.includes('bộ phát') || n.includes('mạng') || l.includes('mang');
+        }),
+        loa: allItems.filter(p => (p.tenHang || '').toLowerCase().includes('loa ')),
+        tainghe: allItems.filter(p => {
+          const n = (p.tenHang || '').toLowerCase();
+          return n.includes('tai nghe') || n.includes('airpods') || n.includes('earbuds') || n.includes('headphone');
+        }),
+        dongho: allItems.filter(p => p.maNhom === 'DONGHO' || (p.tenHang || '').toLowerCase().includes('đồng hồ') || (p.tenHang || '').toLowerCase().includes('watch') || (p.tenHang || '').toLowerCase().includes('band')),
+        camera: allItems.filter(p => (p.tenHang || '').toLowerCase().includes('camera') || (p.tenHang || '').toLowerCase().includes('webcam')),
+        tivi: allItems.filter(p => {
+          const n = (p.tenHang || '').toLowerCase();
+          return p.maLoai === 'TIVI' || n.includes('tivi') || n.includes('tv ');
+        }),
+        tulanh: allItems.filter(p => {
+          const n = (p.tenHang || '').toLowerCase();
+          return p.maLoai === 'TULANH' || n.includes('tủ lạnh');
+        }),
+        dieuhoa: allItems.filter(p => {
+          const n = (p.tenHang || '').toLowerCase();
+          return p.maLoai === 'DIEUHOA' || n.includes('điều hòa') || n.includes('điều hoà');
+        }),
+        maygiat: allItems.filter(p => {
+          const n = (p.tenHang || '').toLowerCase();
+          return p.maLoai === 'MAYGIAT' || n.includes('máy giặt');
+        }),
+        mayloc_khongkhi: allItems.filter(p => {
+          const n = (p.tenHang || '').toLowerCase();
+          return n.includes('lọc không khí') || n.includes('lõi lọc');
+        }),
+        may_hut_am: allItems.filter(p => {
+          const n = (p.tenHang || '').toLowerCase();
+          return n.includes('hút ẩm');
+        })
       };
 
       const toDealItem = (p) => {
@@ -1514,12 +1602,12 @@
 
         let img = p.anhChinh;
         if (!img || img.includes('reload')) {
-          if ((p.tenHang || '').toLowerCase().includes('macbook')) {
+          if ((p.tenHang || '').toLowerCase().includes('macbook') || (p.tenHang || '').toLowerCase().includes('mac mini') || (p.tenHang || '').toLowerCase().includes('imac')) {
             img = 'https://i.hoanghamobile.vn/Uploads/2026/10/28/macbook-pro-14-inch-m6-space-black-pdp-image-position-1-vi-vn-145528508.png';
-          } else if ((p.maNhom || '').toLowerCase() === 'laptop') {
-            img = 'images/deal-tabs/deal-tab-laptop.jpg';
+          } else if ((p.maNhom || '').toLowerCase() === 'laptop' || (p.maNhom || '').toLowerCase() === 'pc') {
+            img = 'images/deal-tabs/deal-tab-laptop.png';
           } else {
-            img = 'images/deal-tabs/deal-tab-phone.jpg';
+            img = 'images/deal-tabs/deal-tab-phone.png';
           }
         }
 
@@ -1536,13 +1624,124 @@
         };
       };
 
-      // Cập nhật đầy đủ cả 6 tab ngành hàng từ file JSON mới nhất
-      ['dienthoai', 'tablet', 'amthanh', 'dongho', 'phukien', 'laptop'].forEach(cat => {
+      // Cập nhật đầy đủ các tab ngành hàng từ file JSON mới nhất
+      ['dienthoai', 'tablet', 'amthanh', 'dongho', 'phukien', 'laptop', 'pc', 'chuot_banphim', 'thietbi_mang', 'loa', 'tainghe', 'camera', 'tivi', 'tulanh', 'dieuhoa', 'maygiat', 'mayloc_khongkhi', 'may_hut_am'].forEach(cat => {
         if (mapCat[cat] && mapCat[cat].length > 0) {
           let list = mapCat[cat].map(toDealItem);
           if (cat === 'tablet') {
             // Đưa các model hot trong ảnh mẫu lên đầu danh sách: Tab S12 Ultra, Tab S12 Plus, Tab S10 FE, Tab A11, Lenovo Tab
             const priorityIds = ['MH163', 'MH164', 'MH165', 'MH166', 'MH167', 'MH160'];
+            list.sort((a, b) => {
+              const aIdx = priorityIds.indexOf(a.id);
+              const bIdx = priorityIds.indexOf(b.id);
+              if (aIdx !== -1 && bIdx !== -1) return aIdx - bIdx;
+              if (aIdx !== -1) return -1;
+              if (bIdx !== -1) return 1;
+              return 0;
+            });
+          }
+          if (cat === 'laptop') {
+            // Đưa các model laptop hot trong ảnh mẫu lên đầu danh sách
+            const priorityIds = ['MH289', 'MH290', 'MH291', 'MH292', 'MH293', 'MH294', 'MH295', 'MH296', 'MH297'];
+            list.sort((a, b) => {
+              const aIdx = priorityIds.indexOf(a.id);
+              const bIdx = priorityIds.indexOf(b.id);
+              if (aIdx !== -1 && bIdx !== -1) return aIdx - bIdx;
+              if (aIdx !== -1) return -1;
+              if (bIdx !== -1) return 1;
+              return 0;
+            });
+          }
+          if (cat === 'pc') {
+            const priorityIds = ['MH604', 'MH603', 'MH605', 'MH606', 'MH607', 'MH608', 'MH609', 'MH610', 'MH611', 'MH627'];
+            list.sort((a, b) => {
+              const aIdx = priorityIds.indexOf(a.id);
+              const bIdx = priorityIds.indexOf(b.id);
+              if (aIdx !== -1 && bIdx !== -1) return aIdx - bIdx;
+              if (aIdx !== -1) return -1;
+              if (bIdx !== -1) return 1;
+              return 0;
+            });
+          }
+          if (cat === 'chuot_banphim') {
+            const priorityIds = ['MH712', 'MH711', 'MH736', 'MH690', 'MH689', 'MH713', 'MH714', 'MH737', 'MH691', 'MH692'];
+            list.sort((a, b) => {
+              const aIdx = priorityIds.indexOf(a.id);
+              const bIdx = priorityIds.indexOf(b.id);
+              if (aIdx !== -1 && bIdx !== -1) return aIdx - bIdx;
+              if (aIdx !== -1) return -1;
+              if (bIdx !== -1) return 1;
+              return 0;
+            });
+          }
+          if (cat === 'loa') {
+            const priorityIds = ['MH1168', 'MH1171', 'MH1173', 'MH1175', 'MH1177', 'MH1179', 'MH1181', 'MH1183', 'MH1185', 'MH1187'];
+            list.sort((a, b) => {
+              const aIdx = priorityIds.indexOf(a.id);
+              const bIdx = priorityIds.indexOf(b.id);
+              if (aIdx !== -1 && bIdx !== -1) return aIdx - bIdx;
+              if (aIdx !== -1) return -1;
+              if (bIdx !== -1) return 1;
+              return 0;
+            });
+          }
+          if (cat === 'tainghe') {
+            const priorityIds = ['MH1169', 'MH1170', 'MH1172', 'MH1174', 'MH1176', 'MH1178', 'MH1180', 'MH1182'];
+            list.sort((a, b) => {
+              const aIdx = priorityIds.indexOf(a.id);
+              const bIdx = priorityIds.indexOf(b.id);
+              if (aIdx !== -1 && bIdx !== -1) return aIdx - bIdx;
+              if (aIdx !== -1) return -1;
+              if (bIdx !== -1) return 1;
+              return 0;
+            });
+          }
+          if (cat === 'dongho') {
+            const priorityIds = ['MH889', 'MH890', 'MH891', 'MH892', 'MH893', 'MH894', 'MH895', 'MH896', 'MH897', 'MH898'];
+            list.sort((a, b) => {
+              const aIdx = priorityIds.indexOf(a.id);
+              const bIdx = priorityIds.indexOf(b.id);
+              if (aIdx !== -1 && bIdx !== -1) return aIdx - bIdx;
+              if (aIdx !== -1) return -1;
+              if (bIdx !== -1) return 1;
+              return 0;
+            });
+          }
+          if (cat === 'camera') {
+            const priorityIds = ['MH2461', 'MH2518', 'MH2460', 'MH2459', 'MH2523', 'MH2524', 'MH2611'];
+            list.sort((a, b) => {
+              const aIdx = priorityIds.indexOf(a.id);
+              const bIdx = priorityIds.indexOf(b.id);
+              if (aIdx !== -1 && bIdx !== -1) return aIdx - bIdx;
+              if (aIdx !== -1) return -1;
+              if (bIdx !== -1) return 1;
+              return 0;
+            });
+          }
+          if (cat === 'tivi') {
+            const priorityIds = ['MH1681', 'MH1682', 'MH1683', 'MH1684', 'MH1685'];
+            list.sort((a, b) => {
+              const aIdx = priorityIds.indexOf(a.id);
+              const bIdx = priorityIds.indexOf(b.id);
+              if (aIdx !== -1 && bIdx !== -1) return aIdx - bIdx;
+              if (aIdx !== -1) return -1;
+              if (bIdx !== -1) return 1;
+              return 0;
+            });
+          }
+          if (cat === 'dieuhoa') {
+            const priorityIds = ['MH2078', 'MH2077', 'MH2080', 'MH2079', 'MH2043'];
+            list.sort((a, b) => {
+              const aIdx = priorityIds.indexOf(a.id);
+              const bIdx = priorityIds.indexOf(b.id);
+              if (aIdx !== -1 && bIdx !== -1) return aIdx - bIdx;
+              if (aIdx !== -1) return -1;
+              if (bIdx !== -1) return 1;
+              return 0;
+            });
+          }
+          if (cat === 'mayloc_khongkhi') {
+            const priorityIds = ['MH1694', 'MH1696', 'MH1697', 'MH1699', 'MH1701', 'MH1702', 'MH1703', 'MH1704', 'MH1706', 'MH1707'];
             list.sort((a, b) => {
               const aIdx = priorityIds.indexOf(a.id);
               const bIdx = priorityIds.indexOf(b.id);
@@ -1558,7 +1757,22 @@
 
       // Render lại giao diện sau khi nạp xong dữ liệu đầy đủ
       renderDealProducts();
+      renderDualCategoryBrandPills(currentDualCategory);
       renderDualCategoryProducts();
+      renderLaptopPcBrandPills(currentLaptopPcCategory);
+      renderLaptopPcProducts();
+      renderMouseBrandPills(currentMouseCategory);
+      renderMouseProducts();
+      renderAudioBrandPills(currentAudioCategory);
+      renderAudioProducts();
+      renderWatchBrandPills(currentWatchCategory);
+      renderWatchProducts();
+      renderTiviBrandPills(currentTiviCategory);
+      renderTiviProducts();
+      renderAirBrandPills(currentAirCategory);
+      renderAirProducts();
+      renderPurifierBrandPills(currentPurifierCategory);
+      renderPurifierProducts();
     } catch (err) {
       console.warn('Load products-meta.json error:', err);
     }
@@ -1751,12 +1965,83 @@
   // =========================================================================
   // CỤM DANH MỤC SẢN PHẨM DẠNG DUAL TAB (ĐIỆN THOẠI & TABLET - Chuẩn Hoàng Hà Mobile)
   // =========================================================================
+  const DUAL_CATEGORY_BRANDS = {
+    tablet: [
+      { brand: 'all', label: 'Tất cả' },
+      { brand: 'Apple', logo: 'images/brands/apple.png', alt: 'Apple', hClass: 'h-4.5 sm:h-5.5' },
+      { brand: 'Samsung', logo: 'images/brands/samsung.png', alt: 'Samsung', hClass: 'h-4 sm:h-5' },
+      { brand: 'Lenovo', logo: 'images/brands/lenovo.png', alt: 'Lenovo', hClass: 'h-4 sm:h-5' },
+      { brand: 'Huawei', logo: 'images/brands/huawei.png', alt: 'Huawei', hClass: 'h-4.5 sm:h-5.5' },
+      { brand: 'Xiaomi', logo: 'images/brands/mi.png', alt: 'Mi', hClass: 'h-4 sm:h-5' },
+      { brand: 'HONOR', logo: 'images/brands/honor.png', alt: 'Honor', hClass: 'h-3.5 sm:h-4.5' },
+      { brand: 'Nubia', logo: 'images/brands/redmagic.png', alt: 'RedMagic', hClass: 'h-4 sm:h-5' },
+      { brand: 'TCL', logo: 'images/brands/tcl.png', alt: 'TCL', hClass: 'h-4 sm:h-5' },
+      { brand: 'OPPO', logo: 'images/brands/oppo.png', alt: 'Oppo', hClass: 'h-4 sm:h-5' },
+      { brand: 'HTC', logo: 'images/brands/htc.png', alt: 'HTC', hClass: 'h-4 sm:h-5' },
+      { brand: 'Nokia', logo: 'images/brands/nokia.png', alt: 'Nokia', hClass: 'h-4 sm:h-5' }
+    ],
+    dienthoai: [
+      { brand: 'all', label: 'Tất cả' },
+      { brand: 'Apple', logo: 'images/brands/apple.png', alt: 'Apple', hClass: 'h-4.5 sm:h-5.5' },
+      { brand: 'Samsung', logo: 'images/brands/samsung.png', alt: 'Samsung', hClass: 'h-4 sm:h-5' },
+      { brand: 'Xiaomi', logo: 'images/brands/mi.png', alt: 'Mi', hClass: 'h-4 sm:h-5' },
+      { brand: 'OPPO', logo: 'images/brands/oppo.png', alt: 'Oppo', hClass: 'h-4 sm:h-5' },
+      { brand: 'HONOR', logo: 'images/brands/honor.png', alt: 'Honor', hClass: 'h-3.5 sm:h-4.5' },
+      { brand: 'TCL', logo: 'images/brands/tcl.png', alt: 'TCL', hClass: 'h-4 sm:h-5' },
+      { brand: 'REDMAGIC', logo: 'images/brands/redmagic.png', alt: 'RedMagic', hClass: 'h-4 sm:h-5' },
+      { brand: 'Masstel', logo: 'images/brands/masstel.png', alt: 'Masstel', hClass: 'h-4 sm:h-5' },
+      { brand: 'Inoi', logo: 'images/brands/inoi.png', alt: 'Inoi', hClass: 'h-4 sm:h-5' },
+      { brand: 'TECNO', logo: 'images/brands/tecno.png', alt: 'TECNO', hClass: 'h-3.5 sm:h-4.5' },
+      { brand: 'Mobell', logo: 'images/brands/mobell.png', alt: 'Mobell', hClass: 'h-4 sm:h-5' },
+      { brand: 'Nokia', logo: 'images/brands/nokia.png', alt: 'Nokia', hClass: 'h-4 sm:h-5' },
+      { brand: 'Nubia', logo: 'images/brands/nubia.png', alt: 'Nubia', hClass: 'h-4 sm:h-5' },
+      { brand: 'OSCAL', logo: 'images/brands/oscal.png', alt: 'OSCAL', hClass: 'h-3.5 sm:h-4.5' },
+      { brand: 'HTC', logo: 'images/brands/htc.png', alt: 'HTC', hClass: 'h-4 sm:h-5' }
+    ]
+  };
+
   let currentDualCategory = 'tablet'; // Mặc định Tablet như ảnh mẫu tham chiếu
   let currentDualBrand = 'all';
   let dualCategoryPageSize = 8;
 
   function initDualCategoryTabsSection() {
+    renderDualCategoryBrandPills(currentDualCategory);
     renderDualCategoryProducts();
+    initAccessorySection();
+    initLaptopPcTabsSection();
+    initMouseKeyboardSection();
+    initAudioSection();
+    initWatchCameraSection();
+    initTiviSection();
+    initAirSection();
+    initPurifierSection();
+  }
+
+  function renderDualCategoryBrandPills(cat) {
+    const container = document.getElementById('dual-tab-brand-pills-container');
+    if (!container) return;
+
+    const list = DUAL_CATEGORY_BRANDS[cat] || DUAL_CATEGORY_BRANDS.tablet;
+    container.innerHTML = list.map(item => {
+      const isActive = currentDualBrand === item.brand;
+      const activeClass = isActive
+        ? 'active-brand-pill'
+        : 'bg-white text-slate-800 border border-slate-200 hover:border-blue-400 hover:text-blue-600';
+
+      if (item.brand === 'all') {
+        return `
+          <button type="button" onclick="window.filterDualCategoryBrand('all')" data-brand="all" class="dual-brand-pill ${activeClass} flex-shrink-0 px-5 py-2 rounded-full text-xs sm:text-[13px] font-bold transition-all cursor-pointer flex items-center justify-center h-9 sm:h-10">
+            ${item.label || 'Tất cả'}
+          </button>
+        `;
+      }
+
+      return `
+        <button type="button" onclick="window.filterDualCategoryBrand('${item.brand}')" data-brand="${item.brand}" class="dual-brand-pill ${activeClass} flex-shrink-0 px-4 sm:px-5 py-2 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-9 sm:h-10" title="${item.alt || item.brand}">
+          <img src="${item.logo}" alt="${item.alt || item.brand}" class="${item.hClass || 'h-4 sm:h-5'} w-auto object-contain max-w-[75px]" loading="lazy">
+        </button>
+      `;
+    }).join('');
   }
 
   window.switchDualCategory = function (cat) {
@@ -1771,29 +2056,26 @@
 
     if (cat === 'tablet') {
       if (btnTablet) {
-        btnTablet.className = 'dual-cat-tab-active h-13 sm:h-16 rounded-2xl sm:rounded-3xl flex items-center justify-center font-extrabold tracking-wider text-sm sm:text-lg uppercase transition-all duration-300 cursor-pointer shadow-md';
+        btnTablet.className = 'dual-cat-tab-active h-12 sm:h-14 rounded-2xl flex items-center justify-center font-extrabold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer shadow-md';
       }
       if (btnPhone) {
-        btnPhone.className = 'dual-cat-tab-inactive h-13 sm:h-16 rounded-2xl sm:rounded-3xl flex items-center justify-center font-bold tracking-wider text-sm sm:text-lg uppercase transition-all duration-300 cursor-pointer bg-white border border-slate-200 shadow-2xs hover:bg-slate-50';
+        btnPhone.className = 'dual-cat-tab-inactive h-12 sm:h-14 rounded-2xl flex items-center justify-center font-bold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer bg-white border border-slate-200 shadow-2xs ';
       }
     } else {
       if (btnPhone) {
-        btnPhone.className = 'dual-cat-tab-active h-13 sm:h-16 rounded-2xl sm:rounded-3xl flex items-center justify-center font-extrabold tracking-wider text-sm sm:text-lg uppercase transition-all duration-300 cursor-pointer shadow-md';
+        btnPhone.className = 'dual-cat-tab-active h-12 sm:h-14 rounded-2xl flex items-center justify-center font-extrabold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer shadow-md';
       }
       if (btnTablet) {
-        btnTablet.className = 'dual-cat-tab-inactive h-13 sm:h-16 rounded-2xl sm:rounded-3xl flex items-center justify-center font-bold tracking-wider text-sm sm:text-lg uppercase transition-all duration-300 cursor-pointer bg-white border border-slate-200 shadow-2xs hover:bg-slate-50';
+        btnTablet.className = 'dual-cat-tab-inactive h-12 sm:h-14 rounded-2xl flex items-center justify-center font-bold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer bg-white border border-slate-200 shadow-2xs ';
       }
     }
 
-    // Reset Brand Pills về "Tất cả"
-    const pills = document.querySelectorAll('.dual-brand-pill');
-    pills.forEach(p => {
-      if (p.dataset.brand === 'all') {
-        p.className = 'dual-brand-pill active-brand-pill flex-shrink-0 px-4 py-2 rounded-full text-xs sm:text-[13px] font-bold transition-all cursor-pointer flex items-center justify-center h-9 sm:h-10';
-      } else {
-        p.className = 'dual-brand-pill flex-shrink-0 px-3.5 sm:px-4 py-2 rounded-full text-xs font-bold bg-white text-slate-800 border border-slate-200 hover:border-blue-400 hover:text-blue-600 transition-all cursor-pointer flex items-center justify-center h-9 sm:h-10';
-      }
-    });
+    // Render lại dải Hot Search thương hiệu tương ứng với Điện thoại / Tablet
+    renderDualCategoryBrandPills(cat);
+
+    // Reset vị trí cuộn ngang về đầu
+    const container = document.getElementById('dual-tab-brand-pills-container');
+    if (container) container.scrollLeft = 0;
 
     renderDualCategoryProducts();
   };
@@ -1805,9 +2087,11 @@
     const pills = document.querySelectorAll('.dual-brand-pill');
     pills.forEach(p => {
       if (p.dataset.brand === brand) {
-        p.className = 'dual-brand-pill active-brand-pill flex-shrink-0 px-3.5 sm:px-4 py-2 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-9 sm:h-10';
+        p.classList.add('active-brand-pill');
+        p.classList.remove('bg-white', 'text-slate-800', 'border', 'border-slate-200');
       } else {
-        p.className = 'dual-brand-pill flex-shrink-0 px-3.5 sm:px-4 py-2 rounded-full text-xs font-bold bg-white text-slate-800 border border-slate-200 hover:border-blue-400 hover:text-blue-600 transition-all cursor-pointer flex items-center justify-center h-9 sm:h-10';
+        p.classList.remove('active-brand-pill');
+        p.classList.add('bg-white', 'text-slate-800', 'border', 'border-slate-200');
       }
     });
 
@@ -1881,11 +2165,50 @@
         if (bLower === 'samsung') {
           return brand.includes('samsung') || name.includes('galaxy') || name.includes('samsung');
         }
-        if (bLower === 'xiaomi') {
-          return brand.includes('xiaomi') || brand.includes('redmi') || name.includes('xiaomi') || name.includes('redmi') || name.includes('pad');
+        if (bLower === 'xiaomi' || bLower === 'mi') {
+          return brand.includes('xiaomi') || brand.includes('redmi') || brand.includes('mi') || name.includes('xiaomi') || name.includes('redmi') || name.includes('mi ') || name.includes('pad');
+        }
+        if (bLower === 'redmagic') {
+          return brand.includes('redmagic') || name.includes('redmagic');
         }
         if (bLower === 'nubia') {
-          return brand.includes('nubia') || brand.includes('redmagic') || name.includes('redmagic');
+          return brand.includes('nubia') || brand.includes('redmagic') || name.includes('nubia') || name.includes('redmagic');
+        }
+        if (bLower === 'tecno') {
+          return brand.includes('tecno') || name.includes('tecno');
+        }
+        if (bLower === 'masstel') {
+          return brand.includes('masstel') || name.includes('masstel');
+        }
+        if (bLower === 'inoi') {
+          return brand.includes('inoi') || name.includes('inoi');
+        }
+        if (bLower === 'mobell') {
+          return brand.includes('mobell') || name.includes('mobell');
+        }
+        if (bLower === 'oscal') {
+          return brand.includes('oscal') || name.includes('oscal');
+        }
+        if (bLower === 'honor') {
+          return brand.includes('honor') || name.includes('honor');
+        }
+        if (bLower === 'tcl') {
+          return brand.includes('tcl') || name.includes('tcl');
+        }
+        if (bLower === 'oppo') {
+          return brand.includes('oppo') || name.includes('oppo');
+        }
+        if (bLower === 'htc') {
+          return brand.includes('htc') || name.includes('htc');
+        }
+        if (bLower === 'nokia') {
+          return brand.includes('nokia') || name.includes('nokia');
+        }
+        if (bLower === 'lenovo') {
+          return brand.includes('lenovo') || name.includes('lenovo');
+        }
+        if (bLower === 'huawei') {
+          return brand.includes('huawei') || name.includes('huawei');
         }
         return brand.includes(bLower) || name.includes(bLower);
       });
@@ -2005,6 +2328,1588 @@
         }
       } else {
         moreBtnContainer.classList.add('hidden');
+      }
+    }
+  }
+
+  // =========================================================================
+  // PHỤ KIỆN: DANH MỤC PHỤ KIỆN DẠNG LƯỚI / CAROUSEL SLIDER (CHÍNH HÃNG)
+  // =========================================================================
+  const ACCESSORY_CATEGORIES_DATA = [
+    // Slide 1 (16 mục - 2 hàng x 8 cột)
+    [
+      { id: 'phan-mem', title: 'Phần mềm', icon: 'images/accessories/phan-mem.png' },
+      { id: 'hub-chuyen-doi', title: 'Hub chuyển đổi', icon: 'images/accessories/hub-chuyen-doi.png' },
+      { id: 'playstation-gear', title: 'PlayStation, gear', icon: 'images/accessories/playstation-gear.png' },
+      { id: 'balo-tui-xach', title: 'Balo, túi xách, túi chống sốc', icon: 'images/accessories/balo-tui-xach.png' },
+      { id: 'mic-thu-am', title: 'Mic thu âm', icon: 'images/accessories/mic-thu-am.png' },
+      { id: 'pin-man-hinh', title: 'Pin và màn hình iPhone', icon: 'images/accessories/pin-man-hinh.png' },
+      { id: 'the-nho-usb', title: 'Thẻ nhớ, USB', icon: 'images/accessories/the-nho-usb.jpg' },
+      { id: 'sac-du-phong', title: 'Sạc dự phòng', icon: 'images/accessories/sac-du-phong.png' },
+      { id: 'quat-mini', title: 'Quạt Mini', icon: 'images/accessories/quat-mini.png' },
+      { id: 'loa', title: 'Loa', icon: 'images/accessories/loa.png' },
+      { id: 'day-deo-airtag', title: 'Dây đeo, Airtag', icon: 'images/accessories/day-deo-airtag.png' },
+      { id: 'cu-sac-day-cap', title: 'Củ sạc, Dây cáp', icon: 'images/accessories/cu-sac-day-cap.png' },
+      { id: 'apple-chinh-hang', title: 'Phụ kiện chính hãng Apple', icon: 'images/accessories/apple-chinh-hang.png' },
+      { id: 'samsung-chinh-hang', title: 'Phụ kiện chính hãng Samsung', icon: 'images/accessories/samsung-chinh-hang.png' },
+      { id: 'bao-da-op-lung', title: 'Bao da - ốp lưng', icon: 'images/accessories/bao-da-op-lung.png' },
+      { id: 'dan-man-hinh', title: 'Dán màn hình', icon: 'images/accessories/dan-man-hinh.png' }
+    ],
+    // Slide 2 (16 mục tiếp theo)
+    [
+      { id: 'linh-kien-laptop', title: 'Linh kiện Laptop', icon: 'images/accessories/linh-kien-laptop.png' },
+      { id: 'gimbal', title: 'Gimbal', icon: 'images/accessories/gimbal.png' },
+      { id: 'chuot-ban-phim', title: 'Chuột, Bàn phím', icon: 'images/categories/pc-linh-kien.png' },
+      { id: 'tai-nghe-bluetooth', title: 'Tai nghe Bluetooth', icon: 'images/categories/am-thanh.png' },
+      { id: 'camera-webcam', title: 'Camera, Webcam', icon: 'images/categories/camera.png' },
+      { id: 'thiet-bi-mang', title: 'Thiết bị mạng WiFi', icon: 'images/categories/thiet-bi-mang.png' },
+      { id: 'do-choi-cong-nghe', title: 'Đồ chơi công nghệ', icon: 'images/accessories/playstation-gear.png' },
+      { id: 'phu-kien-khac', title: 'Phụ kiện cao cấp khác', icon: 'images/accessories/cu-sac-day-cap.png' },
+      { id: 'but-cam-ung', title: 'Bút cảm ứng Stylus', icon: 'images/categories/phu-kien.png' },
+      { id: 'gia-do-ke', title: 'Giá đỡ, Kệ điện thoại', icon: 'images/accessories/linh-kien-laptop.png' },
+      { id: 'day-dong-ho', title: 'Dây đồng hồ thời trang', icon: 'images/accessories/day-deo-airtag.png' },
+      { id: 'op-lung-ipad', title: 'Bao da, Ốp lưng iPad', icon: 'images/accessories/bao-da-op-lung.png' },
+      { id: 'the-nho-camera', title: 'Thẻ nhớ chuyên dụng', icon: 'images/accessories/the-nho-usb.jpg' },
+      { id: 'sac-khong-day', title: 'Sạc không dây MagSafe', icon: 'images/accessories/sac-du-phong.png' },
+      { id: 'dau-doc-the', title: 'Đầu đọc thẻ đa năng', icon: 'images/accessories/hub-chuyen-doi.png' },
+      { id: 've-sinh-thiet-bi', title: 'Bộ vệ sinh thiết bị', icon: 'images/accessories/dan-man-hinh.png' }
+    ]
+  ];
+
+  let currentAccessorySlide = 0;
+  let activeAccessoryId = 'phan-mem'; // Mục Phần mềm active mặc định theo ảnh mẫu
+
+  function initAccessorySection() {
+    renderAccessoryCategories();
+  }
+
+  function renderAccessoryCategories() {
+    const track = document.getElementById('accessory-track');
+    if (!track) return;
+
+    track.innerHTML = ACCESSORY_CATEGORIES_DATA.map((slideItems, slideIdx) => `
+      <div class="w-full flex-shrink-0">
+        <div class="grid grid-cols-4 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 border-t border-l border-slate-100 rounded-lg overflow-hidden">
+          ${slideItems.map(item => {
+            const isSelected = item.id === activeAccessoryId;
+            const bgClass = isSelected
+              ? 'bg-blue-50 font-semibold text-blue-700'
+              : 'bg-white hover:bg-slate-50/80 text-slate-700';
+            return `
+              <div onclick="window.onAccessoryCategoryClick('${item.id}', '${item.title}')" class="group flex flex-col items-center justify-center p-2.5 sm:py-3.5 sm:px-2 min-h-[105px] sm:min-h-[125px] border-r border-b border-slate-100 transition-colors cursor-pointer text-center select-none ${bgClass}" title="${item.title}">
+                <div class="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center mb-1.5 sm:mb-2">
+                  <img src="${item.icon}" alt="${item.title}" class="max-h-full max-w-full object-contain group-hover:scale-108 transition-transform duration-300" loading="lazy" onerror="this.onerror=null; this.src='images/categories/phu-kien.png';" />
+                </div>
+                <span class="text-xs sm:text-[13px] leading-snug line-clamp-2 min-h-[32px] sm:min-h-[36px] flex items-center justify-center transition-colors">
+                  ${item.title}
+                </span>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    `).join('');
+
+    updateAccessorySliderPosition();
+  }
+
+  function updateAccessorySliderPosition() {
+    const track = document.getElementById('accessory-track');
+    if (track) {
+      track.style.transform = `translateX(-${currentAccessorySlide * 100}%)`;
+    }
+
+    const dot0 = document.getElementById('accessory-dot-0');
+    const dot1 = document.getElementById('accessory-dot-1');
+    if (dot0 && dot1) {
+      if (currentAccessorySlide === 0) {
+        dot0.className = 'h-1 w-8 rounded-full bg-[#0057B7] transition-all cursor-pointer';
+        dot1.className = 'h-1 w-8 rounded-full bg-slate-200 hover:bg-slate-300 transition-all cursor-pointer';
+      } else {
+        dot0.className = 'h-1 w-8 rounded-full bg-slate-200 hover:bg-slate-300 transition-all cursor-pointer';
+        dot1.className = 'h-1 w-8 rounded-full bg-[#0057B7] transition-all cursor-pointer';
+      }
+    }
+  }
+
+  window.slideAccessoryCategory = function (direction) {
+    const totalSlides = ACCESSORY_CATEGORIES_DATA.length;
+    currentAccessorySlide = (currentAccessorySlide + direction + totalSlides) % totalSlides;
+    updateAccessorySliderPosition();
+  };
+
+  window.goToAccessorySlide = function (index) {
+    if (index >= 0 && index < ACCESSORY_CATEGORIES_DATA.length) {
+      currentAccessorySlide = index;
+      updateAccessorySliderPosition();
+    }
+  };
+
+  window.onAccessoryCategoryClick = function (id, title) {
+    activeAccessoryId = id;
+    renderAccessoryCategories();
+
+    if (window.quickSearchTag) {
+      window.quickSearchTag(title);
+    }
+  };
+
+  // =========================================================================
+  // CỤM DANH MỤC SẢN PHẨM DẠNG DUAL TAB (LAPTOP & PC - CHUẨN HOÀNG HÀ / CELLPHONES)
+  // =========================================================================
+  const LAPTOP_PC_BRANDS = {
+    laptop: [
+      { brand: 'all', label: 'Tất cả' },
+      { brand: 'Apple', logo: 'images/brands/apple.png', alt: 'Apple', hClass: 'h-4.5 sm:h-5.5' },
+      { brand: 'ASUS', logo: 'images/brands/asus.png', alt: 'ASUS', hClass: 'h-3.5 sm:h-4.5' },
+      { brand: 'Dell', logo: 'images/brands/dell.png', alt: 'Dell', hClass: 'h-4 sm:h-5' },
+      { brand: 'Lenovo', logo: 'images/brands/lenovo.png', alt: 'Lenovo', hClass: 'h-4 sm:h-5' },
+      { brand: 'HP', logo: 'images/brands/hp.png', alt: 'HP', hClass: 'h-4 sm:h-5' },
+      { brand: 'Acer', logo: 'images/brands/acer.png', alt: 'Acer', hClass: 'h-4 sm:h-5' },
+      { brand: 'MSI', logo: 'images/brands/msi.png', alt: 'MSI', hClass: 'h-3.5 sm:h-4.5' },
+      { brand: 'Colorful', logo: 'images/brands/colorful.png', alt: 'Colorful', hClass: 'h-3 sm:h-4' },
+      { brand: 'Mobell', logo: 'images/brands/mobell.png', alt: 'Mobell', hClass: 'h-4 sm:h-5' }
+    ],
+    pc: [
+      { brand: 'all', label: 'Tất cả' },
+      { brand: 'Apple', logo: 'images/brands/apple.png', alt: 'Apple', hClass: 'h-4.5 sm:h-5.5' },
+      { brand: 'MSI', logo: 'images/brands/msi.png', alt: 'MSI', hClass: 'h-3.5 sm:h-4.5' }
+    ]
+  };
+
+  let currentLaptopPcCategory = 'laptop';
+  let currentLaptopPcBrand = 'all';
+  let laptopPcPageSize = 8;
+
+  function initLaptopPcTabsSection() {
+    renderLaptopPcBrandPills(currentLaptopPcCategory);
+    renderLaptopPcProducts();
+  }
+
+  function renderLaptopPcBrandPills(cat) {
+    const container = document.getElementById('laptop-pc-brand-pills-container');
+    if (!container) return;
+
+    const list = LAPTOP_PC_BRANDS[cat] || LAPTOP_PC_BRANDS.laptop;
+    container.innerHTML = list.map(item => {
+      const isActive = currentLaptopPcBrand === item.brand;
+      const activeClass = isActive
+        ? 'active-brand-pill'
+        : 'bg-white text-slate-800 border border-slate-200 hover:border-blue-400 hover:text-blue-600';
+
+      if (item.brand === 'all') {
+        return `
+          <button type="button" onclick="window.filterLaptopPcBrand('all')" data-brand="all" class="dual-brand-pill ${activeClass} flex-shrink-0 px-5 py-2 rounded-full text-xs sm:text-[13px] font-bold transition-all cursor-pointer flex items-center justify-center h-9 sm:h-10">
+            ${item.label || 'Tất cả'}
+          </button>
+        `;
+      }
+
+      return `
+        <button type="button" onclick="window.filterLaptopPcBrand('${item.brand}')" data-brand="${item.brand}" class="dual-brand-pill ${activeClass} flex-shrink-0 px-4 sm:px-5 py-2 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-9 sm:h-10" title="${item.alt || item.brand}">
+          <img src="${item.logo}" alt="${item.alt || item.brand}" class="${item.hClass || 'h-4 sm:h-5'} w-auto object-contain max-w-[75px]" loading="lazy">
+        </button>
+      `;
+    }).join('');
+  }
+
+  window.switchLaptopPcCategory = function (cat) {
+    if (cat !== 'laptop' && cat !== 'pc') return;
+    currentLaptopPcCategory = cat;
+    currentLaptopPcBrand = 'all';
+    laptopPcPageSize = 8;
+
+    const btnLaptop = document.getElementById('btn-laptop-pc-tab-laptop');
+    const btnPc = document.getElementById('btn-laptop-pc-tab-pc');
+
+    if (cat === 'laptop') {
+      if (btnLaptop) {
+        btnLaptop.className = 'dual-cat-tab-active h-12 sm:h-14 rounded-2xl flex items-center justify-center font-extrabold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer shadow-md';
+      }
+      if (btnPc) {
+        btnPc.className = 'dual-cat-tab-inactive h-12 sm:h-14 rounded-2xl flex items-center justify-center font-bold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer bg-white border border-slate-200 shadow-2xs ';
+      }
+    } else {
+      if (btnPc) {
+        btnPc.className = 'dual-cat-tab-active h-12 sm:h-14 rounded-2xl flex items-center justify-center font-extrabold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer shadow-md';
+      }
+      if (btnLaptop) {
+        btnLaptop.className = 'dual-cat-tab-inactive h-12 sm:h-14 rounded-2xl flex items-center justify-center font-bold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer bg-white border border-slate-200 shadow-2xs ';
+      }
+    }
+
+    renderLaptopPcBrandPills(cat);
+
+    const container = document.getElementById('laptop-pc-brand-pills-container');
+    if (container) container.scrollLeft = 0;
+
+    renderLaptopPcProducts();
+  };
+
+  window.filterLaptopPcBrand = function (brand) {
+    currentLaptopPcBrand = brand;
+    laptopPcPageSize = 8;
+
+    const pills = document.querySelectorAll('#laptop-pc-brand-pills-container .dual-brand-pill');
+    pills.forEach(p => {
+      if (p.dataset.brand === brand) {
+        p.classList.add('active-brand-pill');
+        p.classList.remove('bg-white', 'text-slate-800', 'border', 'border-slate-200');
+      } else {
+        p.classList.remove('active-brand-pill');
+        p.classList.add('bg-white', 'text-slate-800', 'border', 'border-slate-200');
+      }
+    });
+
+    renderLaptopPcProducts();
+  };
+
+  window.scrollLaptopPcBrandPills = function (delta) {
+    const container = document.getElementById('laptop-pc-brand-pills-container');
+    if (container) {
+      container.scrollBy({ left: delta, behavior: 'smooth' });
+    }
+  };
+
+  window.loadMoreLaptopPcProducts = function () {
+    laptopPcPageSize += 8;
+    renderLaptopPcProducts();
+  };
+
+  window.onLaptopPcProductClick = function (id) {
+    const list = (dealCategoriesData && dealCategoriesData[currentLaptopPcCategory]) || [];
+    const item = list.find(p => p.id === id);
+    if (!item) return;
+
+    if (window.quickSearchTag) {
+      window.quickSearchTag(item.name);
+    }
+  };
+
+  window.onLaptopPcCartClick = function (id) {
+    const list = (dealCategoriesData && dealCategoriesData[currentLaptopPcCategory]) || [];
+    const item = list.find(p => p.id === id);
+    if (!item) return;
+
+    if (window.CellphoneSCart || window.Cart) {
+      const cartObj = window.CellphoneSCart || window.Cart;
+      cartObj.addItem({
+        maHang: item.id,
+        tenHang: item.name,
+        donGia: item.price,
+        giaGoc: item.oldPrice || item.price,
+        anhChinh: item.image,
+        soLuong: 1
+      }, 1);
+
+      (window.CellphoneSCart || window.Cart).openDrawer();
+    }
+  };
+
+  function renderLaptopPcProducts() {
+    const grid = document.getElementById('laptop-pc-products-grid');
+    if (!grid) return;
+
+    let items = (dealCategoriesData && dealCategoriesData[currentLaptopPcCategory]) ? [...dealCategoriesData[currentLaptopPcCategory]] : [];
+
+    if (currentLaptopPcBrand && currentLaptopPcBrand !== 'all') {
+      const bLower = currentLaptopPcBrand.toLowerCase();
+      items = items.filter(it => {
+        const brand = (it.brand || '').toLowerCase();
+        const name = (it.name || '').toLowerCase();
+        if (bLower === 'apple') {
+          return brand.includes('apple') || name.includes('macbook') || name.includes('mac mini') || name.includes('imac') || name.includes('apple');
+        }
+        if (bLower === 'asus') {
+          return brand.includes('asus') || name.includes('asus') || name.includes('vivobook') || name.includes('tuf') || name.includes('zenbook') || name.includes('rog');
+        }
+        if (bLower === 'dell') {
+          return brand.includes('dell') || name.includes('dell') || name.includes('inspiron') || name.includes('vostro');
+        }
+        if (bLower === 'lenovo') {
+          return brand.includes('lenovo') || name.includes('lenovo') || name.includes('loq') || name.includes('ideapad') || name.includes('thinkpad') || name.includes('legion');
+        }
+        if (bLower === 'hp') {
+          return brand.includes('hp') || name.includes('hp') || name.includes('victus') || name.includes('pavilion') || name.includes('envy');
+        }
+        if (bLower === 'acer') {
+          return brand.includes('acer') || name.includes('acer') || name.includes('nitro') || name.includes('aspire') || name.includes('predator') || name.includes('swift');
+        }
+        if (bLower === 'msi') {
+          return brand.includes('msi') || name.includes('msi') || name.includes('modern') || name.includes('katana') || name.includes('cubi') || name.includes('infinite');
+        }
+        if (bLower === 'colorful') {
+          return brand.includes('colorful') || name.includes('colorful');
+        }
+        if (bLower === 'mobell') {
+          return brand.includes('mobell') || name.includes('mobell') || name.includes('m-smart') || name.includes('mbook');
+        }
+        return brand.includes(bLower) || name.includes(bLower);
+      });
+    }
+
+    if (items.length === 0) {
+      grid.innerHTML = `
+        <div class="col-span-full py-12 text-center text-slate-500">
+          <div class="w-16 h-16 mx-auto mb-3 text-slate-300">
+            <i class="fa-solid fa-box-open text-4xl"></i>
+          </div>
+          <p class="text-sm font-semibold">Chưa có sản phẩm phù hợp với bộ lọc "${currentLaptopPcBrand}".</p>
+          <button type="button" onclick="window.filterLaptopPcBrand('all')" class="mt-3 px-4 py-1.5 rounded-full text-xs font-bold bg-[#0b45a6] text-white hover:bg-blue-700 cursor-pointer">Xem tất cả sản phẩm</button>
+        </div>
+      `;
+      const moreBtnContainer = document.getElementById('laptop-pc-more-container');
+      if (moreBtnContainer) moreBtnContainer.classList.add('hidden');
+      return;
+    }
+
+    const visibleItems = items.slice(0, laptopPcPageSize);
+
+    const BANK_PROMOS = [
+      'TPBank - Giảm đến 500.000đ, trả góp 0%, 0 phí lên đến 6 tháng',
+      'TPBank Evo - Giảm đến 500.000đ, trả góp 0%, 0 phí lên đến 6 tháng',
+      'VIB - Mở thẻ Max Card nhận loạt đặc quyền - Hoàn tiền lên đến 18 triệu đồng',
+      'VPBank - Ưu đãi thanh toán giảm ngay 300.000đ',
+      'Home Credit - Trả góp 0%, duyệt hồ sơ nhanh chỉ 3 phút'
+    ];
+
+    grid.innerHTML = visibleItems.map((item, idx) => {
+      const discountBadge = item.discount ? `<span class="bg-rose-50 text-[#d70018] text-[10px] font-bold px-1.5 py-0.5 rounded ml-1.5">-${item.discount}%</span>` : '';
+      const oldPriceDisplay = item.oldPrice ? `<div class="text-slate-400 text-xs line-through mt-0.5">${formatCurrency(item.oldPrice)}</div>` : '<div class="h-4 mt-0.5"></div>';
+      const installmentVal = item.price > 0 ? Math.round(item.price / 6) : 0;
+      const installmentText = installmentVal > 0 ? `Hoặc ${formatCurrency(installmentVal)} x 6T` : 'Trả góp 0% linh hoạt';
+      const bankPromo = BANK_PROMOS[idx % BANK_PROMOS.length];
+
+      return `
+        <div class="bg-white rounded-xl sm:rounded-2xl border border-slate-200/90 hover:border-blue-400 hover:shadow-lg transition-all duration-300 flex flex-col justify-between p-3 sm:p-3.5 relative group cursor-pointer" onclick="window.onLaptopPcProductClick('${item.id}')">
+          
+          <div class="absolute top-2.5 left-2.5 text-blue-500 z-10 pointer-events-none">
+            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+              <path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z"/>
+            </svg>
+          </div>
+
+          <div>
+            <div class="relative w-full h-48 sm:h-56 lg:h-60 mb-2.5 flex items-center justify-center p-1 overflow-hidden">
+              <img src="${item.image}" alt="${item.name}" class="h-full w-full object-contain mx-auto transition-transform duration-300 transform scale-105 group-hover:scale-115" loading="lazy" onerror="this.onerror=null; this.src='images/deal-tabs/deal-tab-laptop.png';" />
+            </div>
+
+            <h4 class="text-xs sm:text-[13px] font-bold text-slate-800 line-clamp-2 min-h-[38px] leading-snug hover:text-blue-600 transition-colors" title="${item.name}">
+              ${item.name}
+            </h4>
+
+            <div class="mt-2.5">
+              <div class="flex items-baseline flex-wrap gap-1">
+                <span class="text-[#d70018] font-black text-sm sm:text-base">${item.price > 0 ? formatCurrency(item.price) : 'Liên hệ'}</span>
+                ${discountBadge}
+              </div>
+              ${oldPriceDisplay}
+            </div>
+
+            <div class="mt-1.5 text-[#059669] text-[11px] font-semibold flex items-center gap-1">
+              <i class="fa-solid fa-credit-card text-[10px]"></i>
+              <span>${installmentText}</span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-1.5 mt-2.5 w-full">
+              <span class="h-7 sm:h-7.5 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-purple-400 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="TPBank Evo">
+                <img src="images/brands/tpbank.png" alt="TPBank" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full" onerror="this.outerHTML='<span class=\\'text-[11px] font-bold text-purple-700\\'>TPBank</span>'" loading="lazy" />
+              </span>
+              <span class="h-7 sm:h-7.5 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-emerald-400 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="VPBank">
+                <img src="images/brands/vpbank.png" alt="VPBank" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full" onerror="this.outerHTML='<span class=\\'text-[11px] font-bold text-emerald-700\\'>VPBank</span>'" loading="lazy" />
+              </span>
+              <span class="h-7 sm:h-7.5 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-blue-400 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="VIB">
+                <img src="images/brands/vib.png" alt="VIB" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full" onerror="this.outerHTML='<span class=\\'text-[11px] font-bold text-blue-700\\'>VIB</span>'" loading="lazy" />
+              </span>
+              <span class="h-7 sm:h-7.5 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-emerald-400 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="Trả góp 0%">
+                <img src="images/brands/icon-2_639047641516424460.png" alt="Trả góp 0%" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full" onerror="this.src=\\'images/brands/homecredit.png\\'" loading="lazy" />
+              </span>
+            </div>
+
+            <div class="text-[11px] text-slate-600 line-clamp-2 mt-2 bg-slate-50 p-2 rounded-lg border border-slate-200 min-h-[38px] leading-snug">
+              ${bankPromo}
+            </div>
+          </div>
+
+          <div class="pt-2.5 mt-2.5 border-t border-slate-100 flex items-center justify-between">
+            <span class="inline-flex items-center gap-1.5 text-xs text-emerald-600 font-semibold">
+              <i class="fa-regular fa-circle-check text-xs"></i> Sẵn hàng
+            </span>
+            <button type="button" onclick="event.stopPropagation(); window.onLaptopPcCartClick('${item.id}')" class="w-8 h-8 rounded-lg bg-blue-50 hover:bg-[#0057B7] text-[#0057B7] hover:text-white border border-blue-200 flex items-center justify-center transition-all active:scale-90 cursor-pointer shadow-2xs" title="Thêm vào giỏ hàng">
+              <i class="fa-solid fa-cart-shopping text-xs"></i>
+            </button>
+          </div>
+
+        </div>
+      `;
+    }).join('');
+
+    const moreBtnContainer = document.getElementById('laptop-pc-more-container');
+    const moreBtn = document.getElementById('btn-laptop-pc-load-more');
+    if (moreBtnContainer && moreBtn) {
+      if (items.length > visibleItems.length) {
+        moreBtnContainer.classList.remove('hidden');
+        const remaining = items.length - visibleItems.length;
+        const textSpan = moreBtn.querySelector('span');
+        if (textSpan) {
+          textSpan.textContent = `Xem thêm ${remaining} sản phẩm ${currentLaptopPcCategory === 'laptop' ? 'Laptop' : 'PC'}`;
+        }
+      } else {
+        moreBtnContainer.classList.add('hidden');
+      }
+    }
+  }
+
+
+  // =========================================================================
+  // HÀM TIỆN ÍCH CHUNG TẠO THẺ SẢN PHẨM HOÀNG HÀ MOBILE / CELLPHONES (5 CỘT)
+  // =========================================================================
+  function createHoangHaCardHtml(item, fallbackImg, cartFnName, clickFnName) {
+    const isContact = !item.price || item.price <= 0;
+    const discountBadge = item.discount ? `<span class="bg-[#d70018] text-white text-[10px] font-extrabold px-1.5 py-0.5 rounded ml-1.5 whitespace-nowrap">-${item.discount}%</span>` : '';
+    const oldPriceDisplay = item.oldPrice ? `<div class="text-[11px] text-slate-400 line-through font-medium mt-0.5">${formatCurrency(item.oldPrice)}</div>` : '';
+    const installmentVal = item.price > 0 ? Math.round(item.price / 6) : 0;
+    const installmentText = installmentVal > 0 ? `Hoặc ${formatCurrency(installmentVal)} x 6T` : 'Hỗ trợ trả góp 0%';
+
+    const bankPromos = [
+      'TPBank Evo - Giảm đến 500.000đ, trả góp 0%, 0 phí lên đến 6 tháng',
+      'VPBank - Giảm tới 400.000đ khi mở thẻ thành công',
+      'VIB - Hoàn tiền lên đến 18 triệu đồng khi mở thẻ Max Card',
+      'Thanh toán trả góp 0% duyệt nhanh chóng qua Home Credit'
+    ];
+    const bankPromo = item.bankPromo || bankPromos[Math.abs(item.id.split('').reduce((a, c) => a + c.charCodeAt(0), 0)) % bankPromos.length];
+    const isInStock = item.status !== 'Hết hàng' && !isContact;
+    const statusHtml = isInStock 
+      ? `<span class="inline-flex items-center gap-1 text-[11px] text-emerald-600 font-semibold"><i class="fa-regular fa-circle-check text-[11px]"></i> Sẵn hàng</span>`
+      : `<span class="inline-flex items-center gap-1 text-[11px] text-slate-500 font-medium"><i class="fa-solid fa-phone text-[10px]"></i> Liên hệ</span>`;
+
+    return `
+      <div class="product-card group relative bg-white rounded-2xl border border-slate-200/90 hover:border-blue-500 hover:shadow-lg transition-all duration-300 p-2.5 sm:p-3 flex flex-col justify-between cursor-pointer" onclick="${clickFnName}('${item.id}')">
+        <div>
+          <!-- Sparkle Icon -->
+          <div class="absolute top-2.5 left-2.5 z-10 text-blue-500 opacity-80 group-hover:opacity-100 transition-opacity">
+            <i class="fa-solid fa-sparkles text-xs"></i>
+          </div>
+
+          <!-- Product Image Container -->
+          <div class="w-full aspect-square relative mb-2.5 flex items-center justify-center overflow-hidden">
+            <img src="${item.image}" alt="${item.name}" class="h-full w-full object-contain mx-auto transition-transform duration-300 transform scale-100 group-hover:scale-110" loading="lazy" onerror="this.onerror=null; this.src='${fallbackImg}';" />
+          </div>
+
+          <!-- Title (2 lines clamp) -->
+          <h4 class="text-xs sm:text-[13px] font-bold text-slate-800 line-clamp-2 min-h-[36px] leading-snug hover:text-blue-600 transition-colors" title="${item.name}">
+            ${item.name}
+          </h4>
+
+          <!-- Price & Discount -->
+          <div class="mt-2">
+            <div class="flex items-baseline flex-wrap gap-1">
+              <span class="text-[#d70018] font-black text-sm sm:text-base">${item.price > 0 ? formatCurrency(item.price) : 'Liên hệ'}</span>
+              ${discountBadge}
+            </div>
+            ${oldPriceDisplay}
+          </div>
+
+          <!-- Installment -->
+          <div class="mt-1 text-[#059669] text-[11px] font-semibold flex items-center gap-1">
+            <i class="fa-solid fa-credit-card text-[10px]"></i>
+            <span>${installmentText}</span>
+          </div>
+
+          <!-- 4 Bank badges 2x2 symmetrical -->
+          <div class="grid grid-cols-2 gap-1.5 mt-2 w-full">
+            <span class="h-6 sm:h-7 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-purple-400 hover:shadow-xs transition-all flex items-center justify-center p-0.5 w-full" title="TPBank Evo">
+              <img src="images/brands/tpbank.png" alt="TPBank" class="h-3.5 sm:h-4 w-auto object-contain max-w-[85%] max-h-full" onerror="this.outerHTML='<span class=\'text-[10px] font-bold text-purple-700\'>TPBank</span>'" loading="lazy" />
+            </span>
+            <span class="h-6 sm:h-7 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-emerald-400 hover:shadow-xs transition-all flex items-center justify-center p-0.5 w-full" title="VPBank">
+              <img src="images/brands/vpbank.png" alt="VPBank" class="h-3.5 sm:h-4 w-auto object-contain max-w-[85%] max-h-full" onerror="this.outerHTML='<span class=\'text-[10px] font-bold text-emerald-700\'>VPBank</span>'" loading="lazy" />
+            </span>
+            <span class="h-6 sm:h-7 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-blue-400 hover:shadow-xs transition-all flex items-center justify-center p-0.5 w-full" title="VIB">
+              <img src="images/brands/vib.png" alt="VIB" class="h-3.5 sm:h-4 w-auto object-contain max-w-[85%] max-h-full" onerror="this.outerHTML='<span class=\'text-[10px] font-bold text-blue-700\'>VIB</span>'" loading="lazy" />
+            </span>
+            <span class="h-6 sm:h-7 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-emerald-400 hover:shadow-xs transition-all flex items-center justify-center p-0.5 w-full" title="Trả góp 0%">
+              <img src="images/brands/icon-2_639047641516424460.png" alt="Trả góp 0%" class="h-3.5 sm:h-4 w-auto object-contain max-w-[85%] max-h-full" onerror="this.src=\'images/brands/homecredit.png\'" loading="lazy" />
+            </span>
+          </div>
+
+          <!-- Bank promo text box -->
+          <div class="text-[10px] sm:text-[11px] text-slate-600 line-clamp-2 mt-2 bg-slate-50 p-1.5 rounded-lg border border-slate-200 min-h-[34px] leading-snug">
+            ${bankPromo}
+          </div>
+        </div>
+
+        <!-- Stock status & cart button -->
+        <div class="pt-2 mt-2 border-t border-slate-100 flex items-center justify-between">
+          ${statusHtml}
+          <button type="button" onclick="event.stopPropagation(); ${cartFnName}('${item.id}')" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-blue-50 hover:bg-[#0057B7] text-[#0057B7] hover:text-white border border-blue-200 flex items-center justify-center transition-all active:scale-90 cursor-pointer shadow-2xs" title="Thêm vào giỏ hàng">
+            <i class="fa-solid fa-cart-shopping text-xs"></i>
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+  // =========================================================================
+  // 1. CỤM CHUỘT VÀ BÀN PHÍM & THIẾT BỊ MẠNG (5 CỘT CHUẨN HOÀNG HÀ)
+  // =========================================================================
+  let currentMouseCategory = 'chuot_banphim';
+  let currentMouseBrand = 'all';
+  let mousePageSize = 10;
+
+  const MOUSE_KEYBOARD_BRANDS = {
+    chuot_banphim: [
+      { brand: 'all', alt: 'Tất cả' },
+      { brand: 'Logitech', alt: 'Logitech' },
+      { brand: 'Rapoo', alt: 'Rapoo' },
+      { brand: 'E-Dra', alt: 'E-Dra', logo: 'images/brands/edra.png' },
+      { brand: 'MSI', alt: 'MSI', logo: 'images/brands/msi.png' },
+      { brand: 'ASUS', alt: 'ASUS', logo: 'images/brands/asus.png' },
+      { brand: 'Razer', alt: 'Razer' },
+      { brand: 'Elecom', alt: 'Elecom' },
+      { brand: 'HyperX', alt: 'HyperX' },
+      { brand: 'Apple', alt: 'Apple', logo: 'images/brands/apple.png' },
+      { brand: 'Xiaomi', alt: 'Mi', logo: 'images/brands/mi.png' },
+      { brand: 'Acer', alt: 'Acer', logo: 'images/brands/acer.png' },
+      { brand: 'Colorful', alt: 'Colorful', logo: 'images/brands/colorful.png' },
+      { brand: 'Genius', alt: 'Genius' }
+    ],
+    thietbi_mang: [
+      { brand: 'all', alt: 'Tất cả' },
+      { brand: 'TP-Link', alt: 'TP-Link' },
+      { brand: 'ASUS', alt: 'ASUS', logo: 'images/brands/asus.png' },
+      { brand: 'Tenda', alt: 'Tenda' },
+      { brand: 'Mercusys', alt: 'Mercusys' },
+      { brand: 'D-Link', alt: 'D-Link' },
+      { brand: 'Totolink', alt: 'Totolink' },
+      { brand: 'Ruijie', alt: 'Ruijie' }
+    ]
+  };
+
+  function initMouseKeyboardSection() {
+    renderMouseBrandPills(currentMouseCategory);
+    renderMouseProducts();
+  }
+
+  function renderMouseBrandPills(cat) {
+    const container = document.getElementById('mouse-brand-pills-container');
+    if (!container) return;
+
+    const brands = MOUSE_KEYBOARD_BRANDS[cat] || MOUSE_KEYBOARD_BRANDS.chuot_banphim;
+    container.innerHTML = brands.map(item => {
+      const isActive = currentMouseBrand === item.brand;
+      const activeClass = isActive
+        ? 'active-brand-pill bg-[#0057B7] text-white border-blue-600 shadow-xs'
+        : 'bg-white text-slate-800 border border-slate-200 hover:border-blue-400 hover:text-blue-600';
+
+      if (item.brand === 'all') {
+        return `<button type="button" onclick="window.filterMouseBrand('all')" data-brand="all" class="dual-brand-pill ${activeClass} flex-shrink-0 px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9">Tất cả</button>`;
+      }
+
+      if (item.logo) {
+        return `<button type="button" onclick="window.filterMouseBrand('${item.brand}')" data-brand="${item.brand}" class="dual-brand-pill ${activeClass} flex-shrink-0 px-3 sm:px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9" title="${item.alt}"><img src="${item.logo}" alt="${item.alt}" class="h-3.5 sm:h-4 w-auto object-contain max-w-[65px]" onerror="this.outerHTML='<span class=\'text-xs font-bold\'>${item.alt}</span>'" loading="lazy" /></button>`;
+      }
+
+      return `<button type="button" onclick="window.filterMouseBrand('${item.brand}')" data-brand="${item.brand}" class="dual-brand-pill ${activeClass} flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9" title="${item.alt}">${item.alt}</button>`;
+    }).join('');
+  }
+
+  window.switchMouseCategory = function (cat) {
+    if (currentMouseCategory === cat) return;
+    currentMouseCategory = cat;
+    currentMouseBrand = 'all';
+    mousePageSize = 10;
+
+    const btnMouse = document.getElementById('btn-mouse-tab-mouse');
+    const btnNet = document.getElementById('btn-mouse-tab-network');
+
+    if (cat === 'chuot_banphim') {
+      if (btnMouse) {
+        btnMouse.className = 'dual-cat-tab-active h-12 sm:h-14 rounded-2xl flex items-center justify-center font-extrabold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer shadow-md';
+      }
+      if (btnNet) {
+        btnNet.className = 'dual-cat-tab-inactive h-12 sm:h-14 rounded-2xl flex items-center justify-center font-bold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer bg-white border border-slate-200 shadow-2xs ';
+      }
+    } else {
+      if (btnMouse) {
+        btnMouse.className = 'dual-cat-tab-inactive h-12 sm:h-14 rounded-2xl flex items-center justify-center font-bold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer bg-white border border-slate-200 shadow-2xs ';
+      }
+      if (btnNet) {
+        btnNet.className = 'dual-cat-tab-active h-12 sm:h-14 rounded-2xl flex items-center justify-center font-extrabold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer shadow-md';
+      }
+    }
+
+    renderMouseBrandPills(cat);
+    renderMouseProducts();
+  };
+
+  window.filterMouseBrand = function (brand) {
+    currentMouseBrand = brand;
+    mousePageSize = 10;
+
+    const pills = document.querySelectorAll('#mouse-brand-pills-container .dual-brand-pill');
+    pills.forEach(p => {
+      if (p.dataset.brand === brand) {
+        p.className = 'dual-brand-pill active-brand-pill bg-[#0057B7] text-white border-blue-600 shadow-xs flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9';
+      } else {
+        p.className = 'dual-brand-pill bg-white text-slate-800 border border-slate-200 hover:border-blue-400 hover:text-blue-600 flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9';
+      }
+    });
+
+    renderMouseProducts();
+  };
+
+  window.scrollMouseBrandPills = function (delta) {
+    const c = document.getElementById('mouse-brand-pills-container');
+    if (c) c.scrollBy({ left: delta, behavior: 'smooth' });
+  };
+
+  window.loadMoreMouseProducts = function () {
+    mousePageSize += 10;
+    renderMouseProducts();
+  };
+
+  window.onMouseProductClick = function (id) {
+    const list = dealCategoriesData[currentMouseCategory] || [];
+    const item = list.find(p => p.id === id);
+    if (item && window.quickSearchTag) window.quickSearchTag(item.name);
+  };
+
+  window.onMouseCartClick = function (id) {
+    const list = dealCategoriesData[currentMouseCategory] || [];
+    const item = list.find(p => p.id === id);
+    if (!item) return;
+    if (window.CartStore && window.CartStore.addItem) {
+      window.CartStore.addItem({
+        maHang: item.id,
+        tenHang: item.name,
+        giaBan: item.price,
+        anhChinh: item.image,
+        soLuong: 1
+      });
+      if (window.showToast) window.showToast('Đã thêm sản phẩm vào giỏ hàng!', 'success');
+    }
+  };
+
+  function renderMouseProducts() {
+    const grid = document.getElementById('mouse-products-grid');
+    if (!grid) return;
+
+    let items = dealCategoriesData[currentMouseCategory] ? [...dealCategoriesData[currentMouseCategory]] : [];
+    if (currentMouseBrand && currentMouseBrand !== 'all') {
+      const bLower = currentMouseBrand.toLowerCase();
+      items = items.filter(it => {
+        const brand = (it.brand || '').toLowerCase();
+        const name = (it.name || '').toLowerCase();
+        return brand.includes(bLower) || name.includes(bLower);
+      });
+    }
+
+    if (items.length === 0) {
+      grid.innerHTML = `<div class="col-span-full py-12 text-center text-slate-500"><i class="fa-solid fa-box-open text-4xl mb-2 text-slate-300"></i><p class="text-sm font-semibold">Chưa có sản phẩm phù hợp.</p></div>`;
+      const btn = document.getElementById('mouse-more-container');
+      if (btn) btn.classList.add('hidden');
+      return;
+    }
+
+    const visibleItems = items.slice(0, mousePageSize);
+    grid.innerHTML = visibleItems.map(it => createHoangHaCardHtml(it, 'images/deal-tabs/deal-tab-accessory.jpg', 'window.onMouseCartClick', 'window.onMouseProductClick')).join('');
+
+    const moreContainer = document.getElementById('mouse-more-container');
+    const moreBtn = document.getElementById('btn-mouse-load-more');
+    if (moreContainer && moreBtn) {
+      if (items.length > visibleItems.length) {
+        moreContainer.classList.remove('hidden');
+        const remaining = items.length - visibleItems.length;
+        const textSpan = moreBtn.querySelector('span');
+        if (textSpan) textSpan.textContent = `Xem thêm ${remaining} sản phẩm`;
+      } else {
+        moreContainer.classList.add('hidden');
+      }
+    }
+  }
+
+  // =========================================================================
+  // 2. CỤM BANNER NGANG + LOA & TAI NGHE (5 CỘT CHUẨN HOÀNG HÀ)
+  // =========================================================================
+  let currentAudioCategory = 'loa';
+  let currentAudioBrand = 'all';
+  let audioPageSize = 10;
+
+  const AUDIO_BRANDS = {
+    loa: [
+      { brand: 'all', alt: 'Tất cả' },
+      { brand: 'JBL', alt: 'JBL' },
+      { brand: 'Harman Kardon', alt: 'Harman Kardon' },
+      { brand: 'Arirang', alt: 'Arirang' },
+      { brand: 'Sony', alt: 'Sony' },
+      { brand: 'LG', alt: 'LG', logo: 'images/brands/lg.png' },
+      { brand: 'Marshall', alt: 'Marshall' },
+      { brand: 'Monster', alt: 'Monster' },
+      { brand: 'Xiaomi', alt: 'Mi', logo: 'images/brands/mi.png' },
+      { brand: 'Sounarc', alt: 'Sounarc' },
+      { brand: 'Qlike', alt: 'Qlike' },
+      { brand: 'Samsung', alt: 'Samsung', logo: 'images/brands/samsung.png' },
+      { brand: 'Soul', alt: 'Soul' },
+      { brand: 'Baseus', alt: 'Baseus' }
+    ],
+    tainghe: [
+      { brand: 'all', alt: 'Tất cả' },
+      { brand: 'Apple', alt: 'Apple', logo: 'images/brands/apple.png' },
+      { brand: 'Sony', alt: 'Sony' },
+      { brand: 'JBL', alt: 'JBL' },
+      { brand: 'Marshall', alt: 'Marshall' },
+      { brand: 'Samsung', alt: 'Samsung', logo: 'images/brands/samsung.png' },
+      { brand: 'Soundpeats', alt: 'Soundpeats' },
+      { brand: 'Baseus', alt: 'Baseus' },
+      { brand: 'Huawei', alt: 'Huawei', logo: 'images/brands/huawei.png' }
+    ]
+  };
+
+  function initAudioSection() {
+    renderAudioBrandPills(currentAudioCategory);
+    renderAudioProducts();
+  }
+
+  function renderAudioBrandPills(cat) {
+    const container = document.getElementById('audio-brand-pills-container');
+    if (!container) return;
+
+    const brands = AUDIO_BRANDS[cat] || AUDIO_BRANDS.loa;
+    container.innerHTML = brands.map(item => {
+      const isActive = currentAudioBrand === item.brand;
+      const activeClass = isActive
+        ? 'active-brand-pill bg-[#0057B7] text-white border-blue-600 shadow-xs'
+        : 'bg-white text-slate-800 border border-slate-200 hover:border-blue-400 hover:text-blue-600';
+
+      if (item.brand === 'all') {
+        return `<button type="button" onclick="window.filterAudioBrand('all')" data-brand="all" class="dual-brand-pill ${activeClass} flex-shrink-0 px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9">Tất cả</button>`;
+      }
+
+      if (item.logo) {
+        return `<button type="button" onclick="window.filterAudioBrand('${item.brand}')" data-brand="${item.brand}" class="dual-brand-pill ${activeClass} flex-shrink-0 px-3 sm:px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9" title="${item.alt}"><img src="${item.logo}" alt="${item.alt}" class="h-3.5 sm:h-4 w-auto object-contain max-w-[65px]" onerror="this.outerHTML='<span class=\'text-xs font-bold\'>${item.alt}</span>'" loading="lazy" /></button>`;
+      }
+
+      return `<button type="button" onclick="window.filterAudioBrand('${item.brand}')" data-brand="${item.brand}" class="dual-brand-pill ${activeClass} flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9" title="${item.alt}">${item.alt}</button>`;
+    }).join('');
+  }
+
+  window.switchAudioCategory = function (cat) {
+    if (currentAudioCategory === cat) return;
+    currentAudioCategory = cat;
+    currentAudioBrand = 'all';
+    audioPageSize = 10;
+
+    const btnSpeaker = document.getElementById('btn-audio-tab-speaker');
+    const btnHeadphone = document.getElementById('btn-audio-tab-headphone');
+
+    if (cat === 'loa') {
+      if (btnSpeaker) {
+        btnSpeaker.className = 'dual-cat-tab-active h-12 sm:h-14 rounded-2xl flex items-center justify-center font-extrabold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer shadow-md';
+      }
+      if (btnHeadphone) {
+        btnHeadphone.className = 'dual-cat-tab-inactive h-12 sm:h-14 rounded-2xl flex items-center justify-center font-bold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer bg-white border border-slate-200 shadow-2xs ';
+      }
+    } else {
+      if (btnSpeaker) {
+        btnSpeaker.className = 'dual-cat-tab-inactive h-12 sm:h-14 rounded-2xl flex items-center justify-center font-bold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer bg-white border border-slate-200 shadow-2xs ';
+      }
+      if (btnHeadphone) {
+        btnHeadphone.className = 'dual-cat-tab-active h-12 sm:h-14 rounded-2xl flex items-center justify-center font-extrabold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer shadow-md';
+      }
+    }
+
+    renderAudioBrandPills(cat);
+    renderAudioProducts();
+  };
+
+  window.filterAudioBrand = function (brand) {
+    currentAudioBrand = brand;
+    audioPageSize = 10;
+
+    const pills = document.querySelectorAll('#audio-brand-pills-container .dual-brand-pill');
+    pills.forEach(p => {
+      if (p.dataset.brand === brand) {
+        p.className = 'dual-brand-pill active-brand-pill bg-[#0057B7] text-white border-blue-600 shadow-xs flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9';
+      } else {
+        p.className = 'dual-brand-pill bg-white text-slate-800 border border-slate-200 hover:border-blue-400 hover:text-blue-600 flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9';
+      }
+    });
+
+    renderAudioProducts();
+  };
+
+  window.scrollAudioBrandPills = function (delta) {
+    const c = document.getElementById('audio-brand-pills-container');
+    if (c) c.scrollBy({ left: delta, behavior: 'smooth' });
+  };
+
+  window.loadMoreAudioProducts = function () {
+    audioPageSize += 10;
+    renderAudioProducts();
+  };
+
+  window.onAudioProductClick = function (id) {
+    const list = dealCategoriesData[currentAudioCategory] || [];
+    const item = list.find(p => p.id === id);
+    if (item && window.quickSearchTag) window.quickSearchTag(item.name);
+  };
+
+  window.onAudioCartClick = function (id) {
+    const list = dealCategoriesData[currentAudioCategory] || [];
+    const item = list.find(p => p.id === id);
+    if (!item) return;
+    if (window.CartStore && window.CartStore.addItem) {
+      window.CartStore.addItem({
+        maHang: item.id,
+        tenHang: item.name,
+        giaBan: item.price,
+        anhChinh: item.image,
+        soLuong: 1
+      });
+      if (window.showToast) window.showToast('Đã thêm sản phẩm vào giỏ hàng!', 'success');
+    }
+  };
+
+  function renderAudioProducts() {
+    const grid = document.getElementById('audio-products-grid');
+    if (!grid) return;
+
+    let items = dealCategoriesData[currentAudioCategory] ? [...dealCategoriesData[currentAudioCategory]] : [];
+    if (currentAudioBrand && currentAudioBrand !== 'all') {
+      const bLower = currentAudioBrand.toLowerCase();
+      items = items.filter(it => {
+        const brand = (it.brand || '').toLowerCase();
+        const name = (it.name || '').toLowerCase();
+        return brand.includes(bLower) || name.includes(bLower);
+      });
+    }
+
+    if (items.length === 0) {
+      grid.innerHTML = `<div class="col-span-full py-12 text-center text-slate-500"><i class="fa-solid fa-box-open text-4xl mb-2 text-slate-300"></i><p class="text-sm font-semibold">Chưa có sản phẩm phù hợp.</p></div>`;
+      const btn = document.getElementById('audio-more-container');
+      if (btn) btn.classList.add('hidden');
+      return;
+    }
+
+    const visibleItems = items.slice(0, audioPageSize);
+    grid.innerHTML = visibleItems.map(it => createHoangHaCardHtml(it, 'images/deal-tabs/deal-tab-audio.jpg', 'window.onAudioCartClick', 'window.onAudioProductClick')).join('');
+
+    const moreContainer = document.getElementById('audio-more-container');
+    const moreBtn = document.getElementById('btn-audio-load-more');
+    if (moreContainer && moreBtn) {
+      if (items.length > visibleItems.length) {
+        moreContainer.classList.remove('hidden');
+        const remaining = items.length - visibleItems.length;
+        const textSpan = moreBtn.querySelector('span');
+        if (textSpan) textSpan.textContent = `Xem thêm ${remaining} sản phẩm`;
+      } else {
+        moreContainer.classList.add('hidden');
+      }
+    }
+  }
+
+  // =========================================================================
+  // 3. CỤM BANNER NGANG + ĐỒNG HỒ & CAMERA (5 CỘT CHUẨN HOÀNG HÀ)
+  // =========================================================================
+  let currentWatchCategory = 'dongho';
+  let currentWatchBrand = 'all';
+  let watchPageSize = 10;
+
+  const WATCH_CAMERA_BRANDS = {
+    dongho: [
+      { brand: 'all', alt: 'Tất cả' },
+      { brand: 'Garmin', alt: 'GARMIN' },
+      { brand: 'Apple', alt: 'Apple', logo: 'images/brands/apple.png' },
+      { brand: 'Huawei', alt: 'HUAWEI', logo: 'images/brands/huawei.png' },
+      { brand: 'Xiaomi', alt: 'Mi', logo: 'images/brands/mi.png' },
+      { brand: 'Amazfit', alt: 'amazfit' },
+      { brand: 'Kieslect', alt: 'KIESLECT' },
+      { brand: 'Samsung', alt: 'SAMSUNG', logo: 'images/brands/samsung.png' },
+      { brand: 'Masstel', alt: 'Masstel', logo: 'images/brands/masstel.png' },
+      { brand: 'Honor', alt: 'HONOR', logo: 'images/brands/honor.png' },
+      { brand: 'GloryFit', alt: 'GloryFit' },
+      { brand: 'Riversong', alt: 'RIVERSONG' },
+      { brand: 'Mibro', alt: 'mibro' },
+      { brand: 'Myalo', alt: 'myalo' }
+    ],
+    camera: [
+      { brand: 'all', alt: 'Tất cả' },
+      { brand: 'TP-Link', alt: 'Tapo' },
+      { brand: 'Ezviz', alt: 'Ezviz' },
+      { brand: 'Imou', alt: 'Imou' },
+      { brand: 'Xiaomi', alt: 'Mi', logo: 'images/brands/mi.png' },
+      { brand: 'Hikvision', alt: 'Hikvision' },
+      { brand: 'Dahua', alt: 'Dahua' }
+    ]
+  };
+
+  function initWatchCameraSection() {
+    renderWatchBrandPills(currentWatchCategory);
+    renderWatchProducts();
+  }
+
+  function renderWatchBrandPills(cat) {
+    const container = document.getElementById('watch-brand-pills-container');
+    if (!container) return;
+
+    const brands = WATCH_CAMERA_BRANDS[cat] || WATCH_CAMERA_BRANDS.dongho;
+    container.innerHTML = brands.map(item => {
+      const isActive = currentWatchBrand === item.brand;
+      const activeClass = isActive
+        ? 'active-brand-pill bg-[#0057B7] text-white border-blue-600 shadow-xs'
+        : 'bg-white text-slate-800 border border-slate-200 hover:border-blue-400 hover:text-blue-600';
+
+      if (item.brand === 'all') {
+        return `<button type="button" onclick="window.filterWatchBrand('all')" data-brand="all" class="dual-brand-pill ${activeClass} flex-shrink-0 px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9">Tất cả</button>`;
+      }
+
+      if (item.logo) {
+        return `<button type="button" onclick="window.filterWatchBrand('${item.brand}')" data-brand="${item.brand}" class="dual-brand-pill ${activeClass} flex-shrink-0 px-3 sm:px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9" title="${item.alt}"><img src="${item.logo}" alt="${item.alt}" class="h-3.5 sm:h-4 w-auto object-contain max-w-[65px]" onerror="this.outerHTML='<span class=\'text-xs font-bold\'>${item.alt}</span>'" loading="lazy" /></button>`;
+      }
+
+      return `<button type="button" onclick="window.filterWatchBrand('${item.brand}')" data-brand="${item.brand}" class="dual-brand-pill ${activeClass} flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9" title="${item.alt}">${item.alt}</button>`;
+    }).join('');
+  }
+
+  window.switchWatchCategory = function (cat) {
+    if (currentWatchCategory === cat) return;
+    currentWatchCategory = cat;
+    currentWatchBrand = 'all';
+    watchPageSize = 10;
+
+    const btnWatch = document.getElementById('btn-watch-tab-watch');
+    const btnCamera = document.getElementById('btn-watch-tab-camera');
+
+    if (cat === 'dongho') {
+      if (btnWatch) {
+        btnWatch.className = 'dual-cat-tab-active h-12 sm:h-14 rounded-2xl flex items-center justify-center font-extrabold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer shadow-md';
+      }
+      if (btnCamera) {
+        btnCamera.className = 'dual-cat-tab-inactive h-12 sm:h-14 rounded-2xl flex items-center justify-center font-bold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer bg-white border border-slate-200 shadow-2xs ';
+      }
+    } else {
+      if (btnWatch) {
+        btnWatch.className = 'dual-cat-tab-inactive h-12 sm:h-14 rounded-2xl flex items-center justify-center font-bold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer bg-white border border-slate-200 shadow-2xs ';
+      }
+      if (btnCamera) {
+        btnCamera.className = 'dual-cat-tab-active h-12 sm:h-14 rounded-2xl flex items-center justify-center font-extrabold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer shadow-md';
+      }
+    }
+
+    renderWatchBrandPills(cat);
+    renderWatchProducts();
+  };
+
+  window.filterWatchBrand = function (brand) {
+    currentWatchBrand = brand;
+    watchPageSize = 10;
+
+    const pills = document.querySelectorAll('#watch-brand-pills-container .dual-brand-pill');
+    pills.forEach(p => {
+      if (p.dataset.brand === brand) {
+        p.className = 'dual-brand-pill active-brand-pill bg-[#0057B7] text-white border-blue-600 shadow-xs flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9';
+      } else {
+        p.className = 'dual-brand-pill bg-white text-slate-800 border border-slate-200 hover:border-blue-400 hover:text-blue-600 flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9';
+      }
+    });
+
+    renderWatchProducts();
+  };
+
+  window.scrollWatchBrandPills = function (delta) {
+    const c = document.getElementById('watch-brand-pills-container');
+    if (c) c.scrollBy({ left: delta, behavior: 'smooth' });
+  };
+
+  window.loadMoreWatchProducts = function () {
+    watchPageSize += 10;
+    renderWatchProducts();
+  };
+
+  window.onWatchProductClick = function (id) {
+    const list = dealCategoriesData[currentWatchCategory] || [];
+    const item = list.find(p => p.id === id);
+    if (item && window.quickSearchTag) window.quickSearchTag(item.name);
+  };
+
+  window.onWatchCartClick = function (id) {
+    const list = dealCategoriesData[currentWatchCategory] || [];
+    const item = list.find(p => p.id === id);
+    if (!item) return;
+    if (window.CartStore && window.CartStore.addItem) {
+      window.CartStore.addItem({
+        maHang: item.id,
+        tenHang: item.name,
+        giaBan: item.price,
+        anhChinh: item.image,
+        soLuong: 1
+      });
+      if (window.showToast) window.showToast('Đã thêm sản phẩm vào giỏ hàng!', 'success');
+    }
+  };
+
+  function renderWatchProducts() {
+    const grid = document.getElementById('watch-products-grid');
+    if (!grid) return;
+
+    let items = dealCategoriesData[currentWatchCategory] ? [...dealCategoriesData[currentWatchCategory]] : [];
+    if (currentWatchBrand && currentWatchBrand !== 'all') {
+      const bLower = currentWatchBrand.toLowerCase();
+      items = items.filter(it => {
+        const brand = (it.brand || '').toLowerCase();
+        const name = (it.name || '').toLowerCase();
+        return brand.includes(bLower) || name.includes(bLower);
+      });
+    }
+
+    if (items.length === 0) {
+      grid.innerHTML = `<div class="col-span-full py-12 text-center text-slate-500"><i class="fa-solid fa-box-open text-4xl mb-2 text-slate-300"></i><p class="text-sm font-semibold">Chưa có sản phẩm phù hợp.</p></div>`;
+      const moreCont = document.getElementById('watch-more-container');
+      if (moreCont) moreCont.classList.add('hidden');
+      return;
+    }
+
+    const visibleItems = items.slice(0, watchPageSize);
+    grid.innerHTML = visibleItems.map(it => createHoangHaCardHtml(it, 'images/deal-tabs/deal-tab-watch.jpg', 'window.onWatchCartClick', 'window.onWatchProductClick')).join('');
+
+    const moreContainer = document.getElementById('watch-more-container');
+    const moreBtn = document.getElementById('btn-watch-load-more');
+    if (moreContainer && moreBtn) {
+      if (items.length > visibleItems.length) {
+        moreContainer.classList.remove('hidden');
+        const remaining = items.length - visibleItems.length;
+        const textSpan = moreBtn.querySelector('span');
+        if (textSpan) textSpan.textContent = `Xem thêm ${remaining} sản phẩm`;
+      } else {
+        moreContainer.classList.add('hidden');
+      }
+    }
+  }
+
+
+  // =========================================================================
+  // 4. CỤM TIVI & TỦ LẠNH (5 CỘT CHUẨN HOÀNG HÀ)
+  // =========================================================================
+  let currentTiviCategory = 'tivi';
+  let currentTiviBrand = 'all';
+  let tiviPageSize = 10;
+
+  const TIVI_TULANH_BRANDS = {
+    tivi: [
+      { brand: 'all', alt: 'Tất cả' },
+      { brand: 'LG', alt: 'LG', logo: 'images/brands/lg.png' },
+      { brand: 'Samsung', alt: 'SAMSUNG', logo: 'images/brands/samsung.png' },
+      { brand: 'TCL', alt: 'TCL', logo: 'images/brands/tcl.png' },
+      { brand: 'Sony', alt: 'SONY', logo: 'images/brands/sony.png' },
+      { brand: 'Xiaomi', alt: 'Mi', logo: 'images/brands/mi.png' },
+      { brand: 'VSP', alt: 'VSP', logo: 'images/brands/vsp.png' },
+      { brand: 'Coocaa', alt: 'coocaa' },
+      { brand: 'Casper', alt: 'Casper' }
+    ],
+    tulanh: [
+      { brand: 'all', alt: 'Tất cả' },
+      { brand: 'Samsung', alt: 'Samsung', logo: 'images/brands/samsung.png' },
+      { brand: 'Panasonic', alt: 'Panasonic' },
+      { brand: 'Toshiba', alt: 'Toshiba' },
+      { brand: 'LG', alt: 'LG', logo: 'images/brands/lg.png' },
+      { brand: 'Aqua', alt: 'AQUA' },
+      { brand: 'Sharp', alt: 'SHARP' },
+      { brand: 'Casper', alt: 'Casper' },
+      { brand: 'Electrolux', alt: 'Electrolux' }
+    ]
+  };
+
+  function initTiviSection() {
+    renderTiviBrandPills(currentTiviCategory);
+    renderTiviProducts();
+  }
+
+  function renderTiviBrandPills(cat) {
+    const container = document.getElementById('tivi-brand-pills-container');
+    if (!container) return;
+
+    const brands = TIVI_TULANH_BRANDS[cat] || TIVI_TULANH_BRANDS.tivi;
+    container.innerHTML = brands.map(item => {
+      const isActive = currentTiviBrand === item.brand;
+      const activeClass = isActive
+        ? 'active-brand-pill bg-[#0057B7] text-white border-blue-600 shadow-xs'
+        : 'bg-white text-slate-800 border border-slate-200 hover:border-blue-400 hover:text-blue-600';
+
+      if (item.brand === 'all') {
+        return `<button type="button" onclick="window.filterTiviBrand('all')" data-brand="all" class="dual-brand-pill ${activeClass} flex-shrink-0 px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9">Tất cả</button>`;
+      }
+
+      if (item.logo) {
+        return `<button type="button" onclick="window.filterTiviBrand('${item.brand}')" data-brand="${item.brand}" class="dual-brand-pill ${activeClass} flex-shrink-0 px-3 sm:px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9" title="${item.alt}"><img src="${item.logo}" alt="${item.alt}" class="h-3.5 sm:h-4 w-auto object-contain max-w-[65px]" onerror="this.outerHTML='<span class=\'text-xs font-bold\'>${item.alt}</span>'" loading="lazy" /></button>`;
+      }
+
+      return `<button type="button" onclick="window.filterTiviBrand('${item.brand}')" data-brand="${item.brand}" class="dual-brand-pill ${activeClass} flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9" title="${item.alt}">${item.alt}</button>`;
+    }).join('');
+  }
+
+  window.switchTiviCategory = function (cat) {
+    if (currentTiviCategory === cat) return;
+    currentTiviCategory = cat;
+    currentTiviBrand = 'all';
+    tiviPageSize = 10;
+
+    const btnTivi = document.getElementById('btn-tivi-tab-tivi');
+    const btnTulanh = document.getElementById('btn-tivi-tab-tulanh');
+
+    if (cat === 'tivi') {
+      if (btnTivi) {
+        btnTivi.className = 'dual-cat-tab-active h-12 sm:h-14 rounded-2xl flex items-center justify-center font-extrabold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer shadow-md';
+      }
+      if (btnTulanh) {
+        btnTulanh.className = 'dual-cat-tab-inactive h-12 sm:h-14 rounded-2xl flex items-center justify-center font-bold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer bg-white border border-slate-200 shadow-2xs ';
+      }
+    } else {
+      if (btnTivi) {
+        btnTivi.className = 'dual-cat-tab-inactive h-12 sm:h-14 rounded-2xl flex items-center justify-center font-bold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer bg-white border border-slate-200 shadow-2xs ';
+      }
+      if (btnTulanh) {
+        btnTulanh.className = 'dual-cat-tab-active h-12 sm:h-14 rounded-2xl flex items-center justify-center font-extrabold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer shadow-md';
+      }
+    }
+
+    renderTiviBrandPills(cat);
+    renderTiviProducts();
+  };
+
+  window.filterTiviBrand = function (brand) {
+    currentTiviBrand = brand;
+    tiviPageSize = 10;
+
+    const pills = document.querySelectorAll('#tivi-brand-pills-container .dual-brand-pill');
+    pills.forEach(p => {
+      if (p.dataset.brand === brand) {
+        p.className = 'dual-brand-pill active-brand-pill bg-[#0057B7] text-white border-blue-600 shadow-xs flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9';
+      } else {
+        p.className = 'dual-brand-pill bg-white text-slate-800 border border-slate-200 hover:border-blue-400 hover:text-blue-600 flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9';
+      }
+    });
+
+    renderTiviProducts();
+  };
+
+  window.scrollTiviBrandPills = function (delta) {
+    const c = document.getElementById('tivi-brand-pills-container');
+    if (c) c.scrollBy({ left: delta, behavior: 'smooth' });
+  };
+
+  window.loadMoreTiviProducts = function () {
+    tiviPageSize += 10;
+    renderTiviProducts();
+  };
+
+  window.onTiviProductClick = function (id) {
+    const list = dealCategoriesData[currentTiviCategory] || [];
+    const item = list.find(p => p.id === id);
+    if (item && window.quickSearchTag) window.quickSearchTag(item.name);
+  };
+
+  window.onTiviCartClick = function (id) {
+    const list = dealCategoriesData[currentTiviCategory] || [];
+    const item = list.find(p => p.id === id);
+    if (!item) return;
+    if (window.CartStore && window.CartStore.addItem) {
+      window.CartStore.addItem({
+        maHang: item.id,
+        tenHang: item.name,
+        giaBan: item.price,
+        anhChinh: item.image,
+        soLuong: 1
+      });
+      if (window.showToast) window.showToast('Đã thêm sản phẩm vào giỏ hàng!', 'success');
+    }
+  };
+
+  function renderTiviProducts() {
+    const grid = document.getElementById('tivi-products-grid');
+    if (!grid) return;
+
+    let items = dealCategoriesData[currentTiviCategory] ? [...dealCategoriesData[currentTiviCategory]] : [];
+    if (currentTiviBrand && currentTiviBrand !== 'all') {
+      const bLower = currentTiviBrand.toLowerCase();
+      items = items.filter(it => {
+        const brand = (it.brand || '').toLowerCase();
+        const name = (it.name || '').toLowerCase();
+        return brand.includes(bLower) || name.includes(bLower);
+      });
+    }
+
+    if (items.length === 0) {
+      grid.innerHTML = `<div class="col-span-full py-12 text-center text-slate-500"><i class="fa-solid fa-box-open text-4xl mb-2 text-slate-300"></i><p class="text-sm font-semibold">Chưa có sản phẩm phù hợp.</p></div>`;
+      const btn = document.getElementById('tivi-more-container');
+      if (btn) btn.classList.add('hidden');
+      return;
+    }
+
+    const visibleItems = items.slice(0, tiviPageSize);
+    grid.innerHTML = visibleItems.map(it => createHoangHaCardHtml(it, 'images/categories/tivi-dien-may.png', 'window.onTiviCartClick', 'window.onTiviProductClick')).join('');
+
+    const moreContainer = document.getElementById('tivi-more-container');
+    const moreBtn = document.getElementById('btn-tivi-load-more');
+    if (moreContainer && moreBtn) {
+      if (items.length > visibleItems.length) {
+        moreContainer.classList.remove('hidden');
+        const remaining = items.length - visibleItems.length;
+        const textSpan = moreBtn.querySelector('span');
+        if (textSpan) textSpan.textContent = `Xem thêm ${remaining} sản phẩm`;
+      } else {
+        moreContainer.classList.add('hidden');
+      }
+    }
+  }
+
+  // =========================================================================
+  // 5. CỤM ĐIỀU HOÀ & MÁY GIẶT (5 CỘT CHUẨN HOÀNG HÀ)
+  // =========================================================================
+  let currentAirCategory = 'dieuhoa';
+  let currentAirBrand = 'all';
+  let airPageSize = 10;
+
+  const AIR_WASHER_BRANDS = {
+    dieuhoa: [
+      { brand: 'all', alt: 'Tất cả' },
+      { brand: 'Funiki', alt: 'Funiki' },
+      { brand: 'Casper', alt: 'Casper' },
+      { brand: 'Panasonic', alt: 'Panasonic' },
+      { brand: 'Daikin', alt: 'DAIKIN' },
+      { brand: 'Nagakawa', alt: 'Nagakawa' },
+      { brand: 'Toshiba', alt: 'TOSHIBA' },
+      { brand: 'Comfee', alt: 'Comfee' },
+      { brand: 'Sharp', alt: 'SHARP' },
+      { brand: 'TCL', alt: 'TCL', logo: 'images/brands/tcl.png' },
+      { brand: 'LG', alt: 'LG', logo: 'images/brands/lg.png' },
+      { brand: 'Aqua', alt: 'AQUA' },
+      { brand: 'AUX', alt: 'AUX' },
+      { brand: 'Midea', alt: 'Midea' }
+    ],
+    maygiat: [
+      { brand: 'all', alt: 'Tất cả' },
+      { brand: 'LG', alt: 'LG', logo: 'images/brands/lg.png' },
+      { brand: 'Samsung', alt: 'Samsung', logo: 'images/brands/samsung.png' },
+      { brand: 'Toshiba', alt: 'Toshiba' },
+      { brand: 'Panasonic', alt: 'Panasonic' },
+      { brand: 'Aqua', alt: 'AQUA' },
+      { brand: 'Electrolux', alt: 'Electrolux' },
+      { brand: 'Casper', alt: 'Casper' }
+    ]
+  };
+
+  function initAirSection() {
+    renderAirBrandPills(currentAirCategory);
+    renderAirProducts();
+  }
+
+  function renderAirBrandPills(cat) {
+    const container = document.getElementById('air-brand-pills-container');
+    if (!container) return;
+
+    const brands = AIR_WASHER_BRANDS[cat] || AIR_WASHER_BRANDS.dieuhoa;
+    container.innerHTML = brands.map(item => {
+      const isActive = currentAirBrand === item.brand;
+      const activeClass = isActive
+        ? 'active-brand-pill bg-[#0057B7] text-white border-blue-600 shadow-xs'
+        : 'bg-white text-slate-800 border border-slate-200 hover:border-blue-400 hover:text-blue-600';
+
+      if (item.brand === 'all') {
+        return `<button type="button" onclick="window.filterAirBrand('all')" data-brand="all" class="dual-brand-pill ${activeClass} flex-shrink-0 px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9">Tất cả</button>`;
+      }
+
+      if (item.logo) {
+        return `<button type="button" onclick="window.filterAirBrand('${item.brand}')" data-brand="${item.brand}" class="dual-brand-pill ${activeClass} flex-shrink-0 px-3 sm:px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9" title="${item.alt}"><img src="${item.logo}" alt="${item.alt}" class="h-3.5 sm:h-4 w-auto object-contain max-w-[65px]" onerror="this.outerHTML='<span class=\'text-xs font-bold\'>${item.alt}</span>'" loading="lazy" /></button>`;
+      }
+
+      return `<button type="button" onclick="window.filterAirBrand('${item.brand}')" data-brand="${item.brand}" class="dual-brand-pill ${activeClass} flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9" title="${item.alt}">${item.alt}</button>`;
+    }).join('');
+  }
+
+  window.switchAirCategory = function (cat) {
+    if (currentAirCategory === cat) return;
+    currentAirCategory = cat;
+    currentAirBrand = 'all';
+    airPageSize = 10;
+
+    const btnAir = document.getElementById('btn-air-tab-dieuhoa');
+    const btnMaygiat = document.getElementById('btn-air-tab-maygiat');
+
+    if (cat === 'dieuhoa') {
+      if (btnAir) {
+        btnAir.className = 'dual-cat-tab-active h-12 sm:h-14 rounded-2xl flex items-center justify-center font-extrabold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer shadow-md';
+      }
+      if (btnMaygiat) {
+        btnMaygiat.className = 'dual-cat-tab-inactive h-12 sm:h-14 rounded-2xl flex items-center justify-center font-bold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer bg-white border border-slate-200 shadow-2xs ';
+      }
+    } else {
+      if (btnAir) {
+        btnAir.className = 'dual-cat-tab-inactive h-12 sm:h-14 rounded-2xl flex items-center justify-center font-bold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer bg-white border border-slate-200 shadow-2xs ';
+      }
+      if (btnMaygiat) {
+        btnMaygiat.className = 'dual-cat-tab-active h-12 sm:h-14 rounded-2xl flex items-center justify-center font-extrabold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer shadow-md';
+      }
+    }
+
+    renderAirBrandPills(cat);
+    renderAirProducts();
+  };
+
+  window.filterAirBrand = function (brand) {
+    currentAirBrand = brand;
+    airPageSize = 10;
+
+    const pills = document.querySelectorAll('#air-brand-pills-container .dual-brand-pill');
+    pills.forEach(p => {
+      if (p.dataset.brand === brand) {
+        p.className = 'dual-brand-pill active-brand-pill bg-[#0057B7] text-white border-blue-600 shadow-xs flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9';
+      } else {
+        p.className = 'dual-brand-pill bg-white text-slate-800 border border-slate-200 hover:border-blue-400 hover:text-blue-600 flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9';
+      }
+    });
+
+    renderAirProducts();
+  };
+
+  window.scrollAirBrandPills = function (delta) {
+    const c = document.getElementById('air-brand-pills-container');
+    if (c) c.scrollBy({ left: delta, behavior: 'smooth' });
+  };
+
+  window.loadMoreAirProducts = function () {
+    airPageSize += 10;
+    renderAirProducts();
+  };
+
+  window.onAirProductClick = function (id) {
+    const list = dealCategoriesData[currentAirCategory] || [];
+    const item = list.find(p => p.id === id);
+    if (item && window.quickSearchTag) window.quickSearchTag(item.name);
+  };
+
+  window.onAirCartClick = function (id) {
+    const list = dealCategoriesData[currentAirCategory] || [];
+    const item = list.find(p => p.id === id);
+    if (!item) return;
+    if (window.CartStore && window.CartStore.addItem) {
+      window.CartStore.addItem({
+        maHang: item.id,
+        tenHang: item.name,
+        giaBan: item.price,
+        anhChinh: item.image,
+        soLuong: 1
+      });
+      if (window.showToast) window.showToast('Đã thêm sản phẩm vào giỏ hàng!', 'success');
+    }
+  };
+
+  function renderAirProducts() {
+    const grid = document.getElementById('air-products-grid');
+    if (!grid) return;
+
+    let items = dealCategoriesData[currentAirCategory] ? [...dealCategoriesData[currentAirCategory]] : [];
+    if (currentAirBrand && currentAirBrand !== 'all') {
+      const bLower = currentAirBrand.toLowerCase();
+      items = items.filter(it => {
+        const brand = (it.brand || '').toLowerCase();
+        const name = (it.name || '').toLowerCase();
+        return brand.includes(bLower) || name.includes(bLower);
+      });
+    }
+
+    if (items.length === 0) {
+      grid.innerHTML = `<div class="col-span-full py-12 text-center text-slate-500"><i class="fa-solid fa-box-open text-4xl mb-2 text-slate-300"></i><p class="text-sm font-semibold">Chưa có sản phẩm phù hợp.</p></div>`;
+      const btn = document.getElementById('air-more-container');
+      if (btn) btn.classList.add('hidden');
+      return;
+    }
+
+    const visibleItems = items.slice(0, airPageSize);
+    grid.innerHTML = visibleItems.map(it => createHoangHaCardHtml(it, 'images/categories/tivi-dien-may.png', 'window.onAirCartClick', 'window.onAirProductClick')).join('');
+
+    const moreContainer = document.getElementById('air-more-container');
+    const moreBtn = document.getElementById('btn-air-load-more');
+    if (moreContainer && moreBtn) {
+      if (items.length > visibleItems.length) {
+        moreContainer.classList.remove('hidden');
+        const remaining = items.length - visibleItems.length;
+        const textSpan = moreBtn.querySelector('span');
+        if (textSpan) textSpan.textContent = `Xem thêm ${remaining} sản phẩm`;
+      } else {
+        moreContainer.classList.add('hidden');
+      }
+    }
+  }
+
+  // =========================================================================
+  // 6. CỤM MÁY LỌC KHÔNG KHÍ & MÁY HÚT ẨM (5 CỘT CHUẨN HOÀNG HÀ)
+  // =========================================================================
+  let currentPurifierCategory = 'mayloc_khongkhi';
+  let currentPurifierBrand = 'all';
+  let purifierPageSize = 10;
+
+  const PURIFIER_BRANDS = {
+    mayloc_khongkhi: [
+      { brand: 'all', alt: 'Tất cả' },
+      { brand: 'Xiaomi', alt: 'Mi', logo: 'images/brands/mi.png' },
+      { brand: 'Sharp', alt: 'SHARP' },
+      { brand: 'LG', alt: 'LG', logo: 'images/brands/lg.png' },
+      { brand: 'Clair', alt: 'clair' },
+      { brand: 'Daikin', alt: 'DAIKIN' },
+      { brand: 'Electrolux', alt: 'Electrolux' },
+      { brand: 'Philips', alt: 'PHILIPS' },
+      { brand: 'Midea', alt: 'Midea' },
+      { brand: 'Nova', alt: 'NOVA' }
+    ],
+    may_hut_am: [
+      { brand: 'all', alt: 'Tất cả' },
+      { brand: 'Xiaomi', alt: 'Mi', logo: 'images/brands/mi.png' },
+      { brand: 'Sharp', alt: 'SHARP' },
+      { brand: 'Dorosin', alt: 'Dorosin' },
+      { brand: 'Kosmen', alt: 'Kosmen' },
+      { brand: 'FujiE', alt: 'FujiE' }
+    ]
+  };
+
+  function initPurifierSection() {
+    renderPurifierBrandPills(currentPurifierCategory);
+    renderPurifierProducts();
+  }
+
+  function renderPurifierBrandPills(cat) {
+    const container = document.getElementById('purifier-brand-pills-container');
+    if (!container) return;
+
+    const brands = PURIFIER_BRANDS[cat] || PURIFIER_BRANDS.mayloc_khongkhi;
+    container.innerHTML = brands.map(item => {
+      const isActive = currentPurifierBrand === item.brand;
+      const activeClass = isActive
+        ? 'active-brand-pill bg-[#0057B7] text-white border-blue-600 shadow-xs'
+        : 'bg-white text-slate-800 border border-slate-200 hover:border-blue-400 hover:text-blue-600';
+
+      if (item.brand === 'all') {
+        return `<button type="button" onclick="window.filterPurifierBrand('all')" data-brand="all" class="dual-brand-pill ${activeClass} flex-shrink-0 px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9">Tất cả</button>`;
+      }
+
+      if (item.logo) {
+        return `<button type="button" onclick="window.filterPurifierBrand('${item.brand}')" data-brand="${item.brand}" class="dual-brand-pill ${activeClass} flex-shrink-0 px-3 sm:px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9" title="${item.alt}"><img src="${item.logo}" alt="${item.alt}" class="h-3.5 sm:h-4 w-auto object-contain max-w-[65px]" onerror="this.outerHTML='<span class=\'text-xs font-bold\'>${item.alt}</span>'" loading="lazy" /></button>`;
+      }
+
+      return `<button type="button" onclick="window.filterPurifierBrand('${item.brand}')" data-brand="${item.brand}" class="dual-brand-pill ${activeClass} flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9" title="${item.alt}">${item.alt}</button>`;
+    }).join('');
+  }
+
+  window.switchPurifierCategory = function (cat) {
+    if (currentPurifierCategory === cat) return;
+    currentPurifierCategory = cat;
+    currentPurifierBrand = 'all';
+    purifierPageSize = 10;
+
+    const btnAir = document.getElementById('btn-purifier-tab-air');
+    const btnDehum = document.getElementById('btn-purifier-tab-dehum');
+
+    if (cat === 'mayloc_khongkhi') {
+      if (btnAir) {
+        btnAir.className = 'dual-cat-tab-active h-12 sm:h-14 rounded-2xl flex items-center justify-center font-extrabold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer shadow-md';
+      }
+      if (btnDehum) {
+        btnDehum.className = 'dual-cat-tab-inactive h-12 sm:h-14 rounded-2xl flex items-center justify-center font-bold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer bg-white border border-slate-200 shadow-2xs ';
+      }
+    } else {
+      if (btnAir) {
+        btnAir.className = 'dual-cat-tab-inactive h-12 sm:h-14 rounded-2xl flex items-center justify-center font-bold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer bg-white border border-slate-200 shadow-2xs ';
+      }
+      if (btnDehum) {
+        btnDehum.className = 'dual-cat-tab-active h-12 sm:h-14 rounded-2xl flex items-center justify-center font-extrabold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer shadow-md';
+      }
+    }
+
+    renderPurifierBrandPills(cat);
+    renderPurifierProducts();
+  };
+
+  window.filterPurifierBrand = function (brand) {
+    currentPurifierBrand = brand;
+    purifierPageSize = 10;
+
+    const pills = document.querySelectorAll('#purifier-brand-pills-container .dual-brand-pill');
+    pills.forEach(p => {
+      if (p.dataset.brand === brand) {
+        p.className = 'dual-brand-pill active-brand-pill bg-[#0057B7] text-white border-blue-600 shadow-xs flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9';
+      } else {
+        p.className = 'dual-brand-pill bg-white text-slate-800 border border-slate-200 hover:border-blue-400 hover:text-blue-600 flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9';
+      }
+    });
+
+    renderPurifierProducts();
+  };
+
+  window.scrollPurifierBrandPills = function (delta) {
+    const c = document.getElementById('purifier-brand-pills-container');
+    if (c) c.scrollBy({ left: delta, behavior: 'smooth' });
+  };
+
+  window.loadMorePurifierProducts = function () {
+    purifierPageSize += 10;
+    renderPurifierProducts();
+  };
+
+  window.onPurifierProductClick = function (id) {
+    const list = dealCategoriesData[currentPurifierCategory] || [];
+    const item = list.find(p => p.id === id);
+    if (item && window.quickSearchTag) window.quickSearchTag(item.name);
+  };
+
+  window.onPurifierCartClick = function (id) {
+    const list = dealCategoriesData[currentPurifierCategory] || [];
+    const item = list.find(p => p.id === id);
+    if (!item) return;
+    if (window.CartStore && window.CartStore.addItem) {
+      window.CartStore.addItem({
+        maHang: item.id,
+        tenHang: item.name,
+        giaBan: item.price,
+        anhChinh: item.image,
+        soLuong: 1
+      });
+      if (window.showToast) window.showToast('Đã thêm sản phẩm vào giỏ hàng!', 'success');
+    }
+  };
+
+  function renderPurifierProducts() {
+    const grid = document.getElementById('purifier-products-grid');
+    if (!grid) return;
+
+    let items = dealCategoriesData[currentPurifierCategory] ? [...dealCategoriesData[currentPurifierCategory]] : [];
+    if (currentPurifierBrand && currentPurifierBrand !== 'all') {
+      const bLower = currentPurifierBrand.toLowerCase();
+      items = items.filter(it => {
+        const brand = (it.brand || '').toLowerCase();
+        const name = (it.name || '').toLowerCase();
+        return brand.includes(bLower) || name.includes(bLower);
+      });
+    }
+
+    if (items.length === 0) {
+      grid.innerHTML = `<div class="col-span-full py-12 text-center text-slate-500"><i class="fa-solid fa-box-open text-4xl mb-2 text-slate-300"></i><p class="text-sm font-semibold">Chưa có sản phẩm phù hợp.</p></div>`;
+      const btn = document.getElementById('purifier-more-container');
+      if (btn) btn.classList.add('hidden');
+      return;
+    }
+
+    const visibleItems = items.slice(0, purifierPageSize);
+    grid.innerHTML = visibleItems.map(it => createHoangHaCardHtml(it, 'images/categories/smart-home.png', 'window.onPurifierCartClick', 'window.onPurifierProductClick')).join('');
+
+    const moreContainer = document.getElementById('purifier-more-container');
+    const moreBtn = document.getElementById('btn-purifier-load-more');
+    if (moreContainer && moreBtn) {
+      if (items.length > visibleItems.length) {
+        moreContainer.classList.remove('hidden');
+        const remaining = items.length - visibleItems.length;
+        const textSpan = moreBtn.querySelector('span');
+        if (textSpan) textSpan.textContent = `Xem thêm ${remaining} sản phẩm`;
+      } else {
+        moreContainer.classList.add('hidden');
       }
     }
   }

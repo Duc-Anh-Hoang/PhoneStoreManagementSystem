@@ -752,7 +752,7 @@
               <!-- 1. Khung 2 Tab Lớn Nằm Ngang (Category Dual Tabs) ngang bằng với đầu banner bên trái -->
               <div class="grid grid-cols-2 gap-3 select-none">
                 <!-- 1. Tab ĐIỆN THOẠI -->
-                <button id="btn-dual-tab-dienthoai" type="button" onclick="window.switchDualCategory('dienthoai')" class="dual-cat-tab-inactive h-12 sm:h-14 rounded-2xl flex items-center justify-center font-bold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer bg-white border border-slate-200 shadow-2xs hover:bg-slate-50" title="Xem danh mục Điện thoại">
+                <button id="btn-dual-tab-dienthoai" type="button" onclick="window.switchDualCategory('dienthoai')" class="dual-cat-tab-inactive h-12 sm:h-14 rounded-2xl flex items-center justify-center font-bold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer bg-white border border-slate-200 shadow-2xs " title="Xem danh mục Điện thoại">
                   <span>ĐIỆN THOẠI</span>
                 </button>
 
@@ -841,7 +841,622 @@
       </div>
     </section>
 
-  </main>
+    <!-- =========================================================================
+       PHỤ KIỆN: DANH MỤC PHỤ KIỆN DẠNG LƯỚI / CAROUSEL SLIDER (CHÍNH HÃNG)
+       ========================================================================= -->
+    <section id="accessory-categories-section" class="py-6 sm:py-8 bg-slate-50 select-none">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Khối Card Trắng Bo Góc Hiện Đại (Chứa Header, Grid 2 Hàng x 8 Cột & Thanh Pagination) -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 sm:p-6">
+          
+          <!-- Header: Tiêu Đề "Phụ Kiện" & 2 Nút Tròn Điều Hướng (<) và (>) -->
+          <div class="mb-4 flex items-center justify-between">
+            <h2 class="font-extrabold text-lg sm:text-xl text-slate-800 tracking-tight flex items-center gap-2">
+              <span>Phụ Kiện</span>
+            </h2>
+            
+            <div class="flex items-center gap-2">
+              <button type="button" onclick="window.slideAccessoryCategory(-1)" id="btn-accessory-prev" class="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-slate-200 bg-white text-slate-600 hover:text-blue-600 hover:border-blue-500 hover:bg-blue-50 flex items-center justify-center transition-all cursor-pointer active:scale-95 shadow-2xs" aria-label="Phụ kiện trước" title="Trang trước">
+                <i class="fa-solid fa-chevron-left text-xs"></i>
+              </button>
+              <button type="button" onclick="window.slideAccessoryCategory(1)" id="btn-accessory-next" class="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-slate-200 bg-white text-slate-600 hover:text-blue-600 hover:border-blue-500 hover:bg-blue-50 flex items-center justify-center transition-all cursor-pointer active:scale-95 shadow-2xs" aria-label="Phụ kiện tiếp theo" title="Trang tiếp theo">
+                <i class="fa-solid fa-chevron-right text-xs"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Viewport Chứa Slider Các Trang Danh Mục Phụ Kiện -->
+          <div id="accessory-viewport" class="overflow-hidden w-full">
+            <div id="accessory-track" class="flex transition-transform duration-500 ease-in-out">
+              <!-- Render động bởi customer-store.js -->
+            </div>
+          </div>
+
+          <!-- Thanh Phân Trang 2 Vạch (Pagination Indicators: 2 Pills Dài) -->
+          <div class="mt-4 flex items-center justify-center gap-2">
+            <button type="button" onclick="window.goToAccessorySlide(0)" id="accessory-dot-0" class="h-1 w-8 rounded-full bg-[#0057B7] transition-all cursor-pointer" aria-label="Trang 1"></button>
+            <button type="button" onclick="window.goToAccessorySlide(1)" id="accessory-dot-1" class="h-1 w-8 rounded-full bg-slate-200 hover:bg-slate-300 transition-all cursor-pointer" aria-label="Trang 2"></button>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================================================================
+       DANH MỤC SẢN PHẨM DẠNG DUAL TAB (LAPTOP & PC - CHUẨN HOÀNG HÀ / CELLPHONES)
+       ========================================================================= -->
+    <section id="laptop-pc-category-section" class="py-6 sm:py-8 bg-slate-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Khối hiển thị 2 cột: Banner bên trái (2 Banner Laptop) + Khối Tab & Lưới Sản Phẩm bên phải -->
+        <div class="flex flex-col lg:flex-row gap-4 items-stretch">
+          
+          <!-- Cột Trái Banner Phụ (2 Banner theo mẫu CellphoneS / Hoàng Hà) -->
+          <div id="laptop-pc-left-banners" class="hidden lg:flex flex-col gap-4 w-60 xl:w-68 flex-shrink-0 select-none self-stretch">
+            <a href="javascript:void(0)" onclick="window.quickSearchTag('Laptop')" class="group block overflow-hidden rounded-2xl shadow-sm border border-slate-200/80 hover:shadow-md transition-all duration-300 flex-1 flex flex-col" title="Khuyến mãi Laptop chính hãng">
+              <img id="laptop-banner-left-1" src="images/banner-left-laptop-1.png" alt="Khuyến mãi Laptop" class="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300 block" loading="lazy" />
+            </a>
+            <a href="javascript:void(0)" onclick="window.quickSearchTag('PC')" class="group block overflow-hidden rounded-2xl shadow-sm border border-slate-200/80 hover:shadow-md transition-all duration-300 flex-1 flex flex-col" title="PC & Máy tính để bàn">
+              <img id="laptop-banner-left-2" src="images/banner-left-laptop-2.png" alt="PC & Máy tính để bàn" class="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300 block" loading="lazy" />
+            </a>
+          </div>
+
+          <!-- Cột Phải: Dual Tab (LAPTOP / PC) + Hot Search + Lưới 4 cột Card sản phẩm -->
+          <div class="flex-1 min-w-0">
+            <div class="space-y-4">
+              <!-- 1. Thanh Tab Danh Mục Chính (LAPTOP & PC) -->
+              <div class="grid grid-cols-2 gap-3 sm:gap-4 select-none">
+                <button id="btn-laptop-pc-tab-laptop" type="button" onclick="window.switchLaptopPcCategory('laptop')" class="dual-cat-tab-active h-12 sm:h-14 rounded-2xl flex items-center justify-center font-extrabold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer shadow-md" title="Xem danh mục Laptop">
+                  <span>LAPTOP</span>
+                </button>
+                <button id="btn-laptop-pc-tab-pc" type="button" onclick="window.switchLaptopPcCategory('pc')" class="dual-cat-tab-inactive h-12 sm:h-14 rounded-2xl flex items-center justify-center font-bold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer bg-white border border-slate-200 shadow-2xs " title="Xem danh mục PC">
+                  <span>PC</span>
+                </button>
+              </div>
+
+              <!-- 2. Dải "Hot Search" Thương Hiệu Trượt Ngang (Brand Filter Pills) -->
+              <div class="flex items-center gap-2.5 sm:gap-3.5">
+                <!-- Nhãn Text -->
+                <span class="font-bold text-slate-800 text-xs sm:text-sm whitespace-nowrap flex-shrink-0">Hot Search:</span>
+
+                <!-- Container cuộn ngang các thương hiệu -->
+                <div id="laptop-pc-brand-pills-container" class="flex-1 overflow-x-auto no-scrollbar scroll-smooth flex items-center gap-2 py-1">
+                  <!-- Render động bởi customer-store.js -->
+                </div>
+
+                <!-- Nút mũi tên điều hướng tròn mỏng (<) và (>) -->
+                <div class="flex items-center gap-1.5 flex-shrink-0">
+                  <button type="button" onclick="window.scrollLaptopPcBrandPills(-220)" class="w-8 h-8 rounded-full border border-slate-300 hover:border-blue-500 hover:bg-blue-50 text-slate-600 hover:text-blue-600 flex items-center justify-center transition-all cursor-pointer active:scale-95" aria-label="Cuộn thương hiệu sang trái">
+                    <i class="fa-solid fa-chevron-left text-xs"></i>
+                  </button>
+                  <button type="button" onclick="window.scrollLaptopPcBrandPills(220)" class="w-8 h-8 rounded-full border border-slate-300 hover:border-blue-500 hover:bg-blue-50 text-slate-600 hover:text-blue-600 flex items-center justify-center transition-all cursor-pointer active:scale-95" aria-label="Cuộn thương hiệu sang phải">
+                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- 3. Lưới Thẻ Sản Phẩm 4 Cột (1 hàng 4 cột chuẩn, nội dung rõ ràng) -->
+              <div id="laptop-pc-products-grid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+                <!-- Render động qua JavaScript -->
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 4. Nút Xem Thêm Sản Phẩm (Nằm cân đối ngay dưới đáy của khối) -->
+        <div id="laptop-pc-more-container" class="mt-7 text-center">
+          <button id="btn-laptop-pc-load-more" type="button" onclick="window.loadMoreLaptopPcProducts()" class="px-6 py-2.5 rounded-xl border border-slate-300 hover:border-blue-500 hover:bg-blue-50 text-slate-700 hover:text-blue-600 font-bold text-xs sm:text-sm inline-flex items-center gap-2 transition-all cursor-pointer shadow-sm active:scale-95">
+            <span>Xem thêm sản phẩm Laptop</span>
+            <i class="fa-solid fa-chevron-down text-xs"></i>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================================================================
+       DANH MỤC SẢN PHẨM: CHUỘT VÀ BÀN PHÍM & THIẾT BỊ MẠNG (5 CỘT CHUẨN HOÀNG HÀ)
+       ========================================================================= -->
+    <section id="mouse-keyboard-category-section" class="py-6 sm:py-8 bg-slate-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="space-y-4">
+          <!-- 1. Thanh Tab Danh Mục Chính (CHUỘT VÀ BÀN PHÍM & THIẾT BỊ MẠNG) -->
+          <div class="grid grid-cols-2 gap-3 sm:gap-4 select-none">
+            <button id="btn-mouse-tab-mouse" type="button" onclick="window.switchMouseCategory('chuot_banphim')" class="dual-cat-tab-active h-12 sm:h-14 rounded-2xl flex items-center justify-center font-extrabold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer shadow-md" title="Xem danh mục Chuột và bàn phím">
+              <span>CHUỘT VÀ BÀN PHÍM</span>
+            </button>
+            <button id="btn-mouse-tab-network" type="button" onclick="window.switchMouseCategory('thietbi_mang')" class="dual-cat-tab-inactive h-12 sm:h-14 rounded-2xl flex items-center justify-center font-bold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer bg-white border border-slate-200 shadow-2xs " title="Xem danh mục Thiết bị mạng">
+              <span>THIẾT BỊ MẠNG</span>
+            </button>
+          </div>
+
+          <!-- 2. Dải Hot Search Thương Hiệu -->
+          <div class="flex items-center gap-2.5 sm:gap-3.5">
+            <span class="font-bold text-slate-800 text-xs sm:text-sm whitespace-nowrap flex-shrink-0">Hot Search:</span>
+            <div id="mouse-brand-pills-container" class="flex-1 overflow-x-auto no-scrollbar scroll-smooth flex items-center gap-2 py-1">
+              <!-- Render động bởi customer-store.js -->
+            </div>
+            <div class="flex items-center gap-1.5 flex-shrink-0">
+              <button type="button" onclick="window.scrollMouseBrandPills(-220)" class="w-8 h-8 rounded-full border border-slate-300 hover:border-blue-500 hover:bg-blue-50 text-slate-600 hover:text-blue-600 flex items-center justify-center transition-all cursor-pointer active:scale-95" aria-label="Cuộn trái">
+                <i class="fa-solid fa-chevron-left text-xs"></i>
+              </button>
+              <button type="button" onclick="window.scrollMouseBrandPills(220)" class="w-8 h-8 rounded-full border border-slate-300 hover:border-blue-500 hover:bg-blue-50 text-slate-600 hover:text-blue-600 flex items-center justify-center transition-all cursor-pointer active:scale-95" aria-label="Cuộn phải">
+                <i class="fa-solid fa-chevron-right text-xs"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- 3. Lưới Sản Phẩm 5 Cột -->
+          <div id="mouse-products-grid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+            <!-- Render động qua JavaScript -->
+          </div>
+
+          <!-- 4. Nút Xem Thêm Sản Phẩm -->
+          <div id="mouse-more-container" class="mt-6 text-center">
+            <button id="btn-mouse-load-more" type="button" onclick="window.loadMoreMouseProducts()" class="px-8 py-2.5 rounded-xl bg-[#0057B7] hover:bg-[#004494] shadow-md shadow-blue-500/20 text-white font-bold text-xs sm:text-sm inline-flex items-center gap-2 transition-all cursor-pointer shadow-md active:scale-95">
+              <span>Xem thêm sản phẩm</span>
+              <i class="fa-solid fa-chevron-down text-xs"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+       DANH MỤC SẢN PHẨM: BANNER NGANG + LOA & TAI NGHE (5 CỘT CHUẨN HOÀNG HÀ)
+       ========================================================================= -->
+    <section id="audio-category-section" class="py-6 sm:py-8 bg-slate-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="space-y-4">
+          <!-- Banner ngang đôi Hoàng Hà Mobile (Sony Loa & Sony Tai nghe) -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 select-none">
+            <a href="javascript:void(0)" onclick="window.quickSearchTag('Loa Sony')" class="group block overflow-hidden rounded-2xl shadow-sm border border-slate-200/80 hover:shadow-md transition-all duration-300" title="Sony trọn vẹn thanh âm - Trăm ngàn deal hot">
+              <img src="images/banner/banner-loa-sony-1.png" alt="Banner Loa Sony" class="w-full h-auto object-cover group-hover:scale-[1.02] transition-transform duration-300 block" loading="lazy" />
+            </a>
+            <a href="javascript:void(0)" onclick="window.quickSearchTag('Tai nghe Sony')" class="group block overflow-hidden rounded-2xl shadow-sm border border-slate-200/80 hover:shadow-md transition-all duration-300" title="Sony trọn vẹn thanh âm - Trăm ngàn deal hot">
+              <img src="images/banner/banner-loa-sony-2.png" alt="Banner Tai nghe Sony" class="w-full h-auto object-cover group-hover:scale-[1.02] transition-transform duration-300 block" loading="lazy" />
+            </a>
+          </div>
+
+          <!-- 1. Thanh Tab Danh Mục Chính (LOA & TAI NGHE) -->
+          <div class="grid grid-cols-2 gap-3 sm:gap-4 select-none">
+            <button id="btn-audio-tab-speaker" type="button" onclick="window.switchAudioCategory('loa')" class="dual-cat-tab-active h-12 sm:h-14 rounded-2xl flex items-center justify-center font-extrabold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer shadow-md" title="Xem danh mục Loa">
+              <span>LOA</span>
+            </button>
+            <button id="btn-audio-tab-headphone" type="button" onclick="window.switchAudioCategory('tainghe')" class="dual-cat-tab-inactive h-12 sm:h-14 rounded-2xl flex items-center justify-center font-bold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer bg-white border border-slate-200 shadow-2xs " title="Xem danh mục Tai nghe">
+              <span>TAI NGHE</span>
+            </button>
+          </div>
+
+          <!-- 2. Dải Hot Search Thương Hiệu -->
+          <div class="flex items-center gap-2.5 sm:gap-3.5">
+            <span class="font-bold text-slate-800 text-xs sm:text-sm whitespace-nowrap flex-shrink-0">Hot Search:</span>
+            <div id="audio-brand-pills-container" class="flex-1 overflow-x-auto no-scrollbar scroll-smooth flex items-center gap-2 py-1">
+              <!-- Render động bởi customer-store.js -->
+            </div>
+            <div class="flex items-center gap-1.5 flex-shrink-0">
+              <button type="button" onclick="window.scrollAudioBrandPills(-220)" class="w-8 h-8 rounded-full border border-slate-300 hover:border-blue-500 hover:bg-blue-50 text-slate-600 hover:text-blue-600 flex items-center justify-center transition-all cursor-pointer active:scale-95" aria-label="Cuộn trái">
+                <i class="fa-solid fa-chevron-left text-xs"></i>
+              </button>
+              <button type="button" onclick="window.scrollAudioBrandPills(220)" class="w-8 h-8 rounded-full border border-slate-300 hover:border-blue-500 hover:bg-blue-50 text-slate-600 hover:text-blue-600 flex items-center justify-center transition-all cursor-pointer active:scale-95" aria-label="Cuộn phải">
+                <i class="fa-solid fa-chevron-right text-xs"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- 3. Lưới Sản Phẩm 5 Cột -->
+          <div id="audio-products-grid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+            <!-- Render động qua JavaScript -->
+          </div>
+
+          <!-- 4. Nút Xem Thêm Sản Phẩm -->
+          <div id="audio-more-container" class="mt-6 text-center">
+            <button id="btn-audio-load-more" type="button" onclick="window.loadMoreAudioProducts()" class="px-8 py-2.5 rounded-xl bg-[#0057B7] hover:bg-[#004494] shadow-md shadow-blue-500/20 text-white font-bold text-xs sm:text-sm inline-flex items-center gap-2 transition-all cursor-pointer shadow-md active:scale-95">
+              <span>Xem thêm sản phẩm</span>
+              <i class="fa-solid fa-chevron-down text-xs"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+       DANH MỤC SẢN PHẨM: BANNER NGANG + ĐỒNG HỒ & CAMERA (5 CỘT CHUẨN HOÀNG HÀ)
+       ========================================================================= -->
+    <section id="watch-camera-category-section" class="py-6 sm:py-8 bg-slate-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="space-y-4">
+          <!-- Banner ngang đôi Hoàng Hà Mobile (Huawei Watch GT 7 & Camera Tapo TP-Link) -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 select-none">
+            <a href="javascript:void(0)" onclick="window.quickSearchTag('Huawei Watch GT 7')" class="group block overflow-hidden rounded-2xl shadow-sm border border-slate-200/80 hover:shadow-md transition-all duration-300" title="Huawei Watch GT 7 Series">
+              <img src="images/banner/banner-dongho-huawei.jpg" alt="Banner Huawei Watch GT 7 Series" class="w-full aspect-[16/5] object-cover group-hover:scale-[1.02] transition-transform duration-300 block rounded-2xl" loading="lazy" />
+            </a>
+            <a href="javascript:void(0)" onclick="window.quickSearchTag('Camera Tapo')" class="group block overflow-hidden rounded-2xl shadow-sm border border-slate-200/80 hover:shadow-md transition-all duration-300" title="Camera Tapo TP-Link">
+              <img src="images/banner/banner-camera-tapo.png" alt="Banner Camera Tapo" class="w-full aspect-[16/5] object-cover group-hover:scale-[1.02] transition-transform duration-300 block rounded-2xl" loading="lazy" />
+            </a>
+          </div>
+
+          <!-- 1. Thanh Tab Danh Mục Chính (ĐỒNG HỒ & CAMERA) -->
+          <div class="grid grid-cols-2 gap-3 sm:gap-4 select-none">
+            <button id="btn-watch-tab-watch" type="button" onclick="window.switchWatchCategory('dongho')" class="dual-cat-tab-active h-12 sm:h-14 rounded-2xl flex items-center justify-center font-extrabold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer shadow-md" title="Xem danh mục Đồng hồ">
+              <span>ĐỒNG HỒ</span>
+            </button>
+            <button id="btn-watch-tab-camera" type="button" onclick="window.switchWatchCategory('camera')" class="dual-cat-tab-inactive h-12 sm:h-14 rounded-2xl flex items-center justify-center font-bold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer bg-white border border-slate-200 shadow-2xs " title="Xem danh mục Camera">
+              <span>CAMERA</span>
+            </button>
+          </div>
+
+          <!-- 2. Dải Hot Search Thương Hiệu -->
+          <div class="flex items-center gap-2.5 sm:gap-3.5">
+            <span class="font-bold text-slate-800 text-xs sm:text-sm whitespace-nowrap flex-shrink-0">Hot Search:</span>
+            <div id="watch-brand-pills-container" class="flex-1 overflow-x-auto no-scrollbar scroll-smooth flex items-center gap-2 py-1">
+              <!-- Render động bởi customer-store.js -->
+            </div>
+            <div class="flex items-center gap-1.5 flex-shrink-0">
+              <button type="button" onclick="window.scrollWatchBrandPills(-220)" class="w-8 h-8 rounded-full border border-slate-300 hover:border-blue-500 hover:bg-blue-50 text-slate-600 hover:text-blue-600 flex items-center justify-center transition-all cursor-pointer active:scale-95" aria-label="Cuộn trái">
+                <i class="fa-solid fa-chevron-left text-xs"></i>
+              </button>
+              <button type="button" onclick="window.scrollWatchBrandPills(220)" class="w-8 h-8 rounded-full border border-slate-300 hover:border-blue-500 hover:bg-blue-50 text-slate-600 hover:text-blue-600 flex items-center justify-center transition-all cursor-pointer active:scale-95" aria-label="Cuộn phải">
+                <i class="fa-solid fa-chevron-right text-xs"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- 3. Lưới Sản Phẩm 5 Cột -->
+          <div id="watch-products-grid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+            <!-- Render động qua JavaScript -->
+          </div>
+
+          <!-- 4. Thanh Điều Hướng Đáy: Nút Xem Thêm & Link Xem Tất Cả -->
+          <div id="watch-more-container" class="mt-6 flex items-center justify-between">
+            <div class="flex-1 text-center">
+              <button id="btn-watch-load-more" type="button" onclick="window.loadMoreWatchProducts()" class="px-8 py-2.5 rounded-xl bg-[#0057B7] hover:bg-[#004494] shadow-md shadow-blue-500/20 text-white font-bold text-xs sm:text-sm inline-flex items-center gap-2 transition-all cursor-pointer shadow-md active:scale-95">
+                <span>Xem thêm 115 sản phẩm</span>
+                <i class="fa-solid fa-chevron-down text-xs"></i>
+              </button>
+            </div>
+            <a href="javascript:void(0)" onclick="window.quickSearchTag('Đồng hồ thông minh')" class="text-xs sm:text-sm font-bold text-[#0057B7] hover:text-[#004494] inline-flex items-center gap-1 flex-shrink-0">
+              <span>Xem tất cả</span>
+              <i class="fa-solid fa-caret-right text-xs"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+       DANH MỤC: BANNER NGANG + TIVI & TỦ LẠNH (5 CỘT CHUẨN HOÀNG HÀ)
+       ========================================================================= -->
+    <section id="tivi-tulanh-category-section" class="py-6 sm:py-8 bg-slate-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="space-y-4">
+          <!-- Banner ngang đôi (Samsung Tủ lạnh & Xiaomi TV) -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 select-none">
+            <a href="javascript:void(0)" onclick="window.quickSearchTag('Tủ lạnh Samsung')" class="group block overflow-hidden rounded-2xl shadow-sm border border-slate-200/80 hover:shadow-md transition-all duration-300" title="Samsung - Thương hiệu Tủ lạnh Số 1">
+              <img src="images/banner/banner-samsung-tulanh.png" alt="Banner Tủ lạnh Samsung" class="w-full aspect-[16/5] object-cover group-hover:scale-[1.02] transition-transform duration-300 block rounded-2xl" loading="lazy" />
+            </a>
+            <a href="javascript:void(0)" onclick="window.quickSearchTag('Xiaomi TV')" class="group block overflow-hidden rounded-2xl shadow-sm border border-slate-200/80 hover:shadow-md transition-all duration-300" title="Xiaomi TV S Pro Mini LED">
+              <img src="images/banner/banner-xiaomi-tv.png" alt="Banner Xiaomi TV" class="w-full aspect-[16/5] object-cover group-hover:scale-[1.02] transition-transform duration-300 block rounded-2xl" loading="lazy" />
+            </a>
+          </div>
+
+          <!-- 1. Thanh Tab Danh Mục Chính (TIVI & TỦ LẠNH) -->
+          <div class="grid grid-cols-2 gap-3 sm:gap-4 select-none">
+            <button id="btn-tivi-tab-tivi" type="button" onclick="window.switchTiviCategory('tivi')" class="dual-cat-tab-active h-12 sm:h-14 rounded-2xl flex items-center justify-center font-extrabold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer shadow-md" title="Xem danh mục Tivi">
+              <span>TIVI</span>
+            </button>
+            <button id="btn-tivi-tab-tulanh" type="button" onclick="window.switchTiviCategory('tulanh')" class="dual-cat-tab-inactive h-12 sm:h-14 rounded-2xl flex items-center justify-center font-bold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer bg-white border border-slate-200 shadow-2xs " title="Xem danh mục Tủ lạnh">
+              <span>TỦ LẠNH</span>
+            </button>
+          </div>
+
+          <!-- 2. Dải Hot Search Thương Hiệu -->
+          <div class="flex items-center gap-2.5 sm:gap-3.5">
+            <span class="font-bold text-slate-800 text-xs sm:text-sm whitespace-nowrap flex-shrink-0">Hot Search:</span>
+            <div id="tivi-brand-pills-container" class="flex-1 overflow-x-auto no-scrollbar scroll-smooth flex items-center gap-2 py-1">
+              <!-- Render động bởi customer-store.js -->
+            </div>
+            <div class="flex items-center gap-1.5 flex-shrink-0">
+              <button type="button" onclick="window.scrollTiviBrandPills(-220)" class="w-8 h-8 rounded-full border border-slate-300 hover:border-blue-500 hover:bg-blue-50 text-slate-600 hover:text-blue-600 flex items-center justify-center transition-all cursor-pointer active:scale-95" aria-label="Cuộn trái">
+                <i class="fa-solid fa-chevron-left text-xs"></i>
+              </button>
+              <button type="button" onclick="window.scrollTiviBrandPills(220)" class="w-8 h-8 rounded-full border border-slate-300 hover:border-blue-500 hover:bg-blue-50 text-slate-600 hover:text-blue-600 flex items-center justify-center transition-all cursor-pointer active:scale-95" aria-label="Cuộn phải">
+                <i class="fa-solid fa-chevron-right text-xs"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- 3. Lưới Sản Phẩm 5 Cột -->
+          <div id="tivi-products-grid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+            <!-- Render động qua JavaScript -->
+          </div>
+
+          <!-- 4. Nút Xem Thêm Sản Phẩm (Màu xanh dương) -->
+          <div id="tivi-more-container" class="mt-6 text-center">
+            <button id="btn-tivi-load-more" type="button" onclick="window.loadMoreTiviProducts()" class="px-8 py-2.5 rounded-xl bg-[#0057B7] hover:bg-[#004494] text-white font-bold text-xs sm:text-sm inline-flex items-center gap-2 transition-all cursor-pointer shadow-md shadow-blue-500/20 active:scale-95">
+              <span>Xem thêm sản phẩm</span>
+              <i class="fa-solid fa-chevron-down text-xs"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+       DANH MỤC: ĐIỀU HOÀ & MÁY GIẶT (5 CỘT CHUẨN HOÀNG HÀ)
+       ========================================================================= -->
+    <section id="air-washer-category-section" class="py-6 sm:py-8 bg-slate-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="space-y-4">
+          <!-- 1. Thanh Tab Danh Mục Chính (ĐIỀU HOÀ & MÁY GIẶT) -->
+          <div class="grid grid-cols-2 gap-3 sm:gap-4 select-none">
+            <button id="btn-air-tab-dieuhoa" type="button" onclick="window.switchAirCategory('dieuhoa')" class="dual-cat-tab-active h-12 sm:h-14 rounded-2xl flex items-center justify-center font-extrabold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer shadow-md" title="Xem danh mục Điều hoà">
+              <span>ĐIỀU HOÀ</span>
+            </button>
+            <button id="btn-air-tab-maygiat" type="button" onclick="window.switchAirCategory('maygiat')" class="dual-cat-tab-inactive h-12 sm:h-14 rounded-2xl flex items-center justify-center font-bold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer bg-white border border-slate-200 shadow-2xs " title="Xem danh mục Máy giặt">
+              <span>MÁY GIẶT</span>
+            </button>
+          </div>
+
+          <!-- 2. Dải Hot Search Thương Hiệu -->
+          <div class="flex items-center gap-2.5 sm:gap-3.5">
+            <span class="font-bold text-slate-800 text-xs sm:text-sm whitespace-nowrap flex-shrink-0">Hot Search:</span>
+            <div id="air-brand-pills-container" class="flex-1 overflow-x-auto no-scrollbar scroll-smooth flex items-center gap-2 py-1">
+              <!-- Render động bởi customer-store.js -->
+            </div>
+            <div class="flex items-center gap-1.5 flex-shrink-0">
+              <button type="button" onclick="window.scrollAirBrandPills(-220)" class="w-8 h-8 rounded-full border border-slate-300 hover:border-blue-500 hover:bg-blue-50 text-slate-600 hover:text-blue-600 flex items-center justify-center transition-all cursor-pointer active:scale-95" aria-label="Cuộn trái">
+                <i class="fa-solid fa-chevron-left text-xs"></i>
+              </button>
+              <button type="button" onclick="window.scrollAirBrandPills(220)" class="w-8 h-8 rounded-full border border-slate-300 hover:border-blue-500 hover:bg-blue-50 text-slate-600 hover:text-blue-600 flex items-center justify-center transition-all cursor-pointer active:scale-95" aria-label="Cuộn phải">
+                <i class="fa-solid fa-chevron-right text-xs"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- 3. Lưới Sản Phẩm 5 Cột -->
+          <div id="air-products-grid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+            <!-- Render động qua JavaScript -->
+          </div>
+
+          <!-- 4. Nút Xem Thêm Sản Phẩm (Màu xanh dương) -->
+          <div id="air-more-container" class="mt-6 text-center">
+            <button id="btn-air-load-more" type="button" onclick="window.loadMoreAirProducts()" class="px-8 py-2.5 rounded-xl bg-[#0057B7] hover:bg-[#004494] text-white font-bold text-xs sm:text-sm inline-flex items-center gap-2 transition-all cursor-pointer shadow-md shadow-blue-500/20 active:scale-95">
+              <span>Xem thêm sản phẩm</span>
+              <i class="fa-solid fa-chevron-down text-xs"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+       DANH MỤC: MÁY LỌC KHÔNG KHÍ & MÁY HÚT ẨM (5 CỘT CHUẨN HOÀNG HÀ)
+       ========================================================================= -->
+    <section id="purifier-category-section" class="py-6 sm:py-8 bg-slate-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="space-y-4">
+          <!-- 1. Thanh Tab Danh Mục Chính (MÁY LỌC KHÔNG KHÍ & MÁY HÚT ẨM) -->
+          <div class="grid grid-cols-2 gap-3 sm:gap-4 select-none">
+            <button id="btn-purifier-tab-air" type="button" onclick="window.switchPurifierCategory('mayloc_khongkhi')" class="dual-cat-tab-active h-12 sm:h-14 rounded-2xl flex items-center justify-center font-extrabold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer shadow-md" title="Xem danh mục Máy lọc không khí">
+              <span>MÁY LỌC KHÔNG KHÍ</span>
+            </button>
+            <button id="btn-purifier-tab-dehum" type="button" onclick="window.switchPurifierCategory('may_hut_am')" class="dual-cat-tab-inactive h-12 sm:h-14 rounded-2xl flex items-center justify-center font-bold tracking-wider text-sm sm:text-base uppercase transition-all duration-300 cursor-pointer bg-white border border-slate-200 shadow-2xs " title="Xem danh mục Máy hút ẩm">
+              <span>MÁY HÚT ẨM</span>
+            </button>
+          </div>
+
+          <!-- 2. Dải Hot Search Thương Hiệu -->
+          <div class="flex items-center gap-2.5 sm:gap-3.5">
+            <span class="font-bold text-slate-800 text-xs sm:text-sm whitespace-nowrap flex-shrink-0">Hot Search:</span>
+            <div id="purifier-brand-pills-container" class="flex-1 overflow-x-auto no-scrollbar scroll-smooth flex items-center gap-2 py-1">
+              <!-- Render động bởi customer-store.js -->
+            </div>
+            <div class="flex items-center gap-1.5 flex-shrink-0">
+              <button type="button" onclick="window.scrollPurifierBrandPills(-220)" class="w-8 h-8 rounded-full border border-slate-300 hover:border-blue-500 hover:bg-blue-50 text-slate-600 hover:text-blue-600 flex items-center justify-center transition-all cursor-pointer active:scale-95" aria-label="Cuộn trái">
+                <i class="fa-solid fa-chevron-left text-xs"></i>
+              </button>
+              <button type="button" onclick="window.scrollPurifierBrandPills(220)" class="w-8 h-8 rounded-full border border-slate-300 hover:border-blue-500 hover:bg-blue-50 text-slate-600 hover:text-blue-600 flex items-center justify-center transition-all cursor-pointer active:scale-95" aria-label="Cuộn phải">
+                <i class="fa-solid fa-chevron-right text-xs"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- 3. Lưới Sản Phẩm 5 Cột -->
+          <div id="purifier-products-grid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+            <!-- Render động qua JavaScript -->
+          </div>
+
+          <!-- 4. Nút Xem Thêm Sản Phẩm (Màu xanh dương) -->
+          <div id="purifier-more-container" class="mt-6 text-center">
+            <button id="btn-purifier-load-more" type="button" onclick="window.loadMorePurifierProducts()" class="px-8 py-2.5 rounded-xl bg-[#0057B7] hover:bg-[#004494] text-white font-bold text-xs sm:text-sm inline-flex items-center gap-2 transition-all cursor-pointer shadow-md shadow-blue-500/20 active:scale-95">
+              <span>Xem thêm sản phẩm</span>
+              <i class="fa-solid fa-chevron-down text-xs"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+       DANH MỤC: HÀNG CŨ GIÁ TỐT (8 Ô DANH MỤC CHUẨN HOÀNG HÀ)
+       ========================================================================= -->
+    <section id="used-products-section" class="py-6 sm:py-8 bg-slate-50 select-none">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-white rounded-2xl p-4 sm:p-6 border border-slate-200/90 shadow-sm">
+          <div class="flex items-center justify-between mb-4 sm:mb-5">
+            <h3 class="text-base sm:text-lg font-extrabold text-slate-800 tracking-tight">Hàng cũ giá tốt</h3>
+            <a href="javascript:void(0)" onclick="window.quickSearchTag('Hàng cũ')" class="text-xs sm:text-sm font-bold text-[#0057B7] hover:text-[#004494] inline-flex items-center gap-1 group">
+              <span>Xem tất cả</span>
+              <i class="fa-solid fa-caret-right text-xs group-hover:translate-x-0.5 transition-transform"></i>
+            </a>
+          </div>
+
+          <!-- Lưới 8 danh mục hàng cũ -->
+          <div class="grid grid-cols-4 sm:grid-cols-4 md:grid-cols-8 gap-3 sm:gap-3.5">
+            <a href="javascript:void(0)" onclick="window.quickSearchTag('iPhone cũ')" class="flex flex-col items-center justify-center p-3 rounded-xl border border-slate-200/90 hover:border-blue-500 hover:bg-blue-50/40 hover:shadow-xs transition-all text-center group cursor-pointer bg-white" title="iPhone cũ">
+              <div class="h-14 w-full flex items-center justify-center">
+                <img src="images/hang-cu/iphone-cu.png" alt="iPhone cũ" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-200" loading="lazy" onerror="this.src='images/categories/hang-cu.png'" />
+              </div>
+              <span class="mt-2 text-xs font-semibold text-slate-700 group-hover:text-blue-600 transition-colors">iPhone cũ</span>
+            </a>
+
+            <a href="javascript:void(0)" onclick="window.quickSearchTag('Điện thoại cũ')" class="flex flex-col items-center justify-center p-3 rounded-xl border border-slate-200/90 hover:border-blue-500 hover:bg-blue-50/40 hover:shadow-xs transition-all text-center group cursor-pointer bg-white" title="Điện thoại cũ">
+              <div class="h-14 w-full flex items-center justify-center">
+                <img src="images/hang-cu/dienthoai-cu.png" alt="Điện thoại cũ" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-200" loading="lazy" onerror="this.src='images/categories/dien-thoai.png'" />
+              </div>
+              <span class="mt-2 text-xs font-semibold text-slate-700 group-hover:text-blue-600 transition-colors">Điện thoại cũ</span>
+            </a>
+
+            <a href="javascript:void(0)" onclick="window.quickSearchTag('Laptop cũ')" class="flex flex-col items-center justify-center p-3 rounded-xl border border-slate-200/90 hover:border-blue-500 hover:bg-blue-50/40 hover:shadow-xs transition-all text-center group cursor-pointer bg-white" title="Laptop cũ">
+              <div class="h-14 w-full flex items-center justify-center">
+                <img src="images/hang-cu/laptop-cu.png" alt="Laptop cũ" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-200" loading="lazy" onerror="this.src='images/categories/laptop.png'" />
+              </div>
+              <span class="mt-2 text-xs font-semibold text-slate-700 group-hover:text-blue-600 transition-colors">Laptop cũ</span>
+            </a>
+
+            <a href="javascript:void(0)" onclick="window.quickSearchTag('Máy tính bảng cũ')" class="flex flex-col items-center justify-center p-3 rounded-xl border border-slate-200/90 hover:border-blue-500 hover:bg-blue-50/40 hover:shadow-xs transition-all text-center group cursor-pointer bg-white" title="Máy tính bảng cũ">
+              <div class="h-14 w-full flex items-center justify-center">
+                <img src="images/hang-cu/tablet-cu.png" alt="Máy tính bảng cũ" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-200" loading="lazy" onerror="this.src='images/categories/tablet.png'" />
+              </div>
+              <span class="mt-2 text-xs font-semibold text-slate-700 group-hover:text-blue-600 transition-colors">Máy tính bảng cũ</span>
+            </a>
+
+            <a href="javascript:void(0)" onclick="window.quickSearchTag('Màn hình cũ')" class="flex flex-col items-center justify-center p-3 rounded-xl border border-slate-200/90 hover:border-blue-500 hover:bg-blue-50/40 hover:shadow-xs transition-all text-center group cursor-pointer bg-white" title="Màn hình cũ">
+              <div class="h-14 w-full flex items-center justify-center">
+                <img src="images/hang-cu/manhinh-cu.png" alt="Màn hình cũ" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-200" loading="lazy" onerror="this.src='images/categories/man-hinh.png'" />
+              </div>
+              <span class="mt-2 text-xs font-semibold text-slate-700 group-hover:text-blue-600 transition-colors">Màn hình cũ</span>
+            </a>
+
+            <a href="javascript:void(0)" onclick="window.quickSearchTag('Đồng hồ cũ')" class="flex flex-col items-center justify-center p-3 rounded-xl border border-slate-200/90 hover:border-blue-500 hover:bg-blue-50/40 hover:shadow-xs transition-all text-center group cursor-pointer bg-white" title="Đồng hồ cũ">
+              <div class="h-14 w-full flex items-center justify-center">
+                <img src="images/hang-cu/dongho-cu.png" alt="Đồng hồ cũ" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-200" loading="lazy" onerror="this.src='images/categories/dong-ho.png'" />
+              </div>
+              <span class="mt-2 text-xs font-semibold text-slate-700 group-hover:text-blue-600 transition-colors">Đồng hồ cũ</span>
+            </a>
+
+            <a href="javascript:void(0)" onclick="window.quickSearchTag('Tai nghe cũ')" class="flex flex-col items-center justify-center p-3 rounded-xl border border-slate-200/90 hover:border-blue-500 hover:bg-blue-50/40 hover:shadow-xs transition-all text-center group cursor-pointer bg-white" title="Tai nghe cũ">
+              <div class="h-14 w-full flex items-center justify-center">
+                <img src="images/hang-cu/tainghe-cu.png" alt="Tai nghe cũ" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-200" loading="lazy" onerror="this.src='images/categories/am-thanh.png'" />
+              </div>
+              <span class="mt-2 text-xs font-semibold text-slate-700 group-hover:text-blue-600 transition-colors">Tai nghe cũ</span>
+            </a>
+
+            <a href="javascript:void(0)" onclick="window.quickSearchTag('Loa cũ')" class="flex flex-col items-center justify-center p-3 rounded-xl border border-slate-200/90 hover:border-blue-500 hover:bg-blue-50/40 hover:shadow-xs transition-all text-center group cursor-pointer bg-white" title="Loa cũ">
+              <div class="h-14 w-full flex items-center justify-center">
+                <img src="images/hang-cu/loa-cu.png" alt="Loa cũ" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-200" loading="lazy" onerror="this.src='images/categories/am-thanh.png'" />
+              </div>
+              <span class="mt-2 text-xs font-semibold text-slate-700 group-hover:text-blue-600 transition-colors">Loa cũ</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+       BANNER NGANG: TRUNG TÂM DỊCH VỤ SỬA CHỮA HOANGHACARE
+       ========================================================================= -->
+    <section id="hoanghacare-banner-section" class="py-4 sm:py-6 bg-slate-50 select-none">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <a href="javascript:void(0)" onclick="window.quickSearchTag('Sửa chữa')" class="block overflow-hidden rounded-2xl shadow-sm border border-slate-200/80 hover:shadow-md transition-all duration-300 group" title="HoangHaCare - Trung tâm dịch vụ sửa chữa uy tín">
+          <img src="images/banner/banner-hoanghacare.png" alt="Banner HoangHaCare Sửa Chữa" class="w-full h-auto object-cover group-hover:scale-[1.01] transition-transform duration-300 block rounded-2xl" loading="lazy" />
+        </a>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+       KHỐI VIDEO: HOÀNG HÀ CHANNEL (YOUTUBE HIGHLIGHTS)
+       ========================================================================= -->
+    <section id="hoangha-channel-section" class="py-6 sm:py-8 bg-slate-50 select-none">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between mb-4 sm:mb-5">
+          <div class="flex items-center gap-2">
+            <i class="fa-brands fa-youtube text-red-600 text-xl sm:text-2xl"></i>
+            <h3 class="text-base sm:text-lg font-extrabold text-slate-800 tracking-tight">Hoàng Hà Channel</h3>
+          </div>
+          <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" class="text-xs sm:text-sm font-bold text-[#0057B7] hover:text-[#004494] inline-flex items-center gap-1 group">
+            <span>Xem thêm trên Youtube</span>
+            <i class="fa-solid fa-arrow-up-right-from-square text-xs group-hover:translate-x-0.5 transition-transform"></i>
+          </a>
+        </div>
+
+        <!-- Lưới 4 video công nghệ -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" class="group bg-white rounded-2xl overflow-hidden border border-slate-200/90 hover:border-blue-500 hover:shadow-md transition-all flex flex-col">
+            <div class="w-full aspect-video bg-slate-800 relative overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=600&auto=format&fit=crop&q=80" alt="Video iPhone 16 Pro Max" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+              <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                <div class="w-10 h-10 rounded-full bg-red-600 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                  <i class="fa-solid fa-play text-sm ml-0.5"></i>
+                </div>
+              </div>
+            </div>
+            <div class="p-3.5 flex-1 flex flex-col justify-between">
+              <h4 class="text-xs sm:text-sm font-bold text-slate-800 group-hover:text-blue-600 line-clamp-2 leading-snug transition-colors">
+                Đánh giá chi tiết iPhone 16 Pro Max sau 1 tháng sử dụng thực tế!
+              </h4>
+              <span class="text-[11px] text-slate-400 mt-2 flex items-center gap-1.5"><i class="fa-regular fa-clock text-[10px]"></i> 124K lượt xem • 3 ngày trước</span>
+            </div>
+          </a>
+
+          <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" class="group bg-white rounded-2xl overflow-hidden border border-slate-200/90 hover:border-blue-500 hover:shadow-md transition-all flex flex-col">
+            <div class="w-full aspect-video bg-slate-800 relative overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=600&auto=format&fit=crop&q=80" alt="Video Galaxy S24 Ultra" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+              <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                <div class="w-10 h-10 rounded-full bg-red-600 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                  <i class="fa-solid fa-play text-sm ml-0.5"></i>
+                </div>
+              </div>
+            </div>
+            <div class="p-3.5 flex-1 flex flex-col justify-between">
+              <h4 class="text-xs sm:text-sm font-bold text-slate-800 group-hover:text-blue-600 line-clamp-2 leading-snug transition-colors">
+                Mở hộp & Trải nghiệm Galaxy S24 Ultra: Quyền năng Galaxy AI đỉnh cao
+              </h4>
+              <span class="text-[11px] text-slate-400 mt-2 flex items-center gap-1.5"><i class="fa-regular fa-clock text-[10px]"></i> 89K lượt xem • 1 tuần trước</span>
+            </div>
+          </a>
+
+          <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" class="group bg-white rounded-2xl overflow-hidden border border-slate-200/90 hover:border-blue-500 hover:shadow-md transition-all flex flex-col">
+            <div class="w-full aspect-video bg-slate-800 relative overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&auto=format&fit=crop&q=80" alt="Video MacBook Air M3" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+              <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                <div class="w-10 h-10 rounded-full bg-red-600 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                  <i class="fa-solid fa-play text-sm ml-0.5"></i>
+                </div>
+              </div>
+            </div>
+            <div class="p-3.5 flex-1 flex flex-col justify-between">
+              <h4 class="text-xs sm:text-sm font-bold text-slate-800 group-hover:text-blue-600 line-clamp-2 leading-snug transition-colors">
+                MacBook Air M3: Chiếc laptop quốc dân cho sinh viên và văn phòng
+              </h4>
+              <span class="text-[11px] text-slate-400 mt-2 flex items-center gap-1.5"><i class="fa-regular fa-clock text-[10px]"></i> 156K lượt xem • 2 tuần trước</span>
+            </div>
+          </a>
+
+          <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" class="group bg-white rounded-2xl overflow-hidden border border-slate-200/90 hover:border-blue-500 hover:shadow-md transition-all flex flex-col">
+            <div class="w-full aspect-video bg-slate-800 relative overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=600&auto=format&fit=crop&q=80" alt="Video iPad Air M2" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+              <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                <div class="w-10 h-10 rounded-full bg-red-600 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                  <i class="fa-solid fa-play text-sm ml-0.5"></i>
+                </div>
+              </div>
+            </div>
+            <div class="p-3.5 flex-1 flex flex-col justify-between">
+              <h4 class="text-xs sm:text-sm font-bold text-slate-800 group-hover:text-blue-600 line-clamp-2 leading-snug transition-colors">
+                Top 5 máy tính bảng tốt nhất cho học tập & làm việc năm 2026!
+              </h4>
+              <span class="text-[11px] text-slate-400 mt-2 flex items-center gap-1.5"><i class="fa-regular fa-clock text-[10px]"></i> 78K lượt xem • 3 tuần trước</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+</main>
 
     <!-- =========================================================================
        FOOTER: THÔNG TIN LIÊN HỆ, PHÁP LÝ VÀ ĐỐI TÁC
