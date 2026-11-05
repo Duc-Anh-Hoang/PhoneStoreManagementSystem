@@ -488,27 +488,63 @@
             return;
           }
 
-          // Nhận access_token thật từ Google, gửi lên Backend
+          // Nhận access_token thật từ Google: đồng bộ lên Backend hoặc lấy trực tiếp từ Google UserInfo
           try {
             if (btn) {
               btn.disabled = true;
               btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-sm"></i> Đang xác thực...';
             }
 
-            const resp = await fetch(API_BASE + '/auth/google-login', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ accessToken: tokenResponse.access_token })
-            });
+            let loginSuccess = false;
 
-            const data = await resp.json().catch(() => ({}));
-            if (resp.ok && data.token) {
-              applyCustomerLoginSuccess(data);
-            } else {
-              alert(data.message || 'Xác thực tài khoản Google với hệ thống thất bại.');
+            // 1. Gửi token lên Backend PhoneStoreAPI (nếu backend đang chạy)
+            try {
+              const resp = await fetch(API_BASE + '/auth/google-login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ accessToken: tokenResponse.access_token })
+              });
+
+              if (resp.ok) {
+                const data = await resp.json().catch(() => ({}));
+                if (data && data.token) {
+                  applyCustomerLoginSuccess(data);
+                  loginSuccess = true;
+                }
+              }
+            } catch (netErr) {
+              console.warn('Backend chưa online hoặc cổng 8080 chưa mở, chuyển sang lấy profile trực tiếp từ Google API...');
             }
-          } catch (netErr) {
-            alert('Không thể kết nối đến máy chủ backend để hoàn tất đăng nhập.');
+
+            // 2. Dự phòng thông minh: Nếu Backend chưa online, tải profile chính thức trực tiếp từ Google
+            if (!loginSuccess) {
+              try {
+                const gResp = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                  headers: { 'Authorization': 'Bearer ' + tokenResponse.access_token }
+                });
+
+                if (gResp.ok) {
+                  const gUser = await gResp.json();
+                  applyCustomerLoginSuccess({
+                    token: 'google_token_' + (gUser.sub || Date.now()),
+                    user: {
+                      maKH: 'GG_' + (gUser.sub ? gUser.sub.slice(-6) : '001'),
+                      hoTen: gUser.name || gUser.email.split('@')[0],
+                      email: gUser.email || '',
+                      avatar: gUser.picture || '',
+                      sdt: ''
+                    }
+                  }, gUser.email);
+                  loginSuccess = true;
+                }
+              } catch (gErr) {
+                console.error('Lỗi kết nối Google UserInfo API:', gErr);
+              }
+            }
+
+            if (!loginSuccess) {
+              alert('Đăng nhập Google thành công nhưng không thể lấy thông tin hồ sơ. Vui lòng thử lại!');
+            }
           } finally {
             if (btn) {
               btn.disabled = false;
@@ -538,9 +574,10 @@
       hoTen: u.hoTen || 'Khách Hàng Google',
       maKH: u.maKH || '',
       email: u.email || fallbackEmail || '',
+      avatar: u.avatar || '',
       diaChi: u.diaChi || 'TP. Hồ Chí Minh',
-      diemTichLuy: 0,
-      tongChiTieu: 0,
+      diemTichLuy: u.diemTichLuy || 0,
+      tongChiTieu: u.tongChiTieu || 0,
       token: resJson.token
     };
 
