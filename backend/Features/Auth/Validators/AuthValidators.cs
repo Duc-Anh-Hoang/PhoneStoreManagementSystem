@@ -24,3 +24,12 @@ public class CustomerLoginRequestValidator : AbstractValidator<CustomerLoginRequ
             .Matches(@"^[0-9]{9,15}$").WithMessage("Số điện thoại phải chứa từ 9 đến 15 chữ số.");
     }
 }
+
+public class GoogleLoginRequestValidator : AbstractValidator<GoogleLoginRequest>
+{
+    public GoogleLoginRequestValidator()
+    {
+        RuleFor(x => x.IdToken)
+            .NotEmpty().WithMessage("Google ID Token không được để trống.");
+    }
+}

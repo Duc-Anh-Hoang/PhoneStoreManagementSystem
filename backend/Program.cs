@@ -42,6 +42,9 @@ builder.Services.AddFeatureServices();
 // 4. Cấu hình JWT Bearer Authentication & Authorization
 builder.Services.AddAppAuth(builder.Configuration);
 
+// Cấu hình dịch vụ Email SMTP
+builder.Services.AddAppEmail(builder.Configuration);
+
 // 5. Cấu hình Rate Limiting (P1-09)
 builder.Services.AddAppRateLimiting();
 

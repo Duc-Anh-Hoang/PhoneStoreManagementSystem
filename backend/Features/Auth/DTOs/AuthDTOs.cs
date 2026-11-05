@@ -45,3 +45,8 @@ public class CustomerLoginResponse
     public DateTime ExpiresAt { get; set; }
     public CustomerUserInfoDto User { get; set; } = new();
 }
+
+public class GoogleLoginRequest
+{
+    public string IdToken { get; set; } = string.Empty;
+}

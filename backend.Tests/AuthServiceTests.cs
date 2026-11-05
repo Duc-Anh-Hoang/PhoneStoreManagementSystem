@@ -242,4 +242,64 @@ public class AuthServiceTests
         Assert.Equal(HttpStatusCode.Forbidden, ex.StatusCode);
         Assert.Contains("nghỉ việc", ex.Message);
     }
+
+    [Fact]
+    public async Task LoginGoogleAsync_WithEmptyToken_ThrowsBadRequestException()
+    {
+        using var context = CreateDbContext();
+        var service = new AuthService(context, _configuration, _mockCodeGenerator.Object, NullLogger<AuthService>.Instance);
+
+        await Assert.ThrowsAsync<BadRequestException>(() =>
+            service.LoginGoogleAsync(new GoogleLoginRequest { IdToken = "" }));
+    }
+
+    [Fact]
+    public async Task LoginGoogleAsync_WithMockToken_CreatesCustomerAndReturnsJwt()
+    {
+        using var context = CreateDbContext();
+        _mockCodeGenerator.Setup(c => c.NextAsync("KH")).ReturnsAsync("KH009");
+
+        var service = new AuthService(context, _configuration, _mockCodeGenerator.Object, NullLogger<AuthService>.Instance);
+
+        var result = await service.LoginGoogleAsync(new GoogleLoginRequest
+        {
+            IdToken = "mock-google-token:googleuser@gmail.com:Nguyễn Văn Google"
+        });
+
+        Assert.NotNull(result);
+        Assert.NotEmpty(result.Token);
+        Assert.Equal("KH009", result.User.MaKH);
+        Assert.Equal("Nguyễn Văn Google", result.User.HoTen);
+        Assert.Equal("googleuser@gmail.com", result.User.Email);
+
+        var savedCustomer = await context.KhachHangs.FirstOrDefaultAsync(k => k.MaKH == "KH009");
+        Assert.NotNull(savedCustomer);
+        Assert.Equal("googleuser@gmail.com", savedCustomer.Email);
+    }
+
+    [Fact]
+    public async Task LoginGoogleAsync_WithExistingEmail_ReusesCustomerAndReturnsJwt()
+    {
+        using var context = CreateDbContext();
+        var existing = new KhachHang
+        {
+            MaKH = "KH001",
+            HoTen = "Đã Tồn Tại",
+            Email = "existing@gmail.com",
+            Sdt = "0901234567"
+        };
+        context.KhachHangs.Add(existing);
+        await context.SaveChangesAsync();
+
+        var service = new AuthService(context, _configuration, _mockCodeGenerator.Object, NullLogger<AuthService>.Instance);
+
+        var result = await service.LoginGoogleAsync(new GoogleLoginRequest
+        {
+            IdToken = "mock-google-token:existing@gmail.com:Đã Tồn Tại Mới"
+        });
+
+        Assert.NotNull(result);
+        Assert.Equal("KH001", result.User.MaKH);
+        Assert.Equal("existing@gmail.com", result.User.Email);
+    }
 }

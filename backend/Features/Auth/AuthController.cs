@@ -44,6 +44,18 @@ public class AuthController : ControllerBase
     }
 
     /// <summary>
+    /// Đăng nhập khách hàng bằng Google OAuth ID Token
+    /// </summary>
+    [HttpPost("google-login")]
+    [AllowAnonymous]
+    [EnableRateLimiting("login")]
+    public async Task<IActionResult> GoogleLogin([FromBody] GoogleLoginRequest request)
+    {
+        var result = await _authService.LoginGoogleAsync(request);
+        return Ok(result);
+    }
+
+    /// <summary>
     /// Đăng xuất khỏi hệ thống
     /// </summary>
     [HttpPost("logout")]
