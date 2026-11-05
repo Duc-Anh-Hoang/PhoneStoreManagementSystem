@@ -11,9 +11,9 @@ public class WarrantyService : IWarrantyService
 {
     private readonly AppDbContext _context;
     private readonly ICodeGenerator _codeGenerator;
-    private readonly ICurrentUser _currentUser;
+    private readonly ICurrentUser? _currentUser;
 
-    public WarrantyService(AppDbContext context, ICodeGenerator codeGenerator, ICurrentUser currentUser)
+    public WarrantyService(AppDbContext context, ICodeGenerator codeGenerator, ICurrentUser? currentUser = null)
     {
         _context = context;
         _codeGenerator = codeGenerator;
@@ -307,7 +307,7 @@ public class WarrantyService : IWarrantyService
             await ValidateTechnicianAsync(request.MaNVKyThuat.Trim());
         }
 
-        string? maNVTiepNhan = _currentUser.MaNV;
+        string? maNVTiepNhan = _currentUser?.MaNV;
         if (string.IsNullOrWhiteSpace(maNVTiepNhan))
         {
             throw new UnauthorizedException("Không xác định được nhân viên lập phiếu tiếp nhận.");

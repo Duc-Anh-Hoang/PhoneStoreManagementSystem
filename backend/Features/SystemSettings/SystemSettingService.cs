@@ -10,17 +10,27 @@ namespace PhoneStoreAPI.Features.SystemSettings;
 public class SystemSettingService : ISystemSettingService
 {
     private readonly AppDbContext _context;
-    private readonly IThamSoProvider _thamSoProvider;
-    private readonly IValidator<UpdateThamSoRequest> _updateValidator;
+    private readonly IThamSoProvider? _thamSoProvider;
+    private readonly IValidator<UpdateThamSoRequest>? _updateValidator;
 
     public SystemSettingService(
         AppDbContext context, 
-        IThamSoProvider thamSoProvider,
-        IValidator<UpdateThamSoRequest> updateValidator)
+        IThamSoProvider? thamSoProvider = null,
+        IValidator<UpdateThamSoRequest>? updateValidator = null)
     {
         _context = context;
         _thamSoProvider = thamSoProvider;
         _updateValidator = updateValidator;
+    }
+
+    public async Task<decimal> GetAsync(string maThamSo)
+    {
+        if (_thamSoProvider != null)
+        {
+            return await _thamSoProvider.GetAsync(maThamSo);
+        }
+        var ts = await _context.ThamSos.AsNoTracking().FirstOrDefaultAsync(t => t.MaThamSo == maThamSo);
+        return ts?.GiaTri ?? 0m;
     }
 
     public async Task<List<ThamSoDto>> GetAllAsync()
@@ -83,7 +93,7 @@ public class SystemSettingService : ISystemSettingService
         await _context.SaveChangesAsync();
 
         // Xóa cache ngay khi PUT
-        _thamSoProvider.InvalidateCache(entity.MaThamSo);
+        _thamSoProvider?.InvalidateCache(entity.MaThamSo);
 
         return new ThamSoDto
         {

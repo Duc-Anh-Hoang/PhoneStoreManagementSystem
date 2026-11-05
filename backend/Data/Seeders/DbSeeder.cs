@@ -116,6 +116,67 @@ public static class DbSeeder
                 await context.SaveChangesAsync();
                 logger.LogInformation("Đã cập nhật mật khẩu mặc định 'admin123' cho các tài khoản seed.");
             }
+
+            // 5. Seed PhieuNhap & IMEI mẫu nếu kho trống để kiểm thử bán hàng POS
+            if (!await context.PhieuNhaps.AnyAsync())
+            {
+                logger.LogInformation("Seeding PhieuNhap & IMEI mẫu...");
+                var now = DateTime.UtcNow;
+
+                var pn1 = new PhieuNhap
+                {
+                    SoPN = "PN261100001",
+                    NgayNhap = now.AddDays(-5),
+                    MaNCC = "NCC_AP",
+                    MaNV = "NV004"
+                };
+
+                var pn2 = new PhieuNhap
+                {
+                    SoPN = "PN261100002",
+                    NgayNhap = now.AddDays(-3),
+                    MaNCC = "NCC_SS",
+                    MaNV = "NV004"
+                };
+
+                context.PhieuNhaps.AddRange(pn1, pn2);
+                await context.SaveChangesAsync();
+
+                context.ChiTietPhieuNhaps.AddRange(
+                    new ChiTietPhieuNhap { SoPN = "PN261100001", MaHang = "IP15PM256", SlNhap = 5, DonGiaNhap = 26000000m },
+                    new ChiTietPhieuNhap { SoPN = "PN261100001", MaHang = "IP15P128", SlNhap = 5, DonGiaNhap = 22000000m },
+                    new ChiTietPhieuNhap { SoPN = "PN261100001", MaHang = "AP_PRO2", SlNhap = 10, DonGiaNhap = 4500000m },
+                    new ChiTietPhieuNhap { SoPN = "PN261100002", MaHang = "S24U512", SlNhap = 5, DonGiaNhap = 28000000m }
+                );
+                await context.SaveChangesAsync();
+
+                var sampleImeis = new List<IMEI>
+                {
+                    // iPhone 15 Pro Max 256GB (5 máy)
+                    new IMEI { MaIMEI = "IMEI_IP15PM_01", MaHang = "IP15PM256", SoPN = "PN261100001", SoIMEI = "358901234567891", TrangThai = "con_hang" },
+                    new IMEI { MaIMEI = "IMEI_IP15PM_02", MaHang = "IP15PM256", SoPN = "PN261100001", SoIMEI = "358901234567892", TrangThai = "con_hang" },
+                    new IMEI { MaIMEI = "IMEI_IP15PM_03", MaHang = "IP15PM256", SoPN = "PN261100001", SoIMEI = "358901234567893", TrangThai = "con_hang" },
+                    new IMEI { MaIMEI = "IMEI_IP15PM_04", MaHang = "IP15PM256", SoPN = "PN261100001", SoIMEI = "358901234567894", TrangThai = "con_hang" },
+                    new IMEI { MaIMEI = "IMEI_IP15PM_05", MaHang = "IP15PM256", SoPN = "PN261100001", SoIMEI = "358901234567895", TrangThai = "con_hang" },
+
+                    // iPhone 15 Pro 128GB (5 máy)
+                    new IMEI { MaIMEI = "IMEI_IP15P_01", MaHang = "IP15P128", SoPN = "PN261100001", SoIMEI = "358911234567891", TrangThai = "con_hang" },
+                    new IMEI { MaIMEI = "IMEI_IP15P_02", MaHang = "IP15P128", SoPN = "PN261100001", SoIMEI = "358911234567892", TrangThai = "con_hang" },
+                    new IMEI { MaIMEI = "IMEI_IP15P_03", MaHang = "IP15P128", SoPN = "PN261100001", SoIMEI = "358911234567893", TrangThai = "con_hang" },
+                    new IMEI { MaIMEI = "IMEI_IP15P_04", MaHang = "IP15P128", SoPN = "PN261100001", SoIMEI = "358911234567894", TrangThai = "con_hang" },
+                    new IMEI { MaIMEI = "IMEI_IP15P_05", MaHang = "IP15P128", SoPN = "PN261100001", SoIMEI = "358911234567895", TrangThai = "con_hang" },
+
+                    // Samsung Galaxy S24 Ultra 512GB (5 máy)
+                    new IMEI { MaIMEI = "IMEI_S24U_01", MaHang = "S24U512", SoPN = "PN261100002", SoIMEI = "359901234567891", TrangThai = "con_hang" },
+                    new IMEI { MaIMEI = "IMEI_S24U_02", MaHang = "S24U512", SoPN = "PN261100002", SoIMEI = "359901234567892", TrangThai = "con_hang" },
+                    new IMEI { MaIMEI = "IMEI_S24U_03", MaHang = "S24U512", SoPN = "PN261100002", SoIMEI = "359901234567893", TrangThai = "con_hang" },
+                    new IMEI { MaIMEI = "IMEI_S24U_04", MaHang = "S24U512", SoPN = "PN261100002", SoIMEI = "359901234567894", TrangThai = "con_hang" },
+                    new IMEI { MaIMEI = "IMEI_S24U_05", MaHang = "S24U512", SoPN = "PN261100002", SoIMEI = "359901234567895", TrangThai = "con_hang" }
+                };
+
+                context.IMEIs.AddRange(sampleImeis);
+                await context.SaveChangesAsync();
+            }
         }
         catch (Exception ex)
         {

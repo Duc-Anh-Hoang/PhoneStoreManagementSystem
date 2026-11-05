@@ -1,5 +1,465 @@
+using Microsoft.EntityFrameworkCore;
+using PhoneStoreAPI.Common.Constants;
+using PhoneStoreAPI.Common.Exceptions;
+using PhoneStoreAPI.Common.Services;
+using PhoneStoreAPI.Data;
+using PhoneStoreAPI.Features.OnlineOrders.DTOs;
+using PhoneStoreAPI.Features.Warranty;
+using PhoneStoreAPI.Models.Entities;
+
 namespace PhoneStoreAPI.Features.OnlineOrders;
 
 public class OnlineOrderService : IOnlineOrderService
 {
+    private readonly AppDbContext _context;
+    private readonly ICurrentUser _currentUser;
+    private readonly ICodeGenerator _codeGenerator;
+    private readonly IWarrantyService _warrantyService;
+
+    public OnlineOrderService(
+        AppDbContext context,
+        ICurrentUser currentUser,
+        ICodeGenerator codeGenerator,
+        IWarrantyService warrantyService)
+    {
+        _context = context;
+        _currentUser = currentUser;
+        _codeGenerator = codeGenerator;
+        _warrantyService = warrantyService;
+    }
+
+    public async Task<OrderDto> CreateOrderAsync(CreateOrderRequest request)
+    {
+        using var transaction = await _context.Database.BeginTransactionAsync();
+        try
+        {
+            // 1. Chuẩn hóa SĐT người nhận
+            var sdtNorm = request.SdtNguoiNhan.Trim().Replace(" ", "").Replace(".", "").Replace("-", "");
+
+            // 2. Tìm hoặc tạo khách hàng
+            KhachHang? khachHang = null;
+            if (!string.IsNullOrWhiteSpace(request.MaKH))
+            {
+                khachHang = await _context.KhachHangs.FirstOrDefaultAsync(k => k.MaKH == request.MaKH);
+            }
+
+            if (khachHang == null)
+            {
+                khachHang = await _context.KhachHangs.FirstOrDefaultAsync(k => k.Sdt == sdtNorm);
+            }
+
+            if (khachHang == null)
+            {
+                var newMaKH = await _codeGenerator.NextAsync("KH");
+                khachHang = new KhachHang
+                {
+                    MaKH = newMaKH,
+                    HoTen = request.TenNguoiNhan.Trim(),
+                    Sdt = sdtNorm,
+                    DiaChi = request.DiaChiGiao.Trim(),
+                    Email = $"{sdtNorm}@cellphones.customer"
+                };
+                _context.KhachHangs.Add(khachHang);
+                await _context.SaveChangesAsync();
+            }
+
+            // 3. Kiểm tra sản phẩm và tính tổng tiền từ DonGia DB
+            decimal tongTien = 0m;
+            var chiTietList = new List<ChiTietDonHangOnline>();
+
+            foreach (var item in request.Items)
+            {
+                var matHang = await _context.MatHangs.FirstOrDefaultAsync(m => m.MaHang == item.MaHang);
+                if (matHang == null)
+                {
+                    throw new NotFoundException($"Mặt hàng {item.MaHang} không tồn tại.");
+                }
+
+                if (matHang.QuanLyImei)
+                {
+                    // Đếm số IMEI còn hàng
+                    int countAvail = await _context.IMEIs.CountAsync(i => i.MaHang == matHang.MaHang && i.TrangThai == "con_hang");
+                    if (countAvail < item.SoLuong)
+                    {
+                        throw new BadRequestException($"Mặt hàng {matHang.TenHang} không đủ số lượng có sẵn trong kho (còn {countAvail}).");
+                    }
+                }
+                else
+                {
+                    var tongNhap = await _context.ChiTietPhieuNhaps
+                        .Where(p => p.MaHang == matHang.MaHang)
+                        .SumAsync(p => (int?)p.SlNhap) ?? 0;
+                    var tongBan = await _context.ChiTietHoaDons
+                        .Where(h => h.MaHang == matHang.MaHang)
+                        .SumAsync(h => (int?)h.SlBan) ?? 0;
+                    int tonKho = tongNhap - tongBan;
+                    if (tonKho < item.SoLuong)
+                    {
+                        throw new BadRequestException($"Mặt hàng {matHang.TenHang} không đủ tồn kho (còn {tonKho}).");
+                    }
+                }
+
+                decimal donGiaDb = matHang.DonGia; // Bỏ qua giá client
+                tongTien += donGiaDb * item.SoLuong;
+
+                chiTietList.Add(new ChiTietDonHangOnline
+                {
+                    MaHang = matHang.MaHang,
+                    SoLuong = item.SoLuong,
+                    DonGia = donGiaDb
+                });
+            }
+
+            // 4. Tạo DonHangOnline
+            var maDH = await _codeGenerator.NextAsync("DH");
+            var donHang = new DonHangOnline
+            {
+                MaDH = maDH,
+                NgayDat = DateTime.UtcNow,
+                MaKH = khachHang.MaKH,
+                TenNguoiNhan = request.TenNguoiNhan.Trim(),
+                SdtNguoiNhan = sdtNorm,
+                DiaChiGiao = request.DiaChiGiao.Trim(),
+                PhuongThucThanhToan = request.PhuongThucThanhToan,
+                TongTien = tongTien,
+                TrangThai = AppConstants.OrderStatus.ChoXacNhan
+            };
+
+            _context.DonHangOnlines.Add(donHang);
+            await _context.SaveChangesAsync();
+
+            // 5. Gán MaDH cho chi tiết và lưu
+            foreach (var ct in chiTietList)
+            {
+                ct.MaDH = maDH;
+                _context.ChiTietDonHangOnlines.Add(ct);
+            }
+            await _context.SaveChangesAsync();
+
+            await transaction.CommitAsync();
+
+            return new OrderDto
+            {
+                MaDH = donHang.MaDH,
+                NgayDat = donHang.NgayDat,
+                MaKH = donHang.MaKH,
+                TenNguoiNhan = donHang.TenNguoiNhan,
+                SdtNguoiNhan = donHang.SdtNguoiNhan,
+                DiaChiGiao = donHang.DiaChiGiao,
+                PhuongThucThanhToan = donHang.PhuongThucThanhToan,
+                TongTien = donHang.TongTien,
+                TrangThai = donHang.TrangThai,
+                Items = chiTietList.Select(ct => new OrderItemDto
+                {
+                    MaHang = ct.MaHang,
+                    SoLuong = ct.SoLuong,
+                    DonGia = ct.DonGia,
+                    ThanhTien = ct.SoLuong * ct.DonGia
+                }).ToList()
+            };
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+    }
+
+    public async Task<OrderDto?> GetOrderByMaDHAsync(string maDH, string? sdt)
+    {
+        var query = _context.DonHangOnlines.AsNoTracking()
+            .Include(d => d.ChiTietDonHangs)
+                .ThenInclude(c => c.MatHang)
+            .Where(d => d.MaDH == maDH);
+
+        var order = await query.FirstOrDefaultAsync();
+        if (order == null) return null;
+
+        // Nếu client cung cấp SĐT, phải khớp với SdtNguoiNhan. Nếu không khớp trả null để controller ném 404 (chống dò mã đơn P4-06)
+        if (!string.IsNullOrWhiteSpace(sdt))
+        {
+            var cleanPhone = sdt.Trim().Replace(" ", "");
+            if (!string.Equals(order.SdtNguoiNhan, cleanPhone, StringComparison.OrdinalIgnoreCase))
+            {
+                return null;
+            }
+        }
+
+        return new OrderDto
+        {
+            MaDH = order.MaDH,
+            NgayDat = order.NgayDat,
+            MaKH = order.MaKH,
+            TenNguoiNhan = order.TenNguoiNhan,
+            SdtNguoiNhan = order.SdtNguoiNhan,
+            DiaChiGiao = order.DiaChiGiao,
+            PhuongThucThanhToan = order.PhuongThucThanhToan,
+            TongTien = order.TongTien,
+            TrangThai = order.TrangThai,
+            SoHD = order.SoHD,
+            Items = order.ChiTietDonHangs.Select(c => new OrderItemDto
+            {
+                MaHang = c.MaHang,
+                TenHang = c.MatHang?.TenHang ?? c.MaHang,
+                SoLuong = c.SoLuong,
+                DonGia = c.DonGia,
+                ThanhTien = c.SoLuong * c.DonGia
+            }).ToList()
+        };
+    }
+
+    public async Task<List<OrderDto>> GetOrdersByPhoneAsync(string sdt)
+    {
+        var cleanPhone = sdt.Trim().Replace(" ", "");
+        var orders = await _context.DonHangOnlines.AsNoTracking()
+            .Where(d => d.SdtNguoiNhan == cleanPhone)
+            .OrderByDescending(d => d.NgayDat)
+            .ToListAsync();
+
+        return orders.Select(o => new OrderDto
+        {
+            MaDH = o.MaDH,
+            NgayDat = o.NgayDat,
+            MaKH = o.MaKH,
+            TenNguoiNhan = o.TenNguoiNhan,
+            SdtNguoiNhan = o.SdtNguoiNhan,
+            DiaChiGiao = o.DiaChiGiao,
+            PhuongThucThanhToan = o.PhuongThucThanhToan,
+            TongTien = o.TongTien,
+            TrangThai = o.TrangThai,
+            SoHD = o.SoHD
+        }).ToList();
+    }
+
+    public async Task<(List<OrderDto> Items, int Total)> GetAdminOrdersAsync(
+        string? trangThai, DateOnly? tuNgay, DateOnly? denNgay, int page, int pageSize)
+    {
+        page = page <= 0 ? 1 : page;
+        pageSize = pageSize <= 0 ? 20 : (pageSize > 100 ? 100 : pageSize);
+
+        var query = _context.DonHangOnlines.AsNoTracking()
+            .Include(d => d.ChiTietDonHangs)
+                .ThenInclude(c => c.MatHang)
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(trangThai) && trangThai != "all")
+        {
+            query = query.Where(d => d.TrangThai == trangThai);
+        }
+
+        if (tuNgay.HasValue)
+        {
+            var fromUtc = tuNgay.Value.ToDateTime(TimeOnly.MinValue, DateTimeKind.Utc);
+            query = query.Where(d => d.NgayDat >= fromUtc);
+        }
+
+        if (denNgay.HasValue)
+        {
+            var toUtc = denNgay.Value.ToDateTime(TimeOnly.MaxValue, DateTimeKind.Utc);
+            query = query.Where(d => d.NgayDat <= toUtc);
+        }
+
+        int total = await query.CountAsync();
+
+        var list = await query
+            .OrderByDescending(d => d.NgayDat)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        var dtos = list.Select(o => new OrderDto
+        {
+            MaDH = o.MaDH,
+            NgayDat = o.NgayDat,
+            MaKH = o.MaKH,
+            TenNguoiNhan = o.TenNguoiNhan,
+            SdtNguoiNhan = o.SdtNguoiNhan,
+            DiaChiGiao = o.DiaChiGiao,
+            PhuongThucThanhToan = o.PhuongThucThanhToan,
+            TongTien = o.TongTien,
+            TrangThai = o.TrangThai,
+            MaNV = o.MaNV,
+            SoHD = o.SoHD,
+            Items = o.ChiTietDonHangs.Select(c => new OrderItemDto
+            {
+                MaHang = c.MaHang,
+                TenHang = c.MatHang?.TenHang ?? c.MaHang,
+                SoLuong = c.SoLuong,
+                DonGia = c.DonGia,
+                ThanhTien = c.SoLuong * c.DonGia
+            }).ToList()
+        }).ToList();
+
+        return (dtos, total);
+    }
+
+    public async Task<OrderDto> UpdateOrderStatusAsync(string maDH, string newTrangThai, string? soHDKem = null)
+    {
+        var maNV = _currentUser.MaNV;
+        if (string.IsNullOrWhiteSpace(maNV))
+        {
+            maNV = await _context.NhanViens.Select(n => n.MaNV).FirstOrDefaultAsync() ?? "NV001";
+        }
+
+        using var transaction = await _context.Database.BeginTransactionAsync();
+        try
+        {
+            var donHang = await _context.DonHangOnlines
+                .Include(d => d.ChiTietDonHangs)
+                    .ThenInclude(c => c.MatHang)
+                .FirstOrDefaultAsync(d => d.MaDH == maDH);
+
+            if (donHang == null)
+            {
+                throw new NotFoundException($"Không tìm thấy đơn hàng {maDH}");
+            }
+
+            var curr = donHang.TrangThai;
+
+            // Kiểm tra máy trạng thái hợp lệ theo P4-07
+            // Chỉ cho: cho_xac_nhan → da_xac_nhan, da_xac_nhan → dang_giao, dang_giao → hoan_thanh, cho_xac_nhan hoặc da_xac_nhan → da_huy. Còn lại 409
+            bool validTransition = false;
+            if (curr == AppConstants.OrderStatus.ChoXacNhan && newTrangThai == AppConstants.OrderStatus.DaXacNhan) validTransition = true;
+            else if (curr == AppConstants.OrderStatus.DaXacNhan && newTrangThai == AppConstants.OrderStatus.DangGiao) validTransition = true;
+            else if (curr == AppConstants.OrderStatus.DangGiao && newTrangThai == AppConstants.OrderStatus.HoanThanh) validTransition = true;
+            else if ((curr == AppConstants.OrderStatus.ChoXacNhan || curr == AppConstants.OrderStatus.DaXacNhan) && newTrangThai == AppConstants.OrderStatus.DaHuy) validTransition = true;
+
+            if (!validTransition)
+            {
+                throw new ConflictException($"Không thể chuyển trạng thái đơn hàng từ '{curr}' sang '{newTrangThai}'.");
+            }
+
+            // Ghi nhận MaNV khi xác nhận đơn
+            if (newTrangThai == AppConstants.OrderStatus.DaXacNhan)
+            {
+                donHang.MaNV = maNV;
+            }
+
+            // Xử lý khi hoàn thành đơn:
+            // Tự động gán IMEI cũ nhất (theo phiếu nhập), tạo hóa đơn online, tạo bảo hành
+            if (newTrangThai == AppConstants.OrderStatus.HoanThanh)
+            {
+                string soHD = donHang.SoHD ?? soHDKem ?? string.Empty;
+
+                if (string.IsNullOrEmpty(soHD))
+                {
+                    // Tạo hóa đơn mới kênh online
+                    soHD = await _codeGenerator.NextAsync("HD");
+                    var ptThanhToan = donHang.PhuongThucThanhToan == "cod" ? "tien_mat" : donHang.PhuongThucThanhToan;
+
+                    var hoaDon = new HoaDon
+                    {
+                        SoHD = soHD,
+                        NgayLap = DateTime.UtcNow,
+                        MaKH = donHang.MaKH,
+                        MaNV = maNV,
+                        KenhBan = AppConstants.SaleChannels.Online,
+                        TongTien = donHang.TongTien,
+                        TienGiamGia = 0m,
+                        PhuongThucThanhToan = ptThanhToan
+                    };
+                    _context.HoaDons.Add(hoaDon);
+                    await _context.SaveChangesAsync();
+
+                    // Xử lý từng dòng chi tiết đơn
+                    foreach (var item in donHang.ChiTietDonHangs)
+                    {
+                        var matHang = item.MatHang ?? await _context.MatHangs.FirstOrDefaultAsync(m => m.MaHang == item.MaHang);
+                        if (matHang != null && matHang.QuanLyImei)
+                        {
+                            for (int i = 0; i < item.SoLuong; i++)
+                            {
+                                // Chọn IMEI con_hang theo phiếu nhập cũ trước (FIFO dựa vào SoPN hoặc MaIMEI)
+                                var imei = await (from im in _context.IMEIs
+                                                  join pn in _context.PhieuNhaps on im.SoPN equals pn.SoPN into pnGroup
+                                                  from pn in pnGroup.DefaultIfEmpty()
+                                                  where im.MaHang == item.MaHang && im.TrangThai == "con_hang"
+                                                  orderby pn != null ? pn.NgayNhap : DateTime.MinValue, im.MaIMEI
+                                                  select im).FirstOrDefaultAsync();
+
+                                if (imei == null)
+                                {
+                                    throw new ConflictException($"Hết hàng trong kho cho mặt hàng {matHang.TenHang}. Đơn hàng giữ nguyên trạng thái.");
+                                }
+
+                                int rows = 0;
+                                if (_context.Database.IsRelational())
+                                {
+                                    rows = await _context.Database.ExecuteSqlRawAsync(
+                                        "UPDATE imei SET trangthai = 'da_ban' WHERE maimei = {0} AND trangthai = 'con_hang'",
+                                        imei.MaIMEI);
+                                }
+                                else
+                                {
+                                    if (imei.TrangThai == "con_hang")
+                                    {
+                                        imei.TrangThai = "da_ban";
+                                        rows = 1;
+                                    }
+                                }
+
+                                if (rows == 0)
+                                {
+                                    throw new ConflictException($"Xung đột cập nhật IMEI {imei.SoIMEI}. Vui lòng thử lại.");
+                                }
+
+                                var ctHD = new ChiTietHoaDon
+                                {
+                                    SoHD = soHD,
+                                    MaHang = item.MaHang,
+                                    MaIMEI = imei.MaIMEI,
+                                    SlBan = 1,
+                                    DonGiaBan = item.DonGia
+                                };
+                                _context.ChiTietHoaDons.Add(ctHD);
+                                await _context.SaveChangesAsync();
+
+                                // Tạo bảo hành
+                                await _warrantyService.CreateForInvoiceAsync(soHD, imei.MaIMEI, item.MaHang);
+                            }
+                        }
+                        else
+                        {
+                            var ctHD = new ChiTietHoaDon
+                            {
+                                SoHD = soHD,
+                                MaHang = item.MaHang,
+                                MaIMEI = null,
+                                SlBan = item.SoLuong,
+                                DonGiaBan = item.DonGia
+                            };
+                            _context.ChiTietHoaDons.Add(ctHD);
+                            await _context.SaveChangesAsync();
+                        }
+                    }
+                }
+
+                donHang.SoHD = soHD;
+            }
+
+            donHang.TrangThai = newTrangThai;
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+
+            return new OrderDto
+            {
+                MaDH = donHang.MaDH,
+                NgayDat = donHang.NgayDat,
+                MaKH = donHang.MaKH,
+                TenNguoiNhan = donHang.TenNguoiNhan,
+                SdtNguoiNhan = donHang.SdtNguoiNhan,
+                DiaChiGiao = donHang.DiaChiGiao,
+                PhuongThucThanhToan = donHang.PhuongThucThanhToan,
+                TongTien = donHang.TongTien,
+                TrangThai = donHang.TrangThai,
+                MaNV = donHang.MaNV,
+                SoHD = donHang.SoHD
+            };
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+    }
 }
