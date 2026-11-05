@@ -131,10 +131,170 @@
 
   // Khởi tạo trang
   async function init() {
+    setupMainHeader();
     setupStickyPurchaseBar();
     setupCommentForm();
     await loadProductsData();
     resolveAndRenderProduct();
+  }
+
+  // Thiết lập tính năng Header dùng chung chuẩn Hoàng Hà Mobile
+  function setupMainHeader() {
+    // 1. Toggle Mega Menu
+    window.toggleMegaMenu = function () {
+      const menu = document.getElementById('mega-menu-flyout');
+      if (menu) menu.classList.toggle('hidden');
+    };
+
+    // 2. Toggle Notification Popover
+    window.toggleNotificationPopover = function () {
+      const pop = document.getElementById('notification-popover');
+      if (pop) pop.classList.toggle('hidden');
+    };
+
+    // 3. Quick Search Tags
+    window.quickSearchTag = function (tag) {
+      window.location.href = 'category.html?q=' + encodeURIComponent(tag);
+    };
+
+    // 4. Filter Phone Brand
+    window.filterPhoneBrand = function (brand) {
+      window.location.href = 'category.html?type=dienthoai&brand=' + encodeURIComponent(brand);
+    };
+
+    // 5. Apply Search
+    window.applySearchFilters = function () {
+      const input = document.getElementById('search-input');
+      const val = input ? input.value.trim() : '';
+      if (val) {
+        window.location.href = 'category.html?q=' + encodeURIComponent(val);
+      }
+    };
+
+    // 6. Search Input Keydown & Clear button
+    const searchInput = document.getElementById('search-input');
+    const clearBtn = document.getElementById('btn-clear-search');
+    const autoDropdown = document.getElementById('search-autocomplete-dropdown');
+
+    if (searchInput) {
+      searchInput.addEventListener('input', function () {
+        const val = this.value.trim();
+        if (clearBtn) clearBtn.classList.toggle('hidden', !val);
+
+        if (autoDropdown) {
+          if (val.length >= 2) {
+            const metaList = Object.values(allProductsMeta || {});
+            const matches = metaList.filter(p => p.tenHang && p.tenHang.toLowerCase().includes(val.toLowerCase())).slice(0, 5);
+            if (matches.length > 0) {
+              autoDropdown.innerHTML = matches.map(p => `
+                <a href="product-detail.html?id=${encodeURIComponent(p.maHang || p.id)}" class="flex items-center gap-3 p-3 hover:bg-blue-50 transition-colors">
+                  <img src="${p.anhChinh || 'images/default-phone.png'}" class="w-10 h-10 object-contain rounded" onerror="this.src='images/default-phone.png'" />
+                  <div class="flex-1 min-w-0">
+                    <p class="text-xs font-bold text-slate-900 truncate">${p.tenHang}</p>
+                    <p class="text-[11px] text-rose-600 font-extrabold">${Number(p.donGia || 0).toLocaleString('vi-VN')} ₫</p>
+                  </div>
+                </a>
+              `).join('');
+              autoDropdown.classList.remove('hidden');
+            } else {
+              autoDropdown.classList.add('hidden');
+            }
+          } else {
+            autoDropdown.classList.add('hidden');
+          }
+        }
+      });
+
+      searchInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          window.applySearchFilters();
+        }
+      });
+    }
+
+    if (clearBtn && searchInput) {
+      clearBtn.addEventListener('click', function () {
+        searchInput.value = '';
+        clearBtn.classList.add('hidden');
+        if (autoDropdown) autoDropdown.classList.add('hidden');
+        searchInput.focus();
+      });
+    }
+
+    // 7. Click outside closes flyouts
+    document.addEventListener('click', function (e) {
+      const megaMenu = document.getElementById('mega-menu-flyout');
+      const megaBtn = document.getElementById('btn-mega-menu-toggle');
+      if (megaMenu && !megaMenu.classList.contains('hidden')) {
+        if (!megaMenu.contains(e.target) && !megaBtn?.contains(e.target)) {
+          megaMenu.classList.add('hidden');
+        }
+      }
+
+      const notiPop = document.getElementById('notification-popover');
+      const notiBtn = document.getElementById('btn-notification-toggle');
+      if (notiPop && !notiPop.classList.contains('hidden')) {
+        if (!notiPop.contains(e.target) && !notiBtn?.contains(e.target)) {
+          notiPop.classList.add('hidden');
+        }
+      }
+
+      if (autoDropdown && !autoDropdown.classList.contains('hidden')) {
+        if (!autoDropdown.contains(e.target) && !searchInput?.contains(e.target)) {
+          autoDropdown.classList.add('hidden');
+        }
+      }
+    });
+
+    // 8. Auth state synchronization
+    try {
+      const savedUser = localStorage.getItem('cellphones_auth_user');
+      if (savedUser) {
+        const u = JSON.parse(savedUser);
+        const loginBtn = document.getElementById('btn-header-login');
+        const custMenu = document.getElementById('header-customer-menu');
+        const staffMenu = document.getElementById('header-staff-menu');
+
+        if (loginBtn) loginBtn.classList.add('hidden');
+
+        if (u.role === 'admin' || u.role === 'staff' || u.vaiTro === 'Nhân viên') {
+          if (staffMenu) {
+            staffMenu.style.display = 'flex';
+            staffMenu.classList.remove('hidden');
+          }
+          const staffName = document.getElementById('staff-header-name');
+          if (staffName) staffName.textContent = u.hoTen || u.name || 'Nhân viên';
+        } else {
+          if (custMenu) {
+            custMenu.style.display = 'flex';
+            custMenu.classList.remove('hidden');
+          }
+          const custName = document.getElementById('customer-header-name');
+          if (custName) custName.textContent = u.hoTen || u.name || 'Khách hàng';
+        }
+      }
+    } catch (e) {}
+
+    // 9. Global Fallbacks for Lookup & Auth
+    window.CellphoneSAuth = window.CellphoneSAuth || {
+      logout: function () {
+        localStorage.removeItem('cellphones_auth_user');
+        localStorage.removeItem('customer_token');
+        localStorage.removeItem('admin_token');
+        window.location.reload();
+      }
+    };
+
+    window.CellphoneSCustomerPortal = window.CellphoneSCustomerPortal || {
+      openLoginModal: function () { window.location.href = 'index.html#login'; },
+      openPortal: function () { window.location.href = 'index.html#portal'; }
+    };
+
+    window.CellphoneSLookup = window.CellphoneSLookup || {
+      openModal: function (tab) { window.location.href = 'index.html#' + tab; },
+      openTradeInModal: function () { window.location.href = 'index.html#hero-store'; }
+    };
   }
 
   // Tải dữ liệu từ products-meta.json

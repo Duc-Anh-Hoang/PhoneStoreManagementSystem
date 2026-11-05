@@ -2094,8 +2094,8 @@
   };
 
   window.loadMoreDualProducts = function () {
-    dualCategoryPageSize += 8;
-    renderDualCategoryProducts();
+    const type = currentDualCategory === 'tablet' ? 'tablet' : 'dienthoai';
+    window.location.href = 'category.html?type=' + encodeURIComponent(type);
   };
 
   window.onDualProductClick = function (id) {
@@ -2552,8 +2552,8 @@
   };
 
   window.loadMoreLaptopPcProducts = function () {
-    laptopPcPageSize += 8;
-    renderLaptopPcProducts();
+    const type = currentLaptopPcCategory === 'pc' ? 'pc' : 'laptop';
+    window.location.href = 'category.html?type=' + encodeURIComponent(type);
   };
 
   window.onLaptopPcProductClick = function (id) {
@@ -2943,8 +2943,7 @@
   };
 
   window.loadMoreMouseProducts = function () {
-    mousePageSize += 10;
-    renderMouseProducts();
+    window.location.href = 'category.html?type=mouse';
   };
 
   window.onMouseProductClick = function (id) {
@@ -3126,8 +3125,7 @@
   };
 
   window.loadMoreAudioProducts = function () {
-    audioPageSize += 10;
-    renderAudioProducts();
+    window.location.href = 'category.html?type=audio';
   };
 
   window.onAudioProductClick = function (id) {
@@ -3307,8 +3305,7 @@
   };
 
   window.loadMoreWatchProducts = function () {
-    watchPageSize += 10;
-    renderWatchProducts();
+    window.location.href = 'category.html?type=watch';
   };
 
   window.onWatchProductClick = function (id) {
@@ -3486,8 +3483,7 @@
   };
 
   window.loadMoreTiviProducts = function () {
-    tiviPageSize += 10;
-    renderTiviProducts();
+    window.location.href = 'category.html?type=tivi';
   };
 
   window.onTiviProductClick = function (id) {
@@ -3668,8 +3664,7 @@
   };
 
   window.loadMoreAirProducts = function () {
-    airPageSize += 10;
-    renderAirProducts();
+    window.location.href = 'category.html?type=air';
   };
 
   window.onAirProductClick = function (id) {
@@ -3844,8 +3839,7 @@
   };
 
   window.loadMorePurifierProducts = function () {
-    purifierPageSize += 10;
-    renderPurifierProducts();
+    window.location.href = 'category.html?type=purifier';
   };
 
   window.onPurifierProductClick = function (id) {
