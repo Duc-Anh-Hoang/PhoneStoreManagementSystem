@@ -29,7 +29,8 @@ public class GoogleLoginRequestValidator : AbstractValidator<GoogleLoginRequest>
 {
     public GoogleLoginRequestValidator()
     {
-        RuleFor(x => x.IdToken)
-            .NotEmpty().WithMessage("Google ID Token không được để trống.");
+        RuleFor(x => x)
+            .Must(x => !string.IsNullOrWhiteSpace(x.IdToken) || !string.IsNullOrWhiteSpace(x.AccessToken))
+            .WithMessage("Cần cung cấp Google ID Token hoặc Access Token.");
     }
 }

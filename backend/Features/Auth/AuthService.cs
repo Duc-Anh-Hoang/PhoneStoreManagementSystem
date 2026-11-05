@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
 using Google.Apis.Auth;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -19,6 +20,7 @@ public class AuthService : IAuthService
     private readonly IConfiguration _configuration;
     private readonly ICodeGenerator _codeGenerator;
     private readonly ILogger<AuthService> _logger;
+    private readonly HttpClient _httpClient;
 
     public AuthService(
         AppDbContext context,
@@ -30,6 +32,7 @@ public class AuthService : IAuthService
         _configuration = configuration;
         _codeGenerator = codeGenerator;
         _logger = logger;
+        _httpClient = new HttpClient();
     }
 
     public async Task<LoginResponse> LoginStaffAsync(LoginRequest request)
@@ -157,46 +160,78 @@ public class AuthService : IAuthService
 
     public async Task<CustomerLoginResponse> LoginGoogleAsync(GoogleLoginRequest request)
     {
-        if (string.IsNullOrWhiteSpace(request.IdToken))
+        if (string.IsNullOrWhiteSpace(request.IdToken) && string.IsNullOrWhiteSpace(request.AccessToken))
         {
-            throw new BadRequestException("Google ID Token không được để trống.");
+            throw new BadRequestException("Cần cung cấp Google ID Token hoặc Access Token.");
         }
 
-        string email;
-        string name;
-        string googleSub;
+        string email = string.Empty;
+        string name = string.Empty;
+        string googleSub = string.Empty;
 
-        var googleClientId = _configuration["Google:ClientId"];
-        bool isPlaceholder = string.IsNullOrWhiteSpace(googleClientId)
-            || googleClientId.Contains("YOUR_GOOGLE_CLIENT_ID", StringComparison.OrdinalIgnoreCase);
-
-        // Hỗ trợ token mô phỏng khi test môi trường dev / local
-        if (request.IdToken.StartsWith("mock-google-token:", StringComparison.OrdinalIgnoreCase))
-        {
-            var parts = request.IdToken.Split(':');
-            email = parts.Length > 1 ? parts[1].Trim() : "user@gmail.com";
-            name = parts.Length > 2 ? parts[2].Trim() : "Khách hàng Google";
-            googleSub = "mock-google-id-" + email;
-        }
-        else
+        // 1. Nếu có AccessToken từ Google OAuth2 popup:
+        if (!string.IsNullOrWhiteSpace(request.AccessToken))
         {
             try
             {
-                var validationSettings = new GoogleJsonWebSignature.ValidationSettings();
-                if (!isPlaceholder && !string.IsNullOrWhiteSpace(googleClientId))
+                var req = new HttpRequestMessage(HttpMethod.Get, "https://www.googleapis.com/oauth2/v3/userinfo");
+                req.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", request.AccessToken);
+                
+                var res = await _httpClient.SendAsync(req);
+                if (!res.IsSuccessStatusCode)
                 {
-                    validationSettings.Audience = new[] { googleClientId };
+                    throw new UnauthorizedException("Google Access Token không hợp lệ hoặc đã hết hạn.");
                 }
 
-                var payload = await GoogleJsonWebSignature.ValidateAsync(request.IdToken, validationSettings);
-                email = payload.Email;
-                name = payload.Name ?? payload.Email;
-                googleSub = payload.Subject;
+                var jsonStr = await res.Content.ReadAsStringAsync();
+                using var doc = JsonDocument.Parse(jsonStr);
+                var root = doc.RootElement;
+
+                email = root.TryGetProperty("email", out var e) ? e.GetString() ?? "" : "";
+                name = root.TryGetProperty("name", out var n) ? n.GetString() ?? "" : "";
+                googleSub = root.TryGetProperty("sub", out var s) ? s.GetString() ?? "" : "";
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not UnauthorizedException)
             {
-                _logger.LogWarning(ex, "Xác thực Google ID Token thất bại: {Message}", ex.Message);
-                throw new UnauthorizedException("Google ID Token không hợp lệ hoặc đã hết hạn.");
+                _logger.LogWarning(ex, "Lỗi kết nối xác thực Google UserInfo: {Message}", ex.Message);
+                throw new UnauthorizedException("Không thể xác thực thông tin tài khoản Google.");
+            }
+        }
+        // 2. Nếu có IdToken (JWT) từ Google Identity Services:
+        else if (!string.IsNullOrWhiteSpace(request.IdToken))
+        {
+            var googleClientId = _configuration["Google:ClientId"];
+            bool isPlaceholder = string.IsNullOrWhiteSpace(googleClientId)
+                || googleClientId.Contains("YOUR_GOOGLE_CLIENT_ID", StringComparison.OrdinalIgnoreCase);
+
+            // Hỗ trợ token mô phỏng khi test môi trường dev / local
+            if (request.IdToken.StartsWith("mock-google-token:", StringComparison.OrdinalIgnoreCase))
+            {
+                var parts = request.IdToken.Split(':');
+                email = parts.Length > 1 ? parts[1].Trim() : "user@gmail.com";
+                name = parts.Length > 2 ? parts[2].Trim() : "Khách hàng Google";
+                googleSub = "mock-google-id-" + email;
+            }
+            else
+            {
+                try
+                {
+                    var validationSettings = new GoogleJsonWebSignature.ValidationSettings();
+                    if (!isPlaceholder && !string.IsNullOrWhiteSpace(googleClientId))
+                    {
+                        validationSettings.Audience = new[] { googleClientId };
+                    }
+
+                    var payload = await GoogleJsonWebSignature.ValidateAsync(request.IdToken, validationSettings);
+                    email = payload.Email;
+                    name = payload.Name ?? payload.Email;
+                    googleSub = payload.Subject;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, "Xác thực Google ID Token thất bại: {Message}", ex.Message);
+                    throw new UnauthorizedException("Google ID Token không hợp lệ hoặc đã hết hạn.");
+                }
             }
         }
 
@@ -207,7 +242,7 @@ public class AuthService : IAuthService
 
         string normalizedEmail = email.Trim().ToLowerInvariant();
 
-        // 1. Tìm khách hàng theo email
+        // 3. Tìm khách hàng theo email
         var customer = await _context.KhachHangs
             .FirstOrDefaultAsync(k => k.Email != null && k.Email.ToLower() == normalizedEmail);
 
