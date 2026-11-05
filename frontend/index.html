@@ -645,10 +645,10 @@
           </div>
 
           <!-- Khối Card Trắng Liền Mạch (Chứa 6 Tab Ngành Hàng & Carousel Sản Phẩm) -->
-          <div class="bg-white rounded-xl sm:rounded-2xl shadow-sm border border-slate-100 overflow-hidden relative z-10">
+          <div class="bg-white rounded-xl sm:rounded-2xl shadow-sm border border-slate-100 relative z-10">
             
             <!-- Dải 6 Tab Ngành Hàng (Tab 1 Điện Thoại Giá Hời Active với nền kem sáng #FEFCE8) -->
-            <div id="deal-tabs-container" class="grid grid-cols-3 sm:grid-cols-6 border-b border-slate-200 bg-white select-none">
+            <div id="deal-tabs-container" class="grid grid-cols-3 sm:grid-cols-6 border-b border-slate-200 bg-white select-none rounded-t-xl sm:rounded-t-2xl overflow-hidden">
               <button type="button" onclick="window.switchDealCategory('dienthoai')" data-deal-cat="dienthoai" class="deal-tab-btn flex items-center justify-center p-2 sm:p-2.5 border-r border-slate-200 hover:bg-slate-50 transition-all cursor-pointer relative group active-deal-tab" title="Điện thoại giá hời">
                 <img src="images/deal-tabs/deal-tab-phone.jpg" alt="Điện thoại giá hời" class="max-h-8 sm:max-h-11 w-auto object-contain transition-transform group-hover:scale-105" />
               </button>
@@ -678,11 +678,11 @@
                 </div>
               </div>
 
-              <!-- Nút Next & Prev Lướt Sản Phẩm (Nút tròn trắng viền đổ bóng nổi hai bên) -->
-              <button type="button" onclick="window.prevDealProduct()" class="absolute -left-2 sm:-left-3.5 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white text-[#0057B7] shadow-lg border border-slate-200 flex items-center justify-center hover:bg-blue-50 hover:scale-105 active:scale-95 transition-all z-20 cursor-pointer" aria-label="Sản phẩm trước">
+              <!-- Nút Next & Prev Lướt Sản Phẩm (Nút tròn đầy đặn, không bị cắt viền) -->
+              <button type="button" onclick="window.prevDealProduct()" class="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 rounded-full bg-white text-[#0057B7] shadow-[0_4px_14px_rgba(0,0,0,0.18)] border border-slate-200/90 flex items-center justify-center hover:bg-[#0057B7] hover:text-white hover:border-[#0057B7] hover:scale-110 active:scale-95 transition-all z-30 cursor-pointer" aria-label="Sản phẩm trước">
                 <i class="fa-solid fa-chevron-left text-xs sm:text-sm"></i>
               </button>
-              <button type="button" onclick="window.nextDealProduct()" class="absolute -right-2 sm:-right-3.5 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white text-[#0057B7] shadow-lg border border-slate-200 flex items-center justify-center hover:bg-blue-50 hover:scale-105 active:scale-95 transition-all z-20 cursor-pointer" aria-label="Sản phẩm tiếp theo">
+              <button type="button" onclick="window.nextDealProduct()" class="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 rounded-full bg-white text-[#0057B7] shadow-[0_4px_14px_rgba(0,0,0,0.18)] border border-slate-200/90 flex items-center justify-center hover:bg-[#0057B7] hover:text-white hover:border-[#0057B7] hover:scale-110 active:scale-95 transition-all z-30 cursor-pointer" aria-label="Sản phẩm tiếp theo">
                 <i class="fa-solid fa-chevron-right text-xs sm:text-sm"></i>
               </button>
             </div>
@@ -1888,7 +1888,7 @@
   <script src="js/lookup.js?v=3.2"></script>
   <script src="js/product-modal.js?v=3.7"></script>
   <script src="js/auth.js?v=3.2"></script>
-  <script src="js/customer-store.js?v=6.2"></script>
+  <script src="js/customer-store.js?v=6.3"></script>
   <script src="js/main.js?v=3.2"></script>
 </body>
 </html>
