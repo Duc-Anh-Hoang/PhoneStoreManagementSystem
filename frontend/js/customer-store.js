@@ -2393,12 +2393,12 @@
           ${slideItems.map(item => {
             const isSelected = item.id === activeAccessoryId;
             const bgClass = isSelected
-              ? 'bg-blue-50 font-semibold text-blue-700'
-              : 'bg-white hover:bg-slate-50/80 text-slate-700';
+              ? 'bg-[#eefbf4] font-semibold text-emerald-800 -translate-y-0.5 shadow-2xs z-1'
+              : 'bg-white hover:bg-[#eefbf4] hover:-translate-y-0.5 hover:shadow-2xs hover:z-1 text-slate-700 hover:text-emerald-800';
             return `
-              <div onclick="window.onAccessoryCategoryClick('${item.id}', '${item.title}')" class="group flex flex-col items-center justify-center p-2.5 sm:py-3.5 sm:px-2 min-h-[105px] sm:min-h-[125px] border-r border-b border-slate-100 transition-colors cursor-pointer text-center select-none ${bgClass}" title="${item.title}">
-                <div class="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center mb-1.5 sm:mb-2">
-                  <img src="${item.icon}" alt="${item.title}" class="max-h-full max-w-full object-contain group-hover:scale-108 transition-transform duration-300" loading="lazy" onerror="this.onerror=null; this.src='images/categories/phu-kien.png';" />
+              <div onclick="window.onAccessoryCategoryClick('${item.id}', '${item.title}')" class="group flex flex-col items-center justify-between p-2.5 sm:py-3.5 sm:px-2 min-h-[110px] sm:min-h-[130px] border-r border-b border-slate-100 transition-all duration-200 cursor-pointer text-center select-none relative ${bgClass}" title="${item.title}">
+                <div class="w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center mb-1.5 sm:mb-2">
+                  <img src="${item.icon}" alt="${item.title}" class="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-300" loading="lazy" onerror="this.onerror=null; this.src='images/categories/phu-kien.png';" />
                 </div>
                 <span class="text-xs sm:text-[13px] leading-snug line-clamp-2 min-h-[32px] sm:min-h-[36px] flex items-center justify-center transition-colors">
                   ${item.title}
