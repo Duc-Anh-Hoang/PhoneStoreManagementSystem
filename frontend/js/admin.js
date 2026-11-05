@@ -1,4 +1,4 @@
-/**
+﻿/**
  * ADMIN PORTAL JAVASCRIPT - QUẢN LÝ CỬA HÀNG ĐIỆN THOẠI
  * Hỗ trợ: Giao diện Cập nhật dữ liệu, Xử lý dữ liệu & Báo cáo thống kê
  * Dựa trên cấu trúc CSDL QuanLyCuaHangDienThoai (Table.sql & Code.sql)
@@ -2964,17 +2964,6 @@ window.handleAdminLoginScreenSubmit = async function(event) {
   }
 };
 
-window.quickFillAdminLogin = function(username) {
-  const uInput = document.getElementById('admin-login-screen-username');
-  const pInput = document.getElementById('admin-login-screen-password');
-  if (uInput) uInput.value = username;
-  if (pInput) pInput.value = 'admin123';
-  const form = document.getElementById('form-admin-login-screen');
-  if (form) {
-    const submitEvt = new Event('submit', { cancelable: true });
-    form.dispatchEvent(submitEvt);
-  }
-};
 
 function checkAdminAuthAndStart() {
   const loginScreen = document.getElementById('admin-login-screen');

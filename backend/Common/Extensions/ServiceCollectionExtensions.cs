@@ -1,4 +1,4 @@
-using System.Net;
+﻿using System.Net;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.RateLimiting;
@@ -153,14 +153,14 @@ public static class ServiceCollectionExtensions
                     System.Text.Json.JsonSerializer.Serialize(payload), token);
             };
 
-            // Login policy: 5 lần/phút/IP
+            // Login policy: 5 lần/phút/IP (P1-09)
             options.AddPolicy("login", httpContext =>
             {
                 var forwarded = httpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault();
                 var clientIp = !string.IsNullOrWhiteSpace(forwarded) ? forwarded.Split(",")[0].Trim() : (httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown");
                 return RateLimitPartition.GetFixedWindowLimiter(clientIp, _ => new FixedWindowRateLimiterOptions
                 {
-                    PermitLimit = 60,
+                    PermitLimit = 5,
                     Window = TimeSpan.FromMinutes(1),
                     QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
                     QueueLimit = 0

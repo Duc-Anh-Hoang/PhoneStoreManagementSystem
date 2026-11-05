@@ -1,4 +1,4 @@
-services:
+﻿services:
   # 1. Database: PostgreSQL 16
   postgres:
     image: postgres:16-alpine
@@ -58,6 +58,8 @@ services:
     restart: unless-stopped
     ports:
       - "${FRONTEND_PORT:-8088}:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro
     depends_on:
       backend:
         condition: service_healthy

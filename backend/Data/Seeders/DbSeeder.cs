@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PhoneStoreAPI.Common.Constants;
 using PhoneStoreAPI.Models.Entities;
 
@@ -45,41 +45,57 @@ public static class DbSeeder
                 logger.LogInformation("Seed PhanQuyen thành công.");
             }
 
-            // 3. Seed NhanVien (kiểm tra độc lập)
-            if (!await context.NhanViens.AnyAsync())
+            // 3. Seed NhanVien (đảm bảo đầy đủ 6 nhân viên tương ứng 6 chức vụ)
+            var defaultStaff = new List<NhanVien>
             {
-                logger.LogInformation("Seeding NhanVien...");
-                context.NhanViens.AddRange(
-                    new NhanVien { MaNV = "NV001", HoTen = "Nguyễn Văn Quản Lý", ChucVu = "Quản lý", Sdt = "0901234567", Email = "admin@cellphones.vn", NgayVaoLam = DateTime.UtcNow, TrangThai = AppConstants.EmployeeStatus.DangLam },
-                    new NhanVien { MaNV = "NV002", HoTen = "Trần Thị Thu Ngân", ChucVu = "Thu ngân", Sdt = "0912345678", Email = "thungan@cellphones.vn", NgayVaoLam = DateTime.UtcNow, TrangThai = AppConstants.EmployeeStatus.DangLam },
-                    new NhanVien { MaNV = "NV003", HoTen = "Lê Bán Hàng", ChucVu = "Bán hàng", Sdt = "0923456789", Email = "banhang@cellphones.vn", NgayVaoLam = DateTime.UtcNow, TrangThai = AppConstants.EmployeeStatus.DangLam },
-                    new NhanVien { MaNV = "NV004", HoTen = "Phạm Thủ Kho", ChucVu = "Kho", Sdt = "0934567890", Email = "kho@cellphones.vn", NgayVaoLam = DateTime.UtcNow, TrangThai = AppConstants.EmployeeStatus.DangLam },
-                    new NhanVien { MaNV = "NV005", HoTen = "Hoàng Kỹ Thuật", ChucVu = "Kỹ thuật & Bảo hành", Sdt = "0945678901", Email = "kythuat@cellphones.vn", NgayVaoLam = DateTime.UtcNow, TrangThai = AppConstants.EmployeeStatus.DangLam }
-                );
-                await context.SaveChangesAsync();
-                logger.LogInformation("Seed NhanVien thành công.");
-            }
+                new NhanVien { MaNV = "NV001", HoTen = "Nguyễn Văn Quản Trị", ChucVu = "Quản lý", Sdt = "0901234567", Email = "admin@cellphones.vn", NgayVaoLam = DateTime.UtcNow, TrangThai = AppConstants.EmployeeStatus.DangLam },
+                new NhanVien { MaNV = "NV002", HoTen = "Trần Thị Thu Ngân", ChucVu = "Thu ngân", Sdt = "0912345678", Email = "thungan@cellphones.vn", NgayVaoLam = DateTime.UtcNow, TrangThai = AppConstants.EmployeeStatus.DangLam },
+                new NhanVien { MaNV = "NV003", HoTen = "Lê Bán Hàng", ChucVu = "Bán hàng", Sdt = "0923456789", Email = "banhang@cellphones.vn", NgayVaoLam = DateTime.UtcNow, TrangThai = AppConstants.EmployeeStatus.DangLam },
+                new NhanVien { MaNV = "NV004", HoTen = "Phạm Thủ Kho", ChucVu = "Kho", Sdt = "0934567890", Email = "kho@cellphones.vn", NgayVaoLam = DateTime.UtcNow, TrangThai = AppConstants.EmployeeStatus.DangLam },
+                new NhanVien { MaNV = "NV005", HoTen = "Hoàng Kỹ Thuật", ChucVu = "Kỹ thuật & Bảo hành", Sdt = "0945678901", Email = "kythuat@cellphones.vn", NgayVaoLam = DateTime.UtcNow, TrangThai = AppConstants.EmployeeStatus.DangLam },
+                new NhanVien { MaNV = "NV006", HoTen = "Đỗ Cửa Hàng Trưởng", ChucVu = "Quản lý", Sdt = "0956789012", Email = "quanly@cellphones.vn", NgayVaoLam = DateTime.UtcNow, TrangThai = AppConstants.EmployeeStatus.DangLam }
+            };
 
-            // 4. Seed TaiKhoan (kiểm tra độc lập)
-            if (!await context.TaiKhoans.AnyAsync())
+            foreach (var staff in defaultStaff)
             {
-                logger.LogInformation("Seeding TaiKhoan...");
-                string passwordHash = BCrypt.Net.BCrypt.HashPassword("admin123", 11);
-
-                context.TaiKhoans.AddRange(
-                    new TaiKhoan { UserName = "admin", PasswordHash = passwordHash, MaNV = "NV001", MaQuyen = AppConstants.Roles.Admin, TrangThai = AppConstants.AccountStatus.HoatDong, NgayTao = DateTime.UtcNow },
-                    new TaiKhoan { UserName = "thungan", PasswordHash = passwordHash, MaNV = "NV002", MaQuyen = AppConstants.Roles.Cashier, TrangThai = AppConstants.AccountStatus.HoatDong, NgayTao = DateTime.UtcNow },
-                    new TaiKhoan { UserName = "banhang", PasswordHash = passwordHash, MaNV = "NV003", MaQuyen = AppConstants.Roles.Sales, TrangThai = AppConstants.AccountStatus.HoatDong, NgayTao = DateTime.UtcNow }
-                );
-                await context.SaveChangesAsync();
-                logger.LogInformation("Seed TaiKhoan admin thành công.");
+                if (!await context.NhanViens.AnyAsync(n => n.MaNV == staff.MaNV))
+                {
+                    context.NhanViens.Add(staff);
+                }
             }
+            await context.SaveChangesAsync();
 
-            // Đảm bảo các tài khoản mẫu luôn có hash BCrypt hợp lệ của mật khẩu 'admin123'
-            var accounts = await context.TaiKhoans.ToListAsync();
+            // 4. Seed TaiKhoan (đảm bảo đủ 6 tài khoản mẫu cho cả 6 vai trò trong hệ thống)
+            string passwordHash = BCrypt.Net.BCrypt.HashPassword("admin123", 11);
+
+            var defaultAccounts = new List<TaiKhoan>
+            {
+                new TaiKhoan { UserName = "admin", PasswordHash = passwordHash, MaNV = "NV001", MaQuyen = AppConstants.Roles.Admin, TrangThai = AppConstants.AccountStatus.HoatDong, NgayTao = DateTime.UtcNow },
+                new TaiKhoan { UserName = "quanly", PasswordHash = passwordHash, MaNV = "NV006", MaQuyen = AppConstants.Roles.Manager, TrangThai = AppConstants.AccountStatus.HoatDong, NgayTao = DateTime.UtcNow },
+                new TaiKhoan { UserName = "thungan", PasswordHash = passwordHash, MaNV = "NV002", MaQuyen = AppConstants.Roles.Cashier, TrangThai = AppConstants.AccountStatus.HoatDong, NgayTao = DateTime.UtcNow },
+                new TaiKhoan { UserName = "banhang", PasswordHash = passwordHash, MaNV = "NV003", MaQuyen = AppConstants.Roles.Sales, TrangThai = AppConstants.AccountStatus.HoatDong, NgayTao = DateTime.UtcNow },
+                new TaiKhoan { UserName = "kho", PasswordHash = passwordHash, MaNV = "NV004", MaQuyen = AppConstants.Roles.Stock, TrangThai = AppConstants.AccountStatus.HoatDong, NgayTao = DateTime.UtcNow },
+                new TaiKhoan { UserName = "kythuat", PasswordHash = passwordHash, MaNV = "NV005", MaQuyen = AppConstants.Roles.Tech, TrangThai = AppConstants.AccountStatus.HoatDong, NgayTao = DateTime.UtcNow }
+            };
+
+            foreach (var acc in defaultAccounts)
+            {
+                if (!await context.TaiKhoans.AnyAsync(t => t.UserName == acc.UserName))
+                {
+                    context.TaiKhoans.Add(acc);
+                }
+            }
+            await context.SaveChangesAsync();
+
+            // Chỉ cập nhật hash hợp lệ cho 6 tài khoản seed mặc định
+            var seedUsernames = new[] { "admin", "quanly", "thungan", "banhang", "kho", "kythuat" };
+            var seedAccounts = await context.TaiKhoans
+                .Where(t => seedUsernames.Contains(t.UserName))
+                .ToListAsync();
+
             string validHash = BCrypt.Net.BCrypt.HashPassword("admin123");
             bool updated = false;
-            foreach (var acc in accounts)
+            foreach (var acc in seedAccounts)
             {
                 try
                 {

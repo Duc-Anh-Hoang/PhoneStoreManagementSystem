@@ -1,4 +1,4 @@
-/**
+﻿/**
  * AUTHENTICATION & LOGIN MODAL HANDLER
  * Phân luồng đăng nhập:
  * - Đăng nhập Quản trị viên / Nhân viên (Admin/Staff) -> Chuyển hướng vào admin.html
@@ -277,25 +277,15 @@
               <form id="form-staff-login" onsubmit="window.handleStaffLoginSubmit ? window.handleStaffLoginSubmit(event) : null" class="space-y-4">
                 <div>
                   <label class="block text-xs font-bold text-slate-700 mb-1.5">Tên đăng nhập / Mã nhân viên</label>
-                  <input type="text" name="username" required value="admin" placeholder="admin / quanly / thungan / banhang / kythuat" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-medium">
+                  <input type="text" name="username" required placeholder="admin / quanly / thungan / banhang / kythuat" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-medium">
                 </div>
                 <div>
                   <label class="block text-xs font-bold text-slate-700 mb-1.5">Mật khẩu</label>
-                  <input type="password" name="password" required value="123456" placeholder="Mật khẩu (mặc định: 123456)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-medium">
+                  <input type="password" name="password" required placeholder="Mật khẩu (mặc định: 123456)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-medium">
                 </div>
                 <button type="submit" class="w-full py-3 rounded-xl bg-slate-900 hover:bg-black text-white font-bold text-xs shadow-md transition-all">
                   <i class="fa-solid fa-right-to-bracket mr-2"></i> Đăng Nhập
                 </button>
-                <div class="pt-2 border-t text-xs text-slate-500">
-                  <span class="font-bold">Đăng nhập nhanh mẫu:</span>
-                  <div class="grid grid-cols-3 gap-1.5 mt-2">
-                    <button type="button" onclick="window.quickStaffLogin('admin')" class="px-2 py-1 bg-slate-100 hover:bg-[#F0FDF4] text-[11px] font-bold rounded-lg border">admin</button>
-                    <button type="button" onclick="window.quickStaffLogin('banhang')" class="px-2 py-1 bg-slate-100 hover:bg-[#F0FDF4] text-[11px] font-bold rounded-lg border">banhang</button>
-                    <button type="button" onclick="window.quickStaffLogin('thungan')" class="px-2 py-1 bg-slate-100 hover:bg-[#F0FDF4] text-[11px] font-bold rounded-lg border">thungan</button>
-                    <button type="button" onclick="window.quickStaffLogin('kho')" class="px-2 py-1 bg-slate-100 hover:bg-[#F0FDF4] text-[11px] font-bold rounded-lg border">kho</button>
-                    <button type="button" onclick="window.quickStaffLogin('kythuat')" class="px-2 py-1 bg-slate-100 hover:bg-[#F0FDF4] text-[11px] font-bold rounded-lg border">kythuat</button>
-                  </div>
-                </div>
               </form>
             </div>
           </div>
@@ -372,15 +362,6 @@
 
   window.doLogout = () => Auth.logout();
 
-  window.quickStaffLogin = async function(user) {
-    try {
-      await Auth.loginStaff(user, '123456');
-      const isFile = window.location.protocol === 'file:';
-      window.location.href = isFile ? 'admin.html' : '/admin';
-    } catch (e) {
-      alert(e.message || 'Lỗi đăng nhập');
-    }
-  };
 
   window.handleDirectLogin = async function(e) {
     if (e && e.preventDefault) e.preventDefault();
@@ -514,18 +495,6 @@
       });
     }
 
-    // Quick Login cho Khách hàng
-    const quickCustomerBtns = document.querySelectorAll('.btn-quick-customer');
-    quickCustomerBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const phone = btn.dataset.phone;
-        if (customerForm) {
-          customerForm.phone.value = phone;
-          customerForm.dispatchEvent(new Event('submit'));
-        }
-      });
-    });
-
     // 2. Form Đăng nhập Nhân viên / Admin -> Chuyển hướng vào admin.html
     const staffForm = document.getElementById('form-staff-login');
     const staffError = document.getElementById('staff-login-error');
@@ -565,19 +534,6 @@
         }
       });
     }
-
-    // Quick Login cho Admin
-    const quickStaffBtns = document.querySelectorAll('.btn-quick-staff');
-    quickStaffBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const u = btn.dataset.user;
-        if (staffForm) {
-          staffForm.username.value = u;
-          staffForm.password.value = '123456';
-          staffForm.dispatchEvent(new Event('submit'));
-        }
-      });
-    });
 
     // 3. Tra cứu đơn hàng
     const lookupForm = document.getElementById('form-order-lookup');

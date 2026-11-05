@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi" class="h-full bg-slate-100">
 <head>
   <meta charset="UTF-8">
@@ -141,7 +141,7 @@
             <label class="block text-xs font-bold text-slate-700 mb-1.5">Tên đăng nhập</label>
             <div class="relative">
               <i class="fa-solid fa-user absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-              <input type="text" id="admin-login-screen-username" required placeholder="admin / quanly / banhang / thungan / kho / kythuat" class="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-semibold focus:outline-none focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB]">
+              <input type="text" id="admin-login-screen-username" required placeholder="Tên đăng nhập" class="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-semibold focus:outline-none focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB]">
             </div>
           </div>
 
@@ -149,7 +149,7 @@
             <label class="block text-xs font-bold text-slate-700 mb-1.5">Mật khẩu</label>
             <div class="relative">
               <i class="fa-solid fa-lock absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-              <input type="password" id="admin-login-screen-password" required value="admin123" placeholder="Mật khẩu" class="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-semibold focus:outline-none focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB]">
+              <input type="password" id="admin-login-screen-password" required placeholder="Mật khẩu" class="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-semibold focus:outline-none focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB]">
             </div>
           </div>
 
@@ -159,17 +159,6 @@
           </button>
         </form>
 
-        <div class="pt-3 border-t border-slate-100 text-xs text-slate-500">
-          <span class="font-bold text-slate-700">Đăng nhập nhanh tài khoản mẫu:</span>
-          <div class="grid grid-cols-3 gap-1.5 mt-2">
-            <button type="button" onclick="window.quickFillAdminLogin('quanly')" class="px-2 py-1.5 bg-slate-100 hover:bg-blue-50 hover:text-[#1E3A8A] text-[11px] font-bold rounded-lg border border-slate-200 transition-colors">quanly</button>
-            <button type="button" onclick="window.quickFillAdminLogin('banhang')" class="px-2 py-1.5 bg-slate-100 hover:bg-blue-50 hover:text-[#1E3A8A] text-[11px] font-bold rounded-lg border border-slate-200 transition-colors">banhang</button>
-            <button type="button" onclick="window.quickFillAdminLogin('thungan')" class="px-2 py-1.5 bg-slate-100 hover:bg-blue-50 hover:text-[#1E3A8A] text-[11px] font-bold rounded-lg border border-slate-200 transition-colors">thungan</button>
-            <button type="button" onclick="window.quickFillAdminLogin('kho')" class="px-2 py-1.5 bg-slate-100 hover:bg-blue-50 hover:text-[#1E3A8A] text-[11px] font-bold rounded-lg border border-slate-200 transition-colors">kho</button>
-            <button type="button" onclick="window.quickFillAdminLogin('kythuat')" class="px-2 py-1.5 bg-slate-100 hover:bg-blue-50 hover:text-[#1E3A8A] text-[11px] font-bold rounded-lg border border-slate-200 transition-colors">kythuat</button>
-            <button type="button" onclick="window.quickFillAdminLogin('admin')" class="px-2 py-1.5 bg-slate-100 hover:bg-blue-50 hover:text-[#1E3A8A] text-[11px] font-bold rounded-lg border border-slate-200 transition-colors">admin</button>
-          </div>
-        </div>
 
       </div>
     </div>
@@ -1757,7 +1746,7 @@
         </div>
         <div>
           <label class="block font-bold text-slate-700 mb-1">Mật khẩu khởi tạo (sẽ lưu dạng hash bcrypt):</label>
-          <input type="password" name="matKhau" value="admin123" required class="w-full h-10 px-3 border border-slate-200 rounded-xl font-mono focus:border-[#16A34A] focus:outline-none">
+          <input type="password" name="matKhau" required class="w-full h-10 px-3 border border-slate-200 rounded-xl font-mono focus:border-[#16A34A] focus:outline-none">
           <span class="text-[10px] text-slate-400 mt-1 block">Mặc định: admin123</span>
         </div>
         <div class="pt-3 border-t flex justify-end gap-2.5">
@@ -1829,7 +1818,7 @@
             <label class="block text-xs font-bold text-slate-700 mb-1.5">Tên tài khoản</label>
             <div class="relative">
               <i class="fa-solid fa-user absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-              <input type="text" id="login-username" name="username" required value="admin" placeholder="admin, quanly, banhang, thungan, kho..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:border-[#16A34A] text-sm font-medium">
+              <input type="text" id="login-username" name="username" required placeholder="admin, quanly, banhang, thungan, kho..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:border-[#16A34A] text-sm font-medium">
             </div>
           </div>
 
@@ -1837,7 +1826,7 @@
             <label class="block text-xs font-bold text-slate-700 mb-1.5">Mật khẩu</label>
             <div class="relative">
               <i class="fa-solid fa-key absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-              <input type="password" id="login-password" name="password" required value="admin123" placeholder="Mật khẩu (mặc định: admin123)" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:border-[#16A34A] text-sm font-medium">
+              <input type="password" id="login-password" name="password" required placeholder="Mật khẩu (mặc định: admin123)" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:border-[#16A34A] text-sm font-medium">
             </div>
           </div>
 
@@ -1846,29 +1835,6 @@
           </button>
         </form>
 
-        <div class="pt-3 border-t border-slate-100">
-          <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Đăng nhập nhanh 1-Click:</div>
-          <div class="grid grid-cols-3 gap-1.5 text-xs">
-            <button type="button" onclick="window.quickStaffLogin('admin')" class="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-[#F0FDF4] hover:text-[#16A34A] font-bold text-slate-700 border border-slate-200 transition-colors text-center">
-              👑 Admin
-            </button>
-            <button type="button" onclick="window.quickStaffLogin('quanly')" class="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-[#F0FDF4] hover:text-[#16A34A] font-bold text-slate-700 border border-slate-200 transition-colors text-center">
-              📊 Quản lý
-            </button>
-            <button type="button" onclick="window.quickStaffLogin('banhang')" class="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-[#F0FDF4] hover:text-[#16A34A] font-bold text-slate-700 border border-slate-200 transition-colors text-center">
-              🛍️ Bán hàng
-            </button>
-            <button type="button" onclick="window.quickStaffLogin('thungan')" class="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-[#F0FDF4] hover:text-[#16A34A] font-bold text-slate-700 border border-slate-200 transition-colors text-center">
-              💵 Thu ngân
-            </button>
-            <button type="button" onclick="window.quickStaffLogin('kho')" class="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-[#F0FDF4] hover:text-[#16A34A] font-bold text-slate-700 border border-slate-200 transition-colors text-center">
-              📦 Thủ kho
-            </button>
-            <button type="button" onclick="window.quickStaffLogin('kythuat')" class="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-[#F0FDF4] hover:text-[#16A34A] font-bold text-slate-700 border border-slate-200 transition-colors text-center">
-              🔧 Kỹ thuật
-            </button>
-          </div>
-        </div>
 
       </div>
     </div>
@@ -2049,9 +2015,9 @@
   <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2.5 pointer-events-none"></div>
 
   <!-- SCRIPT LOGIC ADMIN & i18n -->
-    <script src="js/auth.js?v=3.3"></script>
-  <script src="js/api.js?v=3.3"></script>
-  <script src="js/admin.js?v=3.3"></script>
+    <script src="js/auth.js?v=3.5"></script>
+  <script src="js/api.js?v=3.5"></script>
+  <script src="js/admin.js?v=3.5"></script>
 
   <script>
     // Mobile sidebar toggle handler
