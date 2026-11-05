@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
+using PhoneStoreAPI.Common.Configuration;
 using PhoneStoreAPI.Common.Services;
 using PhoneStoreAPI.Features.Auth;
 using PhoneStoreAPI.Features.Customers;
@@ -32,6 +33,16 @@ public static class ServiceCollectionExtensions
     /// <summary>
     /// Bước 3. Cấu hình JWT Authentication & Authorization
     /// </summary>
+    /// <summary>
+    /// Cấu hình dịch vụ Email SMTP
+    /// </summary>
+    public static IServiceCollection AddAppEmail(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<SmtpSettings>(configuration.GetSection("Smtp"));
+        services.AddScoped<IEmailService, EmailService>();
+        return services;
+    }
+
     public static IServiceCollection AddAppAuth(this IServiceCollection services, IConfiguration configuration)
     {
         var jwtSettings = configuration.GetSection("Jwt");
@@ -95,6 +106,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IWarrantyService, WarrantyService>();
         services.AddScoped<IDashboardService, DashboardService>();
         services.AddScoped<ISystemSettingService, SystemSettingService>();
+        services.AddScoped<IEmailService, EmailService>();
 
         // FluentValidation tự động đăng ký tất cả validator trong assembly
         services.AddValidatorsFromAssembly(typeof(ServiceCollectionExtensions).Assembly);

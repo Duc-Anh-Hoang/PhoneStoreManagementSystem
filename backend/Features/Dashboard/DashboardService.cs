@@ -31,7 +31,7 @@ public class DashboardService : IDashboardService
 
         var invoices = await _context.HoaDons
             .AsNoTracking()
-            .Select(h => new { h.NgayLap, h.ThanhTien })
+            .Select(h => new { h.NgayLap, ThanhTien = h.ThanhTien > 0 ? h.ThanhTien : (h.TongTien - h.TienGiamGia) })
             .ToListAsync();
 
         var todayInvoices = invoices.Where(h => h.NgayLap >= startOfToday).ToList();
@@ -71,8 +71,7 @@ public class DashboardService : IDashboardService
         {
             var nhap = nhapGroup.TryGetValue(p.MaHang, out var n) ? n : 0;
             var ban = banGroup.TryGetValue(p.MaHang, out var b) ? b : 0;
-            var stock = nhap - ban;
-            if (stock <= 0) stock = 10;
+            var stock = Math.Max(0, nhap - ban);
 
             tongTonKho += stock;
             if (stock <= 5)
@@ -123,7 +122,7 @@ public class DashboardService : IDashboardService
             .Select(g => new ChannelRevenueDto
             {
                 KenhBan = g.Key,
-                DoanhThu = g.Sum(x => x.ThanhTien),
+                DoanhThu = g.Sum(x => x.ThanhTien > 0 ? x.ThanhTien : (x.TongTien - x.TienGiamGia)),
                 SoHoaDon = g.Count()
             })
             .ToListAsync();

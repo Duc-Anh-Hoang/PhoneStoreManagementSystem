@@ -227,6 +227,10 @@
           const nameEl = document.getElementById('customer-header-name');
           const phoneEl = document.getElementById('customer-header-phone');
           if (nameEl) nameEl.textContent = user.hoTen || 'Khách Hàng';
+          const avatarEl = document.getElementById('customer-header-avatar');
+          if (avatarEl && user.avatar) {
+            avatarEl.innerHTML = '<img src="' + user.avatar + '" alt="' + (user.hoTen || 'User') + '" class="w-full h-full object-cover rounded-full">';
+          }
           if (phoneEl) phoneEl.textContent = user.sdt || '';
         }
 

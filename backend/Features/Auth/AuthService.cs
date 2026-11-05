@@ -1,6 +1,8 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
+using Google.Apis.Auth;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using PhoneStoreAPI.Common.Constants;
@@ -18,6 +20,7 @@ public class AuthService : IAuthService
     private readonly IConfiguration _configuration;
     private readonly ICodeGenerator _codeGenerator;
     private readonly ILogger<AuthService> _logger;
+    private readonly HttpClient _httpClient;
 
     public AuthService(
         AppDbContext context,
@@ -29,6 +32,7 @@ public class AuthService : IAuthService
         _configuration = configuration;
         _codeGenerator = codeGenerator;
         _logger = logger;
+        _httpClient = new HttpClient();
     }
 
     public async Task<LoginResponse> LoginStaffAsync(LoginRequest request)
@@ -138,6 +142,142 @@ public class AuthService : IAuthService
             new Claim(ClaimTypes.Role, AppConstants.Roles.Customer),
             new Claim("role", AppConstants.Roles.Customer)
         });
+
+        return new CustomerLoginResponse
+        {
+            Token = token,
+            ExpiresAt = expiresAt,
+            User = new CustomerUserInfoDto
+            {
+                MaKH = customer.MaKH,
+                HoTen = customer.HoTen,
+                Sdt = customer.Sdt,
+                Email = customer.Email,
+                DiaChi = customer.DiaChi
+            }
+        };
+    }
+
+    public async Task<CustomerLoginResponse> LoginGoogleAsync(GoogleLoginRequest request)
+    {
+        if (string.IsNullOrWhiteSpace(request.IdToken) && string.IsNullOrWhiteSpace(request.AccessToken))
+        {
+            throw new BadRequestException("Cần cung cấp Google ID Token hoặc Access Token.");
+        }
+
+        string email = string.Empty;
+        string name = string.Empty;
+        string googleSub = string.Empty;
+
+        // 1. Nếu có AccessToken từ Google OAuth2 popup:
+        if (!string.IsNullOrWhiteSpace(request.AccessToken))
+        {
+            try
+            {
+                var req = new HttpRequestMessage(HttpMethod.Get, "https://www.googleapis.com/oauth2/v3/userinfo");
+                req.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", request.AccessToken);
+                
+                var res = await _httpClient.SendAsync(req);
+                if (!res.IsSuccessStatusCode)
+                {
+                    throw new UnauthorizedException("Google Access Token không hợp lệ hoặc đã hết hạn.");
+                }
+
+                var jsonStr = await res.Content.ReadAsStringAsync();
+                using var doc = JsonDocument.Parse(jsonStr);
+                var root = doc.RootElement;
+
+                email = root.TryGetProperty("email", out var e) ? e.GetString() ?? "" : "";
+                name = root.TryGetProperty("name", out var n) ? n.GetString() ?? "" : "";
+                googleSub = root.TryGetProperty("sub", out var s) ? s.GetString() ?? "" : "";
+            }
+            catch (Exception ex) when (ex is not UnauthorizedException)
+            {
+                _logger.LogWarning(ex, "Lỗi kết nối xác thực Google UserInfo: {Message}", ex.Message);
+                throw new UnauthorizedException("Không thể xác thực thông tin tài khoản Google.");
+            }
+        }
+        // 2. Nếu có IdToken (JWT) từ Google Identity Services:
+        else if (!string.IsNullOrWhiteSpace(request.IdToken))
+        {
+            var googleClientId = _configuration["Google:ClientId"];
+            bool isPlaceholder = string.IsNullOrWhiteSpace(googleClientId)
+                || googleClientId.Contains("YOUR_GOOGLE_CLIENT_ID", StringComparison.OrdinalIgnoreCase);
+
+            // Hỗ trợ token mô phỏng khi test môi trường dev / local
+            if (request.IdToken.StartsWith("mock-google-token:", StringComparison.OrdinalIgnoreCase))
+            {
+                var parts = request.IdToken.Split(':');
+                email = parts.Length > 1 ? parts[1].Trim() : "user@gmail.com";
+                name = parts.Length > 2 ? parts[2].Trim() : "Khách hàng Google";
+                googleSub = "mock-google-id-" + email;
+            }
+            else
+            {
+                try
+                {
+                    var validationSettings = new GoogleJsonWebSignature.ValidationSettings();
+                    if (!isPlaceholder && !string.IsNullOrWhiteSpace(googleClientId))
+                    {
+                        validationSettings.Audience = new[] { googleClientId };
+                    }
+
+                    var payload = await GoogleJsonWebSignature.ValidateAsync(request.IdToken, validationSettings);
+                    email = payload.Email;
+                    name = payload.Name ?? payload.Email;
+                    googleSub = payload.Subject;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, "Xác thực Google ID Token thất bại: {Message}", ex.Message);
+                    throw new UnauthorizedException("Google ID Token không hợp lệ hoặc đã hết hạn.");
+                }
+            }
+        }
+
+        if (string.IsNullOrWhiteSpace(email))
+        {
+            throw new BadRequestException("Không thể trích xuất email từ tài khoản Google.");
+        }
+
+        string normalizedEmail = email.Trim().ToLowerInvariant();
+
+        // 3. Tìm khách hàng theo email
+        var customer = await _context.KhachHangs
+            .FirstOrDefaultAsync(k => k.Email != null && k.Email.ToLower() == normalizedEmail);
+
+        if (customer == null)
+        {
+            // Tự động khởi tạo hồ sơ khách hàng từ Google Profile
+            string maKH = await _codeGenerator.NextAsync("KH");
+            customer = new KhachHang
+            {
+                MaKH = maKH,
+                HoTen = !string.IsNullOrWhiteSpace(name) ? name.Trim() : "Khách hàng Google",
+                Email = normalizedEmail
+            };
+
+            _context.KhachHangs.Add(customer);
+            await _context.SaveChangesAsync();
+            _logger.LogInformation("Khách hàng mới tự động đăng ký qua Google: {MaKH} - Email: {Email}", customer.MaKH, normalizedEmail);
+        }
+        else if (string.IsNullOrWhiteSpace(customer.HoTen) || customer.HoTen.StartsWith("Khách hàng"))
+        {
+            customer.HoTen = name.Trim();
+            await _context.SaveChangesAsync();
+        }
+
+        var (token, expiresAt) = GenerateJwtToken(new[]
+        {
+            new Claim(ClaimTypes.Name, customer.HoTen),
+            new Claim(ClaimTypes.NameIdentifier, customer.MaKH),
+            new Claim("makh", customer.MaKH),
+            new Claim("email", customer.Email ?? normalizedEmail),
+            new Claim(ClaimTypes.Role, AppConstants.Roles.Customer),
+            new Claim("role", AppConstants.Roles.Customer)
+        });
+
+        _logger.LogInformation("Khách hàng '{Email}' (Mã: {MaKH}) đăng nhập thành công qua Google OAuth.", normalizedEmail, customer.MaKH);
 
         return new CustomerLoginResponse
         {

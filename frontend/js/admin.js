@@ -346,7 +346,7 @@ async function renderDashboard() {
     if (pendingSub) {
       if (pendingCount > 0) {
         pendingSub.textContent = 'Cần duyệt & xuất hóa đơn';
-        pendingSub.className = 'text-[11px] text-[#F59E0B] font-bold mt-1.5 truncate whitespace-nowrap';
+        pendingSub.className = 'text-[11px] text-[#F97316] font-bold mt-1.5 truncate whitespace-nowrap';
       } else {
         pendingSub.textContent = 'Đã xử lý hết đơn hàng';
         pendingSub.className = 'text-[11px] text-slate-500 font-medium mt-1.5 truncate whitespace-nowrap';
@@ -448,7 +448,7 @@ async function renderDashboard() {
         const colors = [
           { bar: 'bg-[#1E3A8A]', icon: 'fa-mobile-screen text-[#1E3A8A]' },
           { bar: 'bg-[#2563EB]', icon: 'fa-headphones text-[#2563EB]' },
-          { bar: 'bg-[#F59E0B]', icon: 'fa-plug text-[#F59E0B]' },
+          { bar: 'bg-[#F97316]', icon: 'fa-plug text-[#F97316]' },
           { bar: 'bg-[#0F172A]', icon: 'fa-layer-group text-slate-800' }
         ];
 
@@ -1306,7 +1306,7 @@ async function renderBaoHanhTable() {
       } else if (t.trangThai === 'cho_linh_kien') {
         actionHtml = `
           <div class="flex items-center justify-end gap-1.5">
-            <button type="button" onclick="updateTiepNhanStatus('${t.maTN}', 'dang_sua', this)" class="px-2.5 py-1.5 bg-[#F59E0B] hover:bg-[#D97706] text-white font-bold rounded-lg text-xs transition-colors shadow-sm inline-flex items-center gap-1 cursor-pointer" title="Linh kiện đã về, tiếp tục sửa">
+            <button type="button" onclick="updateTiepNhanStatus('${t.maTN}', 'dang_sua', this)" class="px-2.5 py-1.5 bg-[#F97316] hover:bg-[#EA580C] text-white font-bold rounded-lg text-xs transition-colors shadow-sm inline-flex items-center gap-1 cursor-pointer" title="Linh kiện đã về, tiếp tục sửa">
               <i class="fa-solid fa-screwdriver-wrench text-[10px]"></i> Sửa tiếp
             </button>
             <button type="button" onclick="updateTiepNhanStatus('${t.maTN}', 'hoan_thanh', this)" class="px-2.5 py-1.5 bg-[#22C55E] hover:bg-[#16A34A] text-white font-bold rounded-lg text-xs transition-colors shadow-sm inline-flex items-center gap-1 cursor-pointer" title="Sửa xong trực tiếp">
@@ -1317,7 +1317,7 @@ async function renderBaoHanhTable() {
       } else if (t.trangThai === 'hoan_thanh') {
         actionHtml = `
           <button type="button" onclick="updateTiepNhanStatus('${t.maTN}', 'da_tra', this)" class="px-3 py-1.5 bg-[#1E3A8A] hover:bg-[#172554] text-white font-bold rounded-lg text-xs transition-colors shadow-sm inline-flex items-center gap-1 cursor-pointer" title="Bàn giao máy lại cho khách">
-            <i class="fa-solid fa-handshake text-[10px] text-[#F59E0B]"></i> Trả máy khách
+            <i class="fa-solid fa-handshake text-[10px] text-[#F97316]"></i> Trả máy khách
           </button>
         `;
       } else {
@@ -2959,7 +2959,7 @@ window.handleAdminLoginScreenSubmit = async function(event) {
   } finally {
     if (submitBtn) {
       submitBtn.disabled = false;
-      submitBtn.innerHTML = '<i class="fa-solid fa-right-to-bracket text-[#F59E0B]"></i><span>Đăng Nhập</span>';
+      submitBtn.innerHTML = '<i class="fa-solid fa-right-to-bracket text-[#F97316]"></i><span>Đăng Nhập</span>';
     }
   }
 };

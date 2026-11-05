@@ -277,7 +277,11 @@
         container.innerHTML = this.items.map(item => `
           <div class="flex gap-3.5 p-3.5 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
             <div class="w-20 h-20 rounded-xl bg-slate-50 p-1.5 flex items-center justify-center flex-shrink-0 border border-slate-100 overflow-hidden">
-              <img src="${item.image}" alt="${item.tenHang}" class="w-full h-full object-contain">
+              ${item.image ? `
+                <img src="${item.image}" alt="${item.tenHang}" class="w-full h-full object-contain">
+              ` : `
+                <i class="fa-solid fa-mobile-screen-button text-slate-300 text-xl"></i>
+              `}
             </div>
             <div class="flex-1 flex flex-col justify-between min-w-0">
               <div class="flex items-start justify-between gap-2">
