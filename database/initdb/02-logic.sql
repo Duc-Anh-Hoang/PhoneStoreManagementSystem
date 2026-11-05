@@ -98,7 +98,7 @@ LEFT JOIN (SELECT h.MAKH, SUM(ct.DONGIA_BAN) AS TONGHOAN
            FROM TraHang t
            JOIN HoaDon h ON h.SOHD = t.SOHD
            JOIN ChiTietHoaDon ct ON ct.SOHD = t.SOHD AND ct.MAIMEI = t.MAIMEI
-           WHERE t.HINHTHUCHOANTIEN IN ('tien_mat', 'chuyen_khoan') AND h.MAKH IS NOT NULL
+           WHERE t.TRANGTHAI = 'hoan_tat' AND t.HINHTHUCHOANTIEN IN ('tien_mat', 'chuyen_khoan') AND h.MAKH IS NOT NULL
            GROUP BY h.MAKH) r ON r.MAKH = k.MAKH
 LEFT JOIN LATERAL (SELECT GIATRI FROM ThamSo WHERE MATHAMSO = 'DIEM_MOI_VND') p ON TRUE;
 

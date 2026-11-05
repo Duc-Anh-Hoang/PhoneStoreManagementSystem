@@ -114,7 +114,7 @@ CREATE TABLE IF NOT EXISTS IMEI (
     MAHANG    VARCHAR(10) NOT NULL REFERENCES MatHang(MAHANG),
     SOPN      VARCHAR(15) NOT NULL REFERENCES PhieuNhap(SOPN),
     SOIMEI    VARCHAR(20) NOT NULL UNIQUE CHECK (LENGTH(SOIMEI) = 15 AND SOIMEI ~ '^[0-9]+$'),
-    TRANGTHAI VARCHAR(20) NOT NULL DEFAULT 'con_hang' CHECK (TRANGTHAI IN ('con_hang', 'da_ban', 'tra_hang')),
+    TRANGTHAI VARCHAR(20) NOT NULL DEFAULT 'con_hang' CHECK (TRANGTHAI IN ('con_hang', 'da_ban', 'tra_hang', 'cho_duyet', 'dang_sua')),
     CONSTRAINT UQ_IMEI_MaImei_MaHang UNIQUE (MAIMEI, MAHANG)
 );
 
@@ -175,14 +175,45 @@ CREATE TABLE IF NOT EXISTS BaoHanh (
 
 -- 2.18 BẢNG TRẢ HÀNG
 CREATE TABLE IF NOT EXISTS TraHang (
-    MATR             VARCHAR(15) PRIMARY KEY,
-    SOHD             VARCHAR(15)  NOT NULL REFERENCES HoaDon(SOHD),
-    MAIMEI           VARCHAR(20)  NOT NULL UNIQUE REFERENCES IMEI(MAIMEI),
-    NGAYTR           TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    LYDO             VARCHAR(255) NOT NULL,
-    HINHTHUCHOANTIEN VARCHAR(20)  NOT NULL CHECK (HINHTHUCHOANTIEN IN ('tien_mat', 'chuyen_khoan', 'doi_hang')),
-    MANV             VARCHAR(10)  NOT NULL REFERENCES NhanVien(MANV)
+    MATR                 VARCHAR(15) PRIMARY KEY,
+    SOHD                 VARCHAR(15)   NOT NULL REFERENCES HoaDon(SOHD),
+    MAIMEI               VARCHAR(20)   NOT NULL REFERENCES IMEI(MAIMEI),
+    LOAIYEUCAU           VARCHAR(20)   NOT NULL DEFAULT 'loi_ky_thuat' CHECK (LOAIYEUCAU IN ('loi_ky_thuat', 'doi_y')),
+    HINHTHUCHOANTIEN     VARCHAR(20)   NOT NULL CHECK (HINHTHUCHOANTIEN IN ('tien_mat', 'chuyen_khoan', 'doi_hang')),
+    LYDO                 VARCHAR(255)  NOT NULL,
+    TRANGTHAI            VARCHAR(20)   NOT NULL DEFAULT 'tiep_nhan' CHECK (TRANGTHAI IN ('tiep_nhan', 'da_kiem_tra', 'da_duyet', 'tu_choi', 'hoan_tat', 'da_huy')),
+    NGAYTR               TIMESTAMPTZ   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    MANV                 VARCHAR(10)   NOT NULL REFERENCES NhanVien(MANV),
+    CHECKLIST_NGOAIQUAN  TEXT          NULL,
+    KETQUA_KIEMTRA       VARCHAR(30)   NULL CHECK (KETQUA_KIEMTRA IS NULL OR KETQUA_KIEMTRA IN ('loi_nsx', 'khong_loi', 'hu_hong_do_nguoi_dung')),
+    GHICHU_KIEMTRA       TEXT          NULL,
+    MANV_KIEMTRA         VARCHAR(10)   NULL REFERENCES NhanVien(MANV),
+    NGAY_KIEMTRA         TIMESTAMPTZ   NULL,
+    MANV_DUYET           VARCHAR(10)   NULL REFERENCES NhanVien(MANV),
+    NGAY_DUYET           TIMESTAMPTZ   NULL,
+    LYDO_TUCHOI          VARCHAR(255)  NULL,
+    SOTIENHOAN           DECIMAL(18,2) NULL CHECK (SOTIENHOAN IS NULL OR SOTIENHOAN >= 0),
+    MAGIAODICH           VARCHAR(50)   NULL,
+    MAIMEI_MOI           VARCHAR(20)   NULL REFERENCES IMEI(MAIMEI),
+    MANV_HOANTAT         VARCHAR(10)   NULL REFERENCES NhanVien(MANV),
+    NGAY_HOANTAT         TIMESTAMPTZ   NULL
 );
+
+-- Partial Unique Index: Khong cho 2 phieu cung IMEI o trang thai dang mo hoac hoan tat
+CREATE UNIQUE INDEX IF NOT EXISTS UQ_TraHang_Active_IMEI ON TraHang(MAIMEI)
+    WHERE TRANGTHAI NOT IN ('tu_choi', 'da_huy');
+
+-- 2.18b BẢNG NHẬT KÝ ĐỔI TRẢ (AUDIT LOG)
+CREATE TABLE IF NOT EXISTS TraHangLichSu (
+    MALICHSU       BIGSERIAL PRIMARY KEY,
+    MATR           VARCHAR(15)  NOT NULL REFERENCES TraHang(MATR) ON DELETE CASCADE,
+    TRANGTHAI_CU   VARCHAR(20)  NULL,
+    TRANGTHAI_MOI  VARCHAR(20)  NOT NULL,
+    MANV           VARCHAR(10)  NOT NULL REFERENCES NhanVien(MANV),
+    THOIDIEM       TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    GHICHU         VARCHAR(255) NULL
+);
+CREATE INDEX IF NOT EXISTS IX_TraHangLichSu_MaTR ON TraHangLichSu(MATR);
 
 -- 2.19 BẢNG PHIẾU TIẾP NHẬN BẢO HÀNH
 CREATE TABLE IF NOT EXISTS PhieuTiepNhanBaoHanh (
@@ -259,7 +290,8 @@ CREATE INDEX IF NOT EXISTS IX_DHOL_TrangThai ON DonHangOnline(TRANGTHAI);
 INSERT INTO ThamSo (MATHAMSO, TENTHAMSO, GIATRI, DONVI) VALUES
     ('VAT_PHANTRAM', 'Thuế VAT', 10, '%'),
     ('DIEM_MOI_VND', 'Số tiền chi tiêu để được 1 điểm', 100000, 'VND'),
-    ('HAN_DOITRA_NGAY', 'Hạn đổi trả tính từ ngày lập hóa đơn', 30, 'ngày')
+    ('HAN_DOITRA_NGAY', 'Hạn đổi trả tính từ ngày lập hóa đơn', 30, 'ngày'),
+    ('HAN_DOI_Y_NGAY', 'Hạn đổi trả đối với lý do đổi ý (nguyên seal)', 7, 'ngày')
 ON CONFLICT (MATHAMSO) DO NOTHING;
 
 INSERT INTO PhanQuyen (MAQUYEN, TENQUYEN, MOTA) VALUES
