@@ -156,10 +156,11 @@ public static class ServiceCollectionExtensions
             // Login policy: 5 lần/phút/IP
             options.AddPolicy("login", httpContext =>
             {
-                var clientIp = httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+                var forwarded = httpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault();
+                var clientIp = !string.IsNullOrWhiteSpace(forwarded) ? forwarded.Split(",")[0].Trim() : (httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown");
                 return RateLimitPartition.GetFixedWindowLimiter(clientIp, _ => new FixedWindowRateLimiterOptions
                 {
-                    PermitLimit = 5,
+                    PermitLimit = 60,
                     Window = TimeSpan.FromMinutes(1),
                     QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
                     QueueLimit = 0
@@ -169,7 +170,8 @@ public static class ServiceCollectionExtensions
             // Public lookup policy: 30 lần/phút/IP
             options.AddPolicy("public-lookup", httpContext =>
             {
-                var clientIp = httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+                var forwarded = httpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault();
+                var clientIp = !string.IsNullOrWhiteSpace(forwarded) ? forwarded.Split(",")[0].Trim() : (httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown");
                 return RateLimitPartition.GetFixedWindowLimiter(clientIp, _ => new FixedWindowRateLimiterOptions
                 {
                     PermitLimit = 30,

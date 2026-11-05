@@ -2968,7 +2968,7 @@ window.quickFillAdminLogin = function(username) {
   const uInput = document.getElementById('admin-login-screen-username');
   const pInput = document.getElementById('admin-login-screen-password');
   if (uInput) uInput.value = username;
-  if (pInput) pInput.value = '123456';
+  if (pInput) pInput.value = 'admin123';
   const form = document.getElementById('form-admin-login-screen');
   if (form) {
     const submitEvt = new Event('submit', { cancelable: true });

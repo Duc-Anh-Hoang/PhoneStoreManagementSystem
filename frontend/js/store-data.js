@@ -121,7 +121,6 @@
         }
       }
     }
-    }
 
     getAllProducts() {
       return this.products;
