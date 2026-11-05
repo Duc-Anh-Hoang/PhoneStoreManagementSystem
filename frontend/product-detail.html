@@ -218,10 +218,31 @@
           <span class="hidden sm:inline text-slate-300">|</span>
 
           <!-- 2. Sản phẩm đã xem -->
-          <a href="index.html#shelf-recently-viewed" class="inline-flex items-center gap-2 hover:text-[#2563EB] transition-colors cursor-pointer py-1.5 flex-shrink-0">
-            <i class="fa-regular fa-clock text-slate-500 text-sm"></i>
-            <span>Sản phẩm đã xem</span>
-          </a>
+          <div class="relative group flex-shrink-0">
+            <button type="button" onclick="window.scrollToRecentlyViewed ? window.scrollToRecentlyViewed() : window.location.href='#shelf-recently-viewed'" class="inline-flex items-center gap-2 hover:text-[#2563EB] transition-colors cursor-pointer py-1.5">
+              <i class="fa-regular fa-clock text-slate-500 text-sm"></i>
+              <span>Sản phẩm đã xem</span>
+              <span class="badge-viewed-count hidden px-1.5 py-0.2 rounded-full bg-blue-100 text-blue-700 text-[10px] font-bold">0</span>
+            </button>
+            
+            <!-- Popover xem nhanh khi rê chuột -->
+            <div class="absolute top-full left-0 mt-1 w-72 sm:w-80 bg-white rounded-2xl shadow-xl border border-slate-200/90 p-3 hidden group-hover:block z-50 transition-all">
+              <div class="flex items-center justify-between border-b border-slate-100 pb-2 mb-2">
+                <span class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                  <i class="fa-solid fa-clock-rotate-left text-blue-600"></i> Sản phẩm đã xem
+                </span>
+                <button type="button" onclick="window.clearRecentlyViewed()" class="text-[11px] font-bold text-rose-600 hover:text-rose-700 cursor-pointer">Xóa</button>
+              </div>
+              <div id="recently-viewed-popover-list" class="space-y-1 max-h-60 overflow-y-auto custom-scrollbar">
+                <!-- Render động -->
+              </div>
+              <div class="pt-2 border-t border-slate-100 mt-2 text-center">
+                <button type="button" onclick="window.scrollToRecentlyViewed()" class="text-xs font-bold text-blue-600 hover:text-blue-700 w-full py-1 cursor-pointer">
+                  Xem tất cả danh sách &gt;
+                </button>
+              </div>
+            </div>
+          </div>
           <span class="hidden sm:inline text-slate-300">|</span>
 
           <!-- 3. Tra cứu đơn hàng -->
@@ -854,6 +875,31 @@
       </div>
     </div>
 
+    <!-- =========================================================================
+         7. KHỐI: SẢN PHẨM ĐÃ XEM (RECENTLY VIEWED PRODUCTS)
+         ========================================================================= -->
+    <div id="shelf-recently-viewed" class="bg-white rounded-2xl border border-slate-200/90 p-6 shadow-xs space-y-5">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div class="flex items-center gap-2.5">
+          <span class="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-sm shadow-xs">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+          </span>
+          <h3 class="text-lg sm:text-xl font-black text-slate-900 flex items-center gap-2">
+            <span>Sản phẩm đã xem</span>
+            <span class="recently-viewed-counter text-xs font-bold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-200/60">0</span>
+          </h3>
+        </div>
+        <button type="button" onclick="window.clearRecentlyViewed()" class="text-xs font-bold text-rose-600 hover:text-rose-700 cursor-pointer flex items-center gap-1.5 py-1 px-2.5 rounded-lg hover:bg-rose-50 transition-colors">
+          <i class="fa-regular fa-trash-can text-xs"></i>
+          <span>Xóa lịch sử</span>
+        </button>
+      </div>
+
+      <div class="recently-viewed-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3.5">
+        <!-- Render động bằng recently-viewed.js -->
+      </div>
+    </div>
+
   </main>
 
   <!-- =========================================================================
@@ -1013,6 +1059,7 @@
 
   <!-- Scripts -->
   <script src="js/cart.js?v=6.0"></script>
-  <script src="js/product-detail.js?v=6.0"></script>`r`n  <script src="js/recently-viewed.js"></script>
+  <script src="js/product-detail.js?v=6.0"></script>
+  <script src="js/recently-viewed.js?v=6.0"></script>
 </body>
 </html>
