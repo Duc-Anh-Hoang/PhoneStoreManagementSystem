@@ -109501,5 +109501,50 @@
     "thongSo": {},
     "slug": "/quat-mini/quat-cam-tay-mini-jisulife-handfan-life3-fa20x",
     "maHang": "MH3629"
+  },
+  "MH001": {
+    "maHang": "MH001",
+    "sku": "IP18PM256TN",
+    "tenHang": "iPhone 18 Pro Max 256GB - Chính hãng VN/A",
+    "nhanHieu": "Apple",
+    "tenLoai": "Điện thoại",
+    "tenNhom": "Điện thoại",
+    "donGia": 38490000,
+    "giaGoc": 41569000,
+    "anhChinh": "images/banner/iphone-18-cat-082925094.png",
+    "phienBan": [
+      {
+        "id": "v_256",
+        "dungLuong": "256GB",
+        "gia": 38490000,
+        "giaGoc": 41569000
+      },
+      {
+        "id": "v_512",
+        "dungLuong": "512GB",
+        "gia": 42990000,
+        "giaGoc": 46990000
+      }
+    ],
+    "mauSac": [
+      {
+        "id": "c_titan",
+        "ten": "Titan Tự Nhiên",
+        "hex": "#A8A29E",
+        "anh": "images/banner/iphone-18-cat-082925094.png"
+      },
+      {
+        "id": "c_sa",
+        "ten": "Titan Sa Mạc",
+        "hex": "#D7C4B7",
+        "anh": "images/banner/iphone-18-cat-082925094.png"
+      }
+    ],
+    "thongSoNoiBat": {
+      "Kích thước màn hình": "6.9\"",
+      "Bộ nhớ trong": "256GB",
+      "Vi xử lý": "Apple A20 Pro",
+      "Dung lượng pin hiển thị": "4850mAh"
+    }
   }
 }

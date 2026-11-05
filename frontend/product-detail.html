@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chi Tiết Sản Phẩm - SAMAMOBILE.COM</title>
+  <meta name="description" content="Chi tiết sản phẩm chính hãng tại SAMAMOBILE.COM - Giá tốt nhất thị trường, bảo hành uy tín, giao hàng toàn quốc.">
+  <link rel="icon" type="image/png" href="images/favicon.png">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome 6.5.1 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            navy: '#0b45a6',
+            'sama-blue': '#0057B7',
+            'sama-red': '#E11B1E',
+            'sama-teal': '#008774',
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #f4f6f8; color: #1e293b; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    
+    .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+    .btn-header-glossy {
+      background: linear-gradient(135deg, #ffffff 0%, #eff6ff 100%);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .btn-header-glossy:hover {
+      background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+      box-shadow: 0 4px 8px rgba(0, 87, 183, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      transform: translateY(-1px);
+    }
+
+    /* Selected Badge Checkmark */
+    .variant-card.selected, .color-card.selected {
+      border-color: #0057B7 !important;
+      background-color: #f0f6ff !important;
+    }
+    .variant-card.selected .check-badge, .color-card.selected .check-badge {
+      display: flex !important;
+    }
+
+    /* Table Specs Styling (Chuẩn Screenshot 5) */
+    .specs-table tr:nth-child(even) { background-color: #f8fafc; }
+    .specs-table tr:hover { background-color: #f1f5f9; }
+    .specs-table td { padding: 12px 16px; font-size: 13px; line-height: 1.6; border-bottom: 1px solid #e2e8f0; }
+    .specs-table td:first-child { width: 28%; font-weight: 700; color: #334155; background-color: #f8fafc; border-right: 1px solid #e2e8f0; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased">
+
+  <!-- =========================================================================
+       1. HEADER (CHUẨN HOÀNG HÀ MOBILE - TONE XANH DƯƠNG SAMAMOBILE)
+       ========================================================================= -->
+  <header id="main-header" class="sticky top-0 z-40 transition-all duration-300 shadow-md">
+    
+    <div class="header-blue-banner" style="background-color: #0b45a6; background-image: url('images/header-bg.jpg'); background-size: cover; background-position: center; border-bottom: 1px solid rgba(255,255,255,0.15);">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3.5 flex items-center justify-between gap-2 sm:gap-4">
+        
+        <!-- 1. Logo Thương Hiệu -->
+        <a href="index.html" class="flex-shrink-0 flex items-center gap-2 group transition-transform duration-200 hover:scale-[1.02]" aria-label="Trang chủ SAMAMOBILE.COM">
+          <div class="flex items-center tracking-tight select-none">
+            <span class="text-white text-2xl sm:text-3xl font-black italic tracking-tighter drop-shadow-md">SAMA</span>
+            <span class="text-amber-400 text-2xl sm:text-3xl font-black italic tracking-tighter drop-shadow-md">MOBILE</span>
+            <span class="hidden sm:inline-block text-[11px] font-black text-blue-200 ml-1.5 self-end mb-1 tracking-widest uppercase bg-white/10 px-1.5 py-0.5 rounded">.COM</span>
+          </div>
+        </a>
+
+        <!-- 2. Danh Mục (Mega Menu Button) -->
+        <a href="index.html" class="btn-header-glossy h-12 inline-flex items-center gap-2 px-3.5 sm:px-4 rounded-full text-[#1E3A8A] font-extrabold text-xs sm:text-sm active:scale-95 cursor-pointer whitespace-nowrap flex-shrink-0" aria-label="Xem danh mục sản phẩm">
+          <i class="fa-solid fa-bars text-sm text-[#0057B7]"></i>
+          <span class="hidden md:inline font-extrabold text-[#1E3A8A]">Danh mục</span>
+        </a>
+
+        <!-- 3. Thanh Tìm Kiếm Trung Tâm -->
+        <div class="flex-1 max-w-xl mx-1 sm:mx-2 relative">
+          <form action="index.html" method="GET" class="relative flex items-center">
+            <input type="text" name="q" placeholder="Hôm nay bạn muốn tìm kiếm gì? (Nubia, iPhone 18, Laptop...)" class="w-full h-11 sm:h-12 pl-4 pr-11 rounded-full bg-white text-xs sm:text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-sm transition-all" />
+            <button type="submit" class="absolute right-1 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#0057B7] hover:bg-[#004494] text-white flex items-center justify-center transition-all cursor-pointer" aria-label="Tìm kiếm">
+              <i class="fa-solid fa-magnifying-glass text-xs sm:text-sm"></i>
+            </button>
+          </form>
+        </div>
+
+        <!-- 4. Giỏ Hàng & Tiện Ích -->
+        <div class="flex items-center gap-2 sm:gap-2.5 flex-shrink-0 flex-nowrap">
+          <button type="button" onclick="if(window.CellphoneSCart) window.CellphoneSCart.openDrawer()" class="btn-header-glossy h-12 relative inline-flex items-center gap-2.5 px-4 sm:px-5 rounded-full text-[#1E3A8A] font-extrabold text-xs sm:text-sm active:scale-95 cursor-pointer whitespace-nowrap flex-shrink-0" aria-label="Giỏ hàng của bạn">
+            <i class="fa-solid fa-cart-shopping text-base text-[#0057B7]"></i>
+            <span class="hidden sm:inline font-extrabold text-[#1E3A8A]">Giỏ hàng</span>
+            <span class="cart-badge-count hidden absolute -top-1.5 -right-1.5 bg-[#EF4444] text-white font-extrabold text-[10px] px-1.5 py-0.5 rounded-full shadow-md min-w-[20px] text-center">0</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Sub-bar tiện ích -->
+    <div class="bg-white border-b border-slate-200 shadow-sm text-slate-700 relative z-30">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between sm:justify-end min-h-[40px] overflow-x-auto no-scrollbar gap-3 sm:gap-5 text-xs sm:text-[13px] font-bold whitespace-nowrap text-slate-700">
+          <a href="index.html" class="inline-flex items-center gap-2 hover:text-blue-600 transition-colors py-1 flex-shrink-0">
+            <i class="fa-solid fa-arrows-rotate text-blue-600 text-sm"></i>
+            <span>Thu cũ đổi mới - Lên đời trợ giá 5 triệu</span>
+          </a>
+          <span class="hidden sm:inline text-slate-300">|</span>
+          <a href="index.html#shelf-recently-viewed" class="inline-flex items-center gap-2 hover:text-blue-600 transition-colors py-1 flex-shrink-0">
+            <i class="fa-regular fa-clock text-slate-500 text-sm"></i>
+            <span>Sản phẩm đã xem</span>
+          </a>
+          <span class="hidden sm:inline text-slate-300">|</span>
+          <a href="tel:18006868" class="inline-flex items-center gap-2 hover:text-blue-600 transition-colors py-1 flex-shrink-0">
+            <i class="fa-solid fa-phone text-blue-600 text-sm"></i>
+            <span>Hotline: <strong class="text-slate-900 font-extrabold">1800 6868</strong></span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </header>
+
+  <!-- =========================================================================
+       2. BREADCRUMBS
+       ========================================================================= -->
+  <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 text-xs sm:text-[13px] text-slate-500 flex items-center flex-wrap select-none" id="product-breadcrumbs">
+    <a href="index.html" class="hover:text-blue-600">Trang Chủ</a>
+    <span class="mx-2 text-slate-400">/</span>
+    <span class="hover:text-blue-600" id="bc-category">Điện thoại</span>
+    <span class="mx-2 text-slate-400">/</span>
+    <span class="text-slate-800 font-semibold" id="bc-product-name">Chi tiết sản phẩm</span>
+  </nav>
+
+  <!-- =========================================================================
+       3. KHỐI 1: KHUNG SHOWCASE TRÊN CÙNG (GALLERY LỚN + CẤU HÌNH & MUA HÀNG)
+       ========================================================================= -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 space-y-8">
+    
+    <!-- Header Tên Sản Phẩm & SKU -->
+    <div class="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-xs">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <div>
+          <h1 id="product-title" class="text-xl sm:text-2xl md:text-3xl font-black text-slate-900 tracking-tight leading-snug">
+            Nubia V80 Max 6GB/128GB - Chính hãng
+          </h1>
+          <div class="flex items-center gap-3 mt-1.5 text-xs text-slate-500 flex-wrap">
+            <span>SKU: <strong id="product-sku" class="text-slate-700 font-bold">Z257761280BC</strong></span>
+            <span class="text-slate-300">|</span>
+            <div class="flex items-center gap-1 text-amber-500 font-bold">
+              <i class="fa-solid fa-star"></i>
+              <span id="product-rating-score" class="text-slate-700 font-extrabold">5.0</span>
+              <span class="text-slate-400 font-normal">(1 đánh giá)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3 text-xs sm:text-sm font-bold text-blue-600">
+          <button type="button" onclick="document.getElementById('detailed-specs-section').scrollIntoView({behavior: 'smooth'})" class="inline-flex items-center gap-1.5 hover:text-blue-700 px-3 py-1.5 rounded-lg bg-blue-50 border border-blue-200 transition-colors cursor-pointer">
+            <i class="fa-solid fa-microchip"></i> Thông số kỹ thuật
+          </button>
+          <button type="button" onclick="alert('Tính năng so sánh sản phẩm đang được cập nhật!')" class="inline-flex items-center gap-1.5 hover:text-blue-700 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-700 transition-colors cursor-pointer">
+            <i class="fa-solid fa-code-compare"></i> So sánh
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Layout 2 Cột Showcase (7 cột / 5 cột) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- CỘT TRÁI (GALLERY ẢNH LỚN + THUMBNAILS + THÔNG SỐ NỔI BẬT + CAM KẾT) -->
+      <div class="lg:col-span-7 space-y-6">
+        
+        <!-- Khung Ảnh Lớn (To Rõ, Đẹp Mắt) -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-7 shadow-xs relative group">
+          <div class="relative w-full aspect-square max-h-[480px] sm:max-h-[520px] flex items-center justify-center overflow-hidden bg-white">
+            <img id="main-product-image" src="https://i.hoanghamobile.vn/Uploads/2026/01/08/nubia-v80-max-bac.png" alt="Sản phẩm" class="max-w-full max-h-full object-contain transition-transform duration-300 group-hover:scale-105" />
+            
+            <!-- Nút Prev / Next Carousel -->
+            <button type="button" onclick="window.prevGalleryImage()" class="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/95 hover:bg-white text-slate-700 shadow-lg flex items-center justify-center transition-all cursor-pointer opacity-80 hover:opacity-100" aria-label="Ảnh trước">
+              <i class="fa-solid fa-chevron-left text-sm"></i>
+            </button>
+            <button type="button" onclick="window.nextGalleryImage()" class="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/95 hover:bg-white text-slate-700 shadow-lg flex items-center justify-center transition-all cursor-pointer opacity-80 hover:opacity-100" aria-label="Ảnh kế">
+              <i class="fa-solid fa-chevron-right text-sm"></i>
+            </button>
+
+            <!-- Badge số trang ảnh -->
+            <div id="gallery-counter-badge" class="absolute bottom-3 right-3 px-3 py-1 bg-black/60 text-white text-xs font-bold rounded-full backdrop-blur-xs">
+              1/11
+            </div>
+          </div>
+
+          <!-- Thumbnails tính năng & màu sắc dưới ảnh (To rõ ràng) -->
+          <div id="gallery-thumbnails" class="mt-5 pt-4 border-t border-slate-100 flex items-center gap-3 overflow-x-auto no-scrollbar pb-1">
+            <!-- Render động bằng product-detail.js -->
+          </div>
+        </div>
+
+        <!-- Khối Thông Số Nổi Bật (4 Ô Ngang Có Icon Chuẩn Screenshot 2) -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-xs">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-base sm:text-lg font-black text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-sliders text-blue-600"></i> Thông số nổi bật
+            </h3>
+            <button type="button" onclick="document.getElementById('detailed-specs-section').scrollIntoView({behavior: 'smooth'})" class="text-xs sm:text-sm font-bold text-blue-600 hover:text-blue-700 cursor-pointer flex items-center gap-1">
+              Xem tất cả <i class="fa-solid fa-chevron-right text-[10px]"></i>
+            </button>
+          </div>
+          
+          <div id="key-specs-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <!-- Render động -->
+          </div>
+        </div>
+
+        <!-- Khối Cam Kết Sản Phẩm (Chuẩn Screenshot 2) -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-xs">
+          <div class="flex items-center justify-between mb-3.5">
+            <h3 class="text-base sm:text-lg font-black text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-shield-halved text-emerald-600"></i> Cam kết sản phẩm
+            </h3>
+            <button type="button" onclick="alert('Xem chính sách bảo hành và cam kết chính hãng tại SamaMobile.')" class="text-xs sm:text-sm font-bold text-blue-600 hover:text-blue-700 cursor-pointer">
+              Tìm hiểu thêm
+            </button>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-[13px] text-slate-700">
+            <div class="flex items-start gap-2.5">
+              <i class="fa-solid fa-circle-check text-emerald-500 text-sm mt-0.5 flex-shrink-0"></i>
+              <span>Hư gì đổi nấy <strong>12 tháng</strong> tại hệ thống trên toàn quốc (miễn phí tháng đầu).</span>
+            </div>
+            <div class="flex items-start gap-2.5">
+              <i class="fa-solid fa-circle-check text-emerald-500 text-sm mt-0.5 flex-shrink-0"></i>
+              <span>Bảo hành chính hãng điện thoại <strong>1 năm</strong> tại các trung tâm bảo hành hãng.</span>
+            </div>
+            <div class="flex items-start gap-2.5">
+              <i class="fa-solid fa-circle-check text-emerald-500 text-sm mt-0.5 flex-shrink-0"></i>
+              <span>Bộ sản phẩm gồm: <strong>Hộp, Sách hướng dẫn, Cây lấy sim, Củ sạc 22.5W, Cáp Type-C, Ốp lưng</strong>.</span>
+            </div>
+            <div class="flex items-start gap-2.5">
+              <i class="fa-solid fa-circle-check text-emerald-500 text-sm mt-0.5 flex-shrink-0"></i>
+              <span>Giao hàng nhanh toàn quốc, kiểm tra hàng trước khi thanh toán.</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- CỘT PHẢI (PHIÊN BẢN + MÀU SẮC + GIÁ BÁN + NÚT MUA + ƯU ĐÃI MEMBER) -->
+      <div class="lg:col-span-5 space-y-6">
+        
+        <div class="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-xs space-y-5">
+          
+          <!-- 1. Chọn Phiên Bản (Dung Lượng) -->
+          <div>
+            <label class="block text-xs sm:text-sm font-black text-slate-800 uppercase tracking-wide mb-2.5">
+              Phiên bản
+            </label>
+            <div id="product-versions-list" class="grid grid-cols-2 gap-3">
+              <!-- Render động -->
+            </div>
+          </div>
+
+          <!-- 2. Chọn Màu Sắc -->
+          <div>
+            <label class="block text-xs sm:text-sm font-black text-slate-800 uppercase tracking-wide mb-2.5">
+              Màu sắc
+            </label>
+            <div id="product-colors-list" class="grid grid-cols-2 gap-3">
+              <!-- Render động -->
+            </div>
+          </div>
+
+          <!-- 3. Khung Giá Bán (To Rõ Nổi Bật) -->
+          <div class="bg-[#f0f6fe] border border-blue-200/90 rounded-2xl p-4 sm:p-5">
+            <div class="text-xs text-slate-500 font-semibold mb-1">Giá bán</div>
+            <div class="flex items-baseline gap-3 flex-wrap">
+              <span id="product-sale-price" class="text-3xl sm:text-4xl font-black text-[#0057B7] tracking-tight">
+                3.890.000 ₫
+              </span>
+              <span id="product-original-price" class="text-sm sm:text-base text-slate-400 line-through font-semibold">
+                4.290.000 ₫
+              </span>
+              <span id="product-discount-badge" class="px-2 py-0.5 rounded-md bg-rose-100 text-rose-700 font-extrabold text-xs">
+                -9%
+              </span>
+            </div>
+          </div>
+
+          <!-- 4. Cụm 3 Nút Mua Hàng & Trả Góp -->
+          <div class="flex items-center gap-2.5 pt-1">
+            <!-- Nút Giỏ Hàng -->
+            <button type="button" onclick="window.handleAddToCart(false)" class="w-13 h-12 rounded-xl border-2 border-rose-500 text-rose-600 hover:bg-rose-50 flex items-center justify-center transition-all cursor-pointer flex-shrink-0 active:scale-95" title="Thêm vào giỏ hàng">
+              <i class="fa-solid fa-cart-plus text-lg"></i>
+            </button>
+
+            <!-- Nút MUA NGAY Lớn Màu Đỏ -->
+            <button type="button" onclick="window.handleMainBuyNow()" class="flex-1 h-12 rounded-xl bg-[#E11B1E] hover:bg-red-700 text-white font-extrabold shadow-md hover:shadow-lg transition-all cursor-pointer active:scale-98 flex flex-col items-center justify-center leading-tight">
+              <span class="text-sm uppercase tracking-wide">MUA NGAY</span>
+              <span class="text-[10px] font-medium text-white/90">Giao tận nhà hoặc nhận tại cửa hàng</span>
+            </button>
+
+            <!-- Nút TRẢ GÓP -->
+            <button type="button" onclick="alert('Đang mở cổng đăng ký xét duyệt trả góp 0% qua CCCD...');" class="px-5 h-12 rounded-xl border-2 border-[#008774] text-[#008774] hover:bg-teal-50 font-black text-xs uppercase tracking-wide transition-all cursor-pointer active:scale-95 flex items-center justify-center">
+              TRẢ GÓP
+            </button>
+          </div>
+
+          <!-- 5. Khối Ưu Đãi Đăng Nhập (Có Mascot Mèo SamaMobile Laptop) -->
+          <div class="relative overflow-hidden rounded-2xl border border-blue-200 bg-gradient-to-r from-blue-50/90 via-sky-50/60 to-blue-50/90 p-4 sm:p-5">
+            <div class="flex items-center justify-between gap-3">
+              <div class="space-y-2 z-10 max-w-[70%]">
+                <div class="flex items-center gap-1.5 text-rose-600 font-black text-sm">
+                  <i class="fa-solid fa-gift"></i>
+                  <span>Ưu đãi đăng nhập</span>
+                </div>
+                <div class="space-y-1 text-xs text-slate-700 font-medium">
+                  <div>SamaMobile Member giảm thêm đến <strong class="text-[#0057B7] font-bold">47.000₫</strong></div>
+                  <div>SamaMobile EDU giảm thêm đến <strong class="text-[#0057B7] font-bold">194.000₫</strong></div>
+                </div>
+                <div class="pt-1">
+                  <a href="index.html#auth" class="text-xs font-bold text-rose-600 hover:text-rose-700 underline">
+                    Đăng nhập để áp dụng ưu đãi hạng thành viên
+                  </a>
+                </div>
+              </div>
+
+              <!-- Mascot Cat sitting with laptop -->
+              <div class="flex-shrink-0 w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center">
+                <img src="images/samacat-laptop.png" alt="SamaMobile Cat Mascot" class="max-w-full max-h-full object-contain drop-shadow-md transform hover:scale-105 transition-transform" />
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- =========================================================================
+         4. KHỐI 2: ĐỊA CHỈ CÒN HÀNG & GÓI BẢO HÀNH + ƯU ĐÃI (CHUẨN SCREENSHOT 3)
+         ========================================================================= -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- CỘT TRÁI: ĐỊA CHỈ CÒN HÀNG (108 CỬA HÀNG) -->
+      <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-xs space-y-4">
+        
+        <div>
+          <h3 class="text-base sm:text-lg font-black text-slate-900 flex items-center gap-2">
+            <i class="fa-solid fa-location-dot text-rose-600"></i> Địa chỉ còn hàng
+          </h3>
+          <p class="text-xs text-slate-500 mt-0.5">Sản phẩm hiện đang có tại <strong id="store-count-number" class="text-blue-600 font-bold">108</strong> cửa hàng</p>
+        </div>
+
+        <!-- Bộ Lọc Tìm Kiếm & Tỉnh Thành -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="relative">
+            <input type="text" id="store-filter-search" oninput="window.filterStoreLocations()" placeholder="Tìm kiếm đường, quận..." class="w-full pl-9 pr-3 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-none focus:border-blue-500 bg-white" />
+            <i class="fa-solid fa-magnifying-glass text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 text-xs"></i>
+          </div>
+          <select id="store-filter-city" onchange="window.filterStoreLocations()" class="w-full px-3 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-none focus:border-blue-500 bg-white font-medium">
+            <option value="all">Tất cả khu vực</option>
+            <option value="hanoi">Hà Nội</option>
+            <option value="hcm">Hồ Chí Minh</option>
+            <option value="danang">Đà Nẵng</option>
+            <option value="haiphong">Hải Phòng</option>
+            <option value="thanhhoa">Thanh Hóa</option>
+            <option value="cantho">Cần Thơ</option>
+          </select>
+        </div>
+
+        <!-- Danh Sách Cửa Hàng Cuộn (Scrollable Store List) -->
+        <div id="store-list-container" class="max-h-[380px] overflow-y-auto space-y-2.5 pr-1.5 custom-scrollbar rounded-xl">
+          <!-- Render động bằng product-detail.js -->
+        </div>
+
+      </div>
+
+      <!-- CỘT PHẢI: GÓI BẢO HÀNH MỞ RỘNG & ƯU ĐÃI KHÁC -->
+      <div class="lg:col-span-5 space-y-5">
+        
+        <!-- Khối Bảo Hành Mở Rộng SamaCare (6 ô grid chuẩn screenshot 3) -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs">
+          <div class="flex items-center justify-between mb-3.5">
+            <h4 class="text-sm sm:text-base font-extrabold text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-shield text-blue-600"></i> Gói bảo hành mở rộng SamaCare
+            </h4>
+            <span class="text-xs text-blue-600 font-bold">Chính hãng</span>
+          </div>
+          <div class="grid grid-cols-3 gap-2 text-center text-xs">
+            <div class="p-2.5 rounded-xl border border-slate-200 bg-slate-50/70 hover:border-blue-400 transition-colors cursor-pointer">
+              <div class="text-[11px] font-bold text-slate-700">1+1</div>
+              <div class="text-rose-600 font-extrabold mt-0.5">180.000 đ</div>
+              <div class="text-[10px] text-blue-600 mt-0.5">Chi tiết</div>
+            </div>
+            <div class="p-2.5 rounded-xl border border-slate-200 bg-slate-50/70 hover:border-blue-400 transition-colors cursor-pointer">
+              <div class="text-[11px] font-bold text-slate-700">1+2</div>
+              <div class="text-rose-600 font-extrabold mt-0.5">250.000 đ</div>
+              <div class="text-[10px] text-blue-600 mt-0.5">Chi tiết</div>
+            </div>
+            <div class="p-2.5 rounded-xl border border-slate-200 bg-slate-50/70 hover:border-blue-400 transition-colors cursor-pointer">
+              <div class="text-[11px] font-bold text-slate-700">SCare 18+12</div>
+              <div class="text-rose-600 font-extrabold mt-0.5">180.000 đ</div>
+              <div class="text-[10px] text-blue-600 mt-0.5">Chi tiết</div>
+            </div>
+            <div class="p-2.5 rounded-xl border border-slate-200 bg-slate-50/70 hover:border-blue-400 transition-colors cursor-pointer">
+              <div class="text-[11px] font-bold text-slate-700">SCare 18+24</div>
+              <div class="text-rose-600 font-extrabold mt-0.5">250.000 đ</div>
+              <div class="text-[10px] text-blue-600 mt-0.5">Chi tiết</div>
+            </div>
+            <div class="p-2.5 rounded-xl border border-slate-200 bg-slate-50/70 hover:border-blue-400 transition-colors cursor-pointer">
+              <div class="text-[11px] font-bold text-slate-700">SCare 2+1</div>
+              <div class="text-rose-600 font-extrabold mt-0.5">400.000 đ</div>
+              <div class="text-[10px] text-blue-600 mt-0.5">Chi tiết</div>
+            </div>
+            <div class="p-2.5 rounded-xl border border-slate-200 bg-slate-50/70 hover:border-blue-400 transition-colors cursor-pointer">
+              <div class="text-[11px] font-bold text-slate-700">VIP 1 đổi 1</div>
+              <div class="text-rose-600 font-extrabold mt-0.5">230.000 đ</div>
+              <div class="text-[10px] text-blue-600 mt-0.5">Chi tiết</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Khối Quà Tặng Và Ưu Đãi Khác -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs space-y-3">
+          <h4 class="text-sm sm:text-base font-extrabold text-slate-900 flex items-center gap-2">
+            <i class="fa-solid fa-gift text-rose-600"></i> Quà tặng và ưu đãi khác
+          </h4>
+          <div class="space-y-2 text-xs sm:text-[13px] text-slate-700 leading-relaxed">
+            <div class="flex items-start gap-2">
+              <i class="fa-solid fa-circle-check text-blue-500 text-sm mt-0.5 flex-shrink-0"></i>
+              <span>Thu cũ đổi mới trợ giá <strong>500.000đ</strong> qua SamaMobile.</span>
+            </div>
+            <div class="flex items-start gap-2">
+              <i class="fa-solid fa-circle-check text-blue-500 text-sm mt-0.5 flex-shrink-0"></i>
+              <span>Ưu đãi Chào Mùa Mới, mua phụ kiện chính hãng giảm đến <strong>20%</strong> (<a href="#" class="text-blue-600 font-bold hover:underline">Xem chi tiết</a>).</span>
+            </div>
+            <div class="flex items-start gap-2">
+              <i class="fa-solid fa-circle-check text-blue-500 text-sm mt-0.5 flex-shrink-0"></i>
+              <span>Giảm thêm 15% tối đa 1.000.000đ với các sản phẩm Loa, tai nghe Sony khi mua kèm (<a href="#" class="text-blue-600 font-bold hover:underline">Xem chi tiết</a>).</span>
+            </div>
+          </div>
+          <button type="button" class="text-xs font-bold text-blue-600 hover:text-blue-700 pt-1 cursor-pointer">
+            Xem thêm 2 ưu đãi <i class="fa-solid fa-chevron-down text-[10px]"></i>
+          </button>
+        </div>
+
+        <!-- Khối Thông Số Kỹ Thuật Tóm Tắt (Quick Specs Card) -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs space-y-3">
+          <div class="flex items-center justify-between">
+            <h4 class="text-sm sm:text-base font-extrabold text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-gear text-emerald-600"></i> Thông số kỹ thuật
+            </h4>
+            <button type="button" onclick="document.getElementById('detailed-specs-section').scrollIntoView({behavior: 'smooth'})" class="text-xs font-bold text-blue-600 hover:text-blue-700 cursor-pointer">
+              Xem tất cả
+            </button>
+          </div>
+          <div class="space-y-2 text-xs sm:text-[13px]">
+            <div class="flex items-center justify-between py-1.5 border-b border-slate-100">
+              <span class="text-slate-500">Tần số quét (Hz):</span>
+              <span class="font-bold text-slate-800">120Hz</span>
+            </div>
+            <div class="flex items-center justify-between py-1.5 border-b border-slate-100">
+              <span class="text-slate-500">Công nghệ màn hình:</span>
+              <span class="font-bold text-slate-800">IPS LCD</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- =========================================================================
+         5. KHỐI 3: BÀI VIẾT ĐÁNH GIÁ & BẢNG THÔNG SỐ CHI TIẾT (SCREENSHOT 4 & 5)
+         ========================================================================= -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- CỘT TRÁI (BÀI VIẾT ĐÁNH GIÁ + BẢNG THÔNG SỐ CHI TIẾT + BÌNH LUẬN) -->
+      <div class="lg:col-span-8 space-y-8">
+        
+        <!-- Khối Bài Viết Đánh Giá Chi Tiết (Screenshot 4) -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-8 shadow-xs space-y-6">
+          <h2 class="text-lg sm:text-2xl font-black text-slate-900">
+            Đánh giá chi tiết sản phẩm: Trải nghiệm công nghệ vượt trội
+          </h2>
+
+          <!-- Mục Lục (Table of Contents) -->
+          <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 sm:p-5 text-xs sm:text-sm space-y-2">
+            <div class="font-black text-slate-800 uppercase tracking-wide">Mục lục nội dung</div>
+            <ol class="list-decimal list-inside space-y-1.5 text-blue-700 font-semibold">
+              <li><a href="#toc-specs" class="hover:underline">Thông số kỹ thuật chi tiết của sản phẩm có gì đáng chú ý?</a></li>
+              <li><a href="#toc-release" class="hover:underline">Sản phẩm ra mắt khi nào và định vị phân khúc?</a></li>
+              <li><a href="#toc-price" class="hover:underline">Sản phẩm có giá bao nhiêu và có đáng mua không?</a></li>
+            </ol>
+          </div>
+
+          <!-- Nội Dung Bài Viết -->
+          <div class="text-slate-700 text-sm leading-relaxed space-y-4">
+            <p id="toc-specs">
+              <strong id="article-product-name" class="font-bold text-slate-900">Nubia V80 Max 6GB/128GB</strong> là mẫu điện thoại hướng đến người dùng phổ thông cần một thiết bị có thời lượng pin tốt, màn hình lớn và trải nghiệm ổn định trong tầm giá hợp lý. Sản phẩm tập trung vào các yếu tố thực dụng như khả năng sử dụng lâu dài, hiển thị thoải mái và hiệu năng đủ đáp ứng nhu cầu hàng ngày.
+            </p>
+            
+            <!-- Ảnh Minh Họa Bài Viết -->
+            <div class="rounded-2xl overflow-hidden border border-slate-200 my-4">
+              <img src="https://i.hoanghamobile.vn/Uploads/2026/01/12/nubia-v80-max-8-128gb-10.jpg" onerror="this.src='https://i.hoanghamobile.vn/Uploads/2026/01/08/nubia-v80-max-bac.png'" alt="Minh họa đánh giá" class="w-full max-h-[420px] object-cover" />
+              <div class="p-2.5 text-center text-xs text-slate-500 bg-slate-50 border-t border-slate-200 font-medium">
+                Màn hình kích thước lớn 6.9 inch cùng tần số quét 120Hz mượt mà ấn tượng
+              </div>
+            </div>
+
+            <p id="toc-release">
+              Với định hướng tối ưu giá trị sử dụng, thiết bị là lựa chọn phù hợp cho người dùng cần một chiếc smartphone dễ tiếp cận nhưng vẫn đáp ứng tốt các nhu cầu cơ bản như lướt web, học tập, xem phim và làm việc đa nhiệm.
+            </p>
+
+            <div class="rounded-2xl overflow-hidden border border-slate-200 my-4">
+              <img src="https://i.hoanghamobile.vn/Uploads/2026/01/12/nubia-v80-max-8-128gb-02.jpg" onerror="this.src='https://i.hoanghamobile.vn/Uploads/2026/01/08/nubia-v80-max-den.png'" alt="Minh họa màu sắc" class="w-full max-h-[380px] object-cover" />
+              <div class="p-2.5 text-center text-xs text-slate-500 bg-slate-50 border-t border-slate-200 font-medium">
+                Thiết kế mặt lưng sang trọng với nhiều tùy chọn màu sắc hiện đại
+              </div>
+            </div>
+
+            <p id="toc-price">
+              Hiện nay, sản phẩm đang được phân phối chính hãng tại hệ thống <strong>SAMAMOBILE.COM</strong> với mức giá cực kỳ cạnh tranh, đi kèm chính sách bảo hành 12 tháng 1 đổi 1 và hỗ trợ trả góp 0% lãi suất.
+            </p>
+          </div>
+        </div>
+
+        <!-- Khối Bảng Thông Số Kỹ Thuật Chi Tiết (Screenshot 5 To Rõ, Chuẩn 2 Cột Zebra) -->
+        <div id="detailed-specs-section" class="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-8 shadow-xs scroll-mt-24 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+            <h3 class="text-lg sm:text-xl font-black text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-table-list text-blue-600"></i> Thông số kỹ thuật chi tiết
+            </h3>
+            <span class="text-xs text-slate-500">Thông số công bố từ nhà sản xuất</span>
+          </div>
+
+          <div class="overflow-x-auto rounded-xl border border-slate-200">
+            <table class="w-full text-left border-collapse specs-table">
+              <thead>
+                <tr class="bg-slate-100 text-slate-800 font-black text-xs sm:text-sm border-b border-slate-200">
+                  <th class="p-3.5 w-1/4">Thông số</th>
+                  <th class="p-3.5 w-3/4">Chi tiết</th>
+                </tr>
+              </thead>
+              <tbody id="detailed-specs-tbody">
+                <!-- Render động bằng product-detail.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Khối Đánh Giá & Bình Luận (Interactive Reviews) -->
+        <div id="comments-section" class="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-8 shadow-xs scroll-mt-24 space-y-6">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+            <h3 class="text-lg sm:text-xl font-black text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-comments text-blue-600"></i> Đánh giá & Bình luận
+            </h3>
+            <span class="text-xs sm:text-sm font-bold text-amber-500 flex items-center gap-1">
+              <i class="fa-solid fa-star"></i> 5.0 (Tuyệt vời)
+            </span>
+          </div>
+
+          <!-- Nhập bình luận -->
+          <div class="space-y-3">
+            <textarea id="comment-input" rows="3" placeholder="Nhập câu hỏi hoặc cảm nhận của bạn về sản phẩm này..." class="w-full p-3.5 rounded-xl border border-slate-300 text-xs sm:text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-300 transition-all"></textarea>
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+              <span class="text-xs text-slate-400">Đăng nhập để nhận câu trả lời nhanh nhất từ Quản trị viên</span>
+              <button id="btn-submit-comment" type="button" class="px-6 py-2.5 rounded-xl bg-[#0057B7] hover:bg-[#004494] text-white text-xs sm:text-sm font-bold shadow-md transition-all active:scale-95 cursor-pointer">
+                Gửi bình luận <i class="fa-solid fa-paper-plane ml-1 text-xs"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Danh sách bình luận & phản hồi QTV -->
+          <div id="comments-thread-container" class="space-y-4 pt-2">
+            <!-- Render động bằng product-detail.js -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- CỘT PHẢI (SIDEBAR TIN TỨC & GỢI Ý MUA KÈM) -->
+      <div class="lg:col-span-4 space-y-6">
+        
+        <!-- Banner Dịch Vụ Sửa Chữa SamaCare -->
+        <div class="rounded-2xl overflow-hidden border border-slate-200 shadow-xs">
+          <img src="images/banner/banner-samamobilecare.png" alt="Trung tâm dịch vụ SamaCare" class="w-full h-auto object-cover" />
+        </div>
+
+        <!-- Sản Phẩm Mua Kèm Khuyên Dùng -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <h4 class="text-sm sm:text-base font-extrabold text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-bag-shopping text-blue-600"></i> Sản phẩm mua kèm
+            </h4>
+            <span class="text-xs text-rose-600 font-bold">Giảm đến 20%</span>
+          </div>
+
+          <div id="addons-container" class="space-y-3">
+            <!-- Render động bằng product-detail.js -->
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- =========================================================================
+         6. KHỐI 4: SẢN PHẨM TƯƠNG TỰ (5 SẢN PHẨM CHUẨN KỆ HOÀNG HÀ)
+         ========================================================================= -->
+    <div class="bg-white rounded-2xl border border-slate-200/90 p-6 shadow-xs space-y-5">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h3 class="text-lg sm:text-xl font-black text-slate-900 flex items-center gap-2">
+          <i class="fa-solid fa-layer-group text-blue-600"></i> Sản phẩm tương tự
+        </h3>
+        <a href="index.html" class="text-xs sm:text-sm font-bold text-blue-600 hover:text-blue-700">
+          Xem tất cả <i class="fa-solid fa-chevron-right text-[10px]"></i>
+        </a>
+      </div>
+
+      <div id="similar-products-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3.5">
+        <!-- Render động bằng product-detail.js -->
+      </div>
+    </div>
+
+  </main>
+
+  <!-- =========================================================================
+       7. STICKY BOTTOM PURCHASE BAR (CHUẨN SCREENSHOT 3, 4, 5)
+       ========================================================================= -->
+  <aside id="sticky-purchase-bar" class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-2xl z-40 py-2.5 px-4 sm:px-8 transition-transform duration-300 translate-y-full">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-3 sm:gap-6">
+      
+      <!-- Trái: Mini Info -->
+      <div class="flex items-center gap-3 min-w-0">
+        <img id="sticky-bar-thumb" src="https://i.hoanghamobile.vn/Uploads/2026/01/08/nubia-v80-max-bac.png" alt="Thumb" class="w-11 h-11 object-contain rounded-lg border border-slate-200 flex-shrink-0 bg-white p-1" />
+        <div class="min-w-0">
+          <div id="sticky-bar-title" class="font-bold text-slate-900 text-xs sm:text-sm truncate">
+            Nubia V80 Max 6GB/128GB
+          </div>
+          <div id="sticky-bar-variant" class="text-[11px] text-slate-500 font-medium truncate">
+            Phân loại: Bạc - 6GB/128GB
+          </div>
+        </div>
+      </div>
+
+      <!-- Phải: Giá & Cụm Nút Mua -->
+      <div class="flex items-center gap-2.5 sm:gap-4 flex-shrink-0">
+        <div class="text-right">
+          <div id="sticky-bar-price" class="text-base sm:text-xl font-black text-[#0057B7]">
+            3.890.000 ₫
+          </div>
+        </div>
+        
+        <button type="button" onclick="window.handleAddToCart(false)" class="w-10 h-10 rounded-xl border border-rose-500 text-rose-600 hover:bg-rose-50 flex items-center justify-center transition-all cursor-pointer" title="Thêm giỏ hàng">
+          <i class="fa-solid fa-cart-plus text-sm"></i>
+        </button>
+
+        <button type="button" onclick="window.handleMainBuyNow()" class="px-5 sm:px-7 py-2.5 rounded-xl bg-[#E11B1E] hover:bg-red-700 text-white font-black text-xs sm:text-sm shadow-md transition-all active:scale-95 cursor-pointer uppercase tracking-wider">
+          MUA NGAY
+        </button>
+
+        <button type="button" onclick="alert('Đang mở cổng trả góp 0%...')" class="hidden sm:inline-flex px-4 py-2.5 rounded-xl border-2 border-[#008774] text-[#008774] hover:bg-teal-50 font-black text-xs uppercase cursor-pointer">
+          TRẢ GÓP 0%
+        </button>
+      </div>
+
+    </div>
+  </aside>
+
+  <!-- =========================================================================
+       8. CART DRAWER (GIỎ HÀNG TRƯỢT TỪ BÊN PHẢI)
+       ========================================================================= -->
+  <div id="cart-drawer-overlay" class="hidden fixed inset-0 bg-black/60 z-50 backdrop-blur-xs transition-opacity" onclick="if(window.CellphoneSCart) window.CellphoneSCart.closeDrawer()"></div>
+  <aside id="cart-drawer" class="fixed top-0 right-0 bottom-0 w-full max-w-md bg-white z-50 shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300">
+    <div class="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <i class="fa-solid fa-cart-shopping text-[#0057B7]"></i>
+        <span class="font-extrabold text-slate-900 text-sm">Giỏ Hàng Của Bạn</span>
+      </div>
+      <button type="button" onclick="if(window.CellphoneSCart) window.CellphoneSCart.closeDrawer()" class="w-8 h-8 rounded-full hover:bg-slate-200 text-slate-500 flex items-center justify-center cursor-pointer">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div id="cart-drawer-items" class="flex-1 overflow-y-auto p-4 space-y-3 divide-y divide-slate-100">
+      <!-- Items render động -->
+    </div>
+    <div class="p-4 bg-slate-50 border-t border-slate-200 space-y-3">
+      <div class="flex items-center justify-between font-extrabold text-sm sm:text-base">
+        <span>Tổng tiền tạm tính:</span>
+        <span id="cart-drawer-total" class="text-rose-600 font-black">0 ₫</span>
+      </div>
+      <button type="button" onclick="alert('Đang chuyển hướng đến trang thanh toán...'); window.location.href='index.html';" class="w-full py-3.5 rounded-xl bg-[#0057B7] hover:bg-[#004494] text-white font-extrabold text-sm shadow-md transition-all active:scale-98 cursor-pointer">
+        Tiến Hành Đặt Hàng <i class="fa-solid fa-arrow-right ml-1"></i>
+      </button>
+    </div>
+  </aside>
+
+  <!-- =========================================================================
+       9. FOOTER
+       ========================================================================= -->
+  <footer class="mt-auto bg-slate-900 text-slate-300 text-xs pt-12 pb-8 border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div>
+          <div class="flex items-center tracking-tight mb-4">
+            <span class="text-white text-2xl font-black italic tracking-tighter">SAMA</span>
+            <span class="text-amber-400 text-2xl font-black italic tracking-tighter">MOBILE</span>
+          </div>
+          <p class="text-slate-400 text-xs leading-relaxed">
+            Hệ thống bán lẻ điện thoại, máy tính bảng, laptop và phụ kiện công nghệ chính hãng giá tốt nhất tại Việt Nam.
+          </p>
+        </div>
+        <div>
+          <h4 class="font-bold text-white text-sm mb-3">Về SAMAMOBILE</h4>
+          <ul class="space-y-2 text-slate-400">
+            <li><a href="index.html" class="hover:text-white transition-colors">Giới thiệu công ty</a></li>
+            <li><a href="index.html" class="hover:text-white transition-colors">Hệ thống 108 cửa hàng</a></li>
+            <li><a href="index.html" class="hover:text-white transition-colors">Tuyển dụng mới nhất</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-bold text-white text-sm mb-3">Tổng Đài Hỗ Trợ</h4>
+          <ul class="space-y-2 text-slate-400">
+            <li>Mua hàng: <strong class="text-white">1800 6868</strong></li>
+            <li>Bảo hành & Sửa chữa: <strong class="text-white">1800 2091</strong></li>
+            <li>Góp ý & Khiếu nại: <strong class="text-white">1800 6869</strong></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-bold text-white text-sm mb-3">Hỗ Trợ Thanh Toán</h4>
+          <div class="grid grid-cols-3 gap-2">
+            <span class="h-8 bg-slate-800 rounded flex items-center justify-center p-1"><img src="images/brands/tpbank.png" class="max-h-full" alt="TPBank"></span>
+            <span class="h-8 bg-slate-800 rounded flex items-center justify-center p-1"><img src="images/brands/vpbank.png" class="max-h-full" alt="VPBank"></span>
+            <span class="h-8 bg-slate-800 rounded flex items-center justify-center p-1"><img src="images/brands/vib.png" class="max-h-full" alt="VIB"></span>
+          </div>
+        </div>
+      </div>
+      <div class="pt-6 border-t border-slate-800 text-center text-slate-500 text-[11px]">
+        © 2026 SAMAMOBILE.COM - Bản quyền thuộc về Hệ thống Bán lẻ Công nghệ SAMAMOBILE.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/cart.js?v=6.0"></script>
+  <script src="js/product-detail.js?v=6.0"></script>
+</body>
+</html>

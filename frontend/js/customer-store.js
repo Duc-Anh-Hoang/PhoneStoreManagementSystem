@@ -388,11 +388,8 @@
   }
 
   window.onBannerClick = function(targetMaHang, brand) {
-    if (targetMaHang && (window.CellphoneSProductModal || window.ProductModal)) {
-      (window.CellphoneSProductModal || window.ProductModal).open(targetMaHang);
-    } else if (brand && window.filterPhoneBrand) {
-      window.filterPhoneBrand(brand, true);
-    }
+    const target = targetMaHang || 'MH001';
+    window.location.href = 'product-detail.html?id=' + encodeURIComponent(target);
   };
 
   window.showStudentPromo = function() {
@@ -660,7 +657,7 @@
         </div>
 
         <!-- Ảnh sản phẩm -->
-        <div class="relative w-full h-40 sm:h-48 my-2 flex items-center justify-center p-2 cursor-pointer overflow-hidden" onclick="(window.CellphoneSProductModal || window.ProductModal).open('${p.maHang}')">
+        <div class="relative w-full h-40 sm:h-48 my-2 flex items-center justify-center p-2 cursor-pointer overflow-hidden" onclick="window.location.href='product-detail.html?id=' + encodeURIComponent('${p.maHang}')">
           ${p.anhChinh ? `
             <img src="${p.anhChinh}" alt="${p.tenHang}" class="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-300">
           ` : `
@@ -673,7 +670,7 @@
 
         <!-- Tên sản phẩm -->
         <div class="mt-2 flex-1">
-          <h3 class="text-xs sm:text-sm font-bold text-[#111827] hover:text-[#1E3A8A] line-clamp-2 cursor-pointer transition-colors" onclick="(window.CellphoneSProductModal || window.ProductModal).open('${p.maHang}')" title="${p.tenHang}">
+          <h3 class="text-xs sm:text-sm font-bold text-[#111827] hover:text-[#1E3A8A] line-clamp-2 cursor-pointer transition-colors" onclick="window.location.href='product-detail.html?id=' + encodeURIComponent('${p.maHang}')" title="${p.tenHang}">
             ${p.tenHang}
           </h3>
 
@@ -692,7 +689,7 @@
 
         <!-- Nút hành động chuẩn: "Xem cấu hình" và "Mua ngay" -->
         <div class="mt-3.5 pt-3 border-t border-slate-100 flex items-center gap-2">
-          <button type="button" onclick="(window.CellphoneSProductModal || window.ProductModal).open('${p.maHang}')" class="flex-1 h-[40px] px-2 rounded-[12px] border border-[#2563EB] text-[#2563EB] hover:bg-blue-50 font-bold text-xs transition-colors flex items-center justify-center cursor-pointer">
+          <button type="button" onclick="window.location.href='product-detail.html?id=' + encodeURIComponent('${p.maHang}')" class="flex-1 h-[40px] px-2 rounded-[12px] border border-[#2563EB] text-[#2563EB] hover:bg-blue-50 font-bold text-xs transition-colors flex items-center justify-center cursor-pointer">
             Xem cấu hình
           </button>
           <button type="button" ${tonKho <= 0 ? 'disabled' : ''} onclick="window.quickBuy('${p.maHang}')" class="flex-1 h-[40px] px-2 rounded-[12px] ${tonKho > 0 ? 'bg-[#FF7A00] hover:bg-[#E06800] text-white cursor-pointer shadow-md shadow-orange-500/20' : 'bg-slate-200 text-slate-400 cursor-not-allowed'} font-extrabold text-xs transition-all flex items-center justify-center">
@@ -758,7 +755,7 @@
           </div>
           <div class="divide-y divide-slate-100">
             ${results.map(p => `
-              <div class="p-2.5 flex items-center gap-3 hover:bg-slate-50 rounded-xl cursor-pointer transition-colors" onclick="(window.CellphoneSProductModal || window.ProductModal).open('${p.maHang}'); document.getElementById('search-autocomplete-dropdown').classList.add('hidden');">
+              <div class="p-2.5 flex items-center gap-3 hover:bg-slate-50 rounded-xl cursor-pointer transition-colors" onclick="window.location.href='product-detail.html?id=' + encodeURIComponent('${p.maHang}'); document.getElementById('search-autocomplete-dropdown').classList.add('hidden');">
                 <div class="w-10 h-10 object-contain p-1 rounded-lg bg-slate-50 border border-slate-100 flex-shrink-0 flex items-center justify-center">
                   ${p.anhChinh ? `
                     <img src="${p.anhChinh}" class="w-full h-full object-contain" alt="${p.tenHang}">
@@ -1945,21 +1942,12 @@
   };
 
   window.onDealProductClick = function (id) {
-    const list = dealCategoriesData[currentDealCategory] || [];
-    const item = list.find(p => p.id === id);
-    if (!item) return;
-
-    if (window.CellphoneSProductModal || window.ProductModal) {
-      const modal = window.CellphoneSProductModal || window.ProductModal;
-      // Nạp rawProduct vào StoreData nếu chưa có để modal đọc được full màu sắc, cấu hình
-      if (item.rawProduct && (window.CellphoneSData || window.StoreData)) {
-        const store = window.CellphoneSData || window.StoreData;
-        if (!store.getProductById(item.id)) {
-          store.products.push(item.rawProduct);
-        }
-      }
-      modal.open(item.id);
-    }
+    try {
+      const list = (dealCategoriesData && dealCategoriesData[currentDealCategory]) || [];
+      const item = list.find(p => p.id === id);
+      if (item) sessionStorage.setItem('current_view_product', JSON.stringify(item));
+    } catch (e) {}
+    window.location.href = 'product-detail.html?id=' + encodeURIComponent(id);
   };
 
   // =========================================================================
@@ -2111,20 +2099,12 @@
   };
 
   window.onDualProductClick = function (id) {
-    const list = (dealCategoriesData && dealCategoriesData[currentDualCategory]) || [];
-    const item = list.find(p => p.id === id);
-    if (!item) return;
-
-    if (window.CellphoneSProductModal || window.ProductModal) {
-      const modal = window.CellphoneSProductModal || window.ProductModal;
-      if (item.rawProduct && (window.CellphoneSData || window.StoreData)) {
-        const store = window.CellphoneSData || window.StoreData;
-        if (!store.getProductById(item.id)) {
-          store.products.push(item.rawProduct);
-        }
-      }
-      modal.open(item.id);
-    }
+    try {
+      const list = (dealCategoriesData && dealCategoriesData[currentDualCategory]) || [];
+      const item = list.find(p => p.id === id);
+      if (item) sessionStorage.setItem('current_view_product', JSON.stringify(item));
+    } catch (e) {}
+    window.location.href = 'product-detail.html?id=' + encodeURIComponent(id);
   };
 
   window.onDualCartClick = function (id) {
@@ -2577,13 +2557,12 @@
   };
 
   window.onLaptopPcProductClick = function (id) {
-    const list = (dealCategoriesData && dealCategoriesData[currentLaptopPcCategory]) || [];
-    const item = list.find(p => p.id === id);
-    if (!item) return;
-
-    if (window.quickSearchTag) {
-      window.quickSearchTag(item.name);
-    }
+    try {
+      const list = (dealCategoriesData && dealCategoriesData[currentLaptopPcCategory]) || [];
+      const item = list.find(p => p.id === id);
+      if (item) sessionStorage.setItem('current_view_product', JSON.stringify(item));
+    } catch (e) {}
+    window.location.href = 'product-detail.html?id=' + encodeURIComponent(id);
   };
 
   window.onLaptopPcCartClick = function (id) {
@@ -2969,9 +2948,12 @@
   };
 
   window.onMouseProductClick = function (id) {
-    const list = dealCategoriesData[currentMouseCategory] || [];
-    const item = list.find(p => p.id === id);
-    if (item && window.quickSearchTag) window.quickSearchTag(item.name);
+    try {
+      const list = (dealCategoriesData && dealCategoriesData[currentMouseCategory]) || [];
+      const item = list.find(p => p.id === id);
+      if (item) sessionStorage.setItem('current_view_product', JSON.stringify(item));
+    } catch (e) {}
+    window.location.href = 'product-detail.html?id=' + encodeURIComponent(id);
   };
 
   window.onMouseCartClick = function (id) {
@@ -3149,9 +3131,12 @@
   };
 
   window.onAudioProductClick = function (id) {
-    const list = dealCategoriesData[currentAudioCategory] || [];
-    const item = list.find(p => p.id === id);
-    if (item && window.quickSearchTag) window.quickSearchTag(item.name);
+    try {
+      const list = (dealCategoriesData && dealCategoriesData[currentAudioCategory]) || [];
+      const item = list.find(p => p.id === id);
+      if (item) sessionStorage.setItem('current_view_product', JSON.stringify(item));
+    } catch (e) {}
+    window.location.href = 'product-detail.html?id=' + encodeURIComponent(id);
   };
 
   window.onAudioCartClick = function (id) {
@@ -3327,9 +3312,12 @@
   };
 
   window.onWatchProductClick = function (id) {
-    const list = dealCategoriesData[currentWatchCategory] || [];
-    const item = list.find(p => p.id === id);
-    if (item && window.quickSearchTag) window.quickSearchTag(item.name);
+    try {
+      const list = (dealCategoriesData && dealCategoriesData[currentWatchCategory]) || [];
+      const item = list.find(p => p.id === id);
+      if (item) sessionStorage.setItem('current_view_product', JSON.stringify(item));
+    } catch (e) {}
+    window.location.href = 'product-detail.html?id=' + encodeURIComponent(id);
   };
 
   window.onWatchCartClick = function (id) {
@@ -3503,9 +3491,12 @@
   };
 
   window.onTiviProductClick = function (id) {
-    const list = dealCategoriesData[currentTiviCategory] || [];
-    const item = list.find(p => p.id === id);
-    if (item && window.quickSearchTag) window.quickSearchTag(item.name);
+    try {
+      const list = (dealCategoriesData && dealCategoriesData[currentTiviCategory]) || [];
+      const item = list.find(p => p.id === id);
+      if (item) sessionStorage.setItem('current_view_product', JSON.stringify(item));
+    } catch (e) {}
+    window.location.href = 'product-detail.html?id=' + encodeURIComponent(id);
   };
 
   window.onTiviCartClick = function (id) {
@@ -3682,9 +3673,12 @@
   };
 
   window.onAirProductClick = function (id) {
-    const list = dealCategoriesData[currentAirCategory] || [];
-    const item = list.find(p => p.id === id);
-    if (item && window.quickSearchTag) window.quickSearchTag(item.name);
+    try {
+      const list = (dealCategoriesData && dealCategoriesData[currentAirCategory]) || [];
+      const item = list.find(p => p.id === id);
+      if (item) sessionStorage.setItem('current_view_product', JSON.stringify(item));
+    } catch (e) {}
+    window.location.href = 'product-detail.html?id=' + encodeURIComponent(id);
   };
 
   window.onAirCartClick = function (id) {
@@ -3855,9 +3849,12 @@
   };
 
   window.onPurifierProductClick = function (id) {
-    const list = dealCategoriesData[currentPurifierCategory] || [];
-    const item = list.find(p => p.id === id);
-    if (item && window.quickSearchTag) window.quickSearchTag(item.name);
+    try {
+      const list = (dealCategoriesData && dealCategoriesData[currentPurifierCategory]) || [];
+      const item = list.find(p => p.id === id);
+      if (item) sessionStorage.setItem('current_view_product', JSON.stringify(item));
+    } catch (e) {}
+    window.location.href = 'product-detail.html?id=' + encodeURIComponent(id);
   };
 
   window.onPurifierCartClick = function (id) {
