@@ -35,6 +35,7 @@
     renderHeroSlider();
     renderShelves();
     initTramTiepSucSection();
+    initDualCategoryTabsSection();
     console.log('>>> [CUSTOMER STORE] renderShelves completed');
     initSearchAutocomplete();
     initScrollToTop();
@@ -1196,36 +1197,94 @@
     ],
     tablet: [
       {
+        id: 'MH163',
+        name: 'Samsung Galaxy Tab S12 Ultra Wi-Fi 12GB/256GB',
+        brand: 'Samsung',
+        price: 34990000,
+        oldPrice: 39990000,
+        discount: 13,
+        image: 'https://i.hoanghamobile.vn/Uploads/2026/10/02/galaxy-tab-s12-ultra-2-161156363.png',
+        status: 'Sẵn hàng'
+      },
+      {
+        id: 'MH164',
+        name: 'Samsung Galaxy Tab S12 Plus 5G 12GB/256GB',
+        brand: 'Samsung',
+        price: 34490000,
+        oldPrice: 37990000,
+        discount: 9,
+        image: 'https://i.hoanghamobile.vn/Uploads/2026/10/02/galaxy-tab-s12-plus-1-161156166.png',
+        status: 'Sẵn hàng'
+      },
+      {
+        id: 'MH165',
+        name: 'Samsung Galaxy Tab S10 FE Wifi 8GB/128GB',
+        brand: 'Samsung',
+        price: 11190000,
+        oldPrice: 13690000,
+        discount: 18,
+        image: 'https://i.hoanghamobile.vn/Uploads/2026/10/15/s10-fe-3-134808082.png',
+        status: 'Sẵn hàng'
+      },
+      {
+        id: 'MH166',
+        name: 'Máy tính bảng Samsung Galaxy Tab A11 Wi-Fi 4GB/64GB',
+        brand: 'Samsung',
+        price: 3550000,
+        oldPrice: 4390000,
+        discount: 19,
+        image: 'https://i.hoanghamobile.vn/Uploads/2025/12/24/tab-a11-silver.png',
+        status: 'Sẵn hàng'
+      },
+      {
+        id: 'MH167',
+        name: 'Máy tính bảng Lenovo Tab ZAEH0147VN',
+        brand: 'Lenovo',
+        price: 3790000,
+        oldPrice: 4190000,
+        discount: 10,
+        image: 'https://i.hoanghamobile.vn/Uploads/2024/03/12/lenovo-tab-m11-zadb0134vn-1.png',
+        status: 'Sẵn hàng'
+      },
+      {
         id: 'DEAL-TB-01',
         name: 'iPad Air M2 11 inch Wi-Fi 128GB VN/A Siêu Mỏng',
+        brand: 'Apple',
         price: 15890000,
         oldPrice: 16990000,
         discount: 6,
-        image: 'images/products/ipad-air-m2.webp'
+        image: 'images/products/ipad-air-m2.webp',
+        status: 'Sẵn hàng'
       },
       {
         id: 'DEAL-TB-02',
         name: 'iPad Pro M4 11 inch Ultra Retina XDR 256GB',
+        brand: 'Apple',
         price: 27990000,
         oldPrice: 29990000,
         discount: 7,
-        image: 'images/products/ipad-air-m2.webp'
+        image: 'images/products/ipad-air-m2.webp',
+        status: 'Sẵn hàng'
       },
       {
         id: 'DEAL-TB-03',
         name: 'iPad Gen 10 10.9 inch Wi-Fi 64GB Đủ Màu',
+        brand: 'Apple',
         price: 8990000,
         oldPrice: 9990000,
         discount: 10,
-        image: 'images/deal-tabs/deal-tab-tablet.jpg'
+        image: 'images/deal-tabs/deal-tab-tablet.jpg',
+        status: 'Sẵn hàng'
       },
       {
         id: 'DEAL-TB-04',
         name: 'Samsung Galaxy Tab S9 FE Wi-Fi 128GB Kèm Bút S-Pen',
+        brand: 'Samsung',
         price: 8490000,
         oldPrice: 9990000,
         discount: 15,
-        image: 'images/deal-tabs/deal-tab-tablet.jpg'
+        image: 'images/deal-tabs/deal-tab-tablet.jpg',
+        status: 'Sẵn hàng'
       },
       {
         id: 'DEAL-TB-05',
@@ -1452,27 +1511,54 @@
         const price = Number(p.donGia) || 0;
         const oldPrice = p.giaGoc ? Number(p.giaGoc) : (price > 0 ? Math.round(price * 1.08) : null);
         const discount = (oldPrice && oldPrice > price) ? Math.round((1 - price / oldPrice) * 100) : null;
+
+        let img = p.anhChinh;
+        if (!img || img.includes('reload')) {
+          if ((p.tenHang || '').toLowerCase().includes('macbook')) {
+            img = 'https://i.hoanghamobile.vn/Uploads/2026/10/28/macbook-pro-14-inch-m6-space-black-pdp-image-position-1-vi-vn-145528508.png';
+          } else if ((p.maNhom || '').toLowerCase() === 'laptop') {
+            img = 'images/deal-tabs/deal-tab-laptop.jpg';
+          } else {
+            img = 'images/deal-tabs/deal-tab-phone.jpg';
+          }
+        }
+
         return {
           id: p.maHang,
           name: p.tenHang,
+          brand: p.nhanHieu || '',
           price: price,
           oldPrice: oldPrice,
           discount: discount,
-          image: p.anhChinh || 'images/deal-tabs/deal-tab-phone.jpg',
+          image: img,
           status: 'Sẵn hàng',
           rawProduct: p
         };
       };
 
-      // Cập nhật đủ cả 6 tab ngành hàng từ products-meta.json (tối thiểu 10 sản phẩm mỗi tab)
+      // Cập nhật đầy đủ cả 6 tab ngành hàng từ file JSON mới nhất
       ['dienthoai', 'tablet', 'amthanh', 'dongho', 'phukien', 'laptop'].forEach(cat => {
         if (mapCat[cat] && mapCat[cat].length > 0) {
-          dealCategoriesData[cat] = mapCat[cat].map(toDealItem).slice(0, 12);
+          let list = mapCat[cat].map(toDealItem);
+          if (cat === 'tablet') {
+            // Đưa các model hot trong ảnh mẫu lên đầu danh sách: Tab S12 Ultra, Tab S12 Plus, Tab S10 FE, Tab A11, Lenovo Tab
+            const priorityIds = ['MH163', 'MH164', 'MH165', 'MH166', 'MH167', 'MH160'];
+            list.sort((a, b) => {
+              const aIdx = priorityIds.indexOf(a.id);
+              const bIdx = priorityIds.indexOf(b.id);
+              if (aIdx !== -1 && bIdx !== -1) return aIdx - bIdx;
+              if (aIdx !== -1) return -1;
+              if (bIdx !== -1) return 1;
+              return 0;
+            });
+          }
+          dealCategoriesData[cat] = list;
         }
       });
 
       // Render lại giao diện sau khi nạp xong dữ liệu đầy đủ
       renderDealProducts();
+      renderDualCategoryProducts();
     } catch (err) {
       console.warn('Load products-meta.json error:', err);
     }
@@ -1518,7 +1604,7 @@
         <div class="deal-product-item h-full flex flex-col justify-between group/card select-none cursor-pointer" onclick="window.onDealProductClick('${item.id}')">
           <!-- Ảnh Sản Phẩm (Nền trắng tinh, kích thước to rõ nét) -->
           <div class="relative w-full h-44 sm:h-52 lg:h-56 mb-2 flex items-center justify-center p-0.5 overflow-hidden">
-            <img src="${item.image}" alt="${item.name}" class="h-full w-full object-contain block mx-auto transition-transform duration-300 transform scale-105 group-hover/card:scale-115" loading="lazy" onerror="this.onerror=null; this.src='images/deal-tabs/deal-tab-phone.jpg';" />
+            <img src="${item.image}" alt="${item.name}" class="h-full w-full object-contain block mx-auto transition-transform duration-300 transform scale-105 group-hover/card:scale-115" loading="lazy" onerror="this.onerror=null; this.src='images/deal-tabs/deal-tab-phone.png';" />
           </div>
 
           <!-- Tiêu Đề Sản Phẩm -->
@@ -1527,12 +1613,28 @@
           </h4>
 
           <!-- Giá & Giảm Giá -->
-          <div class="mb-2.5">
+          <div class="mb-1.5">
             <div class="flex items-baseline gap-1.5 flex-wrap">
               <span class="text-sm sm:text-base font-bold text-[#E11B1E]">${formatCurrency(item.price)}</span>
               ${item.discount ? `<span class="text-[10px] font-bold text-[#E11B1E] bg-rose-50 px-1 py-0.5 rounded border border-rose-100">-${item.discount}%</span>` : ''}
             </div>
             ${item.oldPrice ? `<div class="text-[11px] text-slate-400 line-through mt-0.5">${formatCurrency(item.oldPrice)}</div>` : '<div class="h-[18px]"></div>'}
+          </div>
+
+          <!-- Dải logo ngân hàng đối tác trả góp (Lưới 2x2 cân đối tuyệt đối) -->
+          <div class="grid grid-cols-2 gap-1 mb-2 w-full">
+            <span class="h-6 sm:h-6.5 bg-white border border-slate-200 rounded shadow-2xs flex items-center justify-center p-0.5 w-full" title="TPBank">
+              <img src="images/brands/tpbank.png" alt="TPBank" class="h-3.5 w-auto object-contain max-w-[85%] max-h-full" loading="lazy">
+            </span>
+            <span class="h-6 sm:h-6.5 bg-white border border-slate-200 rounded shadow-2xs flex items-center justify-center p-0.5 w-full" title="VPBank">
+              <img src="images/brands/vpbank.png" alt="VPBank" class="h-3.5 w-auto object-contain max-w-[85%] max-h-full" loading="lazy">
+            </span>
+            <span class="h-6 sm:h-6.5 bg-white border border-slate-200 rounded shadow-2xs flex items-center justify-center p-0.5 w-full" title="VIB">
+              <img src="images/brands/vib.png" alt="VIB" class="h-3.5 w-auto object-contain max-w-[85%] max-h-full" loading="lazy">
+            </span>
+            <span class="h-6 sm:h-6.5 bg-white border border-slate-200 rounded shadow-2xs flex items-center justify-center p-0.5 w-full" title="Trả góp 0%">
+              <img src="images/brands/icon-2_639047641516424460.png" alt="Trả góp 0%" class="h-3.5 w-auto object-contain max-w-[85%] max-h-full" onerror="this.src='images/brands/homecredit.png'" loading="lazy">
+            </span>
           </div>
 
           <!-- Footer: Sẵn hàng + Nút thêm giỏ hàng màu xanh dương thương hiệu -->
@@ -1645,6 +1747,267 @@
       modal.open(item.id);
     }
   };
+
+  // =========================================================================
+  // CỤM DANH MỤC SẢN PHẨM DẠNG DUAL TAB (ĐIỆN THOẠI & TABLET - Chuẩn Hoàng Hà Mobile)
+  // =========================================================================
+  let currentDualCategory = 'tablet'; // Mặc định Tablet như ảnh mẫu tham chiếu
+  let currentDualBrand = 'all';
+  let dualCategoryPageSize = 8;
+
+  function initDualCategoryTabsSection() {
+    renderDualCategoryProducts();
+  }
+
+  window.switchDualCategory = function (cat) {
+    if (cat !== 'tablet' && cat !== 'dienthoai') return;
+    currentDualCategory = cat;
+    currentDualBrand = 'all';
+    dualCategoryPageSize = 8;
+
+    // Cập nhật tab active/inactive
+    const btnPhone = document.getElementById('btn-dual-tab-dienthoai');
+    const btnTablet = document.getElementById('btn-dual-tab-tablet');
+
+    if (cat === 'tablet') {
+      if (btnTablet) {
+        btnTablet.className = 'dual-cat-tab-active h-13 sm:h-16 rounded-2xl sm:rounded-3xl flex items-center justify-center font-extrabold tracking-wider text-sm sm:text-lg uppercase transition-all duration-300 cursor-pointer shadow-md';
+      }
+      if (btnPhone) {
+        btnPhone.className = 'dual-cat-tab-inactive h-13 sm:h-16 rounded-2xl sm:rounded-3xl flex items-center justify-center font-bold tracking-wider text-sm sm:text-lg uppercase transition-all duration-300 cursor-pointer bg-white border border-slate-200 shadow-2xs hover:bg-slate-50';
+      }
+    } else {
+      if (btnPhone) {
+        btnPhone.className = 'dual-cat-tab-active h-13 sm:h-16 rounded-2xl sm:rounded-3xl flex items-center justify-center font-extrabold tracking-wider text-sm sm:text-lg uppercase transition-all duration-300 cursor-pointer shadow-md';
+      }
+      if (btnTablet) {
+        btnTablet.className = 'dual-cat-tab-inactive h-13 sm:h-16 rounded-2xl sm:rounded-3xl flex items-center justify-center font-bold tracking-wider text-sm sm:text-lg uppercase transition-all duration-300 cursor-pointer bg-white border border-slate-200 shadow-2xs hover:bg-slate-50';
+      }
+    }
+
+    // Reset Brand Pills về "Tất cả"
+    const pills = document.querySelectorAll('.dual-brand-pill');
+    pills.forEach(p => {
+      if (p.dataset.brand === 'all') {
+        p.className = 'dual-brand-pill active-brand-pill flex-shrink-0 px-4 py-2 rounded-full text-xs sm:text-[13px] font-bold transition-all cursor-pointer flex items-center justify-center h-9 sm:h-10';
+      } else {
+        p.className = 'dual-brand-pill flex-shrink-0 px-3.5 sm:px-4 py-2 rounded-full text-xs font-bold bg-white text-slate-800 border border-slate-200 hover:border-blue-400 hover:text-blue-600 transition-all cursor-pointer flex items-center justify-center h-9 sm:h-10';
+      }
+    });
+
+    renderDualCategoryProducts();
+  };
+
+  window.filterDualCategoryBrand = function (brand) {
+    currentDualBrand = brand;
+    dualCategoryPageSize = 8;
+
+    const pills = document.querySelectorAll('.dual-brand-pill');
+    pills.forEach(p => {
+      if (p.dataset.brand === brand) {
+        p.className = 'dual-brand-pill active-brand-pill flex-shrink-0 px-3.5 sm:px-4 py-2 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-9 sm:h-10';
+      } else {
+        p.className = 'dual-brand-pill flex-shrink-0 px-3.5 sm:px-4 py-2 rounded-full text-xs font-bold bg-white text-slate-800 border border-slate-200 hover:border-blue-400 hover:text-blue-600 transition-all cursor-pointer flex items-center justify-center h-9 sm:h-10';
+      }
+    });
+
+    renderDualCategoryProducts();
+  };
+
+  window.scrollDualBrandPills = function (delta) {
+    const container = document.getElementById('dual-tab-brand-pills-container');
+    if (container) {
+      container.scrollBy({ left: delta, behavior: 'smooth' });
+    }
+  };
+
+  window.loadMoreDualProducts = function () {
+    dualCategoryPageSize += 8;
+    renderDualCategoryProducts();
+  };
+
+  window.onDualProductClick = function (id) {
+    const list = (dealCategoriesData && dealCategoriesData[currentDualCategory]) || [];
+    const item = list.find(p => p.id === id);
+    if (!item) return;
+
+    if (window.CellphoneSProductModal || window.ProductModal) {
+      const modal = window.CellphoneSProductModal || window.ProductModal;
+      if (item.rawProduct && (window.CellphoneSData || window.StoreData)) {
+        const store = window.CellphoneSData || window.StoreData;
+        if (!store.getProductById(item.id)) {
+          store.products.push(item.rawProduct);
+        }
+      }
+      modal.open(item.id);
+    }
+  };
+
+  window.onDualCartClick = function (id) {
+    const list = (dealCategoriesData && dealCategoriesData[currentDualCategory]) || [];
+    const item = list.find(p => p.id === id);
+    if (!item) return;
+
+    if (window.CellphoneSCart || window.Cart) {
+      (window.CellphoneSCart || window.Cart).addItem({
+        maHang: item.id,
+        tenHang: item.name,
+        donGia: item.price,
+        giaGoc: item.oldPrice || item.price,
+        anhChinh: item.image,
+        mauSac: 'Mặc định',
+        phienBan: 'Tiêu chuẩn'
+      }, 1);
+
+      (window.CellphoneSCart || window.Cart).openDrawer();
+    }
+  };
+
+  function renderDualCategoryProducts() {
+    const grid = document.getElementById('dual-tab-products-grid');
+    if (!grid) return;
+
+    let items = (dealCategoriesData && dealCategoriesData[currentDualCategory]) ? [...dealCategoriesData[currentDualCategory]] : [];
+
+    // Lọc theo Brand
+    if (currentDualBrand && currentDualBrand !== 'all') {
+      const bLower = currentDualBrand.toLowerCase();
+      items = items.filter(it => {
+        const brand = (it.brand || '').toLowerCase();
+        const name = (it.name || '').toLowerCase();
+        if (bLower === 'apple') {
+          return brand.includes('apple') || name.includes('ipad') || name.includes('iphone');
+        }
+        if (bLower === 'samsung') {
+          return brand.includes('samsung') || name.includes('galaxy') || name.includes('samsung');
+        }
+        if (bLower === 'xiaomi') {
+          return brand.includes('xiaomi') || brand.includes('redmi') || name.includes('xiaomi') || name.includes('redmi') || name.includes('pad');
+        }
+        if (bLower === 'nubia') {
+          return brand.includes('nubia') || brand.includes('redmagic') || name.includes('redmagic');
+        }
+        return brand.includes(bLower) || name.includes(bLower);
+      });
+    }
+
+    if (items.length === 0) {
+      grid.innerHTML = `
+        <div class="col-span-full py-12 text-center text-slate-500">
+          <div class="w-16 h-16 mx-auto mb-3 text-slate-300">
+            <i class="fa-solid fa-box-open text-4xl"></i>
+          </div>
+          <p class="text-sm font-semibold">Chưa có sản phẩm phù hợp với bộ lọc "${currentDualBrand}".</p>
+          <button type="button" onclick="window.filterDualCategoryBrand('all')" class="mt-3 px-4 py-1.5 rounded-full text-xs font-bold bg-[#0b45a6] text-white hover:bg-blue-700 cursor-pointer">Xem tất cả sản phẩm</button>
+        </div>
+      `;
+      const moreBtnContainer = document.getElementById('dual-tab-more-container');
+      if (moreBtnContainer) moreBtnContainer.classList.add('hidden');
+      return;
+    }
+
+    const visibleItems = items.slice(0, dualCategoryPageSize);
+
+    const BANK_PROMOS = [
+      'TPBank - Giảm đến 500.000đ, trả góp 0%, 0 phí lên đến 6 tháng',
+      'TPBank Evo - Giảm đến 500.000đ, trả góp 0%, 0 phí lên đến 6 tháng',
+      'VIB - Mở thẻ Max Card nhận loạt đặc quyền - Hoàn tiền lên đến 18 triệu đồng',
+      'VPBank - Ưu đãi thanh toán giảm ngay 300.000đ',
+      'Home Credit - Trả góp 0%, duyệt hồ sơ nhanh chỉ 3 phút'
+    ];
+
+    grid.innerHTML = visibleItems.map((item, idx) => {
+      const discountBadge = item.discount ? `<span class="bg-rose-50 text-[#d70018] text-[10px] font-bold px-1.5 py-0.5 rounded ml-1.5">-${item.discount}%</span>` : '';
+      const oldPriceDisplay = item.oldPrice ? `<div class="text-slate-400 text-xs line-through mt-0.5">${formatCurrency(item.oldPrice)}</div>` : '<div class="h-4 mt-0.5"></div>';
+      const installmentVal = item.price > 0 ? Math.round(item.price / 6) : 0;
+      const installmentText = installmentVal > 0 ? `Hoặc ${formatCurrency(installmentVal)} x 6T` : 'Trả góp 0% linh hoạt';
+      const bankPromo = BANK_PROMOS[idx % BANK_PROMOS.length];
+
+      return `
+        <div class="bg-white rounded-xl sm:rounded-2xl border border-slate-200/90 hover:border-blue-400 hover:shadow-lg transition-all duration-300 flex flex-col justify-between p-3 sm:p-3.5 relative group cursor-pointer" onclick="window.onDualProductClick('${item.id}')">
+          
+          <!-- 1. Sparkle Icon lấp lánh góc trên bên trái -->
+          <div class="absolute top-2.5 left-2.5 text-blue-500 z-10 pointer-events-none">
+            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+              <path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z"/>
+            </svg>
+          </div>
+
+          <div>
+            <!-- 2. Ảnh sản phẩm căn giữa, phóng to rõ nét cho dễ nhìn -->
+            <div class="relative w-full h-48 sm:h-56 lg:h-60 mb-2.5 flex items-center justify-center p-1 overflow-hidden">
+              <img src="${item.image}" alt="${item.name}" class="h-full w-full object-contain mx-auto transition-transform duration-300 transform scale-105 group-hover:scale-115" loading="lazy" onerror="this.onerror=null; this.src='images/deal-tabs/deal-tab-tablet.png';" />
+            </div>
+
+            <!-- 3. Tên sản phẩm: 2 dòng line-clamp-2, font đậm -->
+            <h4 class="font-bold text-xs sm:text-[13px] text-slate-800 line-clamp-2 min-h-[36px] leading-snug group-hover:text-blue-600 transition-colors mb-2" title="${item.name}">
+              ${item.name}
+            </h4>
+
+            <!-- 4. Hàng giá: Giá bán đỏ nổi bật, badge giảm giá, giá cũ gạch ngang -->
+            <div class="flex items-baseline gap-1.5 flex-wrap">
+              <span class="text-[#d70018] font-black text-sm sm:text-base">${formatCurrency(item.price)}</span>
+              ${discountBadge}
+            </div>
+            ${oldPriceDisplay}
+
+            <!-- 5. Dòng gợi ý trả góp màu xanh lục -->
+            <div class="text-[#059669] text-[11px] font-semibold mt-1">
+              ${installmentText}
+            </div>
+
+            <!-- 6. Dải 4 logo thẻ ngân hàng / app đối tác (Lưới 2x2 cân đối tuyệt đối, căn đều 50%-50%) -->
+            <div class="grid grid-cols-2 gap-1.5 mt-2.5 w-full">
+              <span class="h-7 sm:h-7.5 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-purple-400 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="TPBank Evo">
+                <img src="images/brands/tpbank.png" alt="TPBank" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full" onerror="this.outerHTML='<span class=\'text-[11px] font-bold text-purple-700\'>TPBank</span>'" loading="lazy" />
+              </span>
+              <span class="h-7 sm:h-7.5 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-emerald-400 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="VPBank">
+                <img src="images/brands/vpbank.png" alt="VPBank" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full" onerror="this.outerHTML='<span class=\'text-[11px] font-bold text-emerald-700\'>VPBank</span>'" loading="lazy" />
+              </span>
+              <span class="h-7 sm:h-7.5 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-blue-400 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="VIB">
+                <img src="images/brands/vib.png" alt="VIB" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full" onerror="this.outerHTML='<span class=\'text-[11px] font-bold text-blue-700\'>VIB</span>'" loading="lazy" />
+              </span>
+              <span class="h-7 sm:h-7.5 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-emerald-400 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="Trả góp 0%">
+                <img src="images/brands/icon-2_639047641516424460.png" alt="Trả góp 0%" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full" onerror="this.src='images/brands/homecredit.png'" loading="lazy" />
+              </span>
+            </div>
+
+            <!-- 7. Dòng khuyến mãi ngân hàng -->
+            <div class="text-[11px] text-slate-600 line-clamp-2 mt-2 bg-slate-50 p-2 rounded-lg border border-slate-200 min-h-[38px] leading-snug">
+              ${bankPromo}
+            </div>
+          </div>
+
+          <!-- 8. Chân thẻ: Trạng thái sẵn hàng + Nút giỏ hàng màu xanh dương giống mục ở trên -->
+          <div class="pt-2.5 mt-2.5 border-t border-slate-100 flex items-center justify-between">
+            <span class="inline-flex items-center gap-1.5 text-xs text-emerald-600 font-semibold">
+              <i class="fa-regular fa-circle-check text-xs"></i> Sẵn hàng
+            </span>
+            <button type="button" onclick="event.stopPropagation(); window.onDualCartClick('${item.id}')" class="w-8 h-8 rounded-lg bg-blue-50 hover:bg-[#0057B7] text-[#0057B7] hover:text-white border border-blue-200 flex items-center justify-center transition-all active:scale-90 cursor-pointer shadow-2xs" title="Thêm vào giỏ hàng">
+              <i class="fa-solid fa-cart-shopping text-xs"></i>
+            </button>
+          </div>
+
+        </div>
+      `;
+    }).join('');
+
+    // Xử lý nút xem thêm
+    const moreBtnContainer = document.getElementById('dual-tab-more-container');
+    const moreBtn = document.getElementById('btn-dual-tab-load-more');
+    if (moreBtnContainer && moreBtn) {
+      if (items.length > visibleItems.length) {
+        moreBtnContainer.classList.remove('hidden');
+        const remaining = items.length - visibleItems.length;
+        const textSpan = moreBtn.querySelector('span');
+        if (textSpan) {
+          textSpan.textContent = `Xem thêm ${remaining} sản phẩm ${currentDualCategory === 'tablet' ? 'Tablet' : 'Điện thoại'}`;
+        }
+      } else {
+        moreBtnContainer.classList.add('hidden');
+      }
+    }
+  }
 
   window.toggleMegaMenu = function () {
     const menu = document.getElementById('mega-menu-flyout');
