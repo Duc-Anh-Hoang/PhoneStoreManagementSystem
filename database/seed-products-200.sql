@@ -1,6 +1,6 @@
 -- ==================================================================
--- Auto-generated seed data crawled from HoangHa Mobile (1580 items)
--- Generated at: 2026-11-05T08:08:06.222Z
+-- Auto-generated seed data crawled from HoangHa Mobile (3529 items)
+-- Generated at: 2026-11-05T09:29:18.355Z
 -- ==================================================================
 
 -- 1. Insert NhomHang
@@ -16,6 +16,12 @@ IF NOT EXISTS (SELECT 1 FROM NhomHang WHERE MaNhom = N'DONGHO')
     INSERT INTO NhomHang (MaNhom, TenNhom) VALUES (N'DONGHO', N'Đồng hồ');
 IF NOT EXISTS (SELECT 1 FROM NhomHang WHERE MaNhom = N'LAPTOP')
     INSERT INTO NhomHang (MaNhom, TenNhom) VALUES (N'LAPTOP', N'Laptop & Màn hình');
+IF NOT EXISTS (SELECT 1 FROM NhomHang WHERE MaNhom = N'DIENMAY')
+    INSERT INTO NhomHang (MaNhom, TenNhom) VALUES (N'DIENMAY', N'Tivi, Điện máy');
+IF NOT EXISTS (SELECT 1 FROM NhomHang WHERE MaNhom = N'SMARTHOME')
+    INSERT INTO NhomHang (MaNhom, TenNhom) VALUES (N'SMARTHOME', N'Smart home, Camera');
+IF NOT EXISTS (SELECT 1 FROM NhomHang WHERE MaNhom = N'HANGCU')
+    INSERT INTO NhomHang (MaNhom, TenNhom) VALUES (N'HANGCU', N'Hàng cũ giá tốt');
 
 -- 2. Insert LoaiHang
 IF NOT EXISTS (SELECT 1 FROM LoaiHang WHERE MaLoai = N'APPLE')
@@ -80,6 +86,28 @@ IF NOT EXISTS (SELECT 1 FROM LoaiHang WHERE MaLoai = N'ANKER')
     INSERT INTO LoaiHang (MaLoai, TenLoai, MaNhom) VALUES (N'ANKER', N'Anker', N'AMTHANH');
 IF NOT EXISTS (SELECT 1 FROM LoaiHang WHERE MaLoai = N'REALME')
     INSERT INTO LoaiHang (MaLoai, TenLoai, MaNhom) VALUES (N'REALME', N'Realme', N'AMTHANH');
+IF NOT EXISTS (SELECT 1 FROM LoaiHang WHERE MaLoai = N'TCL')
+    INSERT INTO LoaiHang (MaLoai, TenLoai, MaNhom) VALUES (N'TCL', N'TCL', N'DIENMAY');
+IF NOT EXISTS (SELECT 1 FROM LoaiHang WHERE MaLoai = N'SHARP')
+    INSERT INTO LoaiHang (MaLoai, TenLoai, MaNhom) VALUES (N'SHARP', N'Sharp', N'DIENMAY');
+IF NOT EXISTS (SELECT 1 FROM LoaiHang WHERE MaLoai = N'PANASONIC')
+    INSERT INTO LoaiHang (MaLoai, TenLoai, MaNhom) VALUES (N'PANASONIC', N'Panasonic', N'DIENMAY');
+IF NOT EXISTS (SELECT 1 FROM LoaiHang WHERE MaLoai = N'CASPER')
+    INSERT INTO LoaiHang (MaLoai, TenLoai, MaNhom) VALUES (N'CASPER', N'Casper', N'DIENMAY');
+IF NOT EXISTS (SELECT 1 FROM LoaiHang WHERE MaLoai = N'MIDEA')
+    INSERT INTO LoaiHang (MaLoai, TenLoai, MaNhom) VALUES (N'MIDEA', N'Midea', N'DIENMAY');
+IF NOT EXISTS (SELECT 1 FROM LoaiHang WHERE MaLoai = N'PHILIPS')
+    INSERT INTO LoaiHang (MaLoai, TenLoai, MaNhom) VALUES (N'PHILIPS', N'Philips', N'DIENMAY');
+IF NOT EXISTS (SELECT 1 FROM LoaiHang WHERE MaLoai = N'TPLINK')
+    INSERT INTO LoaiHang (MaLoai, TenLoai, MaNhom) VALUES (N'TPLINK', N'TP-Link', N'SMARTHOME');
+IF NOT EXISTS (SELECT 1 FROM LoaiHang WHERE MaLoai = N'EZVIZ')
+    INSERT INTO LoaiHang (MaLoai, TenLoai, MaNhom) VALUES (N'EZVIZ', N'EZVIZ', N'SMARTHOME');
+IF NOT EXISTS (SELECT 1 FROM LoaiHang WHERE MaLoai = N'SANDISK')
+    INSERT INTO LoaiHang (MaLoai, TenLoai, MaNhom) VALUES (N'SANDISK', N'SanDisk', N'PHUKIEN');
+IF NOT EXISTS (SELECT 1 FROM LoaiHang WHERE MaLoai = N'MIPOW')
+    INSERT INTO LoaiHang (MaLoai, TenLoai, MaNhom) VALUES (N'MIPOW', N'MiPow', N'PHUKIEN');
+IF NOT EXISTS (SELECT 1 FROM LoaiHang WHERE MaLoai = N'ZAGG')
+    INSERT INTO LoaiHang (MaLoai, TenLoai, MaNhom) VALUES (N'ZAGG', N'ZAGG', N'PHUKIEN');
 
 -- 3. Insert MatHang
 IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH101')
@@ -2784,7 +2812,7 @@ IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1000')
     VALUES (N'MH1000', N'Đồng hồ Huawei Watch Kids 4 Pro', N'Huawei', 2740000, 2329000, 50, N'Chiếc', N'HUAWEI', N'https://i.hoanghamobile.vn/Uploads/2022/05/13/aslan-10.png', 1);
 IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1001')
     INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
-    VALUES (N'MH1001', N'Vòng đeo tay thông minh Garmin Vivosmart 5 - Chính hãng', N'Vivo', 3250000, 2762500, 50, N'Chiếc', N'VIVO', N'https://i.hoanghamobile.vn/Uploads/2022/05/23/image-removebg-preview-36.png', 1);
+    VALUES (N'MH1001', N'Vòng đeo tay thông minh Garmin Vivosmart 5 - Chính hãng', N'Garmin', 3250000, 2762500, 50, N'Chiếc', N'GARMIN', N'https://i.hoanghamobile.vn/Uploads/2022/05/23/image-removebg-preview-36.png', 1);
 IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1002')
     INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
     VALUES (N'MH1002', N'Đồng hồ Huawei Band 7', N'Huawei', 749000, 636650, 50, N'Chiếc', N'HUAWEI', N'https://i.hoanghamobile.vn/Uploads/2022/06/13/vong-deo-tay-thong-minh-huawei-band-7-chinh-hang-12.png', 1);
@@ -2826,7 +2854,7 @@ IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1014')
     VALUES (N'MH1014', N'Đồng hồ Masstel Smart Hero 20 4G', N'Masstel', 1790000, 1521500, 50, N'Chiếc', N'MASSTEL', N'https://i.hoanghamobile.vn/Uploads/2023/01/11/image-removebg-preview-11.png', 1);
 IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1015')
     INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
-    VALUES (N'MH1015', N'Đồng hồ Garmin Vivomove Trend', N'Vivo', 7290000, 6196500, 50, N'Chiếc', N'VIVO', N'https://i.hoanghamobile.vn/Uploads/2023/02/14/v1.png', 1);
+    VALUES (N'MH1015', N'Đồng hồ Garmin Vivomove Trend', N'Garmin', 7290000, 6196500, 50, N'Chiếc', N'GARMIN', N'https://i.hoanghamobile.vn/Uploads/2023/02/14/v1.png', 1);
 IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1016')
     INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
     VALUES (N'MH1016', N'Đồng hồ Garmin Forerunner 965', N'Garmin', 11990000, 10191500, 50, N'Chiếc', N'GARMIN', N'https://i.hoanghamobile.vn/Uploads/2023/03/10/garmin-forerunner-965-6.png', 1);
@@ -2949,7 +2977,7 @@ IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1055')
     VALUES (N'MH1055', N'Đồng hồ HUAWEI Watch GT4 41mm - Màu Xanh', N'Huawei', 3190000, 2711500, 50, N'Chiếc', N'HUAWEI', N'https://i.hoanghamobile.vn/Uploads/2024/06/27/gt-4-41mm-xanh-2.png', 1);
 IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1056')
     INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
-    VALUES (N'MH1056', N'Đồng hồ Garmin Vivoactive 5', N'Vivo', 5690000, 4836500, 50, N'Chiếc', N'VIVO', N'https://i.hoanghamobile.vn/Uploads/2024/06/14/garmin-vivoactive-5-2.png', 1);
+    VALUES (N'MH1056', N'Đồng hồ Garmin Vivoactive 5', N'Garmin', 5690000, 4836500, 50, N'Chiếc', N'GARMIN', N'https://i.hoanghamobile.vn/Uploads/2024/06/14/garmin-vivoactive-5-2.png', 1);
 IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1057')
     INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
     VALUES (N'MH1057', N'Đồng hồ Wonlex CT19', N'Chính hãng', 950000, 807500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/07/16/wonlex-ct19-2.png', 1);
@@ -3105,7 +3133,7 @@ IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1107')
     VALUES (N'MH1107', N'Đồng hồ thông minh Mibro Watch A3', N'Chính hãng', 990000, 841500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/29/mibro-watch-a3-beige-r.png', 1);
 IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1108')
     INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
-    VALUES (N'MH1108', N'Đồng hồ thông minh Garmin Vivoactive 6', N'Vivo', 8290000, 7046500, 50, N'Chiếc', N'VIVO', N'https://i.hoanghamobile.vn/Uploads/2025/05/05/vivoactive-6-pink-1.png', 1);
+    VALUES (N'MH1108', N'Đồng hồ thông minh Garmin Vivoactive 6', N'Garmin', 8290000, 7046500, 50, N'Chiếc', N'GARMIN', N'https://i.hoanghamobile.vn/Uploads/2025/05/05/vivoactive-6-pink-1.png', 1);
 IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1109')
     INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
     VALUES (N'MH1109', N'Đồng hồ thông minh Amazfit Active 2 Square', N'Amazfit', 2890000, 2456500, 50, N'Chiếc', N'AMAZFIT', N'https://i.hoanghamobile.vn/Uploads/2025/07/09/rome-45-right.png', 1);
@@ -4822,3 +4850,5850 @@ IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1679')
 IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1680')
     INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
     VALUES (N'MH1680', N'Pin sạc dự phòng Golf Candy 10.000mAh - G80 - Chính hãng', N'Chính hãng', 145000, 123250, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2022/01/04/fd204af496bdf6254b6472157421dd03-f3506ae7240a4a1f87718512aaecddfc-1024x1024-removebg-preview.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1681')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1681', N'TCL Google Tivi 55P638', N'TCL', 7690000, 6536500, 50, N'Chiếc', N'TCL', N'https://i.hoanghamobile.vn/Uploads/2024/06/17/55p638-3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1682')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1682', N'Coocaa Smart Tivi 32S3U+', N'Chính hãng', 3690000, 3136500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/10/11/coocaa-smart-tivi-32s3u-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1683')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1683', N'Xiaomi Google Tivi QLED A PRO 2026 L43MB-APSEA', N'Xiaomi', 7690000, 6536500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2025/05/14/l55mbapsea-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1684')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1684', N'Xiaomi Google Tivi QLED A PRO 2026 L55MB-APSEA', N'Xiaomi', 9590000, 8151500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2025/05/14/l55mbapsea-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1685')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1685', N'Google Tivi QLED TCL AI FHD 43 inch 43S5K', N'TCL', 5890000, 5006500, 50, N'Chiếc', N'TCL', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/tivi-tcl-ai-s5k.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1686')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1686', N'Google Tivi Xiaomi S Pro Mini LED O32P 4K 65 inch L65MB-SSEA', N'Xiaomi', 21990000, 18691500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2025/09/30/xiaomi-l75mb-ssea.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1687')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1687', N'Máy hút ẩm kết hợp lọc khí SHARP DW-J27FV-S, 27L - 67 m2', N'Sharp', 7990000, 6791500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/dwj27fvs.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1688')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1688', N'Google Tivi TCL QLED 4K 55 inch 2026 55T6D', N'TCL', 9990000, 8491500, 50, N'Chiếc', N'TCL', N'https://i.hoanghamobile.vn/Uploads/2026/11/03/Gallery/675440_google-tivi-tcl-qled-4k-55-inch-2026-55t6d%20(1).png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1689')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1689', N'Máy hút ẩm kết hợp lọc khí Electrolux EDH12TRBD2, 24L - 50 m2', N'Chính hãng', 7690000, 6536500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/edh12trbd2-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1690')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1690', N'Smart Tivi Crystal UHD Samsung 4K 75 inch UA75U8500H', N'Samsung', 19490000, 16566500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2026/10/09/smart-tivi-crystal-uhd-samsung-4k-75-inch-1-145001026.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1691')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1691', N'Máy hút ẩm kết hợp lọc khí Electrolux EDH14TRBD2, 27L - 58 m2', N'Chính hãng', 8790000, 7471500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/edh14trbd2-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1692')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1692', N'Nồi chiên không dầu Hafele HSAF601B 6.4 lít', N'Chính hãng', 1130000, 960500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/10/11/noi-chien-khong-dau-hafele-hsaf601b-6-4-lit-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1693')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1693', N'Samsung Smart Tivi UA43DU7000', N'Samsung', 6290000, 5346500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2024/05/28/du7000-5.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1694')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1694', N'Máy lọc không khí myClair - Chính hãng', N'Chính hãng', 799000, 679150, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2022/01/25/boud-myclair-paper-10.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1695')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1695', N'Smart Tivi LG NANO 4K AI 2026 65 inch 65NU805BPSB', N'LG', 13990000, 11891500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2026/07/01/55nu805bpsb-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1696')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1696', N'Máy lọc không khí Xiaomi Air Purifier 4 Lite - Chính hãng', N'Xiaomi', 2790000, 2371500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2022/02/12/xiaomi-smart-air-purifier-lite-7.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1697')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1697', N'Máy lọc không khí Xiaomi Air Purifier 4 Compact - Chính hãng', N'Xiaomi', 1990000, 1691500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2022/09/22/image-removebg-preview-18.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1698')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1698', N'Sharp nồi cơm điện tử KS-COM192EV-GY, 1.8L', N'Sharp', 1290000, 1096500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/kscom192evgy-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1699')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1699', N'Sharp máy lọc không khí FP-J30E-B', N'Sharp', 1990000, 1691500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/fpj30eb-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1700')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1700', N'Sharp nồi cơm điện tử KS-COM193EV-GL, 1.8L', N'Sharp', 1390000, 1181500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/kscom193evgl-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1701')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1701', N'LG PuriCare 360 Hit AS60GHWG0 41W', N'LG', 5290000, 4496500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/04/15/as60ghwg0-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1702')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1702', N'Sharp lò vi sóng R-205VN-SW, 20L', N'Sharp', 1390000, 1181500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/r205vnsw-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1703')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1703', N'Máy lọc không khí Mova Puris P10', N'Xiaomi', 5750000, 4887500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/06/16/may-loc-khong-khi-mova-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1704')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1704', N'Tủ lạnh Hitachi Side by Side Inverter 525L HRSN9552DWDXVN', N'Chính hãng', 16490000, 14016500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/10/11/tu-lanh-hitachi-side-by-side-525l-hrsn9552dwdxvn-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1705')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1705', N'Sony Google Tivi K-43S30', N'Sony', 13690000, 11636500, 50, N'Chiếc', N'SONY', N'https://i.hoanghamobile.vn/Uploads/2024/06/11/s30-43-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1706')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1706', N'Sony Google Tivi K-75S30', N'Sony', 32990000, 28041500, 50, N'Chiếc', N'SONY', N'https://i.hoanghamobile.vn/Uploads/2024/06/11/sony-s30-85-5.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1707')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1707', N'Sony Google Tivi K-85S30', N'Sony', 42990000, 36541500, 50, N'Chiếc', N'SONY', N'https://i.hoanghamobile.vn/Uploads/2024/06/11/sony-s30-85-5.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1708')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1708', N'Sony Google Tivi Mini LED K-75XR70', N'Sony', 58900000, 50065000, 50, N'Chiếc', N'SONY', N'https://i.hoanghamobile.vn/Uploads/2024/06/11/75-xr70-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1709')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1709', N'Sony Google Tivi OLED K-55XR80', N'Sony', 43990000, 37391500, 50, N'Chiếc', N'SONY', N'https://i.hoanghamobile.vn/Uploads/2024/06/11/xr80-9.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1710')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1710', N'Sony Google Tivi OLED K-65XR80', N'Sony', 60680000, 51578000, 50, N'Chiếc', N'SONY', N'https://i.hoanghamobile.vn/Uploads/2024/06/11/xr80-9.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1711')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1711', N'Sony Google Tivi Mini LED K-75XR90', N'Sony', 79520000, 67592000, 50, N'Chiếc', N'SONY', N'https://i.hoanghamobile.vn/Uploads/2024/06/11/xr90-9.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1712')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1712', N'Sony Google Tivi Mini LED K-85XR90', N'Sony', 109990000, 93491500, 50, N'Chiếc', N'SONY', N'https://i.hoanghamobile.vn/Uploads/2024/06/11/xr90-9.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1713')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1713', N'TV 4K LG OLED AI B6 2026 48 inch', N'LG', 22490000, 19116500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2026/06/03/4k-lg-oled-ai-b6-2026-48-inch-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1714')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1714', N'Smart TV VSP 65 inch QLED 4K VUE65GSU01', N'Chính hãng', 11590000, 9851500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/19/vue65gsu01-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1715')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1715', N'Smart TV VSP 55 inch QLED 4K Q-Plus VUF55GQU01', N'Chính hãng', 9800000, 8330000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/19/vuf55gqu01-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1716')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1716', N'Smart TV VSP 65 inch QLED 4K Q-Plus VUF65GQU01', N'Chính hãng', 15400000, 13090000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/19/vuf65gqu01.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1717')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1717', N'Smart TV VSP 75 inch QLED 4K Q-Plus VUF75GQU01', N'Chính hãng', 19750000, 16787500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/19/vuf75gqu01-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1718')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1718', N'Lõi lọc Xiaomi Smart Air Purifier 4 Compact Filter', N'Xiaomi', 620000, 527000, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/07/23/xiaomi-smart-air-purifier-4-compact-1-172236369.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1719')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1719', N'Smart Tivi LG OLED AI 4K 55 inch 2026 OLED55B6PSA', N'LG', 26490000, 22516500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2026/08/11/tv-lg-55-inch-2026-oled55b6psa-1-111458751.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1720')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1720', N'Lõi lọc cho Máy lọc không khí Clair T1C24', N'Chính hãng', 850000, 722500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/01/08/loi-loc-cho-t1c24.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1721')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1721', N'Samsung Smart Tivi QLED QA85Q60D', N'Samsung', 29990000, 25491500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2024/05/29/q00d-55-80-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1722')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1722', N'Sony Google Tivi Mini LED K-65XR70', N'Sony', 44170000, 37544500, 50, N'Chiếc', N'SONY', N'https://i.hoanghamobile.vn/Uploads/2024/06/11/65xr70-9_638537100069026449.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1723')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1723', N'LG Smart Tivi OLED48B4PSA', N'LG', 18490000, 15716500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2024/06/13/b4psa-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1724')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1724', N'LG Smart Tivi QNED Evo AI 4K 86QNED86ASA', N'LG', 44390000, 37731500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/28/lg-0008s-0006-100qned86as-min.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1725')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1725', N'LG Smart Tivi QNED Evo AI 4K 75QNED86ASA', N'LG', 29890000, 25406500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/28/lg-0008s-0006-100qned86as-min.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1726')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1726', N'LG Smart Tivi QNED Evo AI 4K 65QNED86ASA', N'LG', 20890000, 17756500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/28/lg-0008s-0006-100qned86as-min.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1727')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1727', N'LG Smart Tivi QNED Evo AI 4K 55QNED86ASA', N'LG', 16390000, 13931500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/28/lg-0008s-0006-100qned86as-min.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1728')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1728', N'LG Smart Tivi QNED AI 4K 86QNED82ASA', N'LG', 43990000, 37391500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/lg-0009s-0007-qned82asa-min.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1729')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1729', N'LG Smart Tivi QNED AI 4K 75QNED82ASA', N'LG', 26890000, 22856500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/lg-0009s-0007-qned82asa-min.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1730')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1730', N'LG Smart Tivi QNED AI 4K 86QNED81ASA', N'LG', 40490000, 34416500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/smart-tivi-qned-lg-ai-4k-65-inch-65qned81asa.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1731')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1731', N'LG Smart Tivi QNED AI 4K 75QNED81ASA', N'LG', 25890000, 22006500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/smart-tivi-qned-lg-ai-4k-65-inch-65qned81asa.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1732')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1732', N'LG Smart Tivi QNED AI 4K 65QNED81ASA', N'LG', 17290000, 14696500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/smart-tivi-qned-lg-ai-4k-65-inch-65qned81asa.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1733')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1733', N'LG Smart Tivi QNED AI 4K 55QNED81ASA', N'LG', 13890000, 11806500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/smart-tivi-qned-lg-ai-4k-65-inch-65qned81asa.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1734')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1734', N'LG Smart Tivi QNED AI 4K 50QNED81ASA', N'LG', 13590000, 11551500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/smart-tivi-qned-lg-ai-4k-65-inch-65qned81asa.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1735')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1735', N'LG Smart Tivi QNED AI 4K 43QNED81ASA', N'LG', 11890000, 10106500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/smart-tivi-qned-lg-ai-4k-65-inch-65qned81asa.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1736')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1736', N'LG Smart Tivi QNED AI 4K 86QNED80ASA', N'LG', 36990000, 31441500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/lg-0014s-0005-75qned80asa-min.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1737')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1737', N'LG Smart Tivi QNED AI 4K 75QNED80ASA', N'LG', 23890000, 20306500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/lg-0014s-0005-75qned80asa-min.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1738')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1738', N'LG Smart Tivi QNED AI 4K 65QNED80ASA', N'LG', 16390000, 13931500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/lg-0014s-0005-75qned80asa-min.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1739')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1739', N'LG Smart Tivi QNED AI 4K 55QNED80ASA', N'LG', 13190000, 11211500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/lg-0014s-0005-75qned80asa-min.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1740')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1740', N'LG Smart Tivi QNED AI 4K 50QNED80ASA', N'LG', 13390000, 11381500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/lg-0014s-0005-75qned80asa-min.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1741')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1741', N'LG Smart Tivi QNED AI 4K 43QNED80ASA', N'LG', 10490000, 8916500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/lg-0014s-0005-75qned80asa-min.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1742')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1742', N'LG Smart Tivi QNED AI 4K 86QNED70ASA', N'LG', 34390000, 29231500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/lg-0014s-0005-75qned80asa-min.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1743')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1743', N'LG Smart Tivi QNED AI 4K 75QNED70ASA', N'LG', 21390000, 18181500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/lg-0014s-0005-75qned80asa-min.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1744')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1744', N'LG Smart Tivi QNED AI 4K 65QNED70ASA', N'LG', 14490000, 12316500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/lg-0014s-0005-75qned80asa-min.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1745')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1745', N'LG Smart Tivi QNED AI 4K 55QNED70ASA', N'LG', 11890000, 10106500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/lg-0014s-0005-75qned80asa-min.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1746')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1746', N'LG Smart Tivi QNED AI 4K 43QNED70ASA', N'LG', 10790000, 9171500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/lg-0014s-0005-75qned80asa-min.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1747')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1747', N'LG Smart Tivi NANOCELL AI 4K 86NANO80ASA', N'LG', 33290000, 28296500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/smart-tivi-nanocell-lg-ai-4k-86-inch-86nano80asa.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1748')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1748', N'LG Smart Tivi NANOCELL AI 4K 75NANO80ASA', N'LG', 23890000, 20306500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/smart-tivi-nanocell-lg-ai-4k-86-inch-86nano80asa.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1749')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1749', N'LG Smart Tivi NANOCELL AI 4K 65NANO80ASA', N'LG', 14390000, 12231500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/smart-tivi-nanocell-lg-ai-4k-86-inch-86nano80asa.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1750')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1750', N'LG Smart Tivi NANOCELL AI 4K 55NANO80ASA', N'LG', 11890000, 10106500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/smart-tivi-nanocell-lg-ai-4k-86-inch-86nano80asa.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1751')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1751', N'LG Smart Tivi NANOCELL AI 4K 50NANO80ASA', N'LG', 13290000, 11296500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/smart-tivi-nanocell-lg-ai-4k-86-inch-86nano80asa.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1752')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1752', N'LG Smart Tivi NANOCELL AI 4K 43NANO80ASA', N'LG', 11390000, 9681500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/smart-tivi-nanocell-lg-ai-4k-86-inch-86nano80asa.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1753')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1753', N'Google Tivi TCL AI 4K 65 inch 65P6K', N'TCL', 10490000, 8916500, 50, N'Chiếc', N'TCL', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/tcl-p6k-4k-4_638868316618544844.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1754')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1754', N'Samsung Smart Tivi Neo QLED AI QA85QN950F', N'Samsung', 170490000, 144916500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa85qn950f-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1755')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1755', N'Samsung Smart Tivi Neo QLED AI QA115QN90F', N'Samsung', 286490000, 243516500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa115qn90f-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1756')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1756', N'Samsung Smart Tivi Neo QLED AI QA98QN90F', N'Samsung', 112990000, 96041500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa98qn90f-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1757')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1757', N'Samsung Smart Tivi Neo QLED AI QA85QN90F', N'Samsung', 111990000, 95191500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa85qn90f-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1758')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1758', N'Samsung Smart Tivi Neo QLED AI QA75QN90F', N'Samsung', 54890000, 46656500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa75qn90f-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1759')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1759', N'Samsung Smart Tivi Neo QLED AI QA65QN90F', N'Samsung', 35990000, 30591500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa65qn90f-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1760')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1760', N'Samsung Smart Tivi Neo QLED AI QA55QN90F', N'Samsung', 38490000, 32716500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa65qn90f-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1761')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1761', N'Samsung Smart Tivi Neo QLED AI QA85QN85F', N'Samsung', 62890000, 53456500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa85qn85f-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1762')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1762', N'Samsung Smart Tivi Neo QLED AI QA75QN85F', N'Samsung', 43890000, 37306500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa85qn85f-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1763')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1763', N'Samsung Smart Tivi Neo QLED AI QA65QN85F', N'Samsung', 26890000, 22856500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa85qn85f-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1764')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1764', N'Samsung Smart Tivi Neo QLED AI QA55QN85F', N'Samsung', 30990000, 26341500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa85qn85f-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1765')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1765', N'Samsung Smart Tivi Neo QLED AI QA100QN80F', N'Samsung', 84990000, 72241500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa100qn80f-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1766')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1766', N'Samsung Smart Tivi Neo QLED AI QA85QN80F', N'Samsung', 68990000, 58641500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa100qn80f-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1767')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1767', N'Samsung Smart Tivi Neo QLED AI QA75QN80F', N'Samsung', 34990000, 29741500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa100qn80f-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1768')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1768', N'Samsung Smart Tivi Neo QLED AI QA65QN80F', N'Samsung', 23490000, 19966500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa100qn80f-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1769')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1769', N'Samsung Smart Tivi Neo QLED AI QA55QN80F', N'Samsung', 18390000, 15631500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa100qn80f-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1770')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1770', N'Samsung Smart Tivi Neo QLED AI QA85QN70F', N'Samsung', 40990000, 34841500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa85qn70f-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1771')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1771', N'Samsung Smart Tivi Neo QLED AI QA75QN70F', N'Samsung', 26890000, 22856500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa85qn70f-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1772')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1772', N'Samsung Smart Tivi Neo QLED AI QA65QN70F', N'Samsung', 18390000, 15631500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa85qn70f-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1773')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1773', N'Samsung Smart Tivi Neo QLED AI QA55QN70F', N'Samsung', 15490000, 13166500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa85qn70f-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1774')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1774', N'Panasonic 2 chiều Inverter 9.040 BTU (1 HP) CU/CS-YZ9AKH-8', N'Panasonic', 12990000, 11041500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/MayLanh/4771/Slider/panasonic-inverter-1-hp-cu-cs-yz9akh-8-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1775')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1775', N'Panasonic Inverter 17.700 BTU (2 HP) CU/CS-PU18AKH-8', N'Panasonic', 20990000, 17841500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/MayLanh/4774/Slider/panasonic-inverter-2-hp-cu-cs-pu18akh-8-fix-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1776')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1776', N'Panasonic 2 chiều Inverter 9.040 BTU (1 HP) CU/CS-YZ9WKH-8', N'Panasonic', 12690000, 10786500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/MayLanh/4792/Slider/panasonic-cu-cs-yz9wkh-8-1-2-org.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1777')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1777', N'Panasonic 2 chiều Inverter 12.000 BTU (1.5 HP) CU/CS-YZ12AKH-8', N'Panasonic', 15990000, 13591500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/MayLanh/4795/Slider/panasonic-inverter-1-5-hp-cu-cs-yz12akh-8-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1778')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1778', N'Panasonic 2 chiều Inverter 11.900 BTU (1.5 HP) CU/CS-YZ12WKH-8', N'Panasonic', 15490000, 13166500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/MayLanh/4797/Slider/panasonic-cu-cs-yz12wkh-8-1-1-org.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1779')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1779', N'Panasonic Inverter 18.100 BTU (2 HP) CU/CS-XU18ZKH-8', N'Panasonic', 24990000, 21241500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/MayLanh/4810/Slider/may-lanh-panasonic-inverter-2-hp-cu-cs-xu18zkh-81-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1780')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1780', N'Panasonic 2 chiều Inverter 17.700 BTU (2 HP) CU/CS-YZ18AKH-8', N'Panasonic', 24990000, 21241500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/MayLanh/4823/Slider/panasonic-inverter-2-hp-cu-cs-yz18akh-8-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1781')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1781', N'Máy hút ẩm kết hợp lọc khí SHARP DW-E16FA-W, 16L - 38 m2', N'Sharp', 7890000, 6706500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/dwe16faw.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1782')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1782', N'Xiaomi Smart Display Max 100 2025 L100MA-MAXEA', N'Xiaomi', 47990000, 40791500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2024/09/27/l85ma-maxea-0.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1783')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1783', N'Coocaa Google Tivi 100A5D', N'Chính hãng', 39990000, 33991500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/10/11/coocaa-google-tivi-100a5d.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1784')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1784', N'Máy hút ẩm Xiaomi Smart Dehumidifier BHR8121TH, 22L - 45 m2', N'Xiaomi', 6190000, 5261500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2024/12/18/0ab740b984b1b145dd1caf77139da3d8.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1785')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1785', N'Xiaomi Google Tivi A 2026 L43MB-AFSEA', N'Xiaomi', 6190000, 5261500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2025/05/14/l43mbafsea-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1786')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1786', N'LG Smart Tivi OLED Evo AI 4K OLED97M5PSA', N'LG', 449900000, 382415000, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/28/lg-0000s-0006-m5psa-min.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1787')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1787', N'LG Smart Tivi OLED Evo AI 4K OLED83M5PSA', N'LG', 174990000, 148741500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/28/lg-0000s-0006-m5psa-min.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1788')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1788', N'LG Smart Tivi OLED Evo AI 4K OLED97G5PSA', N'LG', 389900000, 331415000, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/28/smart-tivi-oled-evo-lg-ai-4k-97-inch-oled97g5psa-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1789')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1789', N'LG Smart Tivi OLED Evo AI 4K OLED77G5PSA', N'LG', 102990000, 87541500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/28/smart-tivi-oled-evo-lg-ai-4k-97-inch-oled97g5psa-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1790')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1790', N'LG Smart Tivi OLED Evo AI 4K OLED65G5PSA', N'LG', 54890000, 46656500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/28/smart-tivi-oled-evo-lg-ai-4k-97-inch-oled97g5psa-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1791')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1791', N'LG Smart Tivi OLED Evo AI 4K OLED55G5PSA', N'LG', 42990000, 36541500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/28/smart-tivi-oled-evo-lg-ai-4k-97-inch-oled97g5psa-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1792')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1792', N'LG Smart Tivi OLED Evo AI 4K OLED83C5PSA', N'LG', 103990000, 88391500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/28/lg-oled-evo-ai-4k-83-inch-oled83c5psa.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1793')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1793', N'LG Smart Tivi OLED Evo AI 4K OLED77C5PSA', N'LG', 64790000, 55071500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/28/lg-oled-evo-ai-4k-83-inch-oled83c5psa.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1794')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1794', N'LG Smart Tivi OLED Evo AI 4K OLED65C5PSA', N'LG', 36490000, 31016500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/28/lg-oled-evo-ai-4k-83-inch-oled83c5psa.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1795')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1795', N'LG Smart Tivi OLED Evo AI 4K OLED55C5PSA', N'LG', 26490000, 22516500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/28/lg-oled-evo-ai-4k-83-inch-oled83c5psa.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1796')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1796', N'LG Smart Tivi OLED AI 4K OLED77B5PSA', N'LG', 59890000, 50906500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/28/smart-tivi-oled-lg-ai-4k-65-inch-oled65b5psa-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1797')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1797', N'LG Smart Tivi OLED AI 4K OLED65B5PSA', N'LG', 28890000, 24556500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/28/smart-tivi-oled-lg-ai-4k-65-inch-oled65b5psa-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1798')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1798', N'LG Smart Tivi OLED AI 4K OLED55B5PSA', N'LG', 21490000, 18266500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/28/smart-tivi-oled-lg-ai-4k-65-inch-oled65b5psa-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1799')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1799', N'LG Smart Tivi OLED AI 4K OLED48B5PSA', N'LG', 21490000, 18266500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/28/smart-tivi-oled-lg-ai-4k-65-inch-oled65b5psa-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1800')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1800', N'LG Smart Tivi QNED Evo AI MiniLED 4K 86QNED9MASA', N'LG', 51890000, 44106500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/28/lg-0005s-0006-qned9masa-min.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1801')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1801', N'LG Smart Tivi QNED Evo AI MiniLED 4K 75QNED9MASA', N'LG', 36390000, 30931500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/28/lg-0005s-0006-qned9masa-min.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1802')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1802', N'LG Smart Tivi QNED Evo AI MiniLED 4K 65QNED9MASA', N'LG', 24890000, 21156500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/28/lg-0005s-0006-qned9masa-min.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1803')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1803', N'LG Smart Tivi QNED Evo AI MiniLED 4K 75QNED92ASA', N'LG', 35890000, 30506500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/28/smart-tivi-qned-evo-miniled-lg-4k-85-inch-85qned92asa.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1804')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1804', N'LG Smart Tivi QNED Evo AI MiniLED 4K 65QNED92ASA', N'LG', 29890000, 25406500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/28/smart-tivi-qned-evo-miniled-lg-4k-85-inch-85qned92asa.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1805')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1805', N'LG Smart Tivi QNED Evo AI MiniLED 4K 100QNED86AS', N'LG', 96990000, 82441500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/28/lg-0008s-0006-100qned86as-min.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1806')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1806', N'LG Smart Tivi AI 4K 86UA8450PSA', N'LG', 28890000, 24556500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/l-0001s-0003-86ua8450psa-min.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1807')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1807', N'LG Smart Tivi AI 4K 75UA8450PSA', N'LG', 18390000, 15631500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/l-0001s-0003-86ua8450psa-min.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1808')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1808', N'LG Smart Tivi AI 4K 65UA8450PSA', N'LG', 12590000, 10701500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/l-0001s-0003-86ua8450psa-min.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1809')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1809', N'LG Smart Tivi AI 4K 55UA8450PSA', N'LG', 10390000, 8831500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/l-0001s-0003-86ua8450psa-min.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1810')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1810', N'LG Smart Tivi AI 4K 50UA8450PSA', N'LG', 10890000, 9256500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/l-0001s-0003-86ua8450psa-min.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1811')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1811', N'LG Smart Tivi AI 4K 43UA8450PSA', N'LG', 8190000, 6961500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/l-0001s-0003-86ua8450psa-min.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1812')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1812', N'LG Smart Tivi AI 4K 65UA7350PSB', N'LG', 12290000, 10446500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/l-0000s-0007-ua7350psb-min.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1813')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1813', N'LG Smart Tivi AI 4K 55UA7350PSB', N'LG', 9890000, 8406500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/l-0000s-0007-ua7350psb-min.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1814')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1814', N'LG Smart Tivi AI 4K 50UA7350PSB', N'LG', 9490000, 8066500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/l-0000s-0007-ua7350psb-min.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1815')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1815', N'LG Smart Tivi AI 4K 43UA7350PSB', N'LG', 7990000, 6791500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/l-0000s-0007-ua7350psb-min.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1816')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1816', N'Google Tivi QD-Mini LED TCL AI 4K 85 inch 85C7K', N'TCL', 46990000, 39941500, 50, N'Chiếc', N'TCL', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/tcl-tv-c7k-qd-miniled-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1817')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1817', N'Google Tivi QD-Mini LED TCL AI 4K 75 inch 75C7K', N'TCL', 36890000, 31356500, 50, N'Chiếc', N'TCL', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/tcl-tv-c7k-qd-miniled-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1818')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1818', N'Google Tivi QD-Mini LED TCL AI 4K 55 Inch 55C7K', N'TCL', 16990000, 14441500, 50, N'Chiếc', N'TCL', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/tcl-tv-c7k-qd-miniled-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1819')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1819', N'Google Tivi QLED TCL AI 4K 75 inch 75P7K', N'TCL', 15390000, 13081500, 50, N'Chiếc', N'TCL', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/tcl-p7k-qled-tv-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1820')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1820', N'Google Tivi QLED TCL AI 4K 65 inch 65P7K', N'TCL', 13490000, 11466500, 50, N'Chiếc', N'TCL', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/tcl-p7k-qled-tv-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1821')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1821', N'Google Tivi QLED TCL AI 4K 50 inch 50P7K', N'TCL', 8490000, 7216500, 50, N'Chiếc', N'TCL', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/tcl-p7k-qled-tv-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1822')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1822', N'Google Tivi QLED TCL AI 4K 43 inch 43P7K', N'TCL', 7290000, 6196500, 50, N'Chiếc', N'TCL', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/tcl-p7k-qled-tv-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1823')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1823', N'Google Tivi QLED TCL AI 4K 98 inch 98P8K', N'TCL', 39890000, 33906500, 50, N'Chiếc', N'TCL', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/tcl-p8k-qled-tv-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1824')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1824', N'Google Tivi QLED TCL AI 4K 85 inch 85P8K', N'TCL', 24990000, 21241500, 50, N'Chiếc', N'TCL', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/tcl-p8k-qled-tv-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1825')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1825', N'Google Tivi QLED TCL 4K 75 inch 75P8K', N'TCL', 15890000, 13506500, 50, N'Chiếc', N'TCL', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/tcl-p8k-qled-tv-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1826')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1826', N'Google Tivi QLED TCL AI 4K 65 inch 65P8K', N'TCL', 12790000, 10871500, 50, N'Chiếc', N'TCL', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/tcl-p8k-qled-tv-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1827')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1827', N'Google Tivi QD-Mini LED TCL AI 4K 98 inch 98C8K', N'TCL', 105990000, 90091500, 50, N'Chiếc', N'TCL', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/tv-tcl-tv-c8k-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1828')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1828', N'Google Tivi QD-Mini LED TCL AI 4K 85 inch 85C8K', N'TCL', 85990000, 73091500, 50, N'Chiếc', N'TCL', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/tv-tcl-tv-c8k-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1829')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1829', N'Google Tivi QD-Mini LED TCL AI 4K 75 inch 75C8K', N'TCL', 39990000, 33991500, 50, N'Chiếc', N'TCL', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/tv-tcl-tv-c8k-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1830')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1830', N'Google Tivi QD-Mini LED TCL AI 4K 98 inch 98C6K', N'TCL', 42390000, 36031500, 50, N'Chiếc', N'TCL', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/tv-tcl-c6k-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1831')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1831', N'Google Tivi QD-Mini LED TCL AI 4K 85 inch 85C6K', N'TCL', 32890000, 27956500, 50, N'Chiếc', N'TCL', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/tv-tcl-c6k-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1832')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1832', N'Google Tivi QD-Mini LED TCL AI 4K 75 inch 75C6K', N'TCL', 24490000, 20816500, 50, N'Chiếc', N'TCL', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/tv-tcl-c6k-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1833')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1833', N'Google Tivi QD-Mini LED TCL AI 4K 55 inch 55C6K', N'TCL', 12390000, 10531500, 50, N'Chiếc', N'TCL', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/tv-tcl-c6k-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1834')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1834', N'Google Tivi TCL AI 4K 75 inch 75P6K', N'TCL', 14890000, 12656500, 50, N'Chiếc', N'TCL', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/tcl-p6k-4k-4_638868316618544844.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1835')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1835', N'Google Tivi QLED TCL AI FHD 32 inch 32S5K', N'TCL', 4390000, 3731500, 50, N'Chiếc', N'TCL', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/tivi-tcl-ai-s5k.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1836')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1836', N'Google Tivi QLED TCL AI FHD 40 inch 40S5K', N'TCL', 5390000, 4581500, 50, N'Chiếc', N'TCL', N'https://i.hoanghamobile.vn/Uploads/2025/06/29/tivi-tcl-ai-s5k.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1837')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1837', N'Samsung Smart Tivi OLED AI QA83S95F', N'Samsung', 99890000, 84906500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa83s95f-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1838')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1838', N'Samsung Smart Tivi OLED AI QA77S95F', N'Samsung', 113490000, 96466500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa83s95f-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1839')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1839', N'Samsung Smart Tivi OLED AI QA65S95F', N'Samsung', 47890000, 40706500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa83s95f-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1840')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1840', N'Samsung Smart Tivi OLED AI QA83S90F', N'Samsung', 95890000, 81506500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa83s90f-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1841')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1841', N'Samsung Smart Tivi OLED AI QA77S90F', N'Samsung', 59890000, 50906500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa83s90f-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1842')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1842', N'Samsung Smart Tivi OLED AI QA65S90F', N'Samsung', 34990000, 29741500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa83s90f-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1843')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1843', N'Samsung Smart Tivi OLED AI QA55S90F', N'Samsung', 23990000, 20391500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa83s90f-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1844')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1844', N'Samsung Smart Tivi Khung Tranh The Frame QLED AI QA75LS03F', N'Samsung', 33890000, 28806500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa75ls03f-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1845')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1845', N'Samsung Smart Tivi Khung Tranh The Frame QLED AI QA65LS03F', N'Samsung', 25890000, 22006500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa75ls03f-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1846')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1846', N'Samsung Smart Tivi Khung Tranh The Frame QLED AI QA55LS03F', N'Samsung', 19890000, 16906500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa75ls03f-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1847')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1847', N'Samsung Smart Tivi QLED AI QA85Q8FA', N'Samsung', 43490000, 36966500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa85q8fa-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1848')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1848', N'Samsung Smart Tivi QLED AI QA75Q8FA', N'Samsung', 23390000, 19881500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa85q8fa-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1849')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1849', N'Samsung Smart Tivi QLED AI QA65Q8FA', N'Samsung', 15390000, 13081500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa85q8fa-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1850')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1850', N'Samsung Smart Tivi QLED AI QA55Q8FA', N'Samsung', 12890000, 10956500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa85q8fa-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1851')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1851', N'Samsung Smart Tivi QLED AI QA50Q8FA', N'Samsung', 12890000, 10956500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa85q8fa-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1852')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1852', N'Samsung Smart Tivi QLED AI QA43Q8FA', N'Samsung', 14490000, 12316500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa43q8fa-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1853')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1853', N'Samsung Smart Tivi QLED AI QA85Q7FA', N'Samsung', 30990000, 26341500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa85q7fa-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1854')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1854', N'Samsung Smart Tivi QLED AI QA75Q7FA', N'Samsung', 19890000, 16906500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa85q7fa-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1855')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1855', N'Samsung Smart Tivi QLED AI QA65Q7FA', N'Samsung', 14490000, 12316500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa85q7fa-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1856')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1856', N'Samsung Smart Tivi QLED AI QA55Q7FA', N'Samsung', 11890000, 10106500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa85q7fa-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1857')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1857', N'Samsung Smart Tivi QLED AI QA50Q7FA', N'Samsung', 9990000, 8491500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa85q7fa-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1858')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1858', N'Samsung Smart Tivi QLED AI QA43Q7FA', N'Samsung', 8890000, 7556500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/qa85q7fa-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1859')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1859', N'Samsung Smart Tivi Crystal UHD UA75U8000F', N'Samsung', 25790000, 21921500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/ua75u8000f-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1860')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1860', N'Samsung Smart Tivi Crystal UHD UA43U8000F', N'Samsung', 7890000, 6706500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/ua75u8000f-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1861')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1861', N'Samsung Smart Tivi Crystal UHD UA85U8500F', N'Samsung', 26990000, 22941500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/ua75u8000f-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1862')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1862', N'Samsung Smart Tivi Crystal UHD UA75U8500F', N'Samsung', 15890000, 13506500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/ua75u8000f-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1863')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1863', N'Samsung Smart Tivi Crystal UHD UA65U8500F', N'Samsung', 12390000, 10531500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/ua75u8000f-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1864')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1864', N'Samsung Smart Tivi Crystal UHD UA55U8500F', N'Samsung', 9890000, 8406500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/ua75u8000f-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1865')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1865', N'Samsung Smart Tivi Crystal UHD UA50U8500F', N'Samsung', 9190000, 7811500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/ua75u8000f-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1866')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1866', N'Samsung Smart Tivi Crystal UHD UA43U8500F', N'Samsung', 7490000, 6366500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/ua75u8000f-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1867')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1867', N'Máy hút ẩm kết hợp lọc không khí Sharp DW-T30FV-H (77m2/30 lít)', N'Sharp', 10790000, 9171500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/2025/11/10/dwt30fvh-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1868')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1868', N'Máy hút ẩm kết hợp lọc không khí Sharp DW-T30FV-W (77m2/30 lít)', N'Sharp', 10790000, 9171500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/2025/11/10/dwt30fvw-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1869')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1869', N'Máy hút ẩm kết hợp lọc không khí Electrolux EDH16TRBD3 (66m2/28.5 lít)', N'Chính hãng', 9990000, 8491500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/11/10/edh16trbd3-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1870')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1870', N'Xiaomi Smart Display S QD-MiniLED 4K 85 inch L85MC-STWN', N'Xiaomi', 33990000, 28891500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/03/26/l85mcstwn-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1871')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1871', N'Xiaomi Smart Display S QD-MiniLED 4K 98 inch L98MC-STWN', N'Xiaomi', 49990000, 42491500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/03/26/l98mcstwn-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1872')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1872', N'Samsung Smart Tivi UA85DU8000', N'Samsung', 28990000, 24641500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2024/05/29/faf.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1873')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1873', N'Samsung Smart Tivi UA98DU9000', N'Samsung', 44990000, 38241500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2024/05/29/du9000-5.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1874')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1874', N'Samsung Smart Tivi QLED QA65Q60D', N'Samsung', 12890000, 10956500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2024/05/29/q00d-55-80-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1875')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1875', N'Sony Google Tivi K-50S30', N'Sony', 16690000, 14186500, 50, N'Chiếc', N'SONY', N'https://i.hoanghamobile.vn/Uploads/2024/06/11/s30-43-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1876')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1876', N'Sony Google Tivi K-55S30', N'Sony', 17990000, 15291500, 50, N'Chiếc', N'SONY', N'https://i.hoanghamobile.vn/Uploads/2024/06/11/sony-s30-65-55-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1877')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1877', N'Sony Google Tivi K-65S30', N'Sony', 21490000, 18266500, 50, N'Chiếc', N'SONY', N'https://i.hoanghamobile.vn/Uploads/2024/06/11/sony-s30-65-55-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1878')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1878', N'Panasonic Inverter 8.700 BTU (1 HP) CU/CS-XU9ZKH-8', N'Panasonic', 12890000, 10956500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/MayLanh/4741/Slider/may-lanh-panasonic-inverter-1-hp-cu-cs-xu9zkh-81-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1879')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1879', N'Panasonic Inverter 9.040 BTU (1 HP) CU/CS-PU9AKH-8', N'Panasonic', 10790000, 9171500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/MayLanh/4742/Slider/panasonic-inverter-1-hp-cu-cs-pu9akh-8top-tskt1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1880')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1880', N'Panasonic Inverter 12.000 BTU (1.5 HP) CU/CS-PU12AKH-8', N'Panasonic', 13490000, 11466500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/MayLanh/4752/Slider/panasonic-inverter-1-5-hp-cu-cs-pu12akh-81.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1881')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1881', N'LG AI DD Inverter 9 kg FV1409S4M', N'LG', 8490000, 7216500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/04/28/fv1409s4m-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1882')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1882', N'Casper 9 kg WT-9NB3', N'Casper', 3990000, 3391500, 50, N'Chiếc', N'CASPER', N'https://i.hoanghamobile.vn/Uploads/2025/04/28/wt9nb3-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1883')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1883', N'Casper Inverter 9.5 kg WF-95VG5', N'Casper', 5790000, 4921500, 50, N'Chiếc', N'CASPER', N'https://i.hoanghamobile.vn/Uploads/2025/04/28/wf95vg5-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1884')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1884', N'Casper Inverter 10.5 kg WF-105VG5', N'Casper', 5890000, 5006500, 50, N'Chiếc', N'CASPER', N'https://i.hoanghamobile.vn/Uploads/2025/04/28/wf105vg5-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1885')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1885', N'Toshiba Inverter 10 kg TW-T23BU110UWV(MG)', N'Chính hãng', 8990000, 7641500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/28/twt23bu110uwvmg-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1886')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1886', N'Toshiba Inverter 10.5 Kg TW-T23BU115UWV(MG)', N'Chính hãng', 8490000, 7216500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/28/twt23bu110uwvmg-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1887')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1887', N'Aqua 8 kg AWM8-316K(B)', N'Chính hãng', 4690000, 3986500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/28/awm8316kb-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1888')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1888', N'Aqua 10 KG AQW-U100FT.BK', N'Chính hãng', 5590000, 4751500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/28/aqwu100ftbk-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1889')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1889', N'Electrolux UltimateCare 300 Inverter 10 kg EWF1024D3WC', N'Chính hãng', 8990000, 7641500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/28/ewf1024d3wc-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1890')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1890', N'Electrolux UltimateCare 500 Inverter 9 kg EWF9023P5WC', N'Chính hãng', 8590000, 7301500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/28/ewf9023p5wc-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1891')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1891', N'Electrolux UltimateCare 500 Inverter 9 kg EWF9023P5SC', N'Chính hãng', 9390000, 7981500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/28/ewf9023p5sc-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1892')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1892', N'Electrolux UltimateCare 500 Inverter 10 kg EWF1023P5WC', N'Chính hãng', 9490000, 8066500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/28/ewf9023p5wc-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1893')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1893', N'Electrolux UltimateCare 500 Inverter 10 kg EWF1023P5SC', N'Chính hãng', 10590000, 9001500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/28/ewf9023p5sc-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1894')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1894', N'Electrolux UltimateCare 700 Inverter 10 kg EWF1043R7WC', N'Chính hãng', 12790000, 10871500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/28/ewf1043r7wc-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1895')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1895', N'Electrolux UltimateCare 700 Inverter 10 kg EWF1043R7SC', N'Chính hãng', 14490000, 12316500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/28/ewf1043r7sc-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1896')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1896', N'Electrolux UltimateCare 700 Inverter 11 kg EWF1143R7WC', N'Chính hãng', 14490000, 12316500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/28/ewf1043r7wc-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1897')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1897', N'Electrolux UltimateCare 700 Inverter 11 kg EWF1143R7SC', N'Chính hãng', 15490000, 13166500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/28/ewf1043r7sc-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1898')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1898', N'Electrolux UltimateCare 900 Inverter 11 kg EWF1142R9SC', N'Chính hãng', 17890000, 15206500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/28/ewf1142r9sc-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1899')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1899', N'Electrolux UltimateCare 700 Inverter 13 kg EWF1343R7WC', N'Chính hãng', 18190000, 15461500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/28/ewf1343r7wc-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1900')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1900', N'Electrolux UltimateCare 300 Inverter giặt 9 kg - sấy 6 kg EWW9024P3WC', N'Chính hãng', 11890000, 10106500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/28/eww9024p3wc-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1901')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1901', N'Electrolux UltimateCare 500 Inverter giặt 10 kg - sấy 7 kg EWW1023P5SC', N'Chính hãng', 14490000, 12316500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/28/eww1023p5sc-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1902')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1902', N'Electrolux UltimateCare 500 Inverter giặt 11 kg - sấy 7 kg EWW1123P5WC', N'Chính hãng', 16490000, 14016500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/28/eww1123p5wc-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1903')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1903', N'Electrolux UltimateCare 700 Inverter giặt 13 kg - sấy 9 kg EWW1343R7WC', N'Chính hãng', 20990000, 17841500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/28/eww1343r7wc-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1904')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1904', N'Máy giặt lồng ngang Inverter hơi nước 9kg màu trắng FB1209S6W', N'Chính hãng', 6490000, 5516500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/02/20/fb1209s6w-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1905')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1905', N'Máy giặt sấy Samsung giặt 11 kg - sấy 7 kg WD11T734DBX/SV', N'Samsung', 14490000, 12316500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/04/05/wd11t734dbxsv-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1906')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1906', N'Máy giặt sấy Samsung giặt 25 kg - sấy 15 kg WD25DB8995BZSV', N'Samsung', 47990000, 40791500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/04/05/wd25db8995bzsv-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1907')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1907', N'Máy giặt Samsung Inverter 13 kg WA80F13S5BSV', N'Samsung', 7990000, 6791500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/04/05/wa80f13s5bsv-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1908')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1908', N'Máy giặt Samsung Inverter 15 kg WA80F15B6BSV', N'Samsung', 10990000, 9341500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/04/05/wa80f15b6bsv-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1909')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1909', N'Máy giặt Samsung Inverter 15 kg WA80F15S5CSV', N'Samsung', 8790000, 7471500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/04/05/wa80f15s5csv-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1910')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1910', N'Máy giặt Samsung Inverter 19 kg WA80F19B9BSV', N'Samsung', 11990000, 10191500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/04/05/wa80f19b9bsv-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1911')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1911', N'Máy giặt Samsung Inverter 21 kg WA80F21B9BSV', N'Samsung', 13890000, 11806500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/04/05/wa80f21b9bsv-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1912')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1912', N'Máy giặt Samsung AI EcoBubble Inverter 12 kg WW12CG604DLBSV', N'Samsung', 10990000, 9341500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/04/05/ww12cg604dlbsv-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1913')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1913', N'Máy giặt Samsung AI EcoBubble Inverter 12 kg WW12CGP44DSBSV', N'Samsung', 11890000, 10106500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/04/05/ww12cgp44dsbsv-8.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1914')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1914', N'Máy giặt lồng ngang Inverter hơi nước 9kg màu trắng FB1209S6W1', N'Chính hãng', 6490000, 5516500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/02/20/fb1209s6w1-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1915')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1915', N'Aqua Inverter Giặt 15 kg - Sấy 10 kg AQD-AH1500H PS', N'Chính hãng', 18390000, 15631500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5438/Slider/may-giat-say-aqua-inverter-giat-15-kg-say-10-kg-aqd-ah1500h-ps-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1916')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1916', N'Aqua Inverter Giặt 13 kg - Sấy 8 kg AQD-DH1300H PS', N'Chính hãng', 18490000, 15716500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5439/Slider/may-giat-say-aqua-inverter-13-kg-aqd-dh1300h-ps-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1917')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1917', N'Panasonic Inverter 18 kg NA-FD180W3BV', N'Panasonic', 20490000, 17416500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5440/Slider/may-giat-panasonic-inverter-18-kg-na-fd180w3bv-10.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1918')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1918', N'LG Inverter 25 kg TV2725SV9J', N'LG', 15490000, 13166500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5441/Slider/may-giat-lg-ai-dd-inverter-25-kg-tv2725sv9j-hinh-thum.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1919')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1919', N'Hitachi Inverter 10 kg BD-100XGV MAG', N'Chính hãng', 15790000, 13421500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5442/Slider/may-giat-inverter-hitachi-10-kg-bd-100xgv-mag-2-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1920')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1920', N'LG Inverter 10 kg T2310VS2B', N'LG', 7290000, 6196500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5444/Slider/may-giat-lg-turbodrum-inverter-10-kg-t2310vs2b-0.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1921')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1921', N'Panasonic Inverter 13.5 kg NA-FD135X3BV', N'Panasonic', 12990000, 11041500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5445/Slider/may-giat-panasonic-inverter-13-5-kg-na-fd135x3bv.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1922')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1922', N'Tủ chăm sóc quần áo thông minh LG Styler Inverter 3 móc S3MFC', N'LG', 31490000, 26766500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5421/Slider/tu-cham-soc-quan-ao-thong-minh-lg-s3mfc-2-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1923')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1923', N'Tủ chăm sóc quần áo thông minh LG Styler Inverter 5 móc S5BOC', N'LG', 37990000, 32291500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5422/Slider/tu-cham-soc-quan-ao-thong-minh-lg-s5boc.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1924')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1924', N'Samsung Inverter 12 kg WW12CGP44DSHSV', N'Samsung', 9490000, 8066500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5425/Slider/may-giat-samsung-inverter-12-kg-ww12cgp44dshsv-1-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1925')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1925', N'Tháp giặt sấy LG Inverter Giặt 14 kg - Sấy 10 kg WT1410NHE', N'LG', 39490000, 33566500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5427/Slider/thap-giat-say-lg-wt1410nhe-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1926')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1926', N'LG Inverter 19 kg TV2519SV7J', N'LG', 11390000, 9681500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5428/Slider/may-giat-lg-ai-dd-inverter-19-kg-tv2519sv7j-thum.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1927')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1927', N'LG Inverter 15 kg TV2515DV5J', N'LG', 8790000, 7471500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5429/Slider/may-giat-lg-ai-dd-inverter-15-kg-tv2515dv5j-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1928')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1928', N'Hitachi Inverter Giặt 12 kg - Sấy 8 kg BD-D120XGV MAG', N'Chính hãng', 20490000, 17416500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5434/Slider/may-giat-say-hitachi-bd-d120xgv-mag-2-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1929')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1929', N'Hitachi Inverter 25 kg SF-250ZFVAD SS', N'Chính hãng', 17990000, 15291500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5435/Slider/may-giat-hitachi-sf-250zfvad-ss-2-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1930')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1930', N'Samsung Inverter Giặt 21 kg - Sấy 12 kg WD21B6400KV/SV', N'Samsung', 23990000, 20391500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5408/Slider/may-giat-say-samsung-inverter-21-kg-wd21b6400kv-sv-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1931')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1931', N'Hitachi Inverter 10.5 kg BD-1054HVOS', N'Chính hãng', 8490000, 7216500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5409/Slider/may-giat-hitachi-inverter-10-5-kg-bd-1054hvos-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1932')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1932', N'Hitachi Inverter Giặt 8.5 kg - Sấy 5 kg BD-D852HVOS', N'Chính hãng', 9490000, 8066500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5410/Slider/may-giat-say-hitachi-inverter-8-5-kg-bd-d852hvos-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1933')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1933', N'Samsung Inverter Giặt 12 kg - Sấy 7 kg WD12DB7B85GBSV', N'Samsung', 16490000, 14016500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5411/Slider/may-giat-say-samsung-bespoke-inverter-giat-12-kg-say-7-kg-wd12db7b85gbsv-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1934')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1934', N'Tủ chăm sóc quần áo thông minh LG Styler Inverter 5 móc S5MB', N'LG', 34990000, 29741500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5412/Slider/tu-cham-soc-quan-ao-thong-minh-lg-s5mb-2-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1935')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1935', N'Panasonic Inverter giặt 9.5 kg - sấy tiện ích 2 kg NA-V95FR1BVT', N'Panasonic', 13990000, 11891500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5414/Slider/may-giat-panasonic-inverter-95-kg-na-v95fr1bvt.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1936')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1936', N'Aqua Inverter Giặt 15 kg - Sấy 10 kg AQD-DH1500G PP', N'Chính hãng', 31900000, 27115000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5416/Slider/may-giat-say-aqua-inverter-15-kg-aqd-dh1500g-pp-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1937')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1937', N'Aqua Inverter 14 kg AQW-DR140UHT PS', N'Chính hãng', 11490000, 9766500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5389/Slider/aqua-inverter-14-kg-aqw-dr140uht-ps-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1938')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1938', N'Panasonic Inverter Giặt 10.5 kg - Sấy 6 kg NA-S056FR1BV', N'Panasonic', 15990000, 13591500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5391/Slider/say-panasonic-inverter-105-kg-na-s056fr1bv-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1939')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1939', N'Panasonic Inverter Giặt 9.5 kg - Sấy 6 kg NA-S956FR1BV', N'Panasonic', 17990000, 15291500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5392/Slider/may-giat-say-panasonic-inverter-95-kg-na-s956fr1bv1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1940')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1940', N'Samsung Inverter 11 kg WW11CGP44DSHSV', N'Samsung', 9490000, 8066500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5394/Slider/samsung-inverter-11-kg-ww11cgp44dshsv1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1941')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1941', N'Hitachi Inverter 9.5 kg BD-954HVOS', N'Chính hãng', 7890000, 6706500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5395/Slider/may-giat-hitachi-inverter-9bd-954hvos-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1942')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1942', N'Tháp giặt sấy LG Inverter Giặt 21 kg - Sấy 16 kg WT2116SHEG', N'LG', 49990000, 42491500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5404/Slider/may-giat-say-lg-inverter-21-kg-wt2116sheg-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1943')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1943', N'Tủ chăm sóc quần áo thông minh LG Styler Inverter 5 móc S5GOC', N'LG', 35890000, 30506500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5405/Slider/tu-cham-soc-quan-ao-thong-minh-lg-s5goc-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1944')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1944', N'LG Inverter Giặt 21 kg - Sấy 12 kg F2721HVRB', N'LG', 29490000, 25066500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5407/Slider/may-giat-say-lg-inverter-21-kg-f2721hvrb-den-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1945')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1945', N'Electrolux Inverter 11 kg EWF1141R9SB', N'Chính hãng', 16490000, 14016500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5383/Slider/electrolux-inverter-11-kg-ewf1141r9sb-6.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1946')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1946', N'Panasonic Inverter Giặt 10 kg - Sấy 6 kg NA-S106FC1LV', N'Panasonic', 14490000, 12316500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5384/Slider/say-panasonic-inverter-10-kg-na-s106fc1lv-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1947')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1947', N'Toshiba Inverter Giặt 12.5 kg - Sấy 8 kg TWD-BM135GF4V(MG)', N'Chính hãng', 11990000, 10191500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5386/Slider/may-giat-say-toshiba-inverter-twd-bm135gf4v-mg-2-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1948')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1948', N'Tháp giặt sấy LG Inverter Giặt 25 kg - Sấy 17 kg WT2517NHEG', N'LG', 52990000, 45041500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5388/Slider/thap-giat-say-lg-wt2517nheg-1-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1949')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1949', N'LG Inverter 10 kg FV1410S4P', N'LG', 8590000, 7301500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5373/Slider/lg-inverter-10-kg-fv1410s4p-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1950')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1950', N'LG Inverter 12 kg FV1412S3PA', N'LG', 12690000, 10786500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5374/Slider/may-giat-lg-fv1412s3pa-xam-nhat-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1951')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1951', N'Tháp giặt sấy LG Inverter Giặt 14 kg - Sấy 10 kg WT1410NHB', N'LG', 43990000, 37391500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5376/Slider/may-giat-say-lg-inverter-14-kg-wt1410nhb-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1952')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1952', N'Samsung Inverter 23 kg WA23A8377GV/SV', N'Samsung', 13890000, 11806500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5377/Slider/samsung-inverter-23-kg-wa23a8377gv-sv-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1953')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1953', N'Samsung Inverter Giặt 12 kg - Sấy 8 kg WD12BB944DGHSV', N'Samsung', 15990000, 13591500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5379/Slider/may-giat-say-samsung-wd12bb944dghsv-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1954')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1954', N'Hitachi Inverter Giặt 10.5 kg - Sấy 7 kg BD-D1054HVOS', N'Chính hãng', 9990000, 8491500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5382/Slider/may-giat-say-hitachi-inverter-10-5-kg-bd-d1054hvos-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1955')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1955', N'Samsung Inverter 14 kg WW14BB944DGHSV', N'Samsung', 14490000, 12316500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5364/Slider/may-giat-samsung-ww14bb944dghsv-1-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1956')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1956', N'Aqua Inverter 16 kg AQW-DR160UHT PS', N'Chính hãng', 10990000, 9341500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5365/Slider/may-giat-aqua-aqw-dr160uht-ps-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1957')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1957', N'Toshiba Inverter Giặt 10.5 kg - Sấy 7 kg TWD-T25BZU115MWV(MG)', N'Chính hãng', 14490000, 12316500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5366/Slider/may-giat-say-toshiba-inverter-twd-t25bzu115mwv-mg-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1958')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1958', N'Samsung Inverter 14 kg WA14CG5886BVSV', N'Samsung', 10890000, 9256500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5368/Slider/may-giat-samsung-14kg-wa14cg5886bvsv-den-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1959')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1959', N'Samsung Inverter Giặt 14 kg - Sấy 8 kg WD14BB944DGMSV', N'Samsung', 15990000, 13591500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5369/Slider/may-giat-say-samsung-wd14bb944dgmsv-1-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1960')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1960', N'LG Inverter Giặt 12 kg - Sấy 7 kg FV1412H3BA', N'LG', 14990000, 12741500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5371/Slider/may-giat-say-lg-fv1412h3ba-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1961')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1961', N'Toshiba Inverter Giặt 10.5 kg - Sấy 7 kg TWD-T21BU115UWV(MG)', N'Chính hãng', 11690000, 9936500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5372/Slider/may-giat-say-toshiba-inverter-giat-10-5-kg-say-7-kg-twd-t21bu115uwv-mg-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1962')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1962', N'Toshiba Inverter 15 kg AW-DUM1600LV(SG)', N'Chính hãng', 9390000, 7981500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5356/Slider/may-giat-toshiba-inverter-15-kg-aw-dum1600lv-sg-1-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1963')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1963', N'Panasonic Inverter giặt 9.5 kg - sấy tiện ích 2 kg NA-V95FC1LVT', N'Panasonic', 13990000, 11891500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5357/Slider/may-giat-panasonic-inverter-95-kg-na-v95fc1lvt1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1964')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1964', N'Samsung Inverter 14 kg WW14BB944DGBSV', N'Samsung', 14890000, 12656500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5358/Slider/may-giat-samsung-invertre-bespoke-ww14bb944dgbsv-1-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1965')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1965', N'LG Inverter Giặt 14 kg - Sấy 8 kg FV1414H3BA', N'LG', 16990000, 14441500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5359/Slider/may-giat-say-lg-fv1414h3ba-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1966')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1966', N'LG Inverter 17 kg TV2517SV7J', N'LG', 10990000, 9341500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5360/Slider/may-giat-lg-ai-dd-inverter-17-kg-tv2517sv7j.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1967')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1967', N'Panasonic Inverter Giặt 9 kg - Sấy 6 kg NA-S96FC1LVT', N'Panasonic', 15890000, 13506500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5361/Slider/may-giat-say-panasonic-inverter-9-kg-na-s96fc1lvt1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1968')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1968', N'Toshiba Inverter 10.5 kg TW-T25BU115MWV(MG)', N'Chính hãng', 10890000, 9256500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5362/Slider/may-giat-toshiba-tw-t25bu115mwv-mg-thum.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1969')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1969', N'Samsung Inverter 17 kg WA17CG6442BDSV', N'Samsung', 9990000, 8491500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5342/Slider/may-giat-samsung-ecobubble-inverter-17-kg-wa17cg6442bdsv-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1970')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1970', N'Aqua Inverter 12 kg AW12-B4959U1K(B)', N'Chính hãng', 10690000, 9086500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5343/Slider/aqua-12-kg-aw12-b4959u1k-b-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1971')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1971', N'Samsung Inverter 13 kg WW13T504DAB/SV', N'Samsung', 11990000, 10191500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5345/Slider/samsung-inverter-13-kg-ww13t504dab-sv.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1972')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1972', N'LG Inverter 11 kg FV1411S4WA', N'LG', 9890000, 8406500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5348/Slider/may-giat-lg-fv1411s4wa-trang-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1973')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1973', N'Samsung Inverter 12 kg WW12CGC04DABSV', N'Samsung', 8890000, 7556500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5349/Slider/may-giat-samsung-inverter-ww12cgc04dabsv-1-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1974')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1974', N'Toshiba Inverter 10.5 kg TW-T25BZU115MWV(MG)', N'Chính hãng', 11490000, 9766500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5350/Slider/may-giat-toshiba-inverter-tw-t25bzu115mwv-mg-thum.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1975')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1975', N'Aqua Inverter 15 kg AQD-A1500H PS', N'Chính hãng', 13590000, 11551500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5352/Slider/may-giat-aqua-aqd-a1500h-ps-01.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1976')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1976', N'LG Inverter 14 kg FV1414S3BA', N'LG', 14490000, 12316500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5355/Slider/may-giat-lg-fv1414s3ba-den-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1977')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1977', N'Samsung Inverter 14 kg WA14CG5745BVSV', N'Samsung', 7490000, 6366500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5330/Slider/may-giat-samsung-14kg-wa14cg5745bvsv-den-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1978')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1978', N'Aqua Inverter Giặt 10 kg - Sấy 6 kg AQD-AH1000G.PS', N'Chính hãng', 10390000, 8831500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5332/Slider/may-giat-say-aqua-inverter-10-kg-aqd-ah1000gps-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1979')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1979', N'Samsung Inverter 10 kg WW10TP44DSB/SV', N'Samsung', 8990000, 7641500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5333/Slider/samsung-10kg-ww10tp44dsb-sv-1-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1980')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1980', N'LG Inverter 10.5 kg T2350VSAB', N'LG', 7290000, 6196500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5334/Slider/230079-2-org.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1981')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1981', N'LG Inverter 10 kg FV1410S4W1', N'LG', 7890000, 6706500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5335/Slider/may-giat-lg-fv1410s4w1-fix-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1982')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1982', N'Aqua Inverter 10 kg AQD-DDW1000J BK', N'Chính hãng', 10890000, 9256500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5336/Slider/aqua-inverter-10kg-aqd-ddw1000j-bk-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1983')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1983', N'Panasonic Inverter 12.5 Kg NA-FD125V1BV', N'Panasonic', 11890000, 10106500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5339/Slider/panasonic-na-fd125v1bv-1-org.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1984')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1984', N'Samsung Inverter 10 kg WW10TA046AE/SV', N'Samsung', 8490000, 7216500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5340/Slider/samsung-inverter-10kg-ww10ta046ae-sv-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1985')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1985', N'LG Inverter 12 kg FV1412S3BA', N'LG', 12290000, 10446500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5308/Slider/may-giat-lg-fv1412s3ba-den-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1986')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1986', N'Toshiba 9 kg AW-M1000FV(MK)', N'Chính hãng', 5490000, 4666500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5309/Slider/may-giat-toshiba-9-kg-aw-m1000fv-mk-1-3.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1987')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1987', N'Samsung Inverter 9.5 kg WW95TA046AX/SV', N'Samsung', 7890000, 6706500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5314/Slider/samsung-ww95ta046ax-sv-2-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1988')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1988', N'Aqua Inverter 12 kg AW12-BP4959U1K(B)', N'Chính hãng', 9690000, 8236500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5315/Slider/may-giat-aqua-inverter-12-kg-aw12-bp4959u1k-b-1-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1989')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1989', N'Casper 7.5 kg WT-75NG1', N'Casper', 3290000, 2796500, 50, N'Chiếc', N'CASPER', N'https://i.hoanghamobile.vn/Uploads/2025/04/28/wt75ng1-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1990')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1990', N'Toshiba Inverter 9.5 kg TW-T21BU105UWV(MG)', N'Chính hãng', 7490000, 6366500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5324/Slider/may-giat-toshiba-tw-t21bu105uwv-mg-1-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1991')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1991', N'Toshiba Inverter 10.5 kg TW-T21BU115UWV(MG)', N'Chính hãng', 8490000, 7216500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5328/Slider/toshiba-inverter-105-kg-tw-t21bu115uwv-mg-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1992')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1992', N'LG Inverter 14 kg TV2514DV3B', N'LG', 9390000, 7981500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5296/Slider/may-giat-lg-inverter-14-kg-tv2514dv3b-den-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1993')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1993', N'Aqua 12 kg AQW-FR120HT BK', N'Chính hãng', 6790000, 5771500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5298/Slider/may-giat-aqua-aqw-fr120ht-bk-01.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1994')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1994', N'Toshiba Inverter 13 kg AW-DUM1400LV (MK)', N'Chính hãng', 8890000, 7556500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5299/Slider/may-giat-toshiba-aw-dum1400lv-mk-070923-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1995')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1995', N'Panasonic Inverter 9.5 Kg NA-FD95V1BRV', N'Panasonic', 9190000, 7811500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5300/Slider/panasonic-na-fd95v1brv-2-3.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1996')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1996', N'Toshiba 10 kg AW-M1100PV(MK)', N'Chính hãng', 5890000, 5006500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5301/Slider/may-giat-toshiba-10-kg-aw-m1100pv-mk-fix-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1997')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1997', N'Toshiba 8 kg AW-M905BV(MK)', N'Chính hãng', 4890000, 4156500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5303/Slider/may-giat-toshiba-8kg-aw-m905bvmk-fix-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1998')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1998', N'Panasonic Inverter 14.5 kg NA-FD290CEBV', N'Panasonic', 13490000, 11466500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5304/Slider/may-giat-panasonic-inverter-14-5-kg-na-fd290cebv.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH1999')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH1999', N'Samsung Inverter 12 kg WW12CB944DGBSV', N'Samsung', 10890000, 9256500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5305/Slider/may-giat-samsung-inverter-ww12cb944dgbsv-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2000')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2000', N'Toshiba Inverter 9.0 kg AW-DK1000FV(KK)', N'Chính hãng', 6390000, 5431500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5306/Slider/toshiba-aw-dk1000fv-kk-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2001')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2001', N'Samsung Inverter 9.5 kg WA95CG4545BDSV', N'Samsung', 5790000, 4921500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5288/Slider/may-giat-samsung-9-5kg-wa95cg4545bdsv-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2002')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2002', N'LG Inverter 10 kg FV1410S4B', N'LG', 8990000, 7641500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5290/Slider/lg-fv1410s4b-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2003')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2003', N'Panasonic Inverter giặt 10.5 kg - sấy tiện ích 2 kg NA-V105FC1LV', N'Panasonic', 12290000, 10446500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5292/Slider/panasonic-inverter-105-kg-na-v105fc1lv-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2004')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2004', N'Aqua Inverter 10 kg AQW-DR100JT BK', N'Chính hãng', 6290000, 5346500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5293/Slider/aqua-inverter-10-kg-aqw-dr100ujt-bk-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2005')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2005', N'Toshiba Inverter 10 kg TW-T21BU110UWV(MG)', N'Chính hãng', 8590000, 7301500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5294/Slider/toshiba-inverter-10-kg-tw-t21bu110uwv-mg-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2006')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2006', N'Panasonic Inverter 9.5 kg NA-FD95X1LRV', N'Panasonic', 8490000, 7216500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5295/Slider/panasonic-95kg-na-fd95x1lrv-1-1-org.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2007')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2007', N'Aqua Inverter 11 kg AW11-B4959U1K(B)', N'Chính hãng', 9290000, 7896500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5280/Slider/aqua-11-kg-aw11-b4959u1k-b-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2008')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2008', N'Panasonic 9 Kg NA-F90A9BRV', N'Panasonic', 6990000, 5941500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5281/Slider/panasonic-9-kg-na-f90a9brv-1-1-org.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2009')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2009', N'Toshiba Inverter 12 kg AW-DUK1300KV (MK)', N'Chính hãng', 7790000, 6621500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5282/Slider/may-giat-toshiba-aw-duk1300kv-mk-070923-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2010')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2010', N'Toshiba Inverter 10 kg AW-DM1100PV(KK)', N'Chính hãng', 6890000, 5856500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5283/Slider/toshiba-inverter-10kg-aw-dm1100pv-kk-fix-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2011')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2011', N'Panasonic Inverter 10.5 Kg NA-FD10VR1BV', N'Panasonic', 9490000, 8066500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5284/Slider/may-giat-panasonic-na-fd10vr1bv-1-2-org.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2012')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2012', N'Aqua Inverter 9.5 kg AQD-A952J BK', N'Chính hãng', 6790000, 5771500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5274/Slider/may-giat-aqua-inverter-9-5-kg-aqd-a952j-bk-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2013')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2013', N'LG Inverter 12 kg FV1412S3B', N'LG', 9990000, 8491500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5275/Slider/may-giat-lg-fv1412s3ba-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2014')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2014', N'Panasonic Inverter 11.5 Kg NA-FD11AR1BV', N'Panasonic', 9290000, 7896500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5276/Slider/panasonic-na-fd11ar1bv-1-3-org.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2015')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2015', N'Panasonic 10 Kg NA-F100A9BRV', N'Panasonic', 8090000, 6876500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5278/Slider/panasonic-10-kg-na-f100a9brv-1-1-org-1-org.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2016')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2016', N'Aqua 10 KG AQW-F100GT.BK', N'Chính hãng', 5990000, 5091500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5279/Slider/aqua-10-kg-aqw-f100gtbk-1-org.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2017')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2017', N'LG Inverter 10 kg FV1410S4M1', N'LG', 8890000, 7556500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5269/Slider/may-giat-lg-fv1410s4m1-fix-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2018')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2018', N'Samsung Inverter 12 kg WA12CG5745BVSV', N'Samsung', 7490000, 6366500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5271/Slider/may-giat-samsung-12kg-wa12cg5745bvsv-2-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2019')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2019', N'Aqua Inverter 8.5 kg AQD-A852J BK', N'Chính hãng', 6090000, 5176500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5272/Slider/may-giat-aqua-inverter-85-kg-aqd-a852j-bk-01.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2020')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2020', N'Panasonic Inverter 10.5 Kg NA-FD10AR1BV', N'Panasonic', 10490000, 8916500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5273/Slider/panasonic-na-fd10ar1bv-1-3-org.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2021')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2021', N'Aqua Inverter 12 kg AQW-DR120HT BK', N'Chính hãng', 7890000, 6706500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5260/Slider/may-giat-aqua-aqw-dr120ht-bk-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2022')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2022', N'Samsung Inverter 9 kg WW90T634DLN/SV', N'Samsung', 8190000, 6961500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5261/Slider/may-giat-samsung-inverter-9-kg-ww90t634dln-sv-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2023')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2023', N'LG Inverter 9 kg FB1209S6M', N'LG', 7390000, 6281500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5263/Slider/lg-ai-dd-inverter-9-kg-fb1209s6m-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2024')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2024', N'Samsung Inverter 9kg WW90TP44DSB/SV', N'Samsung', 8990000, 7641500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5264/Slider/samsung-9kg-ww90tp44dsb-sv-1-org.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2025')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2025', N'Panasonic 8.2 kg NA-F82Y01DRV', N'Panasonic', 4990000, 4241500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5267/Slider/panasonic-82-kg-na-f82y01drv1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2026')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2026', N'Panasonic 8.5 Kg NA-F85A9BRV', N'Panasonic', 5990000, 5091500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/MayGiat/5268/Slider/panasonic-85-kg-na-f85a9brv-2-org.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2027')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2027', N'Panasonic Inverter 11.900 BTU (1.5 HP) CU/CS-XU12ZKH-8', N'Panasonic', 16490000, 14016500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/MayLanh/4768/Slider/may-lanh-panasonic-inverter-15-hp-cu-cs-xu12zkh-81-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2028')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2028', N'Panasonic Inverter 12.000 BTU (1.5 HP) CU/CS-RU12AKH-8', N'Panasonic', 12490000, 10616500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/2025/04/16/csru9akh8.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2029')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2029', N'TCL Inverter T-Pro 12.000 BTU (1.5 HP) TAC-13CSD/TPG21', N'TCL', 5890000, 5006500, 50, N'Chiếc', N'TCL', N'https://i.hoanghamobile.vn/Uploads/2025/05/05/tac13csdtpg21-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2030')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2030', N'LG DUALCOOL Inverter 9.300 BTU (1 HP) IEC09M1', N'LG', 7990000, 6791500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/05/08/iec09m1n-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2031')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2031', N'Comfee Inverter 9.350 BTU (1 HP) CFS-10VGPF', N'Chính hãng', 5790000, 4921500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/05/17/cfs10vgpf-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2032')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2032', N'Điều hòa Casper Inverter PrimeAir 9.500 BTU (1 HP) QC-09IU36A', N'Casper', 6490000, 5516500, 50, N'Chiếc', N'CASPER', N'https://i.hoanghamobile.vn/Uploads/2025/08/07/ava-qc-iu36.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2033')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2033', N'Điều hòa Casper Inverter PrimeAir 12.200 BTU (1.5 HP) QC-12IU36A', N'Casper', 6990000, 5941500, 50, N'Chiếc', N'CASPER', N'https://i.hoanghamobile.vn/Uploads/2025/08/07/ava-qc-iu36.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2034')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2034', N'Điều hòa Casper 2 chiều PrimeAir Inverter 10.000 BTU (1 HP) QH-09IU36A', N'Casper', 7490000, 6366500, 50, N'Chiếc', N'CASPER', N'https://i.hoanghamobile.vn/Uploads/2025/08/07/qh09iu36a-4.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2035')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2035', N'Điều hòa Casper 2 chiều PrimeAir Inverter 12.000 BTU (1.5 HP) QH-12IU36A', N'Casper', 8290000, 7046500, 50, N'Chiếc', N'CASPER', N'https://i.hoanghamobile.vn/Uploads/2025/08/07/qh09iu36a-4.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2036')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2036', N'Điều hòa Casper Inverter ProAir 9.250 BTU (1 HP) JC-09IU36', N'Casper', 5690000, 4836500, 50, N'Chiếc', N'CASPER', N'https://i.hoanghamobile.vn/Uploads/2025/08/07/ava-jc09-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2037')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2037', N'Điều hòa Casper Inverter ProAir 12.000 BTU (1.5 HP) JC-12IU36', N'Casper', 6790000, 5771500, 50, N'Chiếc', N'CASPER', N'https://i.hoanghamobile.vn/Uploads/2025/08/07/ava-jc09-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2038')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2038', N'Điều hòa Xiaomi Mijia Pro Eco Inverter 12.500 BTU (1.5 HP) ASC-12W/N1C5-VN', N'Xiaomi', 11490000, 9766500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2025/09/30/xiaomi-asc-12w-n1c5-vn-7.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2039')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2039', N'Điều hòa Panasonic Inverter (1 HP) CU/CS-XU9BKH-8', N'Panasonic', 12890000, 10956500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/2025/10/24/panasonic-inverter-1-hp-cu-cs-xu9bkh-5.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2040')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2040', N'Điều hoà Aux Inverter 9000 BTU (1 HP) AW10CAA4DI-3VN', N'Chính hãng', 5090000, 4326500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/11/18/aw10caa4di-3vn.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2041')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2041', N'Điều hoà Aux Inverter 12000 BTU (1.5 HP) AW13CAA4DI-3VN', N'Chính hãng', 6090000, 5176500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/11/18/aw13caa4di-3vn-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2042')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2042', N'Điều hoà Aux Inverter 18000 BTU (2 HP) AW18CAA4DI-5VN', N'Chính hãng', 11090000, 9426500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/11/18/aw18caa4di-5vn-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2043')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2043', N'Điều hoà Aux Inverter 24000 BTU (2.5 HP) AW24CAA4DI-3VN', N'Chính hãng', 13490000, 11466500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/11/18/aw18caa4di-5vn-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2044')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2044', N'Aqua Inverter 9.000 BTU (1 HP) AQA-RV10QC2N', N'Chính hãng', 5790000, 4921500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/16/aqarv10qc2n-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2045')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2045', N'Aqua Inverter 12.500 BTU (1.5 HP) AQA-RV13QC2N', N'Chính hãng', 6990000, 5941500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/16/aqarv10qc2n-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2046')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2046', N'Aqua Inverter 17.500 BTU (2 HP) AQA-RV18QAN', N'Chính hãng', 10990000, 9341500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/16/aqarv18qan-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2047')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2047', N'Comfee 9.000 BTU (1 HP) CFS-10FWFF-V', N'Chính hãng', 4690000, 3986500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/16/cfs10fwf-13.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2048')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2048', N'Comfee 12.000 BTU (1.5 HP) CFS-13FWFF-V', N'Chính hãng', 5690000, 4836500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/16/cfs10fwf-13.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2049')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2049', N'Comfee Inverter 9.000 BTU (1 HP) CFS-10VAF', N'Chính hãng', 5690000, 4836500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/16/cfs10vaf-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2050')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2050', N'Comfee Inverter 12.000 BTU (1.5 HP) CFS-13VAF', N'Chính hãng', 6690000, 5686500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/16/cfs10vaf-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2051')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2051', N'Comfee Inverter 17.500 BTU (2 HP) CFS-18VAF', N'Chính hãng', 9900000, 8415000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/16/cfs10vaf-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2052')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2052', N'Midea 9.000 BTU (1 HP) MSAFII-10CRN8', N'Midea', 4590000, 3901500, 50, N'Chiếc', N'MIDEA', N'https://i.hoanghamobile.vn/Uploads/2025/04/16/msafii10crn8-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2053')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2053', N'Midea 12.000 BTU (1.5 HP) MSAFII-13CRN8', N'Midea', 5690000, 4836500, 50, N'Chiếc', N'MIDEA', N'https://i.hoanghamobile.vn/Uploads/2025/04/16/msafii10crn8-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2054')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2054', N'Midea Inverter 9.000 BTU (1 HP) MSAF6-10CDN8', N'Midea', 5490000, 4666500, 50, N'Chiếc', N'MIDEA', N'https://i.hoanghamobile.vn/Uploads/2025/04/16/msaf610cdn8-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2055')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2055', N'Midea Inverter 18.000 BTU (2 HP) MSAGA-18CRDN8', N'Midea', 10990000, 9341500, 50, N'Chiếc', N'MIDEA', N'https://i.hoanghamobile.vn/Uploads/2025/04/16/msaga18crdn8-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2056')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2056', N'LG Inverter 9.000 BTU (1 HP) IEC09G1', N'LG', 7190000, 6111500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/04/16/iec09g1n-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2057')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2057', N'LG Inverter 12.000 BTU (1.5 HP) IEC12G1', N'LG', 8790000, 7471500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/04/16/iec12g1n-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2058')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2058', N'LG Inverter 18.000 BTU (2 HP) IEC18G1', N'LG', 12790000, 10871500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/04/16/iec18g1n-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2059')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2059', N'Nagakawa Inverter 9.000 BTU (1 HP) NIS-C09R2U51', N'Chính hãng', 4990000, 4241500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/16/nisc09r2u51-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2060')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2060', N'Nagakawa Inverter 12.000 BTU (1.5 HP) NIS-C12R2U51', N'Chính hãng', 6290000, 5346500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/16/nisc09r2u51-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2061')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2061', N'Nagakawa 9.000 BTU (1 HP) NS-C09R2T30', N'Chính hãng', 4490000, 3816500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/16/nsc09r2t30-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2062')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2062', N'Nagakawa 12.000 BTU (1.5 HP) NS-C12R2T30', N'Chính hãng', 5590000, 4751500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/16/nsc12r2t30-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2063')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2063', N'Nagakawa 18.000 BTU (2 HP) NS-C18R2T30', N'Chính hãng', 9990000, 8491500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/16/nsc18r2t30-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2064')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2064', N'Nagakawa 9.000 BTU (1 HP) NS-C09R2B52', N'Chính hãng', 4290000, 3646500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/16/nsc09r2b52-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2065')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2065', N'Nagakawa 18.000 BTU (2 HP) NS-C18R2B52', N'Chính hãng', 8990000, 7641500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/16/nsc09r2b52-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2066')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2066', N'Daikin Inverter 9.000 BTU (1 HP) FTKB25YVMV', N'Chính hãng', 8990000, 7641500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/16/ftkb25yvmv-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2067')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2067', N'Daikin Inverter 12.000 BTU (1.5 HP) FTKB35YVMV', N'Chính hãng', 11490000, 9766500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/16/ftkb25yvmv-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2068')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2068', N'Daikin Inverter 9.000 BTU (1 HP) FTKB25ZVMV', N'Chính hãng', 8590000, 7301500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/16/ftkb25zvmv-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2069')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2069', N'Daikin Inverter 12.000 BTU (1.5 HP) FTKB35ZVMV', N'Chính hãng', 10690000, 9086500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/16/ftkb25zvmv-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2070')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2070', N'Daikin Inverter 18.000 BTU (2 HP) FTKB50ZVMV', N'Chính hãng', 16990000, 14441500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/16/ftkb25zvmv-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2071')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2071', N'Daikin Inverter 9.000 BTU (1 HP) FTKF25ZVMV', N'Chính hãng', 10290000, 8746500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/16/ftkf25zvmv-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2072')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2072', N'Daikin Inverter 12.000 BTU (1.5 HP) FTKF35ZVMV', N'Chính hãng', 13490000, 11466500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/16/ftkf25zvmv-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2073')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2073', N'Daikin 9.000 BTU (1 HP) FTF25XAV1V', N'Chính hãng', 6990000, 5941500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/16/ftf25xav1v-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2074')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2074', N'Panasonic Inverter 9.000 BTU (1 HP) CU/CS-RU9AKH-8', N'Panasonic', 10490000, 8916500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/2025/04/16/csru9akh8.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2075')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2075', N'Điều hòa Comfee Inverter 24.000 BTU (2.5 HP) CFS-25VGPF', N'Chính hãng', 13490000, 11466500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/07/01/cfs25vgpf-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2076')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2076', N'Điều hòa Casper 9.000 BTU (1 HP) SC-09FB36A', N'Casper', 4890000, 4156500, 50, N'Chiếc', N'CASPER', N'https://i.hoanghamobile.vn/Uploads/2025/07/03/sc09fb36-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2077')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2077', N'Điều hòa Nagakawa Inverter 24.000 BTU 1 chiều (2.5 HP) NIS-C24R2T30', N'Chính hãng', 13690000, 11636500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/10/nagakawa-inverter-c24r2t30-1-115620113.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2078')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2078', N'Điều hòa Nagakawa 24000BTU 1 chiều NS-C24R2U86', N'Chính hãng', 12200000, 10370000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/10/ns-c24r2u86-144342203.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2079')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2079', N'TCL Inverter Elite Pro 12.600 BTU (1.5 HP) TEP-13CSD/F1I', N'TCL', 5990000, 5091500, 50, N'Chiếc', N'TCL', N'https://i.hoanghamobile.vn/Uploads/2026/04/22/tcl-elite-pro-12.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2080')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2080', N'TCL Inverter Elite Pro 18.000 BTU (2 HP) TEP-18CSD/F1I', N'TCL', 8990000, 7641500, 50, N'Chiếc', N'TCL', N'https://i.hoanghamobile.vn/Uploads/2026/04/22/tcl-elite-pro-12.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2081')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2081', N'Funiki 2 chiều Inverter 24.000BTU (2.5 HP) HIH24TMU', N'Chính hãng', 15490000, 13166500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/07/18/hic12tmu-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2082')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2082', N'Funiki 2 chiều 18.000BTU (2 HP) HSH18TMU', N'Chính hãng', 10690000, 9086500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/07/18/hic12tmu-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2083')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2083', N'Funiki 2 chiều 24.000BTU (2.5 HP) HSH24TMU', N'Chính hãng', 14590000, 12401500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/07/18/hic12tmu-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2084')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2084', N'Funiki 2 chiều Inverter 18.000BTU (2 HP) HIH18TMU', N'Chính hãng', 13690000, 11636500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/07/18/hic12tmu-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2085')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2085', N'Funiki 2 chiều 12.000BTU (1.5 HP) HSH12TMU', N'Chính hãng', 6690000, 5686500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/07/18/hic12tmu-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2086')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2086', N'Funiki 2 chiều Inverter 12.000BTU (1.5 HP) HIH12TMU', N'Chính hãng', 8990000, 7641500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/07/18/hic12tmu-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2087')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2087', N'Funiki Inverter 24.000BTU (2.5 HP) HIC24TMU', N'Chính hãng', 14490000, 12316500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/07/18/hic12tmu-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2088')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2088', N'Funiki 2 chiều Inverter 9.000BTU (1 HP) HIH09TMU', N'Chính hãng', 7390000, 6281500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/07/18/hic12tmu-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2089')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2089', N'Funiki Inverter 18.000BTU (2 HP) HIC18TMU', N'Chính hãng', 11490000, 9766500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/07/18/hic12tmu-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2090')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2090', N'Funiki Inverter 12.000BTU (1.5 HP) HIC12TMU', N'Chính hãng', 6690000, 5686500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/07/18/hic12tmu-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2091')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2091', N'Funiki 2 chiều 10.000BTU (1 HP) HSH10TMU', N'Chính hãng', 5790000, 4921500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/07/18/hic12tmu-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2092')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2092', N'Funiki Inverter 9.000BTU (1 HP) HIC09TMU', N'Chính hãng', 5590000, 4751500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/07/18/hic09tmu-7.gif', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2093')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2093', N'Funiki 24.000BTU (2.5 HP) HSC24TMU', N'Chính hãng', 13490000, 11466500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/07/17/hsc09tmu-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2094')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2094', N'Funiki 18.000BTU (2 HP) HSC18TMU', N'Chính hãng', 8990000, 7641500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/07/17/hsc09tmu-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2095')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2095', N'Funiki 12.000BTU (1.5 HP) HSC12TMU', N'Chính hãng', 5790000, 4921500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/07/17/hsc09tmu-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2096')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2096', N'Funiki 9.000BTU (1 HP) HSC09TMU', N'Chính hãng', 4690000, 3986500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/07/17/hsc09tmu-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2097')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2097', N'Toshiba Inverter 18.000 BTU (2 HP) RAS-H18E2KCVG-V', N'Chính hãng', 18900000, 16065000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayLanh/4892/Slider/toshiba-inverter-2-hp-ras-h18e2kcvg-v-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2098')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2098', N'Toshiba Inverter 20.400 BTU (2.5 HP) RAS-H24E2KCVG-V', N'Chính hãng', 23650000, 20102500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayLanh/4893/Slider/toshiba-inverter-2-5-hp-ras-h24e2kcvg-v-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2099')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2099', N'Toshiba Inverter 12.200 BTU (1.5 HP) RAS-H13E2KCVG-V', N'Chính hãng', 12990000, 11041500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayLanh/4891/Slider/toshiba-inverter-1-5-hp-ras-h13e2kcvg-v-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2100')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2100', N'Daikin 2 chiều Inverter 17.100 BTU (2 HP) FTHF50VAVMV', N'Chính hãng', 22390000, 19031500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayLanh/4849/Slider/may-lanh-daikin-inverter-2-hp-fthf50vavmv-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2101')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2101', N'Casper Inverter 12.000 BTU (1.5 HP) TC-12IS36', N'Casper', 6290000, 5346500, 50, N'Chiếc', N'CASPER', N'https://i.hoanghamobile.vn/Uploads/MayLanh/4883/Slider/casper-inverter-1-5-hp-tc-12is36-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2102')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2102', N'Casper Inverter 12.200 BTU (1.5 HP) QC-12IS36', N'Casper', 6290000, 5346500, 50, N'Chiếc', N'CASPER', N'https://i.hoanghamobile.vn/Uploads/MayLanh/4841/Slider/casper-inverter-15-hp-qc-12is36-1-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2103')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2103', N'Toshiba Inverter 20.400 BTU (2.5 HP) RAS-H24S4KCV2G-V', N'Chính hãng', 19990000, 16991500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayLanh/4848/Slider/toshiba-inverter-2-5-hp-ras-h24s4kcv2g-v-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2104')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2104', N'LG 2 chiều Inverter 12.000 BTU (1.5 HP) B13END1', N'LG', 12990000, 11041500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/MayLanh/4830/Slider/2-chieu-lg-inverter-15-hp-b13end1-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2105')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2105', N'Casper Inverter 9.500 BTU (1 HP) QC-09IS36', N'Casper', 5690000, 4836500, 50, N'Chiếc', N'CASPER', N'https://i.hoanghamobile.vn/Uploads/MayLanh/4828/Slider/casper-inverter-1-hp-qc-09is36-1-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2106')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2106', N'Casper Inverter 18.800 BTU (2 HP) TC-18IS36', N'Casper', 10490000, 8916500, 50, N'Chiếc', N'CASPER', N'https://i.hoanghamobile.vn/Uploads/MayLanh/4811/Slider/casper-inverter-2-hp-tc-18is36-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2107')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2107', N'TCL Inverter 24.000 BTU (2.5 HP) TAC-24CSD/XAB1I', N'TCL', 12340000, 10489000, 50, N'Chiếc', N'TCL', N'https://i.hoanghamobile.vn/Uploads/MayLanh/4812/Slider/tcl-inverter-2-5-hp-tac-24csd-xab1i-1-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2108')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2108', N'Toshiba Inverter 9.000 BTU (1 HP) RAS-H10E2KCVG-V', N'Chính hãng', 10790000, 9171500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayLanh/4809/Slider/toshiba-ras-h10e2kcvg-v-1-1-org.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2109')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2109', N'Casper Inverter 21.500 BTU (2.5 HP) GC-24IS35', N'Casper', 14990000, 12741500, 50, N'Chiếc', N'CASPER', N'https://i.hoanghamobile.vn/Uploads/MayLanh/4803/Slider/casper-inverter-25-hp-gc-24is35-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2110')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2110', N'Sharp Inverter 12.000 BTU (1.5 HP) AH-XP13BSW', N'Sharp', 10790000, 9171500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/MayLanh/4806/Slider/sharp-inverter-1-5-hp-ah-xp13bsw-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2111')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2111', N'Toshiba Inverter 17.000 BTU (2 HP) RAS-H18S4KCV2G-V', N'Chính hãng', 15990000, 13591500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayLanh/4799/Slider/toshiba-inverter-2-hp-ras-h18s4kcv2g-v-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2112')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2112', N'Sharp Inverter 18.000 BTU (2 HP) AH-XP18BSW', N'Sharp', 15490000, 13166500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/MayLanh/4802/Slider/sharp-inverter-2-hp-ah-xp18bsw-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2113')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2113', N'TCL Inverter 17.400 BTU (2 HP) TAC-18CSD/XAB1I', N'TCL', 8990000, 7641500, 50, N'Chiếc', N'TCL', N'https://i.hoanghamobile.vn/Uploads/MayLanh/4794/Slider/tcl-inverter-2-hp-tac-18csd-xab1i1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2114')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2114', N'Sharp Inverter 18.000 BTU (2 HP) AH-X18ZEW', N'Sharp', 12790000, 10871500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/MayLanh/4793/Slider/may-lanh-sharp-inverter-2-hp-ah-x18zew1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2115')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2115', N'Sharp Inverter 9.000 BTU (1 HP) AH-XP10BSW', N'Sharp', 9690000, 8236500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/MayLanh/4785/Slider/sharp-inverter-1hp-ah-xp10bsw-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2116')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2116', N'Aqua Inverter 17.500 BTU (2 HP) AQA-RV18QE', N'Chính hãng', 10990000, 9341500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayLanh/4783/Slider/aqua-inverter-2-hp-aqa-rv18qe-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2117')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2117', N'Casper Inverter 18.500 BTU (2 HP) GC-18IS33', N'Casper', 11990000, 10191500, 50, N'Chiếc', N'CASPER', N'https://i.hoanghamobile.vn/Uploads/MayLanh/4769/Slider/casper-inverter-2-hp-gc-18is33-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2118')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2118', N'Casper Inverter 9.300 BTU (1 HP) GC-09IS35', N'Casper', 5290000, 4496500, 50, N'Chiếc', N'CASPER', N'https://i.hoanghamobile.vn/Uploads/MayLanh/4766/Slider/may-lanh-casper-inverter-1-hp-gc-09is351-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2119')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2119', N'TCL Inverter 12.000 BTU (1.5 HP) TAC-13CSD/XAB1I', N'TCL', 5690000, 4836500, 50, N'Chiếc', N'TCL', N'https://i.hoanghamobile.vn/Uploads/MayLanh/4765/Slider/tcl-inverter-15-hp-tac-13csd-xab1i1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2120')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2120', N'Casper Inverter 9.000 BTU (1 HP) TC-09IS35', N'Casper', 5490000, 4666500, 50, N'Chiếc', N'CASPER', N'https://i.hoanghamobile.vn/Uploads/MayLanh/4757/Slider/casper-tc-09is35-2-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2121')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2121', N'Casper Inverter 12.000 BTU (1.5 HP) GC-12IS35', N'Casper', 6190000, 5261500, 50, N'Chiếc', N'CASPER', N'https://i.hoanghamobile.vn/Uploads/MayLanh/4760/Slider/casper-inverter-15-hp-gc-12is35-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2122')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2122', N'Toshiba Inverter 12.000 BTU (1.5 HP) RAS-H13Z1KCVG-V', N'Chính hãng', 10990000, 9341500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayLanh/4753/Slider/may-lanh-toshiba-inverter-15-hp-ras-h13z1kcvg-v2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2123')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2123', N'Toshiba Inverter 9.000 BTU (1 HP) RAS-H10Z1KCVG-V', N'Chính hãng', 8790000, 7471500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/MayLanh/4747/Slider/may-lanh-toshiba-inverter-1-hp-ras-h10z1kcvg-v1-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2124')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2124', N'Sharp Inverter 12.000 BTU (1.5 HP) AH-X13ZEW', N'Sharp', 9190000, 7811500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/MayLanh/4745/Slider/may-lanh-sharp-inverter-15-hp-ah-x13zew2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2125')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2125', N'Sharp Inverter 9.000 BTU (1 HP) AH-X10ZEW', N'Sharp', 8190000, 6961500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/MayLanh/4744/Slider/may-lanh-sharp-inverter-1-hp-ah-x10zew1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2126')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2126', N'Funiki Inverter 185 lít HR T8185TDG', N'Chính hãng', 4790000, 4071500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/26/hrt8185tdg-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2127')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2127', N'Funiki Inverter 209 lít HR T8209TDG', N'Chính hãng', 4990000, 4241500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/26/hrt8209tdg-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2128')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2128', N'Funiki cánh kính Inverter 286 lít HR T8286GB', N'Chính hãng', 5990000, 5091500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/26/hrt8286gb-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2129')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2129', N'Tủ lạnh Aqua 130 lít AQR-T160FA(BS)', N'Chính hãng', 4590000, 3901500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/09/22/aqr-t160fa-right.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2130')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2130', N'Tủ lạnh Multi Door Xiaomi Mijia Inverter 510 lít MRC51HMPAVN', N'Xiaomi', 15990000, 13591500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2025/09/30/xiaomi-mijia-mrc51hmpavn.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2131')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2131', N'Tủ lạnh Casper Inverter EcoFresh 432 lít Multi Door RM-E432PBS', N'Casper', 10590000, 9001500, 50, N'Chiếc', N'CASPER', N'https://i.hoanghamobile.vn/Uploads/2026/01/07/e432.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2132')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2132', N'Tủ lạnh Casper Inverter ProFresh 430 lít Multi Door RM-D430GBS', N'Casper', 11790000, 10021500, 50, N'Chiếc', N'CASPER', N'https://i.hoanghamobile.vn/Uploads/2026/01/07/ava-1-rm430gbs.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2133')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2133', N'Tủ lạnh Casper Inverter ProFresh 540 lít Multi Door RM-D540SBS', N'Casper', 11490000, 9766500, 50, N'Chiếc', N'CASPER', N'https://i.hoanghamobile.vn/Uploads/2026/01/07/d540.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2134')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2134', N'Tủ lạnh Casper Inverter 460 lít Side by Side RS-D462SBS', N'Casper', 9990000, 8491500, 50, N'Chiếc', N'CASPER', N'https://i.hoanghamobile.vn/Uploads/2026/01/07/rs-d462sbs-ava.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2135')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2135', N'Tủ lạnh Casper Inverter 530 lít Side by Side RS-D530SBS', N'Casper', 11490000, 9766500, 50, N'Chiếc', N'CASPER', N'https://i.hoanghamobile.vn/Uploads/2026/01/07/rs-d530sbs-2-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2136')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2136', N'Tủ lạnh Samsung Inverter 636 lít Multi Door Bespoke RF65DB990012SV', N'Samsung', 78990000, 67141500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/04/05/rf65db990012sv-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2137')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2137', N'Tủ lạnh Samsung Inverter 583 lít Side By Side RS57DG400EM9SV', N'Samsung', 13490000, 11466500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/04/05/rs57dg400em9sv-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2138')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2138', N'Tủ lạnh Samsung Inverter 578 lít Side By Side RS57DG410EB4SV', N'Samsung', 16790000, 14271500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/04/05/rs57dg410eb4sv-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2139')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2139', N'Tủ lạnh Samsung Inverter 635 lít Side By Side RS70F65K2FSV', N'Samsung', 23590000, 20051500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/04/05/rs70f65k2fsv-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2140')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2140', N'Tủ lạnh Samsung Inverter 655 lít Side By Side RS70F65Q3FSV', N'Samsung', 15390000, 13081500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/04/05/rs70f65q3fsv-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2141')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2141', N'Tủ lạnh Samsung Inverter 655 lít Side By Side RS70F65Q3TSV', N'Samsung', 14990000, 12741500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/04/05/rs70f65q3tsv-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2142')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2142', N'Tủ lạnh Samsung Inverter 634 lít Side By Side RS80F65J2BSV', N'Samsung', 32990000, 28041500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/04/05/rs80f65j2bsv-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2143')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2143', N'Tủ lạnh Samsung Inverter 615 lít Side By Side RS90F65D2FSV', N'Samsung', 35490000, 30166500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/04/05/rs90f65d2fsv-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2144')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2144', N'Funiki 74 lít FR-71DSU', N'Chính hãng', 2590000, 2201500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/26/fr71dsu-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2145')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2145', N'Funiki 46 lít FR-51DSU', N'Chính hãng', 2390000, 2031500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/26/fr51dsu-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2146')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2146', N'Funiki Mini cánh kính 46 lít HR-S646GB', N'Chính hãng', 2690000, 2286500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/26/hrs646gb-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2147')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2147', N'Funiki Mini cánh kính 90 lít HR-S690GB', N'Chính hãng', 2990000, 2541500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/26/hrs690gb-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2148')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2148', N'Funiki 126 lít FR-132CI.1', N'Chính hãng', 3890000, 3306500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/26/fr132ci1-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2149')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2149', N'Funiki 147 lít FR-152CI.1', N'Chính hãng', 4090000, 3476500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/26/fr152ci1-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2150')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2150', N'Funiki 130 lít FR-135CD.1', N'Chính hãng', 3490000, 2966500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/26/fr135cd1-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2151')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2151', N'Funiki 185 lít HR T6185TDG', N'Chính hãng', 4590000, 3901500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/26/hrt6185tdg-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2152')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2152', N'Tủ lạnh LG 217 lít LTB21SVMD', N'LG', 6990000, 5941500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/09/15/ltb21svmd-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2153')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2153', N'Tủ lạnh LG Inverter 266 lít LTB26BLM', N'LG', 6190000, 5261500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/09/15/ltb26blm-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2154')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2154', N'Tủ lạnh LG Inverter 374 lít LTD37BLM', N'LG', 9490000, 8066500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/09/15/ltd37blm-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2155')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2155', N'Tủ lạnh LG Inverter 474 lít Multi Door LFB47SVM', N'LG', 13390000, 11381500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/09/15/lfb47svm-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2156')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2156', N'Tủ lạnh Aqua 90 lít AQR-D100FA(BS)', N'Chính hãng', 3190000, 2711500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/01/27/aqrd100fabs-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2157')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2157', N'Tủ lạnh Funiki 120 lít FR-125CI.1', N'Chính hãng', 3790000, 3221500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/12/24/fr-125ci-1-01.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2158')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2158', N'Tủ lạnh Electrolux Inverter 308 lít EBB3462K-H', N'Chính hãng', 10390000, 8831500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/12/25/ebb3462k-h-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2159')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2159', N'Tủ lạnh Hitachi Inverter 540 lít Multi Door R-FW690PGV7X (GBK)', N'Chính hãng', 25990000, 22091500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/02/28/vnr-fw690pgv7x-01.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2160')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2160', N'Tủ lạnh LG Side by Side 641L LSI63BLMA', N'LG', 20000000, 17000000, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2026/08/24/lg-side-by-side-641l-lsi63blma-1-152143079.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2161')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2161', N'Tủ lạnh Funiki 90 lít FR-91DSU', N'Chính hãng', 2690000, 2286500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/25/tu-lanh-funiki-90-lit-fr-91dsu-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2162')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2162', N'LG Inverter 334 lít LTD33BLM', N'LG', 9290000, 7896500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5258/Slider/tu-lanh-lg-inverter-334-lit-ltd33blm-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2163')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2163', N'Aqua Inverter 328 lít AQR-T380FA(SL)', N'Chính hãng', 7690000, 6536500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5256/Slider/tu-lanh-aqua-inverter-328-lit-aqr-t380fa-sl-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2164')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2164', N'LG Inverter 314 lít LTD31BLM', N'LG', 9890000, 8406500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5257/Slider/tu-lanh-lg-inverter-314-lit-ltd31blm-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2165')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2165', N'Aqua Inverter 358 lít AQR-T410FA(WGB)', N'Chính hãng', 9390000, 7981500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5253/Slider/tu-lanh-aqua-inverter-358-lit-aqr-t410fa-wgb-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2166')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2166', N'Aqua Inverter 358 lít AQR-T410FA(SL)', N'Chính hãng', 7990000, 6791500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5254/Slider/tu-lanh-aqua-inverter-358-lit-aqr-t410fa-sl-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2167')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2167', N'Aqua Inverter 328 lít AQR-T380FA(WGB)', N'Chính hãng', 8990000, 7641500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5255/Slider/tu-lanh-aqua-inverter-328-lit-aqr-t380fa-wgb-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2168')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2168', N'LG Inverter 459 lít LTD46SVMA', N'LG', 11690000, 9936500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5250/Slider/tu-lanh-lg-ltd46svma-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2169')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2169', N'Aqua Inverter 469 lít AQR-M532XA(CBC)', N'Chính hãng', 14390000, 12231500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5251/Slider/tu-lanh-aqua-inverter-469-lit-aqr-m532xa-cbc-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2170')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2170', N'Panasonic Inverter 621 lít PRIME+ Edition Multi Door NR-XY680YMMV', N'Panasonic', 81890000, 69606500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5248/Slider/tu-lanh-panasonic-inverter-621-lit-multi-door-nr-xy680ymmv-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2171')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2171', N'Aqua Inverter 469 lít Multi Door AQR-M536XA(SL)', N'Chính hãng', 14890000, 12656500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5249/Slider/tu-lanh-aqua-inverter-469-lit-multi-door-aqr-m536xa-sl-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2172')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2172', N'Toshiba Inverter 515 lít Multi Door GR-RF670WI-PGV(A9)-BG', N'Chính hãng', 25990000, 22091500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5246/Slider/tu-lanh-toshiba-inverter-515-lit-gr-rf670wi-pgv-a9-bg2-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2173')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2173', N'Panasonic Inverter 650 lít PRIME+ Edition Multi Door NR-WY720ZMMV', N'Panasonic', 97890000, 83206500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5247/Slider/tu-lanh-panasonic-inverter-650-lit-multi-door-nr-wy720zmmv-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2174')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2174', N'LG Inverter 601 lít Side By Side InstaView Door-in-Door GR-X247JS', N'LG', 41690000, 35436500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5238/Slider/tu-lanh-lg-gr-x247js-1-1-org.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2175')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2175', N'Toshiba Inverter 268 lít GR-RB345WE-PMV(30)-BS', N'Chính hãng', 8990000, 7641500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5241/Slider/toshiba-gr-rb345we-pmv-30-bs30.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2176')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2176', N'Hitachi Inverter 366 lít R-FVX480PGV9 MIR', N'Chính hãng', 13390000, 11381500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5245/Slider/tu-lanh-hitachi-inverter-366-lit-r-fvx480pgv9-mir2-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2177')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2177', N'Aqua Inverter 292 lít AQR-B360MA(SLB)', N'Chính hãng', 8590000, 7301500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5235/Slider/aqua-inverter-292-lit-aqr-b360ma-slb-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2178')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2178', N'Aqua Inverter 283 lít AQR-T299FA(SL)', N'Chính hãng', 7090000, 6026500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5236/Slider/aqua-inverter-283-lit-aqr-t299fa-sl-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2179')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2179', N'LG Inverter 617 lít Multi Door InstaView LFB61BLGAI', N'LG', 30190000, 25661500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5237/Slider/lg-inverter-617-lit-multi-door-instaview-lfb61blgai-1-3.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2180')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2180', N'Hitachi Inverter 260 lít HRTN5275MFUVN', N'Chính hãng', 8390000, 7131500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5233/Slider/tu-lanh-hitachi-inverter-260-lit-hrtn5275mfuvn-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2181')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2181', N'Hitachi Inverter 240 lít HRTN5255MFUVN', N'Chính hãng', 7390000, 6281500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5234/Slider/tu-lanh-hitachi-inverter-240-lit-hrtn5255mfuvn-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2182')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2182', N'Aqua Inverter 660 lít Multi Door AQR-M727XA(GS)U1', N'Chính hãng', 27990000, 23791500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5231/Slider/tu-lanh-aqua-660-lit-aqr-m727xagsu1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2183')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2183', N'Aqua Inverter 660 lít Multi Door AQR-M727XA(GB)U1', N'Chính hãng', 24890000, 21156500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5232/Slider/tu-lanh-aqua-multi-door-inverter-660-lit-aqr-m727xa-gb-u1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2184')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2184', N'LG Inverter 494 lít Multi Door GR-D22MBI', N'LG', 27890000, 23706500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5229/Slider/tu-lanh-lg-inverter-494-multi-door-lit-gr-d22mbi-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2185')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2185', N'Hitachi Inverter 735 lít Multi Door R-ZX740KV X', N'Chính hãng', 99900000, 84915000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5227/Slider/tu-lanh-hitachi-r-zx740kv-x1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2186')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2186', N'Aqua Inverter 324 lít AQR-B380MA(GM)', N'Chính hãng', 11790000, 10021500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5228/Slider/aqua-inverter-324-lit-aqr-b380ma-gm-2-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2187')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2187', N'Hitachi Inverter 406 lít R-FVX510PGV9 MIR', N'Chính hãng', 15490000, 13166500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5223/Slider/tu-lanh-hitachi-406-lit-r-fvx510pgv9-mir1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2188')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2188', N'Hitachi Inverter 540 lít Multi Door R-HW540RV(X)', N'Chính hãng', 50990000, 43341500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/08/13/hitachi-inverter-540-lit-multi-door-r-hw540rv-x.gif', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2189')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2189', N'LG Inverter 332 lít LBD33BLM', N'LG', 12390000, 10531500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5217/Slider/tu-lanh-lg-inverter-332-lit-lbd33blm-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2190')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2190', N'Aqua Inverter 541 lít Side By Side AQR-S541XA(BL)', N'Chính hãng', 13890000, 11806500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/08/13/aqua-inverter-541-lit-side-by-side-aqr-s541xa-bl.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2191')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2191', N'Hitachi Inverter 349 lít R-FVY480PGV0 GMG', N'Chính hãng', 14890000, 12656500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5222/Slider/tu-lanh-hitachi-349-lit-r-fvy480pgv0-gmg1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2192')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2192', N'Hitachi Inverter 569 lít Multi Door R-WB640VGV0 GMG', N'Chính hãng', 32590000, 27701500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5213/Slider/hitachi-inverter-569-lit-r-wb640vgv0-gmg-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2193')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2193', N'Funiki 209 lít HR T6209TDG', N'Chính hãng', 4790000, 4071500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5214/Slider/tu-lanh-funiki-209-lit-hr-t6209tdg-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2194')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2194', N'Sharp Inverter 442 lít Side By Side SJ-SBX440VG-BK', N'Sharp', 14490000, 12316500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5209/Slider/tu-lanh-sharp-inverter-442-lit-sj-sbx440vg-bk-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2195')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2195', N'LG Inverter 635 lít Side By Side InstaView GR-G257SV', N'LG', 27890000, 23706500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5210/Slider/tu-lanh-lg-inverter-635-lit-gr-g257sv-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2196')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2196', N'Toshiba Inverter 515 lít GR-RF677WI-PGV(22)-XK', N'Chính hãng', 15990000, 13591500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5211/Slider/tu-lanh-toshiba-inverter-515-lit-gr-rf677wi-pgv-22-xk-2-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2197')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2197', N'Hitachi Inverter 349 lít R-FVY480PGV0 GBK', N'Chính hãng', 14890000, 12656500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5204/Slider/hitachi-inverter-349-lit-r-fvy480pgv0-3.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2198')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2198', N'Toshiba Inverter 321 lít GR-RB405WEA-PMV(06)-MG', N'Chính hãng', 9990000, 8491500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5206/Slider/tu-lanh-toshiba-inverter-321-lit-gr-rb405wea-pmv-06-mg-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2199')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2199', N'Panasonic Inverter 540 lít Multi Door PRIME+ Edition NR-YW590YMMV', N'Panasonic', 43890000, 37306500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5207/Slider/panasonic-540-lit-nr-yw590ymmv1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2200')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2200', N'LG Inverter 459 lít LTD46BLMA', N'LG', 13390000, 11381500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5198/Slider/tu-lanh-lg-ltd46blma-1-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2201')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2201', N'LG Inverter 666 lít Multi Door InstaView LFB66BLMI', N'LG', 28490000, 24216500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5199/Slider/tu-lanh-lg-inverter-666-lit-multi-door-instaview-lfb66blmi-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2202')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2202', N'LG Inverter 635 lít Side By Side InstaView GR-G257BL', N'LG', 27390000, 23281500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5196/Slider/tu-lanh-lg-inverter-635-lit-side-by-side-instaview-door-in-door-gr-g257bl-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2203')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2203', N'Hitachi Inverter 466 lít Multi Door HR4N7522DSDXVN', N'Chính hãng', 16490000, 14016500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5197/Slider/tu-lanh-hitachi-inverter-466-lit-multi-door-hr4n7522dsdxvn-1-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2204')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2204', N'Hitachi Inverter 464 lít Multi Door HR4N7520DSWDXVN', N'Chính hãng', 17790000, 15121500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5191/Slider/tu-lanh-hitachi-inverter-464-lit-multi-door-hr4n7520dswdxvn1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2205')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2205', N'LG Inverter 315 lít LTB31BLM', N'LG', 8190000, 6961500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5192/Slider/tu-lanh-lg-inverter-314-lit-ltb31blm-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2206')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2206', N'Sharp Inverter 525 lít Multi Door SJ-FXP600VG-BK', N'Sharp', 19890000, 16906500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5187/Slider/sharp-sj-fxp600vg-bk-2-1-org.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2207')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2207', N'Panasonic Inverter 326 lít NR-TL351GPKV', N'Panasonic', 12390000, 10531500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/2024/08/13/panasonic-inverter-326-lit-nr-tl351gpkv.gif', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2208')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2208', N'Hitachi Inverter 573 lít Side By Side R-SX800GPGV0 GBK', N'Chính hãng', 44990000, 38241500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5189/Slider/hitachi-inverter-573-lit-r-sx800gpgv0-3.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2209')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2209', N'Samsung Inverter 648 lít Multi Door Bespoke RF59CB66F8S/SV', N'Samsung', 36990000, 31441500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5180/Slider/tu-lanh-samsung-inverter-648-lit-rf59cb66f8s-sv1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2210')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2210', N'Sharp Inverter 360 lít SJ-XP382AE-DS', N'Sharp', 9490000, 8066500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5181/Slider/tu-lanh-sharp-inverter-360-lit-sj-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2211')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2211', N'Toshiba Inverter 322 lít GR-RB405WE-PMV(06)-MG', N'Chính hãng', 14990000, 12741500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5184/Slider/toshiba-inverter-322-lit-gr-rb405we-pmv-06-mg-2-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2212')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2212', N'Sharp Inverter 417 lít SJ-X417WD-DG', N'Sharp', 9890000, 8406500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5186/Slider/tu-lanh-sharp-inverter-417-lit-sj-x417wd-dg-1-3.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2213')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2213', N'Hitachi Inverter 339 lít R-FVX450PGV9 GBK', N'Chính hãng', 12290000, 10446500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5176/Slider/hitachi-inverter-406-lit-r-fvx450pgv9-3.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2214')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2214', N'Sharp Inverter 181 lít SJ-X198V-DG', N'Sharp', 4790000, 4071500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5177/Slider/tu-lanh-sharp-sj-x198v-dg-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2215')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2215', N'Samsung Inverter 648 lít Multi Door RF59C766FB1/SV', N'Samsung', 30590000, 26001500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5179/Slider/tu-lanh-samsung-inverter-648-lit-rf59c766fb1-sv.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2216')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2216', N'Sharp Inverter 197 lít SJ-X215V-DG', N'Sharp', 4890000, 4156500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5173/Slider/tu-lanh-sharp-sj-x215v-dg-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2217')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2217', N'Hitachi Inverter 569 lít Multi Door R-WB640PGV1 GCK', N'Chính hãng', 26490000, 22516500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5174/Slider/tu-lanh-hitachi-569-lit-r-wb640pgv1-gck2-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2218')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2218', N'Samsung Inverter 307 lít RB30N4190BU/SV', N'Samsung', 11990000, 10191500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5175/Slider/samsung-inverter-307-lit-rb30n4190bu-sv-3.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2219')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2219', N'Panasonic Inverter 366 lít NR-TL381GPKV', N'Panasonic', 13890000, 11806500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/2024/08/13/panasonic-inverter-366-lit-nr-tl381gpkv.gif', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2220')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2220', N'Sharp Inverter 362 lít Multi Door SJ-FX420VG-BK', N'Sharp', 12790000, 10871500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5170/Slider/tu-lanh-sharp-inverter-362-lit-sj-fx420vg-bk-2-3.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2221')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2221', N'Aqua Inverter 292 lít AQR-B350MA(GM)', N'Chính hãng', 11390000, 9681500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5171/Slider/aqua-inverter-292-lit-aqr-b350ma-gm-2-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2222')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2222', N'Hitachi Inverter 509 lít Multi Door R-FW650PGV8 GBK', N'Chính hãng', 18990000, 16141500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/08/13/hitachi-inverter-509-lit-multi-door-r-fw650pgv8-gbk.gif', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2223')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2223', N'Hitachi Inverter 275 lít R-B330PGV8 BSL', N'Chính hãng', 10290000, 8746500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5166/Slider/hitachi-inverter-275-lit-r-b330pgv81-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2224')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2224', N'Sharp Inverter 197 lít SJ-X215V-SL', N'Sharp', 4890000, 4156500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5168/Slider/tu-lanh-sharp-sj-x215v-sl-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2225')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2225', N'Panasonic Inverter 325 lít NR-BV361WGKV', N'Panasonic', 15190000, 12911500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5163/Slider/tu-lanh-panasonic-325-lit-nr-bv361wgkv2-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2226')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2226', N'Hitachi Inverter 210 lít HRTN5230MUVN', N'Chính hãng', 6790000, 5771500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5164/Slider/tu-lanh-hitachi-inverter-210-lit-hrtn5230muvn-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2227')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2227', N'Samsung Inverter 635 lít Side By Side RS64R5301B4/SV', N'Samsung', 27890000, 23706500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5158/Slider/samsung-rs64r5301b4-sv-1-1-org.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2228')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2228', N'Sharp Inverter 401 lít Multi Door SJ-FXP480V-SL', N'Sharp', 12890000, 10956500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5159/Slider/sharp-sj-fxp480v-sl-1-org.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2229')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2229', N'Hitachi Inverter 569 lít Multi Door R-WB640PGV1 GMG', N'Chính hãng', 26990000, 22941500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5160/Slider/hitachi-inverter-569-lit-r-wb640pgv1-3.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2230')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2230', N'Sharp Inverter 401 lít Multi Door SJ-FXP480VG-CH', N'Sharp', 13890000, 11806500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5162/Slider/sharp-sj-fxp480vg-ch-1-1-org.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2231')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2231', N'Panasonic Inverter 495 lít Multi Door PRIME+ Edition NR-CW530XMMV', N'Panasonic', 29890000, 25406500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5150/Slider/panasonic-inverter-495-lit-nr-cw530xmmv-3-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2232')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2232', N'Samsung Inverter 460 lít Bespoke RT47CB66868ASV', N'Samsung', 15790000, 13421500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5151/Slider/samsung-inverter-460-lit-rt47cb66868asv-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2233')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2233', N'Samsung Inverter 305 lít Bespoke RT31CB56248ASV', N'Samsung', 11490000, 9766500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5154/Slider/tu-lanh-samsung-inverter-305-lit-rt31cb56248asv-11.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2234')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2234', N'Toshiba Inverter 338 lít GR-RT468WE-PMV(58)-MM', N'Chính hãng', 7190000, 6111500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5155/Slider/tu-lanh-toshiba-inverter-338-lit-gr-rt468we-pmv-58-mm-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2235')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2235', N'Toshiba Inverter 515 lít GR-RF665WIA-PGV(22)-XK', N'Chính hãng', 21490000, 18266500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5156/Slider/tu-lanh-toshiba-inverter-515-lit-gr-rf665wia-pgv-22-xk-2-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2236')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2236', N'LG Inverter 508 lít Multi Door InstaView LFI50BLMAI', N'LG', 26990000, 22941500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5145/Slider/tu-lanh-lg-ltd46blma-0.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2237')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2237', N'Toshiba Inverter 411 lít GR-RT559WE-PMV(58)-MM', N'Chính hãng', 8890000, 7556500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5146/Slider/tu-lanh-toshiba-inverter-411-lit-gr-rt559we-pmv-58-mm-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2238')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2238', N'Sharp Inverter 605 lít Multi Door SJ-FX688VG-BK', N'Sharp', 21990000, 18691500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5147/Slider/tu-lanh-sharp-sj-fx688vg-bk-1-1-org.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2239')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2239', N'Samsung Inverter 635 lít Side By Side RS64R53012C/SV', N'Samsung', 30990000, 26341500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5148/Slider/samsung-rs64r53012c-sv-2-1-org.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2240')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2240', N'Toshiba Inverter 325 lít GR-RB410WE-PMV(37)-SG', N'Chính hãng', 8190000, 6961500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5149/Slider/toshiba-inverter-325-lit-gr-rb410we-pmv-37-sg-2-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2241')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2241', N'LG Inverter 635 Lít Side By Side InstaView Door-in-Door GR-X257BL', N'LG', 33990000, 28891500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5142/Slider/tu-lanh-lg-inverter-635-lit-side-by-side-instaview-door-in-door-gr-x257bl-2-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2242')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2242', N'Toshiba Inverter 596 lít Side By Side GR-RS775WI-PMV(06)-MG', N'Chính hãng', 14990000, 12741500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5143/Slider/tu-lanh-toshiba-inverter-596-lit-gr-rs775wi-pmv-06-mg1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2243')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2243', N'Aqua Inverter 410 lít AQR-M466XA(GB)', N'Chính hãng', 12990000, 11041500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5144/Slider/tu-lanh-aqua-410-lit-aqr-m466xa-gb-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2244')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2244', N'LG Inverter 635 Lít Side By Side InstaView Door-in-Door GR-X257BG', N'LG', 33990000, 28891500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5139/Slider/tu-lanh-lg-inverter-635-lit-side-by-side-instaview-door-in-door-gr-x257bg-2-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2245')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2245', N'LG Inverter 314 Lít GN-D312BL', N'LG', 8390000, 7131500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5140/Slider/lg-inverter-314-lit-gn-d312bl-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2246')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2246', N'Sharp Inverter 532 lít Side By Side SJ-SBX530VG-BK', N'Sharp', 15490000, 13166500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5141/Slider/tu-lanh-sharp-inverter-532-lit-sj-sbx530vg-bk-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2247')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2247', N'Toshiba Inverter 409 lít GR-RT535WEA-PMV(06)-MG', N'Chính hãng', 11490000, 9766500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5137/Slider/tu-lanh-toshiba-inverter-409-lit-gr-rt535wea-pmv-06-mg-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2248')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2248', N'Aqua Inverter 292 lít AQR-B360MA(WSL)', N'Chính hãng', 9390000, 7981500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5138/Slider/aqua-inverter-292-lit-aqr-b360ma-wsl-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2249')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2249', N'Toshiba Inverter 407 lít GR-RT535WE-PMV(06)-MG', N'Chính hãng', 10290000, 8746500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5132/Slider/toshiba-gr-rt535we-pmv-06-mg-1-1-org-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2250')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2250', N'Samsung Inverter 305 lít RT31CG5424B1SV', N'Samsung', 8790000, 7471500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5133/Slider/tu-lanh-samsung-inverter-305-lit-rt31cg5424b1sv1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2251')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2251', N'Aqua Inverter 469 lít Multi Door AQR-M536XA(WGB)', N'Chính hãng', 15990000, 13591500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5134/Slider/tu-lanh-aqua-inverter-469-lit-aqr-m536xa-wgb-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2252')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2252', N'Sharp Inverter 572 lít Multi Door SJ-FXP640VG-BK', N'Sharp', 21990000, 18691500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5135/Slider/sharp-sj-fxp640vg-bk2-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2253')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2253', N'Hitachi Inverter 569 lít Multi Door R-WB640VGV0 GBK', N'Chính hãng', 30990000, 26341500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5136/Slider/hitachi-inverter-569-lit-r-wb640vgv0-3.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2254')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2254', N'Sharp Inverter 401 lít Multi Door SJ-FXP480VG-BK', N'Sharp', 14490000, 12316500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/2024/08/14/sharp-inverter-401-lit-multi-door-sj-fxp480vg-bk.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2255')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2255', N'Toshiba Inverter 311 lít GR-RT395WE-PMV(06)-MG', N'Chính hãng', 9290000, 7896500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5125/Slider/toshiba-gr-rt395we-pmv-06-mg-org-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2256')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2256', N'Sharp Inverter 330 lít SJ-XP352AE-SL', N'Sharp', 7890000, 6706500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5126/Slider/tu-lanh-sharp-inverter-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2257')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2257', N'Samsung Inverter 345 lít RT35CG5544B1SV', N'Samsung', 9790000, 8321500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5127/Slider/samsung-inverter-345l-rt35cg5544b1sv-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2258')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2258', N'Toshiba Inverter 336 lít GR-RT435WEA-PMV(06)-MG', N'Chính hãng', 10790000, 9171500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5128/Slider/tu-lanh-toshiba-inverter-336-lit-gr-rt435wea-pmv-06-mg1-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2259')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2259', N'Toshiba Inverter 568 lít Side By Side GR-RS755WIA-PGV(22)-XK', N'Chính hãng', 22890000, 19456500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5129/Slider/tu-lanh-toshiba-inverter-568-lit-side-by-side-gr-rs755wi-pgv-22-xk-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2260')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2260', N'Samsung Inverter 385 lít Bespoke RT38CB668412SV', N'Samsung', 11890000, 10106500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5130/Slider/tu-lanh-samsung-rt38cb668412sv-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2261')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2261', N'Samsung Inverter 382 lít Bespoke RT38CB6784C3SV', N'Samsung', 13490000, 11466500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5119/Slider/samsung-inverter-382-lit-rt38cb6784c3sv-6.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2262')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2262', N'Panasonic Inverter 188 lít NR-BA229PKVN', N'Panasonic', 6590000, 5601500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/2024/08/14/panasonic-inverter-188-lit-nr-ba229pkvn.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2263')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2263', N'Samsung Inverter 488 lít Multi Door RF48A4010B4/SV', N'Samsung', 18490000, 15716500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5121/Slider/samsung-inverter-488-lit-rf48a4010b4-sv-2-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2264')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2264', N'Samsung Inverter 406 lít Bespoke RT42CB6784C3SV', N'Samsung', 12990000, 11041500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5123/Slider/samsung-inverter-406-lit-rt42cb6784c3sv-6-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2265')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2265', N'Panasonic Inverter 366 lít NR-TL381GVKV', N'Panasonic', 13790000, 11721500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5117/Slider/tu-lanh-panasonic-inverter-366-lit-nr-tl381gvkv-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2266')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2266', N'Samsung Inverter 216 lít RT20HAR8DBU/SV', N'Samsung', 6390000, 5431500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5118/Slider/samsung-rt20har8dbu-sv-1-org.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2267')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2267', N'LG Inverter 635 lít Side By Side GR-D257WB', N'LG', 23490000, 19966500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5113/Slider/lg-inverter-635-lit-gr-d257wb-3-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2268')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2268', N'Toshiba Inverter 312 lít GR-RT416WE-PMV(58)-MM', N'Chính hãng', 7390000, 6281500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5114/Slider/tu-lanh-toshiba-inverter-312-lit-gr-rt416we-pmv-58-mm-1-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2269')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2269', N'Aqua Inverter 347 lít AQR-T390FA(WGM)', N'Chính hãng', 9790000, 8321500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5115/Slider/tu-lanh-aqua-inverter-347-lit-aqr-t390fa-wgm-2-4.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2270')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2270', N'Toshiba Inverter 509 lít Multi Door GR-RF605WI-PMV(06)-MG', N'Chính hãng', 16490000, 14016500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5116/Slider/tu-lanh-toshiba-inverter-509-lit-gr-rf605wi-pmv06-mg-1-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2271')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2271', N'LG Inverter 655 lít Side By Side InstaView GR-V257BL', N'LG', 32990000, 28041500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5112/Slider/tu-lanh-lg-inverter-655-lit-gr-v257bl-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2272')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2272', N'Samsung Inverter 406 lít RT42CG6584B1SV', N'Samsung', 11490000, 9766500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5108/Slider/samsung-inverter-406-lit-rt42cg6584b1sv1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2273')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2273', N'Panasonic Inverter 326 lít NR-TL351GVKV', N'Panasonic', 12690000, 10786500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5109/Slider/tu-lanh-panasonic-inverter-326-lit-nr-tl351gvkv-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2274')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2274', N'Panasonic Inverter 300 lít NR-BV331WGKV', N'Panasonic', 14890000, 12656500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5110/Slider/tu-lanh-panasonic-300-lit-nr-bv331wgkv1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2275')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2275', N'Toshiba Inverter 194 lít GR-RT252WE-PMV(52)', N'Chính hãng', 5590000, 4751500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5111/Slider/tu-lanh-toshiba-inverter-194-lit-gr-rt252we-pmv-52-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2276')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2276', N'LG Inverter 519 lít Side By Side GR-B256BL', N'LG', 11990000, 10191500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5102/Slider/lg-gr-b256bl1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2277')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2277', N'Samsung Inverter 655 lít Side by Side RS62R5001B4/SV', N'Samsung', 15890000, 13506500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5103/Slider/tu-lanh-samsung-rs62r5001b4-sv-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2278')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2278', N'Electrolux 94 Lít EUM0930AD-VN', N'Chính hãng', 3690000, 3136500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5105/Slider/electrolux-94-lit-eum0930ad-vn-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2279')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2279', N'Toshiba Inverter 253 lít GR-RT329WE-PMV(52)', N'Chính hãng', 5990000, 5091500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5106/Slider/toshiba-inverter-253-lit-gr-rt329we-pmv-52-1-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2280')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2280', N'Toshiba Inverter 596 lít Side By Side GR-RS780WI-PGV(22)-XK', N'Chính hãng', 16490000, 14016500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5107/Slider/toshiba-inverter-596-lit-gr-rs780wi-pgv-22-xk-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2281')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2281', N'Aqua Inverter 212 lít AQR-T239FA(HB)', N'Chính hãng', 5190000, 4411500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5098/Slider/aqua-aqr-t239fa-hb-1-org.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2282')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2282', N'Toshiba Inverter 180 lít GR-RT234WE-PMV(52)', N'Chính hãng', 4990000, 4241500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5099/Slider/tu-lanh-toshiba-inverter-180-lit-gr-rt234we-pmv-52-1-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2283')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2283', N'Panasonic Inverter 268 lít NR-TV301VGMV', N'Panasonic', 9990000, 8491500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/2024/08/14/panasonic-inverter-268-lit-nr-tv301vgmv.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2284')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2284', N'Panasonic Inverter 306 lít NR-TV341VGMV', N'Panasonic', 10490000, 8916500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/2024/08/14/panasonic-inverter-306-lit-nr-tv341vgmv.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2285')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2285', N'Panasonic Inverter 255 lít NR-BV281BGMV', N'Panasonic', 11790000, 10021500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5096/Slider/tu-lanh-panasonic-inverter-255-lit-nr-bv281bgmv2-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2286')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2286', N'Aqua 50 lít AQR-D59FA(BS)', N'Chính hãng', 2690000, 2286500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5097/Slider/aqua-aqr-d59fa-bs-2-1-org.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2287')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2287', N'Panasonic Inverter 326 lít NR-TL351VGMV', N'Panasonic', 11190000, 9511500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/2024/08/14/panasonic-inverter-326-lit-nr-tl351vgmv.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2288')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2288', N'Aqua Inverter 320 lít AQR-B390MA(WSL)', N'Chính hãng', 9690000, 8236500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5093/Slider/tu-lanh-aqua-inverter-320-lit-aqr-b390ma-wsl-fix-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2289')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2289', N'Aqua Inverter 469 lít Multi Door AQR-M536XA(GB)', N'Chính hãng', 14490000, 12316500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5095/Slider/tu-lanh-aqua-inverter-469-lit-aqr-m536xa-gb-2-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2290')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2290', N'Panasonic Inverter 405 lít NR-TX461GPKV', N'Panasonic', 12890000, 10956500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5090/Slider/panasonic-inverter-405-lit-nr-tx461gpkv-1-org.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2291')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2291', N'Panasonic Inverter 377 lít NR-BX421GPKV', N'Panasonic', 14990000, 12741500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/2024/08/14/panasonic-inverter-377-lit-nr-bx421gpkv.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2292')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2292', N'Aqua Inverter 260 lít AQR-B310MA(FB)', N'Chính hãng', 7990000, 6791500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5088/Slider/tu-lanh-aqua-inverter-260-lit-aqr-b310ma-fb-1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2293')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2293', N'LG Inverter 470 lít Multi Door GR-B50BL', N'LG', 14190000, 12061500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5089/Slider/tu-lanh-lg-inverter-470-lit-multi-door-gr-b50bl-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2294')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2294', N'LG Inverter 266 Lít GV-B262WB', N'LG', 7990000, 6791500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5084/Slider/tu-lanh-lg-inverter-266-lit-gv-b262wb51.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2295')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2295', N'Aqua 90 lít AQR-D99FA(BS)', N'Chính hãng', 3190000, 2711500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5085/Slider/aqua-aqr-d99fa-bs-1-org.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2296')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2296', N'Aqua Inverter 236 lít AQR-T260FA(FB)', N'Chính hãng', 5690000, 4836500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5087/Slider/tu-lanh-aqua-inverter-236-lit-aqr-t260fa-fb.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2297')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2297', N'Panasonic Inverter 417 lít NR-BX471GPKV', N'Panasonic', 15390000, 13081500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/2024/08/14/panasonic-inverter-417-lit-nr-bx471gpkv.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2298')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2298', N'Samsung Inverter 256 lít RT25M4032BU/SV', N'Samsung', 6390000, 5431500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5079/Slider/samsung-rt25m4032bu-sv-1-org.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2299')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2299', N'Samsung Inverter 488 lít Multi Door RF48A4000B4/SV', N'Samsung', 15990000, 13591500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5080/Slider/samsung-rf48a4000b4-sv-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2300')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2300', N'Samsung Inverter 382 lít RT38CG6584B1SV', N'Samsung', 10490000, 8916500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5081/Slider/samsung-inverter-382-lit-rt38cg6584b1sv-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2301')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2301', N'Panasonic Inverter 325 lít NR-BC361VGMV', N'Panasonic', 14090000, 11976500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5076/Slider/tu-lanh-panasonic-325-lit-nr-bc361vgmv-3.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2302')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2302', N'Panasonic Inverter 234 lít NR-TV261APSV', N'Panasonic', 7690000, 6536500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/2024/08/14/panasonic-inverter-234-lit-nr-tv261apsv.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2303')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2303', N'Panasonic Inverter 234 lít NR-TV261BPKV', N'Panasonic', 8590000, 7301500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/2024/08/14/panasonic-inverter-234-lit-nr-tv261bpkv.gif', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2304')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2304', N'Samsung Inverter 236 lít RT22M4032BY/SV', N'Samsung', 6190000, 5261500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5073/Slider/samsung-rt22m4032by-sv-1-org.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2305')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2305', N'Panasonic Inverter 366 lít NR-TL381VGMV', N'Panasonic', 12690000, 10786500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/2024/08/14/panasonic-inverter-366-lit-nr-tl381vgmv.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2306')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2306', N'Toshiba Inverter 233 lít GR-RT303WE-PMV(52)', N'Chính hãng', 5490000, 4666500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5075/Slider/tu-lanh-toshiba-inverter-233-lit-gr-rt303we-pmv-52-1-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2307')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2307', N'LG Inverter 394 lít GN-D392BLA', N'LG', 16990000, 14441500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5065/Slider/lg-inverter-394-lit-gn-d392bla1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2308')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2308', N'Samsung Inverter 236 lít RT22M4032BU/SV', N'Samsung', 6490000, 5516500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5068/Slider/samsung-rt22m4032bu-sv-1-1-org.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2309')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2309', N'Panasonic Inverter 550 lít Multi Door NR-DZ601VGKV', N'Panasonic', 19890000, 16906500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5069/Slider/panasonic-inverter-550-lit-nr-dz601vgkv-2-org.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2310')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2310', N'Sharp Inverter 181 lít  SJ-X198V-SL', N'Sharp', 4790000, 4071500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5070/Slider/tu-lanh-sharp-sj-x198v-sl-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2311')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2311', N'Aqua Inverter 189 lít AQR-T220FA(FB)', N'Chính hãng', 4990000, 4241500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5058/Slider/tu-lanh-aqua-aqr-t220fa-fb1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2312')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2312', N'LG Inverter 519 lít Side By Side GR-B256JDS', N'LG', 11790000, 10021500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5059/Slider/lg-gr-b256jds1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2313')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2313', N'Panasonic Inverter 170 lít NR-BA190PPVN', N'Panasonic', 5790000, 4921500, 50, N'Chiếc', N'PANASONIC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5061/Slider/panasonic-nr-ba190ppvn-1-org.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2314')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2314', N'Samsung Inverter 307 lít RB30N4190BY/SV', N'Samsung', 10590000, 9001500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5053/Slider/samsung-inverter-307-lit-rb30n4190by-sv-3.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2315')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2315', N'Samsung Inverter 310 lít RB30N4010BU/SV', N'Samsung', 9990000, 8491500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5055/Slider/samsung-rb30n4010bu-sv-1-org.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2316')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2316', N'Toshiba Inverter 460 lít Side By Side GR-RS600WI-PMV(37)-SG', N'Chính hãng', 12490000, 10616500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5056/Slider/tu-lanh-toshiba-inverter-460-lit-gr-rs600wi-pmv-37-sg1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2317')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2317', N'Toshiba Inverter 511 lít Multi Door GR-RF610WE-PGV(22)-XK', N'Chính hãng', 18490000, 15716500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/TuLanh/5057/Slider/toshiba-gr-rf610we-pgv-22-xk-2-2-org.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2318')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2318', N'Samsung Inverter 280 lít RB27N4010BU/SV', N'Samsung', 8290000, 7046500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/MayLanh/5051/Slider/samsung-rb27n4010bu-sv-2-org.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2319')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2319', N'LG Inverter 315 Lít GN-M312BL', N'LG', 7390000, 6281500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2024/08/06/lg-inverter-315-lit-gn-m312bl-4.gif', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2320')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2320', N'Toshiba Inverter 249 lít GR-RT325WE-PMV(06)-MG', N'Chính hãng', 6990000, 5941500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/05/21/toshiba-gr-rt325we-pmv-06-mg-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2321')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2321', N'Quạt treo tường Mitsubishi W16-RA CY-GY, màu ghi đậm', N'Chính hãng', 1890000, 1606500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/26/w16racygy-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2322')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2322', N'Quạt tháp Tiross TS9181, 3 tốc độ, có điều khiển, 45W', N'Chính hãng', 2290000, 1946500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/26/ts9181-0.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2323')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2323', N'Quạt đứng Midea FS40-23MT, 50W, 7 cánh 45cm', N'Midea', 1100000, 935000, 50, N'Chiếc', N'MIDEA', N'https://i.hoanghamobile.vn/Uploads/2025/05/27/quat-cay-dung-midea-fs40-23mt-7-canh.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2324')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2324', N'Quạt đứng Midea FS40-23MR, 50W, Có Remote, 7 cánh 45 cm', N'Midea', 1400000, 1190000, 50, N'Chiếc', N'MIDEA', N'https://i.hoanghamobile.vn/Uploads/2025/05/27/quat-dung-midea-fs40-23mr.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2325')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2325', N'Quạt đứng sạc điện Midea MFS180D0BPW, 30W, 11h dùng', N'Midea', 2800000, 2380000, 50, N'Chiếc', N'MIDEA', N'https://i.hoanghamobile.vn/Uploads/2025/05/27/quat-midea-mfs18odobpw-3.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2326')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2326', N'Quạt tuần hoàn Midea MFT060M0BPBH, 26W', N'Midea', 1100000, 935000, 50, N'Chiếc', N'MIDEA', N'https://i.hoanghamobile.vn/Uploads/2025/05/28/quat-tuan-hoan-midea-mfto6omobpbh.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2327')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2327', N'Quạt tuần hoàn Midea MFS070M0APBH, 30W', N'Midea', 980000, 833000, 50, N'Chiếc', N'MIDEA', N'https://i.hoanghamobile.vn/Uploads/2025/05/28/quat-tuan-hoan-midea-mfs070m0apbh-6.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2328')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2328', N'Quạt tuần hoàn Midea MFS070R0APBH, 35W, có remote', N'Midea', 1600000, 1360000, 50, N'Chiếc', N'MIDEA', N'https://i.hoanghamobile.vn/Uploads/2025/05/28/quat-tuan-hoan-midea-mfs070r0apbh-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2329')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2329', N'Quạt cây Mitsubishi LV16-RB-CY-BW, màu nâu đậm', N'Chính hãng', 2190000, 1861500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/03/14/lv16rbcybw-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2330')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2330', N'Quạt cây Mitsubishi LV16-RB-CY-GY, màu xám đậm', N'Chính hãng', 2090000, 1776500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/03/14/lv16rbcygy-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2331')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2331', N'Quạt cây Mitsubishi LV16-RB-SF-GY, màu xám nhạt', N'Chính hãng', 2190000, 1861500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/03/14/lv16rbsfgy-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2332')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2332', N'Quạt đứng Midea FS40-15Q, 50W, 5 cánh, 3 tốc độ gió', N'Midea', 1080000, 918000, 50, N'Chiếc', N'MIDEA', N'https://i.hoanghamobile.vn/Uploads/2025/11/11/quat-dung-midea-fs4015q-22040411580229687.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2333')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2333', N'Quạt đứng Midea FS40-18C, 50W, 3 cánh 40cm, 3 tốc độ gió', N'Midea', 1080000, 918000, 50, N'Chiếc', N'MIDEA', N'https://i.hoanghamobile.vn/Uploads/2025/05/26/quat-dung-midea-fs40-18c.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2334')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2334', N'Quạt đứng Midea FS40-18CB, 50W, 3 tốc độ gió', N'Midea', 1080000, 918000, 50, N'Chiếc', N'MIDEA', N'https://i.hoanghamobile.vn/Uploads/2025/05/26/quat-dung-midea-fs40-18cb-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2335')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2335', N'Quạt đứng Midea FS40-11DVN(K), 55W, 3 tốc độ gió', N'Midea', 850000, 722500, 50, N'Chiếc', N'MIDEA', N'https://i.hoanghamobile.vn/Uploads/2025/11/11/quat-dien-midea-11dvn-4-3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2336')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2336', N'Quạt lửng Midea FTS40-17VD, 36W, 3 mức gió', N'Midea', 630000, 535500, 50, N'Chiếc', N'MIDEA', N'https://i.hoanghamobile.vn/Uploads/2025/05/26/midea-3-canh-fts40-17vd-36w.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2337')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2337', N'Quạt Máy Đứng MAGIC A-251, 5 cánh', N'Chính hãng', 1490000, 1266500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/05/26/a251-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2338')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2338', N'Quạt Máy Đứng MAGIC A-252, 7 cánh', N'Chính hãng', 1690000, 1436500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/05/26/a252-0.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2339')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2339', N'Quạt Không Cánh – Kết Hợp Lọc Không Khí MAGIC Eco AC-305', N'Chính hãng', 4190000, 3561500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/05/26/ac305-0.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2340')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2340', N'Quạt Không Cánh – Kết Hợp Lọc Không Khí MAGIC Eco AC-306', N'Chính hãng', 4990000, 4241500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/05/26/ac306-0.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2341')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2341', N'Quạt treo tường Midea FW40-6H, 55W, 3 cánh 40cm', N'Midea', 810000, 688500, 50, N'Chiếc', N'MIDEA', N'https://i.hoanghamobile.vn/Uploads/2025/05/27/quat-treo-tuong-midea-fw40-6h.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2342')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2342', N'Quạt hộp FB40-9H, 55W, 5 cánh 40cm', N'Chính hãng', 720000, 612000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/05/27/quat-hop-fb40-9h-5.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2343')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2343', N'Quạt bàn KYT30-15A, 40W, 5 cánh 30cm, hẹn giờ 2 tiếng', N'Chính hãng', 600000, 510000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/05/27/hinh-anh-thuc-te-quat-kyt30-15a-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2344')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2344', N'Quạt treo tường FW40-7JR, 55W, Có Remote, 3 cánh 40cm', N'Chính hãng', 1170000, 994500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/05/27/quat-treo-tuong-midea-fw40-7jr-17031320422242489.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2345')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2345', N'Quạt treo tường Midea FW40-23M, 50W, 7 cánh 45cm', N'Midea', 1100000, 935000, 50, N'Chiếc', N'MIDEA', N'https://i.hoanghamobile.vn/Uploads/2025/05/27/quat-treo-tuong-midea-fw40-23m-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2346')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2346', N'Quạt đứng Midea FS40-15QR, 55W, Có remote, 5 cánh 40cm', N'Midea', 1350000, 1147500, 50, N'Chiếc', N'MIDEA', N'https://i.hoanghamobile.vn/Uploads/2025/05/27/quat-cay-midea-fs4015qr-co-dieu-khien.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2347')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2347', N'Quạt cây Lumias F08 Pro', N'Chính hãng', 1290000, 1096500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/08/quat-lumias-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2348')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2348', N'Quạt đứng Toshiba 5 cánh F-LSA10(W)VN 50W', N'Chính hãng', 1000000, 850000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/11/quat-dung-toshiba-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2349')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2349', N'Quạt cây tuần hoàn Toshiba F-DSC40XVN(W)-có điều khiển', N'Chính hãng', 1890000, 1606500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/11/quat-cay-toshiba-3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2350')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2350', N'Quạt cây tuần hoàn Toshiba F-DSC80XVN(W)-có điều khiển', N'Chính hãng', 3890000, 3306500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/11/quat-dung-toshiba-1_639167841744211362.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2351')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2351', N'Toshiba quạt cây F-LSD10(H)VN, 9 cánh, DC Inverter, 30W', N'Chính hãng', 1850000, 1572500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/xam.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2352')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2352', N'Toshiba quạt cây F-LSA20(H)VN, 5 cánh, 60W', N'Chính hãng', 1390000, 1181500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/10036642-quat-dung-toshiba-f-lsa20-h-vn-xam-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2353')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2353', N'Toshiba quạt cây F-LSA10(K)VN, 5 cánh, 55W', N'Chính hãng', 1050000, 892500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/quat-may-toshiba-lsa10-9.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2354')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2354', N'Toshiba quạt cây F-LSA20(W)VN, 5 cánh, 60W', N'Chính hãng', 1390000, 1181500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/10036641-quat-dung-toshiba-f-lsa20-w-vn-trang-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2355')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2355', N'Toshiba quạt cây F-LSA10(H)VN, 5 cánh, 55W', N'Chính hãng', 1050000, 892500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/quat-may-toshiba-lsa10-xam-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2356')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2356', N'Toshiba quạt cây F-ASB50VN(W), 5 cánh, 55W', N'Chính hãng', 1190000, 1011500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/f-asb50vn-w-1.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2357')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2357', N'Toshiba quạt treo tường F-WSA20(H)VN, 3 cánh, 55W', N'Chính hãng', 1290000, 1096500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/f-wsa20-h-vn-3.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2358')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2358', N'Toshiba quạt cây F-LSD30(W)VN, 9 cánh, DC Inverter, 30W', N'Chính hãng', 2490000, 2116500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/f-lsd30-w-vn-3.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2359')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2359', N'Toshiba quạt cây F-LSD10(W)VN, 9 cánh, DC Inverter, 30W', N'Chính hãng', 1890000, 1606500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/quat-may-toshiba-lsd10-w-vn.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2360')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2360', N'Quạt thông minh Mi Smart Standing Fan 2 Lite - Chính hãng', N'Chính hãng', 1090000, 926500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2022/03/11/image-removebg-preview-10.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2361')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2361', N'Máy lọc nước Midea MRO-1644-5, 5 lõi, lắp âm', N'Midea', 4490000, 3816500, 50, N'Chiếc', N'MIDEA', N'https://i.hoanghamobile.vn/Uploads/2025/05/28/mro16445.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2362')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2362', N'Máy lọc nước MRO Midea 1644-8 KV, 8 lõi, lắp âm tủ', N'Midea', 5250000, 4462500, 50, N'Chiếc', N'MIDEA', N'https://i.hoanghamobile.vn/Uploads/2025/05/28/mro16448kv.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2363')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2363', N'Máy lọc nước Midea MRO 1644-8 VK1, 8 lõi', N'Midea', 5850000, 4972500, 50, N'Chiếc', N'MIDEA', N'https://i.hoanghamobile.vn/Uploads/2025/05/28/mro16448vk1-0.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2364')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2364', N'Máy lọc nước Midea MRO 1644-8 VK2, 8 lõi', N'Midea', 5850000, 4972500, 50, N'Chiếc', N'MIDEA', N'https://i.hoanghamobile.vn/Uploads/2025/05/29/mro16448vk2-0.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2365')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2365', N'Máy lọc nước Midea MRO 1644-8 VK3, 8 lõi', N'Midea', 5850000, 4972500, 50, N'Chiếc', N'MIDEA', N'https://i.hoanghamobile.vn/Uploads/2025/05/29/mro16448vk3-0.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2366')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2366', N'Máy lọc nước RO Philips cây đứng ADD8911/74', N'Philips', 7590000, 6451500, 50, N'Chiếc', N'PHILIPS', N'https://i.hoanghamobile.vn/Uploads/2025/05/29/may-loc-nuoc-ro-philips-cay-dung-add8911-74-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2367')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2367', N'Máy lọc nước RO Philips cây đứng ADD8912/74', N'Philips', 11390000, 9681500, 50, N'Chiếc', N'PHILIPS', N'https://i.hoanghamobile.vn/Uploads/2025/05/29/may-loc-nuoc-ro-philips-add8912-74-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2368')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2368', N'Máy lọc nước RO Philips cây đứng ADD8913/74', N'Philips', 12800000, 10880000, 50, N'Chiếc', N'PHILIPS', N'https://i.hoanghamobile.vn/Uploads/2025/05/29/may-loc-nuoc-ro-philips-add8913-74-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2369')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2369', N'Máy lọc nước RO Philips cây đứng ADD8922/74', N'Philips', 13300000, 11305000, 50, N'Chiếc', N'PHILIPS', N'https://i.hoanghamobile.vn/Uploads/2025/05/29/may-loc-nuoc-ro-philips-add8922-74.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2370')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2370', N'Máy lọc nước RO Philips để gầm AUT2015/74', N'Philips', 9690000, 8236500, 50, N'Chiếc', N'PHILIPS', N'https://i.hoanghamobile.vn/Uploads/2025/05/29/may-loc-nuoc-ro-philips-de-gam-aut2015-74-4.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2371')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2371', N'Máy lọc nước RO Philips để gầm AUT3015/74', N'Philips', 12550000, 10667500, 50, N'Chiếc', N'PHILIPS', N'https://i.hoanghamobile.vn/Uploads/2025/05/29/may-loc-nuoc-ro-philips-de-gam-aut3015-74-4.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2372')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2372', N'Máy lọc nước RO Philips để bàn ADD6912WH/74', N'Philips', 17090000, 14526500, 50, N'Chiếc', N'PHILIPS', N'https://i.hoanghamobile.vn/Uploads/2025/05/29/may-loc-nuoc-ro-philips-add6912wh-74.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2373')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2373', N'Máy lọc nước RO Philips để bàn ADD6912BL/90', N'Philips', 17090000, 14526500, 50, N'Chiếc', N'PHILIPS', N'https://i.hoanghamobile.vn/Uploads/2025/05/29/may-loc-nuoc-philips-add6912bl-90.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2374')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2374', N'Máy lọc nước RO Philips để bàn ADD6910/74', N'Philips', 12550000, 10667500, 50, N'Chiếc', N'PHILIPS', N'https://i.hoanghamobile.vn/Uploads/2025/05/29/may-loc-nuoc-ro-de-ban-add6910-74.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2375')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2375', N'Máy lọc nước RO Philips để bàn ADD6910DG/90', N'Philips', 12690000, 10786500, 50, N'Chiếc', N'PHILIPS', N'https://i.hoanghamobile.vn/Uploads/2025/05/29/may-loc-nuoc-ro-nong-nguoi-philips-add6910dg-90.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2376')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2376', N'Máy lọc nước RO Philips để bàn ADD6901HWH01/74', N'Philips', 10450000, 8882500, 50, N'Chiếc', N'PHILIPS', N'https://i.hoanghamobile.vn/Uploads/2025/05/30/may-loc-nuoc-ro-de-ban-philips-add6901hwh01.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2377')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2377', N'Máy lọc nước RO Philips để bàn ADD6901HBK01/90', N'Philips', 11050000, 9392500, 50, N'Chiếc', N'PHILIPS', N'https://i.hoanghamobile.vn/Uploads/2025/05/30/may-loc-nuoc-philips-add6901hbk01-90-4.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2378')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2378', N'Bộ lọc nước trực tiếp tại vòi Philips AWP3753/98', N'Philips', 1280000, 1088000, 50, N'Chiếc', N'PHILIPS', N'https://i.hoanghamobile.vn/Uploads/2025/05/30/bo-loc-nuoc-tai-voi-philips-awp3753-98.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2379')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2379', N'Bộ lọc nước vòi sen Philips AWP1775WH/74', N'Philips', 1320000, 1122000, 50, N'Chiếc', N'PHILIPS', N'https://i.hoanghamobile.vn/Uploads/2025/05/30/bo-loc-nuoc-voi-sen-philips-awp1775wh-74.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2380')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2380', N'Toshiba máy lọc nước TWP-N2396SVN(W), 10 lõi', N'Chính hãng', 5990000, 5091500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/cq5dam-compression.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2381')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2381', N'Toshiba máy lọc nước TWP-H2396SVN(W), 10 lõi', N'Chính hãng', 7190000, 6111500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/cq5dam-compression-5.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2382')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2382', N'Toshiba máy lọc nước TWP-W2396SVN(M), 10 lõi', N'Chính hãng', 9590000, 8151500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/twp-w2396svn-m-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2383')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2383', N'Toshiba máy lọc nước TWP-W2398SVN(M), 10 lõi', N'Chính hãng', 12290000, 10446500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/twp-w2398svn-m-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2384')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2384', N'Toshiba máy lọc nước TWP-W2399SVN(M), 10 lõi', N'Chính hãng', 12990000, 11041500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/twp-w2399svn-m-5.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2385')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2385', N'Toshiba máy lọc nước TWP-N1686UV(W1), 3 lõi', N'Chính hãng', 3990000, 3391500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/12/twp-n1686uv-w1-1.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2386')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2386', N'Toshiba máy lọc nước TWP-W1035SVN(K), 7 lõi', N'Chính hãng', 7990000, 6791500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/may-loc-nuoc-toshiba-twp-w1035svn-k-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2387')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2387', N'Toshiba máy lọc nước TWP-W1630SVN(W), 7 lõi', N'Chính hãng', 8990000, 7641500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/may-loc-nuoc-toshiba-twp-w1630svn-w-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2388')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2388', N'Lò vi sóng Xiaomi Microwave Oven', N'Xiaomi', 2190000, 1861500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2025/03/25/xiaomi-microwave-oven-0.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2389')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2389', N'Lò Vi Sóng 20L Sharp R-2040EH-BK', N'Sharp', 1400000, 1190000, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/2026/09/25/sharp-20l-r-2040eh-bk-1-103445800.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2390')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2390', N'Sharp lò vi sóng có nướng R-G251TV-BK, 25L', N'Sharp', 2690000, 2286500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/rg251tvbk.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2391')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2391', N'Electrolux lò vi sóng điện tử 23L EMM23D22B', N'Chính hãng', 2450000, 2082500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/emm23d22b-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2392')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2392', N'Electrolux lò vi sóng có nướng 23L EMG23K22B', N'Chính hãng', 2190000, 1861500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/emg23k22b-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2393')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2393', N'Electrolux lò vi sóng có nướng 20L EMG20K22B', N'Chính hãng', 2190000, 1861500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/emg20k22b-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2394')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2394', N'Electrolux lò vi sóng có nướng 20L EMG20K22W', N'Chính hãng', 2190000, 1861500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/14/emg20k22w-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2395')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2395', N'Electrolux lò vi sóng 23L EMM23K22B', N'Chính hãng', 2290000, 1946500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/14/emm23k22b-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2396')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2396', N'Electrolux lò vi sóng 20L EMM20K22B', N'Chính hãng', 1790000, 1521500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/14/emm20k22b-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2397')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2397', N'Electrolux lò vi sóng 20L EMM20K22W', N'Chính hãng', 1790000, 1521500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/14/emm20k22w-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2398')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2398', N'Sharp lò vi sóng có nướng R-G251TV-SL, 25L', N'Sharp', 2750000, 2337500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/rg251tvsl.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2399')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2399', N'Sharp lò vi sóng có nướng R-G222VN-S, 20L', N'Sharp', 1990000, 1691500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/rg222vns.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2400')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2400', N'Sharp lò vi sóng có nướng R-G322VN-S, 23L', N'Sharp', 2150000, 1827500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/rg322vns-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2401')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2401', N'Sharp lò vi sóng có nướng R-G371VN-W, 23L', N'Sharp', 2150000, 1827500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/rg371vnw-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2402')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2402', N'Sharp lò vi sóng có nướng R-G572VN-S, 25L', N'Sharp', 2290000, 1946500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/rg572vns.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2403')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2403', N'Sharp lò vi sóng R-203VN-M, 20L', N'Sharp', 1570000, 1334500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/r203vnm.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2404')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2404', N'Sharp lò vi sóng R-211TV-SL, 21L', N'Sharp', 1850000, 1572500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/r211tvsl.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2405')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2405', N'Sharp lò vi sóng có nướng R-G225VN-BK, 20L', N'Sharp', 1690000, 1436500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/rg225vnbk-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2406')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2406', N'Sharp lò vi sóng có nướng R-G228VN-SL, 20L', N'Sharp', 1790000, 1521500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/rg228vnsl-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2407')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2407', N'Sharp lò vi sóng có nướng R-G302VN-S, 23L', N'Sharp', 2290000, 1946500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/rg302vns-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2408')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2408', N'Sharp lò vi sóng R-209VN-SK, 20L', N'Sharp', 1490000, 1266500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/r209vnsk.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2409')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2409', N'Sharp lò vi sóng R-32A2VN-S, 23L', N'Sharp', 1850000, 1572500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/r32a2vns.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2410')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2410', N'Sharp lò vi sóng R-208VN-WS, 20L', N'Sharp', 1390000, 1181500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/r208vnws.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2411')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2411', N'Sharp lò vi sóng R-207VN-SL, 20L', N'Sharp', 1380000, 1173000, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/r207vnsl.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2412')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2412', N'Sharp lò vi sóng R-31A2VN-S, 23L', N'Sharp', 1850000, 1572500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/r31a2vns.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2413')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2413', N'Toshiba lò vi sóng MWP-MM20P(WH), 20L', N'Chính hãng', 1280000, 1088000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/12/mwp-mm20p-1.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2414')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2414', N'Sharp Lò vi sóng R-202VN-S 20 lít', N'Sharp', 1390000, 1181500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/2024/08/26/sharp-lo-vi-song-r-202vn-s-20-lit-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2415')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2415', N'Toshiba lò vi sóng MWP-MM20P(BK), 20L', N'Chính hãng', 1390000, 1181500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/12/mwp-mm20p-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2416')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2416', N'Toshiba lò vi sóng MW2-MM24PC(BK), 24L', N'Chính hãng', 2190000, 1861500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/12/mw2-mm24pc-bk-1.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2417')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2417', N'Toshiba lò vi sóng MW3-MM25PE(BK), 25L', N'Chính hãng', 2050000, 1742500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/12/mw3-mm25pe-bk-1.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2418')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2418', N'Toshiba lò vi sóng MM-EM25PE(BM), 25L', N'Chính hãng', 2390000, 2031500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/12/mm-em25pe-bm-1.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2419')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2419', N'Toshiba lò vi sóng có nướng ER-SGS34(S1)VN, 34L', N'Chính hãng', 3570000, 3034500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/12/er-sgs34-s1-vn-1.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2420')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2420', N'Toshiba lò vi sóng ER-SM20(W1)VN, 20L', N'Chính hãng', 1750000, 1487500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/12/er-sm20-w1-vn-1.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2421')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2421', N'Toshiba lò vi sóng ER-SS23(W1)VN, 23L', N'Chính hãng', 2440000, 2074000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/12/er-ss23-w1-vn-1.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2422')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2422', N'Toshiba lò vi sóng MW2-MM20P(BK), 20L', N'Chính hãng', 1390000, 1181500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/12/mw2-mm20p-bk-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2423')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2423', N'Toshiba lò vi sóng có nướng ER-SGM20(S1)VN, 20L', N'Chính hãng', 1490000, 1266500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/12/er-sgm20-s1-vn-1.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2424')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2424', N'Toshiba lò vi sóng có nướng MW2-AG24PC(BK), 24L', N'Chính hãng', 2690000, 2286500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/12/mw2-ag24pc-bk-1.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2425')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2425', N'Toshiba lò vi sóng có nướng MW3-MG25PE(BK), 25L', N'Chính hãng', 2290000, 1946500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/12/mw3-mg25pe-bk.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2426')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2426', N'Bếp điện từ Magic Korea A-50, 2200W', N'Chính hãng', 1290000, 1096500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/05/26/a50-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2427')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2427', N'Bếp từ MIDEA MIC221T0AGG, 2200W', N'Midea', 1190000, 1011500, 50, N'Chiếc', N'MIDEA', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/cq5dam-web-5000-5000-2.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2428')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2428', N'Midea bếp từ MIC221T0AGB , 2200W', N'Midea', 1190000, 1011500, 50, N'Chiếc', N'MIDEA', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/midea-bep-tu-mic221t0agb-2200w.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2429')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2429', N'Electrolux bếp từ ETD42SKS, 2100W', N'Chính hãng', 2590000, 2201500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/etd42sks.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2430')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2430', N'Electrolux bếp từ ETD42SKA, 2100W', N'Chính hãng', 2090000, 1776500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/etd42ska.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2431')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2431', N'Midea bếp từ MI-K1917EF(B), 1900W', N'Midea', 899000, 764150, 50, N'Chiếc', N'MIDEA', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/mi-k1917ef-b.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2432')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2432', N'Midea bếp từ MI-B2015DE, 2000W', N'Midea', 999000, 849150, 50, N'Chiếc', N'MIDEA', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/bp-din-t-midea-mi-b2015de-2000w-96c3357c.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2433')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2433', N'Electrolux bếp từ ETD42SKR, 2100W', N'Chính hãng', 2290000, 1946500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/etd42skr-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2434')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2434', N'Midea bếp từ MI-T2117DC, 2100W', N'Midea', 1190000, 1011500, 50, N'Chiếc', N'MIDEA', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/midea-bep-tu-mi-t2117dc-2100w.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2435')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2435', N'Electrolux bếp từ ETD29MKC, 2000W', N'Chính hãng', 1290000, 1096500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/12/27/etd29mkc-1-png.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2436')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2436', N'Electrolux bếp từ ETD29MKB, 2000W', N'Chính hãng', 1490000, 1266500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/etd29mkb-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2437')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2437', N'Midea bếp từ MI-T2120DD, 2100W', N'Midea', 1190000, 1011500, 50, N'Chiếc', N'MIDEA', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/t2120dd-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2438')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2438', N'Midea bếp từ MI-T2121DB, 2100W', N'Midea', 1890000, 1606500, 50, N'Chiếc', N'MIDEA', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/cq5dam-web-5000-5000_638618432985208251.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2439')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2439', N'Midea bếp từ MIC221T0AGA , 2200W', N'Midea', 1190000, 1011500, 50, N'Chiếc', N'MIDEA', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/cq5dam-web-5000-5000-1.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2440')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2440', N'Toshiba bếp từ IC-20R1SVV, 2000W', N'Chính hãng', 1190000, 1011500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/12/ic20r1svv-3.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2441')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2441', N'Toshiba bếp từ IC-20R2SV, 2000W', N'Chính hãng', 1190000, 1011500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/12/ic20r2sv-1.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2442')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2442', N'Toshiba bếp từ IC-20S1PV, 2000W', N'Chính hãng', 1590000, 1351500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/12/cq5dam-web-5000-5000.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2443')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2443', N'Toshiba bếp từ IC-20S2PV, 2000W', N'Chính hãng', 1490000, 1266500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/12/10048897-bep-dien-tu-toshiba-ic-20s2pv-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2444')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2444', N'Toshiba bếp từ IC-20S3PV, 2000W', N'Chính hãng', 1490000, 1266500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/12/ic20s3pv-1.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2445')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2445', N'Toshiba bếp từ IC-20S4PV, 2000W', N'Chính hãng', 1550000, 1317500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/12/cq5dam-web-5000-5000_638617350170683836.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2446')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2446', N'Robot hút bụi Xiaomi Vacuum S40', N'Xiaomi', 4290000, 3646500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2025/06/19/xiaomi-robot-vacuum-s40-top-left.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2447')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2447', N'Khóa cửa thông minh BRAVUS Core by ABUS A35', N'Chính hãng', 5300000, 4505000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/08/20/a35-1-172321384.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2448')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2448', N'Robot hút bụi lau nhà Xiaomi Vacuum H50', N'Xiaomi', 8790000, 7471500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/03/26/xiaomi-vacuum-h50-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2449')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2449', N'Robot hút bụi lau sàn Dreame D20 Ultra', N'Xiaomi', 9490000, 8066500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/04/15/d20-ultra.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2450')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2450', N'Robot hút bụi lau nhà thông minh Mova E50 Ultra', N'Xiaomi', 10990000, 9341500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/06/16/mova-e50-ultra-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2451')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2451', N'Robot hút bụi lau nhà thông minh Dreame D30 Ultra CE', N'Xiaomi', 10990000, 9341500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/07/07/dreame-d30-ce-1-145948331.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2452')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2452', N'Robot hút bụi lau nhà Mova P70 Pro Ultra', N'Xiaomi', 15200000, 12920000, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/08/28/mova-70-pro-ultra-1-164746481.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2453')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2453', N'Khóa cửa thông minh BRAVUS Core by ABUS A37', N'Chính hãng', 21190000, 18011500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/08/20/a37-1-172438118.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2454')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2454', N'Khóa cửa thông minh BRAVUS Core by ABUS A30', N'Chính hãng', 18890000, 16056500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/08/20/abus-a30-1-170229201.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2455')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2455', N'Robot hút bụi lau nhà Xiaomi Vacuum 6', N'Xiaomi', 14990000, 12741500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/09/15/vacuum-6-1-152953677.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2456')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2456', N'Robot hút bụi thông minh Ecovacs T30C Gen2', N'Chính hãng', 12990000, 11041500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/09/15/t30c-den-7-164152930.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2457')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2457', N'Máy lau sàn hút bụi Tineco Floor One S6 Stretch Max', N'Chính hãng', 6990000, 5941500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/09/15/s6-streck-1-164458509.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2458')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2458', N'Robot hút bụi thông minh Ecovacs T80 Max Omni', N'Chính hãng', 15990000, 13591500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/09/15/robot-hut-bui-ecovacs-t80-max-omni-black-1-161810698.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2459')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2459', N'Camera Wifi TP-Link Tapo C310 3MP - Chính hãng', N'TP-Link', 699000, 594150, 50, N'Chiếc', N'TPLINK', N'https://i.hoanghamobile.vn/Uploads/2023/08/04/whatsapp-image-2023-08-04-at-16-52-58.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2460')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2460', N'Camera IP Wi-Fi TP-Link Tapo C210 360° 3MP - Chính hãng', N'TP-Link', 590000, 501500, 50, N'Chiếc', N'TPLINK', N'https://i.hoanghamobile.vn/Uploads/2023/08/04/c210.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2461')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2461', N'Camera IP Wifi TP-Link Tapo C200 360° 1080P - Chính hãng', N'TP-Link', 370000, 314500, 50, N'Chiếc', N'TPLINK', N'https://i.hoanghamobile.vn/Uploads/2023/08/04/whatsapp-image-2023-08-04-at-16-55-35.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2462')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2462', N'Bình giữ nhiệt Hydro Flask Wide Flex Cap 20 OZ 591 ml Season 2025 (W20CTS)', N'Chính hãng', 950000, 807500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/06/25/binh-giu-nhiet-hydro-flask-wide-flex-cap-20-oz-591-ml-season-2025-w20cts-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2463')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2463', N'Bình giữ nhiệt Hydro Flask Wide Flex Cap 16 OZ 473 ml Season 2025  (W16CTS)', N'Chính hãng', 890000, 756500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/06/25/binh-giu-nhiet-hydro-flask-wide-flex-cap-16-oz-473-ml-season-2025-w16cts.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2464')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2464', N'Bình giữ nhiệt Hydro Flask Standard Flex Straw Cap 21 OZ 621 ml Season 2025', N'Chính hãng', 1150000, 977500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/06/25/binh-giu-nhiet-hydro-flask-standard-flex-straw-cap-21-oz-621-ml-season-2025-s21cfs-2_638864491308656954.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2465')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2465', N'Bình giữ nhiệt Hydro Flask Standard Flex Cap 24 OZ 710 ml Season 2025', N'Chính hãng', 1190000, 1011500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/06/25/binh-giu-nhiet-hydro-flask-standard-flex-cap-21-oz-621-ml-season-2025-s21csx-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2466')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2466', N'Bình giữ nhiệt Hydro Flask Standard Flex Cap 21 OZ 621 ml Season 2025', N'Chính hãng', 990000, 841500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/06/25/binh-giu-nhiet-hydro-flask-standard-flex-cap-21-oz-621-ml-season-2025-s21csx-3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2467')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2467', N'Bình giữ nhiệt Hydro Flask Standard Flex Cap 18 OZ 532 ml Season 2025', N'Chính hãng', 850000, 722500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/06/25/binh-giu-nhiet-hydro-flask-standard-flex-cap-18-oz-532-ml-season-2025-s18csx-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2468')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2468', N'Bình giữ nhiệt Hydro Flask micro hydro mini bottle – TNY200', N'Chính hãng', 680000, 578000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/08/19/imgi-3-tny200001-200-ml-micro-hydro-black-straight-600x600.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2469')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2469', N'Bình giữ nhiệt Hydro Flask micro hydro mini bottle Season 2025 – TNY200', N'Chính hãng', 680000, 578000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/08/19/imgi-218-tny200690-200mlmicrohydro-nectarorange-straighton-1-1-600x690.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2470')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2470', N'Bình giữ nhiệt Hydro Flask micro hydro mini bottle neon – LE-TNY200', N'Chính hãng', 680000, 578000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/08/19/screenshot-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2471')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2471', N'Giẻ lau một lần mop P - 15 cái (Phụ kiện robot hút bụi)', N'Chính hãng', 250000, 212500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2021/06/30/image-removebg-preview-1_637606683679115636.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2472')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2472', N'Hộp đựng nước mop-p 500ml (Phụ kiện robot hút bụi)', N'Chính hãng', 490000, 416500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2021/07/01/image-removebg-preview-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2473')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2473', N'Giẻ lau thay thế Mop/Mop P - 2 cái (Phụ kiện robot hút bụi)', N'Chính hãng', 190000, 161500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2021/07/01/image-removebg-preview-6.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2474')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2474', N'Chổi trục cho Mop/ Mop Pro', N'Chính hãng', 190000, 161500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2021/07/03/cam.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2475')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2475', N'Robot hút bụi Dreame Bot W10 - Chính hãng', N'Xiaomi', 9990000, 8491500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2022/01/08/image-removebg-preview-23.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2476')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2476', N'Xiaomi Vacuum Mop 2 Pro - Chính hãng', N'Xiaomi', 6450000, 5482500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2022/02/12/mi-robot-vacuum-mop-2-pro-13.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2477')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2477', N'Robot hút bụi lau sàn thông minh Viomi V3 Max', N'Chính hãng', 4490000, 3816500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2022/05/31/whatsapp-image-2022-05-30-at-16-41-25.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2478')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2478', N'Robot hút bụi thông minh Viomi Alpha UV S9', N'Chính hãng', 6490000, 5516500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2022/05/31/whatsapp-image-2022-05-30-at-16-41-28.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2479')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2479', N'Nước lau sàn chuyên dụng Dreame Multi surface floor cleaner dành cho Robot', N'Xiaomi', 290000, 246500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2022/07/26/image-removebg-preview-14.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2480')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2480', N'Robot lau sàn hút bụi tự làm sạch Dreame Bot L10s Ultra', N'Xiaomi', 9990000, 8491500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2022/10/01/image-removebg-preview-2022-10-01t091351-936.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2481')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2481', N'Robot hút bụi Dreame D9 Max - Chính hãng', N'Xiaomi', 4790000, 4071500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2023/02/03/image-removebg-preview-54.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2482')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2482', N'Máy hút bụi cầm tay Viomi Cyber – Chính Hãng', N'Chính hãng', 3990000, 3391500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2023/03/06/viomi-cyber-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2483')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2483', N'Máy hút đệm diệt khuẩn thông minh Smarock S10 - Chính hãng', N'Chính hãng', 890000, 756500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2023/03/08/smarock-s10-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2484')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2484', N'Máy hút đệm diệt khuẩn thông minh Smarock S10 Pro - Chính hãng', N'Chính hãng', 1790000, 1521500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2023/03/08/smarock-s10-pro-3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2485')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2485', N'Robot hút bụi Ecovacs Deebot T10 Omni - Chính Hãng', N'Chính hãng', 10990000, 9341500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2023/03/08/ecovacs-deebot-t10-omni-6.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2486')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2486', N'Robot hút bụi Xiaomi Vacuum X10 - Chính hãng', N'Xiaomi', 4990000, 4241500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2023/03/10/xiaomi-x10-8.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2487')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2487', N'Robot hút bụi Xiaomi Vacuum X10 Plus - Chính hãng', N'Xiaomi', 7900000, 6715000, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2023/03/10/x10-plus-6-33.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2488')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2488', N'Robot hút bụi lau sàn chuyên dụng Dreame L20 Ultra', N'Xiaomi', 24990000, 21241500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2023/08/21/dreame-l20-ultra-w.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2489')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2489', N'Robot lau sàn hút bụi tự làm sạch Dreame L10 Prime', N'Xiaomi', 6990000, 5941500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2023/12/13/dreame-l10-prime-3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2490')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2490', N'Robot hút bụi Xiaomi Vacuum E5', N'Xiaomi', 1890000, 1606500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2024/03/14/robot-hut-bui-xiaomi-vacuum-e5.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2491')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2491', N'Robot hút bụi lau nhà Dreame X40 Ultra', N'Xiaomi', 22490000, 19116500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2024/05/28/robot-hut-bui-lau-nha-dreame-x40-ultra-chinh-hang-5.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2492')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2492', N'Robot hút bụi Xiaomi Vacuum S20', N'Xiaomi', 3490000, 2966500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2024/07/19/vacuum-s20-thumb.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2493')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2493', N'Midea máy hút bụi MVC-SC861R, 600W', N'Midea', 849000, 721650, 50, N'Chiếc', N'MIDEA', N'https://i.hoanghamobile.vn/Uploads/2024/09/14/mvc-sc861r-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2494')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2494', N'Midea máy hút bụi MVC-SC861B, 600W', N'Midea', 849000, 721650, 50, N'Chiếc', N'MIDEA', N'https://i.hoanghamobile.vn/Uploads/2024/09/14/mvc-sc861b.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2495')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2495', N'Electrolux máy hút bụi Z1230, 1600W', N'Chính hãng', 1750000, 1487500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/14/z1230-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2496')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2496', N'Robot hút bụi lau nhà thông minh Ecovacs N30 Pro Omni', N'Chính hãng', 7990000, 6791500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/10/08/deebot-n30-pro-omni-black-01.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2497')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2497', N'Máy hút bụi không dây cầm tay MAGIC A-061, 130W', N'Chính hãng', 890000, 756500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/05/26/a061-0.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2498')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2498', N'Máy Hút Bụi Không Dây Cầm Tay MAGIC A-062, 130W', N'Chính hãng', 990000, 841500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/05/26/a062-0.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2499')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2499', N'Máy Hút Bụi Không Dây Cầm Tay MAGIC A-063, 160W', N'Chính hãng', 1390000, 1181500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/05/26/a063-11.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2500')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2500', N'Máy Hút Bụi Không Dây Cầm Tay MAGIC A-064, 600W', N'Chính hãng', 690000, 586500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/05/26/a064-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2501')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2501', N'Robot hút bụi Xiaomi Vacuum S40C', N'Xiaomi', 3890000, 3306500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2025/06/19/xiaomi-robot-vacuum-s40c-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2502')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2502', N'Máy hút bụi Xiaomi Vacuum Cleaner P30', N'Xiaomi', 1890000, 1606500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/05/05/xiaomi-vacuum-cleaner-p30-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2503')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2503', N'Robot hút bụi lau nhà thông minh Eufy Omni C28', N'Chính hãng', 9990000, 8491500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/08/18/c28-1-103555580.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2504')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2504', N'Robot hút bụi lau nhà thông minh Eufy Omni E28', N'Chính hãng', 12990000, 11041500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/08/18/e28-1-103335048.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2505')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2505', N'Robot hút bụi lau nhà Mova E20s Pro Plus', N'Xiaomi', 7450000, 6332500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/08/28/mova-e20s-pro-plus-1-165456288.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2506')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2506', N'Robot hút bụi lau nhà Mova E40 Ultra', N'Xiaomi', 9790000, 8321500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/08/28/mova-e40-ultra-6-165106498.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2507')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2507', N'Robot hút bụi lau nhà Mova S70 Roller', N'Xiaomi', 17350000, 14747500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/08/28/mova-s70-roller-2-164904304.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2508')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2508', N'Robot hút bụi lau nhà Mova V50 Ultra', N'Xiaomi', 19350000, 16447500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/08/28/mova-v50-ultra-1-164522260.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2509')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2509', N'Robot hút bụi lau nhà Xiaomi Vacuum 6 Pro', N'Xiaomi', 24990000, 21241500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/09/15/vacuum-6-1-152953677.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2510')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2510', N'Máy lau sàn hút bụi Tineco Floor One S7 Stretch Steam', N'Chính hãng', 10990000, 9341500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/09/15/s7-streck-6-164406141.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2511')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2511', N'Camera IP Wi-Fi TP-Link Tapo C220 360° 4MP', N'TP-Link', 499000, 424150, 50, N'Chiếc', N'TPLINK', N'https://i.hoanghamobile.vn/Uploads/2023/10/18/c220-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2512')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2512', N'Camera ngoài trời MobiFone Global HS-MBG12 3M', N'Chính hãng', 690000, 586500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2023/12/06/mobifone-hs-mbg12-3m.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2513')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2513', N'Camera quay quét trong nhà MobiFone Global HS-MBG11 3M', N'Chính hãng', 515000, 437750, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2023/12/06/mobifone-hs-mbg11-3m.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2514')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2514', N'Bàn Chải Đánh Răng Điện DR.BEI Sonic GY1', N'Chính hãng', 250000, 212500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2023/11/23/dr-bei-sonic-gy1-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2515')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2515', N'Bàn Chải Đánh Răng Điện DR.BEI Sonic BET-C01', N'Chính hãng', 430000, 365500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2023/11/23/dr-bei-sonic-bet-c01-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2516')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2516', N'Máy Massage lưng Philips PPM4501', N'Philips', 3190000, 2711500, 50, N'Chiếc', N'PHILIPS', N'https://i.hoanghamobile.vn/Uploads/2024/07/09/ppm4501-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2517')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2517', N'Robot Hút Bụi Lau Nhà Lydsto G2D YM-G2D-W03', N'Chính hãng', 3990000, 3391500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/08/11/lydsto-g2d-ym-g2d-w03-1-153246085.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2518')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2518', N'Camera IP Wi-Fi TP-Link Tapo C212 3M', N'TP-Link', 430000, 365500, 50, N'Chiếc', N'TPLINK', N'https://i.hoanghamobile.vn/Uploads/2023/12/14/c212-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2519')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2519', N'Khóa cửa thông minh BRAVUS Core by ABUS A31', N'Chính hãng', 13690000, 11636500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/08/20/a31-1-172222713.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2520')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2520', N'Máy cho thú cưng uống nước tự động Oneisall PWF 002', N'Chính hãng', 499000, 424150, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/01/31/oneisall-pwf-002-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2521')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2521', N'Máy Massage Cổ SKG G7 PRO-E', N'Chính hãng', 2790000, 2371500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/02/28/co-skg-g7-pro-e-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2522')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2522', N'Camera IP Wifi 3MP UNV Uniarch Uho-P2A-M3F4D', N'Chính hãng', 650000, 552500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/02/03/0235c9c5-f.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2523')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2523', N'Camera IP Wifi EZVIZ H6C Pro 2K 3MP', N'EZVIZ', 450000, 382500, 50, N'Chiếc', N'EZVIZ', N'https://i.hoanghamobile.vn/Uploads/2024/07/22/camera-ip-wifi-ezviz-h6c-pro-2mp.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2524')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2524', N'Camera IP Wifi EZVIZ H6C Pro 3K 5MP', N'EZVIZ', 560000, 476000, 50, N'Chiếc', N'EZVIZ', N'https://i.hoanghamobile.vn/Uploads/2024/07/22/camera-ip-wifi-ezviz-h6c-pro-2mp.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2525')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2525', N'Máy hút bụi cầm tay Xiaomi G20 Lite', N'Xiaomi', 1990000, 1691500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2025/03/25/xiaomi-vacuum-cleaner-g20-lite-0.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2526')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2526', N'Máy Sấy Tóc Ion Âm tốc độ cao MAGIC Eco AC-381, 1500W', N'Chính hãng', 1590000, 1351500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/05/29/ac381-0.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2527')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2527', N'Máy Sấy Tóc Ion Âm tốc độ cao MAGIC Eco AC-382, 1500W', N'Chính hãng', 1590000, 1351500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/05/29/ac382-0.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2528')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2528', N'Máy Sấy Tóc tốc độ cao MAGIC A-030, 1999W', N'Chính hãng', 1090000, 926500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/05/29/a030.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2529')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2529', N'Camera DJI Osmo Nano - 128GB', N'Chính hãng', 8460000, 7191000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/09/24/dji-osmo-nano-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2530')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2530', N'Camera DJI Osmo Nano - 64GB', N'Chính hãng', 7360000, 6256000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/09/24/dji-osmo-nano-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2531')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2531', N'Camera giám sát trong nhà IP 3M FPT SE 3', N'Chính hãng', 549000, 466650, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/10/13/se3-housing-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2532')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2532', N'Máy chiếu thông minh JMGO PicoFlix', N'Chính hãng', 11590000, 9851500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/11/26/jmgo-picoflix-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2533')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2533', N'Camera giám sát IP 3M FPT SE 2', N'Chính hãng', 530000, 450500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/02/12/fpt-camera-se-2-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2534')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2534', N'Camera giám sát ngoài trời IP 3M FPT SE 2S', N'Chính hãng', 709000, 602650, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/02/12/fpt-camera-se-2s-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2535')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2535', N'Máy chiếu thông minh JMGO N1S Nano', N'Chính hãng', 9290000, 7896500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/03/18/jmgo-n1s-nano-6.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2536')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2536', N'Ly giữ nhiệt Hydro Flask Mug 12 OZ (Season 2024) 355 ml (M12CP)', N'Chính hãng', 790000, 671500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/06/25/ly-giu-nhiet-hydro-flask-mug-12-oz-354ml-m12cp-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2537')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2537', N'Ly giữ nhiệt Hydro Flask Mug-Eqp 12 OZ 355 ml  (M12CPC)', N'Chính hãng', 790000, 671500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/06/25/ly-giu-nhiet-hydro-flask-mug-eqp-12-oz-355-ml-m12cpc-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2538')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2538', N'Ly giữ nhiệt Hydro Flask Around Tumbler Press-in lid 20 OZ 591 ml (T20CPB)', N'Chính hãng', 790000, 671500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/06/25/ly-giu-nhiet-hydro-flask-around-tumbler-press-in-lid-20-oz-591-ml-t20cpb-3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2539')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2539', N'Ly giữ nhiệt Hydro Flask Around Tumbler Press-in lid 20 OZ 591 ml 2025', N'Chính hãng', 790000, 671500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/06/25/ly-giu-nhiet-hydro-flask-around-tumbler-press-in-lid-20-oz-591-ml-seasson-2025-t20cpc-3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2540')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2540', N'Ly giữ nhiệt Hydro Flask All Ard Travel Tumbler-Eqp 24 OZ 710 ml (TT24PSC)', N'Chính hãng', 990000, 841500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/06/25/travel-tumbler-eqp-24-oz-710-ml-6.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2541')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2541', N'Ly giữ nhiệt Hydro Flask Around Travel Tumbler 40 OZ 1.183 ml Season 2025', N'Chính hãng', 1150000, 977500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/06/25/ly-giu-nhiet-hydro-flask-around-travel-tumbler-40-oz-1-183-ml-season-2025-tt40psc-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2542')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2542', N'Ly giữ nhiệt Hydro Flask Around Tumbler Press-in lid 12 OZ 355 ml', N'Chính hãng', 570000, 484500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/06/25/ly-giu-nhiet-hydro-flask-around-tumbler-press-in-lid-12-oz-355-ml-seasson-2025-t12cpc-3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2543')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2543', N'Bình Giữ Nhiệt Hydro Flask Wide Flex Sip Lid 12 OZ 355 ml Season 2025', N'Chính hãng', 850000, 722500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/06/25/binh-giu-nhiet-hydro-flask-wide-flex-sip-lid-12-oz-355-ml-season-2025-w12bcx-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2544')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2544', N'Bình giữ nhiệt Hydro Flask Wide Flex Cap-Eqp 12 OZ 355 ml (W12CTS)', N'Chính hãng', 850000, 722500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/06/25/binh-giu-nhiet-hydro-flask-wide-flex-cap-eqp-12-oz-355-ml-w12cts-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2545')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2545', N'Bình giữ nhiệt Hydro Flask Wide Flex Sip Lid 16 OZ 473 ml Season 2025', N'Chính hãng', 950000, 807500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/06/25/binh-giu-nhiet-hydro-flask-wide-flex-sip-lid-16-oz-473-ml-season-2025-w16bcx-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2546')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2546', N'Bình giữ nhiệt Hydro Flask Wide Flex Sip Lid 20 OZ 591 ml Season 2025', N'Chính hãng', 990000, 841500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/06/25/binh-giu-nhiet-hydro-flask-wide-flex-sip-lid-20-oz-591-ml-season-2025-w20bcx.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2547')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2547', N'Bình giữ nhiệt Hydro Flask Wide Flex Straw Cap-Eqp 24 OZ 710 ml (W24CFS)', N'Chính hãng', 1150000, 977500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/06/25/binh-giu-nhiet-hydro-flask-wide-flex-straw-cap-eqp-24-oz-710-ml-w24cfs-hong-nhat-3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2548')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2548', N'Bình giữ nhiệt Hydro Flask Wide Flex Straw Cap 32 OZ 946 ml (W32BFS)', N'Chính hãng', 1250000, 1062500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/06/25/binh-giu-nhiet-hydro-flask-wide-flex-straw-cap-32-oz-946-ml-w32bfs.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2549')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2549', N'Bình giữ nhiệt Hydro Flask Wide Flex Straw Cap-Eqp 32 OZ 946 ml (W32CFS)', N'Chính hãng', 1250000, 1062500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/06/25/binh-giu-nhiet-hydro-flask-wide-flex-straw-cap-eqp-32-oz-946-ml-w32cfs-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2550')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2550', N'Bình giữ nhiệt Hydro Flask Wide Flex Straw Cap 32 OZ 946 ml Season 2025', N'Chính hãng', 1250000, 1062500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/06/25/binh-giu-nhiet-hydro-flask-wide-flex-straw-cap-32-oz-946-ml-season-2025-w32cfs-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2551')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2551', N'Bình giữ nhiệt Hydro Flask Wide Flex Cap 32 OZ 946 ml Season 2025 (W32CTS)', N'Chính hãng', 1250000, 1062500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/06/25/binh-giu-nhiet-hydro-flask-wide-flex-cap-32-oz-946-ml-season-2025-w32cts-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2552')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2552', N'Bình nước giữ nhiệt Hydro Flask Wide Flex Cap 40 OZ (Season 2024) 1.183 ml', N'Chính hãng', 1390000, 1181500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/06/25/binh-nuoc-giu-nhiet-hydro-flask-wide-flex-cap-40-oz-season-2024-1-183-ml-w40bts-6.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2553')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2553', N'Bình giữ nhiệt Hydro Flask Wide Flex Straw Cap 40 OZ 1.183 ml Season 2025', N'Chính hãng', 1390000, 1181500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/06/25/binh-giu-nhiet-hydro-flask-wide-flex-straw-cap-40-oz-1-183-ml-season-2025-w40cfs-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2554')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2554', N'Bình nước giữ nhiệt Hydro Flask Wide Flex Cap 32 OZ 946 ml Season 2024', N'Chính hãng', 1250000, 1062500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/06/26/binh-nuoc-giu-nhiet-hydro-flask-wide-flex-cap-32-oz-946-ml-season-2024-w32bts-3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2555')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2555', N'Camera hành động DJI Osmo Action 360 Standard', N'Chính hãng', 9490000, 8066500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/08/14/osmo-360.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2556')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2556', N'Camera hành động DJI Osmo Action 360 Advanced Combo', N'Chính hãng', 11890000, 10106500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/08/14/osmo-360.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2557')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2557', N'Pin AAA Maxell Super Alkaline LR03 Vỉ 4 Viên Tặng 2', N'Chính hãng', 70000, 59500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/10/24/pin-aaa-alkaline-maxell-chinh-hang-vi-4-vien-tang-2-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2558')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2558', N'Pin Kiềm Maxell AA LR6(GD) Combo 4 viên tặng 2 viên', N'Chính hãng', 70000, 59500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/10/24/pin-aa-alkaline-maxell-chinh-hang-vi-4-vien-tang-2-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2559')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2559', N'Pin Alkaline NP AAA - LR03 (EG) Vỉ 4 Viên Tặng 2 Viên', N'Chính hãng', 65000, 55250, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/10/24/z6894860534212-a9f6146c6e009777831001f5ccc67464-f670739fd7ba4655afcd9f342e3f7f35-master.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2560')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2560', N'Pin Alkaline NP AA - LR6 (EG) Vỉ 4 Viên Tặng 2 Viên', N'Chính hãng', 65000, 55250, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/10/24/z6894860203013-6b7caf68f28630715bddc692c623a605-9fb663986a5c4e7a9dcd7b1e4d1da4a3-master.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2561')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2561', N'Pin Maxell CR2032H Lithium 3V Vỉ 2 Viên', N'Chính hãng', 45000, 38250, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/10/24/pin-maxell-cr2032h-2b.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2562')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2562', N'Camera IP Wifi UNV quay quét 360° trong nhà IPC-S3E-M3', N'Chính hãng', 350000, 297500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/11/20/0235cafc-f.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2563')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2563', N'Camera IP Wifi UNV giám sát ngoài trời IPC-B2D-M3F4D', N'Chính hãng', 709000, 602650, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/11/20/0235c7wh-fr.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2564')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2564', N'Camera IP Wifi UNV quay quét 360° trong nhà Uho-S3S-M33D-NB', N'Chính hãng', 1130000, 960500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/11/21/cam.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2565')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2565', N'Camera IP Wifi UNV giám sát ngoài trời Uho-P2C-M4F4', N'Chính hãng', 1050000, 892500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/11/21/cam-p2c.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2566')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2566', N'Camera kỹ thuật số dùng để ghi hình ngoài trời UNV Uho-P2G-M3F4D-AS', N'Chính hãng', 2713000, 2306050, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/11/21/cam-p2g.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2567')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2567', N'Máy massage cầm tay PHILIPS PPM7319', N'Philips', 790000, 671500, 50, N'Chiếc', N'PHILIPS', N'https://i.hoanghamobile.vn/Uploads/2025/11/27/04.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2568')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2568', N'Máy massage vai PHILIPS PPM3325', N'Philips', 1790000, 1521500, 50, N'Chiếc', N'PHILIPS', N'https://i.hoanghamobile.vn/Uploads/2025/11/27/3207n.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2569')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2569', N'Máy massage cổ PHILIPS PPM3308', N'Philips', 1490000, 1266500, 50, N'Chiếc', N'PHILIPS', N'https://i.hoanghamobile.vn/Uploads/2025/11/27/2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2570')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2570', N'Máy massage chân Philips PPM6502', N'Philips', 1490000, 1266500, 50, N'Chiếc', N'PHILIPS', N'https://i.hoanghamobile.vn/Uploads/2025/11/27/6502-fix.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2571')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2571', N'Máy massage chân Philips PPM6504', N'Philips', 2290000, 1946500, 50, N'Chiếc', N'PHILIPS', N'https://i.hoanghamobile.vn/Uploads/2025/11/27/&#x767D', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2572')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2572', N'Máy massage thể thao mini Philips PPM7501', N'Philips', 2750000, 2337500, 50, N'Chiếc', N'PHILIPS', N'https://i.hoanghamobile.vn/Uploads/2025/12/10/7303-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2573')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2573', N'Camera AI Wi-Fi TP-Link Tapo C222 360° 4MP', N'TP-Link', 490000, 416500, 50, N'Chiếc', N'TPLINK', N'https://i.hoanghamobile.vn/Uploads/2025/12/22/tapo-c222-eu-1-0-overview-1-normal-20240722025906e.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2574')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2574', N'Ổ điện đa năng 3AC kèm 2USB-A và 2USB-C sạc nhanh PD (max 65W)', N'Chính hãng', 690000, 586500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/12/26/msp-eng-1005-517-png-500x350.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2575')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2575', N'Ổ điện đa năng 2AC kèm 3USB-A và 1USB-C sạc nhanh PD (max 20W)', N'Chính hãng', 430000, 365500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/12/26/msp-eng-1005-509-jpg-500x350.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2576')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2576', N'Ổ điện đa năng 5AC kèm 3USB-A và 1USB-C sạc nhanh PD (max 20W)', N'Chính hãng', 490000, 416500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/12/26/msp-eng-1005-501-1-jpg-500x350.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2577')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2577', N'Camera hành động DJI Action 6 Standard', N'Chính hãng', 10790000, 9171500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/01/06/dji-osmo-action-6-10-1-768x768.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2578')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2578', N'Camera hành động DJI Action 6 Advanced Combo', N'Chính hãng', 13690000, 11636500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/01/06/dji-osmo-action-6-10-1-768x768.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2579')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2579', N'Pin tiểu Energizer MAX AAA E92 BP4 4 viên (Kiềm)', N'Chính hãng', 70000, 59500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/03/16/max-aaa-e92-bp4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2580')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2580', N'Pin tiểu Energizer MAX AA E91 BP4 4 viên (Kiềm)', N'Chính hãng', 70000, 59500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/03/16/max-aa-e91-bp4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2581')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2581', N'Pin tiểu Energizer MAX AAA E92 BP2+1 3 viên (Kiềm)', N'Chính hãng', 50000, 42500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/03/16/max-aaa-e92-bp2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2582')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2582', N'Pin tiểu Energizer MAX AAA E92 BP4+2 6 viên (Kiềm)', N'Chính hãng', 120000, 102000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/03/16/max-aaa-e92-bp4_639092773879923279.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2583')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2583', N'Pin tiểu Energizer MAX AA E91 BP2+1 3 viên (Kiềm)', N'Chính hãng', 50000, 42500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/03/16/max-aa-e91-bp2-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2584')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2584', N'Pin cúc áo Energizer Speacialty 2032 BP1 1 viên', N'Chính hãng', 30000, 25500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/03/16/bp1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2585')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2585', N'Pin cửa cuốn Energizer A23 BP1 1 viên (Kiềm)', N'Chính hãng', 30000, 25500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/03/16/a23-bp1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2586')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2586', N'Pin tiểu Energizer Eveready SHD AAA 1212 BP4+2 6 viên (Than carbon)', N'Chính hãng', 40000, 34000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/03/16/shd-aaa-1212-bp4-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2587')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2587', N'Pin tiểu Energizer Eveready SHD AA 1215BP4+2 6 viên (Than carbon)', N'Chính hãng', 40000, 34000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/03/16/shd-aa-1215bp4-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2588')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2588', N'Pin Energizer Max AAA E92 BP2', N'Chính hãng', 40000, 34000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/20/pin-aaa-energizer-max-e92-bp2-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2589')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2589', N'Pin Energizer Max AA E91 BP2', N'Chính hãng', 40000, 34000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/20/energizer-max-aa-e91-bp2_639148898782241728.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2590')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2590', N'Trạm sạc Anker 727 GaNPrime 6 cổng 100W 2AC2C2A A9126', N'Anker', 790000, 671500, 50, N'Chiếc', N'ANKER', N'https://i.hoanghamobile.vn/Uploads/2026/06/04/anker-727-ganprime-100w-2ac2c2a-den-xam-blackgray-b2ca91261f1-45aecd17.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2591')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2591', N'Camera IP Wifi trong nhà Uniarch UHO-C1-M3F2', N'Chính hãng', 470000, 399500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/08/07/uniarch-uho-c1-m3f2-4-113810934.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2592')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2592', N'Camera IP Wifi trong nhà Uniarch UHO-C1-M3F3', N'Chính hãng', 410000, 348500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/08/07/uniarch-uho-c1-m3f3-1-113635419.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2593')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2593', N'Camera IP Wifi TP-Link Tapo TC60 1080P - Chính hãng', N'TP-Link', 430000, 365500, 50, N'Chiếc', N'TPLINK', N'https://i.hoanghamobile.vn/Uploads/2023/03/15/wifi-tp-link-tapo-tc60-1080p-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2594')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2594', N'Camera Wifi ngoài trời TP-Link Tapo C320WS 2K - Chính hãng', N'TP-Link', 850000, 722500, 50, N'Chiếc', N'TPLINK', N'https://i.hoanghamobile.vn/Uploads/2023/08/03/c320ws-avatar.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2595')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2595', N'Camera IP Wi-Fi TP-Link Tapo C230 360° 5MP', N'TP-Link', 620000, 527000, 50, N'Chiếc', N'TPLINK', N'https://i.hoanghamobile.vn/Uploads/2025/02/17/tapo-c230-eu-1-0-overview-1-normal-20241011012230x.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2596')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2596', N'Combo Máy massage mắt Olike hiện đại + Tai nghe Oppo Enco Buds', N'OPPO', 150000, 127500, 50, N'Chiếc', N'OPPO', N'https://i.hoanghamobile.vn/Uploads/2022/10/07/massage-olike-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2597')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2597', N'Trạm sạc di động Pisen Power Station 1000W - Chính Hãng', N'Chính hãng', 22900000, 19465000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2023/01/14/image-removebg-preview-44.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2598')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2598', N'Trạm sạc di động Pisen Power Master Station 600W- Chính hãng', N'Chính hãng', 15500000, 13175000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2023/01/14/image-removebg-preview-43.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2599')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2599', N'Trạm sạc di động Digital PISEN Power Station 700W TS-OPS01 - Chính Hãng', N'Chính hãng', 17150000, 14577500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2023/01/14/image-removebg-preview-42.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2600')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2600', N'Ổ cắm điện thông minh chống giật Vconnex Smart Plug - Chính hãng', N'Chính hãng', 299000, 254150, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2022/07/11/vconex-smart-plug-7.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2601')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2601', N'Máy duỗi tóc không dây Dreame Glamour AST14A', N'Xiaomi', 990000, 841500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2025/03/21/image-removebg-preview-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2602')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2602', N'Máy cắt lông mũi Enchen EN005', N'Chính hãng', 89000, 75650, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/04/21/en005.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2603')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2603', N'Cân điện tử thông minh Xiaomi Mi Body Composition Scale 2 - Chính hãng', N'Xiaomi', 490000, 416500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2021/04/06/11.PNG', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2604')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2604', N'Cân điện tử Russell Taylors BWS-10', N'Chính hãng', 270000, 229500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2023/04/17/russell-taylors-bws-10.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2605')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2605', N'Camera cầm tay DJI Osmo Pocket 3', N'Chính hãng', 9190000, 7811500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/06/12/dji-osmo-pocket-3-9.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2606')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2606', N'Máy Massage cổ vai gáy Philips PPM3522', N'Philips', 1990000, 1691500, 50, N'Chiếc', N'PHILIPS', N'https://i.hoanghamobile.vn/Uploads/2024/07/09/philips-ppm3522-3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2607')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2607', N'Máy chiếu XGIMI Mogo 2 Pro', N'Chính hãng', 14200000, 12070000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/07/10/mogo2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2608')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2608', N'Máy chiếu laser 4K cao cấp JMGO N1 Ultra', N'Chính hãng', 59770000, 50804500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/07/10/may-chieu-laser-4k-1.gif', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2609')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2609', N'Máy chiếu di dộng JMGO N1S', N'Chính hãng', 25970000, 22074500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/07/10/jmgo-n1s.gif', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2610')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2610', N'Máy chiếu XGIMI Halo+', N'Chính hãng', 21800000, 18530000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/07/10/xgimi-halo-3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2611')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2611', N'Camera IP Wifi Ezviz H6C Pro 4MP', N'EZVIZ', 560000, 476000, 50, N'Chiếc', N'EZVIZ', N'https://i.hoanghamobile.vn/Uploads/2024/07/22/camera-ip-wifi-ezviz-h6c-pro-2mp.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2612')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2612', N'Camera DJI Osmo Pocket 3 Creator Combo', N'Chính hãng', 11280000, 9588000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/08/09/dji-osmo-pocket-3-creator-combo-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2613')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2613', N'Máy chiếu thông minh EROC MEGA', N'Chính hãng', 4880000, 4148000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/10/14/eroc-mega-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2614')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2614', N'Máy chiếu thông minh Xiaomi L1 Pro', N'Xiaomi', 6990000, 5941500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2025/01/16/l1pro-black-frontleft45.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2615')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2615', N'Camera giám sát thông minh Xiaomi C301', N'Xiaomi', 550000, 467500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2025/02/12/xiaomi-c301.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2616')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2616', N'Camera ngoài trời Xiaomi AW200', N'Xiaomi', 690000, 586500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2025/06/20/aw200-photoroom.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2617')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2617', N'Cân điện tử thông minh 365 Selection WS1 (365-SEL-601)', N'Chính hãng', 260000, 221000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/06/28/365-sel-601-5.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2618')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2618', N'Máy cạo râu điện Flyco FS685VN', N'Chính hãng', 790000, 671500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/15/may-cao-rau-flyco-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2619')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2619', N'Cân điện tử thông minh 365 Selection WS2 (365-SEL-606)', N'Chính hãng', 250000, 212500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/06/28/365-sel-602-6.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2620')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2620', N'Máy cạo râu Enchen Mini 6', N'Chính hãng', 229000, 194650, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/03/14/may-cao-rau-enchen-mini-6-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2621')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2621', N'Bàn Chải Điện Mipow (USA) I4-Plus Ultra Slim CI-900S Ver 2', N'Chính hãng', 335000, 284750, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/05/12/ban-chai-dien-mipow.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2622')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2622', N'Bộ 4 đầu bàn chải Mipow (USA) Ultra Slim Toothbrush Travel Edition CI900-YS', N'Chính hãng', 250000, 212500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/05/13/18191704423645-pic-grande.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2623')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2623', N'Máy sấy tóc Dreame Glory', N'Xiaomi', 1990000, 1691500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/04/24/dreame-glory-uni-xam-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2624')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2624', N'Máy cắt tóc Flyco FC5908VN', N'Chính hãng', 490000, 416500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/15/tong-do-cat-toc-flyco-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2625')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2625', N'Máy hút bụi lau nhà cầm tay Mova S4 Detect', N'Xiaomi', 3550000, 3017500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/08/28/mova-s4-detect-black-1-154127280.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2626')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2626', N'Robot hút bụi lau nhà Mova Z70 Ultra Roller Complete', N'Xiaomi', 25450000, 21632500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/08/28/mova-z70-ultra-roller-complete-black-1-153120166.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2627')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2627', N'Máy hút bụi cầm tay không dây Mova I10', N'Xiaomi', 7190000, 6111500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/08/28/m-y-h-t-b-i-c-m-tay-kh-ng-d-y-mova-i10-1-155246064.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2628')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2628', N'Máy hút bụi lau nhà cầm tay Mova K30 Pro', N'Xiaomi', 7950000, 6757500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/08/28/mova-k30-pro-1-160928070.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2629')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2629', N'Robot hút bụi thông minh Ecovacs T30C Prime Omni', N'Chính hãng', 9900000, 8415000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/09/16/robot-hut-bui-thong-minh-ecovacs-t30c-prime-omni-white-1-091947493.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2630')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2630', N'Robot hút bụi thông minh Ecovacs X12 Omnicyclone', N'Chính hãng', 24990000, 21241500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/09/15/robot-hut-bui-thong-minh-ecovacs-x12-omnicyclone-1-172909672.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2631')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2631', N'Robot hút bụi thông minh Ecovacs T90 PRO OMNI', N'Chính hãng', 17990000, 15291500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/09/15/robot-hut-bui-thong-minh-ecovacs-t90-pro-omni-black-1-170511941.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2632')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2632', N'Robot hút bụi lau nhà Mova V70 Ultra', N'Xiaomi', 29990000, 25491500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/08/28/mova-v70-ultra-white-1-152010290.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2633')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2633', N'Camera thông minh 365 Selection OC2 (365-SEL-222)', N'Chính hãng', 910000, 773500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/07/06/camera-365-opc-4_638558552188099021.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2634')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2634', N'Camera IP Wifi ngoài trời 365 Selection OC1 (365-SEL-221)', N'Chính hãng', 499000, 424150, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/07/06/camera-365-opc-5.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2635')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2635', N'Camera Wifi 365 Selection C2 5MP', N'Chính hãng', 630000, 535500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/05/22/camera-wifi-365-selection-c2-5mp_638519895546543687.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2636')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2636', N'Máy chiếu thông minh EROC MAX full HD - Chính Hãng', N'Chính hãng', 4090000, 3476500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2023/07/31/eroc-max-full-hd-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2637')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2637', N'Camera IP Wifi ngoài trời EZVIZ H3C 1080P - Chính hãng', N'EZVIZ', 509000, 432650, 50, N'Chiếc', N'EZVIZ', N'https://i.hoanghamobile.vn/Uploads/2023/06/29/camera-ip-wifi-ngoai-troi-ezviz-h3c-1080p-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2638')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2638', N'Camera IP Wifi Ezviz H1C-B 1080 - Chính hãng', N'EZVIZ', 409000, 347650, 50, N'Chiếc', N'EZVIZ', N'https://i.hoanghamobile.vn/Uploads/2023/07/27/camera-ip-wifi-ezviz-h1c-b-1080-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2639')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2639', N'Camera thông minh iThink HandView C4 - Chính hãng', N'Chính hãng', 405000, 344250, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2020/09/26/5.gif', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2640')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2640', N'Máy cạo râu điện Flyco FS889VN', N'Chính hãng', 390000, 331500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/15/fs889vn-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2641')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2641', N'Máy cạo râu điện Flyco FS891VN', N'Chính hãng', 790000, 671500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/15/fs891vn-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2642')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2642', N'Máy cạo râu điện Flyco FS903VN', N'Chính hãng', 590000, 501500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/15/may-cao-rau-flyco-1_639171358629105677.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2643')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2643', N'Camera IP 360 độ 3MP IMOU IPC-A32EP-L', N'EZVIZ', 380000, 323000, 50, N'Chiếc', N'EZVIZ', N'https://i.hoanghamobile.vn/Uploads/2026/08/11/camera-ip-360-3mp-imou-ipc-a32ep-l-1-135949243.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2644')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2644', N'Camera IP 360 độ 5MP IMOU IPC-A52P', N'EZVIZ', 570000, 484500, 50, N'Chiếc', N'EZVIZ', N'https://i.hoanghamobile.vn/Uploads/2026/08/11/camera-ip-360-5mp-imou-ipc-a52p-141543258.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2645')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2645', N'Camera IP 360 độ 3MP IMOU IPC-A32P Pro', N'EZVIZ', 430000, 365500, 50, N'Chiếc', N'EZVIZ', N'https://i.hoanghamobile.vn/Uploads/2026/08/11/camera-ip-360-3mp-imou-ipc-a32p-pro-1-144018091.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2646')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2646', N'Máy hút ẩm LG Dual Inverter MD16GQSE0, 16L - 69 m2', N'LG', 8790000, 7471500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/02/07/md16gqse0-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2647')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2647', N'Máy hút ẩm LG Dual Inverter MD19GQGE0, 19L - 81 m2', N'LG', 9490000, 8066500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/02/07/md19gqse0-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2648')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2648', N'Máy hút ẩm thông minh LUMIAS - 35L/ngày LMD-35L, 20 - 70 m²', N'Chính hãng', 5490000, 4666500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/10/01/lmd35l-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2649')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2649', N'Máy hút ẩm thông minh LUMIAS - 50L/ngày LMD-50L, 70 - 120 m²', N'Chính hãng', 6490000, 5516500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/10/01/lmd50l-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2650')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2650', N'Máy hút ẩm ion hóa Sharp DW-T30HV-W (77m2/30 lít)', N'Sharp', 9990000, 8491500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/2025/11/10/dwt30hvw-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2651')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2651', N'Máy hút ẩm LG Dual Inverter DD23GMWE1.ABAE (99m2/40 lít)', N'LG', 11490000, 9766500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/11/10/dd23gmwe1-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2652')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2652', N'Máy hút ẩm thông minh LUMIAS - 20L/ngày LMD-20L, 20 - 40 m²', N'Chính hãng', 4490000, 3816500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/10/01/lmd20l-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2653')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2653', N'Máy hút ẩm SHARP DW-D12A-W, 12L - 25 m2', N'Sharp', 4690000, 3986500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/dwd12aw.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2654')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2654', N'Máy hút ẩm SHARP DW-D20A-W, 20L - 50 m2', N'Sharp', 7190000, 6111500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/dwd20aw-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2655')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2655', N'Máy hút ẩm Electrolux EDH10TRBW1, 20L - 42 m2', N'Chính hãng', 6490000, 5516500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/edh10trbw1-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2656')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2656', N'Máy hút ẩm thông minh LUMIAS D6S-12L, 12L - 25 m²', N'Chính hãng', 2990000, 2541500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/10/01/d6s12l.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2657')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2657', N'Máy hút ẩm thông minh LUMIAS D6S-20L, 20L - 50 m²', N'Chính hãng', 3990000, 3391500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/10/01/d6s20l-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2658')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2658', N'Máy hút ẩm thông minh kiêm lọc không khí LUMIAS D6S-30L, 30L - 125 m²', N'Chính hãng', 5490000, 4666500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/10/01/d6s30l-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2659')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2659', N'Máy hút ẩm thông minh kiêm lọc không khí LUMIAS D6S-60L, 60L - 160 m²', N'Chính hãng', 7490000, 6366500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/10/01/d6s60l-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2660')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2660', N'Máy hút ẩm Casper - 12L/ngày DE-12L1, 8 - 15m2', N'Casper', 4490000, 3816500, 50, N'Chiếc', N'CASPER', N'https://i.hoanghamobile.vn/Uploads/2026/01/16/de12l1-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2661')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2661', N'Máy hút ẩm Casper - 20L/ngày DE-20L1, 20 - 30m2', N'Casper', 5990000, 5091500, 50, N'Chiếc', N'CASPER', N'https://i.hoanghamobile.vn/Uploads/2026/01/16/de20l1-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2662')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2662', N'Máy hút ẩm Casper - 30L/ngày DE-30L1, 30 - 40m2', N'Casper', 6990000, 5941500, 50, N'Chiếc', N'CASPER', N'https://i.hoanghamobile.vn/Uploads/2026/01/16/de30l1-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2663')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2663', N'Máy Hút Ẩm Xiaomi Smart Dehumidifier Lite EU (BHR8374EU), 13L - 25m2', N'Xiaomi', 3790000, 3221500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/02/23/ca88427a9251ae90122af1f158b25def.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2664')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2664', N'Máy lọc không khí Philips AC0820 - Chính hãng', N'Philips', 2990000, 2541500, 50, N'Chiếc', N'PHILIPS', N'https://i.hoanghamobile.vn/Uploads/2020/11/20/zxcvb.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2665')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2665', N'Máy lọc không khí Philips AC1215 - Chính hãng', N'Philips', 4990000, 4241500, 50, N'Chiếc', N'PHILIPS', N'https://i.hoanghamobile.vn/Uploads/2020/11/20/adg.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2666')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2666', N'Máy lọc không khí Daikin MC30VVM-A - Chính hãng', N'Chính hãng', 2990000, 2541500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2021/10/14/image-removebg-preview-2_637698175992435086.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2667')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2667', N'Máy lọc không khí Daikin MC40UVM6 - Chính hãng', N'Chính hãng', 5290000, 4496500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2021/10/14/image-removebg-preview-5.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2668')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2668', N'Máy lọc không khí Clair Tower Plus Air Purifier (T1C24) - Chính hãng', N'Chính hãng', 1290000, 1096500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2022/01/25/t-removebg-preview.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2669')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2669', N'Máy lọc không khí Xiaomi Air Purifier 4 - Chính hãng', N'Xiaomi', 3590000, 3051500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2022/02/12/xiaomi-smart-air-purifier-4-5.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2670')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2670', N'Lõi lọc (Air Purifier filter) Xiaomi Smart Air Purifier 4 Lite Filter', N'Xiaomi', 790000, 671500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/08/11/xiaomi-smart-air-purifier-4-lite-filter-1-155635633.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2671')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2671', N'Lõi lọc cho Máy lọc không khí Clair K2M24/My Clair', N'Chính hãng', 490000, 416500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/01/08/loi-loc-cho-k2m24.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2672')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2672', N'Máy lọc không khí Xiaomi Smart Air Purifier 4 Pro', N'Xiaomi', 4090000, 3476500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2024/04/05/xiaomi-smart-air-purifier-4-pro.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2673')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2673', N'Máy lọc không khí LG PuriCare 360 Hit AS60GHBG0 41W', N'LG', 5790000, 4921500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2024/05/21/lg-puricare-360-hit-as60ghbg0-41w-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2674')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2674', N'Máy lọc không khí 2 tầng LG PuriCare AS10GDWH0.ABAE 70W', N'LG', 18990000, 16141500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2024/08/30/as10gdwh0-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2675')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2675', N'Sharp máy lọc không khí FP-J30E-A', N'Sharp', 2090000, 1776500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/fpj30ea-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2676')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2676', N'Sharp máy lọc không khí FP-J40E-W', N'Sharp', 3590000, 3051500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/fpj40ew.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2677')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2677', N'Sharp máy lọc không khí FP-J60E-W', N'Sharp', 6490000, 5516500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/fpj60ew-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2678')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2678', N'Sharp máy lọc không khí FP-J80EV-H', N'Sharp', 6790000, 5771500, 50, N'Chiếc', N'SHARP', N'https://i.hoanghamobile.vn/Uploads/2024/09/13/fpj80evh-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2679')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2679', N'Máy lọc không khí LG PuriCare 360 Hit AS60GHCG0 41W', N'LG', 5790000, 4921500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2024/05/21/lg-puricare-360-hit-as60ghbg0-41w-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2680')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2680', N'Máy lọc không khí PuriCare360 Alpha PET 2 tầng AS10GDBY0.ABAE 72W', N'Chính hãng', 20990000, 17841500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/01/09/as10gdby0.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2681')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2681', N'Máy lọc không khí Midea MAP-550GJA32, 38W, 5 lớp lọc', N'Midea', 3790000, 3221500, 50, N'Chiếc', N'MIDEA', N'https://i.hoanghamobile.vn/Uploads/2025/05/26/may-loc-khong-khi-midea-map-550gja32-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2682')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2682', N'Máy lọc không khí Electrolux EP32-25UGA 25W', N'Chính hãng', 3290000, 2796500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/12/18/ep32-25uga-angr-1500x1500.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2683')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2683', N'Máy lọc không khí Electrolux EP53-46UGA 40W', N'Chính hãng', 5590000, 4751500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/12/18/ep53-46uga-angr-1500x1500.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2684')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2684', N'Máy lọc không khí Xiaomi Mijia Smart Air Purifier 6', N'Xiaomi', 4890000, 4156500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/09/15/air-purifier-6-1-152805942.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2685')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2685', N'Máy lọc không khí Xiaomi Mijia Smart Air Purifier 6 Plus', N'Xiaomi', 9490000, 8066500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/09/15/air-purifier-6-1-152805942.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2686')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2686', N'Lõi lọc không khí Mi Air Purifier Formaldehyde filter S1', N'Chính hãng', 399000, 339150, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/08/07/xiaomi-mi-air-purifier-formaldehyde-filter-s1-155202904.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2687')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2687', N'Máy massage cầm tay Fascial Gun Philips PPM7323', N'Philips', 770000, 654500, 50, N'Chiếc', N'PHILIPS', N'https://i.hoanghamobile.vn/Uploads/2024/07/09/philips-ppm7323-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2688')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2688', N'Máy massage đa năng PHILIPS PPM8502', N'Philips', 2790000, 2371500, 50, N'Chiếc', N'PHILIPS', N'https://i.hoanghamobile.vn/Uploads/2026/04/21/philips-ppm8502-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2689')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2689', N'Máy massage cổ Philips PPM3502', N'Philips', 1690000, 1436500, 50, N'Chiếc', N'PHILIPS', N'https://i.hoanghamobile.vn/Uploads/2025/03/14/image-removebg-preview-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2690')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2690', N'Máy massage cầm tay Beoka S5 Pro', N'Chính hãng', 1790000, 1521500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/06/28/beoka-s5-pro-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2691')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2691', N'Máy Massage Cầm Tay Mini Beoka C1', N'Chính hãng', 1190000, 1011500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/06/28/massage-beoka-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2692')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2692', N'Máy massage cầm tay mini Beoka Q1', N'Chính hãng', 1290000, 1096500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/06/28/beoka-q1-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2693')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2693', N'Máy massage cầm tay Beoka Q7', N'Chính hãng', 1890000, 1606500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/06/28/beoka-q7-6.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2694')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2694', N'Máy cạo râu Enchen BlackStone 3', N'Chính hãng', 349000, 296650, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/03/14/enchen-blackstone-3-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2695')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2695', N'Máy cạo râu Enchen Pocket Shaver K8', N'Chính hãng', 290000, 246500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/03/14/enchen-pocket-shaver-k8-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2696')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2696', N'Máy cạo râu Enchen Mini 6S', N'Chính hãng', 289000, 245650, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/03/14/enchen-mini-6s-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2697')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2697', N'Máy cạo râu EROC Magic Stone KKYS011', N'Chính hãng', 329000, 279650, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/08/07/eroc-magic-stone-kkys011-1-110746303.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2698')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2698', N'Máy cạo râu EROC Traveller KKXZ021', N'Chính hãng', 449000, 381650, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/08/07/eroc-traveller-kkxz021-white-1-105948430.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2699')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2699', N'Cổng Chuyển Hyperdrive Next 4 Port Usb-C Hub Cho Laptop/Macbook TypeC', N'Apple', 990000, 841500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/04/15/hyperdrive-next-4-port-5.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2700')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2700', N'Cổng Chuyển Hyperdrive Next 4-In-1 Port Usb-C Hub Cho Laptop/Mac HD5002GL', N'Chính hãng', 299000, 254150, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/04/19/hd5002gl-8.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2701')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2701', N'Cổng Chuyển Hyperdrive Next 8 Port Usb-C Macbook/Laptop HD4004GL', N'Apple', 1790000, 1521500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/04/19/hd4004gl-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2702')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2702', N'Cổng Chuyển Hyperdrive Next 10 Port Usb-C Cho Laptop/Macbook TypeC HD4005GL', N'Apple', 1999000, 1699150, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/04/19/hd4005gl-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2703')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2703', N'Cổng Chuyển Hyperdrive Next 11 Port Dual 4K60Hz Hdmi UsbC HD4006GL', N'Chính hãng', 2390000, 2031500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/04/19/hd4006gl-3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2704')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2704', N'Cổng chuyển đổi USB-C Mophie 7 in 1', N'Chính hãng', 950000, 807500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/07/02/usb-c-mophie-7-in-1-13.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2705')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2705', N'Cổng chuyển đổi Ugreen USB C Hub 5 in 1 15495 CM478', N'Ugreen', 350000, 297500, 50, N'Chiếc', N'UGREEN', N'https://i.hoanghamobile.vn/Uploads/2025/04/03/thiet-ke-chua-co-ten.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2706')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2706', N'Cổng chuyển đổi Ugreen USB-C Hub 6-in-1 35998 CD361', N'Ugreen', 535000, 454750, 50, N'Chiếc', N'UGREEN', N'https://i.hoanghamobile.vn/Uploads/2025/04/03/anh-sp.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2707')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2707', N'Cổng chuyển đổi Ugreen USB-C 5-in-1 15596 CM511', N'Ugreen', 650000, 552500, 50, N'Chiếc', N'UGREEN', N'https://i.hoanghamobile.vn/Uploads/2025/04/03/anh-sp-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2708')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2708', N'Cổng chuyển đổi Ugreen USB C Hub 9 in 1 15600 CM498', N'Ugreen', 750000, 637500, 50, N'Chiếc', N'UGREEN', N'https://i.hoanghamobile.vn/Uploads/2025/04/03/anh-sp-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2709')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2709', N'Cổng chuyển đổi Ugreen USB C Hub 10 in 1 15601 CM498', N'Ugreen', 990000, 841500, 50, N'Chiếc', N'UGREEN', N'https://i.hoanghamobile.vn/Uploads/2025/04/03/anh-sp-3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2710')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2710', N'Cổng chuyển đổi Ugreen USB C Hub 70336 CM219', N'Ugreen', 310000, 263500, 50, N'Chiếc', N'UGREEN', N'https://i.hoanghamobile.vn/Uploads/2025/04/03/anh-sp-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2711')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2711', N'Cổng chuyển OTG Innostyle FlexiLInk USB-C to USB-A ST-510GY', N'Chính hãng', 130000, 110500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/07/10/st-510gy-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2712')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2712', N'Cổng chuyển OTG Innostyle FlexiLInk USB-A to USB-C ST-520GY', N'Chính hãng', 130000, 110500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/07/10/lop-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2713')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2713', N'Cổng chuyển OTG Innostyle FlexiLInk USB-C to Lightning – ST-530GY', N'Chính hãng', 130000, 110500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/07/10/st-530gy.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2714')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2714', N'Cổng chuyển OTG Innostyle FlexiLInk Lightning to USB-C – ST-540GY', N'Chính hãng', 150000, 127500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/07/10/st-540gy.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2715')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2715', N'Cổng chuyển OTG Innostyle USB-C to 3.5mm audio DAC – A130GY', N'Chính hãng', 150000, 127500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/07/10/a130gy.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2716')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2716', N'Hub chuyển đổi TP-Link 3in1 UH3020C', N'TP-Link', 390000, 331500, 50, N'Chiếc', N'TPLINK', N'https://i.hoanghamobile.vn/Uploads/2025/09/10/uh3020c-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2717')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2717', N'Hub chuyển đổi TP-Link 5in1 UH5020C', N'TP-Link', 490000, 416500, 50, N'Chiếc', N'TPLINK', N'https://i.hoanghamobile.vn/Uploads/2025/09/10/uh5020c-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2718')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2718', N'Hub chuyển đổi TP-Link 6in1 UH6120C', N'TP-Link', 630000, 535500, 50, N'Chiếc', N'TPLINK', N'https://i.hoanghamobile.vn/Uploads/2025/09/10/uh6120c-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2719')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2719', N'Hub chuyển đổi TP-Link 7in1 UH7020C', N'TP-Link', 650000, 552500, 50, N'Chiếc', N'TPLINK', N'https://i.hoanghamobile.vn/Uploads/2025/09/10/uh7020c-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2720')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2720', N'Hub chuyển đổi TP-Link 9in1 UH9120C', N'TP-Link', 790000, 671500, 50, N'Chiếc', N'TPLINK', N'https://i.hoanghamobile.vn/Uploads/2025/09/10/uh9120c-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2721')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2721', N'Hub chuyển đổi Baseus UltraJoy Series 6in1', N'Baseus', 350000, 297500, 50, N'Chiếc', N'BASEUS', N'https://i.hoanghamobile.vn/Uploads/2026/01/27/baseus-ultrajoy-6in1-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2722')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2722', N'Cổng chuyển OTG Innostyle NexaLink USB-C & USB-A to SD/TF Card Reader CAST3', N'Chính hãng', 390000, 331500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/03/03/cong-otg-innostyle-usb-c-to-sdtf.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2723')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2723', N'Cổng Chuyển OTG Innostyle NexaLink USB 3.0 Capture Card – CCACH15', N'Chính hãng', 599000, 509150, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/11/ccach15-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2724')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2724', N'Cổng chuyển đổi USB-C Mophie 3 in 1', N'Chính hãng', 490000, 416500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/07/02/usb-c-mophie-3-in-1-6.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2725')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2725', N'Cổng chuyển hyperdrive 4K HDMI 3-in-1 USB-C Hub - Chính hãng.', N'Chính hãng', 690000, 586500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2020/09/23/1.%20m&#x1ED9', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2726')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2726', N'HYPERDRIVE BAR 6 IN 1 USB-C HUB FOR MACBOOK, PC & DEVICES - Chính hãng', N'Apple', 750000, 637500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2020/09/23/4444.gif', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2727')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2727', N'Cổng chuyển đổi Hyperdrive HDMI 4K60HZ 4-IN-1 USB-C Hub (HD41)', N'Chính hãng', 750000, 637500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2022/02/22/cong-chuyen-doi-hyperdrive-hdmi-4k60hz-4-in-1-usb-c-hub-hd41-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2728')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2728', N'Cổng chuyển HYPERDRIVE BAR 6 IN 1 USB-C HUB HD22E - Chính hãng', N'Chính hãng', 750000, 637500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2021/02/25/image-removebg-preview-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2729')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2729', N'Cổng chuyển HyperDrive  4K HDMI 3-in-1  USB-C Hub HD259A', N'Chính hãng', 690000, 586500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2021/02/25/image-removebg-preview-3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2730')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2730', N'Cổng chuyển HyperDrive USBC Pro 8-in-2 Grey (GN28D-Grey) - Chính hãng', N'Chính hãng', 1190000, 1011500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2020/11/04/pro8-net.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2731')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2731', N'Cổng Chuyển Hyperdrive USB-C Hub For iPad Pro 2018/Macbook Pro/Air 13″2018', N'Apple', 550000, 467500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2020/09/23/ok-3.gif', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2732')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2732', N'Cổng Chuyển Chuyên Dụng HYPERDRIVE  4 IN 1 HDMI 4K/30HZ USB-C HUB HD319E', N'Chính hãng', 590000, 501500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2020/09/23/C&#x1ED5', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2733')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2733', N'Hub chuyển đổi Baseus Spacemate Series 10 in 1 dùng cho Mac', N'Baseus', 3190000, 2711500, 50, N'Chiếc', N'BASEUS', N'https://i.hoanghamobile.vn/Uploads/2024/09/26/baseus-spacemate-series-10-in-1-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2734')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2734', N'Cổng Chuyển TARGUS 6 In 1 USB-C Docking Station – DOCK419 - Chính Hãng', N'Chính hãng', 590000, 501500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2022/10/13/image-removebg-preview-27.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2735')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2735', N'HUB chuyển đổi Baseus Metal Gleam Type-C 5 trong 1 - Chính Hãng', N'Baseus', 499000, 424150, 50, N'Chiếc', N'BASEUS', N'https://i.hoanghamobile.vn/Uploads/2022/05/24/5in1-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2736')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2736', N'HUB chuyển đổi Baseus Metal Gleam Type-C 8 trong 1 - Chính hãng', N'Baseus', 750000, 637500, 50, N'Chiếc', N'BASEUS', N'https://i.hoanghamobile.vn/Uploads/2022/05/25/image-removebg-preview-39.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2737')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2737', N'HUB chuyển đổi Baseus Metal Gleam Type-C 4 trong 1 - Chính Hãng', N'Baseus', 399000, 339150, 50, N'Chiếc', N'BASEUS', N'https://i.hoanghamobile.vn/Uploads/2022/05/24/gleam-type-c-4-trong-1-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2738')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2738', N'Hub Baseus UltraJoy Series 5 cổng', N'Baseus', 349000, 296650, 50, N'Chiếc', N'BASEUS', N'https://i.hoanghamobile.vn/Uploads/2024/09/17/image-removebg-preview.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2739')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2739', N'Hub Ugreen Robogan 7 trong 1 CM888 45155', N'Ugreen', 690000, 586500, 50, N'Chiếc', N'UGREEN', N'https://i.hoanghamobile.vn/Uploads/2026/04/28/ugreen-45155-cm888-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2740')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2740', N'Tay cầm Backbone One Lightning - Xbox Edition', N'Chính hãng', 2790000, 2371500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2023/12/22/backbone-one-lightning-xbox-edition-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2741')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2741', N'Tay cầm Backbone One USB-C - Xbox Edition', N'Chính hãng', 2790000, 2371500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2023/12/22/tay-cam-backbone-one-usb-c-xbox-edition-chinh-hang-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2742')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2742', N'Tay cầm Backbone One Lightning - PlayStation Edition', N'Sony', 2490000, 2116500, 50, N'Chiếc', N'SONY', N'https://i.hoanghamobile.vn/Uploads/2023/12/22/backbone-one-lightning-playstation-edition-2-thumb.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2743')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2743', N'Tay cầm Backbone One USB-C - PlayStation Edition', N'Sony', 2490000, 2116500, 50, N'Chiếc', N'SONY', N'https://i.hoanghamobile.vn/Uploads/2023/12/22/one-usb-c-playstation-edition-6.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2744')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2744', N'Tay cầm chơi Game Sony PS5 DualSense Cosmic Red (CFI-ZCT1G 02)', N'Sony', 2099000, 1784150, 50, N'Chiếc', N'SONY', N'https://i.hoanghamobile.vn/Uploads/2023/04/04/ps5-dualsense-cosmic-red-cfi-zct1g-02-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2745')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2745', N'Tay cầm không dây Playstation DualSense Edge CFI-ZCP1', N'Sony', 5699000, 4844150, 50, N'Chiếc', N'SONY', N'https://i.hoanghamobile.vn/Uploads/2023/04/04/image-removebg-preview-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2746')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2746', N'Tay cầm Game Pad Sony Playstation PS5 DUALSENSE Black (CFI-ZCT1G 01)', N'Sony', 1990000, 1691500, 50, N'Chiếc', N'SONY', N'https://i.hoanghamobile.vn/Uploads/2023/04/04/cfi-zct1g-01-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2747')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2747', N'Ốp chống sốc TOMTOC Armorcase controller PS5 G27M1D1', N'Sony', 250000, 212500, 50, N'Chiếc', N'SONY', N'https://i.hoanghamobile.vn/Uploads/2026/07/06/p-ch-ng-s-c-tomtoc-ps5-g27m1d1-grey-1-152916445.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2748')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2748', N'Tay cầm chơi game REDMAGIC Shadow Blade Gamepad 2', N'Chính hãng', 2490000, 2116500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/03/20/tay-cam-choi-game-redmagic-shadow-blade-gamepad-2-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2749')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2749', N'Máy chơi game PlayStation 5 Slim CFI-2118 A01', N'Sony', 16790000, 14271500, 50, N'Chiếc', N'SONY', N'https://i.hoanghamobile.vn/Uploads/2024/04/01/sony-playstation-5-standard-cfi-12.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2750')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2750', N'Tay cầm chơi game có dây Rapoo V600 - Chính hãng', N'Chính hãng', 430000, 365500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2023/09/07/v600-black-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2751')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2751', N'Tay cầm chơi game không dây Rapoo V600S - Chính hãng', N'Chính hãng', 630000, 535500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2023/09/07/v600s-gray.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2752')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2752', N'Balo Hoàng Hà Mobile 2023 - Chính hãng', N'Chính hãng', 149000, 126650, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2023/03/09/balohh-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2753')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2753', N'JANSPORT (USA) EVERYDAY MINI TOTE 7L', N'Chính hãng', 981000, 833850, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/16/jansport-usa-everyday-mini-tote-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2754')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2754', N'JANSPORT (USA) FIFTH AVENUE 2.5L', N'Chính hãng', 612000, 520200, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/15/jansport-fifth-avenue-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2755')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2755', N'JANSPORT (USA) MOVE SLING FX SOFT NYLON 6L', N'Chính hãng', 1071000, 910350, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/15/jansport-move-sling-fx-soft-4.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2756')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2756', N'JANSPORT (USA) MOVE SLING HAWKINS POST 6L - HAWKINS POST', N'Chính hãng', 891000, 757350, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/15/move-sling-hawkins-post-1_639144595776927808.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2757')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2757', N'JANSPORT (USA) MOVE SLING 6L', N'Chính hãng', 961000, 816850, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/15/jansport-move-sling-6l-3.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2758')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2758', N'JANSPORT (USA) WEEKENDER MEDIUM DUFFEL 40L', N'Chính hãng', 1332000, 1132200, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/16/jansport-weekender-medium-duffel-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2759')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2759', N'JANSPORT (USA) WEEKENDER MINI DUFFEL 5L', N'Chính hãng', 801000, 680850, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/16/jansport-mini-duffel-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2760')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2760', N'JANSPORT (USA) SUPERBREAK PLUS 26L', N'Chính hãng', 1071000, 910350, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/15/superbreak-plus-fx-26l-soft-nylon-8.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2761')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2761', N'JANSPORT (USA) HALF PINT FX 10.2L SOFT NYLON', N'Chính hãng', 981000, 833850, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/14/half-pint-fx-10-2-10.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2762')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2762', N'Túi đựng phụ kiện ELECOM Minio BMA-MNOGC01 - Chính Hãng', N'Chính hãng', 990000, 841500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2022/10/08/image-removebg-preview-38.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2763')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2763', N'Balo laptop kháng khuẩn 15.6" ELECOM BM-BPAB01 - Chính Hãng', N'Chính hãng', 1490000, 1266500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2022/10/08/image-removebg-preview-41.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2764')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2764', N'Balo Thule EnRoute Backpack 23L - TEBP4216', N'Chính hãng', 3290000, 2796500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/15/thule-enroute-tebp4216-mallard-03-front-3204842-600x600.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2765')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2765', N'Balo Thule EnRoute Backpack 26L - TEBP4316', N'Chính hãng', 3890000, 3306500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/15/thule-enroute-26l-tebp5316-quietgreen-03-3205510-600x600.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2766')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2766', N'Balo Thule EnRoute Backpack 26L - TEBP4316 (1020g)', N'Chính hãng', 3890000, 3306500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/15/thule-enroute-tebp4316-mallard-03-front-3204847-600x600.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2767')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2767', N'Balo Thule EnRoute Travel Backpack 30L - TEBP5416 (1000g)', N'Chính hãng', 4490000, 3816500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/15/thule-enroute-30l-tebp5416-black-03-3205512-600x600.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2768')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2768', N'Balo Thule EnRoute Travel Backpack 30L – TEBP5416', N'Chính hãng', 4490000, 3816500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/15/thule-enroute-30l-tebp5416-black-03-3205512-600x600.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2769')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2769', N'Balo Thule EnRoute Backpack 30L - TEBP4416', N'Chính hãng', 4490000, 3816500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/15/thule-enroute-tebp4416-mallard-3-front-3204850-600x600.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2770')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2770', N'Balo Thule Crossover 2 Backpack 20L - C2BP114', N'Chính hãng', 7690000, 6536500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/15/balo-thule-crossover-2-backpack-20l-c2bp114.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2771')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2771', N'Balo Thule Crossover 2 Backpack 30L – C2BP116', N'Chính hãng', 8790000, 7471500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/15/thule-crossover-2-30l-c2bp116-black-front-3203835-600x600.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2772')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2772', N'Balo Thule Construct Backpack 24L - CONBP116', N'Chính hãng', 4690000, 3986500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/15/thule-construct-24l-conbp116-carbon-front-3204168-600x600.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2773')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2773', N'Balo Thule Construct Backpack 28L - CONBP216', N'Chính hãng', 5490000, 4666500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/15/thule-construct-28l-conbp216-black-front-3204169-600x600.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2774')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2774', N'Balo Thule Accent Recycled Convertible 17L - TACLB2116', N'Chính hãng', 3590000, 3051500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/15/thule-accent-taclb2116-black-3-front-2-3204815-600x600.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2775')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2775', N'Balo Thule Chasm Backpack 26L - TCHB115', N'Chính hãng', 5390000, 4581500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/15/thule-chasm-backpack-26l-tchb115-autumnal-front-3204295-600x600.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2776')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2776', N'Balo Thule Chasm Backpack 26L - TCHB215', N'Chính hãng', 5390000, 4581500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/15/thule-chasm-tchb215-26l-softblue-33-3205448-600x600.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2777')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2777', N'Balo Thule Paramount Commuter Backpack 18L - BTPCB118', N'Chính hãng', 4990000, 4241500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/16/thule-paramount-commuter-bp-tcbp118-black-3-front-3204729-600x600.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2778')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2778', N'Balo Thule Paramount Hybrid Pannier 26L - TPHP326', N'Chính hãng', 8290000, 7046500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/16/thule-paramount-tphp326-black-22-3205091-600x600.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2779')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2779', N'Balo Thule Subterra 2 Travel Backpack - TSTB434', N'Chính hãng', 6290000, 5346500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/16/thule-subterra-2-tstb434-black-22-3205054-600x600.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2780')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2780', N'Balo Thule Subterra 2 Convertible Carry-on - TSD440', N'Chính hãng', 7890000, 6706500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/20/thule-subterra-2-tsd440-black-22-3205057-600x600.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2781')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2781', N'Balo Thule Aion Travel Backpack 28L - TATB128', N'Chính hãng', 6790000, 5771500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/20/thule-aion-tatb128-black-3-front-3204721-600x600-1_639148654274372677.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2782')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2782', N'Balo Thule  Aion Travel Backpack 40L - TATB140', N'Chính hãng', 7990000, 6791500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/20/thule-aion-tatb140-black-3-front-3204723-600x600_639148654274528973.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2783')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2783', N'Balo Thule Landmark 40L - TLPM140', N'Chính hãng', 6690000, 5686500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/20/thule-landmark-tlpm140-darkestblue-33-3205309-600x600-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2784')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2784', N'Balo Thule Landmark Travel Pack 60L – TLPM260', N'Chính hãng', 7890000, 6706500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/20/thule-landmark-tlpm260-darkestblue-32-3205312-600x600.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2785')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2785', N'Balo Thule AllTrail Daypack 18L - TADP218', N'Chính hãng', 3290000, 2796500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/19/balo-thule-alltrail-daypack-18l-tadp218-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2786')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2786', N'Balo Thule AllTrail Daypack 25L - TADP225', N'Chính hãng', 5790000, 4921500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/19/balo-thule-alltrail-daypack-25l-tadp225-6.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2787')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2787', N'Balo Thule AllTrail X 15L - TALX115', N'Chính hãng', 4290000, 3646500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/19/balo-thule-alltrail-x-15l-talx115-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2788')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2788', N'Balo Thule  AllTrail X 25L -  TALX125', N'Chính hãng', 5390000, 4581500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/19/balo-thule-alltrail-x-25l-talx125-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2789')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2789', N'Túi Hành lý Thule Aion Duffel Bag 35L - TAWD135', N'Chính hãng', 6790000, 5771500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/19/thule-aion-tawd135-black-3-front-a-3204725-600x600.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2790')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2790', N'Túi Hành lý Thule Chasm Recycled Duffel 30L - TDSD301', N'Chính hãng', 4790000, 4071500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/19/thule-chasm-recycled-duffel-40l-6.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2791')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2791', N'Túi Hành lý Thule Chasm Recycled Duffel 40L - TDSD302', N'Chính hãng', 5490000, 4666500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/19/thule-chasm-recycled-duffel-40l-6.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2792')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2792', N'Vali Thule Subterra 2 Carry-on Spinner 35L - TSRS422', N'Chính hãng', 12150000, 10327500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/18/vali-thule-subterra-2-carry-on-spinner-35l-tsrs422-den-1_639147184929678242.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2793')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2793', N'Vali Thule Chasm Recycled Carry-on 55cm/22in 40L - TCCO222', N'Chính hãng', 11590000, 9851500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/18/thule-chasm-recycled-carry-on-55cm22in-40l-1_639147183831996608.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2794')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2794', N'Vali Thule Chasm Recycled Rolling Duffel 110L - TCWD232', N'Chính hãng', 14190000, 12061500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/18/thule-chasm-recycled-rolling-duffel-110-1_639147184501079369.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2795')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2795', N'Balo TOMTOC Voyage Laptop MacBook 15.6 inch (T50M1W1)', N'Apple', 4275000, 3633750, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2026/06/26/t50m1w1-1.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2796')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2796', N'Jansport (USA) Half Pint 10.2L', N'Chính hãng', 702000, 596700, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/14/half-pin-10-2l-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2797')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2797', N'Balo GIGABYTE Gaming', N'Chính hãng', 79000, 67150, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/04/23/balo-gigabyte-gaming-chinh-hang-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2798')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2798', N'Balo GIGABYTE', N'Chính hãng', 79000, 67150, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/04/23/balo-gigabyte-chinh-hang.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2799')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2799', N'Balo Lenovo', N'Lenovo', 79000, 67150, 50, N'Chiếc', N'LENOVO', N'https://i.hoanghamobile.vn/Uploads/2024/04/24/balo-lenovo-chinh-hang.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2800')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2800', N'Khoá Vali hành lý Thule TSA Cable Lock -  TSAL101', N'Chính hãng', 530000, 450500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/18/khoa-vali-hanh-ly-thule-cable-lock-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2801')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2801', N'Balo Hoàng Hà 2024', N'Chính hãng', 179000, 152150, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/10/balo-hoang-ha-2024-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2802')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2802', N'Balo HUAWEI CD60 Backpack, Xám', N'Huawei', 79000, 67150, 50, N'Chiếc', N'HUAWEI', N'https://i.hoanghamobile.vn/Uploads/2025/06/18/huawei-cd60-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2803')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2803', N'Túi MSI Pouch - GF9-NXXXX19-808', N'MSI', 79000, 67150, 50, N'Chiếc', N'MSI', N'https://i.hoanghamobile.vn/Uploads/2025/06/18/msi-gf9-nxxxx19-808-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2804')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2804', N'Balo Laptop Acer Gaming', N'Acer', 149000, 126650, 50, N'Chiếc', N'ACER', N'https://i.hoanghamobile.vn/Uploads/2025/06/18/balo-laptop-acer-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2805')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2805', N'Balo ASUS TUF Gaming VP4700 17inch/Đen', N'Asus', 199000, 169150, 50, N'Chiếc', N'ASUS', N'https://i.hoanghamobile.vn/Uploads/2025/06/18/balo-asus-tuf-vp4700-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2806')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2806', N'Balo Laptop LENOVO Legion Gaming Backpack', N'Lenovo', 199000, 169150, 50, N'Chiếc', N'LENOVO', N'https://i.hoanghamobile.vn/Uploads/2025/06/18/balo-laptop-lenovo-legion-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2807')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2807', N'BALO ASUS AP4600 ASUS BACKPACK', N'Asus', 390000, 331500, 50, N'Chiếc', N'ASUS', N'https://i.hoanghamobile.vn/Uploads/2025/06/18/balo-asus-ap4600-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2808')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2808', N'Balo MSI', N'MSI', 89000, 75650, 50, N'Chiếc', N'MSI', N'https://i.hoanghamobile.vn/Uploads/2025/06/18/blomsi-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2809')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2809', N'Túi xách chống sốc Innostyle DailyFlow Carrying Macbook/Laptop 14" S100', N'Apple', 320000, 272000, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/06/20/s100-den.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2810')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2810', N'Túi xách chống sốc Innostyle DailyFlow Carrying Macbook/Laptop 16" S100', N'Apple', 350000, 297500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/06/20/s100-den.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2811')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2811', N'Túi chống sốc, túi phụ kiện Innostyle GuardianTech Mac/Lap 14" GT-C21BLK-14', N'Chính hãng', 590000, 501500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/06/20/gt-c21-tim-thumb.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2812')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2812', N'Túi chống sốc, túi phụ kiện Innostyle GuardianTech Mac/Lap 16" GT-C21BLK-14', N'Chính hãng', 690000, 586500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/06/20/gt-c21-tim-thumb.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2813')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2813', N'Túi xách chống sốc Innostyle CarryLite Slim Macbook/Laptop 14" (S600LV-14)', N'Apple', 650000, 552500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/06/20/s600-hong.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2814')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2814', N'Túi đeo chéo Innostyle FlexiCarry crossbody sling FC22D', N'Chính hãng', 650000, 552500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/06/20/fc22d-dune-photoroom.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2815')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2815', N'Túi đeo chéo Innostyle VersalSling Crossbody bag S2101BRY', N'Chính hãng', 550000, 467500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/06/20/s2101-do.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2816')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2816', N'Balo Innostyle Colorlite Lightweight for Macbook/Laptop 16" P21KH', N'Apple', 599000, 509150, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/06/20/p21kh-den-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2817')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2817', N'Balo Thule EnRoute Backpack 12L - TEBP5112', N'Chính hãng', 1790000, 1521500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/15/thule-enroute-12l-tebp5112-paleyellow-03-3205499-600x600.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2818')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2818', N'Balo Thule EnRoute Backpack 21L - TEBP5116', N'Chính hãng', 2690000, 2286500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/15/thule-enroute-21l-tebp5116-black-03-3205500-600x600.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2819')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2819', N'Balo Thule EnRoute Backpack 21L - TEBP4116', N'Chính hãng', 2690000, 2286500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/15/thule-enroute-tebp4116-pelican-03-front-3204840-600x600.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2820')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2820', N'Túi du lịch Thule Subterra 2 PowerShuttle Mini - TSPW400', N'Chính hãng', 990000, 841500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/19/thule-subterra-2-powershuttle-mini-tspw400-black-4.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2821')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2821', N'Túi chống sốc Thule Subterra MacBook Sleeve 15 inch - TSS315B', N'Apple', 1490000, 1266500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2026/05/19/thule-subterra-macbook-sleeve-15-inch-tss315b-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2822')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2822', N'Túi xách Thule Subterra MacBook Attaché 15 inch - TSA315B', N'Apple', 2690000, 2286500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2026/05/19/thule-gauntlet-4-macbook-pro-sleeve-16-inch-tgse2357-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2823')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2823', N'Túi chống sốc Thule Gauntlet 4 MacBook Pro Sleeve 16 inch - TGSE2357', N'Apple', 1490000, 1266500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2026/05/19/thule-gauntlet-4-macbook-pro-sleeve-16-inch-tgse2357-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2824')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2824', N'Túi chống sốc Thule Gauntlet 5 MacBook Sleeve 14 inch – TGSE255', N'Apple', 1490000, 1266500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2026/05/19/thule-gauntlet-5-macbook-sleeve-16-inch-tgse255-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2825')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2825', N'Túi chống sốc Thule Gauntlet 5 MacBook Sleeve 16 inch – TGSE255', N'Apple', 1490000, 1266500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2026/05/19/thule-gauntlet-5-macbook-sleeve-16-inch-tgse255-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2826')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2826', N'Túi xách Thule Gauntlet 5 MacBook Attaché 14 inch – TGAE255', N'Apple', 2690000, 2286500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2026/05/19/thule-gauntlet-tgae2558-black-33-3205414-600x600.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2827')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2827', N'Túi xách Thule Gauntlet 5 MacBook Attaché 16 inch – TGAE255', N'Apple', 2690000, 2286500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2026/05/19/thule-gauntlet-tgae2558-black-33-3205414-600x600.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2828')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2828', N'Túi đeo chéo Thule EnRoute Sling Bag 2L - TESB5102', N'Chính hãng', 1190000, 1011500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/19/thule-enroute-sling-tesb5102-black-33-3205494-600x600.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2829')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2829', N'Túi xách Dell', N'Dell', 79000, 67150, 50, N'Chiếc', N'DELL', N'https://i.hoanghamobile.vn/Uploads/2024/07/06/tui-xach-dell.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2830')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2830', N'Túi chống sốc Tomtoc Protective cho Macbook Pro/Air 13" A13', N'Apple', 590000, 501500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2020/10/08/27.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2831')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2831', N'Túi chống sốc máy tính xách tay 15.6inch SH-15', N'Chính hãng', 99000, 84150, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/08/19/mtxt-14inch-sh-14-100337875.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2832')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2832', N'Túi chống sốc máy tính xách tay 14inch SH-14', N'Chính hãng', 99000, 84150, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/08/19/mtxt-14inch-sh-14-100337875.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2833')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2833', N'Túi xách đa năng GoPro Tote Bag', N'Chính hãng', 20000, 17000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/08/18/tui-xach-da-nang-gopro-totebag-chinh-hang-164139165.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2834')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2834', N'Túi xách Da Tom 19 15.6 inches', N'Chính hãng', 99000, 84150, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2022/11/22/tui-xach-tom-19-1-removebg-preview.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2835')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2835', N'Túi chống sốc da có quai xách 13.3 inch', N'Chính hãng', 150000, 127500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/08/18/t-i-ch-ng-s-c-da-mtxt-152103888.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2836')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2836', N'Túi xách Laptop SIMTOP SuperSlim 14"', N'Chính hãng', 299000, 254150, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2021/12/24/image-removebg-preview-10.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2837')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2837', N'Túi xách Laptop SIMTOP SuperSlim 15.6"', N'Chính hãng', 299000, 254150, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2021/12/24/image-removebg-preview-9.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2838')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2838', N'Túi chống sốc Macbook, Laptop SIMTOP Skin Zip 14"', N'Apple', 299000, 254150, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2021/12/24/image-removebg-preview-5.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2839')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2839', N'Túi xách cho Laptop và Tài liệu Lexon Premium - LN2701', N'Chính hãng', 399000, 339150, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/08/19/lexon-premium-ln2701-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2840')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2840', N'Túi xách gấp gọn Lexon Flat 14 Laptop Brief -  LN2503', N'Chính hãng', 499000, 424150, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/08/19/lexon-flat-14-laptop-brief-ln2503-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2841')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2841', N'Túi chống sốc Targus City Gear 15,6', N'Chính hãng', 150000, 127500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2022/02/22/tui-chong-soc-targus-city-gear-15-6-3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2842')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2842', N'Túi xách Tomtoc (USA) Briefcase Macbook Pro/Air 13" A14 - Chính hãng', N'Apple', 750000, 637500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2020/09/17/T&#xDA', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2843')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2843', N'Túi đeo chéo Tomtoc Slash Shoulder Bag 11inch Meteorite (T27S1D1)', N'Chính hãng', 990000, 841500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/09/t27s1d1-1-154951597.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2844')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2844', N'Balo Tomtoc Rolltop Navigator Travel Daypack laptop 17.3 inch 30L T61L1D1M', N'Chính hãng', 1782000, 1514700, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/09/balo-tomtoc-rolltop-navigator-travel-daypack-for-laptop-173-inch-universal-30l-t61l1-p62543-1-optimize-145010398.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2845')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2845', N'Túi đeo vai TOMTOC Meta/Oculus Quest 2 Sling Bag G40M1D1 (A0530)', N'Chính hãng', 1290000, 1096500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/06/a0530d1-1-172458790.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2846')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2846', N'Túi đeo chéo TOMTOC Sling Bag S Inky 8.3 inch (H02A4B1)', N'Chính hãng', 790000, 671500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/07/h02a4b1-1-093613165.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2847')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2847', N'TOMTOC LIghtweight Cordura Sling Bag 8.3 inch T21S1 (H02-A04)', N'Chính hãng', 882000, 749700, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/07/h02a4-4-094053212.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2848')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2848', N'Túi đeo chéo TOMTOC Lightweight Cordura Sling Bag 8.3 inch (T21S1)', N'Chính hãng', 882000, 749700, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/07/t21s1-1-094438388.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2849')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2849', N'Túi Đeo Chéo TOMTOC (USA) Sling Bags X-Pac 8.3 inch T21S1D2 (H02A4D2)', N'Chính hãng', 1431000, 1216350, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/07/h02a4d2-1-095721890.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2850')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2850', N'Túi đeo chéo TOMTOC Steam Deck Wander Daily Sling (T26S1D1)', N'Chính hãng', 1431000, 1216350, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/07/t26s1d1-1-100059656.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2851')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2851', N'Túi chống va đập TOMTOC Nintendo Switch Fancycase slim (G05S1)', N'Chính hãng', 531000, 451350, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/07/tomtoc-nintendo-switch-fancycase-slim-black-g05s1-6-101558560.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2852')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2852', N'Túi chống sốc kèm túi phụ kiện TOMTOC 360 Protective laptop 16inch A13E2', N'Chính hãng', 880000, 748000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/03/tui-chong-soc-kem-tui-phu-kien-tomtoc-360-a13e2-black-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2853')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2853', N'Túi xách TOMTOC Defender handbag laptop 16inch A22F2', N'Chính hãng', 925000, 786250, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/03/tui-xach-tomtoc-16inch-a22f2-blue-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2854')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2854', N'Túi xách chống sốc TOMTOC Briefcase laptop 16inch NEW A14F2', N'Chính hãng', 945000, 803250, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/03/tui-xach-chong-soc-tomtoc-new-a14f2-black-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2855')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2855', N'Túi xách đeo chéo TOMTOC Defender shoulder bag laptop 15 16inch A40', N'Chính hãng', 990000, 841500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/03/tui-xach-deo-cheo-tomtoc-a40-black-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2856')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2856', N'Túi đeo TOMTOC Protection Premium laptop 15 16inch NEW H13', N'Chính hãng', 1135000, 964750, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/03/tui-deo-tomtoc-protection-premium-laptop-15-16inch-new-h13.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2857')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2857', N'Túi đeo TOMTOC Defenderace laptop shoulder bag A03', N'Chính hãng', 1135000, 964750, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/03/tui-deo-tomtoc-defenderace-laptop-shoulder-bag-a03-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2858')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2858', N'Túi xách cs TOMTOC Protection premium laptop 16inch NEW H13', N'Chính hãng', 1135000, 964750, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/03/tui-chong-soc-macbook-tomtoc-h13-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2859')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2859', N'TOMTOC Urban Codura Sling BAG TRAVEL & WORK 11 inch T21M1D1 (H02B4S1)', N'Chính hãng', 1782000, 1514700, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/03/tomtoc-croxbody-edc-sling-bag-14-inch-t24m1-a54d2-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2860')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2860', N'Túi xách TOMTOC USA Terra-T38 Puffy Laptop 14 inch 10L Tote Bag', N'Chính hãng', 1251000, 1063350, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/03/tomtoc-usa-terra-t38-puffy-laptop-14-inch10l-tote-bag-6.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2861')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2861', N'Túi đeo đa năng TOMTOC Croxbody Edc Sling BaG 14 inch T24M1 (A54D2)', N'Chính hãng', 1341000, 1139850, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/30/a54a1d1-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2862')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2862', N'Túi đeo TOMTOC Shoulder bags laptop 15 16inch A42', N'Chính hãng', 1135000, 964750, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/03/tui-deo-tomtoc-shoulder-bags-a42-black-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2863')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2863', N'Túi đeo chéo TOMTOC Sling Bag L Royal Order T21L1D1MH (H02C4S1)', N'Chính hãng', 2142000, 1820700, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/03/tomtoc-croxbody-edc-sling-bag-14-inch-t24m1-a54d2-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2864')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2864', N'Túi phụ kiện Tomtoc Arccos Accessory Royal order (G41M1D1MH) A0541S1', N'Chính hãng', 1242000, 1055700, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/03/tomtoc-croxbody-edc-sling-bag-14-inch-t24m1-a54d2-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2865')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2865', N'Túi TOMTOC Sling Bag S Royal Order 8.3 inch T21S1D1MH (H02A4S1)', N'Chính hãng', 1332000, 1132200, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/03/tomtoc-croxbody-edc-sling-bag-14-inch-t24m1-a54d2-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2866')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2866', N'Túi đeo vai TOMTOC Urban Codura Sling bag travel & work 13.3-14.2 inch T21L', N'Chính hãng', 1790000, 1521500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/03/t21l1-h02-c04-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2867')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2867', N'TOMTOC Terra-T38 Puffy Laptop 16 inch 13.5L Tote Bag', N'Chính hãng', 1368000, 1162800, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/03/tomtoc-usa-terra-t38-puffy-laptop-14-inch10l-tote-bag-6.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2868')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2868', N'Túi xách TOMTOC Versatile tote laptop 14inch 10L T23S1 2025', N'Chính hãng', 1431000, 1216350, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/06/t-i-x-ch-tomtoc-versatile-t23-2025-black-1-115650362.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2869')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2869', N'Túi xách TOMTOC Versatile tote laptop 14inch 12.5L (T23M1 2025)', N'Chính hãng', 1512000, 1285200, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/06/t-i-x-ch-tomtoc-versatile-t23-2025-black-1-115650362.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2870')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2870', N'Túi TomToc Ns Lim bag G44M1D1 (A0534D1)', N'Chính hãng', 657000, 558450, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/06/a0534d1-1-161923348.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2871')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2871', N'Túi chống va đập TOMTOC Rog Ally Fancycase Eva G02S1D1', N'Asus', 585000, 497250, 50, N'Chiếc', N'ASUS', N'https://i.hoanghamobile.vn/Uploads/2026/07/06/g02s1d1-1-162105085.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2872')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2872', N'Túi chống va đập Tomtoc Nintendo Switch 2 Fancycase Slim G05S3', N'Chính hãng', 625000, 531250, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/06/g05s3-2-5-162327456.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2873')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2873', N'Túi đeo chéo Tomtoc Phụ kiện & Nintendo Switch 2 G49S1', N'Chính hãng', 799000, 679150, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/06/g49-s1-xam-1-162724694.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2874')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2874', N'TOMTOC Phụ Kiện & GameOn  Switch 2 JoyCarry Sling Black G50S1', N'Chính hãng', 612000, 520200, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/06/g50s1-1-5-163233870.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2875')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2875', N'Túi xách TOMTOC Tote handbag for macbook 16inch T23L1 (A53)', N'Apple', 1251000, 1063350, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2026/07/06/t-i-x-ch-tomtoc-t23l1-a53-grey-1-145845736.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2876')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2876', N'Túi xách TOMTOC Versatile tote laptop 15.6inch 18L T23L1-2025', N'Chính hãng', 1512000, 1285200, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/06/t-i-x-ch-tomtoc-versatile-t23-2025-black-1-115650362.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2877')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2877', N'Túi chống va đập TOMTOC Switch Fancycase Travel (G05L1)', N'Chính hãng', 531000, 451350, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/06/t-i-ch-ng-va-p-tomtoc-g05l1-red-1-161315876.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2878')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2878', N'TOMTOC ARCCOS Game Card for Nintendo Switch and OLED Lite G46M1D1', N'Chính hãng', 531000, 451350, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/06/t-i-ph-ki-n-tomtoc-g46m1d1-black-1-164332742.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2879')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2879', N'Túi đeo Tomtoc Arccos Carrying For steam deck console and accessories G47M1', N'Chính hãng', 981000, 833850, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/06/a0537-4-171646329.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2880')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2880', N'Túi xách cs TOMTOC Spill-Resistant laptop 15inch New A22-D01', N'Chính hãng', 890000, 756500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/01/tui-xach-cs-tomtoc-a22-d01-black-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2881')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2881', N'Túi xách chống sốc TOMTOC Briefcase laptop 15inch NEW A14-D01', N'Chính hãng', 945000, 803250, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/02/81hjleho5zl-sl1300.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2882')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2882', N'Túi đeo chéo Tomtoc Urban Codura Sling Bag 11 inch T21M1D1 (H02-B04)', N'Chính hãng', 1690000, 1436500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/02/t21m1d1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2883')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2883', N'Túi xách CS TOMTOC Defender Briefcase (New version) for laptop 16inch A22F2', N'Chính hãng', 657000, 558450, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/02/tui-xach-cs-tomtoc-a22f2-black-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2884')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2884', N'Túi chống sốc TOMTOC Terra laptop 16inch A27F2', N'Chính hãng', 711000, 604350, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/01/tui-chong-soc-tomtoc-a27e3-white-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2885')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2885', N'Túi cs TOMTOC 360 Protective laptop 16inch A13F2', N'Chính hãng', 835000, 709750, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/02/tui-cs-tomtoc-360-a13-grey-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2886')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2886', N'Túi cs TOMTOC 360 Protective laptop 16inch A13E2', N'Chính hãng', 835000, 709750, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/02/tui-cs-tomtoc-360-a13e2-yellow-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2887')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2887', N'Túi cs TOMTOC 360 Protective laptop 16inch A13', N'Chính hãng', 835000, 709750, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/02/tui-cs-tomtoc-360-a13-blue-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2888')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2888', N'Túi xách TOMTOC Defender handbag laptop 15inch A22E3', N'Chính hãng', 890000, 756500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/01/tui-xach-tomtoc-a22e3-grey_639185231342338974.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2889')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2889', N'Túi xách Tomtoc Terracrossbody Bag tablet 11-inch 9L T34', N'Chính hãng', 1161000, 986850, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/29/t34-9.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2890')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2890', N'Túi chống sốc TOMTOC Terra laptop 15inch A27E3', N'Chính hãng', 693000, 589050, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/01/tui-chong-soc-tomtoc-a27e3-black-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2891')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2891', N'Túi cs TOMTOC Protective laptop 15inch A13E3', N'Chính hãng', 835000, 709750, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/01/tui-cs-tomtoc-protective-laptop-15inch-a13e3-grey.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2892')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2892', N'Túi cs kèm túi phụ kiện TOMTOC Defender kit  laptop 15inch A13E3', N'Chính hãng', 880000, 748000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/01/tui-cs-kem-tui-phu-kien-tomtoc-a13e3-black-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2893')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2893', N'Túi xách TOMTOC Electronic Organizer 7.9 inch T11M1D1 (H01-011D)', N'Chính hãng', 890000, 756500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/30/h01-011d-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2894')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2894', N'Túi đeo chéo TOMTOC Aviator-T33 Chest Bag T33S2', N'Chính hãng', 990000, 841500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/30/t33s2-5.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2895')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2895', N'Túi Đeo Chéo Fashion Tomtoc Aviator RFID Sling Bag – T35', N'Chính hãng', 1431000, 1216350, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/30/t35-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2896')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2896', N'Túi đeo chéo TOMTOC Aviator-T33 Chest Bag T33', N'Chính hãng', 891000, 757350, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/30/t33s2-5.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2897')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2897', N'Túi đeo chéo TOMTOC Aviator RFID Sling Bag 3.5L (T35M1D1)', N'Chính hãng', 1521000, 1292850, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/30/t35-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2898')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2898', N'Túi đeo chéo TOMTOC Theher Shoulder Bag For Laptop 13.5inch H22', N'Chính hãng', 1290000, 1096500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/30/tui-deo-cheo-tomtoc-h22-black-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2899')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2899', N'Túi đeo chéo TOMTOC Wander Pac Daily Sling Steam Deck 5.5L T26S1', N'Chính hãng', 1971000, 1675350, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/30/t26s1-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2900')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2900', N'Túi đeo chéo Tomtoc Slash-T27 shoulder bag T27S1T1GC', N'Chính hãng', 1161000, 986850, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/30/t27s1-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2901')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2901', N'Túi Xách TOMTOC Briefcase Premium for MacBook 13inch A50-C01D', N'Apple', 1420000, 1207000, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2026/06/30/tui-xach-tomtoc-black-a50-c01d-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2902')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2902', N'Túi xách cs TOMTOC Spill-Resistant Macbook Pro 16inch  A22E2', N'Apple', 925000, 786250, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2026/06/30/tui-xach-chong-soc-tomtoc-khaki-a22e2k1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2903')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2903', N'Túi xách chống sốc TOMTOC Briefcase laptop 16inch A14E2Y1', N'Chính hãng', 945000, 803250, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/30/tui-chong-soc-tomtoc-a14e2-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2904')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2904', N'Túi đeo đa năng Tomtoc Croxbody Edc sling bag 11 inch T24S1D1 A54A1D1', N'Chính hãng', 1130000, 960500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/30/a54a1d1-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2905')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2905', N'Túi chống sốc TOMTOC Slim laptop 15inch A18E3', N'Chính hãng', 567000, 481950, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/23/tui-tomtoc-a18-mau-den-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2906')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2906', N'Túi đeo chéo / túi xách TOMTOC DEFENDER-A40 shoulder bag laptop 14inch', N'Chính hãng', 981000, 833850, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/30/tui-xach-tomtoc-a40-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2907')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2907', N'Túi Xách TOMTOC Terra Puffy Laptop Handbag 14inch A28', N'Chính hãng', 1071000, 910350, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/30/tui-xach-tomtoc-a28-black-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2908')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2908', N'Túi Đeo Chéo Tomtoc Navigator-A33 Shoulder Bag Laptop', N'Chính hãng', 1215000, 1032750, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/30/tui-deo-cheo-tui-xach-tomtoc-a33-black-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2909')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2909', N'TOMTOC defender briefcase for laptop 14inch A22 (New Version)', N'Chính hãng', 639000, 543150, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/29/tui-xach-tomtoc-a22-black-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2910')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2910', N'Túi xách chống sốc TOMTOC spill resistant laptop 14inch A22', N'Chính hãng', 890000, 756500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/27/tui-xach-chong-soc-tomtoc-spill-resistant-laptop-14inch-a22-xam-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2911')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2911', N'Túi đeo chéo TOMTOC Aviator-T33 Chest Bag', N'Chính hãng', 790000, 671500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/29/t33-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2912')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2912', N'Túi phụ kiện TOMTOC Light-T12 Electronic Accessory Pouch 1.8L (T12M1)', N'Chính hãng', 495000, 420750, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/29/t12m1-6.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2913')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2913', N'Túi xách chống sốc TOMTOC briefcase laptop 14inch A14', N'Chính hãng', 945000, 803250, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/29/a14-black-tomtoc-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2914')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2914', N'Túi Phụ Kiện Tomtoc Premium Light-T12 Tech Organizer', N'Chính hãng', 684000, 581400, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/29/t12-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2915')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2915', N'Túi xách TOMTOC messenger bags laptop 13/14inch A45', N'Chính hãng', 999000, 849150, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/29/tomtoc-bag-a45-c01-pink-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2916')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2916', N'Túi TOMTOC Terra-A27 Accessory Pouch A27P1', N'Chính hãng', 499000, 424150, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/29/a27p1-3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2917')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2917', N'Túi chống sốc kèm túi đựng TOMTOC terra sleeve kit laptop 14inch A27', N'Chính hãng', 1035000, 879750, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/29/hd3-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2918')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2918', N'Túi phụ kiện TOMTOC Navigator Accessory Pouch T13M1', N'Chính hãng', 801000, 680850, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/29/t13m1-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2919')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2919', N'Túi đựng passport TOMTOC Passport Holder T03M1G1 (H0113)', N'Chính hãng', 801000, 680850, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/29/t03m1g1-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2920')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2920', N'Túi xách TOMTOC Terra-T34 Crossbody Bag 3.5L', N'Chính hãng', 864000, 734400, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/29/t34-7.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2921')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2921', N'Túi chống sốc TOMTOC VOYAGE-A10 premium laptop 14inch A10', N'Chính hãng', 1071000, 910350, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/29/tui-chong-soc-tomtoc-black-a10d2d1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2922')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2922', N'Túi xách / đeo chéo TOMTOC defender shoulder bag laptop 13-14inch A30', N'Chính hãng', 1251000, 1063350, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/29/deo-cheo-tomtoc-laptop-13-14inch-a30-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2923')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2923', N'TOMTOC urban codura shoulder bags for ultrabook 13/14inch (H14-C01D)', N'Chính hãng', 1430000, 1215500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/29/tui-deo-cheo-tomtoc-a04d2-h14-c01-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2924')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2924', N'Túi xách chống sốc TOMTOC slim handbag laptop 13/14inch A21', N'Chính hãng', 630000, 535500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/29/tomtoc-slim-handbag-laptop-1314inch-a21-grey-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2925')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2925', N'Túi cs TOMTOC spill resistant laptop 13inch A22', N'Chính hãng', 890000, 756500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/25/tui-cs-tomtoc-spill-resistant-laptop-13inch-a22-mau-den-1_639179959666473459.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2926')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2926', N'Túi chống sốc kèm túi đựng TOMTOC terra sleeve kit laptop 13inch A27', N'Chính hãng', 981000, 833850, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/25/tui-chong-soc-kem-tui-dung-tomtoc-a27-mau-trang-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2927')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2927', N'Balo TOMTOC Travel Backpack 40L A82', N'Chính hãng', 1791000, 1522350, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/25/tomtoc-usa-travel-backpack-40l-a82-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2928')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2928', N'Balo TOMTOC VintPack Laptop 13-16 inch 22L TA1M1', N'Chính hãng', 1881000, 1598850, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/25/ta1m1-4.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2929')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2929', N'Túi chống sốc TOMTOC voyage premium laptop 13inch A10', N'Chính hãng', 1071000, 910350, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/25/tui-chong-soc-tomtoc-voyage-premium-laptop-13inch-a10-mau-den-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2930')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2930', N'Balo TOMTOC Navigator-T67 Travel Laptop Backpack T67M1D1', N'Chính hãng', 2142000, 1820700, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/25/tomtoc-navigator-t67-travel-laptop-backpack-t67m1d1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2931')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2931', N'Balo Tomtoc liteway travel backpack 17 inch 40L T66M1', N'Chính hãng', 2151000, 1828350, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/22/t66s1-1_639177343029212864.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2932')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2932', N'Túi đeo chéo chống va đập TOMTOC eva for laptop 13inch A25', N'Chính hãng', 1130000, 960500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/26/tui-deo-cheo-macbook-13-inch-tomtoc-eva-a25-c02g-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2933')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2933', N'Balo TOMTOC Urban-EX-T77 Laptop 16 inch 26L', N'Chính hãng', 2691000, 2287350, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/26/tomtoc-urban-ex-t77-laptop-16-inch-26l-5.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2934')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2934', N'Balo Tomtoc techpack-H73 x-pac 30l backpack T73M1D1 (H73E1D1).', N'Chính hãng', 4131000, 3511350, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/26/h73e1d1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2935')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2935', N'Balo TOMTOC Explorer - T60 Laptop 16/15.6 inch 22L', N'Chính hãng', 1431000, 1216350, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/26/10-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2936')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2936', N'Túi chống sốc TOMTOC slim laptop sleeve for laptop 14inch', N'Chính hãng', 558000, 474300, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/26/tui-chong-soc-tomtoc-slim-laptop-sleeve-black-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2937')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2937', N'Túi chống sốc TOMTOC terra laptop 14inch A27', N'Chính hãng', 675000, 573750, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/26/terra-a27-laptop-sleeve-for-14-inch-macbook-pro-white-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2938')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2938', N'Balo TOMTOC Urban-EX-T77 Laptop 16 inch 32L', N'Chính hãng', 2961000, 2516850, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/26/tomtoc-urban-ex-t77-laptop-16-inch-26l-5.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2939')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2939', N'Túi phụ kiện TOMTOC Light-T12 Electronic Accessory Pouch 1L', N'Chính hãng', 270000, 229500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/26/t12-6.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2940')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2940', N'Túi phụ kiện TOMTOC Defender Pouch (A13P1B2)', N'Chính hãng', 351000, 298350, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/26/a13p1b2-3.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2941')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2941', N'Túi chống sốc TOMTOC 360 protective laptop 14inch A13', N'Chính hãng', 782000, 664700, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/26/tui-chong-soc-tomtoc-360-protective-laptop-14inch-a13-black-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2942')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2942', N'Túi đeo chéo TOMTOC Aviator Travel Crossbody 1.3L T37', N'Chính hãng', 1431000, 1216350, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/27/crossbody-1-3l-t37-9.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2943')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2943', N'Túi đeo chéo TOMTOC Slingbean T32 Belt Bag', N'Chính hãng', 621000, 527850, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/26/t32-den-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2944')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2944', N'Túi đeo chéo TOMTOC Aviator Travel Crossbody Black T37', N'Chính hãng', 972000, 826200, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/27/crossbody-black-khaki-t37-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2945')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2945', N'Túi chống sốc TOMTOC 360 protective kèm túi phụ kiện for laptop 14inch A13', N'Chính hãng', 880000, 748000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/27/a13d2d1gp-hd-6-scaled.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2946')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2946', N'Balo TOMTOC Navigator-G43 PS5 G43M1D1', N'Sony', 1701000, 1445850, 50, N'Chiếc', N'SONY', N'https://i.hoanghamobile.vn/Uploads/2026/06/24/g43m1d1-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2947')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2947', N'Balo TOMTOC Roll Top Laptop 13-16 inch 17L-23L T61M1', N'Chính hãng', 1701000, 1445850, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/24/t61m1-1_639179160199606630.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2948')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2948', N'Túi chống sốc TOMTOC 360 protective kèm túi phụ kiện laptop 13inch a13', N'Chính hãng', 880000, 748000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/24/tui-laptop-tomtoc-13inch-a13-mau-den-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2949')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2949', N'Túi xách chống sốc TOMTOC defender briefcase  for laptop 13inch A22', N'Chính hãng', 625000, 531250, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/24/tui-tomtoc-a22-mau-den-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2950')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2950', N'Balo TOMTOC Slash Flip Laptop Backpack 14 inch T63M1', N'Chính hãng', 1431000, 1216350, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/24/t63m1-ghi-dam.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2951')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2951', N'Balo TOMTOC Slash Flip Rucksack 18L 16 inch T64M1T1GC / A6', N'Chính hãng', 1490000, 1266500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/24/t64m1t1gc-4-d7f9e3fc1fe24f1f813781fb0f2f82c9-large.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2952')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2952', N'Microphone thu âm không dây Boya BY-V1 V2.0 (Lightning, 1Mic)', N'Chính hãng', 599000, 509150, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/02/10/boya-by-v1-v2-0-thumb.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2953')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2953', N'Microphone thu âm không dây Boya BY-V2 V2.0 (Lightning, 2 Mic)', N'Chính hãng', 825000, 701250, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/02/10/boya-by-v2-v2-0-thumb.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2954')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2954', N'Microphone thu âm không dây Boya Mini', N'Chính hãng', 1090000, 926500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/02/10/boya-mini-thumb.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2955')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2955', N'Microphone thu âm không dây Boya BY-V10 V2.0 (TypeC, 1 Mic)', N'Chính hãng', 625000, 531250, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/02/10/by-v10-v2-0-thumb.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2956')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2956', N'Microphone thu âm không dây Boya BY-V20 V2.0 (TypeC, 2 Mic)', N'Chính hãng', 825000, 701250, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/02/10/boya-by-v20-v2-0-thumb.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2957')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2957', N'Microphone thu âm không dây Boya Mini 2', N'Chính hãng', 1290000, 1096500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/12/24/1-photoroom.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2958')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2958', N'Micro thu âm không dây MAONO WM650 PA3 - Full Combo', N'Chính hãng', 3600000, 3060000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/12/25/4-2-png-500x350.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2959')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2959', N'Micro thu âm không dây MAONO WM622 PBC2 (Type-C và Lightning)', N'Chính hãng', 1600000, 1360000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/12/25/for-lightning-type-c-2025-11-03-09-49-23.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2960')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2960', N'Micro thu âm không dây MAONO WM622 PC2 (Type-C)', N'Chính hãng', 1100000, 935000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/12/26/maono-wm622-pc2-type-c.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2961')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2961', N'Micro thu âm có dây MAONO RGB DGM20', N'Chính hãng', 890000, 756500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/12/26/dgm20-mic-black-496d90a1-b36e-4277-a45d-a377aa735e6e-webp.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2962')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2962', N'Micro thu âm có dây MAONO RGB PD100X', N'Chính hãng', 1250000, 1062500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/12/26/pd100x-usb-gaming-microphone-37b3970b-fbeb-420a-a820-9a4f310206d4.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2963')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2963', N'Micro thu âm có dây MAONO RGB PD200X', N'Chính hãng', 1790000, 1521500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/09/24/thi-t-k-ch-a-c-t-n-083232231.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2964')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2964', N'Bộ Micro thu âm có dây MAONO RGB PD200XS', N'Chính hãng', 2300000, 1955000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/12/26/01.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2965')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2965', N'Bộ Micro thu âm có dây MAONO RGB DGM20S (Gồm Giá đỡ)', N'Chính hãng', 1190000, 1011500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/12/26/1-6_639023435421509579.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2966')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2966', N'Micro thu âm không dây Boya Link 2', N'Chính hãng', 2090000, 1776500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/18/boya-link-2-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2967')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2967', N'DJI Mini 2 (1TX+ 1RX) 1 Mic', N'Chính hãng', 1745000, 1483250, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/04/29/dji-mini-mic-2-3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2968')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2968', N'DJI Mini 2 (1 TX + 1 MOBILE RX + CHARGING CASE) 1 Mic', N'Chính hãng', 1745000, 1483250, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/04/29/micdji-mini-2-1-tx-1-mobile-rx-charging-case-1-mic-8.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2969')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2969', N'DJI Mini 2 (2 TX + 1 RX + Charging Case) 2 Mic', N'Chính hãng', 2925000, 2486250, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/04/29/dji-mini-2-2-tx-1-rx-charging-case-2-mic-10.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2970')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2970', N'DJI Mini 2 (2 TX + 1 Mobile RX + Charging Case) 2 Mic', N'Chính hãng', 2340000, 1989000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/04/29/dji-mini-2-2-tx-1-mobile-rx-charging-case-2-mic-7.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2971')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2971', N'Micro không dây Alpha Works D2', N'Chính hãng', 1290000, 1096500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/12/16/alpha-works-d2-3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2972')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2972', N'MICRO không dây SARAMONIC BLINKME B2 - Chính hãng', N'Chính hãng', 2790000, 2371500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2023/06/12/micro-khong-day-saramonic-blinkme-b2-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2973')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2973', N'Bộ micro không dây Saramonic Blink900 B1(RX+TX) - Chính hãng', N'Chính hãng', 1990000, 1691500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2023/05/17/saramonic-blink900-b1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2974')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2974', N'Bộ micro không dây Blink500 ProX B1 (TX+RX) - Chính hãng', N'Chính hãng', 1990000, 1691500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2023/05/17/blink500-prox-b1-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2975')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2975', N'Mic thu âm điện thoại Boya BYWM3T1D1 (chân Lightning)', N'Chính hãng', 549000, 466650, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2022/05/18/image-removebg-preview-25.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2976')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2976', N'Mic Thu âm điện thoại Boya BYWM3T1U1 (Chân TypeC) - Chính hãng', N'Chính hãng', 549000, 466650, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2022/06/13/image-removebg-preview-88.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2977')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2977', N'Microphone thu âm Podcast/phòng thu/livestream Boya K3', N'Chính hãng', 690000, 586500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/18/boya-k-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2978')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2978', N'Microphone không dây DJI Mini (TX+RX) 1 Mic', N'Chính hãng', 1850000, 1572500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/06/03/mic-thu-am.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2979')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2979', N'Micro không dây JBL Micas 2 - Chính Hãng', N'JBL', 2490000, 2116500, 50, N'Chiếc', N'JBL', N'https://i.hoanghamobile.vn/Uploads/2023/05/08/jbl-micas-2-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2980')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2980', N'Micro không dây Alpha Works A1', N'Chính hãng', 850000, 722500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/01/06/alpha-works-a1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2981')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2981', N'Micro không dây Acnos MI30X (2 mic)', N'Chính hãng', 2690000, 2286500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/10/20/acnos-mi30x-2-mic-1-104326765.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2982')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2982', N'Xiaomi POCO M7 6GB/128GB - Máy cũ, TBH', N'Xiaomi', 3790000, 3221500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/05/07/o19ap-silver-front-r1-wallpaper-111_639137522035097764.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2983')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2983', N'iPhone Air 256GB - Máy cũ, TBH', N'Apple', 18990000, 16141500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/17/iphone-air.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2984')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2984', N'TCL 30 SE (4GB/128GB)  - Máy cũ, TBH', N'Chính hãng', 2090000, 1776500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2023/09/08/image-removebg-preview.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2985')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2985', N'iPhone 16 Pro Max 256GB - Máy cũ, TBH', N'Apple', 22990000, 19541500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-sa-mac-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2986')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2986', N'Samsung Galaxy S25 Ultra - 12GB/256GB - Máy cũ, TBH', N'Samsung', 19890000, 16906500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2987')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2987', N'iPhone 17 Pro Max 256GB - Máy cũ, TBH', N'Apple', 29990000, 25491500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/10/iphone-17-pro-max-cosmic-orange-pdp-image-position-1-cosmic-orange-color-vn-vi.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2988')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2988', N'Điện thoại Viettel T2 - 4G (DÙNG MỌI LOẠI SIM) - Máy cũ, TBH', N'Chính hãng', 260000, 221000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/11/20/t2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2989')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2989', N'iPhone 16 Pro 256GB - Máy cũ, TBH', N'Apple', 20990000, 17841500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-tu-nhien-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2990')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2990', N'Xiaomi Redmi A7 Pro 4GB/128GB (NFC) - Máy cũ, TBH', N'Xiaomi', 2890000, 2456500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/03/26/p25-black-front-wallpaper_639101191235209787.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2991')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2991', N'Xiaomi Redmi Note 17 4GB/128GB - Máy cũ, TBH', N'Xiaomi', 3990000, 3391500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/08/17/p19-purple-back11-155153642.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2992')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2992', N'Samsung Galaxy A26 5G - 8GB/128GB - Máy cũ, TBH', N'Samsung', 4590000, 3901500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/03/24/a26-cam-opal.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2993')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2993', N'Xiaomi Redmi 17 4G 6GB/256GB - Máy cũ, TBH', N'Xiaomi', 5190000, 4411500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/08/01/q15a-green-back1-091121733.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2994')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2994', N'Hera V9 - Máy cũ, TBH', N'Chính hãng', 190000, 161500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/01/06/v9-thumb.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2995')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2995', N'Samsung Galaxy A57 5G - 8GB/128GB - Máy cũ, TBH', N'Samsung', 9000000, 7650000, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2026/03/17/a57-violet-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2996')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2996', N'REDMAGIC 10 Pro 12GB/256GB Bản Quốc Tế Chính Hãng - Máy cũ, TBH', N'Chính hãng', 12740000, 10829000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/22/anh-sp-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2997')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2997', N'POCO X6 5G (8GB/256GB)  - Máy cũ, TBH', N'Xiaomi', 4990000, 4241500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2025/01/06/poco-x6-5g.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2998')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2998', N'iPhone 15 128GB - Máy cũ, TBH', N'Apple', 13990000, 11891500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/09/13/iphone-15-pink-pure-back-iphone-15-pink-pure-front-2up-screen-usen.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH2999')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH2999', N'Điện thoại Itel it9211 - 4G - Máy cũ, TBH', N'Chính hãng', 280000, 238000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/10/it9211-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3000')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3000', N'Điện thoại HTC Wildfire E5 Plus (6+6GB/128GB) - Máy cũ, TBH', N'Chính hãng', 1990000, 1691500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/01/06/dien-thoai-htc-wildfire-e5-plus-thumb.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3001')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3001', N'iPhone 13 128GB - Chính hãng VN/A - Máy cũ, TBH', N'Apple', 7990000, 6791500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/12/03/iphone-13-trang-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3002')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3002', N'Xiaomi Redmi Note 17 5G 6GB/128GB - Máy cũ, TBH', N'Xiaomi', 6490000, 5516500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/08/17/p19a-blue-front-11-155553849.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3003')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3003', N'iPhone 16 Pro 512GB - Máy cũ, TBH', N'Apple', 22990000, 19541500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-tu-nhien-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3004')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3004', N'Nubia V80 Design 4GB/128GB - Máy cũ, TBH', N'Chính hãng', 2490000, 2116500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/01/07/thumb-ads-v80.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3005')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3005', N'iPhone 17 Pro 256GB - Máy cũ, TBH', N'Apple', 26990000, 22941500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/17/iphone-17-pro.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3006')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3006', N'iPhone 11 Pro Max (256GB) - Chính hãng VN/A - Máy cũ, TBH', N'Apple', 6990000, 5941500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/08/03/header-iphone-11-pro-max-midnight-green-large-2x.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3007')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3007', N'iPhone 16 Pro 128GB - Máy cũ, TBH', N'Apple', 20990000, 17841500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-tu-nhien-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3008')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3008', N'iPhone 15 Pro Max 256GB - Chính hãng VN/A - Máy cũ, TBH', N'Apple', 20250000, 17212500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/09/13/iphone-15-pro-max-natural-titanium-pure-back-iphone-15-pro-max-natural-titanium-pure-front-2up-screen-usen-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3009')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3009', N'iPhone 12 Pro Max (128GB) - Chính hãng VN/A - Máy cũ, TBH', N'Apple', 10990000, 9341500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/11/header-iphone-12-pro-max-pacific-blue-large-2x-removebg.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3010')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3010', N'iPhone 17 Pro Max 512GB - Máy cũ, TBH', N'Apple', 34990000, 29741500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/10/iphone-17-pro-max-silver-pdp-image-position-1-silver-color-vn-vi.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3011')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3011', N'iPhone 17 256GB - Máy cũ, TBH', N'Apple', 21990000, 18691500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/17/iphone-17-thuong.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3012')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3012', N'HTC Wildfire E3 lite (4GB/64GB)  - Máy cũ, TBH', N'Chính hãng', 1290000, 1096500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2023/10/12/htc-wildfire-e3-lite-grey.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3013')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3013', N'HONOR X7d 5G 8GB/256GB - Máy cũ, TBH', N'Chính hãng', 6390000, 5431500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/10/27/x7d-den.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3014')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3014', N'Samsung Galaxy A07 4GB/128GB - Máy cũ, TBH', N'Samsung', 2790000, 2371500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/08/15/thumb-a07-green.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3015')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3015', N'iPhone 16 128GB - Máy cũ, TBH', N'Apple', 15990000, 13591500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/09/10/ip16-xanh-mong-ket.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3016')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3016', N'Xiaomi Redmi Note 15 6GB/128GB - Máy cũ, TBH', N'Xiaomi', 3790000, 3221500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2025/12/25/p7-purple-back1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3017')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3017', N'Xiaomi Redmi Note 17 Pro 5G 6GB/256GB - Máy cũ, TBH', N'Xiaomi', 7690000, 6536500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/08/17/q16-blue-back-111-160301724.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3018')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3018', N'Nubia V80 Max 6GB/128GB - Máy cũ, TBH', N'Chính hãng', 3490000, 2966500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/01/07/thumb-ads-v80-max.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3019')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3019', N'Samsung Galaxy S25 Ultra - 12GB/512GB - Máy cũ, TBH', N'Samsung', 21990000, 18691500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3020')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3020', N'iPhone 18 Pro Max 256GB - Máy cũ, TBH', N'Apple', 40490000, 34416500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3021')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3021', N'iPhone 16 256GB - Máy cũ, TBH', N'Apple', 17990000, 15291500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/09/10/ip16-xanh-mong-ket.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3022')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3022', N'iPhone 13 Pro Max (128GB) - Chính hãng VN/A - Máy cũ, TBH', N'Apple', 10990000, 9341500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2022/09/07/image-removebg-preview-6.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3023')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3023', N'Xiaomi Redmi 17 5G 4GB/128GB - Máy cũ, TBH', N'Xiaomi', 4490000, 3816500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/08/01/q15-orange-back1-090747790.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3024')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3024', N'Samsung Galaxy A56 5G - 8GB/128GB - Máy cũ, TBH', N'Samsung', 5990000, 5091500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/03/20/a56-xanh-marble.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3025')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3025', N'iPhone 14 Plus (256GB) - Chính hãng VN/A - Máy cũ, TBH', N'Apple', 13990000, 11891500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/07/18/14plus-removebg-preview.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3026')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3026', N'OPPO Reno15 F 5G 8GB+256GB - Máy cũ, TBH', N'OPPO', 9490000, 8066500, 50, N'Chiếc', N'OPPO', N'https://i.hoanghamobile.vn/Uploads/2026/10/03/combo-product-reno15-f-blue-104637703.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3027')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3027', N'Samsung Galaxy A17 LTE 8GB/128GB - Máy cũ, TBH', N'Samsung', 4270000, 3629500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/09/03/galaxy-a17-lte-light-blue-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3028')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3028', N'Xiaomi POCO M7 Pro 5G 12GB/512GB - Máy cũ, TBH', N'Xiaomi', 5805000, 4934250, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2025/07/09/o17p-green-back1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3029')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3029', N'Xiaomi Redmi Note 14 Pro+ 5G 8GB/256GB - Máy cũ, TBH', N'Xiaomi', 6555000, 5571750, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2025/01/10/redmi-note-14-pro-blule.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3030')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3030', N'iPhone 15 Pro Max 512GB - Chính hãng VN/A - Máy cũ, TBH', N'Apple', 23990000, 20391500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/01/23/15-pro-max-512-thumb.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3031')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3031', N'iPhone 12 Pro Max (256GB) - Chính hãng VN/A - Máy cũ, TBH', N'Apple', 11990000, 10191500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/08/03/header-iphone-12-pro-max-pacific-blue-large-2x.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3032')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3032', N'Xiaomi Redmi Note 15 Pro 12GB/256GB - Máy cũ, TBH', N'Xiaomi', 6200000, 5270000, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2025/12/25/p6-ti-back1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3033')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3033', N'iPhone 14 Pro Max (256GB) - Chính hãng VN/A - Máy cũ, TBH', N'Apple', 17990000, 15291500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/02/01/1111.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3034')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3034', N'iPhone 14 Pro Max (512GB) - Chính hãng VN/A - Máy cũ, TBH', N'Apple', 17990000, 15291500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/02/01/1111.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3035')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3035', N'Samsung Galaxy A17 5G 8GB/256GB - Máy cũ, TBH', N'Samsung', 4790000, 4071500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/08/15/thumb-a17-5g-blue.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3036')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3036', N'iPhone 11 (128GB) - Chính hãng VN/A - Máy cũ, TBH', N'Apple', 5990000, 5091500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/10/18/iphone-11-white-2-up-vertical-us-en-screen-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3037')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3037', N'Nubia Air 5G 8GB/256GB - Máy cũ, TBH', N'Chính hãng', 4490000, 3816500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/07/back-gold1-171113527.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3038')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3038', N'Samsung Galaxy A27 5G - 6GB/128GB - Máy cũ, TBH', N'Samsung', 6690000, 5686500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2026/06/24/samsung-a27-xanh-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3039')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3039', N'Điện thoại OPPO A6 Pro (8GB+128GB) - Máy cũ, TBH', N'OPPO', 7290000, 6196500, 50, N'Chiếc', N'OPPO', N'https://i.hoanghamobile.vn/Uploads/2025/10/23/oppo-a6-pro-hong-4g.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3040')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3040', N'TCL 40 SE (4GB/128GB)  - Máy cũ, TBH', N'Chính hãng', 2390000, 2031500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2023/08/24/tcl-40-se-purple-0.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3041')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3041', N'Điện thoại di động TCL 505 4GB/128GB - Máy cũ, TBH', N'Chính hãng', 2270000, 1929500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/11/13/356741392.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3042')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3042', N'iPhone 18 Pro Max 512GB - Máy cũ, TBH', N'Apple', 46990000, 39941500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3043')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3043', N'Samsung Galaxy S26 Ultra - 12GB/256GB - Máy cũ, TBH', N'Samsung', 25990000, 22091500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-tim-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3044')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3044', N'REDMAGIC 10 Pro 16GB/512GB Bản Quốc Tế Chính Hãng - Máy cũ, TBH', N'Chính hãng', 15540000, 13209000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/01/06/redmagic-pro-10-thumb-ads.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3045')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3045', N'iPhone 16 Plus 256GB - Máy cũ, TBH', N'Apple', 20990000, 17841500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/09/10/ip16-xanh-luu-ly.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3046')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3046', N'Xiaomi Redmi Note 14 8GB/128GB - Máy cũ, TBH', N'Xiaomi', 4290000, 3646500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2025/01/04/redmi-note-14-thumb.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3047')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3047', N'HONOR X9d 12GB/512GB - Máy cũ, TBH', N'Chính hãng', 9000000, 7650000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/03/20/martin-identity-pictures-sunrise-gold-hq.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3048')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3048', N'Samsung Galaxy A07 5G 4GB/128GB - Máy cũ, TBH', N'Samsung', 3990000, 3391500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2026/01/15/a07-5g-tim-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3049')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3049', N'TCL 40 NXTPAPER (8GB/256GB)  - Máy cũ, TBH', N'Chính hãng', 2490000, 2116500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2023/11/18/tcl-40-nxtpaper-6.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3050')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3050', N'OSCAL TIGER 12 (12GB/256GB) NFC - Máy cũ, TBH', N'Chính hãng', 3190000, 2711500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/01/06/oscal-tiger-12-thumb.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3051')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3051', N'TCL 30 - PASSAT  - Máy cũ, TBH', N'Chính hãng', 2390000, 2031500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2022/09/13/image-removebg-preview-30.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3052')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3052', N'ZTE Blade A55 (4GB/128GB) - Máy cũ, TBH', N'Chính hãng', 1790000, 1521500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/07/03/zte-blade-a55-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3053')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3053', N'iPhone 12 Pro (128GB) - Chính hãng VN/A - Máy cũ, TBH', N'Apple', 7990000, 6791500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/08/03/header-iphone-12-pro-pacific-blue-large-2x.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3054')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3054', N'iPhone 14 Pro (128GB) - Máy cũ, TBH', N'Apple', 13490000, 11466500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/02/01/1111.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3055')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3055', N'iPhone 16 Plus 128GB - Máy cũ, TBH', N'Apple', 18990000, 16141500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/09/10/ip16-xanh-luu-ly.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3056')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3056', N'Xiaomi 15T 12GB/512GB - Máy cũ, TBH', N'Xiaomi', 10390000, 8831500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2025/09/09/o12a-rose-gold-back-r31.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3057')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3057', N'Samsung Galaxy A08 4GB/64GB - Máy cũ, TBH', N'Samsung', 3880000, 3298000, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2026/10/02/a08-silver-135259154.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3058')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3058', N'Xiaomi 17T 5G 12GB/512GB - Máy cũ, TBH', N'Xiaomi', 12990000, 11041500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/05/12/p12a-violet-back-r51.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3059')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3059', N'TCL 408 (4GB/64GB)  - Máy cũ, TBH', N'Chính hãng', 1850000, 1572500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2023/08/24/tcl-408-blue-0.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3060')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3060', N'Điện thoại Gaming REDMAGIC 11 PRO 16GB/512GB - Máy cũ, TBH', N'Chính hãng', 21190000, 18011500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/12/03/redmagic-11-pro-subzero-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3061')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3061', N'Samsung Galaxy S26 Ultra - 12GB/512GB - Máy cũ, TBH', N'Samsung', 25990000, 22091500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-tim-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3062')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3062', N'iPhone 14 128GB - Máy cũ, TBH', N'Apple', 9900000, 8415000, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/07/18/14-removebg-preview.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3063')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3063', N'Samsung Galaxy Z Fold7 5G 12GB/512GB - Máy cũ, TBH', N'Samsung', 26990000, 22941500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/09/thumb-fold7-xanh-navy.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3064')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3064', N'iPhone 11 Pro Max (64GB) - Chính hãng Apple - Máy cũ, TBH', N'Apple', 4990000, 4241500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/08/03/header-iphone-11-pro-max-midnight-green-large-2x.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3065')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3065', N'OSCAL MODERN 8 (8+8GB/256GB) - Máy cũ, TBH', N'Chính hãng', 3090000, 2626500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/02/19/oscal-8-3.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3066')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3066', N'HONOR X9c 5G 12GB/256GB - Máy cũ, TBH', N'Chính hãng', 4990000, 4241500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/03/07/x9c-thumb.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3067')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3067', N'iPhone 14 Pro (256GB) - Chính hãng VN/A - Máy cũ, TBH', N'Apple', 14990000, 12741500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/02/01/1111.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3068')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3068', N'iPhone 14 Pro Max (128GB) - Chính hãng VN/A - Máy cũ, TBH', N'Apple', 15790000, 13421500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/06/05/my-project.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3069')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3069', N'Itel it8010 4G - Máy cũ, TBH', N'Chính hãng', 179000, 152150, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/07/16/it8010-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3070')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3070', N'iPhone 15 Pro 128GB - Chính hãng VN/A - Máy cũ, TBH', N'Apple', 16990000, 14441500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/09/13/iphone-15-pro-finish-select-202309-6-7inch-naturaltitanium-removebg-preview-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3071')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3071', N'Điện thoại Gaming REDMAGIC 11 PRO 12GB/256GB - Máy cũ, TBH', N'Chính hãng', 17490000, 14866500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/12/03/redmagic-11-pro-cryo-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3072')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3072', N'Samsung Galaxy Z Flip7 5G 12GB/256GB - Máy cũ, TBH', N'Samsung', 13990000, 11891500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/09/thumb-flip7-xanh-navy.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3073')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3073', N'Hera S9 - 2.8 inch - Máy cũ, TBH', N'Chính hãng', 320000, 272000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/11/20/s9.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3074')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3074', N'Samsung Galaxy S25 Edge - 12GB/256GB - Máy cũ, TBH', N'Samsung', 15840000, 13464000, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/21/s25-edge-trail.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3075')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3075', N'HONOR X8d - 8GB/128GB - Máy cũ, TBH', N'Chính hãng', 5890000, 5006500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/02/27/luna-id-light-blue-front-left-rgb-png-en-hq-800-202511191.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3076')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3076', N'Điện thoại di động realme 14 5G (8GB/256GB) - Máy cũ, TBH', N'Realme', 5405000, 4594250, 50, N'Chiếc', N'REALME', N'https://i.hoanghamobile.vn/Uploads/2025/04/26/realme-14-5g-thumb.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3077')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3077', N'Xiaomi Redmi Note 17 Pro Max 5G 8GB/512GB - Máy cũ, TBH', N'Xiaomi', 12390000, 10531500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/08/17/q16u-cloud-blush-white-back11-161455838.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3078')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3078', N'Samsung Galaxy A36 5G - 8GB/128GB - Máy cũ, TBH', N'Samsung', 5890000, 5006500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/03/20/a36-tim-hologram.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3079')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3079', N'Redmi 10A (2GB/32GB) - Chính hãng - Máy cũ, TBH', N'Xiaomi', 300000, 255000, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2022/07/06/image-removebg-preview-13.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3080')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3080', N'iPhone 12 (128GB) - Chính hãng VN/A - Máy cũ, TBH', N'Apple', 6990000, 5941500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/07/18/iphone-12-finish-select-202207-green-removebg-preview.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3081')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3081', N'OPPO A6c (4GB+64GB) - Máy cũ, TBH', N'OPPO', 4090000, 3476500, 50, N'Chiếc', N'OPPO', N'https://i.hoanghamobile.vn/Uploads/2026/05/27/a6c-tim.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3082')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3082', N'Xiaomi 17T PRO 5G 12GB/512GB - Máy cũ, TBH', N'Xiaomi', 15990000, 13591500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/05/12/p12u-deep-blue-back-r11.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3083')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3083', N'OSCAL TIGER 10 (8+8GB/256GB) - Máy cũ, TBH', N'Chính hãng', 2790000, 2371500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/02/19/tiger10-black-20231007111011245.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3084')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3084', N'Xiaomi 17 Ultra 16GB/512GB - Máy cũ, TBH', N'Xiaomi', 25990000, 22091500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/02/14/p1-green-back-r121.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3085')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3085', N'HONOR 600 8GB/256GB - Máy cũ, TBH', N'Chính hãng', 12490000, 10616500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/01/h600-da-cam-13.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3086')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3086', N'iPhone 15 Plus 128GB - Máy cũ, TBH', N'Apple', 14990000, 12741500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/09/13/iphone-15-plus-blue-pure-back-iphone-15-plus-blue-pure-front-2up-screen-usen.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3087')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3087', N'Samsung Galaxy S24 Ultra - 12GB/256GB (BHĐT) - Máy cũ, TBH', N'Samsung', 17990000, 15291500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2024/01/16/s24-ultra-vang_638409930027889246.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3088')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3088', N'Samsung Galaxy S26 - 12GB/256GB - Máy cũ, TBH', N'Samsung', 15990000, 13591500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-trang-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3089')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3089', N'Xiaomi 15T Pro 5G 12GB/512GB - Máy cũ, TBH', N'Xiaomi', 14740000, 12529000, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2025/09/09/o12u-mocha-gold-front-r3-wallpaper1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3090')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3090', N'HONOR X6c 6GB/128GB (NFC/AI) - Máy cũ, TBH', N'Chính hãng', 3200000, 2720000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/07/09/thumb-x6c-xanh.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3091')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3091', N'iPhone 16 Pro Max 1TB  - Máy cũ, TBH', N'Apple', 29990000, 25491500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-sa-mac-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3092')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3092', N'TECNO SPARK Go 2 (4+4GB/64GB) - Máy cũ, TBH', N'Chính hãng', 2090000, 1776500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/08/11/tecno-spark-go-2-bac.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3093')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3093', N'HONOR X9d 8GB/256GB - Máy cũ, TBH', N'Chính hãng', 7990000, 6791500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/03/20/martin-identity-pictures-sunrise-gold-hq.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3094')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3094', N'HONOR X7c - 8GB/256GB - Máy cũ, TBH', N'Chính hãng', 3240000, 2754000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/11/23/honor-x7c-thumb.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3095')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3095', N'iPhone 16 Pro Max 512GB - Máy cũ, TBH', N'Apple', 28990000, 24641500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-sa-mac-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3096')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3096', N'Samsung Galaxy A17 5G 8GB/128GB - Máy cũ, TBH', N'Samsung', 4940000, 4199000, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/08/15/thumb-a17-5g-blue.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3097')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3097', N'Samsung Galaxy Z Fold8 Ultra 5G 12GB/256GB - Máy cũ, TBH', N'Samsung', 41990000, 35691500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2026/07/22/samsung-galaxy-z-fold8-ultra-tim-4-154212817.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3098')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3098', N'iPhone 17 Pro Max 1TB - Máy cũ, TBH', N'Apple', 40990000, 34841500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/10/iphone-17-pro-max-silver-pdp-image-position-1-silver-color-vn-vi.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3099')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3099', N'OPPO A6t Pro (8GB+128GB) - Máy cũ, TBH', N'OPPO', 7790000, 6621500, 50, N'Chiếc', N'OPPO', N'https://i.hoanghamobile.vn/Uploads/2026/05/27/a6t-pro-tim-8.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3100')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3100', N'Điện thoại nubia V80 Max 8GB/128GB - Máy cũ, TBH', N'Chính hãng', 3090000, 2626500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/01/07/thumb-ads-v80-max.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3101')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3101', N'HONOR X5c Plus 4GB/64GB - Máy cũ, TBH', N'Chính hãng', 2690000, 2286500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/01/16/honor-x5c-plus-xanh.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3102')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3102', N'Laptop HP 15 fd0015TU - A19C5PA (i7 1355U, 16GB, 512GB, Full HD, Win11) - Máy cũ, TBH', N'HP', 13990000, 11891500, 50, N'Chiếc', N'HP', N'https://i.hoanghamobile.vn/Uploads/2026/10/28/Gallery/242598_laptop.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3103')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3103', N'ASUS VivoBook Pro M3500QC-L1105T - Máy cũ, TBH', N'Vivo', 15890000, 13506500, 50, N'Chiếc', N'VIVO', N'https://i.hoanghamobile.vn/Uploads/2024/06/10/vivobook-pro-m3500qc-l1105t-7.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3104')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3104', N'Dell Inspiron 14 5440 (N4I7204W1) - Máy cũ, TBH', N'Dell', 20190000, 17161500, 50, N'Chiếc', N'DELL', N'https://i.hoanghamobile.vn/Uploads/2024/05/28/dell-inspiron-14-9.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3105')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3105', N'M-SMART MBOOK 1409A - Máy cũ, TBH', N'Chính hãng', 2365000, 2010250, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/07/19/mbook-1409a-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3106')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3106', N'Laptop ASUS TUF Gaming F16 FX607VU-RL045W - Máy cũ, TBH', N'Asus', 24990000, 21241500, 50, N'Chiếc', N'ASUS', N'https://i.hoanghamobile.vn/Uploads/2025/10/25/fx607vu-rl045w-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3107')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3107', N'MacBook Neo 2026 8GB/256GB - Máy cũ, TBH', N'Apple', 16490000, 14016500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2026/03/05/macbook-13-in-a18-pro-citrus-pdp-image-position-1-vn-vi.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3108')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3108', N'ASUS Vivobook Go 14 E1404FA-EB935W - Máy cũ, TBH', N'Vivo', 17790000, 15121500, 50, N'Chiếc', N'VIVO', N'https://i.hoanghamobile.vn/Uploads/2026/08/11/asus-vivobook-go-14-e1404fa-eb935w-1-165016227.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3109')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3109', N'Laptop ASUS TUF Gaming A15 FA506NCG-HN329W - Máy cũ, TBH', N'Asus', 24890000, 21156500, 50, N'Chiếc', N'ASUS', N'https://i.hoanghamobile.vn/Uploads/2026/06/02/asus-tuf-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3110')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3110', N'HP 15-FD0083TU (8D736PA) - Máy cũ, TBH', N'HP', 15190000, 12911500, 50, N'Chiếc', N'HP', N'https://i.hoanghamobile.vn/Uploads/2024/07/29/8d736pa-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3111')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3111', N'Laptop MSI Modern 15 H C2RMG-292VN - Máy cũ, TBH', N'MSI', 16890000, 14356500, 50, N'Chiếc', N'MSI', N'https://i.hoanghamobile.vn/Uploads/2026/02/09/c2rmg-292vn-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3112')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3112', N'Asus Zenbook 14X OLED UM5401QA-KN053W - Máy cũ, TBH', N'Asus', 14940000, 12699000, 50, N'Chiếc', N'ASUS', N'https://i.hoanghamobile.vn/Uploads/2024/06/04/um5401qa-kn053w-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3113')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3113', N'DELL 15 DC15250(CPH992) i5-1334U/16G/512GB/15.6 inch/W11/OFFICE_2024/Bạc - Máy cũ, TBH', N'Dell', 19790000, 16821500, 50, N'Chiếc', N'DELL', N'https://i.hoanghamobile.vn/Uploads/2026/05/09/dc15250-71092479-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3114')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3114', N'Laptop Lenovo IdeaPad Slim 5 15ARP10 83J3001DVN - Máy cũ, TBH', N'Lenovo', 19390000, 16481500, 50, N'Chiếc', N'LENOVO', N'https://i.hoanghamobile.vn/Uploads/2025/02/14/83j3001dvn-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3115')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3115', N'HP ENVY x360 13-bf0114TU (7C0P0PA) - Máy cũ, TBH', N'HP', 17390000, 14781500, 50, N'Chiếc', N'HP', N'https://i.hoanghamobile.vn/Uploads/2024/01/03/7c0p0pa-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3116')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3116', N'MacBook Air M5 13 inch 10CPU 8GPU 16GB/512GB - Máy cũ, TBH', N'Apple', 32490000, 27616500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2026/03/04/macbook-air-13-in-m5-starlight-pdp-image-position-1-vn-vi.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3117')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3117', N'Laptop ASUS ExpertBook P1 P1503CVA-C3U08-50W - Máy cũ, TBH', N'Asus', 14290000, 12146500, 50, N'Chiếc', N'ASUS', N'https://i.hoanghamobile.vn/Uploads/2026/05/05/p1503cva-c3u08-50w-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3118')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3118', N'Laptop Dell 15 DC15250 DC5I7952W1 - Máy cũ, TBH', N'Dell', 20490000, 17416500, 50, N'Chiếc', N'DELL', N'https://i.hoanghamobile.vn/Uploads/2026/01/26/dc5i7952w1-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3119')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3119', N'HP Pavilion 15-EG3092TU (8C5L3PA) - Máy cũ, TBH', N'HP', 17790000, 15121500, 50, N'Chiếc', N'HP', N'https://i.hoanghamobile.vn/Uploads/2024/07/29/8c5l3pa-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3120')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3120', N'HUAWEI MateBook 14 2022 - Máy cũ, TBH', N'Huawei', 10240000, 8704000, 50, N'Chiếc', N'HUAWEI', N'https://i.hoanghamobile.vn/Uploads/2022/07/28/huawei-matebook-14-thinkpro-01.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3121')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3121', N'Laptop MSI Venture A15 AI A2HMG-003VN - Máy cũ, TBH', N'MSI', 16890000, 14356500, 50, N'Chiếc', N'MSI', N'https://i.hoanghamobile.vn/Uploads/2025/05/29/a2hmg-003vn-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3122')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3122', N'Laptop Acer Aspire 5 A515-58M-79R7 (NX.KQ8SV.007) - Máy cũ, TBH', N'Acer', 17290000, 14696500, 50, N'Chiếc', N'ACER', N'https://i.hoanghamobile.vn/Uploads/2025/10/01/a515-58m-79r7-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3123')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3123', N'HUAWEI MateBook 14 AMD 2021 - Máy cũ, TBH', N'Huawei', 15290000, 12996500, 50, N'Chiếc', N'HUAWEI', N'https://i.hoanghamobile.vn/Uploads/2022/02/21/laptop-huawei-matebook-14-klvd-wdh9-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3124')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3124', N'HP 15s-fq5159TU (7C0S0PA) - Máy cũ, TBH', N'HP', 13040000, 11084000, 50, N'Chiếc', N'HP', N'https://i.hoanghamobile.vn/Uploads/2023/09/05/7c0s0pa-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3125')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3125', N'Asus Zenbook S 13 OLED UX5304MA-NQ117W - Máy cũ, TBH', N'Asus', 31390000, 26681500, 50, N'Chiếc', N'ASUS', N'https://i.hoanghamobile.vn/Uploads/2024/06/28/ux5304ma-nq117w-7.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3126')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3126', N'MSI Modern 15 B13M-438VN - Máy cũ, TBH', N'MSI', 12140000, 10319000, 50, N'Chiếc', N'MSI', N'https://i.hoanghamobile.vn/Uploads/2024/07/09/b13m-438vn-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3127')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3127', N'Máy tính bảng Lenovo Tab ZAEH0147VN - Máy cũ, TBH', N'Lenovo', 3390000, 2881500, 50, N'Chiếc', N'LENOVO', N'https://i.hoanghamobile.vn/Uploads/2025/11/06/lenovo-tab-zaeh0147vn-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3128')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3128', N'Lenovo Tab One (ZAF10022VN) - Máy cũ, TBH', N'Lenovo', 2990000, 2541500, 50, N'Chiếc', N'LENOVO', N'https://i.hoanghamobile.vn/Uploads/2025/12/30/zaf00020vn-8.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3129')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3129', N'Máy Tính Bảng Redmi Pad SE 8.7 Wifi 4GB/128GB - Máy cũ, TBH', N'Xiaomi', 2490000, 2116500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2025/02/07/untitled-1_638745393576890322.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3130')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3130', N'Redmi Pad 2 Wi-Fi (4GB+256GB) - Máy cũ, TBH', N'Xiaomi', 4890000, 4156500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2025/06/12/o84-purple-back-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3131')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3131', N'Samsung Galaxy Tab S10 FE Wifi 8GB/128GB - Máy cũ, TBH', N'Samsung', 8490000, 7216500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2026/10/15/s10-fe-3-134808082.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3132')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3132', N'Samsung Galaxy Tab A11 Plus Wi-Fi 8GB/256GB - Máy cũ, TBH', N'Samsung', 7150000, 6077500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/12/24/tab-a11-plus-gray.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3133')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3133', N'Máy tính bảng REDMAGIC Astra 2 Gaming 12GB/256GB - Máy cũ, TBH', N'Chính hãng', 17990000, 15291500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/08/26/redmagic-astra-2-gaming-trang-5-110809021.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3134')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3134', N'iPad A16 Wifi 128GB - Máy cũ, TBH', N'Apple', 10890000, 9256500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/03/06/ipad-a16-wifi-pink-pdp-image-position-1-vn-vi.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3135')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3135', N'Samsung Galaxy Tab A11 Wi-Fi 4GB/64GB - Máy cũ, TBH', N'Samsung', 3060000, 2601000, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/12/24/tab-a11-silver.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3136')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3136', N'Máy tính bảng Huawei MatePad Pro 12.2 inch 2025 (12GB/512GB) - Máy cũ, TBH', N'Huawei', 13990000, 11891500, 50, N'Chiếc', N'HUAWEI', N'https://i.hoanghamobile.vn/Uploads/2025/10/29/mkt-morandi-green-tablet-white-glide-keyboard-pencil-04-ultra-hd-hq-png-20250328.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3137')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3137', N'Máy tính bảng Xiaomi Pad 8 Pro 8GB/128GB - Máy cũ, TBH', N'Xiaomi', 13590000, 11551500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/01/27/xiaomi-pad-8-pro-demo.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3138')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3138', N'Máy tính bảng HUAWEI MatePad 11.5 2026 (8GB+128GB) - Máy cũ, TBH', N'Huawei', 7490000, 6366500, 50, N'Chiếc', N'HUAWEI', N'https://i.hoanghamobile.vn/Uploads/2026/06/24/huawei-matepad-11-5-2026-8gb-128gb-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3139')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3139', N'Samsung Galaxy Tab S11 Wi-Fi 12GB/128GB - Máy cũ, TBH', N'Samsung', 14990000, 12741500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/12/24/tab-s11-gray.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3140')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3140', N'iPad Air M4 11 inch Wi-Fi 128GB - Máy cũ, TBH', N'Apple', 18490000, 15716500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2026/04/06/ipad-air-11-in-m4-wifi-purple-pdp-image-position-1-th-en.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3141')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3141', N'Máy tính bảng HUAWEI MatePad 12 X (12GB/256GB) - Máy cũ, TBH', N'Huawei', 11990000, 10191500, 50, N'Chiếc', N'HUAWEI', N'https://i.hoanghamobile.vn/Uploads/2025/12/31/ka-thumbnail.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3142')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3142', N'Xiaomi REDMI Pad 2 9.7 inch 4G 4GB/64GB - Máy cũ, TBH', N'Xiaomi', 4490000, 3816500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/04/24/p85x-gray-front1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3143')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3143', N'iPad Air M3 13" Wifi 128GB - Máy cũ, TBH', N'Apple', 15890000, 13506500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/03/06/ipad-air-13-inch-m3-cellular-starlight-pdp-image-position-1-vn-vi.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3144')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3144', N'Xiaomi REDMI Pad 2 9.7 inch Wifi 4GB/64GB - Máy cũ, TBH', N'Xiaomi', 3890000, 3306500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/04/24/p85-gray-front1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3145')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3145', N'Máy tính bảng Xiaomi Pad 8 8GB/128GB - Máy cũ, TBH', N'Xiaomi', 8990000, 7641500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/01/27/xiaomi-pad-8-demo.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3146')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3146', N'Samsung Galaxy Tab S10 FE 5G 8GB/128GB - Máy cũ, TBH', N'Samsung', 11990000, 10191500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2026/10/15/s10-fe-1-134807846.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3147')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3147', N'Samsung Galaxy Tab S11 Ultra 5G 12GB/256GB - Máy cũ, TBH', N'Samsung', 21890000, 18606500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/12/24/tab-s11-ultra-silver.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3148')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3148', N'Máy tính bảng LENOVO TAB(ZAEJ0145VN) G85/4G/64G/10.1T/LTE/WL/5100mAh/2Y/Xám - Máy cũ, TBH', N'Lenovo', 3990000, 3391500, 50, N'Chiếc', N'LENOVO', N'https://i.hoanghamobile.vn/Uploads/2026/06/29/zaej0145vn-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3149')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3149', N'Samsung Galaxy Tab S10 Lite Wifi 6GB/128GB - Máy cũ, TBH', N'Samsung', 7250000, 6162500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/12/24/tab-s10-lite-gray.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3150')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3150', N'Máy tính bảng Redmi Pad 2 Pro 5G 6GB/128GB - Máy cũ, TBH', N'Xiaomi', 7350000, 6247500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2025/10/31/p83-5g-grey-back-r1-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3151')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3151', N'Huawei MatePad SE 11 inch (4GB/128GB) - Máy cũ, TBH', N'Huawei', 4390000, 3731500, 50, N'Chiếc', N'HUAWEI', N'https://i.hoanghamobile.vn/Uploads/2025/10/30/huawei-matepad-se.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3152')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3152', N'Samsung Galaxy Tab S10 FE+ Wifi 8GB/128GB - Máy cũ, TBH', N'Samsung', 9950000, 8457500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/04/14/tab-s10-fe-plus-xam-9.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3153')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3153', N'Màn hình MSI PRO MP242L - Máy cũ, TBH', N'MSI', 1450000, 1232500, 50, N'Chiếc', N'MSI', N'https://i.hoanghamobile.vn/Uploads/2024/12/02/mp242l-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3154')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3154', N'Màn hình Xiaomi Gaming G24i (ELA5625EU) - Máy cũ, TBH', N'Xiaomi', 2115000, 1797750, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2025/01/08/ela5625eu.gif', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3155')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3155', N'Màn hình MSI PRO MP251 E2 - Máy cũ, TBH', N'MSI', 1570000, 1334500, 50, N'Chiếc', N'MSI', N'https://i.hoanghamobile.vn/Uploads/2025/01/08/mp251-e2.gif', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3156')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3156', N'Màn hình gaming ViewSonic VX2758A-2K-PRO-4 - Máy cũ, TBH', N'ViewSonic', 3860000, 3281000, 50, N'Chiếc', N'VIEWSONIC', N'https://i.hoanghamobile.vn/Uploads/2025/05/16/vx2758a-2k-pro-4-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3157')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3157', N'Màn Hình Gaming MSI MAG 275QF - Máy cũ, TBH', N'MSI', 3790000, 3221500, 50, N'Chiếc', N'MSI', N'https://i.hoanghamobile.vn/Uploads/2024/09/20/mag-275qf-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3158')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3158', N'Màn Hình LG 27UP600K-W - Máy cũ, TBH', N'LG', 4990000, 4241500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/05/31/27up600k-w-0.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3159')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3159', N'Màn hình ViewSonic VA3209-2K-MHD (32"/QHD/IPS/75Hz) - Máy cũ, TBH', N'ViewSonic', 3760000, 3196000, 50, N'Chiếc', N'VIEWSONIC', N'https://i.hoanghamobile.vn/Uploads/2022/10/27/image-removebg-preview-2022-10-27t153915-410.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3160')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3160', N'Màn hình MSI PRO MP251 E14L - Máy cũ, TBH', N'MSI', 1790000, 1521500, 50, N'Chiếc', N'MSI', N'https://i.hoanghamobile.vn/Uploads/2026/03/05/pro-mp251-e14l-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3161')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3161', N'LG UltraGear 24GS60F-B - Máy cũ, TBH', N'LG', 2565000, 2180250, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2024/08/20/24gs60f-b-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3162')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3162', N'Màn Hình Máy Tính Gaming VSP IP25Q180 - Máy cũ, TBH', N'Chính hãng', 1990000, 1691500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/09/28/1638-ip25q180-1-134940979.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3163')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3163', N'Màn hình MSI MAG 255F E20 - Máy cũ, TBH', N'MSI', 2250000, 1912500, 50, N'Chiếc', N'MSI', N'https://i.hoanghamobile.vn/Uploads/2025/12/01/msi-mag-255f-e20-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3164')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3164', N'Xiaomi A27i 2026 (ELA6410EU) - Máy cũ, TBH', N'Xiaomi', 1990000, 1691500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/03/30/ela6410eu-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3165')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3165', N'Màn Hình LG 27UL850-W (27/4K/IPS/HDR/Freesync/USB-C) - Cũ - Máy cũ, TBH', N'LG', 5255000, 4466750, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2024/05/27/lg-27ul850-w-274kipshdrfreesy.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3166')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3166', N'Màn hình ASUS VY249HGE (23.8"/FHD/IPS/144Hz) - Máy cũ, TBH', N'Asus', 1790000, 1521500, 50, N'Chiếc', N'ASUS', N'https://i.hoanghamobile.vn/Uploads/2023/07/26/man-hinh-lcd-asus-gaming-bao-ve-mat-vy249hge-01.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3167')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3167', N'Màn hình EDRA EGM24F100H - Máy cũ, TBH', N'Chính hãng', 1430000, 1215500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/06/egm24f100h-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3168')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3168', N'Màn hình MSI PRO MP225 E12VL - Máy cũ, TBH', N'MSI', 1280000, 1088000, 50, N'Chiếc', N'MSI', N'https://i.hoanghamobile.vn/Uploads/2026/03/05/pro-mp225-e12vl-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3169')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3169', N'Màn Hình LG 24MS550-B - Máy cũ, TBH', N'LG', 1800000, 1530000, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2024/12/09/24ms550-b-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3170')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3170', N'Xiaomi Gaming G27i (ELA5375EU) - Máy cũ, TBH', N'Xiaomi', 2465000, 2095250, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2024/08/21/ela5375eu-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3171')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3171', N'Màn Hình LG 27UP850K-W - Máy cũ, TBH', N'LG', 7950000, 6757500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/10/01/27up850k-w-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3172')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3172', N'Màn hình Samsung Odyssey G5 G55C LS32CG552EEXXV - Máy cũ, TBH', N'Samsung', 4820000, 4097000, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2024/12/02/ls32cg552eexxv-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3173')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3173', N'Màn hình ASUS TUF VG27AQ1A - Máy cũ, TBH', N'Asus', 3960000, 3366000, 50, N'Chiếc', N'ASUS', N'https://i.hoanghamobile.vn/Uploads/2025/02/17/vg27aq1a-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3174')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3174', N'Màn hình máy tính Samsung ViewFinity S8 LS27B800PXEXXV 27 inch 4K/IPS - Máy cũ, TBH', N'Samsung', 5355000, 4551750, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2022/08/31/image-removebg-preview-8.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3175')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3175', N'Màn hình ViewSonic VA2414-H - Máy cũ, TBH', N'ViewSonic', 1580000, 1343000, 50, N'Chiếc', N'VIEWSONIC', N'https://i.hoanghamobile.vn/Uploads/2025/03/25/va2414-h-0.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3176')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3176', N'Màn hình ViewSonic VA2708-2K-MHD - Máy cũ, TBH', N'ViewSonic', 2965000, 2520250, 50, N'Chiếc', N'VIEWSONIC', N'https://i.hoanghamobile.vn/Uploads/2024/12/02/va2708-2k-mhd-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3177')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3177', N'Màn hình MSI PRO MP272LKL - Máy cũ, TBH', N'MSI', 1970000, 1674500, 50, N'Chiếc', N'MSI', N'https://i.hoanghamobile.vn/Uploads/2025/10/13/mp272lkl-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3178')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3178', N'LG UltraGear 27GS75Q-B - Máy cũ, TBH', N'LG', 4360000, 3706000, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2024/08/20/27gs75q-b-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3179')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3179', N'Màn hình LG UltraGear 27GS65F-B - Máy cũ, TBH', N'LG', 2965000, 2520250, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2024/12/16/27gs65f-b-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3180')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3180', N'Màn hình Gaming LG 27GR93U-B - Máy cũ, TBH', N'LG', 8310000, 7063500, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/02/27/27gr93u-b-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3181')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3181', N'Màn hình LG 27UP850N-W (27"/UHD/IPS/60Hz) - Máy cũ, TBH', N'LG', 6415000, 5452750, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2025/01/18/27up850n-w.gif', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3182')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3182', N'Màn hình LG 27UP600-W (27"/UHD/IPS/60Hz) - Máy cũ, TBH', N'LG', 4760000, 4046000, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2023/02/17/27up600-w-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3183')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3183', N'Màn hình ViewSonic VX2728-2K (27"/QHD/IPS/180Hz) - Máy cũ, TBH', N'ViewSonic', 3560000, 3026000, 50, N'Chiếc', N'VIEWSONIC', N'https://i.hoanghamobile.vn/Uploads/2024/04/04/vx2728-2k.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3184')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3184', N'Màn hình di động MSI PRO MP161 E2 (15.6"/FHD/IPS/60Hz/Có loa) - Máy cũ, TBH', N'MSI', 2465000, 2095250, 50, N'Chiếc', N'MSI', N'https://i.hoanghamobile.vn/Uploads/2024/03/28/msi-pro-mp161-e2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3185')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3185', N'Màn hình ASUS TUF VG279QM5A  - Máy cũ, TBH', N'Asus', 3260000, 2771000, 50, N'Chiếc', N'ASUS', N'https://i.hoanghamobile.vn/Uploads/2025/10/01/vg279qm5a-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3186')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3186', N'Màn hình LG 24QP500-B (23.8/QHD/IPS/75Hz) - Máy cũ, TBH', N'LG', 2965000, 2520250, 50, N'Chiếc', N'LG', N'https://i.hoanghamobile.vn/Uploads/2023/02/04/image-removebg-preview-64.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3187')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3187', N'Màn hình VSP IP2510W2 (24.5 INCH/FHD/FAST IPS/180HZ/1MS) - Máy cũ, TBH', N'Chính hãng', 1870000, 1589500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/05/30/man-hinh-vsp-ip2510w2-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3188')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3188', N'Màn hình VSP IP2718F1 (27"INCH/FHD/Fast IPS/180Hz/0.5ms/Đen) - Máy cũ, TBH', N'Chính hãng', 2465000, 2095250, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/04/22/ip2718f1-3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3189')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3189', N'Màn hình Xiaomi A27Qi (ELA5812EU) - Máy cũ, TBH', N'Xiaomi', 3160000, 2686000, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2025/03/04/p27qca-ragl.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3190')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3190', N'Màn hình Viewsonic XG2431 - Chính hãng - Máy cũ, TBH', N'ViewSonic', 3460000, 2941000, 50, N'Chiếc', N'VIEWSONIC', N'https://i.hoanghamobile.vn/Uploads/2022/10/27/image-removebg-preview-2022-10-27t153259-602.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3191')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3191', N'Đồng hồ thông minh Huawei GT 6 46mm - Màu Nâu dây da - Máy cũ, TBH', N'Huawei', 3790000, 3221500, 50, N'Chiếc', N'HUAWEI', N'https://i.hoanghamobile.vn/Uploads/2025/09/22/atum-grey-product-image-left-30-en-jpg-20250807.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3192')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3192', N'Đồng hồ thông minh Huawei GT 6 46mm - Màu Xanh lá dây woven - Máy cũ, TBH', N'Huawei', 3490000, 2966500, 50, N'Chiếc', N'HUAWEI', N'https://i.hoanghamobile.vn/Uploads/2025/09/22/atum-green-product-image-left-30-en-jpg-20250807.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3193')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3193', N'Đồng hồ thông minh Huawei GT 6 41mm - Màu Tím dây cao su - Máy cũ, TBH', N'Huawei', 2990000, 2541500, 50, N'Chiếc', N'HUAWEI', N'https://i.hoanghamobile.vn/Uploads/2025/09/22/konsu-purple-product-image-left-30-en-jpg-20250813.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3194')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3194', N'Đồng hồ định vị trẻ em myALO K64 - Máy cũ, TBH', N'Chính hãng', 840000, 714000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/03/21/dong-ho-dinh-vi-tre-em-myalo-k64-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3195')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3195', N'Samsung Watch8 44mm BT (L330) - Máy cũ, TBH', N'Samsung', 4990000, 4241500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/09/watch8-xam-7.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3196')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3196', N'Apple Watch Series 10 - GPS + Cellular, 46mm - Viền Nhôm Dây Cao Su - Máy cũ, TBH', N'Apple', 7990000, 6791500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/09/11/series-10-den-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3197')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3197', N'Đồng hồ thông minh Xiaomi Watch 5 - Máy cũ, TBH', N'Xiaomi', 4890000, 4156500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/02/25/o61-black-frontright.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3198')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3198', N'Đồng hồ thông minh HUAWEI WATCH Ultimate 2 - Màu Đen - Máy cũ, TBH', N'Huawei', 13490000, 11466500, 50, N'Chiếc', N'HUAWEI', N'https://i.hoanghamobile.vn/Uploads/2025/10/15/huawei-watch-ultimate-2-den-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3199')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3199', N'Đồng hồ thông minh Huawei GT 6 Pro 46mm - Màu Nâu dây woven - Máy cũ, TBH', N'Huawei', 4290000, 3646500, 50, N'Chiếc', N'HUAWEI', N'https://i.hoanghamobile.vn/Uploads/2025/09/22/atum-pro-brown-product-image-left-30-en-jpg-20250813.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3200')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3200', N'Đồng hồ Samsung Galaxy Watch Ultra 47mm LTE (L705) - Máy cũ, TBH', N'Samsung', 6790000, 5771500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2024/07/11/watch-ultra-new-grey-orange-band-thumbnail.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3201')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3201', N'Đồng hồ thông minh Huawei GT 6 Pro 46mm - Màu Đen dây cao su - Máy cũ, TBH', N'Huawei', 5590000, 4751500, 50, N'Chiếc', N'HUAWEI', N'https://i.hoanghamobile.vn/Uploads/2025/09/22/atum-pro-black-product-image-left-30-en-jpg-20250813.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3202')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3202', N'Vòng đeo tay thông minh Xiaomi Band 9 Pro - Máy cũ, TBH', N'Xiaomi', 939000, 798150, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2024/11/27/xiaomi-band-9-pro-pink-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3203')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3203', N'Đồng hồ thông minh Xiaomi Watch S4 - Máy cũ, TBH', N'Xiaomi', 1949000, 1656650, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2025/02/27/o62-black-left45.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3204')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3204', N'Samsung Watch8 40mm Bluetooth (L320) - Máy cũ, TBH', N'Samsung', 4890000, 4156500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/09/watch8-xam-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3205')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3205', N'Garmin Forerunner 945 - Chính hãng FPT - Máy cũ, TBH', N'Garmin', 3960000, 3366000, 50, N'Chiếc', N'GARMIN', N'https://i.hoanghamobile.vn/Uploads/2020/09/24/Garmin%20Forerunner%20945.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3206')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3206', N'Apple Watch Series 10 - GPS, 42mm - Viền Nhôm Dây Cao Su - Máy cũ, TBH', N'Apple', 4960000, 4216000, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/02/11/apple-watch-series-10-vien-nhom-day-cao-su.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3207')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3207', N'Đồng hồ Garmin Epix Pro (Gen 2) – Sapphire 47mm - Máy cũ, TBH', N'Garmin', 14240000, 12104000, 50, N'Chiếc', N'GARMIN', N'https://i.hoanghamobile.vn/Uploads/2023/06/15/epix-pro-gen-2-sapphire-47mm-12.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3208')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3208', N'Đồng hồ định vị trẻ em Tammi Watch Kid Plus - Máy cũ, TBH', N'Chính hãng', 790000, 671500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/15/tammi-watch-kid-plus-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3209')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3209', N'Đồng hồ MyKID 4G LITE  - Máy cũ, TBH', N'Chính hãng', 680000, 578000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2023/08/31/mykid4glite-h.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3210')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3210', N'Vòng đeo tay thông minh Xiaomi Band 9 Active - Máy cũ, TBH', N'Xiaomi', 460000, 391000, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2024/11/27/n69-pink-side45.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3211')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3211', N'Đồng hồ thông minh Kieslect KS3 - Máy cũ, TBH', N'Chính hãng', 990000, 841500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/08/22/ks3-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3212')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3212', N'Đồng hồ Garmin Instinct 2, Xám Graphite, SEA - Máy cũ, TBH', N'Garmin', 3790000, 3221500, 50, N'Chiếc', N'GARMIN', N'https://i.hoanghamobile.vn/Uploads/2022/03/26/instinct-2s-3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3213')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3213', N'Samsung Galaxy Watch9 40mm LTE (L345) - Máy cũ, TBH', N'Samsung', 9290000, 7896500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2026/07/22/l345-7-151548124.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3214')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3214', N'Apple Watch Series 9 - GPS, 45mm - Vỏ Nhôm Dây Cao Su - Máy cũ, TBH', N'Apple', 4960000, 4216000, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/09/20/s9-45-midnight-midnight-aluminium.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3215')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3215', N'Đồng hồ thông minh Huawei Watch Fit 4 - Máy cũ, TBH', N'Huawei', 1390000, 1181500, 50, N'Chiếc', N'HUAWEI', N'https://i.hoanghamobile.vn/Uploads/2025/05/16/fit-4-perplr-3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3216')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3216', N'HUAWEI Watch Fit 5 - Máy cũ, TBH', N'Huawei', 2590000, 2201500, 50, N'Chiếc', N'HUAWEI', N'https://i.hoanghamobile.vn/Uploads/2026/05/12/huawei-watch-fit-5-den-6.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3217')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3217', N'Đồng hồ Gloryfit Q31 - Máy cũ, TBH', N'Chính hãng', 490000, 416500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/03/04/gloryfit-q31-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3218')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3218', N'Đồng hồ Xiaomi Watch 2 - Máy cũ, TBH', N'Xiaomi', 1090000, 926500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2024/02/27/xiaomi-watch-2-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3219')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3219', N'Đồng hồ Garmin Forerunner 965 - Máy cũ, TBH', N'Garmin', 10940000, 9299000, 50, N'Chiếc', N'GARMIN', N'https://i.hoanghamobile.vn/Uploads/2023/03/10/garmin-forerunner-965-6.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3220')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3220', N'Đồng hồ Garmin Forerunner 55 - Chính hãng FPT - Máy cũ, TBH', N'Garmin', 1970000, 1674500, 50, N'Chiếc', N'GARMIN', N'https://i.hoanghamobile.vn/Uploads/2022/02/09/image-removebg-preview_637799988894127992.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3221')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3221', N'Samsung Galaxy Watch9 44mm BT (L350) - Máy cũ, TBH', N'Samsung', 6990000, 5941500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2026/07/22/l350-9-160938157.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3222')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3222', N'Đồng hồ Garmin Forerunner 165 - Máy cũ, TBH', N'Garmin', 2990000, 2541500, 50, N'Chiếc', N'GARMIN', N'https://i.hoanghamobile.vn/Uploads/2024/03/14/garmin-forerunner-165-11.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3223')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3223', N'Đồng hồ thông minh Xiaomi Redmi Watch 5 Lite - Máy cũ, TBH', N'Xiaomi', 660000, 561000, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2024/09/23/xiaomi-redmi-watch-5-lite-gold-3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3224')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3224', N'Đồng hồ thông minh Zobo NovaDeli - Máy cũ, TBH', N'Chính hãng', 340000, 289000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/11/05/zobo-novadeli.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3225')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3225', N'Đồng hồ thông minh Huawei Watch GT 7 Pro 46mm - Máy cũ, TBH', N'Huawei', 7590000, 6451500, 50, N'Chiếc', N'HUAWEI', N'https://i.hoanghamobile.vn/Uploads/2026/09/18/huawei-watch-gt-7-pro-46mm-den-1-162953927.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3226')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3226', N'Vòng đeo tay thông minh HUAWEI Band 11 Pro - Máy cũ, TBH', N'Huawei', 1190000, 1011500, 50, N'Chiếc', N'HUAWEI', N'https://i.hoanghamobile.vn/Uploads/2026/02/12/huawei-band-11-pro-xanh-la-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3227')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3227', N'Đồng hồ thông minh Huawei GT 6 46mm - Màu Đen dây cao su - Máy cũ, TBH', N'Huawei', 3390000, 2881500, 50, N'Chiếc', N'HUAWEI', N'https://i.hoanghamobile.vn/Uploads/2025/09/22/atum-black-product-image-left-30-en-jpg-20250807.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3228')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3228', N'Đồng hồ thông minh Huawei Watch Fit 4 Pro - Máy cũ, TBH', N'Huawei', 2590000, 2201500, 50, N'Chiếc', N'HUAWEI', N'https://i.hoanghamobile.vn/Uploads/2025/05/16/fit-4-pro-blue-3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3229')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3229', N'Apple Watch Series 10 - GPS, 46mm - Viền Nhôm Dây Cao Su - Máy cũ, TBH', N'Apple', 5955000, 5061750, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/09/11/series-10-den-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3230')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3230', N'Apple Watch Series 8 - GPS + Cellular, 45mm - Viền thép dây thép - Máy cũ, TBH', N'Apple', 7450000, 6332500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/01/12/image-removebg-preview-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3231')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3231', N'Đồng hồ Garmin Venu SQ 2 - Máy cũ, TBH', N'Garmin', 2790000, 2371500, 50, N'Chiếc', N'GARMIN', N'https://i.hoanghamobile.vn/Uploads/2022/09/20/image-removebg-preview-2022-09-20t090349-627.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3232')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3232', N'HUAWEI Watch Fit 5 - Dây Nylon (NFC) - Máy cũ, TBH', N'Huawei', 2490000, 2116500, 50, N'Chiếc', N'HUAWEI', N'https://i.hoanghamobile.vn/Uploads/2026/05/12/huawei-watch-fit-5-bac-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3233')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3233', N'Đồng hồ Gloryfit S8 Pro - Máy cũ, TBH', N'Chính hãng', 159000, 135150, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/03/04/gloryfit-s8-pro-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3234')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3234', N'Đồng hồ thông minh Kieslect KR Ultra 3 - Máy cũ, TBH', N'Chính hãng', 1290000, 1096500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/07/09/kr3-white-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3235')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3235', N'Đồng hồ thông minh Kieslect KR 3 - Máy cũ, TBH', N'Chính hãng', 1290000, 1096500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/07/09/kr3-gold-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3236')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3236', N'Đồng hồ thông minh Riversong Motive 9 Max SW903 - Máy cũ, TBH', N'Chính hãng', 1270000, 1079500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/01/17/sw903.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3237')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3237', N'Đồng hồ định vị trẻ em Masstel Hero 30 - Máy cũ, TBH', N'Chính hãng', 1650000, 1402500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/10/masstel-hero-30-den-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3238')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3238', N'Đồng hồ Garmin Forerunner 265 - Máy cũ, TBH', N'Garmin', 8390000, 7131500, 50, N'Chiếc', N'GARMIN', N'https://i.hoanghamobile.vn/Uploads/2023/03/10/garmin-forerunner-265-7.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3239')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3239', N'Apple Watch SE 3 - GPS, 40mm - Vỏ Nhôm Dây Cao Su S/M - Máy cũ, TBH', N'Apple', 4990000, 4241500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/10/ap5e45-1.JPG', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3240')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3240', N'Goly K10 - Máy cũ, TBH', N'Chính hãng', 539000, 458150, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/09/18/goly-k10-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3241')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3241', N'Vòng đeo tay Samsung Galaxy Fit3 (R390) - Máy cũ, TBH', N'Samsung', 399000, 339150, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2024/02/20/samsung-galaxy-fit3-7.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3242')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3242', N'Apple Watch Series 9 - GPS + Cellular, 45mm - Vỏ Nhôm Dây Cao Su - Máy cũ, TBH', N'Apple', 4960000, 4216000, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/09/20/s9-45-midnight-midnight-aluminium.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3243')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3243', N'Đồng hồ định vị trẻ em Masstel Hero 16i - Máy cũ, TBH', N'Chính hãng', 1190000, 1011500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/11/masstel-hero-16i-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3244')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3244', N'Đồng hồ định vị trẻ em myALO K74 - Máy cũ, TBH', N'Chính hãng', 1270000, 1079500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2023/11/29/myalo-k74-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3245')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3245', N'Đồng hồ định vị trẻ em Tammi Watch Kid Max - Máy cũ, TBH', N'Chính hãng', 1390000, 1181500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/15/tammi-watch-kid-max-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3246')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3246', N'Vòng đeo tay thông minh HUAWEI Band 11 - Khung hợp kim nhôm - Máy cũ, TBH', N'Huawei', 890000, 756500, 50, N'Chiếc', N'HUAWEI', N'https://i.hoanghamobile.vn/Uploads/2026/02/12/huawei-band-11-nhom-be-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3247')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3247', N'Apple Watch SE 3 - GPS, 44mm - Vỏ Nhôm Dây Cao Su dây S/M - Máy cũ, TBH', N'Apple', 6390000, 5431500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/10/ap5e45-1.JPG', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3248')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3248', N'Apple Watch SE 2024 - GPS, 40mm - Vỏ Nhôm Dây Cao Su  - Máy cũ, TBH', N'Apple', 3960000, 3366000, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/12/05/thumb-watch-se-2024-lte-44mm-anh-sao.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3249')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3249', N'Apple Watch Series 7 - GPS + Cellular, 45mm - Vỏ Nhôm Dây Cao Su - Máy cũ, TBH', N'Apple', 4660000, 3961000, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/07/01/series-7-trang.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3250')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3250', N'Vòng đeo tay thông minh Xiaomi Band 10 Pro - Máy cũ, TBH', N'Xiaomi', 1690000, 1436500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2026/05/27/xiaomi-band-10-pro-den-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3251')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3251', N'Samsung Watch Ultra 2025 LTE - Máy cũ, TBH', N'Samsung', 8790000, 7471500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/09/watch8-ultra-xam-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3252')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3252', N'Đồng hồ Samsung Galaxy Watch FE - Máy cũ, TBH', N'Samsung', 1470000, 1249500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2024/06/28/sansung-galaxy-watch-fe-den-3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3253')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3253', N'Vòng đeo tay thông minh Xiaomi Band 10 - Máy cũ, TBH', N'Xiaomi', 750000, 637500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2025/06/27/o66-pink-right45.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3254')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3254', N'Apple Watch SE 3 - GPS + Cellular, 40mm - Vỏ Nhôm Dây Cao Su S/M - Máy cũ, TBH', N'Apple', 7550000, 6417500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/10/ap5e45-1.JPG', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3255')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3255', N'Đồng hồ thông minh Riversong Motive 9 Pro SW901 - Máy cũ, TBH', N'Chính hãng', 780000, 663000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/01/17/9-pro.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3256')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3256', N'Apple Watch Ultra 3 - GPS + Cellular, 49mm - Viền Titan Dây Alpine - Máy cũ, TBH', N'Apple', 15990000, 13591500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/10/ap115e-1.JPG', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3257')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3257', N'Đồng hồ Garmin Venu 2 Plus, GPS  - Máy cũ, TBH', N'Garmin', 5490000, 4666500, 50, N'Chiếc', N'GARMIN', N'https://i.hoanghamobile.vn/Uploads/2022/01/06/image-removebg-preview-20.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3258')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3258', N'Apple Watch Series 8 - GPS + Cellular, 45mm - Viền thép dây cao su - Máy cũ, TBH', N'Apple', 7650000, 6502500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2022/09/11/image-removebg-preview-1_637984976450783767.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3259')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3259', N'Đồng hồ thông minh Huawei GT 6 Pro 46mm - Titanium - Máy cũ, TBH', N'Huawei', 9490000, 8066500, 50, N'Chiếc', N'HUAWEI', N'https://i.hoanghamobile.vn/Uploads/2025/09/22/atum-pro-titanium-product-image-left-30-en-jpg-20250813.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3260')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3260', N'Samsung Watch8 40mm LTE (L325) - Máy cũ, TBH', N'Samsung', 4890000, 4156500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/09/watch8-xam-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3261')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3261', N'Samsung Watch8 Classic 46mm BT (L500) - Máy cũ, TBH', N'Samsung', 8550000, 7267500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/09/watch8-classic-den-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3262')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3262', N'Đồng hồ thông minh Huawei GT 5 - 41mm - Máy cũ, TBH', N'Huawei', 3390000, 2881500, 50, N'Chiếc', N'HUAWEI', N'https://i.hoanghamobile.vn/Uploads/2024/09/23/image-removebg-preview.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3263')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3263', N'Đồng hồ Garmin Venu SQ 2 Music  - Máy cũ, TBH', N'Garmin', 3390000, 2881500, 50, N'Chiếc', N'GARMIN', N'https://i.hoanghamobile.vn/Uploads/2022/09/20/image-removebg-preview-2022-09-20t091108-813.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3264')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3264', N'Đồng hồ Garmin Instinct 2S, Solar Standard Edition - Máy cũ, TBH', N'Garmin', 6255000, 5316750, 50, N'Chiếc', N'GARMIN', N'https://i.hoanghamobile.vn/Uploads/2022/03/26/garmin-instinct-2-solar-standard-edition-mist-gray-jpg-removebg-preview.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3265')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3265', N'Apple Watch Series 8 - GPS + Cellular, 41mm - Viền thép dây thép - Máy cũ, TBH', N'Apple', 7950000, 6757500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/01/12/image-removebg-preview-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3266')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3266', N'Apple Watch Series 7 - GPS + Cellular, 41mm - Vỏ Thép Dây Thép - Máy cũ, TBH', N'Apple', 4260000, 3621000, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2021/10/08/s7-thep-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3267')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3267', N'Apple Watch Series 7 - GPS + Cellular, 45mm - Vỏ Thép Dây Thép - Máy cũ, TBH', N'Apple', 7250000, 6162500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2021/10/08/s7-thep-3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3268')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3268', N'Apple Watch Series 7 - GPS + Cellular, 45mm - Vỏ Thép Dây Cao Su - Máy cũ, TBH', N'Apple', 6955000, 5911750, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2022/07/23/image-removebg-preview-6_637941662259992932.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3269')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3269', N'Apple Watch Series 11 - GPS + Cellular, 42mm - Viền Titan Dây Thép Milan - Máy cũ, TBH', N'Apple', 18990000, 16141500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/11/ap09db-1.JPG', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3270')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3270', N'Đồng hồ thông minh Amazfit T-Rex 3 Pro 48mm - Máy cũ, TBH', N'Amazfit', 7750000, 6587500, 50, N'Chiếc', N'AMAZFIT', N'https://i.hoanghamobile.vn/Uploads/2025/09/24/t-rex-3-pro-black-gold-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3271')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3271', N'Apple Watch Series 7 - GPS + Cellular, 41mm - Vỏ Thép Dây Cao Su - Máy cũ, TBH', N'Apple', 6755000, 5741750, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2022/07/23/image-removebg-preview-4_637941662259992932.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3272')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3272', N'Masstel Dream Action - Chính hãng - Máy cũ, TBH', N'Chính hãng', 319000, 271150, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/07/01/masstel-dream-action.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3273')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3273', N'Đồng hồ Xiaomi Redmi Watch 3 Active - Máy cũ, TBH', N'Xiaomi', 580000, 493000, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2024/07/01/xiaomi-redmi-watch-3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3274')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3274', N'Đồng hồ Garmin Epix Gen 2, Back,Gray Carbon DLC Titanium - Máy cũ, TBH', N'Garmin', 10240000, 8704000, 50, N'Chiếc', N'GARMIN', N'https://i.hoanghamobile.vn/Uploads/2024/07/01/epix-gen2-carbon-titan.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3275')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3275', N'Đồng hồ thông minh Riversong Motive 9E SW905 - Máy cũ, TBH', N'Chính hãng', 780000, 663000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/01/17/sw905.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3276')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3276', N'Đồng hồ thông minh Amazfit Active 2 Square - Máy cũ, TBH', N'Amazfit', 2565000, 2180250, 50, N'Chiếc', N'AMAZFIT', N'https://i.hoanghamobile.vn/Uploads/2025/07/09/rome-45-right.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3277')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3277', N'Samsung Galaxy Fit (SM - R370) - Chính hãng - Máy cũ, TBH', N'Samsung', 469000, 398650, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2020/09/16/Samsung-Galaxy-Fit-(SM---R370)---Ch&#xED', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3278')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3278', N'Đồng hồ thông minh Huawei Watch GT 6 Milanese - Máy cũ, TBH', N'Huawei', 5455000, 4636750, 50, N'Chiếc', N'HUAWEI', N'https://i.hoanghamobile.vn/Uploads/2025/12/31/konsu-gold-product-image-left-30-en-png-800px-20250813.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3279')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3279', N'Đồng hồ thông minh Amazfit Balance 2 - Máy cũ, TBH', N'Amazfit', 6255000, 5316750, 50, N'Chiếc', N'AMAZFIT', N'https://i.hoanghamobile.vn/Uploads/2025/07/31/amazfit-balance-2-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3280')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3280', N'Đồng hồ Garmin Venu 3 - Máy cũ, TBH', N'Garmin', 8190000, 6961500, 50, N'Chiếc', N'GARMIN', N'https://i.hoanghamobile.vn/Uploads/2023/08/29/venu-3-3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3281')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3281', N'Đồng hồ Huawei Watch GT4 46mm  - Máy cũ, TBH', N'Huawei', 1970000, 1674500, 50, N'Chiếc', N'HUAWEI', N'https://i.hoanghamobile.vn/Uploads/2023/09/08/huawei-watch-gt4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3282')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3282', N'Apple Watch SE 2024 - GPS + Cellular, 40mm - Vỏ Nhôm Dây Cao Su  - Máy cũ, TBH', N'Apple', 5255000, 4466750, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/12/05/thumb-watch-se-2024-lte-44mm-bac.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3283')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3283', N'Apple Watch SE 2021 - GPS + Cellular, 44mm - Vỏ Nhôm Dây Vải - Máy cũ, TBH', N'Apple', 3970000, 3374500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2021/01/12/watch-se-lte-silver-loop.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3284')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3284', N'Đồng hồ Samsung Galaxy Watch7 40mm BT (L300) - Máy cũ, TBH', N'Samsung', 4890000, 4156500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2024/07/11/watch7-new-s-cream-thumbnail.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3285')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3285', N'Apple Watch Series 10 - GPS + Cellular, 42mm - Viền Nhôm Dây Cao Su - Máy cũ, TBH', N'Apple', 9750000, 8287500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/02/11/apple-watch-series-10-vien-nhom-day-cao-su.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3286')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3286', N'Đồng hồ Samsung Galaxy Watch6 Classic 47mm BT (R960) - Máy cũ, TBH', N'Samsung', 3890000, 3306500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2024/07/01/galaxy-watch6-classic-47mm-bt.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3287')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3287', N'Apple Watch SE 2024 - GPS, 44mm - Vỏ Nhôm Dây Cao Su  - Máy cũ, TBH', N'Apple', 4560000, 3876000, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/12/05/thumb-watch-se-2024-lte-44mm-den.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3288')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3288', N'Đồng hồ thông minh Huawei GT 5 - 46mm - Máy cũ, TBH', N'Huawei', 3490000, 2966500, 50, N'Chiếc', N'HUAWEI', N'https://i.hoanghamobile.vn/Uploads/2024/09/25/huawei-watch-gt-5-blue-46mm-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3289')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3289', N'Đồng hồ thông minh Garmin Instinct 3 45MM Amoled - Máy cũ, TBH', N'Garmin', 6790000, 5771500, 50, N'Chiếc', N'GARMIN', N'https://i.hoanghamobile.vn/Uploads/2025/02/12/image-removebg-preview.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3290')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3290', N'Đồng hồ Garmin Lily 2 Silicone - Máy cũ, TBH', N'Garmin', 3490000, 2966500, 50, N'Chiếc', N'GARMIN', N'https://i.hoanghamobile.vn/Uploads/2024/01/15/garmin-lily-2-silicone-9.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3291')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3291', N'Đồng hồ Garmin Venu 2 - Chính hãng FPT - Máy cũ, TBH', N'Garmin', 4760000, 4046000, 50, N'Chiếc', N'GARMIN', N'https://i.hoanghamobile.vn/Uploads/2021/06/24/image-removebg-preview-5.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3292')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3292', N'Đồng hồ Masstel Super Hero 4G - Máy cũ, TBH', N'Chính hãng', 790000, 671500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2021/01/27/masstel-super-hero-4g-xanh.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3293')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3293', N'Đồng hồ Redmi Watch 2 Lite - Máy cũ, TBH', N'Xiaomi', 1090000, 926500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2021/11/29/image-removebg-preview-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3294')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3294', N'Đồng hồ định vị trẻ em myAlo K84 - Máy cũ, TBH', N'Chính hãng', 1770000, 1504500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2021/03/09/image-removebg-preview-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3295')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3295', N'Đồng hồ thông minh Garmin Lily 2 Active - Máy cũ, TBH', N'Garmin', 4790000, 4071500, 50, N'Chiếc', N'GARMIN', N'https://i.hoanghamobile.vn/Uploads/2024/10/11/image-removebg-preview.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3296')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3296', N'Đồng hồ Garmin Forerunner 165 Music - Máy cũ, TBH', N'Garmin', 4490000, 3816500, 50, N'Chiếc', N'GARMIN', N'https://i.hoanghamobile.vn/Uploads/2024/03/14/garmin-forerunner-165-music-22.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3297')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3297', N'Đồng hồ Huawei Watch GT4 41mm - Máy cũ, TBH', N'Huawei', 2465000, 2095250, 50, N'Chiếc', N'HUAWEI', N'https://i.hoanghamobile.vn/Uploads/2023/09/15/gt4-41mm-1_638303869283912023.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3298')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3298', N'Đồng hồ thông minh Huawei GT 5 Pro - 42mm - Máy cũ, TBH', N'Huawei', 3590000, 3051500, 50, N'Chiếc', N'HUAWEI', N'https://i.hoanghamobile.vn/Uploads/2024/09/25/huawei-watch-gt-5-pro-ceramic-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3299')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3299', N'Đồng hồ thông minh Amazfit Active 2 Premium Sapphire (dây da) - Máy cũ, TBH', N'Amazfit', 2365000, 2010250, 50, N'Chiếc', N'AMAZFIT', N'https://i.hoanghamobile.vn/Uploads/2025/04/25/image-removebg-preview-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3300')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3300', N'Đồng hồ Garmin Vivomove Sport  - Máy cũ, TBH', N'Garmin', 4190000, 3561500, 50, N'Chiếc', N'GARMIN', N'https://i.hoanghamobile.vn/Uploads/2022/03/11/qu.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3301')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3301', N'Đồng hồ Garmin Fenix 6S Pro Solar - Chính hãng FPT - Máy cũ, TBH', N'Garmin', 6490000, 5516500, 50, N'Chiếc', N'GARMIN', N'https://i.hoanghamobile.vn/Uploads/2020/09/23/Garmin%20Fenix%20v6S%20Pro%20Solar_637364811208524039.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3302')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3302', N'Vòng đeo tay theo dõi sức khỏe Garmin Vivomove Luxe cũ - Máy cũ, TBH', N'Garmin', 2325000, 1976250, 50, N'Chiếc', N'GARMIN', N'https://i.hoanghamobile.vn/Uploads/2020/11/04/vivomove-luxe-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3303')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3303', N'Đồng hồ Garmin Venu 2S - Chính hãng FPT - Máy cũ, TBH', N'Garmin', 3760000, 3196000, 50, N'Chiếc', N'GARMIN', N'https://i.hoanghamobile.vn/Uploads/2021/06/25/image-removebg-preview-9.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3304')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3304', N'Apple Watch SE 2021 - GPS + Cellular, 40mm - Vỏ Nhôm Dây Cao Su - Máy cũ, TBH', N'Apple', 3860000, 3281000, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2021/01/12/se-lte-gray.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3305')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3305', N'Samsung Galaxy Watch6 40mm BT (R930)  - Máy cũ, TBH', N'Samsung', 2990000, 2541500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2024/07/01/galaxy-watch-6.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3306')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3306', N'Tai nghe Bluetooth SoundPEATS Clear - Máy cũ, TBH', N'Chính hãng', 360000, 306000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2023/10/25/bluetooth-soundpeats-clear-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3307')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3307', N'Tai Nghe TWS Nakamichi TW016 - Máy cũ, TBH', N'Chính hãng', 159000, 135150, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/01/30/nakamichi-tw016-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3308')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3308', N'Tai nghe có dây Baseus Encok CZ11 - Máy cũ, TBH', N'Baseus', 79000, 67150, 50, N'Chiếc', N'BASEUS', N'https://i.hoanghamobile.vn/Uploads/2024/05/17/baseus-encok-cz11-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3309')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3309', N'Tai nghe AirPods 5 - Sạc không dây - Máy cũ, TBH', N'Apple', 3690000, 3136500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2026/09/10/aipo-5-024212048.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3310')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3310', N'Tai nghe SENNHEISER Accentum True Wireless - Máy cũ, TBH', N'Chính hãng', 3990000, 3391500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/12/25/3913-tai-nghe-sennheiser-accentum-true-wireless.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3311')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3311', N'Tai nghe Bluetooth myALO X-One - Chính hãng - Máy cũ, TBH', N'Chính hãng', 159000, 135150, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/03/tai-nghe-bluetooth-myalo-x-one-b-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3312')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3312', N'Tai nghe chụp tai (không dây) SONY WH-CH520 - Chính Hãng - Máy cũ, TBH', N'Sony', 690000, 586500, 50, N'Chiếc', N'SONY', N'https://i.hoanghamobile.vn/Uploads/2025/04/14/image-removebg-preview-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3313')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3313', N'Tai nghe AirPods 4 - Máy cũ, TBH', N'Apple', 2565000, 2180250, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/09/10/airpods-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3314')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3314', N'Tai nghe bluetooth hiệu Havit, model LIFE 04T - Máy cũ, TBH', N'Chính hãng', 179000, 152150, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/11/18/tw888-30.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3315')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3315', N'Tai nghe Bluetooth True Wireless Gaming Black Shark T11  - Máy cũ, TBH', N'Chính hãng', 330000, 280500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/08/23/tai-nghe-bluetooth-true-wireless-gaming-black-shark-t11-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3316')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3316', N'Tai nghe Bluetooth True Wireless Huawei FreeBuds SE 2 - Máy cũ, TBH', N'Huawei', 320000, 272000, 50, N'Chiếc', N'HUAWEI', N'https://i.hoanghamobile.vn/Uploads/2023/10/09/true-wireless-huawei-freebuds-se-2-3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3317')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3317', N'Tai nghe AirPods Pro 3 - Máy cũ, TBH', N'Apple', 5190000, 4411500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2026/11/03/Gallery/899842_airpod-pro-3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3318')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3318', N'Tai nghe Redmi Buds 6 Pro - Máy cũ, TBH', N'Xiaomi', 1270000, 1079500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2024/12/27/redmi-bud-6-pro-5.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3319')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3319', N'Tai nghe chống ồn không dây Sony WF-C700N - Chính Hãng - Máy cũ, TBH', N'Sony', 840000, 714000, 50, N'Chiếc', N'SONY', N'https://i.hoanghamobile.vn/Uploads/2023/04/15/wf-c700n-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3320')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3320', N'Tai nghe AirPods 5 - Sạc có dây - Máy cũ, TBH', N'Apple', 3390000, 2881500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2026/09/10/aipo-5-024212048.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3321')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3321', N'Tai nghe Bluetooth True Wireless Havit 931 - Máy cũ, TBH', N'Chính hãng', 170000, 144500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/14/tws-havit-tw931.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3322')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3322', N'Tai Nghe TWS HAVIT TW931 - Máy cũ, TBH', N'Chính hãng', 170000, 144500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/28/tai-nghe-tws-havit-tw931.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3323')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3323', N'Samsung Galaxy Buds4 - Máy cũ, TBH', N'Samsung', 3490000, 2966500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2026/02/25/buds4-den-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3324')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3324', N'Samsung Galaxy Buds Core - Máy cũ, TBH', N'Samsung', 790000, 671500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/08/18/buds-core-onyx-black-6.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3325')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3325', N'Tai nghe bluetooth hiệu Havit, model TW992 - Máy cũ, TBH', N'Chính hãng', 329000, 279650, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/11/18/tw992-10.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3326')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3326', N'Tai nghe AirPods 4 ANC - Máy cũ, TBH', N'Apple', 3260000, 2771000, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/09/10/airpods-4_638615358810000422.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3327')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3327', N'Tai nghe Bluetooth chụp tai Sony ULT900N Wear - Máy cũ, TBH', N'Sony', 1990000, 1691500, 50, N'Chiếc', N'SONY', N'https://i.hoanghamobile.vn/Uploads/2024/04/23/bluetooth-chup-tai-sony-ult900-wea-6.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3328')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3328', N'Tai nghe Bluetooth UEELR YW03 - Máy cũ, TBH', N'Chính hãng', 290000, 246500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/05/09/image-removebg-preview.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3329')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3329', N'Tai nghe Xiaomi Buds 3 - Chính hãng - Máy cũ, TBH', N'Xiaomi', 799000, 679150, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2022/03/18/tai-nghe-khong-day-xiaomi-buds-3-6.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3330')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3330', N'Tai nghe không dây Redmi Buds 3 - Chính hãng  - Máy cũ, TBH', N'Xiaomi', 450000, 382500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2022/01/18/image-removebg-preview.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3331')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3331', N'Tai nghe chụp tai (Không dây) SONY WH-CH720N - Chính Hãng - Máy cũ, TBH', N'Sony', 1590000, 1351500, 50, N'Chiếc', N'SONY', N'https://i.hoanghamobile.vn/Uploads/2023/04/14/sony-wh-ch720n-3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3332')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3332', N'Tai nghe Bluetooth SoundPEATS Air5 Pro - Máy cũ, TBH', N'Chính hãng', 1250000, 1062500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/09/03/1-2-600x600.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3333')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3333', N'Tai nghe Bluetooth SoundPEATS POP Clip - Máy cũ, TBH', N'Chính hãng', 499000, 424150, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/08/18/1-600x600.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3334')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3334', N'Tai nghe AirPods Pro 2 - Máy cũ, TBH', N'Apple', 4120000, 3502000, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/10/27/airpods-pro-2nd-gen-usb-c-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3335')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3335', N'Tai nghe chống ồn không dây Sony WF-C710N - Máy cũ, TBH', N'Sony', 1470000, 1249500, 50, N'Chiếc', N'SONY', N'https://i.hoanghamobile.vn/Uploads/2025/05/09/wf-c710n-glassblue-case-open-large.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3336')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3336', N'True Wireless Baseus AirGo 1 Ring Open-Ear - Máy cũ, TBH', N'Baseus', 380000, 323000, 50, N'Chiếc', N'BASEUS', N'https://i.hoanghamobile.vn/Uploads/2024/06/25/baseus-airgo-1-ring-open-ear-den-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3337')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3337', N'Tai nghe SENNHEISER MOMENTUM TRUE WIRELESS 4 - Máy cũ, TBH', N'Chính hãng', 4460000, 3791000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/04/04/sennheiser-momentum-true-wireless-4-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3338')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3338', N'Tai nghe không dây Sony WF-1000XM5 - Chính Hãng - Máy cũ, TBH', N'Sony', 4760000, 4046000, 50, N'Chiếc', N'SONY', N'https://i.hoanghamobile.vn/Uploads/2023/07/25/sony-wf-1000xm5-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3339')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3339', N'Samsung Galaxy Buds4 Pro - Máy cũ, TBH', N'Samsung', 5890000, 5006500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2026/02/25/buds4-pro-trang-6.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3340')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3340', N'Tai nghe Bluetooth True Wireless EarFun Air Life - Máy cũ, TBH', N'Chính hãng', 260000, 221000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/05/14/earfun-air-life.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3341')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3341', N'Tai Nghe Thể Thao Amazfit Up Open-Ear Earbuds - Máy cũ, TBH', N'Amazfit', 1070000, 909500, 50, N'Chiếc', N'AMAZFIT', N'https://i.hoanghamobile.vn/Uploads/2025/07/31/amazfit-up-open-ear-earbuds-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3342')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3342', N'Tai Nghe TWS HAVIT TW982 Life 01T - Máy cũ, TBH', N'Chính hãng', 210000, 178500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/28/image-removebg-preview.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3343')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3343', N'Baseus Eli Sport 1 Open-Ear - Máy cũ, TBH', N'Baseus', 780000, 663000, 50, N'Chiếc', N'BASEUS', N'https://i.hoanghamobile.vn/Uploads/2024/06/25/baseus-eli-sport-1-open-ear-den.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3344')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3344', N'Samsung Galaxy Buds3 - Máy cũ, TBH', N'Samsung', 1970000, 1674500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2024/07/11/buds3-silver-thumbnail.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3345')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3345', N'Tai nghe Bluetooth Honor Choice Earbuds Clip - Máy cũ, TBH', N'Chính hãng', 1470000, 1249500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/07/18/honor-choice-earbuds-clip-tim-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3346')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3346', N'Tai nghe chụp tai (Có dây) Motorola Pulse Bass 200 Wired - Chính Hãng - Máy cũ, TBH', N'Chính hãng', 229000, 194650, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2021/12/22/pb200-11-removebg-preview.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3347')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3347', N'Samsung Galaxy Buds3 Pro - Máy cũ, TBH', N'Samsung', 3260000, 2771000, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2024/07/11/buds3-pro-silver-thumbnail_638563084073529877.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3348')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3348', N'Tai nghe chống ồn không dây Sony WH-1000XM6 - Máy cũ, TBH', N'Sony', 9150000, 7777500, 50, N'Chiếc', N'SONY', N'https://i.hoanghamobile.vn/Uploads/2025/05/21/image-removebg-preview-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3349')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3349', N'Tai nghe Chụp tai (Không dây) SENNHEISER Accentum Plus Wireless - Máy cũ, TBH', N'Chính hãng', 2990000, 2541500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/02/15/sennheiser-accentum-plus-wireless-5.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3350')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3350', N'Tai nghe Pioneer SE-C3T - Chính Hãng - Máy cũ, TBH', N'Chính hãng', 229000, 194650, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2022/08/08/2985-tai-nghe-pioneer-se-c3t-black-songlongmedia-1-removebg-preview.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3351')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3351', N'Tai nghe Bluetooth TWS Macaron	 - Máy cũ, TBH', N'Chính hãng', 209000, 177650, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/03/28/a.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3352')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3352', N'Loa Bluetooth Xiaomi Sound Outdoor - Máy cũ, TBH', N'Xiaomi', 790000, 671500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2025/12/31/xiaomi-sound-outdoor-30w-gold-5.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3353')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3353', N'Loa Bluetooth Soul Storm Mini  - Máy cũ, TBH', N'Chính hãng', 199000, 169150, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/12/01/soul-storm-mini-den.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3354')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3354', N'Loa Harman Kardon Go+Play 3 - Máy cũ, TBH', N'Harman Kardon', 6890000, 5856500, 50, N'Chiếc', N'HARMAN', N'https://i.hoanghamobile.vn/Uploads/2023/09/29/loa-harman-kardon-go-play-3-chinh-hang-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3355')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3355', N'Harman Kardon Soundstick 4 - Chính hãng - Máy cũ, TBH', N'Harman Kardon', 4990000, 4241500, 50, N'Chiếc', N'HARMAN', N'https://i.hoanghamobile.vn/Uploads/2020/09/23/Loa%20Bluetooth%20Harman%20Kardon%20Soundstick%204.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3356')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3356', N'Loa Sony SRS-XB100 - Chính Hãng - Máy cũ, TBH', N'Sony', 890000, 756500, 50, N'Chiếc', N'SONY', N'https://i.hoanghamobile.vn/Uploads/2023/07/25/loa-sony-srs-xb100-chinh-hang-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3357')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3357', N'Loa Bluetooth JBL Flip 7 - Máy cũ, TBH', N'JBL', 2990000, 2541500, 50, N'Chiếc', N'JBL', N'https://i.hoanghamobile.vn/Uploads/2025/05/05/jbl-flip-7-front-blue-011-x1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3358')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3358', N'Loa Energizer BTS-102 - Chính hãng - Máy cũ, TBH', N'Chính hãng', 390000, 331500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2020/10/30/loa-energizer-102.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3359')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3359', N'Loa Karaoke di động Arirang MKS2 - Máy cũ, TBH', N'Chính hãng', 2165000, 1840250, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/07/09/arirang-mks2-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3360')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3360', N'Loa JBL Flip 5 - chính hãng - Máy cũ, TBH', N'JBL', 1490000, 1266500, 50, N'Chiếc', N'JBL', N'https://i.hoanghamobile.vn/Uploads/2020/10/28/flip%205.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3361')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3361', N'Loa Bluetooth JBL PartyBox Club 120 - Máy cũ, TBH', N'JBL', 8550000, 7267500, 50, N'Chiếc', N'JBL', N'https://i.hoanghamobile.vn/Uploads/2024/05/06/partybox-club-120-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3362')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3362', N'HARMAN/KARDON AURA STUDIO 3 - Chính Hãng - Máy cũ, TBH', N'Harman Kardon', 3960000, 3366000, 50, N'Chiếc', N'HARMAN', N'https://i.hoanghamobile.vn/Uploads/2020/09/24/HARMAN-%20KARDON%20AURA%20STUDIO%203.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3363')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3363', N'Loa Xiaomi Bluetooth Speaker Mini - Máy cũ, TBH', N'Xiaomi', 680000, 578000, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2024/12/05/xiaomi-bluetooth-speaker-mini.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3364')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3364', N'Loa Bluetooth JBL Go4 - Máy cũ, TBH', N'JBL', 880000, 748000, 50, N'Chiếc', N'JBL', N'https://i.hoanghamobile.vn/Uploads/2024/05/06/loa-bluetooth-jbl-go4-chinh-hang-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3365')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3365', N'Harman Kardon GO + PLAY MINI - Chính hãng - Máy cũ, TBH', N'Harman Kardon', 3960000, 3366000, 50, N'Chiếc', N'HARMAN', N'https://i.hoanghamobile.vn/Uploads/2020/09/24/Loa%20Harman%20Kardon%20GO%20PLAY%20MINI.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3366')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3366', N'Loa Bluetooth Marshall Emberton III - Chính Hãng ASH - Máy cũ, TBH', N'Marshall', 4060000, 3451000, 50, N'Chiếc', N'MARSHALL', N'https://i.hoanghamobile.vn/Uploads/2024/08/29/emberton-iii-cream-7.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3367')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3367', N'Loa bluetooth Monster Adventurer Force - Chính Hãng - Máy cũ, TBH', N'Chính hãng', 1080000, 918000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2022/02/22/monster-adventurer-force-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3368')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3368', N'Harman Kardon Onyx Studio 9 - Máy cũ, TBH', N'Harman Kardon', 4760000, 4046000, 50, N'Chiếc', N'HARMAN', N'https://i.hoanghamobile.vn/Uploads/2024/12/23/harman-kardon-onyx-studio-9-den-1.gif', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3369')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3369', N'Loa Bluetooth FOOMEE HH16 - Chính hãng - Máy cũ, TBH', N'Chính hãng', 190000, 161500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2022/08/17/image-removebg-preview.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3370')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3370', N'Thẻ nhớ TF-64G-T-C', N'Chính hãng', 350000, 297500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/02/03/the-nho-unv-64gb.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3371')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3371', N'Thẻ nhớ MicroSD Sandisk Extreme Pro 256GB', N'SanDisk', 2290000, 1946500, 50, N'Chiếc', N'SANDISK', N'https://i.hoanghamobile.vn/Uploads/2026/05/20/the-nho-sandisk-microsd-256gb-extreme-pro-class-10-u3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3372')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3372', N'Thẻ nhớ SDXC SanDisk Extreme PRO 64GB', N'SanDisk', 1190000, 1011500, 50, N'Chiếc', N'SANDISK', N'https://i.hoanghamobile.vn/Uploads/2026/09/20/the-nho-sdxc-sandisk-extreme-pro-u3-v30-64gb-200mb-s-sdsdxxu-064g-gn4in-8c62a874-5956-4cf4-86cd-ffeffcd2f5c2-181906797.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3373')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3373', N'Thẻ nhớ Patriot MICRO SDXC V30 A1 128GB - Chính hãng', N'Chính hãng', 590000, 501500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2023/02/07/patriot-v30-0.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3374')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3374', N'Thẻ nhớ Patriot MICRO SDXC V30 A1 64GB- Chính hãng', N'Chính hãng', 150000, 127500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2023/02/07/v30-64-0.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3375')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3375', N'Thẻ nhớ IMOU MicroSD 32GB Class , ST3-32-F1 - Chính hãng', N'Chính hãng', 110000, 93500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2023/02/03/image-removebg-preview-37.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3376')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3376', N'Thẻ nhớ Micro SD card LEXAR 128GB', N'Chính hãng', 590000, 501500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/24/the-nho-lexar-128gb-chinh-hang-142222504.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3377')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3377', N'Thẻ nhớ Micro SD card LEXAR 64GB', N'Chính hãng', 450000, 382500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/24/the-nho-lexar-64gb-chinh-hang-142222988.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3378')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3378', N'Thẻ nhớ Micro SD card LEXAR 32GB', N'Chính hãng', 320000, 272000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/07/24/the-nho-lexar-32gb-chinh-hang-142222472.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3379')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3379', N'Sandisk iXpand Mini Flash Drive 16GB - Chính hãng', N'SanDisk', 490000, 416500, 50, N'Chiếc', N'SANDISK', N'https://i.hoanghamobile.vn/Uploads/2020/09/24/Sandisk%20iXpand%20Mini%20Flash%20Drive%2016GB-50.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3380')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3380', N'Thẻ nhớ MicroSD 128GB Kingston Canvas Select Plus CS3', N'Chính hãng', 520000, 442000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2020/10/08/12.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3381')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3381', N'Thẻ nhớ Micro SanDisk Ultra 64GB - Chính hãng', N'SanDisk', 290000, 246500, 50, N'Chiếc', N'SANDISK', N'https://i.hoanghamobile.vn/Uploads/2020/09/17/Th&#x1EBB', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3382')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3382', N'Thẻ nhớ MicroSD Sandisk Extreme Pro 128GB - Chính hãng', N'SanDisk', 1390000, 1181500, 50, N'Chiếc', N'SANDISK', N'https://i.hoanghamobile.vn/Uploads/2020/09/17/Th&#x1EBB', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3383')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3383', N'Thẻ nhớ Sandisk Ultra 128 GB - Chính hãng', N'SanDisk', 640000, 544000, 50, N'Chiếc', N'SANDISK', N'https://i.hoanghamobile.vn/Uploads/2021/05/14/image-removebg-preview-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3384')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3384', N'Ốp lưng Spigen Liquid Crystal Clear iPhone 15 Pro Max', N'Apple', 149000, 126650, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/09/15/spigen-liquid-crystal-clear-ip15prm-10.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3385')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3385', N'Ốp lưng Spigen Liquid Crystal Clear iPhone 15', N'Apple', 125000, 106250, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/09/15/op-lung-spigen-liquid-crystal-clear-iphone-15.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3386')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3386', N'Ốp lưng Spigen Ultra Hybrid iPhone 15', N'Apple', 125000, 106250, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/09/15/spigen-ultra-hybrid-iphone-15-10.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3387')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3387', N'Ốp lưng ZAGG ESNTL Clear cho iPhone 15 Pro Max', N'Apple', 99000, 84150, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/09/18/702312510-zagg-case-esntl-clear-ip15-pro-max-apple-gomez-fg-apac-pdt02.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3388')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3388', N'Ốp lưng ZAGG ESNTL Clear cho iPhone 15', N'Apple', 99000, 84150, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/09/18/702312504-zagg-case-esntl-clear-ip15-apple-pugsley-fg-apac-pdt01.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3389')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3389', N'Ốp lưng trong suốt Silicon TPU SOFT Transparent - iPhone 15', N'Apple', 79000, 67150, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/09/15/op-tpu-soft-transparent-15.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3390')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3390', N'Ốp Lưng Mipow TEMPERED TRANSPARNET iPhone 15 Pro', N'Apple', 49000, 41650, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/09/15/op-tempered-transparnet-ip15prm-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3391')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3391', N'Ốp lưng trong suốt Silicon TPU SOFT Transparent - iphone 15 Pro Max', N'Apple', 50000, 42500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/09/15/op-silicon-tpu-soft-transparent-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3392')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3392', N'Ốp lưng trong suốt Silicon TPU SOFT Transparent - iPhone 15 Pro', N'Apple', 50000, 42500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/09/15/op-silicon-tpu-soft-transparent.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3393')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3393', N'Ốp lưng trong suốt Silicon TPU SOFT Transparent - iPhone 15 Plus', N'Apple', 59000, 50150, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/09/15/image-removebg-preview_638303931825504814.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3394')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3394', N'Hộp đựng tai nghe Raigor Cara Apple Airpods 4/Airpods 5', N'Apple', 190000, 161500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2026/08/05/apple-airpods-4-raigor-cara-green-120102136.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3395')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3395', N'Ốp LAUT Zentry Airpods 4/Airpods 5', N'Apple', 250000, 212500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/11/25/op-airpods-4-laut-zentry.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3396')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3396', N'Ốp LAUT Huex Protect  Airpods 4/Airpods 5', N'Apple', 250000, 212500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/11/25/image-removebg-preview-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3397')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3397', N'Bao da bàn phím Samsung Galaxy Tab S11 Ultra |Tab S12 Ultra chính hãng', N'Samsung', 2990000, 2541500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/10/30/galaxy-tab-s11-ultra-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3398')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3398', N'Ốp lưng Samsung Z Fold 8 - ZAGG Crystal Palace Snap - Clear', N'Samsung', 990000, 841500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2026/09/10/zagg-crystal-palace-snap-1-092221632.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3399')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3399', N'Bao da Magnetic kèm bàn phím ESR dành cho iPad Gen 11/10 Rebound', N'Apple', 2590000, 2201500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/07/21/ipad-10th-generation-rebound-magnetic-keyboard-case-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3400')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3400', N'Bao da bàn phím Samsung Galaxy Tab S12 Plus', N'Samsung', 2490000, 2116500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2026/10/08/ban-phim-samsung-galaxy-tab-s12-plus-1-110353435.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3401')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3401', N'Ốp lưng Araree Aero Flex - Galaxy Z Fold 5', N'Samsung', 99000, 84150, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2023/11/23/aero-flex-3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3402')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3402', N'Ốp lưng Samsung Z Fold8 - PITAKA Edge', N'Samsung', 3000000, 2550000, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2026/10/27/Gallery/397564_op-lung-samsung-z-fold8-pitaka-edge-black-grey%20(1).png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3403')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3403', N'Dán cường lực ZAGG Glass Plus Edge iPhone 14 Plus', N'Apple', 150000, 127500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2022/10/06/appleiphonekirkproxtr2herosingle-7-png-500x350-removebg-preview.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3404')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3404', N'Dán cường lực ZAGG Glass Plus Edge iPhone 14 Pro', N'Apple', 150000, 127500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2022/10/06/appleiphonekirkproxtr2herosingle-7-png-500x350-removebg-preview.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3405')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3405', N'Dán cường lực ZAGG Glass Plus Edge iPhone 14 Pro Max', N'Apple', 150000, 127500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2022/10/06/appleiphonekirkproxtr2herosingle-7-png-500x350-removebg-preview.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3406')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3406', N'Tấm dán màn hình Dán cường lực ZAGG Glass Plus Edge iPhone 13/14/16E', N'Apple', 260000, 221000, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2022/10/06/appleiphonekirkproxtr2herosingle-7-png-500x350-removebg-preview.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3407')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3407', N'Dán bảo vệ MH phụ Samsung Galaxy Z-Fold 5 Glas.Tr ez Fit trong suốt AGL0652', N'Samsung', 199000, 169150, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2023/08/16/dan-bvmh-phu-galaxy-z-fold5-agl0652-9.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3408')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3408', N'Dán bảo vệ MH phụ Samsung Galaxy Z-Flip 5 Glas.Tr ez Fit trong suốt AGL0652', N'Samsung', 149000, 126650, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2023/08/16/dan-bvmh-phu-galaxy-z-flip5-agl0652-9.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3409')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3409', N'Dán Cường Lực Chống Nhìn Trộm Mipow Kingbull HD Anti-Spy iPhone 17 Air', N'Apple', 350000, 297500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/10/mipow-cnt-17-air.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3410')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3410', N'Dán Cường Lực Chống Nhìn Trộm Mipow Kingbull HD Anti-Spy iPhone 17/ 16 Pro', N'Apple', 350000, 297500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/10/mipow-cnt-17.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3411')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3411', N'Dán Cường Lực Chống Nhìn Trộm Mipow Kingbull HD Anti-Spy iPhone 17 Pro', N'Apple', 350000, 297500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/10/mipow-cnt-17-pro.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3412')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3412', N'Dán Cường Lực Chống Nhìn Trộm Mipow Kingbull HD Anti-Spy iPhone 17 Pro Max', N'Apple', 350000, 297500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/10/mipow-cnt-17-pro-max.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3413')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3413', N'Ốp lưng trong Galaxy A55', N'Samsung', 50000, 42500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2024/03/19/op-lung-trong-galaxy-a55.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3414')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3414', N'Ốp lưng trong Galaxy A35', N'Samsung', 50000, 42500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2024/03/19/op-lung-trong-galaxy-a55.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3415')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3415', N'Ốp lưng kèm khe đựng thẻ Galaxy A35', N'Samsung', 50000, 42500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2024/03/19/op-lung-a35.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3416')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3416', N'Ốp lưng bảo vệ ZAGG ESNTL Clear cho Samsung Galaxy A35 5G', N'Samsung', 50000, 42500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2024/03/26/op-lung-bao-ve-zagg-esntl-clear-a55-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3417')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3417', N'Ốp lưng Silicone kèm vòng Flip6', N'Chính hãng', 149000, 126650, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/07/11/op-lung-silicone-kem-vong-flip6-27.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3418')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3418', N'Ốp lưng trong kèm vòng Flip6', N'Chính hãng', 79000, 67150, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/07/11/op-lung-trong-kem-vong-flip6-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3419')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3419', N'Ốp lưng da thực vật Flip6', N'Chính hãng', 790000, 671500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/07/11/op-lung-da-thuc-vat-flip6-10.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3420')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3420', N'Ốp lưng trong siêu mỏng Flip6', N'Chính hãng', 150000, 127500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/07/11/op-lung-trong-sieu-mong-flip6-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3421')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3421', N'Ốp lưng kèm bút S-Pen Fold6', N'Chính hãng', 990000, 841500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/07/11/op-lung-kem-but-s-pen-galaxy-z-fold6-xanh-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3422')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3422', N'Ốp lưng ZAGG Santa Cruz cho Samsung S25 Ultra 702317287', N'Samsung', 490000, 416500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/21/zagg-santa-cruz-cho-samsung-s25-ultra-4.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3423')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3423', N'Bao da kèm bàn phím Galaxy Tab S10 FE+', N'Samsung', 2490000, 2116500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2026/01/21/aps-tab-s10-fe-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3424')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3424', N'Ốp lưng ZAGG Crystal Palace Snap - Clear cho Samsung S26 Ultra', N'Samsung', 590000, 501500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2026/02/26/zagg-crystal-palace-snap-clear-s26-ultra.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3425')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3425', N'Ốp lưng ZAGG Crystal Palace - Clear cho Samsung S26 Ultra', N'Samsung', 520000, 442000, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2026/02/26/op-lung-samsung-galaxy-s26-plus-zagg-crystal-palace-clear-12.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3426')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3426', N'Ốp lưng PITAKA Edge - Ultra-slim cho Samsung S26 Ultra', N'Samsung', 1790000, 1521500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2026/02/27/2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3427')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3427', N'Ốp lưng PITAKA Cairn - Aramid Proguard cho Samsung S26 Ultra', N'Samsung', 2190000, 1861500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2026/02/27/moonrise-pbs2604u-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3428')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3428', N'Bao da kèm bàn phím ESR Magnetic Rebound iPad Air6/Air7/Air8 11 inch', N'Apple', 2590000, 2201500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2026/04/15/bao-da-kem-ban-phim-esr-magnetic-rebound-ipad-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3429')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3429', N'Ốp lưng trong suốt Samsung A36/A37', N'Samsung', 79000, 67150, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/03/31/ef-qa366c-001-front-transparent.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3430')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3430', N'Ốp lưng Silicone Samsung A56', N'Samsung', 99000, 84150, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/03/31/ef-pa566c-001-front-black.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3431')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3431', N'Ốp lưng Mipow Tempered Glass Case for iPhone 12/12 Pro 6.1"', N'Apple', 29000, 24650, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2021/03/31/image-removebg-preview-15.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3432')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3432', N'Ốp lưng Mipow tempered Glass for iPhone 14 Plus', N'Apple', 19000, 16150, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2022/10/01/image-removebg-preview-12.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3433')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3433', N'Ốp lưng Mipow tempered Glass for iPhone 14 Pro', N'Apple', 49000, 41650, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2022/10/01/image-removebg-preview-12.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3434')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3434', N'Ốp lưng Dẻo Mipow Soft TPU trong suốt case for iPhone14 Pro', N'Apple', 49000, 41650, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2022/10/01/image-removebg-preview-13.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3435')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3435', N'Ốp lưng Dẻo Mipow Soft TPU trong suốt case for iPhone14 Pro Max', N'Apple', 49000, 41650, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2022/10/01/image-removebg-preview-13.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3436')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3436', N'Ốp lưng ZAGG Clear for iPhone 14 Plus', N'Apple', 39000, 33150, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2022/10/01/clear-3-jpg-500x350.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3437')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3437', N'Ốp lưng ZAGG Clear for iPhone 14 Pro', N'Apple', 99000, 84150, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2022/10/01/clear-3-jpg-500x350.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3438')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3438', N'Ốp lưng Samsung A05s', N'Samsung', 9000, 7650, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2024/12/31/op-lung-samsung-galaxy-a05s-deo-trong.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3439')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3439', N'Ốp lưng Samsung A15', N'Samsung', 9000, 7650, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2024/12/31/op-lung-galaxy-a15-nhua-cung-vien-deo-jm-pure-ii-thumb-600x600.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3440')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3440', N'Ốp lưng ZAGG Crystal Palace Lite Snap cho Samsung S25 Ultra', N'Samsung', 450000, 382500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/02/11/2-56-png-500x350.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3441')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3441', N'Ốp lưng ZAGG Crystal Palace Lite - Clear cho Samsung S25 Ultra', N'Samsung', 350000, 297500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/02/11/zagg-crystal-palace-lite-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3442')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3442', N'Gear4 Copenhagen cho iPhone 13/14', N'Apple', 150000, 127500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/03/31/gear4-copenhagen.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3443')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3443', N'Ốp lưng Carbon Magnet Galaxy Z Fold8 Ultra', N'Samsung', 1245000, 1058250, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2026/07/22/op-lung-carbon-magnet-galaxy-fold8-ultra-5-143946218.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3444')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3444', N'Ốp lưng trong suốt Galaxy Z Fold7', N'Samsung', 445000, 378250, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/07/op-lung-trong-suot-fold7-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3445')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3445', N'Ốp lưng Silicone kèm vòng Galaxy Z Flip7', N'Samsung', 245000, 208250, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/07/07/op-silicone-fold7-xanh-1_638874969863076908.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3446')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3446', N'Ốp lưng ZAGG ESNTL Clear  iPhone 17 - 702320200', N'Apple', 350000, 297500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/09/702320200-zagg-cases-esntlclear-apple-bryce-apac-pkg-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3447')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3447', N'Ốp lưng ZAGG ESNTL - Clear iPhone 17 Air - 702320201', N'Apple', 199000, 169150, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/09/702320201-zagg-cases-esntlclear-apple-capitol-apac-pkg-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3448')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3448', N'Ốp lưng ZAGG ESNTL - Clear iPhone 17 Pro - 702320202', N'Apple', 350000, 297500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/09/702320202-zagg-cases-esntlclear-apple-basin-apac-pkg-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3449')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3449', N'Ốp lưng ZAGG ESNTL - Clear iPhone 17 Pro Max - 702320203', N'Apple', 350000, 297500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/09/702320203-zagg-cases-esntlclear-apple-zion-apac-pkg-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3450')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3450', N'Ốp lưng ZAGG ESNTL Snap - Clear iPhone 17 Pro Max - 702320207', N'Apple', 490000, 416500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/09/702320207-zagg-cases-esntlclearsnap-apple-zion-apac-pkg-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3451')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3451', N'Ốp lưng ESR Snap Classic Hybrid Case HaloLock cho iPhone 17 Pro Max 1A864', N'Apple', 450000, 382500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/09/1-iphone-17-pro-max.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3452')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3452', N'Ốp Lưng Mipow Kingbull Soft TPU Transparent iPhone 17 Air', N'Apple', 99000, 84150, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/10/op-17air-tpu.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3453')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3453', N'Ốp Lưng Mipow Kingbull Soft TPU Transparent iPhone 17', N'Apple', 220000, 187000, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/10/op-17-tpu.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3454')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3454', N'Ốp Lưng Mipow Kingbull Soft TPU Transparent iPhone 17 Pro', N'Apple', 220000, 187000, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/10/op-17pro-tpu.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3455')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3455', N'Ốp Lưng Mipow Kingbull Soft TPU Transparent iPhone 17 Pro Max', N'Apple', 220000, 187000, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/10/op-17promax-tpu.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3456')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3456', N'Ốp Lưng Mipow Kingbull Tempered Glass Transprent iPhone 17 Air', N'Apple', 290000, 246500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/10/op-17air.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3457')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3457', N'Ốp Lưng Mipow Kingbull Tempered Glass Transparent iPhone 17', N'Apple', 300000, 255000, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/10/op-17.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3458')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3458', N'Ốp Lưng Mipow Kingbull Tempered Glass Transparent iPhone 17 Pro', N'Apple', 300000, 255000, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/10/op-17pro.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3459')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3459', N'Ốp Lưng Mipow Kingbull Tempered Glass Transparent iPhone 17 Pro Max', N'Apple', 300000, 255000, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/10/op-17promax.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3460')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3460', N'Ốp Lưng Magsafe Mipow Kingbull Tempered Glass Transparent iPhone 17 Promax', N'Apple', 390000, 331500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/10/op-magsafe-17promax.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3461')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3461', N'Ốp lưng UNIQ SWIVIX iPhone 17 PRO MAX', N'Apple', 499000, 424150, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/11/op-uniq-swivix-cam.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3462')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3462', N'Ốp lưng UNIQ HELDRO PRO iPhone 17 PRO MAX', N'Apple', 499000, 424150, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/11/op-uniq-heldro-pro-cam.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3463')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3463', N'Ốp lưng UNIQ HELDRO AIR iPhone 17 PRO MAX', N'Apple', 390000, 331500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/11/op-uniq-heldro-air-den-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3464')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3464', N'Bao da Devia cho iPad Gen 10/11/A16 Rosy Series', N'Apple', 490000, 416500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/15/image-removebg-preview-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3465')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3465', N'Ốp lưng Silicone Samsung S25 FE', N'Samsung', 345000, 293250, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/09/17/op-silicone-s25-fe-xanh-navy-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3466')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3466', N'Bao da bàn phím Samsung Tab S11', N'Samsung', 2290000, 1946500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2025/09/17/bao-da-ban-phim-tab-s11-9.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3467')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3467', N'Ốp lưng UAG Civilian cho iPhone 17 Pro Max', N'Apple', 1390000, 1181500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/17/uaghsappleiphone2025lioncivilianmsmallardndv011-jpg-500x350.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3468')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3468', N'Ốp lưng UAG Monarch Pro Kevlar cho iPhone 17 Pro Max', N'Apple', 2190000, 1861500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/17/uaghsappleiphone2025lionmonarchprokevlarelementgreenndv011-jpg-500x350.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3469')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3469', N'Ốp lưng UAG Monarch Pro cho iPhone 17 Pro Max', N'Apple', 1790000, 1521500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/17/uaghsappleiphone2025lionmonarchprocarbonfiberndv011-1-jpg-500x350.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3470')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3470', N'Ốp lưng UAG Monarch Pro Exclusive Cap cho iPhone 17 Pro Max', N'Apple', 1990000, 1691500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/17/uaghsappleiphone2025lionmonarchprocoverbuttoncarbonfiberndv01-1-jpg-500x350.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3471')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3471', N'Ốp lưng UAG Essential Armor cho iPhone 17 Pro Max', N'Apple', 990000, 841500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/17/uaghsappleiphone2025lionessentialarmorcloudbluendv01-1-jpg-500x350.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3472')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3472', N'Ốp lưng UAG Metropolis LT Kevlar cho iPhone 17 Pro Max', N'Apple', 1490000, 1266500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/17/uaghsappleiphone2025lionmetroltkevlarblackndv01-1-jpg-500x350.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3473')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3473', N'Ốp lưng UAG Pathfinder SE cho iPhone 17 Pro Max', N'Apple', 1390000, 1181500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/17/uaghsappleiphone2025lionpathfindermsmidnightcamondv01-1-jpg-500x350.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3474')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3474', N'Ốp lưng UAG Pathfinder cho iPhone 17 Pro Max', N'Apple', 1390000, 1181500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/17/uaghsappleiphone2025tinmanpathfindermscloudbluendv011-jpg-500x350.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3475')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3475', N'Ốp lưng UAG Pathfinder Clear cho iPhone 17 Pro Max', N'Apple', 1390000, 1181500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/17/uaghsappleiphone2025lionpathfinderclearashblackndv01-jpg-500x350.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3476')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3476', N'Ốp lưng UAG Pathfinder Clear (kèm dây đeo) cho iPhone 17 Pro Max', N'Apple', 1490000, 1266500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/17/uaghsappleiphone2025lionpathfinderclearactivelavandv01-jpg-500x350.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3477')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3477', N'Ốp lưng UAG Plasma XTE cho iPhone 17 Pro Max', N'Apple', 1590000, 1351500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/17/uaghsappleiphone2025lionplasmaxteashtitaniumndv011-jpg-500x350.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3478')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3478', N'Ốp lưng UAG Plyo  cho iPhone 17 Pro Max', N'Apple', 1290000, 1096500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/17/uaghsappleiphone2025lionplyoproombrepurplepinkndv011-jpg-500x350.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3479')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3479', N'Ốp lưng PITAKA Ultra-Slim (with PitaTap) iPhone 17 Pro Max', N'Apple', 1790000, 1521500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/09/17/pitaka-ultra-slim-milky-way-galaxy-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3480')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3480', N'Ốp lưng PITAKA Ultra-Slim (with PitaTap) iPhone 17 Pro', N'Apple', 1890000, 1606500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/10/08/pitaka-ultra-slim-17p-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3481')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3481', N'Ốp lưng PITAKA Ultra-Slim (with PitaTap) iPhone Air', N'Apple', 1890000, 1606500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/10/09/ip-air.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3482')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3482', N'Kính dán màn hình ZAGG Plus Edge cho iPhone 15 Pro Max', N'Apple', 135000, 114750, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/09/18/kinh-cl-zagg-plus-edge-ip15-promax-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3483')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3483', N'Kính dán màn hình ZAGG Plus Edge cho iPhone 15 Pro', N'Apple', 550000, 467500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/09/18/kinh-cl-zagg-plus-edge-ip15-promax-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3484')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3484', N'Kính dán màn hình ZAGG Plus Edge cho iPhone 15', N'Apple', 135000, 114750, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/09/18/kinh-cl-zagg-plus-edge-ip15-promax-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3485')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3485', N'Kính dán màn hình ZAGG Plus Edge cho iPhone 15 Plus', N'Apple', 135000, 114750, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/09/18/kinh-cl-zagg-plus-edge-ip15-promax-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3486')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3486', N'Cường lực Mipow Kingbull HD PREMIUM SILK PROTECTOR iPhone 15 Pro Max', N'Apple', 190000, 161500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/09/15/cuong-luc-mipow-silk-15prm-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3487')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3487', N'Cường lực Mipow Kingbull HD PREMIUM SILK PROTECTOR iPhone 15 Pro', N'Apple', 150000, 127500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/09/15/cuong-luc-mipow-silk-15pr.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3488')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3488', N'Cường lực Mipow Kingbull HD PREMIUM SILK PROTECTOR iPhone 15 Plus', N'Apple', 179000, 152150, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/09/15/cuong-luc-mipow-silk-15prm-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3489')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3489', N'Cường lực Mipow Kingbull HD PREMIUM SILK PROTECTOR iPhone 15', N'Apple', 199000, 169150, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/09/15/cuong-luc-mipow-silk-15pr.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3490')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3490', N'Cường lực Mipow Kingbull HD Chống nhìn trộm ANTI SPY PROTECTOR iP15 Pro', N'MiPow', 99000, 84150, 50, N'Chiếc', N'MIPOW', N'https://i.hoanghamobile.vn/Uploads/2023/09/15/anti-spy-protector-ip15-pro.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3491')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3491', N'Cường lực Mipow Kingbull HD Chống nhìn trộm ANTI SPY PROTECTOR iP15', N'MiPow', 199000, 169150, 50, N'Chiếc', N'MIPOW', N'https://i.hoanghamobile.vn/Uploads/2023/09/15/anti-spy-protector-ip15-pro.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3492')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3492', N'Cường lực camera Mipow KINGBULL TITANSHIELD PROTECTOR iPhone 15|15 Pro Max', N'Apple', 85000, 72250, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/09/15/titan-gray-600x600.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3493')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3493', N'Kính cường lực Honor X6C', N'Chính hãng', 19000, 16150, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/11/13/kinh-x6c-photoroom.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3494')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3494', N'Cường Lực iPhone 18 Pro Max/17 Pro Max 6.9 MIPOW IRONBULL HD Silk Premium', N'Apple', 450000, 382500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2026/09/10/mipow-ironbull-hd-silk-premium-pro-140022127.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3495')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3495', N'Lens Camera InvisibleShield Glass Elite AR E iPhone 18 Pro/18 ProMax', N'Apple', 500000, 425000, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2026/09/10/tr-ng-2-164117061.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3496')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3496', N'Kính bảo vệ Camera Samsung Z Fold 8 - InvisibleShield Glass Elite AR E', N'Samsung', 390000, 331500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2026/08/21/invisibleshield-glass-elite-ar-e-1-143437149.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3497')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3497', N'Cường lực Enger iPhone 12/12 Pro (10in1)', N'Apple', 80000, 68000, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2025/07/11/12-12pro.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3498')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3498', N'Kính cường lực Camera ZAGG for iPhone 16/17 Pro và 16/17 Pro Max', N'Apple', 150000, 127500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/09/12/100116156-zagg-premglcamerarings-apple-jimmike-cfs-whttitanium-apac-pdt-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3499')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3499', N'Cường lực Mipow Kingbull Full HD for iPhone 11', N'Apple', 99000, 84150, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2020/09/23/KCL%20Mipow%20Kingbull%20Phone%2011-11%20PRO-11%20PRO%20MAX.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3500')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3500', N'Mipow Kingbull Premium HD (2.7D) Transparent (không viền) iP12 Mini', N'MiPow', 29000, 24650, 50, N'Chiếc', N'MIPOW', N'https://i.hoanghamobile.vn/Uploads/2020/11/26/image-removebg-preview-5_637419815472796588.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3501')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3501', N'Mipow Kingbull Premium HD (2.7D) Transparent (không viền) iP12/12Pro', N'MiPow', 99000, 84150, 50, N'Chiếc', N'MIPOW', N'https://i.hoanghamobile.vn/Uploads/2020/11/26/image-removebg-preview-5_637419815472796588.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3502')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3502', N'Dán cường lực mờ Mipow Kingbull Anti-Glare Premium HD (2.7D) iP12 Mini', N'MiPow', 29000, 24650, 50, N'Chiếc', N'MIPOW', N'https://i.hoanghamobile.vn/Uploads/2020/11/26/image-removebg-preview-5_637419815472796588.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3503')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3503', N'Dán cường lực mờ Mipow Kingbull Anti-Glare Premium HD (2.7D) iP12/12 Pro', N'MiPow', 99000, 84150, 50, N'Chiếc', N'MIPOW', N'https://i.hoanghamobile.vn/Uploads/2020/11/26/image-removebg-preview-5_637419815472796588.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3504')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3504', N'Miếng dán cường lực Mipow Kingbull Premium HD (2.7D) for iPad 10.2 inch', N'Apple', 149000, 126650, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2022/07/08/dan-cuong-luc-mipow-kingbull-premium-hd-2-7d-ipad-pro-air-2018-2019-2020-2021-bj204-7.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3505')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3505', N'Miếng dán cường lực Mipow Kingbull Premium HD (2.7D) iPhone 12/12 Pro 6.1"', N'Apple', 99000, 84150, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2020/11/26/image-removebg-preview-5_637419815472796588.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3506')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3506', N'Kính chống nhìn trộm Mipow Kingbull Anti-Spy Premium HD (2.7D) iP12 Pro', N'MiPow', 120000, 102000, 50, N'Chiếc', N'MIPOW', N'https://i.hoanghamobile.vn/Uploads/2020/11/26/image-removebg-preview-5_637419815472796588.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3507')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3507', N'Tấm Dán Cường Lực PISEN TIGER (Ful-screen) iP12 6.1"', N'Chính hãng', 49000, 41650, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2021/05/05/4917f71c-b51c-4f8b-9748-54391522cfa5.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3508')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3508', N'Tấm Dán Cường Lực Pisen Anti-Fingerprint (Full-screen) iXR/i11 - Chính hãng', N'Chính hãng', 9000, 7650, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2021/05/05/4917f71c-b51c-4f8b-9748-54391522cfa5.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3509')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3509', N'Dán màn hình Crystal Clear Screen Protector For MacBook Pro/Air 13"', N'Apple', 250000, 212500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2021/06/21/image-removebg-preview_637598647400496810.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3510')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3510', N'Cường lực Camera Mipow Glass Alumium for iPhone 12 Pro - Chính hãng', N'Apple', 49000, 41650, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2021/06/23/z2503318121445-47b5c2bd535d26cf03f6c62f2ad66ff1.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3511')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3511', N'Bộ dán MacBook Pro 13'' 2020  FULL 6 IN 1 ZEELOT', N'Apple', 750000, 637500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2021/08/25/111.PNG', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3512')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3512', N'Cường lực Chống Nhìn Trộm MiPow Kingbull  iPhone 13/13 Pro 6.1"', N'Apple', 199000, 169150, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2021/10/12/image-removebg-preview.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3513')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3513', N'Cường lực Chống Nhìn Trộm MiPow Kingbull iPhone 13 Promax 6.7"', N'Apple', 120000, 102000, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2021/10/12/image-removebg-preview.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3514')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3514', N'Cường lực MiPow Kingbull HD Premium iPhone 13/13 Pro 6.1" (Có viền)', N'Apple', 199000, 169150, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2021/10/12/image-removebg-preview-3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3515')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3515', N'Cường lực MiPow Kingbull HD Premium iPhone 13 Pro Max 6.7" (Có viền)', N'Apple', 90000, 76500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2021/10/12/image-removebg-preview-3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3516')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3516', N'Dán Cường lực Mipow Kingbull HD Premium-Silk for iPhone 14', N'Apple', 199000, 169150, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2022/10/01/image-removebg-preview-9.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3517')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3517', N'Cường Lực Chống nhìn trộm Mipow Kingbull HD Anti Spy for iP 14', N'MiPow', 290000, 246500, 50, N'Chiếc', N'MIPOW', N'https://i.hoanghamobile.vn/Uploads/2022/10/01/image-removebg-preview-11.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3518')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3518', N'Miếng Dán Cường Lực Pisen Anti-Crack iPhone 14', N'Apple', 170000, 144500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2022/10/13/image_638012675249782341.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3519')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3519', N'Miếng Dán Cường Lực Pisen Anti-Crack iPhone 14 Plus', N'Apple', 49000, 41650, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2022/10/13/image_638012675249782341.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3520')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3520', N'Miếng Dán Cường Lực Pisen Anti-Crack iPhone 14 Pro', N'Apple', 49000, 41650, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2022/10/13/image_638012675249782341.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3521')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3521', N'Miếng Dán Cường Lực Pisen Anti-Crack iPhone 14 Pro Max', N'Apple', 49000, 41650, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2022/10/13/image_638012675249782341.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3522')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3522', N'Dán Cường lực Mipow Kingbull HD Premium-Silk for iPhone 14 Plus', N'Apple', 70000, 59500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2022/10/01/image-removebg-preview-9.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3523')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3523', N'Dán Cường lực Mipow Kingbull HD Premium-Silk for iPhone 14 Pro', N'Apple', 70000, 59500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2022/10/01/image-removebg-preview-9.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3524')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3524', N'Dán Cường lực Mipow Kingbull HD Premium-Silk for iPhone 14 Pro Max', N'Apple', 70000, 59500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2022/10/01/image-removebg-preview-9.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3525')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3525', N'Cường Lực Chống nhìn trộm Mipow Kingbull HD Anti Spy for iP 14 Plus', N'MiPow', 70000, 59500, 50, N'Chiếc', N'MIPOW', N'https://i.hoanghamobile.vn/Uploads/2022/10/01/image-removebg-preview-11.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3526')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3526', N'Cường Lực Chống nhìn trộm Mipow Kingbull HD Anti Spy for iP 14 Pro', N'MiPow', 179000, 152150, 50, N'Chiếc', N'MIPOW', N'https://i.hoanghamobile.vn/Uploads/2022/10/01/image-removebg-preview-11.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3527')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3527', N'BỘ DÁN + TOOL HỖ TRỢ DÁN CƯỜNG LỰC IPHONE 14 PRO MIPOW KINGBULL PREMIUM', N'Apple', 70000, 59500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/02/13/image-removebg-preview.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3528')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3528', N'BỘ DÁN + TOOL HỖ TRỢ DÁN CƯỜNG LỰC IPHONE 14 MIPOW KINGBULL PREMIUM', N'Apple', 199000, 169150, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/02/13/image-removebg-preview.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3529')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3529', N'Miếng dán Innostyle Clear Screen Protector for MB Air 13.6" M2/M3/M4', N'Chính hãng', 290000, 246500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2023/03/30/clear-screen-protector-for-mb-air-2022-m2-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3530')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3530', N'Bộ dán 3M Innostyle Diamond Guard 6 in1 for MacBook Air 13.6 inch M2/M4/M5', N'Apple', 490000, 416500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/03/30/diamond-guard-6in1skin-set-mb-airm2-8.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3531')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3531', N'Kính cường lực nhám iPhone 14 Pro Max Zeelot Solidsleek Matte', N'Apple', 199000, 169150, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/04/05/b80015c4-0608-466e-be89-eb9157753fb0.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3532')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3532', N'Kính cường lực chống va đập iPhone 13/13Pro/14 6.1" Zeelot Solidsleek', N'Apple', 190000, 161500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/04/05/b80015c4-0608-466e-be89-eb9157753fb0.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3533')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3533', N'Dán cường lực iPad Gen 9th 10.2 Zeelot', N'Apple', 150000, 127500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/04/05/76d21508-cfc5-47ad-82bc-afe299592d00.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3534')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3534', N'Dán nhám chống va đập iPad Gen 9th 10.2 Zeelot', N'Apple', 150000, 127500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/04/05/76d21508-cfc5-47ad-82bc-afe299592d00.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3535')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3535', N'Cường lực Mipow Kingbull HD for iPad Gen 10 10.9 inch/ Gen 11 (A16)', N'Apple', 370000, 314500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/06/14/kingbull-premium-hd-ipgen10-10-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3536')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3536', N'Miếng dán kính full màn hình iPhone15 Pro Max (T-Rex)', N'Apple', 99000, 84150, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/11/18/prm.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3537')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3537', N'Miếng dán kính full màn hình iPhone15 Pro (T-Rex)', N'Apple', 49000, 41650, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/11/18/pr-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3538')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3538', N'Miếng dán cường lực màn hình Araree Core Glass - Galaxy Z Fold 4/Z Fold 5', N'Samsung', 75000, 63750, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2023/11/23/araree-core-glass-galaxy-z-fold-4-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3539')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3539', N'Miếng dán cường lực camera Araree Core Camera - Galaxy Z Fold 5 - Clear (2p', N'Samsung', 75000, 63750, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2023/11/23/araree-core-camera-z-fold-5-3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3540')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3540', N'Kính Cường Lực PanzerGlass Clear Cho Iphone 15 Pro Max', N'Apple', 99000, 84150, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2023/12/07/kinh-anzerglass-clear-ip15prm-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3541')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3541', N'Combo Dán ZAGG Plus Edge + Ốp lưng ZAGG ESNTL Clear Cho ip15 Series', N'ZAGG', 550000, 467500, 50, N'Chiếc', N'ZAGG', N'https://i.hoanghamobile.vn/Uploads/2023/12/08/combo4-zagg-plus-edge-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3542')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3542', N'Tấm dán màn hình ForceField Ultimate ProHeal (Miếng dán tự phục hồi)', N'Chính hãng', 170000, 144500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2023/12/12/ultimate-anti-bacterial.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3543')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3543', N'Tấm dán màn hình ForceField Ultimate UltraShield  (Miếng dán UV Siêu cứng)', N'Chính hãng', 170000, 144500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2023/12/12/ultimate-anti-bacterial.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3544')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3544', N'Dán cường lực Mipow Kingbull HD Premium Silk Galaxy S24', N'Samsung', 150000, 127500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2024/01/20/premium-silk-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3545')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3545', N'Kính dán màn hình ZAGG Glass Plus cho Samsung Galaxy A55 5G', N'Samsung', 99000, 84150, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2024/03/26/kinh-dan-mh-zagg-glass-plus-a55-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3546')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3546', N'Kính dán màn hình ZAGG Glass Plus cho Samsung Galaxy A35 5G', N'Samsung', 50000, 42500, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2024/03/26/kinh-dan-mh-zagg-glass-plus-a55-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3547')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3547', N'Kính dán màn hình ZAGG Plus Edge cho Xiaomi Redmi Note 13/13 Pro', N'Xiaomi', 150000, 127500, 50, N'Chiếc', N'XIAOMI', N'https://i.hoanghamobile.vn/Uploads/2024/05/31/kinh-dan-man-hinh-zagg-plus-edge-3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3548')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3548', N'Kính dán màn hình ZAGG Glass cho iPad Air 6,7 / Pro 11" 2024/2025', N'Apple', 490000, 416500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/05/31/kinh-dan-man-hinh-zagg-glass-11-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3549')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3549', N'Kính dán màn hình ZAGG Glass cho iPad Air 13/ Pro 13 inch 2024', N'Apple', 590000, 501500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/05/31/kinh-dan-man-hinh-zagg-glass-13-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3550')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3550', N'Tấm dán chống nhìn trộm Gokaizen', N'Chính hãng', 190000, 161500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/06/03/tam-dan-chong-nhin-trom-gokaizen.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3551')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3551', N'Kính dán màn hình ZAGG InvisibleShield Glass Elite Plus cho iPhone 14/13', N'Apple', 250000, 212500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/07/10/zagg-invisibleshield-glass-elite-plus-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3552')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3552', N'Dán cường lực Mipow Kingbull HD Premium Protector for iPad Pro 11 inch 2024', N'Apple', 390000, 331500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/07/10/image-removebg-preview-38.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3553')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3553', N'Dán cường lực Mipow Kingbull HD Premium Protector for iPad Air 6/7 11 inch', N'Apple', 390000, 331500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/07/10/image-removebg-preview-39.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3554')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3554', N'Kính dán màn hình ZAGG Glass Elite Edge cho iPhone 15 Pro Max', N'Apple', 135000, 114750, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/07/11/zagg-ip15-3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3555')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3555', N'Dán cường lực Mipow Kingbull HD Premium Protector for iPad Air 13" 2024', N'Apple', 299000, 254150, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/07/23/mipow-ipad-13-inch.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3556')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3556', N'Miếng dán cường lực dành cho iPad Pro 11 và Air 4/5/Air 11 kèm khay dán ESR', N'Apple', 220000, 187000, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/07/29/whatsapp-image-2024-07-29-at-2-42-47-pm.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3557')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3557', N'Miếng dán cường lực  dành cho iPad Pro M4 11" 2024 kèm khay dán ESR', N'Apple', 220000, 187000, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/07/29/whatsapp-image-2024-07-29-at-2-42-47-pm.jpeg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3558')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3558', N'Kính cường lực Spigen Samsung Galaxy Flip 6 (2024) Glas.tR EZ Fit Transpare', N'Samsung', 135000, 114750, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2024/08/09/kinh-cuong-luc-spigen-samsung-galaxy-flip-6-2024-glas-tr-ez-fit-transparency-removebg-preview.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3559')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3559', N'Kính cường lực Spigen Samsung Galaxy Fold 6 (2024) Glas.tR EZ Fit', N'Samsung', 299000, 254150, 50, N'Chiếc', N'SAMSUNG', N'https://i.hoanghamobile.vn/Uploads/2024/08/09/image-removebg-preview.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3560')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3560', N'Kính cường lực Mipow Kingbull HD Premium Silk for iPhone 6.1 inch 2024', N'Apple', 179000, 152150, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/09/09/1_638614913952922384.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3561')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3561', N'Kính cường lực Mipow Kingbull HD Premium Silk for iPhone 6.3 inch 2024', N'Apple', 179000, 152150, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/09/09/2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3562')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3562', N'Kính cường lực Mipow Kingbull HD Premium Silk for iPhone 6.7 inch 2024', N'Apple', 179000, 152150, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/09/09/3_638614919241549948.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3563')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3563', N'Kính cường lực Mipow Kingbull HD Premium Silk for iPhone 6.9 inch 2024', N'Apple', 400000, 340000, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/09/09/4_638614921043103698.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3564')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3564', N'Kính cường lực Mipow Kingbull HD Anti-Spy Premium Silk for iPhone 6.1 inch', N'Apple', 199000, 169150, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/09/09/1_638614924208116286.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3565')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3565', N'Kính cường lực Mipow Kingbull HD Anti-Spy Premium Silk for iPhone 6.3 inch', N'Apple', 199000, 169150, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/09/09/2_638614925437147050.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3566')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3566', N'Kính dán màn hình iPhone 16 /iPhone 15 - ZAGG Plus Edge - 100115454', N'Apple', 179000, 152150, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/09/12/100115454-zagg-glass-plus-edge-apple-pam-sm-15-cfs-apac-pdt04-device.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3567')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3567', N'Kính dán màn hình iPhone 16 Plus /iPhone 15 Plus -ZAGG Plus Edge- 100115455', N'Apple', 179000, 152150, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/09/12/100115455-zagg-glass-plus-edge-apple-dwight-lgpl-15-cfs-apac-pdt02-device.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3568')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3568', N'Kính dán màn hình iPhone 16 Pro - ZAGG Plus Edge - 100115456', N'Apple', 290000, 246500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/09/09/kinh-dan-man-hinh-iphone-16-iphone-15-zagg-plus-edge-100115454-1_638614946322871794.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3569')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3569', N'Kính dán màn hình iPhone 16 Pro Max - ZAGG Plus Edge - 100115457', N'Apple', 350000, 297500, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/09/12/100115457-zagg-glass-plus-edge-apple-michael-lgpro-cfs-apac-pdt04-device.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3570')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3570', N'Miếng dán cường lực PISEN Zero Sense for iPhone 16', N'Apple', 59000, 50150, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/09/09/pisen-zero-sense-for-iphone-16-series.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3571')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3571', N'Miếng dán cường lực PISEN Zero Sense for iPhone 16 Plus', N'Apple', 59000, 50150, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/09/09/pisen-zero-sense-for-iphone-16-series.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3572')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3572', N'Miếng dán cường lực PISEN Zero Sense for iPhone 16 Pro', N'Apple', 59000, 50150, 50, N'Chiếc', N'APPLE', N'https://i.hoanghamobile.vn/Uploads/2024/09/09/pisen-zero-sense-for-iphone-16-series.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3573')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3573', N'Thiết bị mở rộng sóng Wifi Chuẩn N Mercusys MW300RE', N'Chính hãng', 199000, 169150, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2023/12/14/mercusys-mw300re-3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3574')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3574', N'Router WiFi 6 TP-Link Archer AX12', N'TP-Link', 829000, 704650, 50, N'Chiếc', N'TPLINK', N'https://i.hoanghamobile.vn/Uploads/2024/03/12/router-wifi-6-tp-link-archer-ax12-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3575')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3575', N'Router Wi-Fi TP-LINK Archer C6 AC1200', N'TP-Link', 560000, 476000, 50, N'Chiếc', N'TPLINK', N'https://i.hoanghamobile.vn/Uploads/2024/03/12/tp-link-archer-c6-ac1200-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3576')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3576', N'Router Wifi Mercusys MW301R Chuẩn N Tốc độ 300Mbps', N'Chính hãng', 210000, 178500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/03/12/router-wifi-mercusys-mw301r-300mbps-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3577')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3577', N'USB Bluetooth 5.3 TP-Link UB500 Plus', N'TP-Link', 159000, 135150, 50, N'Chiếc', N'TPLINK', N'https://i.hoanghamobile.vn/Uploads/2025/03/29/tp-link-ub500-plus-0.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3578')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3578', N'Router Wifi 6 băng tần kép Asus RT-AX1800HP', N'Asus', 1230000, 1045500, 50, N'Chiếc', N'ASUS', N'https://i.hoanghamobile.vn/Uploads/2025/11/25/asus-rt-ax1800hp-01.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3579')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3579', N'Router Wifi 6 băng tần kép Asus RT-AX52 AX1800', N'Asus', 880000, 748000, 50, N'Chiếc', N'ASUS', N'https://i.hoanghamobile.vn/Uploads/2025/11/25/rt-ax52-01.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3580')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3580', N'Router Wifi Totolink A720R băng tần kép AC1200', N'Chính hãng', 349000, 296650, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/10/29/a720r-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3581')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3581', N'Router Wifi mini Totolink N200RE chuẩn N 300Mbps', N'Chính hãng', 209000, 177650, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/10/29/n200re-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3582')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3582', N'Bộ chia mạng Switch Totolink S505G 5 cổng', N'Chính hãng', 185000, 157250, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/10/29/s505g-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3583')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3583', N'Bộ chia mạng Switch Totolink S808G 8 cổng', N'Chính hãng', 325000, 276250, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/10/29/s808g-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3584')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3584', N'USB Bluetooth 5.3 Nano Mercusys MA530', N'Chính hãng', 90000, 76500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/06/26/usb-bluetooth-5-3-nano-mercusys-ma530-3.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3585')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3585', N'Cổng chuyển OTG Innostyle NexaLink USB-A to Wifi - AWF6', N'Chính hãng', 190000, 161500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/03/03/cong-chuyen-otg-innostyle-nexalink-usb-a-to-wifi.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3586')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3586', N'Router Wifi 7 Asus RT-BE50', N'Asus', 1650000, 1402500, 50, N'Chiếc', N'ASUS', N'https://i.hoanghamobile.vn/Uploads/2026/03/17/thumb-rt-be50-a.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3587')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3587', N'Router Wifi 7 Asus TUF Gaming BE3600', N'Asus', 2690000, 2286500, 50, N'Chiếc', N'ASUS', N'https://i.hoanghamobile.vn/Uploads/2026/03/17/thumb-tuf-gaming-be3600-01.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3588')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3588', N'Router Wifi 6 HUAWEI AX2', N'Huawei', 1190000, 1011500, 50, N'Chiếc', N'HUAWEI', N'https://i.hoanghamobile.vn/Uploads/2026/04/14/huawei-ax2-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3589')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3589', N'Router Wi-Fi 7 TP-Link Archer BE220', N'TP-Link', 1700000, 1445000, 50, N'Chiếc', N'TPLINK', N'https://i.hoanghamobile.vn/Uploads/2026/09/21/tp-link-be220-1-144334545.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3590')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3590', N'USB Wi-Fi MU-MIMO Mini AC1300 TP-Link Archer T3U', N'TP-Link', 329000, 279650, 50, N'Chiếc', N'TPLINK', N'https://i.hoanghamobile.vn/Uploads/2026/09/21/usb-wi-fi-mu-mimo-mini-ac1300-tp-link-archer-t3u-1-134006909.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3591')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3591', N'USB Bluetooth 6.0 TP-Link UB600 Nano', N'TP-Link', 169000, 143650, 50, N'Chiếc', N'TPLINK', N'https://i.hoanghamobile.vn/Uploads/2026/09/21/usb-bluetooth-6-0-tp-link-ub600-nano-1-135356143.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3592')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3592', N'Bộ phát Wifi di động 4G TP-Link M7000', N'TP-Link', 1170000, 994500, 50, N'Chiếc', N'TPLINK', N'https://i.hoanghamobile.vn/Uploads/2024/07/22/m7000-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3593')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3593', N'Bộ phát Wifi 7 băng tần kép BE3600 TP-LINK Archer BE230', N'TP-Link', 1970000, 1674500, 50, N'Chiếc', N'TPLINK', N'https://i.hoanghamobile.vn/Uploads/2024/10/10/archer-be230-us-1-0-02-normal-20240815064804f.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3594')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3594', N'USB Wi-Fi Nano Chuẩn N Tốc Độ 150Mbps TP-Link TL-WN725N', N'TP-Link', 140000, 119000, 50, N'Chiếc', N'TPLINK', N'https://i.hoanghamobile.vn/Uploads/2024/11/28/tp-link-tl-wn725n-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3595')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3595', N'USB mini Wi-Fi 6 băng tần kép AX900 Totolink X900USM', N'Chính hãng', 220000, 187000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/05/06/x900usm-3-1000x1000.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3596')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3596', N'USB Wi-Fi 6 băng tần kép AX900 Totolink X900UA', N'Chính hãng', 265000, 225250, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/05/06/x900ua-2-1000x1000.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3597')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3597', N'USB Nano Bluetooth 5.0 TP-Link UB500 - Chính hãng', N'TP-Link', 149000, 126650, 50, N'Chiếc', N'TPLINK', N'https://i.hoanghamobile.vn/Uploads/2023/02/23/ub500-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3598')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3598', N'Cổng chuyển OTG Innostyle NexaLink USB-A to Bluetooth adapter – ABT50', N'Chính hãng', 135000, 114750, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/06/11/f2a257ee-6b74-4436-8425-51a9c675bae3.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3599')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3599', N'Bộ phát Wifi di động 4G LTE 300Mbps Mercusys MB115-4G', N'Chính hãng', 990000, 841500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/10/13/router-wifi-mercusys-4g-lte-300mbps-mb115-4g-2-111045052.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3600')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3600', N'Thiết bị mở rộng sóng Wifi Totolink EX200 Chuẩn 300Mbps - Chính hãng', N'Chính hãng', 230000, 195500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2023/02/22/ex200-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3601')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3601', N'Bộ phát Wifi di động 4G LTE Mercusys MT110 150Mbps', N'Chính hãng', 950000, 807500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/08/21/bo-phat-wifi-di-dong-4g-lte-mercusys-mt110-150mbps-7.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3602')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3602', N'Bộ phát WiFi di động 4G LTE TP-Link TL-MR105', N'TP-Link', 960000, 816000, 50, N'Chiếc', N'TPLINK', N'https://i.hoanghamobile.vn/Uploads/2024/08/21/bo-phat-wifi-di-dong-4g-lte-tp-link-tl-mr105-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3603')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3603', N'Bộ phát Wifi di động 4G LTE Totolink M3L - Wifi 6 AX300, tốc độ 150Mbps', N'Chính hãng', 870000, 739500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/01/24/product-totolink-m3l-2.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3604')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3604', N'Bộ mở rộng sóng Wifi TP-Link, TL-WA855RE - Chính hãng', N'TP-Link', 279000, 237150, 50, N'Chiếc', N'TPLINK', N'https://i.hoanghamobile.vn/Uploads/2021/12/01/image-removebg-preview-6.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3605')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3605', N'USB Wi-Fi băng tần kép AC1300 TP-Link Archer T3U Nano', N'TP-Link', 309000, 262650, 50, N'Chiếc', N'TPLINK', N'https://i.hoanghamobile.vn/Uploads/2026/09/21/tp-link-t3u-nano-1-144354795.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3606')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3606', N'Router Wi-Fi TP-LINK Tốc độ 300Mbps chuẩn N - TL- WR841N', N'TP-Link', 269000, 228650, 50, N'Chiếc', N'TPLINK', N'https://i.hoanghamobile.vn/Uploads/2022/07/18/image-removebg-preview_637937405352777261.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3607')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3607', N'Bộ Mở Rộng Sóng TP Link RE205 AC750 - Chính hãng', N'Chính hãng', 390000, 331500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2022/03/11/image-removebg-preview-13.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3608')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3608', N'Router Wifi Tp-Link Archer Ax10 chuẩn Wifi 6 AX1500 - Chính hãng', N'TP-Link', 830000, 705500, 50, N'Chiếc', N'TPLINK', N'https://i.hoanghamobile.vn/Uploads/2022/03/30/ax10-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3609')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3609', N'USB Wifi TP-Link AC600 Archer T2U Nano', N'TP-Link', 219000, 186150, 50, N'Chiếc', N'TPLINK', N'https://i.hoanghamobile.vn/Uploads/2024/07/22/ac600.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3610')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3610', N'USB Wifi Bluetooth 4.2 TP-Link AC600 Archer T2UB Nano', N'TP-Link', 250000, 212500, 50, N'Chiếc', N'TPLINK', N'https://i.hoanghamobile.vn/Uploads/2024/08/21/ac600-archer-t2ub-nano-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3611')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3611', N'USB Wifi TP-Link T2U Plus Ac600 băng tầng kép - Chính hãng', N'TP-Link', 255000, 216750, 50, N'Chiếc', N'TPLINK', N'https://i.hoanghamobile.vn/Uploads/2023/05/24/rgf.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3612')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3612', N'Router Wifi băng tầng kép AC1200 TP-Link Archer C64 - Chính hãng', N'TP-Link', 599000, 509150, 50, N'Chiếc', N'TPLINK', N'https://i.hoanghamobile.vn/Uploads/2022/03/11/image-removebg-preview-14.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3613')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3613', N'Router Wifi 6 Asus RT-AX3000 - Chính hãng', N'Asus', 2590000, 2201500, 50, N'Chiếc', N'ASUS', N'https://i.hoanghamobile.vn/Uploads/2025/11/25/rt-ax3000-03b.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3614')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3614', N'Bộ phát wifi Mi Router 4A Giga - Chính hãng', N'Chính hãng', 610000, 518500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2021/11/26/image-removebg-preview-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3615')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3615', N'Bộ phát wifi Mi Router 4A - Chính hãng', N'Chính hãng', 360000, 306000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2021/11/26/image-removebg-preview-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3616')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3616', N'Dây đeo đồng hồ Huawei EasyFit 2', N'Huawei', 50000, 42500, 50, N'Chiếc', N'HUAWEI', N'https://i.hoanghamobile.vn/Uploads/2026/04/28/day-deo-huawei-easyfit-xanh-la.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3617')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3617', N'Quạt mini tích điện cầm tay Jisulife Life 4 3600mAh', N'Chính hãng', 270000, 229500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/29/jisulife-life-4-hong.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3618')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3618', N'Quạt mini tích điện cầm tay Jisulife Life 7 3600mAh', N'Chính hãng', 299000, 254150, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/06/13/jisulife-life-7-3600mah-2.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3619')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3619', N'Quạt cầm tay mini Jisulife Life 9 3600mAh', N'Chính hãng', 415000, 352750, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/07/17/jisulife-life-9-3600mah-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3620')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3620', N'Quạt cầm tay mini Jisulife Life 9 5000mAh', N'Chính hãng', 520000, 442000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/07/17/jisulife-life-9-5000mah-1.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3621')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3621', N'Quạt mini tích điện cầm tay Jisulife Life 7 5000mAh', N'Chính hãng', 470000, 399500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/29/jisulife-life-7-den.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3622')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3622', N'Quạt Cầm Tay FA53 ABS 3600mAh', N'Chính hãng', 590000, 501500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/07/17/quat-cam-tay-fa53-abs-3600mah-3.jpg', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3623')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3623', N'Quạt cầm tay Energizer EF5000', N'Chính hãng', 650000, 552500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/14/ef5000-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3624')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3624', N'Quạt cầm tay Energizer EF6000', N'Chính hãng', 590000, 501500, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/05/14/ef6000-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3625')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3625', N'Quạt KHÔNG DÂY Mini PISEN-F17 (HJ-F17)', N'Chính hãng', 149000, 126650, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2024/05/29/quat-khong-day-mini-pisen-f17-hj-f17.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3626')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3626', N'Quạt cầm tay Mini JISULIFE FA42 pin 2000mAh', N'Chính hãng', 199000, 169150, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2026/04/02/fa42-xanh.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3627')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3627', N'Quạt Cầm Tay Mini JISULIFE FA20', N'Chính hãng', 99000, 84150, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/15/jisulife-fa20-1.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3628')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3628', N'Quạt Cầm Tay Jisulife F8 2000mAh', N'Chính hãng', 145000, 123250, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/15/jisulife-f8-2000mah-4.png', 1);
+IF NOT EXISTS (SELECT 1 FROM MatHang WHERE MaHang = N'MH3629')
+    INSERT INTO MatHang (MaHang, TenHang, NhanHieu, DonGia, GiaNhap, SoLuongTon, DonViTinh, MaLoai, HinhAnh, TrangThai)
+    VALUES (N'MH3629', N'Quạt Cầm Tay Mini JISULIFE HandFan Life3 FA20X', N'Chính hãng', 200000, 170000, 50, N'Chiếc', N'KHAC', N'https://i.hoanghamobile.vn/Uploads/2025/04/15/quat-cam-tay-mini-jisulife-fa20x-hong-510x510-1.jpg', 1);
