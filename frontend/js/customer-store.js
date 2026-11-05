@@ -2859,28 +2859,28 @@
   const MOUSE_KEYBOARD_BRANDS = {
     chuot_banphim: [
       { brand: 'all', alt: 'Tất cả' },
-      { brand: 'Logitech', alt: 'Logitech' },
-      { brand: 'Rapoo', alt: 'Rapoo' },
+      { brand: 'Logitech', alt: 'Logitech', logo: 'images/brands/logitech.png' },
+      { brand: 'Rapoo', alt: 'Rapoo', logo: 'images/brands/rapoo.png' },
       { brand: 'E-Dra', alt: 'E-Dra', logo: 'images/brands/edra.png' },
       { brand: 'MSI', alt: 'MSI', logo: 'images/brands/msi.png' },
       { brand: 'ASUS', alt: 'ASUS', logo: 'images/brands/asus.png' },
-      { brand: 'Razer', alt: 'Razer' },
-      { brand: 'Elecom', alt: 'Elecom' },
+      { brand: 'Razer', alt: 'Razer', logo: 'images/brands/razer.png' },
+      { brand: 'Elecom', alt: 'Elecom', logo: 'images/brands/elecom.png' },
       { brand: 'HyperX', alt: 'HyperX' },
       { brand: 'Apple', alt: 'Apple', logo: 'images/brands/apple.png' },
       { brand: 'Xiaomi', alt: 'Mi', logo: 'images/brands/mi.png' },
       { brand: 'Acer', alt: 'Acer', logo: 'images/brands/acer.png' },
       { brand: 'Colorful', alt: 'Colorful', logo: 'images/brands/colorful.png' },
-      { brand: 'Genius', alt: 'Genius' }
+      { brand: 'Genius', alt: 'Genius', logo: 'images/brands/genius.png' }
     ],
     thietbi_mang: [
       { brand: 'all', alt: 'Tất cả' },
-      { brand: 'TP-Link', alt: 'TP-Link' },
+      { brand: 'TP-Link', alt: 'TP-Link', logo: 'images/brands/tp-link.png' },
       { brand: 'ASUS', alt: 'ASUS', logo: 'images/brands/asus.png' },
       { brand: 'Tenda', alt: 'Tenda' },
-      { brand: 'Mercusys', alt: 'Mercusys' },
+      { brand: 'Mercusys', alt: 'Mercusys', logo: 'images/brands/mercusys.png' },
       { brand: 'D-Link', alt: 'D-Link' },
-      { brand: 'Totolink', alt: 'Totolink' },
+      { brand: 'Totolink', alt: 'Totolink', logo: 'images/brands/totolink.png' },
       { brand: 'Ruijie', alt: 'Ruijie' }
     ]
   };
@@ -3038,29 +3038,29 @@
   const AUDIO_BRANDS = {
     loa: [
       { brand: 'all', alt: 'Tất cả' },
-      { brand: 'JBL', alt: 'JBL' },
-      { brand: 'Harman Kardon', alt: 'Harman Kardon' },
-      { brand: 'Arirang', alt: 'Arirang' },
-      { brand: 'Sony', alt: 'Sony' },
+      { brand: 'JBL', alt: 'JBL', logo: 'images/brands/jbl.png' },
+      { brand: 'Harman Kardon', alt: 'Harman Kardon', logo: 'images/brands/harman-kardon.png' },
+      { brand: 'Arirang', alt: 'Arirang', logo: 'images/brands/arirang.png' },
+      { brand: 'Sony', alt: 'Sony', logo: 'images/brands/sony.png' },
       { brand: 'LG', alt: 'LG', logo: 'images/brands/lg.png' },
-      { brand: 'Marshall', alt: 'Marshall' },
-      { brand: 'Monster', alt: 'Monster' },
+      { brand: 'Marshall', alt: 'Marshall', logo: 'images/brands/marshall.png' },
+      { brand: 'Monster', alt: 'Monster', logo: 'images/brands/monster.png' },
       { brand: 'Xiaomi', alt: 'Mi', logo: 'images/brands/mi.png' },
-      { brand: 'Sounarc', alt: 'Sounarc' },
-      { brand: 'Qlike', alt: 'Qlike' },
+      { brand: 'Sounarc', alt: 'Sounarc', logo: 'images/brands/sounarc.png' },
+      { brand: 'Qlike', alt: 'Olike', logo: 'images/brands/olike.png' },
       { brand: 'Samsung', alt: 'Samsung', logo: 'images/brands/samsung.png' },
-      { brand: 'Soul', alt: 'Soul' },
-      { brand: 'Baseus', alt: 'Baseus' }
+      { brand: 'Soul', alt: 'Soul', logo: 'images/brands/soul.png' },
+      { brand: 'Baseus', alt: 'Baseus', logo: 'images/brands/baseus.png' }
     ],
     tainghe: [
       { brand: 'all', alt: 'Tất cả' },
       { brand: 'Apple', alt: 'Apple', logo: 'images/brands/apple.png' },
-      { brand: 'Sony', alt: 'Sony' },
-      { brand: 'JBL', alt: 'JBL' },
-      { brand: 'Marshall', alt: 'Marshall' },
+      { brand: 'Sony', alt: 'Sony', logo: 'images/brands/sony.png' },
+      { brand: 'JBL', alt: 'JBL', logo: 'images/brands/jbl.png' },
+      { brand: 'Marshall', alt: 'Marshall', logo: 'images/brands/marshall.png' },
       { brand: 'Samsung', alt: 'Samsung', logo: 'images/brands/samsung.png' },
-      { brand: 'Soundpeats', alt: 'Soundpeats' },
-      { brand: 'Baseus', alt: 'Baseus' },
+      { brand: 'Soundpeats', alt: 'Soundpeats', logo: 'images/brands/soundpeats.png' },
+      { brand: 'Baseus', alt: 'Baseus', logo: 'images/brands/baseus.png' },
       { brand: 'Huawei', alt: 'Huawei', logo: 'images/brands/huawei.png' }
     ]
   };
@@ -3218,25 +3218,25 @@
   const WATCH_CAMERA_BRANDS = {
     dongho: [
       { brand: 'all', alt: 'Tất cả' },
-      { brand: 'Garmin', alt: 'GARMIN' },
+      { brand: 'Garmin', alt: 'GARMIN', logo: 'images/brands/garmin.png' },
       { brand: 'Apple', alt: 'Apple', logo: 'images/brands/apple.png' },
       { brand: 'Huawei', alt: 'HUAWEI', logo: 'images/brands/huawei.png' },
       { brand: 'Xiaomi', alt: 'Mi', logo: 'images/brands/mi.png' },
-      { brand: 'Amazfit', alt: 'amazfit' },
-      { brand: 'Kieslect', alt: 'KIESLECT' },
+      { brand: 'Amazfit', alt: 'amazfit', logo: 'images/brands/amazfit.png' },
+      { brand: 'Kieslect', alt: 'KIESLECT', logo: 'images/brands/kieslect.png' },
       { brand: 'Samsung', alt: 'SAMSUNG', logo: 'images/brands/samsung.png' },
       { brand: 'Masstel', alt: 'Masstel', logo: 'images/brands/masstel.png' },
       { brand: 'Honor', alt: 'HONOR', logo: 'images/brands/honor.png' },
-      { brand: 'GloryFit', alt: 'GloryFit' },
-      { brand: 'Riversong', alt: 'RIVERSONG' },
-      { brand: 'Mibro', alt: 'mibro' },
-      { brand: 'Myalo', alt: 'myalo' }
+      { brand: 'GloryFit', alt: 'GloryFit', logo: 'images/brands/gloryfit.png' },
+      { brand: 'Riversong', alt: 'RIVERSONG', logo: 'images/brands/riversong.png' },
+      { brand: 'Mibro', alt: 'mibro', logo: 'images/brands/mibro.png' },
+      { brand: 'Myalo', alt: 'myalo', logo: 'images/brands/myalo.png' }
     ],
     camera: [
       { brand: 'all', alt: 'Tất cả' },
-      { brand: 'TP-Link', alt: 'Tapo' },
-      { brand: 'Ezviz', alt: 'Ezviz' },
-      { brand: 'Imou', alt: 'Imou' },
+      { brand: 'TP-Link', alt: 'Tapo', logo: 'images/brands/tp-link.png' },
+      { brand: 'Ezviz', alt: 'Ezviz', logo: 'images/brands/ezviz.png' },
+      { brand: 'Imou', alt: 'Imou', logo: 'images/brands/imou.png' },
       { brand: 'Xiaomi', alt: 'Mi', logo: 'images/brands/mi.png' },
       { brand: 'Hikvision', alt: 'Hikvision' },
       { brand: 'Dahua', alt: 'Dahua' }
@@ -3403,19 +3403,19 @@
       { brand: 'Sony', alt: 'SONY', logo: 'images/brands/sony.png' },
       { brand: 'Xiaomi', alt: 'Mi', logo: 'images/brands/mi.png' },
       { brand: 'VSP', alt: 'VSP', logo: 'images/brands/vsp.png' },
-      { brand: 'Coocaa', alt: 'coocaa' },
-      { brand: 'Casper', alt: 'Casper' }
+      { brand: 'Coocaa', alt: 'coocaa', logo: 'images/brands/coocaa.png' },
+      { brand: 'Casper', alt: 'Casper', logo: 'images/brands/casper.png' }
     ],
     tulanh: [
       { brand: 'all', alt: 'Tất cả' },
       { brand: 'Samsung', alt: 'Samsung', logo: 'images/brands/samsung.png' },
-      { brand: 'Panasonic', alt: 'Panasonic' },
-      { brand: 'Toshiba', alt: 'Toshiba' },
+      { brand: 'Panasonic', alt: 'Panasonic', logo: 'images/brands/panasonic.png' },
+      { brand: 'Toshiba', alt: 'Toshiba', logo: 'images/brands/toshiba.png' },
       { brand: 'LG', alt: 'LG', logo: 'images/brands/lg.png' },
-      { brand: 'Aqua', alt: 'AQUA' },
-      { brand: 'Sharp', alt: 'SHARP' },
-      { brand: 'Casper', alt: 'Casper' },
-      { brand: 'Electrolux', alt: 'Electrolux' }
+      { brand: 'Aqua', alt: 'AQUA', logo: 'images/brands/aqua.png' },
+      { brand: 'Sharp', alt: 'SHARP', logo: 'images/brands/sharp.png' },
+      { brand: 'Casper', alt: 'Casper', logo: 'images/brands/casper.png' },
+      { brand: 'Electrolux', alt: 'Electrolux', logo: 'images/brands/electrolux.png' }
     ]
   };
 
@@ -3572,29 +3572,29 @@
   const AIR_WASHER_BRANDS = {
     dieuhoa: [
       { brand: 'all', alt: 'Tất cả' },
-      { brand: 'Funiki', alt: 'Funiki' },
-      { brand: 'Casper', alt: 'Casper' },
-      { brand: 'Panasonic', alt: 'Panasonic' },
-      { brand: 'Daikin', alt: 'DAIKIN' },
-      { brand: 'Nagakawa', alt: 'Nagakawa' },
-      { brand: 'Toshiba', alt: 'TOSHIBA' },
-      { brand: 'Comfee', alt: 'Comfee' },
-      { brand: 'Sharp', alt: 'SHARP' },
+      { brand: 'Funiki', alt: 'Funiki', logo: 'images/brands/funiki.png' },
+      { brand: 'Casper', alt: 'Casper', logo: 'images/brands/casper.png' },
+      { brand: 'Panasonic', alt: 'Panasonic', logo: 'images/brands/panasonic.png' },
+      { brand: 'Daikin', alt: 'DAIKIN', logo: 'images/brands/daikin.png' },
+      { brand: 'Nagakawa', alt: 'Nagakawa', logo: 'images/brands/nagakawa.png' },
+      { brand: 'Toshiba', alt: 'TOSHIBA', logo: 'images/brands/toshiba.png' },
+      { brand: 'Comfee', alt: 'Comfee', logo: 'images/brands/comfee.png' },
+      { brand: 'Sharp', alt: 'SHARP', logo: 'images/brands/sharp.png' },
       { brand: 'TCL', alt: 'TCL', logo: 'images/brands/tcl.png' },
       { brand: 'LG', alt: 'LG', logo: 'images/brands/lg.png' },
-      { brand: 'Aqua', alt: 'AQUA' },
-      { brand: 'AUX', alt: 'AUX' },
-      { brand: 'Midea', alt: 'Midea' }
+      { brand: 'Aqua', alt: 'AQUA', logo: 'images/brands/aqua.png' },
+      { brand: 'AUX', alt: 'AUX', logo: 'images/brands/aux-brand.png' },
+      { brand: 'Midea', alt: 'Midea', logo: 'images/brands/midea.png' }
     ],
     maygiat: [
       { brand: 'all', alt: 'Tất cả' },
       { brand: 'LG', alt: 'LG', logo: 'images/brands/lg.png' },
       { brand: 'Samsung', alt: 'Samsung', logo: 'images/brands/samsung.png' },
-      { brand: 'Toshiba', alt: 'Toshiba' },
-      { brand: 'Panasonic', alt: 'Panasonic' },
-      { brand: 'Aqua', alt: 'AQUA' },
-      { brand: 'Electrolux', alt: 'Electrolux' },
-      { brand: 'Casper', alt: 'Casper' }
+      { brand: 'Toshiba', alt: 'Toshiba', logo: 'images/brands/toshiba.png' },
+      { brand: 'Panasonic', alt: 'Panasonic', logo: 'images/brands/panasonic.png' },
+      { brand: 'Aqua', alt: 'AQUA', logo: 'images/brands/aqua.png' },
+      { brand: 'Electrolux', alt: 'Electrolux', logo: 'images/brands/electrolux.png' },
+      { brand: 'Casper', alt: 'Casper', logo: 'images/brands/casper.png' }
     ]
   };
 
@@ -3752,19 +3752,19 @@
     mayloc_khongkhi: [
       { brand: 'all', alt: 'Tất cả' },
       { brand: 'Xiaomi', alt: 'Mi', logo: 'images/brands/mi.png' },
-      { brand: 'Sharp', alt: 'SHARP' },
+      { brand: 'Sharp', alt: 'SHARP', logo: 'images/brands/sharp.png' },
       { brand: 'LG', alt: 'LG', logo: 'images/brands/lg.png' },
-      { brand: 'Clair', alt: 'clair' },
-      { brand: 'Daikin', alt: 'DAIKIN' },
-      { brand: 'Electrolux', alt: 'Electrolux' },
-      { brand: 'Philips', alt: 'PHILIPS' },
-      { brand: 'Midea', alt: 'Midea' },
+      { brand: 'Clair', alt: 'clair', logo: 'images/brands/clair.png' },
+      { brand: 'Daikin', alt: 'DAIKIN', logo: 'images/brands/daikin.png' },
+      { brand: 'Electrolux', alt: 'Electrolux', logo: 'images/brands/electrolux.png' },
+      { brand: 'Philips', alt: 'PHILIPS', logo: 'images/brands/philips.png' },
+      { brand: 'Midea', alt: 'Midea', logo: 'images/brands/midea.png' },
       { brand: 'Nova', alt: 'NOVA' }
     ],
     may_hut_am: [
       { brand: 'all', alt: 'Tất cả' },
       { brand: 'Xiaomi', alt: 'Mi', logo: 'images/brands/mi.png' },
-      { brand: 'Sharp', alt: 'SHARP' },
+      { brand: 'Sharp', alt: 'SHARP', logo: 'images/brands/sharp.png' },
       { brand: 'Dorosin', alt: 'Dorosin' },
       { brand: 'Kosmen', alt: 'Kosmen' },
       { brand: 'FujiE', alt: 'FujiE' }
