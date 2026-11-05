@@ -1,4 +1,4 @@
-﻿/**
+/**
  * CellphoneS - 241 Lê Văn Việt - DATA LAYER & REPOSITORY
  * Dữ liệu lấy trực tiếp từ Backend REST API (Spring Boot / SQL Server)
  * Tuyệt đối không lưu dữ liệu giả hoặc rơi về dữ liệu cứng
@@ -38,7 +38,7 @@
           fetch(`${API_BASE}/nhomhang`).then(r => r.ok ? r.json() : []).catch(() => []),
           fetch(`${API_BASE}/loaihang`).then(r => r.ok ? r.json() : []).catch(() => []),
           fetch(`${API_BASE}/khuyenmai/hoatdong`).then(r => r.ok ? r.json() : []).catch(() => []),
-          fetch('products-meta.json').then(r => r.ok ? r.json() : {}).catch(() => ({}))
+          fetch('data/products-meta.json').then(r => r.ok ? r.json() : fetch('products-meta.json').then(r2 => r2.ok ? r2.json() : {})).catch(() => ({}))
         ]);
 
         this.nhomHang = Array.isArray(nhomhangRes) ? nhomhangRes : [];

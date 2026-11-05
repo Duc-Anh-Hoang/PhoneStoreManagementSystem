@@ -93,8 +93,11 @@ _ReSharper*/
 !.env.example
 !.env.template
 secrets.json
-appsettings*.local.json
-appsettings.Production.json
+appsettings*.json
+!appsettings.example.json
+*.pfx
+*.pem
+*.key
 
 # Docker & Container artifacts
 .docker/

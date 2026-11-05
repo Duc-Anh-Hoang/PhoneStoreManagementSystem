@@ -125,7 +125,8 @@
   // Tải dữ liệu hoangha-categories.json
   async function loadCategoriesData() {
     try {
-      const res = await fetch('hoangha-categories.json');
+      let res = await fetch('data/hoangha-categories.json');
+      if (!res.ok) res = await fetch('hoangha-categories.json');
       if (res.ok) {
         const json = await res.json();
         hoanghaCategoriesData = json;
@@ -662,7 +663,8 @@
 
     // 2. Nạp thêm sản phẩm từ products-meta.json
     try {
-      const res = await fetch('products-meta.json');
+      let res = await fetch('data/products-meta.json');
+      if (!res.ok) res = await fetch('products-meta.json');
       if (res.ok) {
         const meta = await res.json();
         const matchedMeta = Object.values(meta).filter(p => isProductMatchCategory(p, currentCategory));

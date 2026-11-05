@@ -35,8 +35,8 @@ jobs:
 
       - name: Validate JSON syntax
         run: |
-          if [ -f frontend/home-config.json ]; then
-            python3 -m json.tool frontend/home-config.json > /dev/null || exit 1
+          if [ -f frontend/data/home-config.json ]; then
+            python3 -m json.tool frontend/data/home-config.json > /dev/null || exit 1
             echo "home-config.json syntax is valid."
           fi
 

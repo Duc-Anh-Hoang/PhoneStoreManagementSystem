@@ -2,6 +2,5 @@
   <Folder Name="/backend/">
     <Project Path="backend/PhoneStoreAPI.csproj" />
   </Folder>
-  <Project Path="backend.Tests/backend.Tests.csproj" />
-  <Project Path="tests/PhoneStoreAPI.Tests/PhoneStoreAPI.Tests.csproj" />
+  <Project Path="Test/Test.csproj" />
 </Solution>

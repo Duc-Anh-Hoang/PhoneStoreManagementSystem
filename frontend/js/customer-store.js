@@ -1536,7 +1536,8 @@
 
   async function loadDealProductsFromJson() {
     try {
-      const res = await fetch('products-meta.json');
+      let res = await fetch('data/products-meta.json');
+      if (!res.ok) res = await fetch('products-meta.json');
       if (!res.ok) return;
       const metaMap = await res.json();
       const allItems = Object.values(metaMap || {});

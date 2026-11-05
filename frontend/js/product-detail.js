@@ -300,7 +300,8 @@
   // Tải dữ liệu từ products-meta.json
   async function loadProductsData() {
     try {
-      const res = await fetch('products-meta.json');
+      let res = await fetch('data/products-meta.json');
+      if (!res.ok) res = await fetch('products-meta.json');
       if (res.ok) {
         allProductsMeta = await res.json();
       }
