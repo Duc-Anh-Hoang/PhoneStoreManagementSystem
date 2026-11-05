@@ -2393,8 +2393,8 @@
           ${slideItems.map(item => {
             const isSelected = item.id === activeAccessoryId;
             const bgClass = isSelected
-              ? 'bg-[#eefbf4] font-semibold text-emerald-800 -translate-y-0.5 shadow-2xs z-1'
-              : 'bg-white hover:bg-[#eefbf4] hover:-translate-y-0.5 hover:shadow-2xs hover:z-1 text-slate-700 hover:text-emerald-800';
+              ? 'bg-[#ebf3fe] font-semibold text-[#0057B7] -translate-y-0.5 shadow-2xs z-1'
+              : 'bg-white hover:bg-[#ebf3fe] hover:-translate-y-0.5 hover:shadow-2xs hover:z-1 text-slate-700 hover:text-[#0057B7]';
             return `
               <div onclick="window.onAccessoryCategoryClick('${item.id}', '${item.title}')" class="group flex flex-col items-center justify-between p-2.5 sm:py-3.5 sm:px-2 min-h-[110px] sm:min-h-[130px] border-r border-b border-slate-100 transition-all duration-200 cursor-pointer text-center select-none relative ${bgClass}" title="${item.title}">
                 <div class="w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center mb-1.5 sm:mb-2">
