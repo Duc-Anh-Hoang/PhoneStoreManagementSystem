@@ -708,9 +708,13 @@
                     <!-- Khối hiển thị QR và Thông tin chuyển khoản -->
                     <div class="flex flex-col sm:flex-row items-center gap-4 bg-gradient-to-br from-blue-50/70 via-indigo-50/30 to-white p-3.5 rounded-2xl border border-blue-200/80">
                       <!-- Ảnh QR Code động -->
-                      <div class="relative w-40 h-40 bg-white p-2 rounded-2xl shadow-sm border border-slate-200 flex-shrink-0 flex items-center justify-center group">
-                        <img id="vietqr-code-img" src="" alt="VietQR" class="w-full h-full object-contain">
-                        <div class="absolute inset-0 bg-blue-900/10 rounded-2xl pointer-events-none"></div>
+                      <div class="flex flex-col items-center flex-shrink-0">
+                        <div class="relative w-48 h-48 sm:w-52 sm:h-52 bg-white p-2.5 rounded-2xl shadow-md border border-slate-200 flex items-center justify-center">
+                          <img id="vietqr-code-img" src="" alt="VietQR" class="w-full h-full object-contain select-none">
+                        </div>
+                        <button type="button" onclick="window.openCustomBankModal()" class="mt-2 text-[11px] text-[#0057B7] hover:underline font-bold flex items-center justify-center gap-1 cursor-pointer">
+                          <i class="fa-solid fa-gear text-[10px]"></i> Đổi STK của bạn để test
+                        </button>
                       </div>
 
                       <!-- Thông tin tài khoản & nút sao chép -->
@@ -1353,5 +1357,62 @@
   <script src="../js/customer-portal.js?v=4.0"></script>
   <script src="../js/cart-page.js"></script>
   <script src="../js/recently-viewed.js"></script>
+
+  <!-- =========================================================================
+       MODAL CẤU HÌNH TÀI KHOẢN NGÂN HÀNG THỬ NGHIỆM
+       ========================================================================= -->
+  <div id="custom-bank-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm animate-in fade-in duration-200">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <h3 class="font-black text-base text-slate-900 flex items-center gap-2">
+          <i class="fa-solid fa-qrcode text-[#0057B7]"></i> Cài đặt STK nhận tiền thử nghiệm
+        </h3>
+        <button type="button" onclick="window.closeCustomBankModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-xl hover:bg-slate-100 cursor-pointer">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <p class="text-xs text-slate-600 leading-relaxed">
+        Để quét mã QR trực tiếp bằng app ngân hàng của bạn (MB, VCB, Techcombank, MoMo...) và thấy đúng tên của bạn, bạn có thể nhập số tài khoản thực tế dưới đây:
+      </p>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Ngân hàng:</label>
+          <select id="custom-bank-select" class="w-full p-2.5 rounded-xl border border-slate-300 bg-white font-semibold text-slate-800">
+            <option value="MBBank">MBBank (Quân Đội)</option>
+            <option value="Vietcombank">Vietcombank</option>
+            <option value="Techcombank">Techcombank</option>
+            <option value="ACB">ACB (Á Châu)</option>
+            <option value="TPBank">TPBank</option>
+            <option value="VPBank">VPBank</option>
+            <option value="BIDV">BIDV</option>
+            <option value="Agribank">Agribank</option>
+            <option value="VietinBank">VietinBank</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Số tài khoản nhận tiền:</label>
+          <input type="text" id="custom-bank-account" placeholder="Ví dụ: 0383224846" class="w-full p-2.5 rounded-xl border border-slate-300 font-mono text-sm font-bold text-blue-900">
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Tên chủ tài khoản (Không dấu):</label>
+          <input type="text" id="custom-bank-name" placeholder="Ví dụ: NGUYEN VAN A" class="w-full p-2.5 rounded-xl border border-slate-300 uppercase font-bold text-slate-800">
+        </div>
+      </div>
+
+      <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-3">
+        <button type="button" onclick="window.resetDefaultBankConfig()" class="px-3 py-2 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-100 cursor-pointer">
+          Khôi phục mặc định
+        </button>
+        <button type="button" onclick="window.saveCustomBankConfig()" class="px-5 py-2.5 rounded-xl bg-[#0057B7] hover:bg-blue-700 text-white font-black text-xs shadow-md cursor-pointer">
+          Lưu & Tạo QR mới
+        </button>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>

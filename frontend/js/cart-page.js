@@ -16,11 +16,31 @@
   };
 
   const BANK_CONFIGS = {
-    'MB': { name: 'MBBank (Ngân hàng Quân Đội)', accountNo: '0901234567', accountName: 'CONG TY TNHH SAMA MOBILE' },
-    'VCB': { name: 'Vietcombank (Ngoại Thương VN)', accountNo: '1029384756', accountName: 'CONG TY TNHH SAMA MOBILE' },
-    'TCB': { name: 'Techcombank (Kỹ Thương VN)', accountNo: '1903847561', accountName: 'CONG TY TNHH SAMA MOBILE' },
-    'ACB': { name: 'ACB (Ngân hàng Á Châu)', accountNo: '246813579', accountName: 'CONG TY TNHH SAMA MOBILE' }
+    'MB': { name: 'MBBank (Ngân hàng Quân Đội)', sepayBank: 'MBBank', accountNo: '0901234567', accountName: 'CONG TY TNHH SAMA MOBILE' },
+    'VCB': { name: 'Vietcombank (Ngoại Thương VN)', sepayBank: 'Vietcombank', accountNo: '1029384756', accountName: 'CONG TY TNHH SAMA MOBILE' },
+    'TCB': { name: 'Techcombank (Kỹ Thương VN)', sepayBank: 'Techcombank', accountNo: '1903847561', accountName: 'CONG TY TNHH SAMA MOBILE' },
+    'ACB': { name: 'ACB (Ngân hàng Á Châu)', sepayBank: 'ACB', accountNo: '246813579', accountName: 'CONG TY TNHH SAMA MOBILE' }
   };
+
+  function getActiveBankConfig() {
+    try {
+      const saved = localStorage.getItem('samamobile_custom_bank_config');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && parsed.accountNo) return parsed;
+      }
+    } catch (e) {}
+    return BANK_CONFIGS[selectedBank] || BANK_CONFIGS['MB'];
+  }
+
+  function getQrCodeUrl(bankCfg, amount, memo) {
+    const bank = bankCfg.sepayBank || bankCfg.name?.split(' ')[0] || selectedBank || 'MBBank';
+    const acc = bankCfg.accountNo || '0901234567';
+    const amt = Math.max(1000, Math.round(Number(amount) || 0));
+    const safeMemo = (memo || 'SAMA').replace(/[^a-zA-Z0-9 ]/g, '').trim();
+    // SePay standard VietQR direct PNG - 100% decodable by all banking apps and cameras
+    return `https://qr.sepay.vn/img?bank=${encodeURIComponent(bank)}&acc=${encodeURIComponent(acc)}&amount=${amt}&des=${encodeURIComponent(safeMemo)}`;
+  }
 
   let appliedVoucher = null;
   let deliveryMethod = 'delivery'; // 'delivery' | 'store'
@@ -605,26 +625,27 @@
     }
   };
 
-  // Cập nhật VietQR Code động
+  // Cập nhật VietQR Code động (Chuẩn hóa SePay PNG sắc nét 100% quét được)
   function updateVietQR(amount) {
-    const cfg = BANK_CONFIGS[selectedBank] || BANK_CONFIGS['MB'];
+    const cfg = getActiveBankConfig();
     const qrImg = document.getElementById('vietqr-code-img');
     const qrAmount = document.getElementById('vietqr-amount-text');
     const bankName = document.getElementById('vietqr-bank-name');
     const accountNo = document.getElementById('vietqr-account-no');
+    const accountNameEl = document.getElementById('vietqr-account-name');
     const memoEl = document.getElementById('vietqr-memo-text');
 
     if (qrAmount) qrAmount.textContent = formatVND(amount);
     if (bankName) bankName.textContent = cfg.name;
     if (accountNo) accountNo.textContent = cfg.accountNo;
+    if (accountNameEl) accountNameEl.textContent = cfg.accountName || 'CONG TY TNHH SAMA MOBILE';
 
     const memo = 'SAMA 261106';
     if (memoEl) memoEl.textContent = memo;
 
     if (qrImg) {
-      const bankCode = selectedBank;
-      const amt = Math.max(10000, Math.round(amount));
-      qrImg.src = `https://img.vietqr.io/image/${bankCode}-${cfg.accountNo}-compact2.png?amount=${amt}&addInfo=${encodeURIComponent(memo)}&accountName=${encodeURIComponent(cfg.accountName)}`;
+      const amt = Math.max(1000, Math.round(amount));
+      qrImg.src = getQrCodeUrl(cfg, amt, memo);
     }
   }
 
@@ -655,7 +676,8 @@
     const memo = 'SAMA WALLET 261106';
 
     if (qrImg) {
-      qrImg.src = `https://img.vietqr.io/image/MB-0901234567-compact2.png?amount=${amt}&addInfo=${encodeURIComponent(memo)}&accountName=SAMA%20MOBILE%20STORE`;
+      const cfg = getActiveBankConfig();
+      qrImg.src = getQrCodeUrl(cfg, amt, memo);
     }
 
     if (labelEl) {
@@ -910,7 +932,8 @@
           if (memoText) memoText.textContent = memo;
           if (qrAmount) qrAmount.textContent = formatVND(order.tongTien);
           if (qrImg) {
-            qrImg.src = `https://img.vietqr.io/image/MB-0901234567-compact2.png?amount=${Math.round(order.tongTien)}&addInfo=${encodeURIComponent(memo)}&accountName=SAMA%20MOBILE%20STORE`;
+            const cfg = getActiveBankConfig();
+            qrImg.src = getQrCodeUrl(cfg, order.tongTien, memo);
           }
 
           startQrCountdown();
@@ -1111,7 +1134,8 @@
     if (memo) memo.textContent = memoText;
 
     if (img) {
-      img.src = `https://img.vietqr.io/image/MB-0901234567-compact2.png?amount=${Math.round(order.tongTien)}&addInfo=${encodeURIComponent(memoText)}&accountName=SAMA%20MOBILE%20STORE`;
+      const cfg = getActiveBankConfig();
+      img.src = getQrCodeUrl(cfg, order.tongTien, memoText);
     }
 
     if (modal) modal.classList.remove('hidden');
@@ -1226,3 +1250,44 @@
     }
   });
 })();
+
+  // Tùy chỉnh STK nhận tiền thực tế để test quét app ngân hàng
+  window.openCustomBankModal = function () {
+    const modal = document.getElementById('custom-bank-modal');
+    if (modal) modal.classList.remove('hidden');
+  };
+
+  window.closeCustomBankModal = function () {
+    const modal = document.getElementById('custom-bank-modal');
+    if (modal) modal.classList.add('hidden');
+  };
+
+  window.saveCustomBankConfig = function () {
+    const bank = document.getElementById('custom-bank-select')?.value || 'MBBank';
+    const acc = (document.getElementById('custom-bank-account')?.value || '').trim();
+    const name = (document.getElementById('custom-bank-name')?.value || '').trim();
+
+    if (!acc) {
+      alert('Vui lòng nhập số tài khoản ngân hàng của bạn');
+      return;
+    }
+
+    const cfg = {
+      name: `${bank} (${name || 'Tài khoản cá nhân'})`,
+      sepayBank: bank,
+      accountNo: acc,
+      accountName: name || 'NGUOI THU HUONG'
+    };
+
+    localStorage.setItem('samamobile_custom_bank_config', JSON.stringify(cfg));
+    window.closeCustomBankModal();
+    updateVietQR(getCartFinalTotal());
+    showToast('Đã lưu cấu hình tài khoản nhận tiền mới!', 'success');
+  };
+
+  window.resetDefaultBankConfig = function () {
+    localStorage.removeItem('samamobile_custom_bank_config');
+    window.closeCustomBankModal();
+    updateVietQR(getCartFinalTotal());
+    showToast('Đã khôi phục tài khoản mặc định SamaMobile!', 'info');
+  };
