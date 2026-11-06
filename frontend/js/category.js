@@ -941,16 +941,6 @@
             <!-- Khu vực ảnh to rõ có Spec Badges nổi ở góc phải & Discount tag góc trái -->
             <div class="relative h-52 sm:h-56 flex items-center justify-center p-3 mb-2.5 bg-slate-50/50 rounded-xl overflow-hidden">
               
-              <!-- Floating Spec Badges góc phải ảnh (Chip, RAM, Pin, Màn hình, BTU...) -->
-              <div class="absolute top-2.5 right-2.5 flex flex-col items-end gap-1.5 pointer-events-none z-10">
-                ${badges.map(b => `
-                  <div class="flex items-center gap-1.5 text-[10px] sm:text-[11px] text-slate-700 font-bold bg-white/95 backdrop-blur-xs px-2 py-0.5 rounded-md shadow-2xs border border-slate-200/80">
-                    <i class="${getSpecIcon(b)} text-[10px] text-blue-600"></i>
-                    <span>${b}</span>
-                  </div>
-                `).join('')}
-              </div>
-
               <!-- Discount Tag góc trái ảnh -->
               ${discount > 0 ? `
                 <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-[#E0052B] text-white font-black text-xs shadow-xs z-10">
@@ -963,7 +953,7 @@
             </div>
 
             <!-- Tên sản phẩm 2 dòng cỡ chữ to rõ -->
-            <h3 class="text-sm sm:text-[15px] font-bold text-slate-900 group-hover:text-[#0057B7] line-clamp-2 leading-snug min-h-[42px] transition-colors" title="${p.tenHang}">
+            <h3 class="text-[14px] sm:text-[15px] font-bold text-slate-900 group-hover:text-[#0057B7] line-clamp-2 leading-snug min-h-[42px] transition-colors" style="font-family: Arial, Helvetica, sans-serif;" title="${p.tenHang}">
               ${p.tenHang}
             </h3>
 
