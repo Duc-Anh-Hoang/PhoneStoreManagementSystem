@@ -49,6 +49,7 @@
   // 8 Category IDs chuẩn từ hoangha-categories.json:
   // 'dien-thoai', 'tablet', 'laptop', 'man-hinh', 'dieu-hoa-may-lanh', 'dong-ho-thong-minh', 'am-thanh', 'phu-kien'
   var currentCategory = 'dien-thoai';
+  var currentSubCategory = '';
   var selectedBrand = 'all';
   var selectedPriceRange = 'all';
   var selectedSpecs = {}; // { ram: '8GB', screen_size: '15.6 inch', ... }
@@ -446,6 +447,8 @@
 
       'dong-ho-thong-minh': 'dong-ho-thong-minh',
       'dong-ho': 'dong-ho-thong-minh',
+      'smartband': 'dong-ho-thong-minh',
+      'band': 'dong-ho-thong-minh',
       'smartwatch': 'dong-ho-thong-minh',
       'watch': 'dong-ho-thong-minh',
       'vong-deo-tay': 'dong-ho-thong-minh',
@@ -461,6 +464,9 @@
       'phu-kien': 'phu-kien',
       'accessories': 'phu-kien',
       'phukien': 'phu-kien',
+      'chuot-ban-phim': 'phu-kien',
+      'chuot': 'phu-kien',
+      'ban-phim': 'phu-kien',
       'mouse': 'phu-kien',
       'keyboard': 'phu-kien',
       'sac-cap': 'phu-kien',
@@ -481,8 +487,33 @@
 
     currentCategory = categoryMap[rawType] || 'dien-thoai';
 
-    // Xác định chuẩn subCategory mặc định nếu chưa có
-    if (!currentSubCategory) {
+    // Xác định chuẩn currentSubCategory tương ứng
+    if (['tablet', 'may-tinh-bang', 'ipad', 'tab'].includes(rawType)) {
+      currentSubCategory = 'tablet';
+    } else if (['dien-thoai', 'dienthoai', 'phone', 'smartphone'].includes(rawType)) {
+      currentSubCategory = 'dien-thoai';
+    } else if (['man-hinh', 'pc', 'monitor', 'man-hinh-may-tinh'].includes(rawType)) {
+      currentSubCategory = 'man-hinh';
+    } else if (['laptop', 'may-tinh-xach-tay', 'macbook', 'computer'].includes(rawType)) {
+      currentSubCategory = 'laptop';
+    } else if (['purifier', 'may-loc-khong-khi', 'dien-may', 'tivi', 'gia-dung', 'dienmay'].includes(rawType)) {
+      currentSubCategory = 'purifier';
+    } else if (['dieu-hoa', 'may-lanh', 'dieu-hoa-may-lanh', 'air'].includes(rawType)) {
+      currentSubCategory = 'dieu-hoa';
+    } else if (['smartband', 'vong-deo-tay', 'band'].includes(rawType)) {
+      currentSubCategory = 'smartband';
+    } else if (['dong-ho-thong-minh', 'smartwatch', 'watch', 'dong-ho'].includes(rawType)) {
+      currentSubCategory = 'dong-ho-thong-minh';
+    } else if (['loa', 'speaker', 'soundbar'].includes(rawType)) {
+      currentSubCategory = 'loa';
+    } else if (['tai-nghe', 'headphone', 'earphone', 'am-thanh', 'audio'].includes(rawType)) {
+      currentSubCategory = 'tai-nghe';
+    } else if (['chuot-ban-phim', 'chuot', 'ban-phim', 'mouse', 'keyboard'].includes(rawType)) {
+      currentSubCategory = 'chuot-ban-phim';
+    } else if (['sac-cap', 'pin-du-phong', 'phu-kien', 'accessories'].includes(rawType)) {
+      currentSubCategory = 'sac-cap';
+    } else {
+      // Mặc định theo category
       if (currentCategory === 'dieu-hoa-may-lanh') currentSubCategory = 'dieu-hoa';
       else if (currentCategory === 'dong-ho-thong-minh') currentSubCategory = 'dong-ho-thong-minh';
       else if (currentCategory === 'am-thanh') currentSubCategory = 'tai-nghe';
@@ -491,19 +522,7 @@
       else if (currentCategory === 'dien-thoai') currentSubCategory = 'dien-thoai';
       else if (currentCategory === 'man-hinh') currentSubCategory = 'man-hinh';
       else if (currentCategory === 'laptop') currentSubCategory = 'laptop';
-    } else {
-      if (['purifier', 'may-loc-khong-khi', 'dien-may', 'tivi', 'gia-dung'].includes(currentSubCategory)) currentSubCategory = 'purifier';
-      else if (['dieu-hoa', 'may-lanh', 'dieu-hoa-may-lanh', 'air'].includes(currentSubCategory)) currentSubCategory = 'dieu-hoa';
-      else if (['smartband', 'vong-deo-tay', 'band'].includes(currentSubCategory)) currentSubCategory = 'smartband';
-      else if (['dong-ho-thong-minh', 'smartwatch', 'watch', 'dong-ho'].includes(currentSubCategory)) currentSubCategory = 'dong-ho-thong-minh';
-      else if (['loa', 'speaker', 'soundbar'].includes(currentSubCategory)) currentSubCategory = 'loa';
-      else if (['tai-nghe', 'headphone', 'earphone', 'am-thanh', 'audio'].includes(currentSubCategory)) currentSubCategory = 'tai-nghe';
-      else if (['chuot-ban-phim', 'chuot', 'ban-phim', 'mouse', 'keyboard'].includes(currentSubCategory)) currentSubCategory = 'chuot-ban-phim';
-      else if (['sac-cap', 'pin-du-phong', 'phu-kien', 'accessories'].includes(currentSubCategory)) currentSubCategory = 'sac-cap';
-      else if (currentCategory === 'tablet') currentSubCategory = 'tablet';
-      else if (currentCategory === 'dien-thoai') currentSubCategory = 'dien-thoai';
-      else if (currentCategory === 'man-hinh') currentSubCategory = 'man-hinh';
-      else if (currentCategory === 'laptop') currentSubCategory = 'laptop';
+      else currentSubCategory = 'dien-thoai';
     }
 
     if (hoanghaCategoriesData && Array.isArray(hoanghaCategoriesData.categories)) {
