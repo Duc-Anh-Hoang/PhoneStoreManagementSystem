@@ -22,6 +22,67 @@
   const PHONE_REGEX = /^(0)(3[2-9]|5[2689]|7[06-9]|8[1-9]|9[0-9])[0-9]{7}$/;
 
   class CustomerPortalManager {
+
+    /**
+     * Lưu thông tin hồ sơ cá nhân
+     */
+    saveProfile() {
+      const user = (window.CellphoneSAuth || window.Auth) ? (window.CellphoneSAuth || window.Auth).getUser() : null;
+      if (!user) {
+        alert('Vui lòng đăng nhập để lưu hồ sơ!');
+        return;
+      }
+
+      const nameInput = document.getElementById('portal-profile-name');
+      const emailInput = document.getElementById('portal-profile-email');
+      const addressInput = document.getElementById('portal-profile-address');
+
+      if (nameInput) user.hoTen = nameInput.value.trim();
+      if (emailInput) user.email = emailInput.value.trim();
+      if (addressInput) user.diaChi = addressInput.value.trim();
+
+      if (window.CellphoneSAuth || window.Auth) {
+        (window.CellphoneSAuth || window.Auth).setUser(user);
+      }
+
+      // Cập nhật lại UI header
+      const custName = document.getElementById('customer-header-name');
+      if (custName && user.hoTen) custName.textContent = user.hoTen;
+      const portalName = document.getElementById('portal-user-name');
+      if (portalName && user.hoTen) portalName.textContent = user.hoTen;
+
+      if (window.CellphoneSCart && typeof window.CellphoneSCart.showToast === 'function') {
+        window.CellphoneSCart.showToast('Cập nhật hồ sơ cá nhân thành công!', 'success');
+      } else {
+        alert('Cập nhật hồ sơ cá nhân thành công!');
+      }
+    }
+
+    /**
+     * Chuyển đổi tab trong Customer Portal Modal (orders, warranty, profile)
+     */
+    switchTab(tab) {
+      const tabs = ['orders', 'warranty', 'profile'];
+      tabs.forEach(t => {
+        const btn = document.getElementById('btn-portal-tab-' + t);
+        const pane = document.getElementById('portal-tab-' + t);
+        if (btn) {
+          if (t === tab) {
+            btn.className = 'py-3 px-4 font-bold border-b-2 border-[#2563EB] text-[#1E3A8A] flex items-center gap-2 cursor-pointer';
+          } else {
+            btn.className = 'py-3 px-4 font-semibold text-slate-500 hover:text-navy border-b-2 border-transparent flex items-center gap-2 cursor-pointer';
+          }
+        }
+        if (pane) {
+          if (t === tab) {
+            pane.classList.remove('hidden');
+          } else {
+            pane.classList.add('hidden');
+          }
+        }
+      });
+    }
+  
     constructor() {
       this.pendingPhone = '';
     }

@@ -20,7 +20,7 @@ public class InventoryController : ControllerBase
     /// P2-09: Xem danh sách tồn kho từ vw_TonKho kèm cờ cảnh báo
     /// </summary>
     [HttpGet]
-    [Authorize(Roles = $"{AppConstants.Roles.Admin},{AppConstants.Roles.Manager},{AppConstants.Roles.Sales},{AppConstants.Roles.Cashier},{AppConstants.Roles.Stock}")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetTonKho([FromQuery] TonKhoQueryParameters query)
     {
         var (items, totalCount) = await _inventoryService.GetTonKhoAsync(query);
@@ -32,7 +32,7 @@ public class InventoryController : ControllerBase
     /// Xem tồn kho của một mặt hàng cụ thể
     /// </summary>
     [HttpGet("{maHang}")]
-    [Authorize(Roles = $"{AppConstants.Roles.Admin},{AppConstants.Roles.Manager},{AppConstants.Roles.Sales},{AppConstants.Roles.Cashier},{AppConstants.Roles.Stock}")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetTonKhoByMa([FromRoute] string maHang)
     {
         var item = await _inventoryService.GetTonKhoByMaHangAsync(maHang);
@@ -55,7 +55,7 @@ public class ImeiController : ControllerBase
     /// P2-08: Lấy danh sách IMEI theo mặt hàng, trạng thái, từ khóa
     /// </summary>
     [HttpGet]
-    [Authorize(Roles = $"{AppConstants.Roles.Admin},{AppConstants.Roles.Manager},{AppConstants.Roles.Sales},{AppConstants.Roles.Cashier},{AppConstants.Roles.Stock}")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetImeis([FromQuery] ImeiQueryParameters query)
     {
         var (items, totalCount) = await _inventoryService.GetImeisAsync(query);

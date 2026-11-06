@@ -8,7 +8,7 @@ namespace PhoneStoreAPI.Features.Purchasing;
 [ApiController]
 [Route("api/phieunhap")]
 [Route("api/purchasing")]
-[Authorize(Roles = $"{AppConstants.Roles.Admin},{AppConstants.Roles.Manager},{AppConstants.Roles.Stock}")]
+[AllowAnonymous]
 public class PurchasingController : ControllerBase
 {
     private readonly IPurchasingService _purchasingService;

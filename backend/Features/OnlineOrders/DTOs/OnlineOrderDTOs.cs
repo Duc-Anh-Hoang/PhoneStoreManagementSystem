@@ -15,6 +15,7 @@ public class CreateOrderRequest
 public class OrderItemRequest
 {
     public string MaHang { get; set; } = string.Empty;
+    public string? TenHang { get; set; }
     public int SoLuong { get; set; }
     public decimal DonGia { get; set; } // Client gửi lên nhưng backend sẽ bỏ qua và đọc từ DB
 }

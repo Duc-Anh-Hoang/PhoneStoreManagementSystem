@@ -115,30 +115,11 @@ public class SalesService : ISalesService
                         throw new ConflictException($"IMEI {imeiRecord.SoIMEI} đã được bán hoặc không còn trong kho.");
                     }
 
-                    // Cập nhật IMEI có điều kiện (WHERE trangthai = 'con_hang') chống bán trùng đồng thời
-                    int rowsAffected = 0;
-                    if (_context.Database.IsRelational())
+                    // Đối với PostgreSQL, trigger fn_trg_chitiethoadon_imei_ban tự động kiểm tra 'con_hang' và cập nhật 'da_ban' khi chitiethoadon được tạo
+                    if (!_context.Database.IsRelational())
                     {
-                        rowsAffected = await _context.Database.ExecuteSqlRawAsync(
-                            "UPDATE imei SET trangthai = 'da_ban' WHERE maimei = {0} AND trangthai = 'con_hang'",
-                            imeiRecord.MaIMEI);
+                        imeiRecord.TrangThai = "da_ban";
                     }
-                    else
-                    {
-                        // Cho In-Memory Test
-                        if (imeiRecord.TrangThai == "con_hang")
-                        {
-                            imeiRecord.TrangThai = "da_ban";
-                            rowsAffected = 1;
-                        }
-                    }
-
-                    if (rowsAffected == 0)
-                    {
-                        throw new ConflictException($"IMEI {imeiRecord.SoIMEI} đã được bán bởi giao dịch khác.");
-                    }
-
-                    imeiUpdates.Add(imeiRecord.MaIMEI);
 
                     chiTietEntities.Add(new ChiTietHoaDon
                     {
