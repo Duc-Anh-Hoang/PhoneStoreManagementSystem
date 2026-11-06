@@ -53,6 +53,9 @@
     return (root || '') + '/hubs/order';
   }
 
+  // Quản lý deduplicate thông báo realtime
+  const recentStatusUpdates = new Map();
+
   // Banner thông báo realtime nổi bật trên màn hình User
   function showUserRealtimeOrderBanner(data) {
     let container = document.getElementById('signalr-user-toast-container');
@@ -63,7 +66,16 @@
       document.body.appendChild(container);
     }
 
+    // Nếu đã có thông báo của chính đơn hàng này đang hiển thị thì gỡ bỏ trước khi tạo mới (tránh lặp)
+    if (data && data.maDH) {
+      const existingToast = container.querySelector(`[data-order-toast="${data.maDH}"]`);
+      if (existingToast) {
+        existingToast.remove();
+      }
+    }
+
     const toast = document.createElement('div');
+    toast.dataset.orderToast = data.maDH || '';
     toast.className = 'pointer-events-auto bg-white rounded-2xl shadow-2xl border-2 border-emerald-500 p-4 transition-all duration-300 transform translate-y-2 opacity-0 flex items-start gap-3.5';
 
     let iconBg = 'bg-emerald-500';
@@ -164,6 +176,17 @@
 
     // Lắng nghe sự kiện: Trạng thái đơn thay đổi (dành cho User & Admin)
     connection.on('OrderStatusUpdated', function (data) {
+      if (!data) return;
+
+      // Deduplicate tránh lặp thông báo trong vòng 3 giây cho cùng 1 trạng thái của đơn
+      const dedupKey = `${data.maDH || ''}_${data.trangThai || ''}`;
+      const now = Date.now();
+      if (recentStatusUpdates.has(dedupKey) && (now - recentStatusUpdates.get(dedupKey) < 3000)) {
+        console.log('SignalR: Bỏ qua thông báo trùng lặp (dedup):', dedupKey);
+        return;
+      }
+      recentStatusUpdates.set(dedupKey, now);
+
       console.log('SignalR: OrderStatusUpdated', data);
       playChime('order_status');
 

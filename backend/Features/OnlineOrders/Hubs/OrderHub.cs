@@ -74,17 +74,7 @@ public class OrderHub : Hub
             updatedAt = DateTime.UtcNow
         };
 
-        // Gửi riêng cho nhóm đơn hàng
-        await Clients.Group($"Order_{maDH}").SendAsync("OrderStatusUpdated", payload);
-
-        // Gửi cho nhóm khách hàng theo SĐT nếu có
-        if (!string.IsNullOrWhiteSpace(phone))
-        {
-            var cleanPhone = phone.Trim().Replace(" ", "").Replace(".", "").Replace("-", "");
-            await Clients.Group($"Customer_{cleanPhone}").SendAsync("OrderStatusUpdated", payload);
-        }
-
-        // Gửi cho tất cả client kết nối
+        // Gửi 1 lần duy nhất cho toàn bộ client kết nối (tránh duplicate khi client vừa trong group Order, Customer và All)
         await Clients.All.SendAsync("OrderStatusUpdated", payload);
     }
 }
