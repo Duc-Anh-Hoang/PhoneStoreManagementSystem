@@ -115,11 +115,9 @@ public class SalesService : ISalesService
                         throw new ConflictException($"IMEI {imeiRecord.SoIMEI} đã được bán hoặc không còn trong kho.");
                     }
 
-                    // Đối với PostgreSQL, trigger fn_trg_chitiethoadon_imei_ban tự động kiểm tra 'con_hang' và cập nhật 'da_ban' khi chitiethoadon được tạo
-                    if (!_context.Database.IsRelational())
-                    {
-                        imeiRecord.TrangThai = "da_ban";
-                    }
+                    // Cập nhật trạng thái IMEI sang da_ban trực tiếp trong C# Service (nguồn sự thật duy nhất)
+                    imeiRecord.TrangThai = "da_ban";
+                    _context.IMEIs.Update(imeiRecord);
 
                     chiTietEntities.Add(new ChiTietHoaDon
                     {

@@ -64,7 +64,11 @@ public class ReturnsService : IReturnsService
             // 2. Kiểm tra trạng thái IMEI (phải là da_ban)
             if (imeiRecord.TrangThai != "da_ban")
             {
-                throw new ConflictException($"IMEI {imeiRecord.SoIMEI} đang ở trạng thái '{imeiRecord.TrangThai}', không thể tiếp nhận trả hàng.");
+                if (imeiRecord.TrangThai == "con_hang")
+                {
+                    throw new ConflictException($"Máy mang IMEI {imeiRecord.SoIMEI} chưa được bán (đang còn trong kho), không thể tiếp nhận đổi trả.");
+                }
+                throw new ConflictException($"IMEI {imeiRecord.SoIMEI} đang ở trạng thái '{imeiRecord.TrangThai}', không thể tiếp nhận đổi trả.");
             }
 
             // 3. Tìm hoặc xác minh số hóa đơn
@@ -621,7 +625,14 @@ public class ReturnsService : IReturnsService
         string? lyDoKhongHopLe = null;
         if (imei.TrangThai != "da_ban")
         {
-            lyDoKhongHopLe = $"IMEI không ở trạng thái 'da_ban' (hiện tại: {imei.TrangThai}).";
+            if (imei.TrangThai == "con_hang")
+            {
+                lyDoKhongHopLe = "Máy này chưa được bán (đang còn trong kho), không thể tiếp nhận đổi trả.";
+            }
+            else
+            {
+                lyDoKhongHopLe = $"IMEI không ở trạng thái 'da_ban' (hiện tại: {imei.TrangThai}).";
+            }
         }
         else if (!conHanDoiTra)
         {

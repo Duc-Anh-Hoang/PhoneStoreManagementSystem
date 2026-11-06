@@ -2350,6 +2350,30 @@ window.submitHuyTraHang = submitHuyTraHang;
 async function openTraHangModal() {
   const modal = document.getElementById('modal-trahang');
   if (!modal) return;
+  const box = document.getElementById('tr-imei-lookup-box');
+  if (box) { box.classList.add('hidden'); box.innerHTML = ''; }
+  const imeiInput = document.getElementById('tr-soIMEI');
+  if (imeiInput) imeiInput.value = '';
+  const soHDInput = document.getElementById('tr-soHD');
+  if (soHDInput) soHDInput.value = '';
+
+  // Nạp danh sách gợi ý IMEI đã bán (da_ban) để nhân viên chọn ngay mà không cần nhớ số
+  try {
+    const imeisDaBan = await api.get('/imei?trangThai=da_ban').catch(() => []);
+    let datalist = document.getElementById('dl-imei-daban');
+    if (!datalist) {
+      datalist = document.createElement('datalist');
+      datalist.id = 'dl-imei-daban';
+      document.body.appendChild(datalist);
+      if (imeiInput) imeiInput.setAttribute('list', 'dl-imei-daban');
+    }
+    if (Array.isArray(imeisDaBan)) {
+      datalist.innerHTML = imeisDaBan.map(i => `
+        <option value="${i.soIMEI}">${i.tenHang || i.maHang} (Đã bán)</option>
+      `).join('');
+    }
+  } catch (e) {}
+
   modal.classList.remove('hidden');
 }
 
