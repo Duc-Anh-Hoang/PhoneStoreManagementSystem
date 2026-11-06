@@ -498,18 +498,27 @@
     cachedOtpEmail = email;
 
     let emailSentViaBackend = false;
+    let finalOtp = generatedOtp;
     try {
       const resp = await fetch(API_BASE + '/email/send-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: email, otpCode: generatedOtp, purpose: 'đăng nhập tài khoản Sama Member' })
       });
-      if (resp.ok) {
-        emailSentViaBackend = true;
+      const data = await resp.json().catch(() => ({}));
+      if (resp.ok && data) {
+        if (data.otpCode) {
+          finalOtp = data.otpCode;
+          cachedOtpCode = data.otpCode;
+        }
+        if (!data.isSimulated) {
+          emailSentViaBackend = true;
+        }
       }
     } catch (e) {
       // Backend offline hoặc chưa có route email
     }
+    cachedOtpCode = finalOtp;
 
     // Hiển thị khung nhập OTP
     const otpBox = document.getElementById('login-field-otp-box');

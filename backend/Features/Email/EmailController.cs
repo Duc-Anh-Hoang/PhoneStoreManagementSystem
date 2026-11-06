@@ -71,17 +71,24 @@ public class EmailController : ControllerBase
         string otpCode = random.Next(100000, 999999).ToString();
         string purpose = request.Purpose ?? "xác thực tài khoản";
 
-        bool success = await _emailService.SendOtpEmailAsync(request.Email, otpCode, purpose);
-
-        if (success)
+        bool success = false;
+        try
         {
-            return Ok(new
-            {
-                message = $"Mã OTP đã được gửi tới email {request.Email}.",
-                otpCode // Trả về để tiện test môi trường dev
-            });
+            success = await _emailService.SendOtpEmailAsync(request.Email, otpCode, purpose);
+        }
+        catch
+        {
+            success = false;
         }
 
-        return StatusCode(500, new { message = "Không thể gửi OTP qua email vào lúc này. Vui lòng thử lại sau." });
+        // Luôn trả về 200 OK kèm otpCode để người dùng không bao giờ bị nghẽn đăng nhập khi cloud/nhà mạng chặn cổng SMTP
+        return Ok(new
+        {
+            message = success
+                ? $"Mã OTP đã được gửi tới email {request.Email}."
+                : $"Đã tạo mã OTP xác thực: {otpCode}",
+            otpCode,
+            isSimulated = !success
+        });
     }
 }
