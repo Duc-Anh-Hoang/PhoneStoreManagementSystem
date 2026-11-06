@@ -2068,8 +2068,10 @@ async function renderTraHangTable() {
         `;
       } else if (t.trangThai === 'da_kiem_tra') {
         actionButtons = `
-          <button onclick="actionDuyetTraHang('${t.maTR}', true)" class="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-[10px] font-bold shadow-sm transition-all">Duyệt</button>
-          <button onclick="actionDuyetTraHang('${t.maTR}', false)" class="px-2 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-[10px] font-bold shadow-sm transition-all">Từ chối</button>
+          <button onclick="actionDuyetTraHang('${t.maTR}')" class="px-2.5 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-[10px] font-bold shadow-sm transition-all">
+            <i class="fa-solid fa-stamp mr-1"></i>Phê duyệt
+          </button>
+          <button onclick="actionHuyTraHang('${t.maTR}')" class="px-2 py-1 bg-slate-200 hover:bg-rose-100 text-slate-700 hover:text-rose-700 rounded-lg text-[10px] font-semibold transition-all">Hủy</button>
         `;
       } else if (t.trangThai === 'da_duyet') {
         actionButtons = `
@@ -2105,76 +2107,245 @@ async function renderTraHangTable() {
   }
 }
 
+// 1. Mở modal Kiểm tra Kỹ thuật
 async function actionKiemTraTraHang(maTR) {
-  const kq = prompt('Nhập kết quả kiểm tra kỹ thuật (loi_nsx / khong_loi / hu_hong_do_nguoi_dung):', 'loi_nsx');
-  if (!kq) return;
-  const ghiChu = prompt('Nhập ghi chú chi tiết kiểm tra:', 'Kỹ thuật viên đã kiểm tra xác nhận lỗi phần cứng NSX.') || 'Đã kiểm tra';
   try {
-    await api.put('/trahang/' + encodeURIComponent(maTR) + '/kiemtra', { ketQuaKiemTra: kq.trim(), ghiChuKiemTra: ghiChu.trim() });
-    showToast('Cập nhật kết quả kiểm tra thành công!', 'success');
+    const data = await api.get('/trahang/' + encodeURIComponent(maTR));
+    if (!data) return;
+
+    document.getElementById('kt-maTR').textContent = data.maTR;
+    document.getElementById('kt-hidden-maTR').value = data.maTR;
+    document.getElementById('kt-tenHang').textContent = data.tenHang || data.maHang;
+    document.getElementById('kt-soIMEI').textContent = data.soIMEI || data.maIMEI;
+    document.getElementById('kt-lyDo').textContent = data.lyDo || 'Không có';
+    document.getElementById('kt-ghiChu').value = data.ghiChuKiemTra || '';
+
+    const val = data.ketQuaKiemTra || 'loi_nsx';
+    const radio = document.querySelector(`input[name="ketQuaKiemTra"][value="${val}"]`);
+    if (radio) radio.checked = true;
+
+    const modal = document.getElementById('modal-kiemtra-trahang');
+    if (modal) modal.classList.remove('hidden');
+  } catch (err) {
+    alert('Lỗi tải thông tin phiếu: ' + err.message);
+  }
+}
+
+async function submitKiemTraTraHang(e) {
+  e.preventDefault();
+  const form = e.target;
+  const maTR = document.getElementById('kt-hidden-maTR').value;
+  const ketQuaKiemTra = form.ketQuaKiemTra.value;
+  const ghiChuKiemTra = form.ghiChuKiemTra.value.trim();
+
+  try {
+    await api.put('/trahang/' + encodeURIComponent(maTR) + '/kiemtra', { ketQuaKiemTra, ghiChuKiemTra });
+    showToast('Đã lưu kết quả kiểm tra kỹ thuật phiếu ' + maTR, 'success');
+    closeModal('modal-kiemtra-trahang');
     await renderTraHangTable();
-  } catch (e) {
-    alert('Lỗi kiểm tra kỹ thuật: ' + (e.message || 'Thất bại'));
+  } catch (err) {
+    alert('Lỗi kiểm tra kỹ thuật: ' + (err.message || 'Thất bại'));
   }
 }
 
-async function actionDuyetTraHang(maTR, chapNhan) {
-  if (chapNhan) {
-    if (!confirm('Bạn có chắc chắn muốn DUYỆT phiếu đổi trả ' + maTR + '?')) return;
-    try {
-      await api.put('/trahang/' + encodeURIComponent(maTR) + '/duyet', { chapNhan: true });
-      showToast('Đã duyệt hồ sơ ' + maTR + ' thành công!', 'success');
-      await renderTraHangTable();
-    } catch (e) {
-      alert('Lỗi duyệt hồ sơ: ' + (e.message || 'Thất bại'));
-    }
-  } else {
-    const lyDo = prompt('Nhập lý do TỪ CHỐI hồ sơ:');
-    if (!lyDo) return;
-    try {
-      await api.put('/trahang/' + encodeURIComponent(maTR) + '/duyet', { chapNhan: false, lyDoTuChoi: lyDo.trim() });
-      showToast('Đã từ chối hồ sơ ' + maTR, 'info');
-      await renderTraHangTable();
-    } catch (e) {
-      alert('Lỗi từ chối hồ sơ: ' + (e.message || 'Thất bại'));
-    }
-  }
-}
-
-async function actionHoanTatTraHang(maTR, hinhThuc) {
-  let maGD = null;
-  if (hinhThuc === 'chuyen_khoan') {
-    maGD = prompt('Nhập mã giao dịch chuyển khoản ngân hàng hoàn tiền:');
-    if (!maGD) return;
-  }
-  if (!confirm('Xác nhận hoàn tất xử lý phiếu ' + maTR + ' (' + hinhThuc + ')?')) return;
+// 2. Mở modal Duyệt / Từ chối
+async function actionDuyetTraHang(maTR) {
   try {
-    await api.put('/trahang/' + encodeURIComponent(maTR) + '/hoantat', { maGiaoDich: maGD });
-    showToast('Hoàn tất đổi trả phiếu ' + maTR + ' thành công!', 'success');
+    const data = await api.get('/trahang/' + encodeURIComponent(maTR));
+    if (!data) return;
+
+    window._curDuyetTraHang = data;
+    document.getElementById('duyet-maTR').textContent = data.maTR;
+    document.getElementById('duyet-tenHang').textContent = data.tenHang || data.maHang;
+    document.getElementById('duyet-soIMEI').textContent = data.soIMEI || data.maIMEI;
+    document.getElementById('duyet-hinhThuc').innerHTML = Format.statusBadge(data.hinhThucHoanTien);
+    document.getElementById('duyet-ketQua').innerHTML = Format.statusBadge(data.ketQuaKiemTra);
+    document.getElementById('duyet-ghiChuKT').textContent = data.ghiChuKiemTra || 'Không có';
+
+    const rejectBox = document.getElementById('duyet-tuchoi-box');
+    const actions = document.getElementById('duyet-action-buttons');
+    if (rejectBox) rejectBox.classList.add('hidden');
+    if (actions) actions.classList.remove('hidden');
+    const lyDoInput = document.getElementById('duyet-lyDoTuChoi');
+    if (lyDoInput) lyDoInput.value = '';
+
+    const modal = document.getElementById('modal-duyet-trahang');
+    if (modal) modal.classList.remove('hidden');
+  } catch (err) {
+    alert('Lỗi tải thông tin phiếu: ' + err.message);
+  }
+}
+
+function showRejectBox() {
+  const rejectBox = document.getElementById('duyet-tuchoi-box');
+  const actions = document.getElementById('duyet-action-buttons');
+  if (rejectBox) rejectBox.classList.remove('hidden');
+  if (actions) actions.classList.add('hidden');
+}
+
+function cancelRejectBox() {
+  const rejectBox = document.getElementById('duyet-tuchoi-box');
+  const actions = document.getElementById('duyet-action-buttons');
+  if (rejectBox) rejectBox.classList.add('hidden');
+  if (actions) actions.classList.remove('hidden');
+}
+
+async function submitDuyetAction(chapNhan) {
+  const data = window._curDuyetTraHang;
+  if (!data) return;
+
+  const payload = { chapNhan };
+  if (!chapNhan) {
+    const lyDo = document.getElementById('duyet-lyDoTuChoi')?.value?.trim();
+    if (!lyDo) {
+      alert('Vui lòng nhập lý do từ chối hồ sơ!');
+      return;
+    }
+    payload.lyDoTuChoi = lyDo;
+  }
+
+  try {
+    await api.put('/trahang/' + encodeURIComponent(data.maTR) + '/duyet', payload);
+    showToast(chapNhan ? 'Đã duyệt hồ sơ ' + data.maTR + ' thành công!' : 'Đã từ chối hồ sơ ' + data.maTR, chapNhan ? 'success' : 'info');
+    closeModal('modal-duyet-trahang');
+    await renderTraHangTable();
+  } catch (err) {
+    alert('Lỗi phê duyệt hồ sơ: ' + (err.message || 'Thất bại'));
+  }
+}
+
+// 3. Mở modal Hoàn tất & Chọn máy mới tương đương
+async function actionHoanTatTraHang(maTR, hinhThuc) {
+  try {
+    const data = await api.get('/trahang/' + encodeURIComponent(maTR));
+    if (!data) return;
+
+    window._curHoanTatTraHang = data;
+    document.getElementById('ht-maTR').textContent = data.maTR;
+    document.getElementById('ht-hidden-maTR').value = data.maTR;
+    document.getElementById('ht-hidden-hinhThuc').value = data.hinhThucHoanTien;
+    document.getElementById('ht-tenHang').textContent = data.tenHang || data.maHang;
+    document.getElementById('ht-soIMEI').textContent = data.soIMEI || data.maIMEI;
+    document.getElementById('ht-hinhThucText').textContent = data.hinhThucHoanTien === 'doi_hang' ? 'Đổi máy 1-1 cùng model' : (data.hinhThucHoanTien === 'tien_mat' ? 'Hoàn tiền mặt' : 'Hoàn chuyển khoản');
+
+    const doiHangSec = document.getElementById('ht-doi-hang-section');
+    const tienMatSec = document.getElementById('ht-tien-mat-section');
+    const chuyenKhoanSec = document.getElementById('ht-chuyen-khoan-section');
+
+    if (data.hinhThucHoanTien === 'doi_hang') {
+      if (doiHangSec) doiHangSec.classList.remove('hidden');
+      if (tienMatSec) tienMatSec.classList.add('hidden');
+      if (chuyenKhoanSec) chuyenKhoanSec.classList.add('hidden');
+
+      const selectImeiMoi = document.getElementById('ht-select-imei-moi');
+      selectImeiMoi.innerHTML = '<option value="">Đang kiểm tra tồn kho thiết bị tương đương...</option>';
+      const availableImeis = await api.get('/imei/available/' + encodeURIComponent(data.maHang)).catch(() => []);
+      if (!availableImeis || availableImeis.length === 0) {
+        selectImeiMoi.innerHTML = '<option value="">-- HẾT HÀNG TRONG KHO (Không còn máy tương đương để đổi) --</option>';
+        selectImeiMoi.disabled = true;
+      } else {
+        selectImeiMoi.disabled = false;
+        selectImeiMoi.innerHTML = availableImeis.map((im, idx) => `
+          <option value="${im.soIMEI}" ${idx === 0 ? 'selected' : ''}>
+            ${im.soIMEI} (Lô: ${im.soPN || im.soPn || 'Kho'} - Ngày nhập: ${im.ngayNhap ? im.ngayNhap.substring(0, 10) : 'Mới'}) ${idx === 0 ? '[Đề xuất FIFO cũ nhất]' : ''}
+          </option>
+        `).join('');
+      }
+    } else {
+      if (doiHangSec) doiHangSec.classList.add('hidden');
+      const tienHoanFormatted = Format.currency(data.soTienHoan || 0);
+
+      if (data.hinhThucHoanTien === 'tien_mat') {
+        if (tienMatSec) tienMatSec.classList.remove('hidden');
+        if (chuyenKhoanSec) chuyenKhoanSec.classList.add('hidden');
+        document.getElementById('ht-sotien-hoan').textContent = tienHoanFormatted;
+      } else {
+        if (tienMatSec) tienMatSec.classList.add('hidden');
+        if (chuyenKhoanSec) chuyenKhoanSec.classList.remove('hidden');
+        document.getElementById('ht-sotien-hoan-ck').textContent = tienHoanFormatted;
+        document.getElementById('ht-maGiaoDich').value = '';
+      }
+    }
+
+    const modal = document.getElementById('modal-hoantat-trahang');
+    if (modal) modal.classList.remove('hidden');
+  } catch (err) {
+    alert('Lỗi tải thông tin hoàn tất: ' + err.message);
+  }
+}
+
+async function submitHoanTatTraHang(e) {
+  e.preventDefault();
+  const form = e.target;
+  const maTR = document.getElementById('ht-hidden-maTR').value;
+  const hinhThuc = document.getElementById('ht-hidden-hinhThuc').value;
+
+  const payload = {};
+  if (hinhThuc === 'doi_hang') {
+    const selectImeiMoi = document.getElementById('ht-select-imei-moi');
+    if (selectImeiMoi.disabled || !selectImeiMoi.value) {
+      alert('Không có máy tương đương trong kho để đổi! Vui lòng liên hệ Quản lý chuyển sang hình thức Hoàn tiền.');
+      return;
+    }
+    payload.soIMEIMoi = selectImeiMoi.value;
+  } else if (hinhThuc === 'chuyen_khoan') {
+    const maGD = document.getElementById('ht-maGiaoDich')?.value?.trim();
+    if (!maGD) {
+      alert('Vui lòng nhập mã giao dịch ngân hàng / Ủy nhiệm chi hoàn tiền!');
+      return;
+    }
+    payload.maGiaoDich = maGD;
+  }
+
+  try {
+    const res = await api.put('/trahang/' + encodeURIComponent(maTR) + '/hoantat', payload);
+    showToast(hinhThuc === 'doi_hang' 
+      ? 'Đổi máy mới thành công! IMEI mới: ' + (res.maIMEIMoi || payload.soIMEIMoi)
+      : 'Hoàn tất hoàn tiền thành công phiếu ' + maTR, 'success');
+    closeModal('modal-hoantat-trahang');
     await renderTraHangTable();
     if (typeof renderTonKhoTable === 'function') renderTonKhoTable();
     if (typeof renderImeiTable === 'function') renderImeiTable();
-  } catch (e) {
-    alert('Lỗi hoàn tất đổi trả: ' + (e.message || 'Thất bại'));
+  } catch (err) {
+    alert('Lỗi hoàn tất đổi trả: ' + (err.message || 'Thất bại'));
   }
 }
 
-async function actionHuyTraHang(maTR) {
-  const lyDo = prompt('Nhập lý do hủy hồ sơ đổi trả:');
-  if (!lyDo) return;
+// 4. Mở modal Hủy hồ sơ
+function actionHuyTraHang(maTR) {
+  document.getElementById('huy-maTR').textContent = maTR;
+  document.getElementById('huy-hidden-maTR').value = maTR;
+  document.getElementById('huy-lyDo').value = '';
+  const modal = document.getElementById('modal-huy-trahang');
+  if (modal) modal.classList.remove('hidden');
+}
+
+async function submitHuyTraHang(e) {
+  e.preventDefault();
+  const maTR = document.getElementById('huy-hidden-maTR').value;
+  const lyDo = document.getElementById('huy-lyDo').value.trim();
+
   try {
-    await api.put('/trahang/' + encodeURIComponent(maTR) + '/huy', { lyDo: lyDo.trim() });
-    showToast('Đã hủy hồ sơ ' + maTR, 'info');
+    await api.put('/trahang/' + encodeURIComponent(maTR) + '/huy', { lyDo });
+    showToast('Đã hủy hồ sơ ' + maTR + ', thiết bị đã hoàn trả cho khách.', 'info');
+    closeModal('modal-huy-trahang');
     await renderTraHangTable();
-  } catch (e) {
-    alert('Lỗi hủy hồ sơ: ' + (e.message || 'Thất bại'));
+    if (typeof renderImeiTable === 'function') renderImeiTable();
+  } catch (err) {
+    alert('Lỗi hủy hồ sơ: ' + (err.message || 'Thất bại'));
   }
 }
 
 window.actionKiemTraTraHang = actionKiemTraTraHang;
+window.submitKiemTraTraHang = submitKiemTraTraHang;
 window.actionDuyetTraHang = actionDuyetTraHang;
+window.showRejectBox = showRejectBox;
+window.cancelRejectBox = cancelRejectBox;
+window.submitDuyetAction = submitDuyetAction;
 window.actionHoanTatTraHang = actionHoanTatTraHang;
+window.submitHoanTatTraHang = submitHoanTatTraHang;
 window.actionHuyTraHang = actionHuyTraHang;
+window.submitHuyTraHang = submitHuyTraHang;
 
 async function openTraHangModal() {
   const modal = document.getElementById('modal-trahang');

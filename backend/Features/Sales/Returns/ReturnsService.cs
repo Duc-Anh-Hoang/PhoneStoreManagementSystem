@@ -372,12 +372,28 @@ public class ReturnsService : IReturnsService
 
             if (traHang.HinhThucHoanTien == "doi_hang")
             {
-                // Chọn IMEI mới cùng mặt hàng, con_hang, FIFO
-                var imeiMoi = await (from im in _context.IMEIs
+                IMEI? imeiMoi = null;
+                // Nếu nhân viên chọn cụ thể IMEI máy mới tương đương từ form:
+                if (!string.IsNullOrWhiteSpace(request.SoIMEIMoi) || !string.IsNullOrWhiteSpace(request.MaIMEIMoi))
+                {
+                    imeiMoi = await _context.IMEIs.FirstOrDefaultAsync(im =>
+                        (im.SoIMEI == request.SoIMEIMoi || im.MaIMEI == request.MaIMEIMoi) &&
+                        im.TrangThai == "con_hang");
+
+                    if (imeiMoi == null)
+                    {
+                        throw new BadRequestException("Số IMEI máy mới được chọn không tồn tại hoặc không còn hàng trong kho.");
+                    }
+                }
+                else
+                {
+                    // Tự động chọn theo FIFO cùng mặt hàng
+                    imeiMoi = await (from im in _context.IMEIs
                                      join pn in _context.PhieuNhaps on im.SoPN equals pn.SoPN
                                      where im.MaHang == traHang.IMEI!.MaHang && im.TrangThai == "con_hang"
                                      orderby pn.NgayNhap ascending, im.MaIMEI ascending
                                      select im).FirstOrDefaultAsync();
+                }
 
                 if (imeiMoi == null)
                 {

@@ -1720,6 +1720,200 @@
   <!-- =========================================================================
        MODAL: CHI TIẾT & IN HÓA ĐƠN BÁN HÀNG KÈM PHIẾU BẢO HÀNH (FR17, BR12, BR24)
        ========================================================================= -->
+  <!-- =========================================================================
+       MODAL: KIỂM TRA KỸ THUẬT THIẾT BỊ ĐỔI TRẢ (BƯỚC 2)
+       ========================================================================= -->
+  <div id="modal-kiemtra-trahang" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-md overflow-y-auto">
+    <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-slate-100 p-6 space-y-5 animate-in fade-in duration-200">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div>
+          <span class="text-[10px] font-extrabold uppercase tracking-widest text-amber-700 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200">Bước 2: Kỹ Thuật Viên</span>
+          <h3 class="font-extrabold text-navy text-base mt-1">Biên Bản Thẩm Định Kỹ Thuật (<span id="kt-maTR" class="font-mono text-emerald-700"></span>)</h3>
+        </div>
+        <button onclick="closeModal('modal-kiemtra-trahang')" class="text-slate-400 hover:text-navy p-1 flex-shrink-0"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+
+      <div class="p-3 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs space-y-1.5">
+        <div class="flex justify-between"><span class="text-slate-500">Thiết bị:</span> <strong id="kt-tenHang" class="text-slate-800"></strong></div>
+        <div class="flex justify-between"><span class="text-slate-500">Số IMEI máy:</span> <strong id="kt-soIMEI" class="font-mono text-indigo-700"></strong></div>
+        <div class="flex justify-between"><span class="text-slate-500">Lý do khách báo:</span> <span id="kt-lyDo" class="text-slate-700"></span></div>
+      </div>
+
+      <form onsubmit="submitKiemTraTraHang(event)" class="space-y-4 text-xs">
+        <input type="hidden" id="kt-hidden-maTR" name="maTR">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-2">Kết quả giám định kỹ thuật (*):</label>
+          <div class="space-y-2">
+            <label class="flex items-start gap-3 p-3 border border-slate-200 rounded-xl hover:bg-slate-50 cursor-pointer transition-colors has-[:checked]:border-emerald-600 has-[:checked]:bg-emerald-50/40">
+              <input type="radio" name="ketQuaKiemTra" value="loi_nsx" checked class="mt-0.5 text-emerald-600 focus:ring-emerald-500">
+              <div>
+                <div class="font-bold text-slate-800 text-xs">Lỗi phần cứng do Nhà Sản Xuất (loi_nsx)</div>
+                <div class="text-[11px] text-slate-500">Thiết bị bị lỗi linh kiện, màn hình, mainboard do NSX. Đủ điều kiện đổi máy mới hoặc hoàn tiền.</div>
+              </div>
+            </label>
+            <label class="flex items-start gap-3 p-3 border border-slate-200 rounded-xl hover:bg-slate-50 cursor-pointer transition-colors has-[:checked]:border-blue-600 has-[:checked]:bg-blue-50/40">
+              <input type="radio" name="ketQuaKiemTra" value="khong_loi" class="mt-0.5 text-blue-600 focus:ring-blue-500">
+              <div>
+                <div class="font-bold text-slate-800 text-xs">Máy hoạt động bình thường, không có lỗi (khong_loi)</div>
+                <div class="text-[11px] text-slate-500">Chỉ duyệt khi khách hàng yêu cầu lý do Đổi Ý và máy còn nguyên seal, đầy đủ hộp phụ kiện.</div>
+              </div>
+            </label>
+            <label class="flex items-start gap-3 p-3 border border-slate-200 rounded-xl hover:bg-slate-50 cursor-pointer transition-colors has-[:checked]:border-rose-600 has-[:checked]:bg-rose-50/40">
+              <input type="radio" name="ketQuaKiemTra" value="hu_hong_do_nguoi_dung" class="mt-0.5 text-rose-600 focus:ring-rose-500">
+              <div>
+                <div class="font-bold text-slate-800 text-xs">Hư hỏng do tác động người dùng (hu_hong_do_nguoi_dung)</div>
+                <div class="text-[11px] text-slate-500">Rơi vỡ, móp méo, vào nước, cháy nổ, trầy xước nặng. Từ chối đổi trả theo chính sách.</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">Ghi chú chi tiết thẩm định (*):</label>
+          <textarea id="kt-ghiChu" name="ghiChuKiemTra" rows="3" required placeholder="Ghi nhận chi tiết ngoại quan, kết quả test chức năng phần cứng..." class="w-full p-3 border border-slate-200 rounded-xl focus:outline-none focus:border-emerald-600 text-xs"></textarea>
+        </div>
+
+        <div class="pt-3 border-t flex justify-end gap-2.5">
+          <button type="button" onclick="closeModal('modal-kiemtra-trahang')" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 font-bold rounded-xl text-slate-700 transition-colors">Hủy</button>
+          <button type="submit" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 font-bold rounded-xl text-white shadow-md shadow-emerald-600/20 transition-colors">Lưu Kết Quả Kiểm Tra</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL: QUẢN LÝ PHÊ DUYỆT / TỪ CHỐI ĐỔI TRẢ (BƯỚC 3)
+       ========================================================================= -->
+  <div id="modal-duyet-trahang" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-md overflow-y-auto">
+    <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-slate-100 p-6 space-y-5 animate-in fade-in duration-200">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div>
+          <span class="text-[10px] font-extrabold uppercase tracking-widest text-blue-700 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200">Bước 3: Quản Lý Phê Duyệt</span>
+          <h3 class="font-extrabold text-navy text-base mt-1">Duyệt Hồ Sơ Đổi Trả (<span id="duyet-maTR" class="font-mono text-emerald-700"></span>)</h3>
+        </div>
+        <button onclick="closeModal('modal-duyet-trahang')" class="text-slate-400 hover:text-navy p-1 flex-shrink-0"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+
+      <div class="p-3 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs space-y-1.5">
+        <div class="flex justify-between"><span class="text-slate-500">Thiết bị:</span> <strong id="duyet-tenHang" class="text-slate-800"></strong></div>
+        <div class="flex justify-between"><span class="text-slate-500">Số IMEI:</span> <strong id="duyet-soIMEI" class="font-mono text-indigo-700"></strong></div>
+        <div class="flex justify-between"><span class="text-slate-500">Hình thức xử lý:</span> <strong id="duyet-hinhThuc" class="text-emerald-700"></strong></div>
+        <div class="flex justify-between"><span class="text-slate-500">Kết quả kiểm tra KT:</span> <span id="duyet-ketQua" class="font-bold"></span></div>
+        <div class="flex justify-between"><span class="text-slate-500">Ghi chú KT:</span> <span id="duyet-ghiChuKT" class="text-slate-600 italic"></span></div>
+      </div>
+
+      <div class="space-y-3 pt-2">
+        <div id="duyet-tuchoi-box" class="hidden space-y-2 p-3 bg-rose-50/70 border border-rose-200 rounded-xl">
+          <label class="block text-xs font-bold text-rose-800">Lý do từ chối hồ sơ (*):</label>
+          <input type="text" id="duyet-lyDoTuChoi" placeholder="Ví dụ: Thiết bị không thuộc chính sách đổi trả hoặc lỗi do người dùng..." class="w-full h-10 px-3.5 border border-rose-300 rounded-xl bg-white text-xs focus:outline-none focus:border-rose-600">
+          <div class="flex justify-end gap-2 pt-1">
+            <button type="button" onclick="cancelRejectBox()" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 rounded-lg text-slate-700 font-bold text-xs">Quay lại</button>
+            <button type="button" onclick="submitDuyetAction(false)" class="px-4 py-1.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-lg text-xs shadow-sm">Xác Nhận Từ Chối</button>
+          </div>
+        </div>
+
+        <div id="duyet-action-buttons" class="flex justify-end gap-3 pt-2 border-t">
+          <button type="button" onclick="showRejectBox()" class="px-4 py-2 bg-rose-50 text-rose-700 hover:bg-rose-100 border border-rose-200 font-bold rounded-xl text-xs transition-colors">
+            <i class="fa-solid fa-ban mr-1"></i>Từ Chối Hồ Sơ
+          </button>
+          <button type="button" onclick="submitDuyetAction(true)" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs shadow-md shadow-blue-500/20 transition-colors">
+            <i class="fa-solid fa-check mr-1"></i>Chấp Thuận Duyệt
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL: HOÀN TẤT XỬ LÝ & CHỌN MÁY TƯƠNG ĐƯƠNG (1 ĐỔI 1) (BƯỚC 4)
+       ========================================================================= -->
+  <div id="modal-hoantat-trahang" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-md overflow-y-auto">
+    <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-slate-100 p-6 space-y-5 animate-in fade-in duration-200">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div>
+          <span class="text-[10px] font-extrabold uppercase tracking-widest text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">Bước 4: Hoàn Tất Hồ Sơ</span>
+          <h3 class="font-extrabold text-navy text-base mt-1">Hoàn Tất Đổi Trả (<span id="ht-maTR" class="font-mono text-emerald-700"></span>)</h3>
+        </div>
+        <button onclick="closeModal('modal-hoantat-trahang')" class="text-slate-400 hover:text-navy p-1 flex-shrink-0"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+
+      <div class="p-3 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs space-y-1.5">
+        <div class="flex justify-between"><span class="text-slate-500">Mặt hàng:</span> <strong id="ht-tenHang" class="text-slate-800"></strong></div>
+        <div class="flex justify-between"><span class="text-slate-500">IMEI máy thu hồi:</span> <strong id="ht-soIMEI" class="font-mono text-rose-600"></strong></div>
+        <div class="flex justify-between"><span class="text-slate-500">Hình thức xử lý:</span> <strong id="ht-hinhThucText" class="text-emerald-700"></strong></div>
+      </div>
+
+      <form onsubmit="submitHoanTatTraHang(event)" class="space-y-4 text-xs">
+        <input type="hidden" id="ht-hidden-maTR" name="maTR">
+        <input type="hidden" id="ht-hidden-hinhThuc" name="hinhThuc">
+
+        <!-- Form chọn máy tương đương khi đổi hàng 1-1 -->
+        <div id="ht-doi-hang-section" class="space-y-3">
+          <div class="p-3 bg-blue-50/70 border border-blue-200 rounded-2xl text-blue-900 leading-relaxed text-xs">
+            <i class="fa-solid fa-rotate text-blue-600 mr-1.5"></i>
+            <strong>Quy định đổi máy 1-1:</strong> Chọn chiếc máy mới tương đương cùng model đang có sẵn trong kho để giao cho khách. Hệ thống sẽ tự động gán máy mới sang <em>ĐÃ BÁN</em> và tạo mới gói bảo hành chính hãng.
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1.5">Chọn máy mới tương đương còn trong kho (*):</label>
+            <select id="ht-select-imei-moi" name="soIMEIMoi" class="w-full h-11 px-3.5 border border-slate-200 rounded-xl bg-white font-mono text-indigo-700 font-bold focus:outline-none focus:border-emerald-600 text-xs">
+              <option value="">Đang kiểm tra tồn kho thiết bị tương đương...</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Form hoàn tiền mặt -->
+        <div id="ht-tien-mat-section" class="hidden space-y-2 p-3 bg-emerald-50/70 border border-emerald-200 rounded-2xl text-xs">
+          <div class="text-slate-600">Số tiền chi hoàn lại cho khách hàng:</div>
+          <div id="ht-sotien-hoan" class="text-lg font-extrabold text-[#15803D]">0 đ</div>
+          <div class="text-[11px] text-slate-500 italic">Thu ngân xuất tiền mặt trực tiếp tại quầy theo hóa đơn gốc.</div>
+        </div>
+
+        <!-- Form hoàn tiền chuyển khoản -->
+        <div id="ht-chuyen-khoan-section" class="hidden space-y-3">
+          <div class="p-3 bg-emerald-50/70 border border-emerald-200 rounded-2xl text-xs">
+            <div class="text-slate-600">Số tiền chuyển khoản hoàn lại:</div>
+            <div id="ht-sotien-hoan-ck" class="text-lg font-extrabold text-[#15803D]">0 đ</div>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1.5">Mã giao dịch ngân hàng / Ủy nhiệm chi (*):</label>
+            <input type="text" id="ht-maGiaoDich" name="maGiaoDich" placeholder="Ví dụ: FT26110098321..." class="w-full h-10 px-3.5 border border-slate-200 rounded-xl text-xs font-mono focus:outline-none focus:border-emerald-600">
+          </div>
+        </div>
+
+        <div class="pt-3 border-t flex justify-end gap-2.5">
+          <button type="button" onclick="closeModal('modal-hoantat-trahang')" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 font-bold rounded-xl text-slate-700 transition-colors">Hủy</button>
+          <button type="submit" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 font-bold rounded-xl text-white shadow-md shadow-emerald-500/20 transition-colors">Xác Nhận Hoàn Tất</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL: HỦY HỒ SƠ ĐỔI TRẢ
+       ========================================================================= -->
+  <div id="modal-huy-trahang" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-md overflow-y-auto">
+    <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-slate-100 p-6 space-y-5 animate-in fade-in duration-200">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h3 class="font-extrabold text-navy text-base">Hủy Hồ Sơ Đổi Trả (<span id="huy-maTR" class="font-mono text-rose-600"></span>)</h3>
+        <button onclick="closeModal('modal-huy-trahang')" class="text-slate-400 hover:text-navy p-1 flex-shrink-0"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        Khi hủy hồ sơ, máy thu hồi sẽ được hoàn trả lại cho khách và chuyển trạng thái về <strong>ĐÃ BÁN</strong>.
+      </p>
+      <form onsubmit="submitHuyTraHang(event)" class="space-y-4 text-xs">
+        <input type="hidden" id="huy-hidden-maTR" name="maTR">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">Lý do hủy hồ sơ (*):</label>
+          <input type="text" id="huy-lyDo" name="lyDo" placeholder="Ví dụ: Khách đổi ý không muốn trả hàng nữa..." required class="w-full h-10 px-3.5 border border-slate-200 rounded-xl focus:outline-none focus:border-rose-500 text-xs">
+        </div>
+        <div class="pt-3 border-t flex justify-end gap-2.5">
+          <button type="button" onclick="closeModal('modal-huy-trahang')" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 font-bold rounded-xl text-slate-700 transition-colors">Đóng</button>
+          <button type="submit" class="px-5 py-2 bg-rose-600 hover:bg-rose-700 font-bold rounded-xl text-white shadow-md shadow-rose-500/20 transition-colors">Xác Nhận Hủy</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <div id="modal-chitiethoadon" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-md overflow-y-auto">
     <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl border border-slate-100 p-6 sm:p-8 space-y-6 animate-in fade-in duration-200">
       <div class="flex items-center justify-between border-b border-slate-100 pb-4">

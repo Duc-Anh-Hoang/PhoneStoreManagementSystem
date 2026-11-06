@@ -1,4 +1,4 @@
-namespace PhoneStoreAPI.Features.Sales.Returns.DTOs;
+﻿namespace PhoneStoreAPI.Features.Sales.Returns.DTOs;
 
 public class CreateTraHangRequest
 {
@@ -26,6 +26,8 @@ public class DuyetTraHangRequest
 public class HoanTatTraHangRequest
 {
     public string? MaGiaoDich { get; set; }
+    public string? SoIMEIMoi { get; set; }
+    public string? MaIMEIMoi { get; set; }
 }
 
 public class DoiHinhThucRequest
