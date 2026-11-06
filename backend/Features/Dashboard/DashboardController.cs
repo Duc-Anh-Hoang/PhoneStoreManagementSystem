@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PhoneStoreAPI.Common.Constants;
 using PhoneStoreAPI.Features.Dashboard.DTOs;
 
 namespace PhoneStoreAPI.Features.Dashboard;
 
 [ApiController]
 [Route("api/thongke")]
-[Authorize(Roles = $"{AppConstants.Roles.Admin},{AppConstants.Roles.Manager}")]
+[Route("api/dashboard")]
+[Authorize]
 public class DashboardController : ControllerBase
 {
     private readonly IDashboardService _dashboardService;
@@ -18,6 +18,7 @@ public class DashboardController : ControllerBase
     }
 
     [HttpGet("tonghop")]
+    [HttpGet("summary")]
     public async Task<IActionResult> GetSummary()
     {
         var result = await _dashboardService.GetSummaryAsync();
@@ -25,6 +26,7 @@ public class DashboardController : ControllerBase
     }
 
     [HttpGet("kenhban")]
+    [HttpGet("channels")]
     public async Task<IActionResult> GetRevenueByChannel(
         [FromQuery] DateTime? tuNgay,
         [FromQuery] DateTime? denNgay)
@@ -34,6 +36,7 @@ public class DashboardController : ControllerBase
     }
 
     [HttpGet("nhomhang")]
+    [HttpGet("categories")]
     public async Task<IActionResult> GetRevenueByCategory(
         [FromQuery] DateTime? tuNgay,
         [FromQuery] DateTime? denNgay)

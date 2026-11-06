@@ -9,7 +9,7 @@ public class DashboardService : IDashboardService
 {
     private readonly AppDbContext _context;
     private readonly IMemoryCache _cache;
-    private static readonly TimeSpan CacheDuration = TimeSpan.FromSeconds(30);
+    private static readonly TimeSpan CacheDuration = TimeSpan.FromSeconds(3);
     private const string SummaryCacheKey = "dashboard_summary";
 
     public DashboardService(AppDbContext context, IMemoryCache cache)
@@ -31,17 +31,58 @@ public class DashboardService : IDashboardService
 
         var invoices = await _context.HoaDons
             .AsNoTracking()
-            .Select(h => new { h.NgayLap, ThanhTien = h.ThanhTien > 0 ? h.ThanhTien : (h.TongTien - h.TienGiamGia) })
+            .Select(h => new
+            {
+                h.SoHD,
+                h.NgayLap,
+                ThanhTien = h.ThanhTien > 0 ? h.ThanhTien : (h.TongTien - h.TienGiamGia),
+                KenhBan = h.KenhBan ?? "tai_quay"
+            })
+            .ToListAsync();
+
+        var refunds = await _context.TraHangs
+            .AsNoTracking()
+            .Where(t => t.TrangThai == "hoan_tat" && (t.HinhThucHoanTien == "tien_mat" || t.HinhThucHoanTien == "chuyen_khoan"))
+            .Select(t => new
+            {
+                t.MaTR,
+                t.SoHD,
+                Ngay = t.NgayHoanTat ?? t.NgayTR,
+                SoTienHoan = t.SoTienHoan ?? 0m
+            })
             .ToListAsync();
 
         var todayInvoices = invoices.Where(h => h.NgayLap >= startOfToday).ToList();
         var monthInvoices = invoices.Where(h => h.NgayLap >= startOfMonth).ToList();
 
-        decimal doanhThuHomNay = todayInvoices.Sum(h => h.ThanhTien);
-        decimal doanhThuThang = monthInvoices.Sum(h => h.ThanhTien);
-        decimal tongDoanhThu = invoices.Sum(h => h.ThanhTien);
+        var todayRefunds = refunds.Where(r => r.Ngay >= startOfToday).ToList();
+        var monthRefunds = refunds.Where(r => r.Ngay >= startOfMonth).ToList();
+
+        decimal grossTotal = invoices.Sum(h => h.ThanhTien);
+        decimal grossToday = todayInvoices.Sum(h => h.ThanhTien);
+        decimal grossMonth = monthInvoices.Sum(h => h.ThanhTien);
+
+        decimal refundTotal = refunds.Sum(r => r.SoTienHoan);
+        decimal refundToday = todayRefunds.Sum(r => r.SoTienHoan);
+        decimal refundMonth = monthRefunds.Sum(r => r.SoTienHoan);
+
+        // Doanh thu thuần = Doanh thu bán - Tiền hoàn trả
+        decimal tongDoanhThu = Math.Max(0, grossTotal - refundTotal);
+        decimal doanhThuHomNay = Math.Max(0, grossToday - refundToday);
+        decimal doanhThuThang = Math.Max(0, grossMonth - refundMonth);
+
         int soHoaDonHomNay = todayInvoices.Count;
         int tongHoaDon = invoices.Count;
+
+        var taiQuayInvoices = invoices.Where(h => h.KenhBan == "tai_quay").ToList();
+        var onlineInvoices = invoices.Where(h => h.KenhBan == "online").ToList();
+        var taiQuayHDSet = taiQuayInvoices.Select(h => h.SoHD).ToHashSet();
+
+        decimal posRefunds = refunds.Where(r => r.SoHD != null && taiQuayHDSet.Contains(r.SoHD)).Sum(r => r.SoTienHoan);
+        decimal onlineRefunds = refundTotal - posRefunds;
+
+        decimal doanhThuTaiQuay = Math.Max(0, taiQuayInvoices.Sum(h => h.ThanhTien) - posRefunds);
+        decimal doanhThuOnline = Math.Max(0, onlineInvoices.Sum(h => h.ThanhTien) - onlineRefunds);
 
         int pendingOrders = await _context.DonHangOnlines
             .AsNoTracking()
@@ -53,6 +94,13 @@ public class DashboardService : IDashboardService
 
         var allProducts = await _context.MatHangs.AsNoTracking().ToListAsync();
         int tongMatHang = allProducts.Count;
+
+        var imeiConHangGroup = await _context.IMEIs
+            .AsNoTracking()
+            .Where(i => i.TrangThai == "con_hang")
+            .GroupBy(i => i.MaHang)
+            .Select(g => new { MaHang = g.Key, Total = g.Count() })
+            .ToDictionaryAsync(x => x.MaHang, x => x.Total);
 
         var nhapGroup = await _context.ChiTietPhieuNhaps
             .GroupBy(c => c.MaHang)
@@ -69,9 +117,17 @@ public class DashboardService : IDashboardService
 
         foreach (var p in allProducts)
         {
-            var nhap = nhapGroup.TryGetValue(p.MaHang, out var n) ? n : 0;
-            var ban = banGroup.TryGetValue(p.MaHang, out var b) ? b : 0;
-            var stock = Math.Max(0, nhap - ban);
+            int stock;
+            if (p.QuanLyImei)
+            {
+                stock = imeiConHangGroup.TryGetValue(p.MaHang, out var count) ? count : 0;
+            }
+            else
+            {
+                var nhap = nhapGroup.TryGetValue(p.MaHang, out var n) ? n : 0;
+                var ban = banGroup.TryGetValue(p.MaHang, out var b) ? b : 0;
+                stock = Math.Max(0, nhap - ban);
+            }
 
             tongTonKho += stock;
             if (stock <= 5)
@@ -85,8 +141,15 @@ public class DashboardService : IDashboardService
             DoanhThuHomNay = doanhThuHomNay,
             DoanhThuThang = doanhThuThang,
             TongDoanhThu = tongDoanhThu,
+            DoanhThuGop = grossTotal,
+            TongTienHoanTra = refundTotal,
+            SoDonHoanTra = refunds.Count,
             SoHoaDonHomNay = soHoaDonHomNay,
             TongHoaDon = tongHoaDon,
+            SoHoaDonTaiQuay = taiQuayInvoices.Count,
+            SoHoaDonOnline = onlineInvoices.Count,
+            DoanhThuTaiQuay = doanhThuTaiQuay,
+            DoanhThuOnline = doanhThuOnline,
             DonOnlineChoXacNhan = pendingOrders,
             TongMatHang = tongMatHang,
             TongTonKho = tongTonKho,
@@ -106,26 +169,49 @@ public class DashboardService : IDashboardService
             return cached;
         }
 
-        var query = _context.HoaDons.AsNoTracking();
+        var hdQuery = _context.HoaDons.AsNoTracking();
+        var trQuery = _context.TraHangs.AsNoTracking()
+            .Where(t => t.TrangThai == "hoan_tat" && (t.HinhThucHoanTien == "tien_mat" || t.HinhThucHoanTien == "chuyen_khoan"));
 
         if (tuNgay.HasValue)
         {
-            query = query.Where(h => h.NgayLap >= tuNgay.Value);
+            hdQuery = hdQuery.Where(h => h.NgayLap >= tuNgay.Value);
+            trQuery = trQuery.Where(t => (t.NgayHoanTat ?? t.NgayTR) >= tuNgay.Value);
         }
         if (denNgay.HasValue)
         {
-            query = query.Where(h => h.NgayLap <= denNgay.Value);
+            hdQuery = hdQuery.Where(h => h.NgayLap <= denNgay.Value);
+            trQuery = trQuery.Where(t => (t.NgayHoanTat ?? t.NgayTR) <= denNgay.Value);
         }
 
-        var result = await query
-            .GroupBy(h => h.KenhBan)
-            .Select(g => new ChannelRevenueDto
+        var invoices = await hdQuery
+            .Select(h => new
             {
-                KenhBan = g.Key,
-                DoanhThu = g.Sum(x => x.ThanhTien > 0 ? x.ThanhTien : (x.TongTien - x.TienGiamGia)),
-                SoHoaDon = g.Count()
+                h.SoHD,
+                h.KenhBan,
+                ThanhTien = h.ThanhTien > 0 ? h.ThanhTien : (h.TongTien - h.TienGiamGia)
             })
             .ToListAsync();
+
+        var refunds = await trQuery
+            .Select(t => new { t.SoHD, SoTienHoan = t.SoTienHoan ?? 0m })
+            .ToListAsync();
+
+        var result = new List<ChannelRevenueDto>();
+        var channels = new[] { "tai_quay", "online" };
+        foreach (var ch in channels)
+        {
+            var chInvoices = invoices.Where(h => (h.KenhBan ?? "tai_quay") == ch).ToList();
+            var chSohds = chInvoices.Select(h => h.SoHD).ToHashSet();
+            var chRefunds = refunds.Where(r => r.SoHD != null && chSohds.Contains(r.SoHD)).Sum(r => r.SoTienHoan);
+            var gross = chInvoices.Sum(h => h.ThanhTien);
+            result.Add(new ChannelRevenueDto
+            {
+                KenhBan = ch,
+                DoanhThu = Math.Max(0, gross - chRefunds),
+                SoHoaDon = chInvoices.Count
+            });
+        }
 
         _cache.Set(cacheKey, result, CacheDuration);
         return result;

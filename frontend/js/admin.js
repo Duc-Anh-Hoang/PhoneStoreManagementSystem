@@ -649,25 +649,61 @@ async function renderDashboard() {
     const products = AdminRealtimeData.products || [];
     const orders = AdminRealtimeData.orders || [];
 
-    // 1. Tính tổng doanh thu thực tế
-    const completedOrders = orders.filter(o => o.trangThai === 'hoan_thanh');
-    const onlineRev = completedOrders.reduce((acc, o) => acc + (Number(o.tongTien) || 0), 0);
-    // Base POS offline sales (35.600.000 đ) + online sales hoàn tất
-    const basePosRev = 35600000;
-    const totalRev = basePosRev + onlineRev;
+    // Lấy số liệu thống kê realtime từ backend API (Nguồn sự thật duy nhất)
+    let summary = null;
+    try {
+      summary = await api.get('/thongke/tonghop');
+    } catch (e) {
+      try {
+        summary = await api.get('/dashboard/summary');
+      } catch (err) {}
+    }
+
+    // 1. Tính tổng doanh thu thực tế (Doanh thu bán trừ tiền đổi trả đã hoàn)
+    let totalRev = 0;
+    let totalInvoices = 0;
+    let posRev = 0;
+    let onlineRev = 0;
+    let posInvoicesCount = 0;
+    let onlineInvoicesCount = 0;
+    let refundAmount = 0;
+    let refundCount = 0;
+
+    if (summary) {
+      totalRev = Number(summary.tongDoanhThu) || 0;
+      totalInvoices = summary.tongHoaDon || 0;
+      posRev = Number(summary.doanhThuTaiQuay) || 0;
+      onlineRev = Number(summary.doanhThuOnline) || 0;
+      posInvoicesCount = summary.soHoaDonTaiQuay || 0;
+      onlineInvoicesCount = summary.soHoaDonOnline || 0;
+      refundAmount = Number(summary.tongTienHoanTra) || 0;
+      refundCount = summary.soDonHoanTra || 0;
+    } else {
+      const completedOrders = orders.filter(o => o.trangThai === 'hoan_thanh');
+      onlineRev = completedOrders.reduce((acc, o) => acc + (Number(o.tongTien) || 0), 0);
+      posRev = 0;
+      totalRev = onlineRev;
+      onlineInvoicesCount = completedOrders.length;
+      totalInvoices = completedOrders.length;
+    }
 
     const revEl = document.getElementById('dash-revenue');
     if (revEl) revEl.textContent = Format.currency(totalRev);
 
     const revSubText = document.getElementById('dash-revenue-sub-text');
     if (revSubText) {
-      const totalInvoices = completedOrders.length + 3;
-      revSubText.textContent = `${totalInvoices} đơn hoàn tất (${completedOrders.length} online, 3 tại quầy)`;
+      if (refundAmount > 0) {
+        revSubText.textContent = `${totalInvoices} đơn hoàn tất (Đã trừ ${Format.currency(refundAmount)} trả hàng)`;
+        revSubText.title = `Tổng bán: ${Format.currency(summary ? summary.doanhThuGop : totalRev)} - Đã hoàn lại: ${Format.currency(refundAmount)}`;
+      } else {
+        revSubText.textContent = `${totalInvoices} đơn hoàn tất (${posInvoicesCount} tại quầy, ${onlineInvoicesCount} online)`;
+      }
     }
 
     // 2. Card Đơn Chờ Duyệt (Realtime)
-    const pendingOrders = orders.filter(o => o.trangThai === 'cho_xac_nhan');
-    const pendingCount = pendingOrders.length;
+    const pendingCount = (summary && typeof summary.donOnlineChoXacNhan === 'number')
+      ? summary.donOnlineChoXacNhan
+      : orders.filter(o => o.trangThai === 'cho_xac_nhan').length;
     const pendingEl = document.getElementById('dash-pending-orders');
     if (pendingEl) pendingEl.textContent = pendingCount + ' đơn';
 
@@ -690,8 +726,12 @@ async function renderDashboard() {
     }
 
     // 3. Card Tổng Tồn Kho Máy & Cảnh báo sắp hết
-    const totalTonKho = products.reduce((acc, p) => acc + (p.tonKho || 0), 0);
-    const lowStockCount = products.filter(p => (p.tonKho || 0) > 0 && (p.tonKho || 0) <= 5).length;
+    const totalTonKho = (summary && typeof summary.tongTonKho === 'number' && summary.tongTonKho > 0)
+      ? summary.tongTonKho
+      : products.reduce((acc, p) => acc + (p.tonKho || 0), 0);
+    const lowStockCount = (summary && typeof summary.soMatHangSapHet === 'number')
+      ? summary.soMatHangSapHet
+      : products.filter(p => (p.tonKho || 0) > 0 && (p.tonKho || 0) <= 5).length;
     const stockEl = document.getElementById('dash-total-stock');
     if (stockEl) {
       stockEl.textContent = totalTonKho.toLocaleString('vi-VN') + ' máy';
@@ -703,15 +743,18 @@ async function renderDashboard() {
         stockSub.textContent = `Kho thực tế (${lowStockCount} model sắp hết)`;
         stockSub.className = 'text-[11px] text-[#F97316] font-bold mt-1.5 truncate whitespace-nowrap';
       } else {
-        stockSub.textContent = `Đang còn hàng (${products.length.toLocaleString('vi-VN')} model)`;
+        stockSub.textContent = `Đang còn hàng (${(summary?.tongMatHang || products.length).toLocaleString('vi-VN')} model)`;
         stockSub.className = 'text-[11px] text-[#22C55E] font-medium mt-1.5 truncate whitespace-nowrap';
       }
     }
 
     // 4. Card Tổng Mặt Hàng Đang Kinh Doanh
     const prodEl = document.getElementById('dash-total-products');
+    const totalProducts = (summary && typeof summary.tongMatHang === 'number' && summary.tongMatHang > 0)
+      ? summary.tongMatHang
+      : products.length;
     if (prodEl) {
-      prodEl.textContent = products.length.toLocaleString('vi-VN') + ' model';
+      prodEl.textContent = totalProducts.toLocaleString('vi-VN') + ' model';
     }
     const prodSub = document.getElementById('dash-total-products-sub');
     if (prodSub) {
@@ -721,10 +764,22 @@ async function renderDashboard() {
     // 5. Render Doanh Thu Theo Kênh Bán
     const channelContainer = document.getElementById('dash-channel-stats');
     if (channelContainer) {
-      const onlineOrdersCount = orders.length;
-      const totalAllRev = totalRev > 0 ? totalRev : 1;
-      const posPct = Math.round((basePosRev / totalAllRev) * 100);
+      const totalAllRev = (posRev + onlineRev) > 0 ? (posRev + onlineRev) : 1;
+      const posPct = Math.min(100, Math.max(0, Math.round((posRev / totalAllRev) * 100)));
       const onlinePct = 100 - posPct;
+
+      let refundNotice = '';
+      if (refundAmount > 0) {
+        refundNotice = `
+          <div class="mt-2.5 p-2.5 bg-rose-50 rounded-xl border border-rose-100 flex items-center justify-between text-xs">
+            <span class="text-rose-700 font-semibold flex items-center gap-1.5">
+              <i class="fa-solid fa-arrow-rotate-left text-rose-500"></i>
+              Khấu trừ đổi trả hoàn tiền (${refundCount} hồ sơ):
+            </span>
+            <span class="font-mono font-bold text-rose-700">-${Format.currency(refundAmount)}</span>
+          </div>
+        `;
+      }
 
       channelContainer.innerHTML = `
         <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
@@ -736,7 +791,7 @@ async function renderDashboard() {
             <span class="font-mono font-bold text-slate-900">${Format.currency(onlineRev)}</span>
           </div>
           <div class="flex items-center justify-between text-[11px] text-slate-500 mb-1.5">
-            <span>Số lượng: <b>${onlineOrdersCount} đơn hàng</b></span>
+            <span>Số lượng: <b>${onlineInvoicesCount} đơn hoàn tất</b></span>
             <span class="font-bold text-slate-700">${onlinePct}%</span>
           </div>
           <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
@@ -749,20 +804,22 @@ async function renderDashboard() {
               <i class="fa-solid fa-cash-register text-[#1E3A8A]"></i>
               Bán Tại Quầy (POS Cửa Hàng)
             </span>
-            <span class="font-mono font-bold text-slate-900">${Format.currency(basePosRev)}</span>
+            <span class="font-mono font-bold text-slate-900">${Format.currency(posRev)}</span>
           </div>
           <div class="flex items-center justify-between text-[11px] text-slate-500 mb-1.5">
-            <span>Số lượng: <b>3 hóa đơn</b></span>
+            <span>Số lượng: <b>${posInvoicesCount} hóa đơn</b></span>
             <span class="font-bold text-slate-700">${posPct}%</span>
           </div>
           <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
             <div class="bg-[#1E3A8A] h-2 rounded-full transition-all duration-500" style="width: ${posPct}%"></div>
           </div>
         </div>
+        ${refundNotice}
       `;
     }
 
     // 6. Render Doanh Thu Theo Nhóm Hàng Thực Tế
+    
     const catContainer = document.getElementById('dash-category-stats');
     if (catContainer) {
       const topCategories = (AdminRealtimeData.categories || []).slice(0, 4);
@@ -1304,6 +1361,7 @@ async function cancelOrder(maDH) {
 async function completeOrder(maDH) {
   const genHD = 'HD' + Math.floor(10000 + Math.random() * 90000);
   AdminRealtimeData.updateOrderStatus(maDH, 'hoan_thanh', genHD);
+  if (typeof renderDashboard === 'function') renderDashboard();
   showToast('Đã thu tiền & hoàn tất đơn hàng ' + maDH + ' (Mã hóa đơn: ' + genHD + ')!', 'success');
   // Realtime notification qua SignalR
   const oComp = (AdminRealtimeData.orders || []).find(x => x.maDH === maDH);
@@ -1503,6 +1561,7 @@ async function saveLapHoaDon(e) {
     closeModal('modal-lap-hoadon');
     form.reset();
     await renderHoaDonTable();
+    if (typeof renderDashboard === 'function') renderDashboard();
     if (typeof renderHoaDonListTable === 'function') renderHoaDonListTable();
     if (typeof renderTonKhoTable === 'function') renderTonKhoTable();
     if (typeof renderImeiTable === 'function') renderImeiTable();
@@ -2353,6 +2412,7 @@ async function submitHoanTatTraHang(e) {
       : 'Hoàn tất hoàn tiền thành công phiếu ' + maTR, 'success');
     closeModal('modal-hoantat-trahang');
     await renderTraHangTable();
+    if (typeof renderDashboard === 'function') renderDashboard();
     if (typeof renderTonKhoTable === 'function') renderTonKhoTable();
     if (typeof renderImeiTable === 'function') renderImeiTable();
   } catch (err) {
@@ -2457,6 +2517,7 @@ async function saveTraHang(e) {
     closeModal('modal-trahang');
     form.reset();
     await renderTraHangTable();
+    if (typeof renderDashboard === 'function') renderDashboard();
     if (typeof renderTonKhoTable === 'function') renderTonKhoTable();
     if (typeof renderImeiTable === 'function') renderImeiTable();
   } catch (err) {

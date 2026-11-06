@@ -5,8 +5,15 @@ public class DashboardSummaryDto
     public decimal DoanhThuHomNay { get; set; }
     public decimal DoanhThuThang { get; set; }
     public decimal TongDoanhThu { get; set; }
+    public decimal DoanhThuGop { get; set; }
+    public decimal TongTienHoanTra { get; set; }
+    public int SoDonHoanTra { get; set; }
     public int SoHoaDonHomNay { get; set; }
     public int TongHoaDon { get; set; }
+    public int SoHoaDonTaiQuay { get; set; }
+    public int SoHoaDonOnline { get; set; }
+    public decimal DoanhThuTaiQuay { get; set; }
+    public decimal DoanhThuOnline { get; set; }
     public int DonOnlineChoXacNhan { get; set; }
     public int TongMatHang { get; set; }
     public int TongTonKho { get; set; }
