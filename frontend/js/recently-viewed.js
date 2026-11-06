@@ -142,11 +142,13 @@
 
   // Cuộn mượt đến khối sản phẩm đã xem trên trang
   window.scrollToRecentlyViewed = function () {
-    var el = document.getElementById('shelf-recently-viewed');
-    if (el) {
+    var el = document.getElementById('shelf-recently-viewed') || document.getElementById('empty-cart-recently-viewed-section');
+    if (el && !el.classList.contains('hidden') && el.offsetParent !== null) {
       el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     } else {
-      window.location.href = 'index.html#shelf-recently-viewed';
+      var isInsidePages = window.location.pathname.includes('/pages/') || window.location.href.includes('/pages/');
+      var targetUrl = (isInsidePages ? '../' : '') + 'index.html#shelf-recently-viewed';
+      window.location.href = targetUrl;
     }
   };
 

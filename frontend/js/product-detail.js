@@ -321,13 +321,13 @@
     };
 
     window.CellphoneSCustomerPortal = window.CellphoneSCustomerPortal || {
-      openLoginModal: function () { window.location.href = 'index.html#login'; },
-      openPortal: function () { window.location.href = 'index.html#portal'; }
+      openLoginModal: function () { const isPages = window.location.pathname.includes('/pages/'); window.location.href = (isPages ? '../' : '') + 'index.html#login'; },
+      openPortal: function () { const isPages = window.location.pathname.includes('/pages/'); window.location.href = (isPages ? '../' : '') + 'index.html#portal'; }
     };
 
     window.CellphoneSLookup = window.CellphoneSLookup || {
-      openModal: function (tab) { window.location.href = 'index.html#' + tab; },
-      openTradeInModal: function () { window.location.href = 'index.html#hero-store'; }
+      openModal: function (tab) { const isPages = window.location.pathname.includes('/pages/'); window.location.href = (isPages ? '../' : '') + 'index.html#' + tab; },
+      openTradeInModal: function () { const isPages = window.location.pathname.includes('/pages/'); window.location.href = (isPages ? '../' : '') + 'index.html#hero-store'; }
     };
   }
 

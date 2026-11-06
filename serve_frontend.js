@@ -35,7 +35,7 @@ const server = http.createServer((req, res) => {
   let reqPath = decodeURIComponent(req.url.split('?')[0]);
 
   // Root redirect to frontend/index.html
-  if (reqPath === '/' || reqPath === '') {
+  if (reqPath === '/' || reqPath === '' || reqPath === '/pages/index.html') {
     reqPath = '/frontend/index.html';
   } else if (reqPath === '/cart' || reqPath === '/cart.html') {
     reqPath = '/frontend/pages/cart.html';
