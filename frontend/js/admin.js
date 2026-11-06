@@ -1303,9 +1303,12 @@ async function renderHoaDonTable() {
     }
 
     tbody.innerHTML = list.map(h => {
-      const imeiStr = (h.chiTiet && h.chiTiet.length > 0)
-        ? h.chiTiet.map(ct => ct.soIMEI || ct.maIMEI).filter(Boolean).join(', ')
-        : (h.maImei || '-');
+      const imeiList = (h.chiTiet && h.chiTiet.length > 0)
+        ? h.chiTiet.map(ct => ct.soIMEI || ct.maIMEI).filter(Boolean)
+        : (h.maImei ? [h.maImei] : []);
+      const imeiStr = imeiList.length > 0
+        ? `<span class="font-mono text-indigo-700">${imeiList.join(', ')}</span>`
+        : `<span class="text-slate-400 italic text-[11px]">Không áp dụng (Phụ kiện)</span>`;
       const ngay = h.ngayLap ? h.ngayLap.replace('T', ' ').substring(0, 16) : '-';
       const tenKh = h.tenKhachHang || h.tenKH || 'Khách lẻ';
 
@@ -1315,7 +1318,7 @@ async function renderHoaDonTable() {
           <td class="p-3.5 text-xs text-slate-500 whitespace-nowrap">${ngay}</td>
           <td class="p-3.5 font-bold text-sm text-navy whitespace-nowrap">${tenKh}</td>
           <td class="p-3.5 text-xs text-center whitespace-nowrap">${Format.statusBadge(h.kenhBan)}</td>
-          <td class="p-3.5 font-mono font-bold text-xs text-slate-700 whitespace-nowrap">${imeiStr}</td>
+          <td class="p-3.5 text-xs whitespace-nowrap">${imeiStr}</td>
           <td class="p-3.5 font-bold text-sm text-slate-700 text-right whitespace-nowrap">${Format.currency(h.tongTien)}</td>
           <td class="p-3.5 text-xs text-rose-600 text-right whitespace-nowrap">-${Format.currency(h.tienGiamGia || 0)}</td>
           <td class="p-3.5 font-bold text-sm text-[#15803D] text-right whitespace-nowrap">${Format.currency(h.thanhTien)}</td>
@@ -1334,15 +1337,20 @@ async function openLapHoaDonModal() {
 
   const selectMH = document.getElementById('pos-select-mathang');
   try {
-    if (typeof AdminRealtimeData !== 'undefined' && !AdminRealtimeData.isLoaded) {
-      await AdminRealtimeData.init();
+    // Luôn ưu tiên lấy dữ liệu mặt hàng và tồn kho trực tiếp từ backend API
+    let products = await api.get('/mathang').catch(() => []);
+    if (!products || products.length === 0) {
+      if (typeof AdminRealtimeData !== 'undefined' && !AdminRealtimeData.isLoaded) {
+        await AdminRealtimeData.init();
+      }
+      products = (typeof AdminRealtimeData !== 'undefined' && AdminRealtimeData.products) ? AdminRealtimeData.products : [];
     }
-    let products = (typeof AdminRealtimeData !== 'undefined' && AdminRealtimeData.products && AdminRealtimeData.products.length > 0)
-      ? AdminRealtimeData.products
-      : await api.get('/mathang').catch(() => []);
+    window._posProductList = Array.isArray(products) ? products : [];
     if (selectMH) {
-      selectMH.innerHTML = products.map(m => `
-        <option value="${m.maHang}">${m.tenHang} - ${Format.currency(m.donGia)} (Kho: ${m.tonKho != null ? m.tonKho : 0})</option>
+      selectMH.innerHTML = window._posProductList.map(m => `
+        <option value="${m.maHang}" data-quanlyimei="${m.quanLyImei ? 'true' : 'false'}" data-tonkho="${m.tonKho != null ? m.tonKho : 0}">
+          ${m.tenHang} - ${Format.currency(m.donGia)} (Kho: ${m.tonKho != null ? m.tonKho : 0} ${m.dvt || 'Cái'}${m.quanLyImei ? ' - Có IMEI' : ' - Phụ kiện'})
+        </option>
       `).join('');
     }
     await updatePosImeiOptions();
@@ -1355,6 +1363,9 @@ async function openLapHoaDonModal() {
 async function updatePosImeiOptions() {
   const selectMH = document.getElementById('pos-select-mathang');
   const selectImei = document.getElementById('pos-select-imei');
+  const imeiContainer = document.getElementById('pos-imei-container');
+  const qtyContainer = document.getElementById('pos-qty-container');
+  const imeiLabel = document.getElementById('pos-imei-label');
   if (!selectMH || !selectImei) return;
 
   const maHang = selectMH.value;
@@ -1363,13 +1374,37 @@ async function updatePosImeiOptions() {
     return;
   }
 
-  selectImei.innerHTML = '<option value="">Đang tải IMEI khả dụng...</option>';
+  const selectedOpt = selectMH.selectedOptions[0];
+  const isImei = selectedOpt?.getAttribute('data-quanlyimei') === 'true';
+  const tonKho = parseInt(selectedOpt?.getAttribute('data-tonkho') || '0', 10);
+
+  if (!isImei) {
+    // Hàng phụ kiện (không quản lý IMEI)
+    if (imeiContainer) imeiContainer.classList.add('hidden');
+    if (qtyContainer) {
+      qtyContainer.classList.remove('hidden');
+      const qtyInput = document.getElementById('pos-input-soluong');
+      if (qtyInput) qtyInput.max = Math.max(1, tonKho);
+    }
+    selectImei.required = false;
+    selectImei.disabled = true;
+    selectImei.innerHTML = '<option value="">(Phụ kiện không quản lý IMEI)</option>';
+    return;
+  }
+
+  // Hàng có quản lý IMEI (Điện thoại, Tablet)
+  if (imeiContainer) imeiContainer.classList.remove('hidden');
+  if (qtyContainer) qtyContainer.classList.add('hidden');
+  if (imeiLabel) imeiLabel.textContent = 'Chọn số IMEI máy còn trong kho (*):';
+  selectImei.required = true;
+  selectImei.disabled = false;
+  selectImei.innerHTML = '<option value="">Đang tải IMEI khả dụng trong kho...</option>';
+
   try {
     const imeis = await api.get('/imei/available/' + encodeURIComponent(maHang)).catch(() => []);
     if (!imeis || imeis.length === 0) {
-      selectImei.disabled = false;
-      const autoImei = '86' + String(Math.floor(1000000000000 + Math.random() * 9000000000000));
-      selectImei.innerHTML = `<option value="${autoImei}">${autoImei} (Tự động gán từ kho thực)</option>`;
+      selectImei.disabled = true;
+      selectImei.innerHTML = '<option value="">-- HẾT HÀNG TRONG KHO (0 IMEI khả dụng) --</option>';
     } else {
       selectImei.disabled = false;
       selectImei.innerHTML = imeis.map(i => `
@@ -1377,9 +1412,8 @@ async function updatePosImeiOptions() {
       `).join('');
     }
   } catch (err) {
-    selectImei.disabled = false;
-    const autoImei = '86' + String(Math.floor(1000000000000 + Math.random() * 9000000000000));
-    selectImei.innerHTML = `<option value="${autoImei}">${autoImei} (Tự động gán từ kho thực)</option>`;
+    selectImei.disabled = true;
+    selectImei.innerHTML = '<option value="">-- Lỗi tải danh sách IMEI --</option>';
   }
 }
 
@@ -1387,26 +1421,40 @@ async function saveLapHoaDon(e) {
   e.preventDefault();
   const form = e.target;
   const tenKH = form.tenKH.value.trim();
-  const maHang = document.getElementById('pos-select-mathang').value;
+  const selectMH = document.getElementById('pos-select-mathang');
+  const maHang = selectMH.value;
+  const selectedOpt = selectMH.selectedOptions[0];
+  const isImei = selectedOpt?.getAttribute('data-quanlyimei') === 'true';
+  const tonKho = parseInt(selectedOpt?.getAttribute('data-tonkho') || '0', 10);
+
   const selectImei = document.getElementById('pos-select-imei');
   const soImei = selectImei ? selectImei.value : null;
+  const qtyInput = document.getElementById('pos-input-soluong');
+  const soLuong = isImei ? 1 : Math.max(1, parseInt(qtyInput?.value || '1', 10));
   const phuongThuc = form.phuongThuc.value;
 
-  if (!soImei) {
+  if (tonKho < soLuong) {
+    alert('Không đủ tồn kho để xuất hóa đơn! Hiện còn: ' + tonKho);
+    return;
+  }
+
+  if (isImei && !soImei) {
     alert('Vui lòng chọn số IMEI máy còn trong kho!');
     return;
+  }
+
+  const chiTietItem = {
+    maHang: maHang,
+    slBan: soLuong
+  };
+  if (isImei && soImei) {
+    chiTietItem.soIMEI = soImei;
   }
 
   const payload = {
     kenhBan: 'tai_quay',
     phuongThucThanhToan: phuongThuc,
-    chiTiet: [
-      {
-        maHang: maHang,
-        soIMEI: soImei,
-        slBan: 1
-      }
-    ]
+    chiTiet: [ chiTietItem ]
   };
 
   try {
@@ -1418,10 +1466,64 @@ async function saveLapHoaDon(e) {
     if (typeof renderHoaDonListTable === 'function') renderHoaDonListTable();
     if (typeof renderTonKhoTable === 'function') renderTonKhoTable();
     if (typeof renderImeiTable === 'function') renderImeiTable();
+    if (typeof renderMatHangTable === 'function') renderMatHangTable();
   } catch (err) {
     alert('Lỗi xuất hóa đơn POS: ' + err.message);
   }
 }
+
+// Hàm tra cứu nhanh thông tin hóa đơn và điều kiện đổi trả theo số IMEI
+let _lookupImeiTimer = null;
+async function lookupTraHangIMEI(soImei) {
+  clearTimeout(_lookupImeiTimer);
+  const box = document.getElementById('tr-imei-lookup-box');
+  const soHDInput = document.getElementById('tr-soHD');
+  if (!box) return;
+
+  const val = (soImei || '').trim();
+  if (val.length < 10) {
+    box.classList.add('hidden');
+    box.innerHTML = '';
+    return;
+  }
+
+  _lookupImeiTimer = setTimeout(async () => {
+    try {
+      const data = await api.get('/trahang/tracuu?soIMEI=' + encodeURIComponent(val));
+      if (data) {
+        if (soHDInput && !soHDInput.value) {
+          soHDInput.value = data.soHD || '';
+        }
+        const ngayMuaStr = data.ngayMua ? data.ngayMua.replace('T', ' ').substring(0, 10) : '-';
+        const hanText = data.conHanDoiTra
+          ? `<span class="text-emerald-700 font-bold">Còn hạn đổi trả (hạn 30 ngày)</span>`
+          : `<span class="text-rose-600 font-bold">Đã quá hạn đổi trả 30 ngày</span>`;
+
+        box.innerHTML = `
+          <div class="flex items-center justify-between border-b border-emerald-200/60 pb-1.5 font-bold text-slate-800">
+            <span>Thiết bị: <span class="text-[#15803D]">${data.tenHang || data.maHang}</span></span>
+            <span class="font-mono text-indigo-700">HĐ: ${data.soHD}</span>
+          </div>
+          <div class="grid grid-cols-2 gap-2 pt-1 text-[11px] text-slate-600">
+            <div>Ngày mua: <strong class="text-slate-800">${ngayMuaStr}</strong></div>
+            <div>Giá đã trả: <strong class="text-emerald-700">${Format.currency(data.soTienThucTra || data.donGiaBan)}</strong></div>
+            <div class="col-span-2">${hanText}</div>
+          </div>
+          <div class="mt-2 p-2 bg-blue-50/80 rounded-lg border border-blue-200/80 text-[11px] text-blue-900 leading-relaxed">
+            <i class="fa-solid fa-circle-info text-blue-600 mr-1"></i>
+            <strong>Quy tắc đổi máy mới (1 đổi 1):</strong> Tại bước tiếp nhận này bạn <u>chỉ cần nhập máy khách trả</u>. Sau khi Kỹ thuật kiểm tra xác nhận lỗi và Quản lý duyệt, khi bấm <strong>Hoàn tất</strong>, hệ thống sẽ <strong>tự động xuất 1 máy mới cùng model từ kho thực (FIFO)</strong> và kích hoạt bảo hành cho máy mới mà không cần lập đơn mới.
+          </div>
+        `;
+        box.classList.remove('hidden');
+      }
+    } catch (err) {
+      box.innerHTML = `<div class="text-rose-600 font-medium text-[11px]"><i class="fa-solid fa-triangle-exclamation mr-1"></i>IMEI không hợp lệ hoặc chưa từng được bán trên hệ thống.</div>`;
+      box.classList.remove('hidden');
+    }
+  }, 400);
+}
+
+window.lookupTraHangIMEI = lookupTraHangIMEI;
 
 
 // -------------------------------------------------------------
