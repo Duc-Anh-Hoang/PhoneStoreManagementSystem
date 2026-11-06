@@ -1,4 +1,4 @@
--- ====================================================================
+﻿-- ====================================================================
 -- DATABASE: PhoneStoreDB (PostgreSQL Dialect)
 -- SCRIPT 02: BUSINESS LOGIC, VIEWS, TRIGGERS & STORED PROCEDURES
 -- ====================================================================
@@ -10,10 +10,14 @@ CREATE OR REPLACE VIEW vw_TonKho AS
 SELECT m.MAHANG, m.TENHANG, m.MANHOM, m.MALOAI, m.DONGIA,
        COALESCE(n.TONGNHAP, 0) AS TONGNHAP,
        COALESCE(b.TONGBAN, 0) AS TONGBAN,
-       COALESCE(n.TONGNHAP, 0) - COALESCE(b.TONGBAN, 0) AS TONKHO
+       CASE 
+         WHEN m.QUANLYIMEI = TRUE THEN COALESCE(im.TONKHO_IMEI, 0)
+         ELSE COALESCE(n.TONGNHAP, 0) - COALESCE(b.TONGBAN, 0)
+       END AS TONKHO
 FROM MatHang m
 LEFT JOIN (SELECT MAHANG, SUM(SLNHAP) AS TONGNHAP FROM ChiTietPhieuNhap GROUP BY MAHANG) n ON n.MAHANG = m.MAHANG
-LEFT JOIN (SELECT MAHANG, SUM(SLBAN) AS TONGBAN FROM ChiTietHoaDon GROUP BY MAHANG) b ON b.MAHANG = m.MAHANG;
+LEFT JOIN (SELECT MAHANG, SUM(SLBAN) AS TONGBAN FROM ChiTietHoaDon GROUP BY MAHANG) b ON b.MAHANG = m.MAHANG
+LEFT JOIN (SELECT MAHANG, COUNT(*) AS TONKHO_IMEI FROM IMEI WHERE TRANGTHAI = 'con_hang' GROUP BY MAHANG) im ON im.MAHANG = m.MAHANG;
 
 -- 1.2 View Danh sách IMEI còn trong kho
 CREATE OR REPLACE VIEW vw_IMEIConHang AS
