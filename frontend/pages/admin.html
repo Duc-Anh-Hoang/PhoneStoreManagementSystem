@@ -122,146 +122,92 @@
   </style>
 </head>
 <body class="h-full font-sans text-slate-900 antialiased flex overflow-hidden bg-[#F8FAFC]">
-  <!-- MÀN HÌNH ĐĂNG NHẬP CHUYÊN BIỆT CHO TRANG QUẢN TRỊ (TONE TRẮNG XANH - SAMA MEMBER) -->
-  <div id="admin-login-screen" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto bg-gradient-to-br from-[#E0F2FE] via-[#F0FDF4] to-[#E0E7FF]">
+    <!-- MÀN HÌNH ĐĂNG NHẬP QUẢN TRỊ (PHƯƠNG ÁN 2: FORM ĐƠN TỐI GIẢN Ở GIỮA MÀN HÌNH) -->
+  <div id="admin-login-screen" class="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto bg-gradient-to-br from-[#E0F2FE] via-[#F0FDF4] to-[#E0E7FF]">
     
-    <!-- Hiệu ứng nền Ambient Background mờ ảo từ ảnh Sama Member -->
-    <div class="fixed inset-0 pointer-events-none opacity-20 bg-center bg-cover blur-3xl scale-110" style="background-image: url('../images/sama-member-banner.jpg');"></div>
-
-    <!-- Khung Card Đăng Nhập Chính (Split 2 Cột Tone Trắng Xanh Chuẩn Brand SamaMobile - Thấy Trọn Vẹn 100% Ảnh Nền) -->
-    <div class="relative w-full max-w-5xl bg-white/95 backdrop-blur-xl rounded-3xl sm:rounded-[32px] shadow-[0_20px_60px_-15px_rgba(0,87,183,0.22)] border border-white/80 overflow-hidden grid grid-cols-1 lg:grid-cols-12 my-auto transition-all animate-in fade-in zoom-in-95 duration-200">
-
-      <!-- CỘT TRÁI: Hiển thị trọn vẹn 100% Poster Sama Member (object-contain, không bị cắt xén bất kỳ góc nào) -->
-      <div class="lg:col-span-6 relative bg-[#E6F4F2] flex items-center justify-center p-3 sm:p-5 overflow-hidden group border-b lg:border-b-0 lg:border-r border-slate-100">
-        <div class="relative w-full h-full min-h-[300px] sm:min-h-[420px] lg:min-h-[540px] flex items-center justify-center">
-          <img src="../images/sama-member-banner.jpg" alt="Nhập hội Sama Member" class="w-full h-full max-h-[560px] object-contain rounded-2xl shadow-xs transition-transform group-hover:scale-[1.02] duration-500">
-        </div>
-
-        <!-- Huy hiệu nổi góc trên -->
-        <div class="absolute top-4 left-4 z-10 inline-flex items-center gap-2 bg-white/90 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/90 text-[11px] font-bold text-[#0057B7] shadow-sm">
-          <span class="w-2 h-2 rounded-full bg-[#0057B7] animate-ping"></span>
-          <span>SamaMobile Member</span>
-        </div>
+    <!-- Khung Card Đăng Nhập Đơn Rộng 420px Đặt Giữa Màn Hình -->
+    <div class="relative w-full max-w-[420px] bg-white/95 backdrop-blur-xl rounded-3xl shadow-[0_20px_50px_-12px_rgba(0,87,183,0.2)] border border-white/80 p-6 sm:p-8 my-auto transition-all animate-in fade-in zoom-in-95 duration-200">
+      
+      <!-- 1. Logo & Badge Nội Bộ -->
+      <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-5">
+        <a href="../index.html" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#0F172A] shadow-sm hover:bg-[#1E293B] transition-colors" title="Xem trang bán hàng">
+          <img src="../images/samamobile-logo.png" alt="SamaMobile" class="h-5 sm:h-6 w-auto object-contain">
+        </a>
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#E0F2FE] text-[#0057B7] border border-[#BAE6FD]">
+          <i class="fa-solid fa-lock text-[10px]"></i> Nội Bộ
+        </span>
       </div>
 
-      <!-- CỘT PHẢI: Form Đăng Nhập Tone Trắng - Xanh (6 cột cân đối) -->
-      <div class="lg:col-span-6 p-6 sm:p-8 lg:p-10 flex flex-col justify-between bg-white">
+      <!-- 2. Tiêu đề -->
+      <div class="space-y-1 mb-5">
+        <h2 class="text-xl sm:text-2xl font-black text-slate-800 tracking-tight flex items-center gap-2">
+          <span>Đăng Nhập Quản Trị</span>
+          <span class="text-[#0057B7] text-lg"><i class="fa-solid fa-circle-check"></i></span>
+        </h2>
+        <p class="text-xs text-slate-500 font-medium">Nhập thông tin nhân viên để tiếp tục</p>
+      </div>
+
+      <!-- Thông báo lỗi (nếu có) -->
+      <div id="admin-login-screen-error" class="hidden p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold mb-4 animate-shake"></div>
+
+      <!-- Form Đăng Nhập -->
+      <form id="form-admin-login-screen" onsubmit="window.handleAdminLoginScreenSubmit(event)" class="space-y-4">
+        
+        <!-- 3. Ô Username -->
         <div>
-          <!-- Header Logo & Tiêu đề -->
-          <div class="flex items-center justify-between pb-5 border-b border-slate-100 mb-5">
-            <a href="../index.html" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#0F172A] shadow-sm hover:bg-[#1E293B] transition-colors" title="Xem trang bán hàng">
-              <img src="../images/samamobile-logo.png" alt="SamaMobile" class="h-6 w-auto object-contain">
-            </a>
-            <div class="text-right">
-              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-[#E0F2FE] text-[#0057B7] border border-[#BAE6FD]">
-                <i class="fa-solid fa-lock text-[10px]"></i> Nội Bộ
-              </span>
-            </div>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">
+            Tài khoản nhân viên
+          </label>
+          <div class="relative flex items-center">
+            <span class="absolute left-3.5 text-slate-400 pointer-events-none text-xs flex items-center justify-center w-5 h-5">
+              <i class="fa-solid fa-user"></i>
+            </span>
+            <input type="text" id="admin-login-screen-username" required placeholder="Nhập username" style="padding-left: 2.75rem !important; padding-right: 1rem !important;" class="w-full py-2.5 sm:py-3 rounded-2xl border border-slate-200 text-sm font-semibold text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-[#0057B7] focus:ring-4 focus:ring-[#0057B7]/10 transition-all bg-slate-50/50 hover:bg-white focus:bg-white">
           </div>
+        </div>
 
-          <!-- Lời chào -->
-          <div class="space-y-1 mb-5">
-            <h2 class="text-xl sm:text-2xl font-black text-slate-800 tracking-tight flex items-center gap-2">
-              <span>Đăng Nhập Quản Trị</span>
-              <span class="text-[#0057B7] text-lg"><i class="fa-solid fa-circle-check"></i></span>
-            </h2>
-            <p class="text-xs text-slate-500 font-medium">Nhập thông tin nhân viên hoặc chọn nhanh tài khoản mẫu bên dưới</p>
-          </div>
-
-          <!-- Thông báo lỗi (nếu có) -->
-          <div id="admin-login-screen-error" class="hidden p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold mb-4 animate-shake"></div>
-
-          <!-- Form Đăng Nhập -->
-          <form id="form-admin-login-screen" onsubmit="window.handleAdminLoginScreenSubmit(event)" class="space-y-4">
-            <!-- Tên đăng nhập -->
-            <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1.5 flex items-center justify-between">
-                <span>Tài khoản nhân viên</span>
-                <span class="text-[10px] text-slate-400 font-normal">Mã nhân sự / Username</span>
-              </label>
-              <div class="relative flex items-center">
-                <span class="absolute left-3.5 text-slate-400 pointer-events-none text-xs flex items-center justify-center w-5 h-5">
-                  <i class="fa-solid fa-user"></i>
-                </span>
-                <input type="text" id="admin-login-screen-username" required placeholder="Nhập username (vd: admin, quanly...)" style="padding-left: 2.75rem !important; padding-right: 1rem !important;" class="w-full py-2.5 sm:py-3 rounded-2xl border border-slate-200 text-sm font-semibold text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-[#0057B7] focus:ring-4 focus:ring-[#0057B7]/10 transition-all bg-slate-50/50 hover:bg-white focus:bg-white">
-              </div>
-            </div>
-
-            <!-- Mật khẩu -->
-            <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1.5 flex items-center justify-between">
-                <span>Mật khẩu</span>
-                <span class="text-[10px] text-slate-400 font-normal">Mặc định: admin123</span>
-              </label>
-              <div class="relative flex items-center">
-                <span class="absolute left-3.5 text-slate-400 pointer-events-none text-xs flex items-center justify-center w-5 h-5">
-                  <i class="fa-solid fa-lock"></i>
-                </span>
-                <input type="password" id="admin-login-screen-password" required placeholder="Nhập mật khẩu..." style="padding-left: 2.75rem !important; padding-right: 2.75rem !important;" class="w-full py-2.5 sm:py-3 rounded-2xl border border-slate-200 text-sm font-semibold text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-[#0057B7] focus:ring-4 focus:ring-[#0057B7]/10 transition-all bg-slate-50/50 hover:bg-white focus:bg-white">
-                <button type="button" onclick="window.toggleAdminPasswordVisibility()" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 cursor-pointer transition-colors" title="Hiện/Ẩn mật khẩu">
-                  <i id="icon-toggle-admin-password" class="fa-regular fa-eye text-xs"></i>
-                </button>
-              </div>
-            </div>
-
-            <!-- Nút Submit Đăng Nhập -->
-            <button type="submit" id="btn-submit-admin-login" class="w-full py-3 sm:py-3.5 rounded-2xl bg-gradient-to-r from-[#0057B7] via-[#0284C7] to-[#008B8B] hover:opacity-95 active:scale-[0.99] text-white font-extrabold text-xs sm:text-sm shadow-lg shadow-[#0057B7]/25 transition-all flex items-center justify-center gap-2 cursor-pointer mt-2">
-              <i class="fa-solid fa-right-to-bracket text-cyan-200"></i>
-              <span>Vào Bảng Điều Khiển Quản Trị</span>
+        <!-- 4. Ô Mật khẩu -->
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">
+            Mật khẩu
+          </label>
+          <div class="relative flex items-center">
+            <span class="absolute left-3.5 text-slate-400 pointer-events-none text-xs flex items-center justify-center w-5 h-5">
+              <i class="fa-solid fa-lock"></i>
+            </span>
+            <input type="password" id="admin-login-screen-password" required placeholder="Nhập password" style="padding-left: 2.75rem !important; padding-right: 2.75rem !important;" class="w-full py-2.5 sm:py-3 rounded-2xl border border-slate-200 text-sm font-semibold text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-[#0057B7] focus:ring-4 focus:ring-[#0057B7]/10 transition-all bg-slate-50/50 hover:bg-white focus:bg-white">
+            <button type="button" onclick="window.toggleAdminPasswordVisibility()" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 cursor-pointer transition-colors" title="Hiện/Ẩn mật khẩu">
+              <i id="icon-toggle-admin-password" class="fa-regular fa-eye text-xs"></i>
             </button>
-          </form>
-
-          <!-- Chọn nhanh tài khoản mẫu -->
-          <div class="mt-5 pt-4 border-t border-slate-100">
-            <div class="flex items-center justify-between mb-2">
-              <span class="font-extrabold text-xs text-slate-700 flex items-center gap-1.5">
-                <i class="fa-solid fa-bolt text-amber-500 text-xs"></i> Chọn nhanh vai trò để test:
-              </span>
-              <span class="text-[11px] font-mono text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 font-bold">Pass: admin123</span>
-            </div>
-
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-1.5 sm:gap-2">
-              <button type="button" onclick="window.fillAdminCredentials('admin', 'admin123')" class="p-2 rounded-xl bg-slate-50 hover:bg-[#E0F2FE] hover:border-[#BAE6FD] border border-slate-200 text-left transition-all cursor-pointer group">
-                <div class="text-xs font-black text-slate-800 group-hover:text-[#0057B7]">admin</div>
-                <div class="text-[10px] text-slate-500 truncate">Toàn quyền Admin</div>
-              </button>
-
-              <button type="button" onclick="window.fillAdminCredentials('quanly', 'admin123')" class="p-2 rounded-xl bg-slate-50 hover:bg-[#E0F2FE] hover:border-[#BAE6FD] border border-slate-200 text-left transition-all cursor-pointer group">
-                <div class="text-xs font-black text-slate-800 group-hover:text-[#0057B7]">quanly</div>
-                <div class="text-[10px] text-slate-500 truncate">Cửa hàng trưởng</div>
-              </button>
-
-              <button type="button" onclick="window.fillAdminCredentials('banhang', 'admin123')" class="p-2 rounded-xl bg-slate-50 hover:bg-[#E0F2FE] hover:border-[#BAE6FD] border border-slate-200 text-left transition-all cursor-pointer group">
-                <div class="text-xs font-black text-slate-800 group-hover:text-[#0057B7]">banhang</div>
-                <div class="text-[10px] text-slate-500 truncate">Nhân viên POS</div>
-              </button>
-
-              <button type="button" onclick="window.fillAdminCredentials('thungan', 'admin123')" class="p-2 rounded-xl bg-slate-50 hover:bg-[#E0F2FE] hover:border-[#BAE6FD] border border-slate-200 text-left transition-all cursor-pointer group">
-                <div class="text-xs font-black text-slate-800 group-hover:text-[#0057B7]">thungan</div>
-                <div class="text-[10px] text-slate-500 truncate">Thu ngân & HĐ</div>
-              </button>
-
-              <button type="button" onclick="window.fillAdminCredentials('kho', 'admin123')" class="p-2 rounded-xl bg-slate-50 hover:bg-[#E0F2FE] hover:border-[#BAE6FD] border border-slate-200 text-left transition-all cursor-pointer group">
-                <div class="text-xs font-black text-slate-800 group-hover:text-[#0057B7]">kho</div>
-                <div class="text-[10px] text-slate-500 truncate">Thủ kho & IMEI</div>
-              </button>
-
-              <button type="button" onclick="window.fillAdminCredentials('kythuat', 'admin123')" class="p-2 rounded-xl bg-slate-50 hover:bg-[#E0F2FE] hover:border-[#BAE6FD] border border-slate-200 text-left transition-all cursor-pointer group">
-                <div class="text-xs font-black text-slate-800 group-hover:text-[#0057B7]">kythuat</div>
-                <div class="text-[10px] text-slate-500 truncate">Bảo hành máy</div>
-              </button>
-            </div>
           </div>
         </div>
 
-        <!-- Chân trang Form: Nút quay lại trang chủ -->
-        <div class="mt-5 pt-3.5 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-          <a href="../index.html" class="inline-flex items-center gap-1.5 font-bold text-[#0057B7] hover:text-[#003875] transition-colors">
-            <i class="fa-solid fa-arrow-left text-[11px]"></i> Quay lại trang chủ SamaMobile
-          </a>
-          <span class="text-[11px] text-slate-400 font-mono">Hotline: 1900.2091</span>
+        <!-- 5. Hàng Ghi nhớ / Quên mật khẩu -->
+        <div class="flex items-center justify-between text-xs pt-0.5">
+          <label class="inline-flex items-center gap-2 text-slate-600 font-medium cursor-pointer select-none">
+            <input type="checkbox" id="admin-remember-me" checked class="w-4 h-4 rounded text-[#0057B7] border-slate-300 focus:ring-[#0057B7] focus:ring-offset-0 cursor-pointer">
+            <span>Ghi nhớ đăng nhập</span>
+          </label>
+          <button type="button" onclick="alert('Vui lòng liên hệ quản trị viên hệ thống hoặc bộ phận IT để được hỗ trợ cấp lại mật khẩu.')" class="font-bold text-[#0057B7] hover:underline cursor-pointer">
+            Quên mật khẩu?
+          </button>
         </div>
+
+        <!-- 6. Nút Đăng Nhập -->
+        <button type="submit" id="btn-submit-admin-login" class="w-full py-3 sm:py-3.5 rounded-2xl bg-gradient-to-r from-[#0057B7] via-[#0284C7] to-[#008B8B] hover:opacity-95 active:scale-[0.99] text-white font-extrabold text-xs sm:text-sm shadow-lg shadow-[#0057B7]/25 transition-all flex items-center justify-center gap-2 cursor-pointer mt-2">
+          <i class="fa-solid fa-right-to-bracket text-cyan-200"></i>
+          <span>Vào Bảng Điều Khiển Quản Trị</span>
+        </button>
+      </form>
+
+      <!-- 7. Footer nhỏ (hotline, quay lại trang chủ) -->
+      <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+        <a href="../index.html" class="inline-flex items-center gap-1.5 font-bold text-[#0057B7] hover:text-[#003875] transition-colors">
+          <i class="fa-solid fa-arrow-left text-[11px]"></i> Quay lại trang chủ
+        </a>
+        <span class="text-[11px] text-slate-400 font-mono">Hotline: 1900.2091</span>
       </div>
+
     </div>
   </div>
 
