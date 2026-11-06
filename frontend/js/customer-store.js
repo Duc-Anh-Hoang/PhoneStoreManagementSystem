@@ -626,93 +626,216 @@
   }
 
   /**
-   * Tạo HTML thẻ sản phẩm chuẩn CellphoneS
+   * Trích xuất thông số nổi bật dạng Spec Badges (Chip, Màn hình, Dung lượng...)
+   */
+  function extractProductSpecBadges(p) {
+    if (Array.isArray(p.image_badges) && p.image_badges.length > 0) {
+      return p.image_badges.slice(0, 3).map(b => {
+        if (typeof b === 'object' && b.text) return b;
+        return { icon: 'fa-microchip', text: String(b) };
+      });
+    }
+
+    const badges = [];
+    const name = (p.tenHang || '').toLowerCase();
+    const specs = p.thongSo || {};
+
+    if (specs['Màn hình']) badges.push({ icon: 'fa-mobile-screen', text: specs['Màn hình'] });
+    if (specs['Vi xử lý'] || specs['Chip']) badges.push({ icon: 'fa-microchip', text: specs['Vi xử lý'] || specs['Chip'] });
+    if (specs['Bộ nhớ trong'] || specs['ROM']) badges.push({ icon: 'fa-hard-drive', text: specs['Bộ nhớ trong'] || specs['ROM'] });
+    if (specs['RAM']) badges.push({ icon: 'fa-memory', text: specs['RAM'] });
+
+    if (badges.length === 0) {
+      if (name.includes('iphone 18') || name.includes('iphone 17')) {
+        badges.push({ icon: 'fa-mobile-screen', text: '6.9" Super Retina' });
+        badges.push({ icon: 'fa-microchip', text: 'A19 Pro' });
+        badges.push({ icon: 'fa-hard-drive', text: '256GB' });
+      } else if (name.includes('iphone 16') || name.includes('iphone 15') || name.includes('iphone 14')) {
+        badges.push({ icon: 'fa-mobile-screen', text: '6.7" Super Retina' });
+        badges.push({ icon: 'fa-microchip', text: 'A18 Bionic' });
+        badges.push({ icon: 'fa-hard-drive', text: '128GB' });
+      } else if (name.includes('ipad') || name.includes('tab') || name.includes('lenovo')) {
+        badges.push({ icon: 'fa-tablet-screen-button', text: '10.9 inch Retina' });
+        badges.push({ icon: 'fa-microchip', text: 'A14 Bionic' });
+        badges.push({ icon: 'fa-hard-drive', text: '64GB' });
+      } else if (name.includes('s25') || name.includes('s24') || name.includes('galaxy')) {
+        badges.push({ icon: 'fa-mobile-screen', text: '6.8" Dynamic AMOLED' });
+        badges.push({ icon: 'fa-microchip', text: 'Snapdragon 8 Elite' });
+        badges.push({ icon: 'fa-hard-drive', text: '256GB' });
+      } else if (name.includes('laptop') || name.includes('macbook')) {
+        badges.push({ icon: 'fa-laptop', text: '14 inch Retina' });
+        badges.push({ icon: 'fa-microchip', text: 'Apple M3 / Core i5' });
+        badges.push({ icon: 'fa-hard-drive', text: '512GB SSD' });
+      }
+    }
+
+    return badges.slice(0, 3);
+  }
+
+  function formatCardMoney(amount) {
+    if (amount === undefined || amount === null || isNaN(amount)) return '0₫';
+    return Number(amount).toLocaleString('vi-VN') + '₫';
+  }
+
+  /**
+   * Tạo HTML thẻ sản phẩm chuẩn CellphoneS / Hoàng Hà Mobile mới
    */
   function createProductCardHtml(p, options = {}) {
     const isFlashSale = options.isFlashSale || p.isFlashSale;
-    const discountPercent = p.giaGoc > p.donGia 
-      ? Math.round((1 - p.donGia / p.giaGoc) * 100) 
+    const donGia = Number(p.donGia) || 0;
+    const giaGoc = Number(p.giaGoc) || (donGia > 0 ? Math.round(donGia * 1.15) : 0);
+    const discountPercent = giaGoc > donGia 
+      ? Math.round((1 - donGia / giaGoc) * 100) 
       : 0;
 
-    const tonKho = p.tonKho !== undefined ? Number(p.tonKho) : 0;
-    const stockHtml = tonKho > 0
-      ? `<span class="text-emerald-600 font-semibold"><i class="fa-solid fa-circle-check text-[10px] mr-1"></i>Còn ${tonKho} máy</span>`
-      : `<span class="text-rose-500 font-semibold"><i class="fa-solid fa-circle-xmark text-[10px] mr-1"></i>Tạm hết hàng</span>`;
-
-    const bhHtml = (p.thoiHanBaoHanh && p.thoiHanBaoHanh > 0)
-      ? `<span class="text-slate-500 text-[11px]"><i class="fa-solid fa-shield text-[10px] mr-0.5 text-blue-600"></i>Bảo hành ${p.thoiHanBaoHanh} tháng</span>`
-      : '';
+    const tonKho = p.tonKho !== undefined ? Number(p.tonKho) : 15;
+    const installmentAmount = donGia > 0 ? Math.round(donGia / 6) : 0;
+    const specBadges = extractProductSpecBadges(p);
+    const promoDesc = p.moTaKhuyenMai || 'Home Credit - Trả góp 0%, duyệt hồ sơ nhanh chỉ 3 phút';
 
     return `
-      <div class="product-card group relative flex flex-col justify-between bg-white rounded-[16px] border border-slate-200/90 p-4 sm:p-5 hover:border-blue-300 hover:shadow-[0_12px_28px_rgba(0,0,0,0.12)] hover:-translate-y-1 transition-all duration-250">
-        <!-- Badges góc trên -->
-        <div class="flex items-center justify-between gap-1 mb-2 z-10">
-          <div class="flex flex-wrap gap-1">
-            ${p.tenLoai ? `<span class="px-2 py-0.5 rounded-[6px] bg-slate-100 text-slate-700 text-[10px] font-bold uppercase">${p.tenLoai}</span>` : ''}
+      <div class="product-card group relative flex flex-col justify-between bg-white rounded-2xl border border-slate-200/90 p-3.5 sm:p-4 hover:border-blue-400 hover:shadow-xl hover:-translate-y-1 transition-all duration-200 cursor-pointer" onclick="window.location.href = 'pages/product-detail.html?id=' + encodeURIComponent('${p.maHang}')">
+        
+        <div>
+          <!-- Icon ngôi sao / sparkle góc trên bên trái -->
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-blue-500 font-black text-sm">✦</span>
           </div>
-          ${discountPercent > 0 ? `
-            <span class="px-2 py-0.5 rounded-[6px] bg-[#FF7A00] text-white text-[10px] font-extrabold uppercase tracking-tight shadow-sm">
-              Giảm ${discountPercent}%
-            </span>` : ''}
-        </div>
 
-        <!-- Ảnh sản phẩm -->
-        <div class="relative w-full h-40 sm:h-48 my-2 flex items-center justify-center p-2 cursor-pointer overflow-hidden" onclick="window.location.href = 'pages/product-detail.html?id=' + encodeURIComponent('${p.maHang}')">
-          ${p.anhChinh ? `
-            <img src="${p.anhChinh}" alt="${p.tenHang}" class="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-300">
-          ` : `
-            <div class="w-full h-full flex flex-col items-center justify-center text-slate-300 group-hover:text-[#2563EB] transition-colors bg-slate-50/70 rounded-xl border border-dashed border-slate-200">
-              <i class="fa-solid fa-mobile-screen-button text-3xl mb-1 text-slate-300 group-hover:text-[#2563EB]"></i>
-              <span class="text-[10px] text-slate-400 font-medium">Chờ cập nhật ảnh</span>
-            </div>
-          `}
-        </div>
+          <!-- Ảnh sản phẩm kèm Spec Badges nổi (Chip, Màn hình, Dung lượng...) -->
+          <div class="relative w-full h-44 sm:h-48 my-1 flex items-center justify-center p-2 overflow-hidden">
+            ${p.anhChinh ? `
+              <img src="${p.anhChinh}" alt="${p.tenHang}" class="max-w-[160px] max-h-[160px] object-contain group-hover:scale-105 transition-transform duration-300" loading="lazy" onerror="this.onerror=null; this.src='images/banner/iphone-18-cat-082925094.png';">
+            ` : `
+              <div class="w-full h-full flex flex-col items-center justify-center text-slate-300 group-hover:text-blue-600 transition-colors bg-slate-50/70 rounded-xl border border-dashed border-slate-200">
+                <i class="fa-solid fa-mobile-screen-button text-3xl mb-1 text-slate-300"></i>
+                <span class="text-[10px] text-slate-400 font-medium">Chờ cập nhật ảnh</span>
+              </div>
+            `}
 
-        <!-- Tên sản phẩm -->
-        <div class="mt-2 flex-1">
-          <h3 class="text-xs sm:text-sm font-bold text-[#111827] hover:text-[#1E3A8A] line-clamp-2 cursor-pointer transition-colors" onclick="window.location.href = 'pages/product-detail.html?id=' + encodeURIComponent('${p.maHang}')" title="${p.tenHang}">
+            <!-- Spec Badges nổi góc phải ảnh -->
+            ${specBadges.length > 0 ? `
+              <div class="absolute top-1 right-1 flex flex-col gap-1 items-end pointer-events-none z-10">
+                ${specBadges.map(b => `
+                  <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-lg bg-white/95 backdrop-blur-xs border border-slate-200 shadow-2xs text-[10px] font-bold text-slate-700">
+                    <i class="fa-solid ${b.icon} text-blue-500 text-[9px]"></i>
+                    <span>${b.text}</span>
+                  </span>
+                `).join('')}
+              </div>
+            ` : ''}
+          </div>
+
+          <!-- Tên sản phẩm 2 dòng -->
+          <h3 class="text-xs sm:text-[13.5px] font-bold text-slate-900 group-hover:text-blue-600 line-clamp-2 leading-snug min-h-[38px] transition-colors mt-2" title="${p.tenHang}">
             ${p.tenHang}
           </h3>
 
-          <!-- Giá bán -->
-          <div class="flex flex-wrap items-baseline gap-2 mt-2">
-            <span class="text-sm sm:text-base font-black text-[#FF7A00] font-mono">${(window.CellphoneSCart || window.Cart) ? (window.CellphoneSCart || window.Cart).formatMoney(p.donGia) : p.donGia}</span>
-            ${p.giaGoc > p.donGia ? `<span class="text-[11px] text-slate-400 line-through">${(window.CellphoneSCart || window.Cart).formatMoney(p.giaGoc)}</span>` : ''}
+          <!-- Khối giá: Giá bán đỏ to, Badge giảm giá, Giá gốc gạch ngang, Trả góp 6T -->
+          <div class="mt-2.5">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-base sm:text-lg font-black text-[#E0052B] font-mono leading-none">
+                ${formatCardMoney(donGia)}
+              </span>
+              ${discountPercent > 0 ? `
+                <span class="px-1.5 py-0.5 rounded-md bg-red-50 text-[#E0052B] border border-red-200/80 text-[10.5px] font-bold leading-none">
+                  -${discountPercent}%
+                </span>
+              ` : ''}
+            </div>
+
+            ${giaGoc > donGia ? `
+              <div class="text-xs text-slate-400 line-through mt-1">
+                ${formatCardMoney(giaGoc)}
+              </div>
+            ` : ''}
+
+            <div class="text-xs font-semibold text-blue-600 mt-1">
+              Hoặc ${formatCardMoney(installmentAmount)} x 6T
+            </div>
           </div>
 
-          <!-- Tình trạng tồn kho & bảo hành -->
-          <div class="mt-2 text-[11px] flex items-center justify-between gap-1">
-            ${stockHtml}
-            ${bhHtml}
+          <!-- Lưới 4 đối tác ngân hàng / trả góp (2x2) -->
+          <div class="grid grid-cols-2 gap-1.5 mt-2.5">
+            <div class="h-6.5 px-2 rounded-lg border border-slate-200 bg-white flex items-center justify-center gap-1 text-[10.5px] font-bold text-slate-700 shadow-2xs hover:border-slate-300 transition-colors">
+              <span class="text-[#EA5A00] text-[9px] font-black">▼</span>
+              <span class="text-[#742E86] font-extrabold text-[10px]">TP</span><span class="text-[#EA5A00] font-extrabold text-[10px]">Bank</span>
+            </div>
+            <div class="h-6.5 px-2 rounded-lg border border-slate-200 bg-white flex items-center justify-center gap-1 text-[10.5px] font-bold text-slate-700 shadow-2xs hover:border-slate-300 transition-colors">
+              <span class="w-2 h-2 rounded-full bg-[#009A44] inline-block"></span>
+              <span class="text-[#009A44] font-bold text-[10px]">VP</span><span class="text-[#E0052B] font-bold text-[10px]">Bank</span>
+            </div>
+            <div class="h-6.5 px-2 rounded-lg border border-slate-200 bg-white flex items-center justify-center gap-1 text-[10.5px] font-bold text-slate-700 shadow-2xs hover:border-slate-300 transition-colors">
+              <span class="text-[#0057B7] font-black text-[10px]">VIB</span>
+              <span class="text-amber-400 text-[10px] font-bold">✦</span>
+            </div>
+            <div class="h-6.5 px-2 rounded-lg border border-slate-200 bg-white flex items-center justify-center gap-1 text-[10.5px] font-bold text-[#00A859] shadow-2xs hover:border-slate-300 transition-colors">
+              <span class="italic font-black text-[10.5px]">muadee</span>
+              <span class="text-[9.5px] font-bold ml-0.5">0%</span>
+            </div>
+          </div>
+
+          <!-- Khung ưu đãi dịch vụ / tài chính -->
+          <div class="mt-2 p-2 rounded-xl bg-slate-50 border border-slate-200/80 text-[11px] text-slate-600 leading-snug line-clamp-2">
+            ${promoDesc}
           </div>
         </div>
 
-        <!-- Nút hành động chuẩn: "Xem cấu hình" và "Mua ngay" -->
-        <div class="mt-3.5 pt-3 border-t border-slate-100 flex items-center gap-2">
-          <button type="button" onclick="window.location.href = 'pages/product-detail.html?id=' + encodeURIComponent('${p.maHang}')" class="flex-1 h-[40px] px-2 rounded-[12px] border border-[#2563EB] text-[#2563EB] hover:bg-blue-50 font-bold text-xs transition-colors flex items-center justify-center cursor-pointer">
-            Xem cấu hình
-          </button>
-          <button type="button" ${tonKho <= 0 ? 'disabled' : ''} onclick="window.quickBuy('${p.maHang}')" class="flex-1 h-[40px] px-2 rounded-[12px] ${tonKho > 0 ? 'bg-[#FF7A00] hover:bg-[#E06800] text-white cursor-pointer shadow-md shadow-orange-500/20' : 'bg-slate-200 text-slate-400 cursor-not-allowed'} font-extrabold text-xs transition-all flex items-center justify-center">
-            ${tonKho > 0 ? 'Mua ngay' : 'Hết hàng'}
+        <!-- Hàng chân card: Trạng thái Sẵn hàng & Nút icon giỏ hàng mua nhanh -->
+        <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between">
+          <div class="flex items-center gap-1.5 text-xs font-bold text-emerald-600">
+            <i class="fa-regular fa-circle-check text-emerald-500 text-sm"></i>
+            <span>${tonKho > 0 ? 'Sẵn hàng' : 'Liên hệ'}</span>
+          </div>
+          <button type="button" onclick="window.quickAddToCart('${p.maHang}', event)" class="w-8 h-8 rounded-xl bg-blue-50 hover:bg-[#0057B7] text-[#0057B7] hover:text-white border border-blue-200 flex items-center justify-center transition-all cursor-pointer shadow-xs active:scale-95" title="Thêm vào giỏ hàng">
+            <i class="fa-solid fa-cart-shopping text-xs"></i>
           </button>
         </div>
+
       </div>
     `;
   }
 
-  window.quickBuy = function (maHang) {
-    if (!(window.CellphoneSData || window.StoreData)) return;
-    const p = (window.CellphoneSData || window.StoreData).getProductById(maHang);
-    if (!p) return;
-    if (p.tonKho <= 0) {
+  window.quickAddToCart = function (maHang, event) {
+    if (event && event.stopPropagation) event.stopPropagation();
+    let prod = null;
+    if (window.CellphoneSData || window.StoreData) {
+      prod = (window.CellphoneSData || window.StoreData).getProductById(maHang);
+    }
+    if (!prod && window.allProducts) {
+      prod = window.allProducts.find(p => (p.maHang === maHang || p.id === maHang));
+    }
+    if (!prod) return;
+
+    if (prod.tonKho !== undefined && Number(prod.tonKho) <= 0) {
       if (window.CellphoneSCart || window.Cart) {
         (window.CellphoneSCart || window.Cart).showToast('Sản phẩm hiện đang tạm hết hàng!', 'warning');
+      } else {
+        alert('Sản phẩm hiện đang tạm hết hàng!');
       }
       return;
     }
+
+    const item = {
+      maHang: prod.maHang || prod.id,
+      tenHang: prod.tenHang,
+      donGia: Number(prod.donGia) || 0,
+      giaGoc: Number(prod.giaGoc) || (Number(prod.donGia) * 1.15),
+      hinhAnh: prod.anhChinh || prod.image || 'images/banner/iphone-18-cat-082925094.png',
+      soLuong: 1,
+      mauSac: 'Mặc định',
+      phienBan: 'Tiêu chuẩn'
+    };
+
     if (window.CellphoneSCart || window.Cart) {
-      (window.CellphoneSCart || window.Cart).addItem(p, null, null, 1);
+      (window.CellphoneSCart || window.Cart).addItem(item);
+    } else {
+      alert(`Đã thêm "${prod.tenHang}" vào giỏ hàng!`);
     }
+  };
+
+  window.quickBuy = function (maHang) {
+    window.quickAddToCart(maHang);
     if (window.CellphoneSCheckout || window.Checkout) {
       (window.CellphoneSCheckout || window.Checkout).openCheckout();
     }
