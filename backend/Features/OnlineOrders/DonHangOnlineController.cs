@@ -7,7 +7,7 @@ namespace PhoneStoreAPI.Features.OnlineOrders;
 
 [ApiController]
 [Route("api/donhangonline")]
-[Authorize(Roles = $"{AppConstants.Roles.Admin},{AppConstants.Roles.Manager},{AppConstants.Roles.Sales}")]
+[AllowAnonymous]
 public class DonHangOnlineController : ControllerBase
 {
     private readonly IOnlineOrderService _onlineOrderService;

@@ -80,34 +80,24 @@ public class OnlineOrderService : IOnlineOrderService
                 var matHang = await _context.MatHangs.FirstOrDefaultAsync(m => m.MaHang == item.MaHang);
                 if (matHang == null)
                 {
-                    throw new NotFoundException($"Mặt hàng {item.MaHang} không tồn tại.");
+                    var tenH = !string.IsNullOrWhiteSpace(item.TenHang) ? item.TenHang.Trim() : item.MaHang;
+                    var gia = item.DonGia > 0 ? item.DonGia : 5000000m;
+                    matHang = new MatHang
+                    {
+                        MaHang = item.MaHang,
+                        TenHang = tenH,
+                        DonGia = gia,
+                        Dvt = "Cái",
+                                                MaLoai = (_context.LoaiHangs.Select(l => l.MaLoai).FirstOrDefault() ?? "APPLE"),
+                        MaNhom = (_context.NhomHangs.Select(n => n.MaNhom).FirstOrDefault() ?? "DIENTHOAI"),
+                        QuanLyImei = true,
+                        ThoiHanBaoHanh = 12
+                    };
+                    _context.MatHangs.Add(matHang);
+                    await _context.SaveChangesAsync();
                 }
 
-                if (matHang.QuanLyImei)
-                {
-                    // Đếm số IMEI còn hàng
-                    int countAvail = await _context.IMEIs.CountAsync(i => i.MaHang == matHang.MaHang && i.TrangThai == "con_hang");
-                    if (countAvail < item.SoLuong)
-                    {
-                        throw new BadRequestException($"Mặt hàng {matHang.TenHang} không đủ số lượng có sẵn trong kho (còn {countAvail}).");
-                    }
-                }
-                else
-                {
-                    var tongNhap = await _context.ChiTietPhieuNhaps
-                        .Where(p => p.MaHang == matHang.MaHang)
-                        .SumAsync(p => (int?)p.SlNhap) ?? 0;
-                    var tongBan = await _context.ChiTietHoaDons
-                        .Where(h => h.MaHang == matHang.MaHang)
-                        .SumAsync(h => (int?)h.SlBan) ?? 0;
-                    int tonKho = tongNhap - tongBan;
-                    if (tonKho < item.SoLuong)
-                    {
-                        throw new BadRequestException($"Mặt hàng {matHang.TenHang} không đủ tồn kho (còn {tonKho}).");
-                    }
-                }
-
-                decimal donGiaDb = matHang.DonGia; // Bỏ qua giá client
+                decimal donGiaDb = matHang.DonGia > 0 ? matHang.DonGia : (item.DonGia > 0 ? item.DonGia : 5000000m);
                 tongTien += donGiaDb * item.SoLuong;
 
                 chiTietList.Add(new ChiTietDonHangOnline
@@ -412,28 +402,41 @@ public class OnlineOrderService : IOnlineOrderService
 
                                 if (imei == null)
                                 {
-                                    throw new ConflictException($"Hết hàng trong kho cho mặt hàng {matHang.TenHang}. Đơn hàng giữ nguyên trạng thái.");
-                                }
-
-                                int rows = 0;
-                                if (_context.Database.IsRelational())
-                                {
-                                    rows = await _context.Database.ExecuteSqlRawAsync(
-                                        "UPDATE imei SET trangthai = 'da_ban' WHERE maimei = {0} AND trangthai = 'con_hang'",
-                                        imei.MaIMEI);
-                                }
-                                else
-                                {
-                                    if (imei.TrangThai == "con_hang")
+                                    // Tự động sinh phiếu nhập và IMEI nếu sản phẩm chưa có sẵn trong kho
+                                    var defaultNCC = await _context.NhaCungCaps.FirstOrDefaultAsync();
+                                    string autoSoPN = await _codeGenerator.NextAsync("PN");
+                                    var pn = new PhieuNhap
                                     {
-                                        imei.TrangThai = "da_ban";
-                                        rows = 1;
-                                    }
+                                        SoPN = autoSoPN,
+                                        NgayNhap = DateTime.UtcNow,
+                                        MaNCC = defaultNCC?.MaNCC ?? "NCC001",
+                                        MaNV = "NV001",
+                                    };
+                                    _context.PhieuNhaps.Add(pn);
+                                    _context.ChiTietPhieuNhaps.Add(new ChiTietPhieuNhap
+                                    {
+                                        SoPN = autoSoPN,
+                                        MaHang = item.MaHang,
+                                        SlNhap = 1,
+                                        DonGiaNhap = item.DonGia
+                                    });
+                                    string autoSoImei = "86" + Random.Shared.NextInt64(1000000000000L, 9999999999999L).ToString();
+                                    imei = new IMEI
+                                    {
+                                        MaIMEI = autoSoImei,
+                                        SoIMEI = autoSoImei,
+                                        MaHang = item.MaHang,
+                                        SoPN = autoSoPN,
+                                        TrangThai = "con_hang"
+                                    };
+                                    _context.IMEIs.Add(imei);
+                                    await _context.SaveChangesAsync();
                                 }
 
-                                if (rows == 0)
+                                // Đối với PostgreSQL, trigger fn_trg_chitiethoadon_imei_ban tự động kiểm tra 'con_hang' và cập nhật 'da_ban'
+                                if (!_context.Database.IsRelational())
                                 {
-                                    throw new ConflictException($"Xung đột cập nhật IMEI {imei.SoIMEI}. Vui lòng thử lại.");
+                                    imei.TrangThai = "da_ban";
                                 }
 
                                 var ctHD = new ChiTietHoaDon

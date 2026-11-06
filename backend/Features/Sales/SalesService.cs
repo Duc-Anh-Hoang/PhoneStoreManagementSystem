@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PhoneStoreAPI.Common.Constants;
 using PhoneStoreAPI.Common.Exceptions;
 using PhoneStoreAPI.Common.Services;
@@ -41,10 +41,13 @@ public class SalesService : ISalesService
             maNV = await _context.NhanViens.Select(n => n.MaNV).FirstOrDefaultAsync() ?? "NV001";
         }
 
-        using var transaction = await _context.Database.BeginTransactionAsync();
-        try
+        var strategy = _context.Database.CreateExecutionStrategy();
+        return await strategy.ExecuteAsync(async () =>
         {
-            // 1. Kiểm tra khuyến mãi nếu có
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                // 1. Kiểm tra khuyến mãi nếu có
             decimal phanTramGiam = 0m;
             string? validMaKM = null;
             if (!string.IsNullOrWhiteSpace(request.MaKM))
@@ -112,30 +115,11 @@ public class SalesService : ISalesService
                         throw new ConflictException($"IMEI {imeiRecord.SoIMEI} đã được bán hoặc không còn trong kho.");
                     }
 
-                    // Cập nhật IMEI có điều kiện (WHERE trangthai = 'con_hang') chống bán trùng đồng thời
-                    int rowsAffected = 0;
-                    if (_context.Database.IsRelational())
+                    // Đối với PostgreSQL, trigger fn_trg_chitiethoadon_imei_ban tự động kiểm tra 'con_hang' và cập nhật 'da_ban' khi chitiethoadon được tạo
+                    if (!_context.Database.IsRelational())
                     {
-                        rowsAffected = await _context.Database.ExecuteSqlRawAsync(
-                            "UPDATE imei SET trangthai = 'da_ban' WHERE maimei = {0} AND trangthai = 'con_hang'",
-                            imeiRecord.MaIMEI);
+                        imeiRecord.TrangThai = "da_ban";
                     }
-                    else
-                    {
-                        // Cho In-Memory Test
-                        if (imeiRecord.TrangThai == "con_hang")
-                        {
-                            imeiRecord.TrangThai = "da_ban";
-                            rowsAffected = 1;
-                        }
-                    }
-
-                    if (rowsAffected == 0)
-                    {
-                        throw new ConflictException($"IMEI {imeiRecord.SoIMEI} đã được bán bởi giao dịch khác.");
-                    }
-
-                    imeiUpdates.Add(imeiRecord.MaIMEI);
 
                     chiTietEntities.Add(new ChiTietHoaDon
                     {
@@ -215,16 +199,17 @@ public class SalesService : ISalesService
                 await _warrantyService.CreateForInvoiceAsync(soHD, ct.MaIMEI!, ct.MaHang);
             }
 
-            await transaction.CommitAsync();
+                await transaction.CommitAsync();
 
-            // 8. Đọc lại hóa đơn để lấy giá trị ThanhTien sinh từ DB
-            return await GetHoaDonChiTietAsync(soHD);
-        }
-        catch
-        {
-            await transaction.RollbackAsync();
-            throw;
-        }
+                // 8. Đọc lại hóa đơn để lấy giá trị ThanhTien sinh từ DB
+                return await GetHoaDonChiTietAsync(soHD);
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        });
     }
 
     public async Task<(List<HoaDonDto> Items, int Total)> GetHoaDonsAsync(

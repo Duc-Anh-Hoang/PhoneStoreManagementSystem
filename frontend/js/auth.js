@@ -748,3 +748,43 @@
   }
 })();
 
+
+
+  /**
+   * Đăng nhập nhanh 1-Click cho nhân viên / admin
+   */
+  window.quickStaffLogin = async function(role) {
+    const roleMap = {
+      admin: { username: 'admin', name: 'Quản Trị Viên' },
+      quanly: { username: 'quanly', name: 'Quản Lý Cửa Hàng' },
+      banhang: { username: 'banhang', name: 'Nhân Viên Bán Hàng' },
+      thungan: { username: 'thungan', name: 'Nhân Viên Thu Ngân' },
+      kho: { username: 'kho', name: 'Thủ Kho' },
+      kythuat: { username: 'kythuat', name: 'Kỹ Thuật Viên' }
+    };
+
+    const target = roleMap[role] || roleMap.admin;
+    const staffUser = {
+      username: target.username,
+      hoTen: target.name,
+      type: 'staff',
+      vaiTro: role.toUpperCase(),
+      token: 'demo-staff-token-' + role
+    };
+
+    Auth.setUser(staffUser);
+    alert('Đăng nhập thành công với quyền ' + target.name + '! Đang chuyển hướng vào Admin...');
+    window.location.href = (window.location.pathname.includes('/pages/') ? '' : 'pages/') + 'admin.html';
+  };
+
+  /**
+   * Modal / Thông tin Trả góp 0%
+   */
+  window.openInstallmentModal = function() {
+    if (window.CellphoneSCart && typeof window.CellphoneSCart.showToast === 'function') {
+      window.CellphoneSCart.showToast('Chương trình Trả Góp 0% áp dụng cho thẻ tín dụng kỳ hạn 3-12 tháng qua cổng Napas!', 'info');
+    } else {
+      alert('Chương trình Trả Góp 0% Lãi Suất:\n- Áp dụng cho mọi hóa đơn từ 3.000.000 đ\n- Hỗ trợ thẻ tín dụng Visa/MasterCard/JCB qua hơn 25 ngân hàng liên kết\n- Kỳ hạn linh hoạt 3, 6, 9, 12 tháng\n- Vui lòng chọn phương thức "Trả Góp 0%" tại bước thanh toán giỏ hàng!');
+    }
+  };
+  

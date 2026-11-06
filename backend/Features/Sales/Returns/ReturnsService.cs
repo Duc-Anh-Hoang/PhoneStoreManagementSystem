@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PhoneStoreAPI.Common.Constants;
 using PhoneStoreAPI.Common.Exceptions;
 using PhoneStoreAPI.Common.Services;
@@ -39,10 +39,13 @@ public class ReturnsService : IReturnsService
     {
         var maNV = GetCurrentUserId();
 
-        using var transaction = await _context.Database.BeginTransactionAsync();
-        try
+        var strategy = _context.Database.CreateExecutionStrategy();
+        return await strategy.ExecuteAsync(async () =>
         {
-            // 1. Xác định IMEI
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                // 1. Xác định IMEI
             IMEI? imeiRecord = null;
             if (!string.IsNullOrWhiteSpace(request.MaIMEI))
             {
@@ -165,16 +168,17 @@ public class ReturnsService : IReturnsService
             };
             _context.Set<TraHangLichSu>().Add(lichSu);
 
-            await _context.SaveChangesAsync();
-            await transaction.CommitAsync();
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
 
-            return await GetByIdAsync(maTR);
-        }
-        catch
-        {
-            await transaction.RollbackAsync();
-            throw;
-        }
+                return await GetByIdAsync(maTR);
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        });
     }
 
     public async Task<TraHangDto> KiemTraAsync(string maTR, KiemTraTraHangRequest request)
@@ -259,13 +263,16 @@ public class ReturnsService : IReturnsService
             }
         }
 
-        using var transaction = await _context.Database.BeginTransactionAsync();
-        try
+        var strategy = _context.Database.CreateExecutionStrategy();
+        return await strategy.ExecuteAsync(async () =>
         {
-            var now = DateTime.UtcNow;
-            string trangThaiCu = traHang.TrangThai;
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var now = DateTime.UtcNow;
+                string trangThaiCu = traHang.TrangThai;
 
-            if (request.ChapNhan)
+                if (request.ChapNhan)
             {
                 traHang.TrangThai = "da_duyet";
                 traHang.MaNVDuyet = maNV;
@@ -307,16 +314,17 @@ public class ReturnsService : IReturnsService
                 });
             }
 
-            await _context.SaveChangesAsync();
-            await transaction.CommitAsync();
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
 
-            return await GetByIdAsync(maTR);
-        }
-        catch
-        {
-            await transaction.RollbackAsync();
-            throw;
-        }
+                return await GetByIdAsync(maTR);
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        });
     }
 
     public async Task<TraHangDto> HoanTatAsync(string maTR, HoanTatTraHangRequest request)
@@ -333,13 +341,16 @@ public class ReturnsService : IReturnsService
             throw new ConflictException($"Phiếu {maTR} đang ở trạng thái '{traHang.TrangThai}', chỉ có thể hoàn tất khi đã ở trạng thái 'da_duyet'.");
         }
 
-        using var transaction = await _context.Database.BeginTransactionAsync();
-        try
+        var strategy = _context.Database.CreateExecutionStrategy();
+        return await strategy.ExecuteAsync(async () =>
         {
-            var now = DateTime.UtcNow;
-            string trangThaiCu = traHang.TrangThai;
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var now = DateTime.UtcNow;
+                string trangThaiCu = traHang.TrangThai;
 
-            // Tính tiền hoàn thực tế khách đã trả trên hóa đơn
+                // Tính tiền hoàn thực tế khách đã trả trên hóa đơn
             var chiTietGoc = await _context.ChiTietHoaDons
                 .FirstOrDefaultAsync(ct => ct.SoHD == traHang.SoHD && ct.MaIMEI == traHang.MaIMEI);
             var hoaDonGoc = await _context.HoaDons.FirstOrDefaultAsync(h => h.SoHD == traHang.SoHD);
@@ -430,16 +441,17 @@ public class ReturnsService : IReturnsService
                     : $"Hoàn tất hoàn tiền ({traHang.HinhThucHoanTien}): {soTienHoan:N0} VND."
             });
 
-            await _context.SaveChangesAsync();
-            await transaction.CommitAsync();
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
 
-            return await GetByIdAsync(maTR);
-        }
-        catch
-        {
-            await transaction.RollbackAsync();
-            throw;
-        }
+                return await GetByIdAsync(maTR);
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        });
     }
 
     public async Task<TraHangDto> HuyAsync(string maTR, HuyTraHangRequest request)
@@ -456,13 +468,16 @@ public class ReturnsService : IReturnsService
             throw new ConflictException($"Không thể hủy hồ sơ đã duyệt hoặc hoàn tất (trạng thái hiện tại: '{traHang.TrangThai}').");
         }
 
-        using var transaction = await _context.Database.BeginTransactionAsync();
-        try
+        var strategy = _context.Database.CreateExecutionStrategy();
+        return await strategy.ExecuteAsync(async () =>
         {
-            var now = DateTime.UtcNow;
-            string trangThaiCu = traHang.TrangThai;
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var now = DateTime.UtcNow;
+                string trangThaiCu = traHang.TrangThai;
 
-            traHang.TrangThai = "da_huy";
+                traHang.TrangThai = "da_huy";
             traHang.LyDoTuChoi = $"Hủy hồ sơ: {request.LyDo.Trim()}";
 
             // Trả máy về tay khách
@@ -482,16 +497,17 @@ public class ReturnsService : IReturnsService
                 GhiChu = $"Hủy hồ sơ: {request.LyDo.Trim()}"
             });
 
-            await _context.SaveChangesAsync();
-            await transaction.CommitAsync();
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
 
-            return await GetByIdAsync(maTR);
-        }
-        catch
-        {
-            await transaction.RollbackAsync();
-            throw;
-        }
+                return await GetByIdAsync(maTR);
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        });
     }
 
     public async Task<TraHangDto> DoiHinhThucAsync(string maTR, DoiHinhThucRequest request)

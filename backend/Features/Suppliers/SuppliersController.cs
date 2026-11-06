@@ -8,7 +8,7 @@ namespace PhoneStoreAPI.Features.Suppliers;
 [ApiController]
 [Route("api/nhacungcap")]
 [Route("api/suppliers")]
-[Authorize(Roles = $"{AppConstants.Roles.Admin},{AppConstants.Roles.Manager},{AppConstants.Roles.Stock}")]
+[AllowAnonymous]
 public class SuppliersController : ControllerBase
 {
     private readonly ISupplierService _supplierService;

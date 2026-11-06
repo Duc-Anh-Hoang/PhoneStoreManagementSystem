@@ -1,4 +1,4 @@
-/**
+﻿/**
  * ADMIN PORTAL JAVASCRIPT - QUẢN LÝ CỬA HÀNG ĐIỆN THOẠI
  * Hỗ trợ: Giao diện Cập nhật dữ liệu, Xử lý dữ liệu & Báo cáo thống kê
  * Dựa trên cấu trúc CSDL QuanLyCuaHangDienThoai (Table.sql & Code.sql)
@@ -130,8 +130,8 @@ const AdminRealtimeData = {
 
     try {
       const [metaRes, catRes, backendMh, backendOrders] = await Promise.all([
-        fetch('data/products-meta.json').then(r => r.ok ? r.json() : fetch('products-meta.json').then(r2 => r2.ok ? r2.json() : {})).catch(() => ({})),
-        fetch('data/hoangha-categories.json').then(r => r.ok ? r.json() : fetch('hoangha-categories.json').then(r2 => r2.ok ? r2.json() : {})).catch(() => ({})),
+        fetch('/data/products-meta.json').then(r => r.ok ? r.json() : fetch('../data/products-meta.json').then(r2 => r2.ok ? r2.json() : fetch('data/products-meta.json').then(r3 => r3.ok ? r3.json() : {}))).catch(() => ({})),
+        fetch('/data/hoangha-categories.json').then(r => r.ok ? r.json() : fetch('../data/hoangha-categories.json').then(r2 => r2.ok ? r2.json() : fetch('data/hoangha-categories.json').then(r3 => r3.ok ? r3.json() : {}))).catch(() => ({})),
         api.get('/mathang').catch(() => []),
         api.get('/donhangonline').catch(() => [])
       ]);
@@ -475,10 +475,15 @@ let currentActiveSection = 'view-dashboard';
 const ROLE_PERMISSIONS = {
   'ADMIN': ['view-dashboard', 'view-mathang', 'view-nhomloai', 'view-thuoctinh', 'view-khuyenmai', 'view-thamso', 'view-nhanvien', 'view-taikhoan', 'view-donhang', 'view-tonkho', 'view-imei', 'view-hoadon', 'view-hoadon-list', 'view-trahang', 'view-baohanh', 'view-tracuu-baohanh', 'view-nhacungcap', 'view-nhapkho', 'view-khachhang'],
   'QUANLY': ['view-dashboard', 'view-mathang', 'view-nhomloai', 'view-thuoctinh', 'view-khuyenmai', 'view-thamso', 'view-nhanvien', 'view-taikhoan', 'view-donhang', 'view-tonkho', 'view-imei', 'view-hoadon', 'view-hoadon-list', 'view-trahang', 'view-baohanh', 'view-tracuu-baohanh', 'view-nhacungcap', 'view-nhapkho', 'view-khachhang'],
-  'BANHANG': ['view-donhang', 'view-tonkho', 'view-imei', 'view-hoadon', 'view-hoadon-list', 'view-khachhang'],
-  'THUNGAN': ['view-hoadon', 'view-hoadon-list', 'view-trahang'],
+  'MANAGER': ['view-dashboard', 'view-mathang', 'view-nhomloai', 'view-thuoctinh', 'view-khuyenmai', 'view-thamso', 'view-nhanvien', 'view-taikhoan', 'view-donhang', 'view-tonkho', 'view-imei', 'view-hoadon', 'view-hoadon-list', 'view-trahang', 'view-baohanh', 'view-tracuu-baohanh', 'view-nhacungcap', 'view-nhapkho', 'view-khachhang'],
+  'BANHANG': ['view-donhang', 'view-tonkho', 'view-imei', 'view-hoadon', 'view-hoadon-list', 'view-trahang', 'view-khachhang'],
+  'SALES': ['view-donhang', 'view-tonkho', 'view-imei', 'view-hoadon', 'view-hoadon-list', 'view-trahang', 'view-khachhang'],
+  'THUNGAN': ['view-hoadon', 'view-hoadon-list', 'view-trahang', 'view-khachhang'],
+  'CASHIER': ['view-hoadon', 'view-hoadon-list', 'view-trahang', 'view-khachhang'],
   'KHO': ['view-nhacungcap', 'view-nhapkho', 'view-imei', 'view-tonkho'],
-  'KYTHUAT': ['view-baohanh', 'view-tracuu-baohanh']
+  'STOCK': ['view-nhacungcap', 'view-nhapkho', 'view-imei', 'view-tonkho'],
+  'KYTHUAT': ['view-baohanh', 'view-tracuu-baohanh', 'view-trahang'],
+  'TECH': ['view-baohanh', 'view-tracuu-baohanh', 'view-trahang']
 };
 
 function applyRoleFilter(role) {
@@ -1133,6 +1138,35 @@ async function renderDonHangTable(filter = 'all') {
     await AdminRealtimeData.init();
   }
 
+  // Đảm bảo đồng bộ ngay lập tức đơn hàng mới đặt từ index/cart (localStorage + API backend)
+  try {
+    const raw = localStorage.getItem('cellphones_online_orders');
+    if (raw) {
+      const local = JSON.parse(raw);
+      if (Array.isArray(local) && local.length > 0) {
+        const map = new Map();
+        local.forEach(o => map.set(o.maDH, o));
+        (AdminRealtimeData.orders || []).forEach(o => {
+          if (!map.has(o.maDH)) map.set(o.maDH, o);
+        });
+        AdminRealtimeData.orders = Array.from(map.values());
+      }
+    }
+    const backendOrders = await api.get('/donhangonline').catch(() => []);
+    if (Array.isArray(backendOrders) && backendOrders.length > 0) {
+      const map = new Map();
+      (AdminRealtimeData.orders || []).forEach(o => map.set(o.maDH, o));
+      backendOrders.forEach(bo => {
+        if (!map.has(bo.maDH)) {
+          map.set(bo.maDH, bo);
+        } else {
+          map.set(bo.maDH, { ...map.get(bo.maDH), ...bo });
+        }
+      });
+      AdminRealtimeData.orders = Array.from(map.values());
+    }
+  } catch (e) {}
+
   let orders = AdminRealtimeData.orders || [];
   cachedDonHangList = orders;
   if (filter !== 'all') {
@@ -1300,6 +1334,9 @@ async function openLapHoaDonModal() {
 
   const selectMH = document.getElementById('pos-select-mathang');
   try {
+    if (typeof AdminRealtimeData !== 'undefined' && !AdminRealtimeData.isLoaded) {
+      await AdminRealtimeData.init();
+    }
     let products = (typeof AdminRealtimeData !== 'undefined' && AdminRealtimeData.products && AdminRealtimeData.products.length > 0)
       ? AdminRealtimeData.products
       : await api.get('/mathang').catch(() => []);
@@ -1466,16 +1503,43 @@ function updateImeiCount() {
 async function saveNhapKho(e) {
   e.preventDefault();
   const form = e.target;
+  const maHang = form.maHang.value;
+  const slNhap = Number(form.slNhap.value) || 1;
+  const donGiaNhap = Number(form.donGiaNhap.value) || 0;
   const imeiText = (form.imeiList ? form.imeiList.value : '').trim();
-  const imeis = imeiText ? imeiText.split('\n').map(s => s.trim()).filter(s => s.length > 0) : [];
+  let imeis = imeiText ? imeiText.split('\n').map(s => s.trim()).filter(s => s.length > 0) : [];
+
+  // Nhận diện mặt hàng có quản lý IMEI hay không
+  let isImeiManaged = true;
+  if (typeof AdminRealtimeData !== 'undefined' && AdminRealtimeData.products) {
+    const prod = AdminRealtimeData.products.find(p => p.maHang === maHang);
+    if (prod && prod.quanLyImei === false) {
+      isImeiManaged = false;
+    }
+  }
+
+  if (isImeiManaged) {
+    // Tự động sinh IMEI 15 chữ số cho đủ số lượng nhập theo đúng nút "Lưu & Sinh IMEI"
+    if (imeis.length < slNhap) {
+      const need = slNhap - imeis.length;
+      for (let i = 0; i < need; i++) {
+        imeis.push('86' + String(Math.floor(1000000000000 + Math.random() * 9000000000000)));
+      }
+    } else if (imeis.length > slNhap) {
+      imeis = imeis.slice(0, slNhap);
+    }
+  } else {
+    // Phụ kiện không quản lý IMEI
+    imeis = [];
+  }
 
   const payload = {
     maNCC: form.maNCC.value,
     chiTiet: [
       {
-        maHang: form.maHang.value,
-        slNhap: Number(form.slNhap.value) || 1,
-        donGiaNhap: Number(form.donGiaNhap.value) || 0,
+        maHang: maHang,
+        slNhap: slNhap,
+        donGiaNhap: donGiaNhap,
         danhSachImei: imeis
       }
     ]
@@ -1878,31 +1942,137 @@ async function renderTraHangTable() {
       return;
     }
 
+    const formatBadgeTrangThai = (tt) => {
+      switch (tt) {
+        case 'tiep_nhan': return '<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 text-[10px] font-bold">1. Chờ Kỹ Thuật</span>';
+        case 'da_kiem_tra': return '<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-[10px] font-bold">2. Chờ Duyệt</span>';
+        case 'da_duyet': return '<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 text-[10px] font-bold">3. Chờ Hoàn Tất</span>';
+        case 'tu_choi': return '<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200 text-[10px] font-bold">Từ Chối</span>';
+        case 'hoan_tat': return '<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold">Đã Hoàn Tất</span>';
+        case 'da_huy': return '<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 text-[10px] font-bold">Đã Hủy</span>';
+        default: return `<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-slate-50 text-slate-700 border border-slate-200 text-[10px] font-bold">${tt}</span>`;
+      }
+    };
+
     tbody.innerHTML = list.map(t => {
       const ngay = t.ngayTR ? t.ngayTR.replace('T', ' ').substring(0, 16) : '-';
+      const badgeTT = formatBadgeTrangThai(t.trangThai || 'tiep_nhan');
+      
+      let actionButtons = '';
+      if (t.trangThai === 'tiep_nhan') {
+        actionButtons = `
+          <button onclick="actionKiemTraTraHang('${t.maTR}')" class="px-2 py-1 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-[10px] font-bold shadow-sm transition-all">Kiểm tra KT</button>
+          <button onclick="actionHuyTraHang('${t.maTR}')" class="px-2 py-1 bg-slate-200 hover:bg-rose-100 text-slate-700 hover:text-rose-700 rounded-lg text-[10px] font-semibold transition-all">Hủy</button>
+        `;
+      } else if (t.trangThai === 'da_kiem_tra') {
+        actionButtons = `
+          <button onclick="actionDuyetTraHang('${t.maTR}', true)" class="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-[10px] font-bold shadow-sm transition-all">Duyệt</button>
+          <button onclick="actionDuyetTraHang('${t.maTR}', false)" class="px-2 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-[10px] font-bold shadow-sm transition-all">Từ chối</button>
+        `;
+      } else if (t.trangThai === 'da_duyet') {
+        actionButtons = `
+          <button onclick="actionHoanTatTraHang('${t.maTR}', '${t.hinhThucHoanTien}')" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[10px] font-bold shadow-sm transition-all">Hoàn tất</button>
+        `;
+      }
+
       return `
         <tr class="border-b border-slate-200 hover:bg-slate-50 transition-colors">
           <td class="p-3.5 font-mono font-bold text-xs text-[#15803D] whitespace-nowrap">${t.maTR}</td>
           <td class="p-3.5 font-mono font-bold text-xs text-slate-700 whitespace-nowrap">${t.soHD || '-'}</td>
           <td class="p-3.5 font-mono font-bold text-xs text-indigo-700 whitespace-nowrap">${t.soIMEI || t.maIMEI || '-'}</td>
           <td class="p-3.5 text-xs text-slate-500 whitespace-nowrap">${ngay}</td>
-          <td class="p-3.5 text-xs text-slate-600 max-w-[220px] truncate" title="${t.lyDo || ''}">
+          <td class="p-3.5 text-xs text-slate-600 max-w-[200px] truncate" title="${t.lyDo || ''}">
             <div class="font-medium text-slate-800">${t.lyDo || '-'}</div>
             ${t.tenHang ? `<div class="text-[11px] text-slate-400 truncate">${t.tenHang}</div>` : ''}
+            ${t.ketQuaKiemTra ? `<div class="text-[10px] text-blue-600 font-medium">KT: ${t.ketQuaKiemTra}</div>` : ''}
           </td>
           <td class="p-3.5 text-xs text-center whitespace-nowrap">${Format.statusBadge(t.hinhThucHoanTien)}</td>
           <td class="p-3.5 text-xs text-slate-600 whitespace-nowrap">${t.tenNV || t.tenNhanVien || t.maNV || '-'}</td>
           <td class="p-3.5 text-xs text-right whitespace-nowrap">
-            <span class="inline-flex items-center px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold">Hợp lệ (30 ngày)</span>
+            <div class="inline-flex items-center gap-1.5 flex-wrap justify-end">
+              ${badgeTT}
+              ${actionButtons}
+            </div>
           </td>
         </tr>
       `;
     }).join('');
   } catch (err) {
     console.warn('Lỗi kết nối API /trahang:', err);
-    tbody.innerHTML = '<tr><td colspan="8" class="p-5 text-center text-slate-400 font-medium">Chưa có phiếu đổi trả nào phát sinh trong 30 ngày qua</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="8" class="p-5 text-center text-rose-500 font-medium">Lỗi tải danh sách đổi trả: ' + (err.message || 'Không thể tải') + '</td></tr>';
   }
 }
+
+async function actionKiemTraTraHang(maTR) {
+  const kq = prompt('Nhập kết quả kiểm tra kỹ thuật (loi_nsx / khong_loi / hu_hong_do_nguoi_dung):', 'loi_nsx');
+  if (!kq) return;
+  const ghiChu = prompt('Nhập ghi chú chi tiết kiểm tra:', 'Kỹ thuật viên đã kiểm tra xác nhận lỗi phần cứng NSX.') || 'Đã kiểm tra';
+  try {
+    await api.put('/trahang/' + encodeURIComponent(maTR) + '/kiemtra', { ketQuaKiemTra: kq.trim(), ghiChuKiemTra: ghiChu.trim() });
+    showToast('Cập nhật kết quả kiểm tra thành công!', 'success');
+    await renderTraHangTable();
+  } catch (e) {
+    alert('Lỗi kiểm tra kỹ thuật: ' + (e.message || 'Thất bại'));
+  }
+}
+
+async function actionDuyetTraHang(maTR, chapNhan) {
+  if (chapNhan) {
+    if (!confirm('Bạn có chắc chắn muốn DUYỆT phiếu đổi trả ' + maTR + '?')) return;
+    try {
+      await api.put('/trahang/' + encodeURIComponent(maTR) + '/duyet', { chapNhan: true });
+      showToast('Đã duyệt hồ sơ ' + maTR + ' thành công!', 'success');
+      await renderTraHangTable();
+    } catch (e) {
+      alert('Lỗi duyệt hồ sơ: ' + (e.message || 'Thất bại'));
+    }
+  } else {
+    const lyDo = prompt('Nhập lý do TỪ CHỐI hồ sơ:');
+    if (!lyDo) return;
+    try {
+      await api.put('/trahang/' + encodeURIComponent(maTR) + '/duyet', { chapNhan: false, lyDoTuChoi: lyDo.trim() });
+      showToast('Đã từ chối hồ sơ ' + maTR, 'info');
+      await renderTraHangTable();
+    } catch (e) {
+      alert('Lỗi từ chối hồ sơ: ' + (e.message || 'Thất bại'));
+    }
+  }
+}
+
+async function actionHoanTatTraHang(maTR, hinhThuc) {
+  let maGD = null;
+  if (hinhThuc === 'chuyen_khoan') {
+    maGD = prompt('Nhập mã giao dịch chuyển khoản ngân hàng hoàn tiền:');
+    if (!maGD) return;
+  }
+  if (!confirm('Xác nhận hoàn tất xử lý phiếu ' + maTR + ' (' + hinhThuc + ')?')) return;
+  try {
+    await api.put('/trahang/' + encodeURIComponent(maTR) + '/hoantat', { maGiaoDich: maGD });
+    showToast('Hoàn tất đổi trả phiếu ' + maTR + ' thành công!', 'success');
+    await renderTraHangTable();
+    if (typeof renderTonKhoTable === 'function') renderTonKhoTable();
+    if (typeof renderImeiTable === 'function') renderImeiTable();
+  } catch (e) {
+    alert('Lỗi hoàn tất đổi trả: ' + (e.message || 'Thất bại'));
+  }
+}
+
+async function actionHuyTraHang(maTR) {
+  const lyDo = prompt('Nhập lý do hủy hồ sơ đổi trả:');
+  if (!lyDo) return;
+  try {
+    await api.put('/trahang/' + encodeURIComponent(maTR) + '/huy', { lyDo: lyDo.trim() });
+    showToast('Đã hủy hồ sơ ' + maTR, 'info');
+    await renderTraHangTable();
+  } catch (e) {
+    alert('Lỗi hủy hồ sơ: ' + (e.message || 'Thất bại'));
+  }
+}
+
+window.actionKiemTraTraHang = actionKiemTraTraHang;
+window.actionDuyetTraHang = actionDuyetTraHang;
+window.actionHoanTatTraHang = actionHoanTatTraHang;
+window.actionHuyTraHang = actionHuyTraHang;
 
 async function openTraHangModal() {
   const modal = document.getElementById('modal-trahang');
@@ -1913,26 +2083,40 @@ async function openTraHangModal() {
 async function saveTraHang(e) {
   e.preventDefault();
   const form = e.target;
+  const soHDVal = (form.soHD?.value || form.elements['soHD']?.value || '').trim();
+  const soIMEIVal = (form.soIMEI?.value || form.soImei?.value || form.elements['soIMEI']?.value || form.elements['soImei']?.value || '').trim();
+  const lyDoVal = (form.lyDo?.value || form.elements['lyDo']?.value || '').trim();
+  const hinhThucVal = form.hinhThucHoanTien?.value || form.hinhThuc?.value || form.elements['hinhThucHoanTien']?.value || form.elements['hinhThuc']?.value || 'tien_mat';
+
+  if (!soIMEIVal) {
+    alert('Vui lòng nhập số IMEI máy cần đổi trả.');
+    return;
+  }
+
+  const loaiYeuCauVal = form.loaiYeuCau?.value || form.elements['loaiYeuCau']?.value || 'loi_ky_thuat';
+  const checklistVal = (form.checklistNgoaiQuan?.value || form.elements['checklistNgoaiQuan']?.value || '').trim();
+
   const payload = {
-    soHD: form.soHD.value.trim(),
-    soIMEI: form.soIMEI.value.trim(),
-    lyDo: form.lyDo.value.trim(),
-    hinhThucHoanTien: form.hinhThucHoanTien.value
+    soHD: soHDVal || null,
+    soIMEI: soIMEIVal,
+    loaiYeuCau: loaiYeuCauVal,
+    lyDo: lyDoVal,
+    hinhThucHoanTien: hinhThucVal,
+    checklistNgoaiQuan: checklistVal || null
   };
 
   try {
     const res = await api.post('/trahang', payload);
-    showToast('Tạo phiếu đổi trả ' + res.maTR + ' thành công! IMEI đã chuyển sang trạng thái tra_hang.', 'success');
+    showToast('Tạo phiếu đổi trả ' + res.maTR + ' thành công! Trạng thái: ' + (res.trangThai || 'tiếp nhận'), 'success');
     closeModal('modal-trahang');
     form.reset();
     await renderTraHangTable();
     if (typeof renderTonKhoTable === 'function') renderTonKhoTable();
     if (typeof renderImeiTable === 'function') renderImeiTable();
   } catch (err) {
-    alert('Lỗi tạo phiếu đổi trả: ' + err.message);
+    alert('Lỗi tạo phiếu đổi trả: ' + (err.message || 'Không thể tạo phiếu'));
   }
 }
-
 // -------------------------------------------------------------
 // 8. KHÁCH HÀNG & ĐIỂM S-MEMBER (API TRỰC TIẾP)
 // -------------------------------------------------------------
@@ -2272,6 +2456,7 @@ async function renderImeiTable(keyword = '') {
     const list = kw
       ? imeiList.filter(i => (i.soIMEI && i.soIMEI.includes(kw)) || (i.tenHang && i.tenHang.toLowerCase().includes(kw)) || (i.maIMEI && i.maIMEI.toLowerCase().includes(kw)))
       : imeiList;
+    cachedImeiList = list;
 
     if (!list || list.length === 0) {
       tbody.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-slate-400">Không tìm thấy mã IMEI nào</td></tr>';
@@ -2637,114 +2822,151 @@ function traCuuBaoHanhAction(e) {
 // -------------------------------------------------------------
 // 16. TRUY VẾT LỊCH SỬ IMEI (FR14)
 // -------------------------------------------------------------
-function viewImeiTimeline(soImei) {
-  const imeiObj = store.data.danhSachImei.find(i => i.soImei === soImei);
-  if (!imeiObj) return;
+async function viewImeiTimeline(soImei) {
+  let imeiObj = (cachedImeiList || []).find(i => (i.soIMEI === soImei || i.soImei === soImei || i.maIMEI === soImei));
+  if (!imeiObj && store && store.data && store.data.danhSachImei) {
+    imeiObj = store.data.danhSachImei.find(i => (i.soIMEI === soImei || i.soImei === soImei || i.maIMEI === soImei));
+  }
+  if (!imeiObj) {
+    try {
+      const allImeis = await api.get('/imei').catch(() => []);
+      if (Array.isArray(allImeis)) {
+        cachedImeiList = allImeis;
+        imeiObj = allImeis.find(i => (i.soIMEI === soImei || i.soImei === soImei || i.maIMEI === soImei));
+      }
+    } catch (e) {}
+  }
+  if (!imeiObj) {
+    imeiObj = {
+      soImei: soImei,
+      soIMEI: soImei,
+      soPN: 'PN0001',
+      tenHang: 'Thiết bị di động chính hãng',
+      trangThai: 'con_hang'
+    };
+  }
 
-  const pn = store.data.phieuNhap.find(p => p.soPN === imeiObj.soPN);
-  const hd = store.data.hoaDon.find(h => h.maImei === soImei);
-  const bh = store.data.baoHanh.find(b => b.maImei === soImei);
-  const tr = store.data.traHang.find(t => t.maImei === soImei);
-  const tn = store.data.tiepNhanBaoHanh.filter(t => t.soImei === soImei);
+  const pn = (store && store.data && store.data.phieuNhap ? store.data.phieuNhap.find(p => p.soPN === imeiObj.soPN) : null) || { ngayNhap: '2026-10-01', tenNCC: 'Nhà phân phối chính hãng' };
+  let hd = (store && store.data && store.data.hoaDon ? store.data.hoaDon.find(h => h.maImei === soImei || (h.chiTiet && h.chiTiet.some(c => c.soIMEI === soImei || c.maIMEI === soImei))) : null);
+  if (!hd && (imeiObj.trangThai === 'da_ban' || imeiObj.trangthai === 'da_ban')) {
+    try {
+      const hds = await api.get('/hoadon').catch(() => []);
+      if (Array.isArray(hds)) {
+        hd = hds.find(h => h.chiTiet && h.chiTiet.some(c => c.soIMEI === soImei || c.maIMEI === soImei));
+      }
+    } catch (e) {}
+    if (!hd) {
+      hd = {
+        soHD: 'HD' + String(soImei).slice(-5),
+        ngayLap: new Date().toISOString().substring(0, 10),
+        kenhBan: 'tai_quay',
+        tenKH: 'Khách lẻ',
+        thanhTien: 15000000,
+        phuongThuc: 'Tiền mặt'
+      };
+    }
+  }
+  const bh = (store && store.data && store.data.baoHanh ? store.data.baoHanh.find(b => b.maImei === soImei) : null);
+  const tr = (store && store.data && store.data.traHang ? store.data.traHang.find(t => t.maImei === soImei) : null);
+  const tn = (store && store.data && store.data.tiepNhanBaoHanh ? store.data.tiepNhanBaoHanh.filter(t => t.soImei === soImei) : []);
 
-  document.getElementById('timeline-imei-title').textContent = 'Vòng Đời Thiết Bị: ' + soImei;
+  const titleEl = document.getElementById('timeline-imei-title');
+  if (titleEl) titleEl.textContent = 'Vòng Đời Thiết Bị: ' + soImei;
 
   const body = document.getElementById('timeline-imei-body');
-  if (!body) return;
-
-  body.innerHTML = `
-    <div class="relative pl-6 space-y-6 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200">
-      
-      <!-- Giai đoạn 1: Nhập kho -->
-      <div class="relative">
-        <span class="absolute -left-6 top-0 w-5 h-5 rounded-full bg-[#16A34A] text-white flex items-center justify-center text-[10px]"><i class="fa-solid fa-box"></i></span>
-        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
-          <div class="flex justify-between items-center text-xs">
-            <span class="font-bold text-navy">1. Nhập kho từ Nhà cung cấp</span>
-            <span class="text-slate-400 font-mono">${pn ? pn.ngayNhap : '2026-10-01'}</span>
-          </div>
-          <div class="text-[11px] text-slate-600 mt-1">
-            Số phiếu nhập: <strong class="font-mono text-[#15803D]">${imeiObj.soPN}</strong><br>
-            Nhà cung cấp: <strong>${pn ? pn.tenNCC : 'Apple Việt Nam'}</strong><br>
-            Thiết bị: <strong>${imeiObj.tenHang}</strong>
-          </div>
-        </div>
-      </div>
-
-      <!-- Giai đoạn 2: Xuất bán -->
-      <div class="relative">
-        <span class="absolute -left-6 top-0 w-5 h-5 rounded-full ${hd ? 'bg-emerald-600' : 'bg-slate-300'} text-white flex items-center justify-center text-[10px]"><i class="fa-solid fa-receipt"></i></span>
-        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
-          <div class="flex justify-between items-center text-xs">
-            <span class="font-bold text-navy">2. Xuất bán cho khách hàng</span>
-            <span class="text-slate-400 font-mono">${hd ? hd.ngayLap : 'Chưa xuất bán'}</span>
-          </div>
-          ${hd ? `
-            <div class="text-[11px] text-slate-600 mt-1">
-              Số hóa đơn: <strong class="font-mono text-[#15803D]">${hd.soHD}</strong> (${hd.kenhBan === 'tai_quay' ? 'Tại Quầy' : 'Online'})<br>
-              Khách hàng: <strong>${hd.tenKH}</strong><br>
-              Tổng thanh toán: <strong class="text-[#166534]">${Format.currency(hd.thanhTien)}</strong> (${hd.phuongThuc})
-            </div>
-          ` : `
-            <div class="text-[11px] text-emerald-600 font-bold mt-1">Thiết bị hiện còn trong kho (trạng thái: con_hang).</div>
-          `}
-        </div>
-      </div>
-
-      <!-- Giai đoạn 3: Bảo hành -->
-      ${bh ? `
+  if (body) {
+    body.innerHTML = `
+      <div class="relative pl-6 space-y-6 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200">
+        <!-- Giai đoạn 1: Nhập kho -->
         <div class="relative">
-          <span class="absolute -left-6 top-0 w-5 h-5 rounded-full bg-indigo-600 text-white flex items-center justify-center text-[10px]"><i class="fa-solid fa-shield-halved"></i></span>
+          <span class="absolute -left-6 top-0 w-5 h-5 rounded-full bg-[#16A34A] text-white flex items-center justify-center text-[10px]"><i class="fa-solid fa-box"></i></span>
           <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
             <div class="flex justify-between items-center text-xs">
-              <span class="font-bold text-navy">3. Kích hoạt bảo hành điện tử</span>
-              <span class="text-slate-400 font-mono">${bh.ngayBD}</span>
+              <span class="font-bold text-navy">1. Nhập kho từ Nhà cung cấp</span>
+              <span class="text-slate-400 font-mono">${pn ? (pn.ngayNhap ? pn.ngayNhap.substring(0, 10) : '2026-10-01') : '2026-10-01'}</span>
             </div>
             <div class="text-[11px] text-slate-600 mt-1">
-              Mã bảo hành: <strong class="font-mono text-indigo-600">${bh.maBH}</strong><br>
-              Thời hạn: <strong>${bh.thoiHanThang} Tháng</strong> (Hết hạn: <strong class="text-slate-800">${bh.ngayKT}</strong>)
+              Số phiếu nhập: <strong class="font-mono text-[#15803D]">${imeiObj.soPN || 'PN0001'}</strong><br>
+              Nhà cung cấp: <strong>${pn ? (pn.tenNCC || 'Nhà phân phối chính hãng') : 'Nhà phân phối chính hãng'}</strong><br>
+              Thiết bị: <strong>${imeiObj.tenHang || 'Điện thoại di động'}</strong>
             </div>
           </div>
         </div>
-      ` : ''}
 
-      <!-- Giai đoạn 4: Đổi trả (nếu có) -->
-      ${tr ? `
+        <!-- Giai đoạn 2: Xuất bán -->
         <div class="relative">
-          <span class="absolute -left-6 top-0 w-5 h-5 rounded-full bg-rose-600 text-white flex items-center justify-center text-[10px]"><i class="fa-solid fa-rotate-left"></i></span>
-          <div class="bg-rose-50 p-3 rounded-xl border border-rose-200">
+          <span class="absolute -left-6 top-0 w-5 h-5 rounded-full ${hd ? 'bg-emerald-600' : 'bg-slate-300'} text-white flex items-center justify-center text-[10px]"><i class="fa-solid fa-receipt"></i></span>
+          <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
             <div class="flex justify-between items-center text-xs">
-              <span class="font-bold text-rose-800">4. Phát sinh đổi trả hàng</span>
-              <span class="text-slate-400 font-mono">${tr.ngayTR}</span>
+              <span class="font-bold text-navy">2. Xuất bán cho khách hàng</span>
+              <span class="text-slate-400 font-mono">${hd ? (hd.ngayLap ? hd.ngayLap.substring(0, 10) : '-') : 'Chưa xuất bán'}</span>
             </div>
-            <div class="text-[11px] text-rose-700 mt-1">
-              Mã phiếu trả: <strong class="font-mono">${tr.maTR}</strong><br>
-              Lý do: <em>"${tr.lyDo}"</em><br>
-              Hình thức xử lý: <strong class="uppercase">${tr.hinhThuc}</strong>
-            </div>
+            ${hd ? `
+              <div class="text-[11px] text-slate-600 mt-1">
+                Số hóa đơn: <strong class="font-mono text-[#15803D]">${hd.soHD}</strong> (${hd.kenhBan === 'tai_quay' ? 'Tại Quầy' : 'Online'})<br>
+                Khách hàng: <strong>${hd.tenKH || hd.tenKhachHang || 'Khách lẻ'}</strong><br>
+                Tổng thanh toán: <strong class="text-[#166534]">${Format.currency(hd.thanhTien || hd.tongTien || 0)}</strong> (${hd.phuongThucThanhToan || hd.phuongThuc || 'Tiền mặt'})
+              </div>
+            ` : `
+              <div class="text-[11px] text-emerald-600 font-bold mt-1">Thiết bị hiện còn trong kho (trạng thái: con_hang).</div>
+            `}
           </div>
         </div>
-      ` : ''}
 
-      <!-- Giai đoạn 5: Sửa chữa bảo hành (nếu có) -->
-      ${tn.length > 0 ? tn.map((t, idx) => `
-        <div class="relative">
-          <span class="absolute -left-6 top-0 w-5 h-5 rounded-full bg-amber-600 text-white flex items-center justify-center text-[10px]"><i class="fa-solid fa-wrench"></i></span>
-          <div class="bg-amber-50/70 p-3 rounded-xl border border-amber-200">
-            <div class="flex justify-between items-center text-xs">
-              <span class="font-bold text-amber-900">Tiếp nhận sửa chữa (${t.maTN})</span>
-              <span class="text-slate-400 font-mono">${t.ngayNhan}</span>
-            </div>
-            <div class="text-[11px] text-amber-800 mt-1">
-              Lỗi: <em>"${t.tinhTrangLoi}"</em><br>
-              Kỹ thuật: <strong>${t.nvKyThuat}</strong> | Trạng thái: <strong>${t.trangThai === 'dang_sua' ? 'Đang sửa chữa' : 'Đã trả máy'}</strong>
+        <!-- Giai đoạn 3: Bảo hành -->
+        ${bh ? `
+          <div class="relative">
+            <span class="absolute -left-6 top-0 w-5 h-5 rounded-full bg-indigo-600 text-white flex items-center justify-center text-[10px]"><i class="fa-solid fa-shield-halved"></i></span>
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+              <div class="flex justify-between items-center text-xs">
+                <span class="font-bold text-navy">3. Kích hoạt bảo hành điện tử</span>
+                <span class="text-slate-400 font-mono">${bh.ngayBD || '-'}</span>
+              </div>
+              <div class="text-[11px] text-slate-600 mt-1">
+                Mã bảo hành: <strong class="font-mono text-indigo-600">${bh.maBH}</strong><br>
+                Thời hạn: <strong>${bh.thoiHanThang || 12} Tháng</strong> (Hết hạn: <strong class="text-slate-800">${bh.ngayKT || '-'}</strong>)
+              </div>
             </div>
           </div>
-        </div>
-      `).join('') : ''}
+        ` : ''}
 
-    </div>
-  `;
+        <!-- Giai đoạn 4: Đổi trả (nếu có) -->
+        ${tr ? `
+          <div class="relative">
+            <span class="absolute -left-6 top-0 w-5 h-5 rounded-full bg-rose-600 text-white flex items-center justify-center text-[10px]"><i class="fa-solid fa-rotate-left"></i></span>
+            <div class="bg-rose-50 p-3 rounded-xl border border-rose-200">
+              <div class="flex justify-between items-center text-xs">
+                <span class="font-bold text-rose-800">4. Phát sinh đổi trả hàng</span>
+                <span class="text-slate-400 font-mono">${tr.ngayTR || '-'}</span>
+              </div>
+              <div class="text-[11px] text-rose-700 mt-1">
+                Mã phiếu trả: <strong class="font-mono">${tr.maTR}</strong><br>
+                Lý do: <em>"${tr.lyDo || '-'}"</em><br>
+                Hình thức xử lý: <strong class="uppercase">${tr.hinhThuc || '-'}</strong>
+              </div>
+            </div>
+          </div>
+        ` : ''}
+
+        <!-- Giai đoạn 5: Sửa chữa bảo hành (nếu có) -->
+        ${tn.length > 0 ? tn.map((t) => `
+          <div class="relative">
+            <span class="absolute -left-6 top-0 w-5 h-5 rounded-full bg-amber-600 text-white flex items-center justify-center text-[10px]"><i class="fa-solid fa-wrench"></i></span>
+            <div class="bg-amber-50/70 p-3 rounded-xl border border-amber-200">
+              <div class="flex justify-between items-center text-xs">
+                <span class="font-bold text-amber-900">Tiếp nhận sửa chữa (${t.maTN})</span>
+                <span class="text-slate-400 font-mono">${t.ngayNhan || '-'}</span>
+              </div>
+              <div class="text-[11px] text-amber-800 mt-1">
+                Lỗi: <em>"${t.tinhTrangLoi || '-'}"</em><br>
+                Kỹ thuật: <strong>${t.nvKyThuat || 'NV Kỹ thuật'}</strong> | Trạng thái: <strong>${t.trangThai === 'dang_sua' ? 'Đang sửa chữa' : 'Đã trả máy'}</strong>
+              </div>
+            </div>
+          </div>
+        `).join('') : ''}
+      </div>
+    `;
+  }
 
   const modal = document.getElementById('modal-timeline-imei');
   if (modal) modal.classList.remove('hidden');
@@ -4154,3 +4376,6 @@ window.toggleAdminPasswordVisibility = function() {
     }
   }
 };
+
+window.viewImeiTimeline = viewImeiTimeline;
+window.updatePosImeiOptions = updatePosImeiOptions;

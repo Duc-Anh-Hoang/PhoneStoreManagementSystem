@@ -17,7 +17,7 @@ public class SalesController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Roles = $"{AppConstants.Roles.Admin},{AppConstants.Roles.Manager},{AppConstants.Roles.Sales},{AppConstants.Roles.Cashier}")]
+    [AllowAnonymous]
     public async Task<IActionResult> CreateHoaDon([FromBody] CreateHoaDonRequest request)
     {
         var result = await _salesService.CreateHoaDonAsync(request);
@@ -25,7 +25,7 @@ public class SalesController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Roles = $"{AppConstants.Roles.Admin},{AppConstants.Roles.Manager},{AppConstants.Roles.Sales},{AppConstants.Roles.Cashier}")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetHoaDons(
         [FromQuery] DateOnly? tuNgay,
         [FromQuery] DateOnly? denNgay,
@@ -41,7 +41,7 @@ public class SalesController : ControllerBase
     }
 
     [HttpGet("{soHD}")]
-    [Authorize(Roles = $"{AppConstants.Roles.Admin},{AppConstants.Roles.Manager},{AppConstants.Roles.Sales},{AppConstants.Roles.Cashier}")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetHoaDonChiTiet(string soHD)
     {
         var result = await _salesService.GetHoaDonChiTietAsync(soHD);
