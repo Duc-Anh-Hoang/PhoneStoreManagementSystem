@@ -53,6 +53,7 @@
 
     // Gắn sự kiện submit form
     setupForms(user);
+    setupMainHeader(user);
   }
 
   // Điền dữ liệu vào các trường
@@ -295,6 +296,115 @@
       window.location.href = '../index.html';
     }
   };
+
+
+  // Thiết lập Header dùng chung trên trang Profile
+  function setupMainHeader(user) {
+    window.toggleMegaMenu = function () {
+      const menu = document.getElementById('mega-menu-flyout');
+      if (menu) menu.classList.toggle('hidden');
+    };
+
+    window.toggleNotificationPopover = function () {
+      const pop = document.getElementById('notification-popover');
+      if (pop) pop.classList.toggle('hidden');
+    };
+
+    window.toggleCustomerAvatarMenu = function (e) {
+      if (e && e.stopPropagation) e.stopPropagation();
+      const pop = document.getElementById('customer-avatar-popover');
+      const chev = document.getElementById('customer-avatar-chevron');
+      if (!pop) return;
+      const isHidden = pop.classList.contains('hidden');
+      if (isHidden) {
+        pop.classList.remove('hidden');
+        if (chev) chev.style.transform = 'rotate(180deg)';
+      } else {
+        pop.classList.add('hidden');
+        if (chev) chev.style.transform = 'rotate(0deg)';
+      }
+    };
+
+    window.closeCustomerAvatarMenu = function () {
+      const pop = document.getElementById('customer-avatar-popover');
+      const chev = document.getElementById('customer-avatar-chevron');
+      if (pop) pop.classList.add('hidden');
+      if (chev) chev.style.transform = 'rotate(0deg)';
+    };
+
+    window.quickSearchTag = function (tag) {
+      window.location.href = 'category.html?q=' + encodeURIComponent(tag);
+    };
+
+    window.filterPhoneBrand = function (brand) {
+      window.location.href = 'category.html?type=dien-thoai&brand=' + encodeURIComponent(brand);
+    };
+
+    window.applySearchFilters = function () {
+      const input = document.getElementById('search-input');
+      const q = input ? input.value.trim() : '';
+      if (q) window.location.href = 'category.html?q=' + encodeURIComponent(q);
+    };
+
+    const searchInput = document.getElementById('search-input');
+    if (searchInput) {
+      searchInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          window.applySearchFilters();
+        }
+      });
+    }
+
+    document.addEventListener('click', function (e) {
+      const pop = document.getElementById('customer-avatar-popover');
+      const btn = document.getElementById('btn-customer-avatar-toggle');
+      if (pop && !pop.classList.contains('hidden') && !pop.contains(e.target) && !btn?.contains(e.target)) {
+        window.closeCustomerAvatarMenu();
+      }
+
+      const notiPop = document.getElementById('notification-popover');
+      const notiBtn = document.getElementById('btn-notification-toggle');
+      if (notiPop && !notiPop.classList.contains('hidden') && !notiPop.contains(e.target) && !notiBtn?.contains(e.target)) {
+        notiPop.classList.add('hidden');
+      }
+    });
+
+    // Cập nhật thông tin trên header
+    const loginBtn = document.getElementById('btn-header-login');
+    const custMenu = document.getElementById('header-customer-menu');
+    if (loginBtn) loginBtn.classList.add('hidden');
+    if (custMenu) {
+      custMenu.style.display = 'flex';
+      custMenu.classList.remove('hidden');
+    }
+
+    const custName = document.getElementById('customer-header-name');
+    if (custName) custName.textContent = user.hoTen || user.taiKhoan || 'Khang Huy';
+
+    const custPoints = document.getElementById('customer-header-points');
+    if (custPoints) custPoints.textContent = (user.diemTichLuy != null ? user.diemTichLuy : 200) + ' Đ';
+
+    const letter = (user.hoTen || user.taiKhoan || 'K').trim().charAt(0).toUpperCase();
+    const custAvatar = document.getElementById('customer-header-avatar');
+    if (custAvatar) {
+      custAvatar.innerHTML = user.avatar ? `<img src="${user.avatar}" class="w-full h-full object-cover rounded-full" />` : `<span class="font-black text-xs text-[#1E3A8A]">${letter}</span>`;
+    }
+
+    const popName = document.getElementById('customer-popover-name');
+    if (popName) popName.textContent = user.hoTen || user.taiKhoan || 'Khang Huy';
+
+    const popPhone = document.getElementById('customer-popover-phone');
+    if (popPhone) popPhone.textContent = user.email || user.sdt || '';
+
+    const popPoints = document.getElementById('customer-popover-points');
+    if (popPoints) popPoints.textContent = user.diemTichLuy != null ? user.diemTichLuy : 200;
+
+    const popAvatar = document.getElementById('customer-popover-avatar');
+    if (popAvatar) {
+      popAvatar.innerHTML = user.avatar ? `<img src="${user.avatar}" class="w-full h-full object-cover rounded-full" />` : letter;
+    }
+  }
 
   // Khởi động khi DOM sẵn sàng
   if (document.readyState === 'loading') {

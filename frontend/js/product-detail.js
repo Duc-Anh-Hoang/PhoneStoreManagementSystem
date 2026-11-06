@@ -186,6 +186,78 @@
       if (pop) pop.classList.toggle('hidden');
     };
 
+    window.toggleCustomerAvatarMenu = function (e) {
+      if (e && e.stopPropagation) e.stopPropagation();
+      const pop = document.getElementById('customer-avatar-popover');
+      const chev = document.getElementById('customer-avatar-chevron');
+      if (!pop) return;
+      const isHidden = pop.classList.contains('hidden');
+      if (isHidden) {
+        pop.classList.remove('hidden');
+        if (chev) chev.style.transform = 'rotate(180deg)';
+      } else {
+        pop.classList.add('hidden');
+        if (chev) chev.style.transform = 'rotate(0deg)';
+      }
+    };
+
+    window.closeCustomerAvatarMenu = function () {
+      const pop = document.getElementById('customer-avatar-popover');
+      const chev = document.getElementById('customer-avatar-chevron');
+      if (pop) pop.classList.add('hidden');
+      if (chev) chev.style.transform = 'rotate(0deg)';
+    };
+
+    document.addEventListener('click', function (e) {
+      const pop = document.getElementById('customer-avatar-popover');
+      const btn = document.getElementById('btn-customer-avatar-toggle');
+      if (pop && !pop.classList.contains('hidden') && !pop.contains(e.target) && !btn?.contains(e.target)) {
+        window.closeCustomerAvatarMenu();
+      }
+
+      const notiPop = document.getElementById('notification-popover');
+      const notiBtn = document.getElementById('btn-notification-toggle');
+      if (notiPop && !notiPop.classList.contains('hidden') && !notiPop.contains(e.target) && !notiBtn?.contains(e.target)) {
+        notiPop.classList.add('hidden');
+      }
+    });
+
+    window.toggleCustomerAvatarMenu = function (e) {
+      if (e && e.stopPropagation) e.stopPropagation();
+      const pop = document.getElementById('customer-avatar-popover');
+      const chev = document.getElementById('customer-avatar-chevron');
+      if (!pop) return;
+      const isHidden = pop.classList.contains('hidden');
+      if (isHidden) {
+        pop.classList.remove('hidden');
+        if (chev) chev.style.transform = 'rotate(180deg)';
+      } else {
+        pop.classList.add('hidden');
+        if (chev) chev.style.transform = 'rotate(0deg)';
+      }
+    };
+
+    window.closeCustomerAvatarMenu = function () {
+      const pop = document.getElementById('customer-avatar-popover');
+      const chev = document.getElementById('customer-avatar-chevron');
+      if (pop) pop.classList.add('hidden');
+      if (chev) chev.style.transform = 'rotate(0deg)';
+    };
+
+    document.addEventListener('click', function (e) {
+      const pop = document.getElementById('customer-avatar-popover');
+      const btn = document.getElementById('btn-customer-avatar-toggle');
+      if (pop && !pop.classList.contains('hidden') && !pop.contains(e.target) && !btn?.contains(e.target)) {
+        window.closeCustomerAvatarMenu();
+      }
+
+      const notiPop = document.getElementById('notification-popover');
+      const notiBtn = document.getElementById('btn-notification-toggle');
+      if (notiPop && !notiPop.classList.contains('hidden') && !notiPop.contains(e.target) && !notiBtn?.contains(e.target)) {
+        notiPop.classList.add('hidden');
+      }
+    });
+
     // 3. Quick Search Tags
     window.quickSearchTag = function (tag) {
       window.location.href = 'category.html?q=' + encodeURIComponent(tag);
