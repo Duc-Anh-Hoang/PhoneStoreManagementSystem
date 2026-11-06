@@ -33,100 +33,8 @@
   let activeModalOrderCode = null;
   let qrCountdownInterval = null;
 
-  // Dữ liệu đơn hàng mẫu ban đầu (Initial Seed)
-  const SAMPLE_ORDERS = [
-    {
-      maDH: 'DH-261106-8921',
-      ngayDat: '2026-11-06T09:30:00.000Z',
-      tenNguoiNhan: 'Anh Khang Nguyễn',
-      sdtNguoiNhan: '0901234567',
-      email: 'huykhang110206@gmail.com',
-      diaChiGiao: '241 Lê Văn Việt, Phường Hiệp Phú, TP. Thủ Đức, TP. Hồ Chí Minh',
-      phuongThucThanhToan: 'banking',
-      ghiChu: 'Giao giờ hành chính, gọi trước 15 phút',
-      subtotal: 28990000,
-      discount: 389900,
-      tongTien: 28600100,
-      trangThai: 'cho_xac_nhan',
-      daThanhToan: false,
-      items: [
-        {
-          maHang: 'IPHONE16PM',
-          tenHang: 'iPhone 16 Pro Max 256GB Chính Hãng VN/A',
-          soLuong: 1,
-          donGia: 28990000,
-          thanhTien: 28990000,
-          image: '../images/deal-tabs/deal-tab-phone.jpg'
-        }
-      ]
-    },
-    {
-      maDH: 'DH-261105-4120',
-      ngayDat: '2026-11-05T14:15:00.000Z',
-      tenNguoiNhan: 'Anh Khang Nguyễn',
-      sdtNguoiNhan: '0901234567',
-      email: 'huykhang110206@gmail.com',
-      diaChiGiao: 'Ký túc xá Khu B ĐHQG, Phường Đông Hòa, Dĩ An, Bình Dương',
-      phuongThucThanhToan: 'cod',
-      ghiChu: 'Giao buổi chiều',
-      subtotal: 23990000,
-      discount: 239900,
-      tongTien: 23750100,
-      trangThai: 'dang_giao',
-      daThanhToan: false,
-      items: [
-        {
-          maHang: 'SS24ULTRA',
-          tenHang: 'Samsung Galaxy S24 Ultra 512GB Titan Gray',
-          soLuong: 1,
-          donGia: 23990000,
-          thanhTien: 23990000,
-          image: '../images/deal-tabs/deal-tab-dienthoai.jpg'
-        }
-      ]
-    },
-    {
-      maDH: 'DH-261101-7734',
-      ngayDat: '2026-11-01T10:00:00.000Z',
-      tenNguoiNhan: 'Anh Khang Nguyễn',
-      sdtNguoiNhan: '0901234567',
-      email: 'huykhang110206@gmail.com',
-      diaChiGiao: '241 Lê Văn Việt, TP. Thủ Đức, TP. Hồ Chí Minh',
-      phuongThucThanhToan: 'momo',
-      ghiChu: '',
-      subtotal: 5390000,
-      discount: 100000,
-      tongTien: 5290000,
-      trangThai: 'da_giao',
-      daThanhToan: true,
-      items: [
-        {
-          maHang: 'AIRPODS2USB',
-          tenHang: 'Tai nghe Bluetooth Apple AirPods Pro 2 Type-C (2024)',
-          soLuong: 1,
-          donGia: 5390000,
-          thanhTien: 5390000,
-          image: '../images/deal-tabs/deal-tab-audio.jpg'
-        }
-      ]
-    }
-  ];
-
-  function getCart() {
-    try {
-      const c = localStorage.getItem(STORAGE_KEY);
-      return c ? JSON.parse(c) : [];
-    } catch (e) {
-      return [];
-    }
-  }
-
-  function saveCart(items) {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-      updateHeaderBadge();
-    } catch (e) {}
-  }
+  // Dữ liệu đơn hàng: Không sử dụng dữ liệu ảo mẫu
+  const SAMPLE_ORDERS = [];
 
   function getOrders() {
     try {
@@ -887,12 +795,19 @@
       saveOrders(orders);
     } catch (e) {}
 
-    // Gửi realtime qua SignalR tới Admin ngay lập tức
+    // Gửi realtime qua SignalR & BroadcastChannel tới Admin ngay lập tức
     try {
       if (window.OrderSignalR && typeof window.OrderSignalR.notifyNewOrder === 'function') {
         window.OrderSignalR.notifyNewOrder(orderData);
         window.OrderSignalR.joinOrderGroup(orderData.maDH);
         if (orderData.sdtNguoiNhan) window.OrderSignalR.joinCustomerGroup(orderData.sdtNguoiNhan);
+      }
+    } catch (e) {}
+    try {
+      if (typeof BroadcastChannel !== 'undefined') {
+        const bc = new BroadcastChannel('samamobile_orders');
+        bc.postMessage({ type: 'new_order', order: orderData });
+        bc.close();
       }
     } catch (e) {}
 

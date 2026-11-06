@@ -4728,15 +4728,12 @@ window.updatePosImeiOptions = updatePosImeiOptions;
 
 
 // =========================================================================
-// SIGNALR REALTIME LISTENERS DÀNH CHO ADMIN
+// SIGNALR & BROADCAST REALTIME LISTENERS DÀNH CHO ADMIN
 // =========================================================================
-window.addEventListener('samamobile:new_order', function (e) {
-  const order = e.detail;
+function handleIncomingAdminOrder(order) {
   if (!order || !order.maDH) return;
-
   console.log('Admin received real-time new order:', order);
 
-  // 1. Thêm đơn hàng mới vào đầu danh sách nếu chưa có
   if (!AdminRealtimeData.orders) AdminRealtimeData.orders = [];
   const exists = AdminRealtimeData.orders.some(o => o.maDH === order.maDH);
   if (!exists) {
@@ -4746,20 +4743,28 @@ window.addEventListener('samamobile:new_order', function (e) {
     } catch (err) {}
   }
 
-  // 2. Chuông báo & Thông báo Toast nổi bật
+  // Phát âm thanh chuông báo Web Audio
+  if (AdminRealtimeData && typeof AdminRealtimeData.playOrderChime === 'function') {
+    AdminRealtimeData.playOrderChime();
+  }
+
   const ten = order.tenNguoiNhan || 'Khách hàng';
   const tien = (typeof Format !== 'undefined' && Format.currency) 
     ? Format.currency(order.tongTien || 0) 
     : ((order.tongTien || 0).toLocaleString('vi-VN') + 'đ');
   showToast('🔔 ĐƠN HÀNG MỚI! ' + ten + ' vừa đặt đơn #' + order.maDH + ' (' + tien + ')', 'info');
 
-  // 3. Tự động vẽ lại bảng đơn hàng nếu đang mở
-  if (typeof renderDonHangOnlineTable === 'function') {
-    renderDonHangOnlineTable();
+  // Vẽ lại bảng đơn hàng và Dashboard ngay tức thì
+  if (typeof renderDonHangTable === 'function') {
+    renderDonHangTable();
   }
-  if (typeof updateDashboardStats === 'function') {
-    updateDashboardStats();
+  if (AdminRealtimeData && typeof AdminRealtimeData.refreshUI === 'function') {
+    AdminRealtimeData.refreshUI();
   }
+}
+
+window.addEventListener('samamobile:new_order', function (e) {
+  handleIncomingAdminOrder(e.detail);
 });
 
 window.addEventListener('samamobile:order_status_updated', function (e) {
@@ -4771,9 +4776,29 @@ window.addEventListener('samamobile:order_status_updated', function (e) {
     if (o) {
       o.trangThai = data.trangThai;
       if (data.soHD) o.soHD = data.soHD;
-      if (typeof renderDonHangOnlineTable === 'function') {
-        renderDonHangOnlineTable();
+      try {
+        localStorage.setItem('cellphones_online_orders', JSON.stringify(AdminRealtimeData.orders));
+      } catch (err) {}
+      if (typeof renderDonHangTable === 'function') {
+        renderDonHangTable();
+      }
+      if (AdminRealtimeData && typeof AdminRealtimeData.refreshUI === 'function') {
+        AdminRealtimeData.refreshUI();
       }
     }
   }
 });
+
+// BroadcastChannel cho kết nối liên tab trong cùng trình duyệt với độ trễ 0ms
+if (typeof BroadcastChannel !== 'undefined') {
+  try {
+    const adminBC = new BroadcastChannel('samamobile_orders');
+    adminBC.onmessage = function (e) {
+      if (e.data && e.data.type === 'new_order' && e.data.order) {
+        handleIncomingAdminOrder(e.data.order);
+      } else if (e.data && e.data.type === 'orders_updated' && Array.isArray(e.data.orders) && e.data.orders.length > 0) {
+        handleIncomingAdminOrder(e.data.orders[0]);
+      }
+    };
+  } catch (err) {}
+}
