@@ -212,7 +212,7 @@
       const oldRaw = localStorage.getItem(REGISTERED_USERS_KEY);
       if (oldRaw) regList = JSON.parse(oldRaw);
       // Cập nhật nếu đã có hoặc thêm mới
-      const existingIdx = regList.findIndex(u => (u.email && u.email === completeUser.email) || (u.sdt && u.sdt === completeUser.sdt));
+      const existingIdx = regList.findIndex(u => (u.email && completeUser.email && u.email.toLowerCase() === completeUser.email.toLowerCase()) || (u.sdt && completeUser.sdt && u.sdt.replace(/\s/g, "") === completeUser.sdt.replace(/\s/g, "")));
       if (existingIdx > -1) {
         regList[existingIdx] = completeUser;
       } else {

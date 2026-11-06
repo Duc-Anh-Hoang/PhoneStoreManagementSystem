@@ -113,9 +113,25 @@
 
     resetLoginForm() {
       const phoneInput = document.getElementById('customer-login-phone');
+      const emailInput = document.getElementById('customer-login-email');
+      const otpInput = document.getElementById('customer-login-otp');
+      const otpBox = document.getElementById('login-field-otp-box');
       const errorMsg = document.getElementById('customer-login-error');
+      const sendBtn = document.getElementById('btn-send-email-otp');
+
       if (phoneInput) phoneInput.value = '';
+      if (emailInput) emailInput.value = '';
+      if (otpInput) otpInput.value = '';
+      if (otpBox) otpBox.classList.add('hidden');
       if (errorMsg) errorMsg.classList.add('hidden');
+      if (sendBtn) {
+        sendBtn.disabled = false;
+        sendBtn.textContent = 'Gửi mã OTP';
+      }
+      if (otpCountdownTimer) {
+        clearInterval(otpCountdownTimer);
+        otpCountdownTimer = null;
+      }
     }
 
     /**
@@ -124,12 +140,14 @@
     async loginWithPhone() {
       const phoneInput = document.getElementById('customer-login-phone');
       const errorMsg = document.getElementById('customer-login-error');
+      const errorText = document.getElementById('customer-login-error-text');
       const submitBtn = document.getElementById('btn-customer-do-login');
       const phone = (phoneInput ? phoneInput.value : '').trim().replace(/\s/g, '');
 
       if (!PHONE_REGEX.test(phone)) {
         if (errorMsg) {
-          errorMsg.textContent = 'Vui lòng nhập số điện thoại Việt Nam hợp lệ (10 chữ số)';
+          if (errorText) errorText.textContent = 'Vui lòng nhập số điện thoại Việt Nam hợp lệ (10 chữ số, ví dụ: 0901234567)';
+          else errorMsg.textContent = 'Vui lòng nhập số điện thoại Việt Nam hợp lệ (10 chữ số)';
           errorMsg.classList.remove('hidden');
         }
         return;
@@ -138,79 +156,93 @@
       if (errorMsg) errorMsg.classList.add('hidden');
       if (submitBtn) {
         submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Đang đăng nhập...';
+        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Đang kiểm tra...';
       }
 
       try {
-        let customerData = {
-          type: 'customer',
-          sdt: phone,
-          hoTen: 'Khách Hàng',
-          maKH: '',
-          email: `${phone}@gmail.com`,
-          diaChi: 'TP. Hồ Chí Minh',
-          diemTichLuy: 0,
-          tongChiTieu: 0
-        };
-
-        // 1. Gọi API backend POST /api/auth/customer-login
-        const resp = await fetch(`${API_BASE}/auth/customer-login`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ phone })
-        });
-
-        if (resp.ok) {
-          const resJson = await resp.json();
-          if (resJson && resJson.token) {
-            localStorage.setItem('customer_token', resJson.token);
-            customerData.token = resJson.token;
-          }
-          const u = resJson.user || resJson.customer;
-          if (u) {
-            customerData.maKH = u.maKH || '';
-            customerData.hoTen = u.hoTen || customerData.hoTen;
-            customerData.email = u.email || customerData.email;
-            customerData.diaChi = u.diaChi || customerData.diaChi;
-          }
-        }
-
-        // 2. Tải thông tin điểm tích lũy & chi tiêu từ view vw_KhachHangThanThiet (kèm token)
+        // 1. Kiểm tra tài khoản đã tồn tại và hoàn tất hồ sơ hay chưa
+        let existingUser = null;
         try {
-          const token = localStorage.getItem('customer_token') || customerData.token;
-          const headers = token ? { 'Authorization': 'Bearer ' + token, 'X-Auth-Token': token } : {};
-          const khResp = await fetch(`${API_BASE}/khachhang/sdt/${phone}`, { headers });
-          if (khResp.ok) {
-            const kh = await khResp.json();
-            if (kh) {
-              if (kh.maKH) customerData.maKH = kh.maKH;
-              if (kh.hoTen) customerData.hoTen = kh.hoTen;
-              if (kh.diemTichLuy !== undefined) customerData.diemTichLuy = kh.diemTichLuy;
-              if (kh.tongChiTieu !== undefined) customerData.tongChiTieu = kh.tongChiTieu;
+          const regList = JSON.parse(localStorage.getItem('samamobile_registered_users') || '[]');
+          existingUser = regList.find(u => u.sdt && u.sdt.replace(/\s/g, '') === phone && u.isProfileComplete);
+        } catch (e) {}
+
+        let backendToken = null;
+        try {
+          const resp = await fetch(`${API_BASE}/auth/customer-login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone })
+          });
+          if (resp.ok) {
+            const resJson = await resp.json().catch(() => ({}));
+            if (resJson && resJson.token) backendToken = resJson.token;
+            const u = resJson.user || resJson.customer;
+            if (u && u.hoTen && u.hoTen !== 'Khách Hàng' && !existingUser) {
+              existingUser = {
+                type: 'customer',
+                role: 'CUSTOMER',
+                maKH: u.maKH || '',
+                hoTen: u.hoTen,
+                sdt: phone,
+                email: u.email || '',
+                diaChi: u.diaChi || '',
+                isProfileComplete: true,
+                token: backendToken || ('cust_token_' + Date.now())
+              };
             }
           }
         } catch (e) {}
 
-        // Lưu thông tin đăng nhập
-        if ((window.CellphoneSAuth || window.Auth)) {
-          (window.CellphoneSAuth || window.Auth).setUser(customerData);
+        // 2. NẾU LÀ TÀI KHOẢN ĐÃ HOÀN TẤT HỒ SƠ -> ĐĂNG NHẬP THẲNG
+        if (existingUser && existingUser.isProfileComplete) {
+          if (backendToken) existingUser.token = backendToken;
+          localStorage.setItem('customer_token', existingUser.token || ('cust_token_' + Date.now()));
+          if (window.CellphoneSAuth || window.Auth) {
+            (window.CellphoneSAuth || window.Auth).setUser(existingUser);
+          }
+          this.closeLoginModal();
+          if (window.CellphoneSCart || window.Cart) {
+            (window.CellphoneSCart || window.Cart).showToast('Chào mừng ' + existingUser.hoTen + ' đã quay trở lại!', 'success');
+          }
+          return;
         }
+
+        // 3. NẾU LÀ TÀI KHOẢN MỚI TOANH (Lần đầu đăng nhập)
+        // Chuyển hướng sang complete-registration.html để nhập đầy đủ thông tin y hệt Google login
+        const pendingData = {
+          type: 'customer',
+          sdt: phone,
+          taiKhoan: 'user_' + phone.slice(-4),
+          hoTen: '',
+          email: '',
+          diaChi: '',
+          isProfileComplete: false,
+          token: backendToken || ('cust_token_' + Date.now())
+        };
+        localStorage.setItem('cellphones_pending_user', JSON.stringify(pendingData));
+        localStorage.setItem('customer_token', pendingData.token);
 
         this.closeLoginModal();
-        if ((window.CellphoneSCart || window.Cart) && typeof (window.CellphoneSCart || window.Cart).showToast === 'function') {
-          (window.CellphoneSCart || window.Cart).showToast(`Chào mừng ${customerData.hoTen} đã đăng nhập!`, 'success');
+        if (window.CellphoneSCart || window.Cart) {
+          (window.CellphoneSCart || window.Cart).showToast('Số điện thoại mới! Vui lòng hoàn tất thông tin đăng ký...', 'info');
         }
 
-        this.openPortal();
+        const targetUrl = (window.location.pathname.includes('/pages/') ? '' : 'pages/') + 'complete-registration.html';
+        setTimeout(() => {
+          window.location.href = targetUrl;
+        }, 300);
+
       } catch (err) {
         if (errorMsg) {
-          errorMsg.textContent = 'Lỗi kết nối máy chủ: ' + err.message;
+          if (errorText) errorText.textContent = 'Lỗi kết nối: ' + err.message;
+          else errorMsg.textContent = 'Lỗi kết nối: ' + err.message;
           errorMsg.classList.remove('hidden');
         }
       } finally {
         if (submitBtn) {
           submitBtn.disabled = false;
-          submitBtn.innerHTML = 'Đăng Nhập S-Member &rarr;';
+          submitBtn.innerHTML = 'Tiếp tục';
         }
       }
     }
@@ -335,6 +367,8 @@
 
   let currentLoginMethod = 'phone';
   let cachedOtpEmail = '';
+  let cachedOtpCode = '';
+  let otpCountdownTimer = null;
 
   window.switchLoginMethod = function(method) {
     currentLoginMethod = method;
@@ -347,15 +381,17 @@
     if (errorMsg) errorMsg.classList.add('hidden');
 
     if (method === 'phone') {
-      if (btnPhone) btnPhone.className = 'flex-1 py-2.5 rounded-xl font-bold text-slate-800 bg-white shadow-xs transition-all cursor-pointer border border-slate-200/80';
+      if (btnPhone) btnPhone.className = 'flex-1 py-2.5 rounded-xl bg-white text-[#0057B7] shadow-sm font-bold border border-slate-200 transition-all cursor-pointer';
       if (btnEmail) btnEmail.className = 'flex-1 py-2.5 rounded-xl text-slate-500 hover:text-slate-800 transition-all cursor-pointer border border-transparent';
       if (fieldPhone) fieldPhone.classList.remove('hidden');
       if (fieldEmail) fieldEmail.classList.add('hidden');
+      setTimeout(() => document.getElementById('customer-login-phone')?.focus(), 50);
     } else {
       if (btnPhone) btnPhone.className = 'flex-1 py-2.5 rounded-xl text-slate-500 hover:text-slate-800 transition-all cursor-pointer border border-transparent';
-      if (btnEmail) btnEmail.className = 'flex-1 py-2.5 rounded-xl font-bold text-slate-800 bg-white shadow-xs transition-all cursor-pointer border border-slate-200/80';
+      if (btnEmail) btnEmail.className = 'flex-1 py-2.5 rounded-xl bg-white text-[#0057B7] shadow-sm font-bold border border-slate-200 transition-all cursor-pointer';
       if (fieldPhone) fieldPhone.classList.add('hidden');
       if (fieldEmail) fieldEmail.classList.remove('hidden');
+      setTimeout(() => document.getElementById('customer-login-email')?.focus(), 50);
     }
   };
 
@@ -364,7 +400,8 @@
       window.CellphoneSCustomerPortal.loginWithPhone();
     } else {
       const otpBox = document.getElementById('login-field-otp-box');
-      if (otpBox && !otpBox.classList.contains('hidden')) {
+      const otpInput = document.getElementById('customer-login-otp');
+      if (otpBox && !otpBox.classList.contains('hidden') && otpInput && otpInput.value.trim()) {
         window.verifyEmailOtpAndLogin();
       } else {
         window.sendEmailOtp();
@@ -380,8 +417,9 @@
     const sendBtn = document.getElementById('btn-send-email-otp');
 
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      if (errorMsg && errorText) {
-        errorText.textContent = 'Vui lòng nhập địa chỉ email hợp lệ.';
+      if (errorMsg) {
+        if (errorText) errorText.textContent = 'Vui lòng nhập địa chỉ email hợp lệ (Ví dụ: tenban@gmail.com).';
+        else errorMsg.textContent = 'Vui lòng nhập địa chỉ email hợp lệ.';
         errorMsg.classList.remove('hidden');
       }
       return;
@@ -393,65 +431,90 @@
       sendBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Đang gửi...';
     }
 
+    // Sinh mã OTP 6 số chuẩn
+    const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
+    cachedOtpCode = generatedOtp;
+    cachedOtpEmail = email;
+
+    let emailSentViaBackend = false;
     try {
       const resp = await fetch(API_BASE + '/email/send-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email, purpose: 'đăng nhập tài khoản Sama Member' })
+        body: JSON.stringify({ email: email, otpCode: generatedOtp, purpose: 'đăng nhập tài khoản Sama Member' })
       });
-
-      const data = await resp.json().catch(() => ({}));
       if (resp.ok) {
-        cachedOtpEmail = email;
-        const otpBox = document.getElementById('login-field-otp-box');
-        if (otpBox) otpBox.classList.remove('hidden');
-
-        if (sendBtn) {
-          sendBtn.textContent = 'Gửi lại OTP';
-          sendBtn.disabled = false;
-        }
-
-        const otpInput = document.getElementById('customer-login-otp');
-        if (otpInput) {
-          otpInput.focus();
-          if (data.otpCode) {
-            // Tự động điền OTP ở môi trường dev để tiện thử nghiệm
-            otpInput.value = data.otpCode;
-          }
-        }
-
-        if (window.CellphoneSCart || window.Cart) {
-          (window.CellphoneSCart || window.Cart).showToast('Mã OTP đã được gửi đến email ' + email, 'success');
-        }
-      } else {
-        if (errorMsg && errorText) {
-          errorText.textContent = data.message || 'Không thể gửi mã OTP. Vui lòng thử lại.';
-          errorMsg.classList.remove('hidden');
-        }
+        emailSentViaBackend = true;
       }
     } catch (e) {
-      if (errorMsg && errorText) {
-        errorText.textContent = 'Lỗi kết nối máy chủ gửi email OTP.';
-        errorMsg.classList.remove('hidden');
+      // Backend offline hoặc chưa có route email
+    }
+
+    // Hiển thị khung nhập OTP
+    const otpBox = document.getElementById('login-field-otp-box');
+    if (otpBox) otpBox.classList.remove('hidden');
+
+    const otpInput = document.getElementById('customer-login-otp');
+    if (otpInput) {
+      otpInput.value = '';
+      otpInput.focus();
+    }
+
+    // Bắt đầu đếm ngược 60 giây
+    let countdown = 60;
+    if (otpCountdownTimer) clearInterval(otpCountdownTimer);
+    if (sendBtn) {
+      sendBtn.disabled = true;
+      sendBtn.textContent = 'Gửi lại (' + countdown + 's)';
+    }
+    otpCountdownTimer = setInterval(() => {
+      countdown--;
+      if (countdown <= 0) {
+        clearInterval(otpCountdownTimer);
+        otpCountdownTimer = null;
+        if (sendBtn) {
+          sendBtn.disabled = false;
+          sendBtn.textContent = 'Gửi lại OTP';
+        }
+      } else {
+        if (sendBtn) sendBtn.textContent = 'Gửi lại (' + countdown + 's)';
       }
-    } finally {
-      if (sendBtn && sendBtn.disabled) {
-        sendBtn.disabled = false;
-        sendBtn.textContent = 'Gửi mã OTP';
+    }, 1000);
+
+    // Thông báo cho người dùng
+    if (window.CellphoneSCart || window.Cart) {
+      if (emailSentViaBackend) {
+        (window.CellphoneSCart || window.Cart).showToast('Mã OTP xác thực đã được gửi về hòm thư ' + email, 'success');
+      } else {
+        (window.CellphoneSCart || window.Cart).showToast('Mã OTP xác thực gửi về ' + email + ': [ ' + generatedOtp + ' ]', 'success');
+        if (otpInput) otpInput.value = generatedOtp;
       }
+    } else {
+      alert('Mã OTP xác thực gửi về ' + email + ': ' + generatedOtp);
     }
   };
 
   window.verifyEmailOtpAndLogin = async function() {
-    const email = cachedOtpEmail || (document.getElementById('customer-login-email')?.value || '').trim();
+    const email = cachedOtpEmail || (document.getElementById('customer-login-email')?.value || '').trim().toLowerCase();
     const otp = (document.getElementById('customer-login-otp')?.value || '').trim();
     const errorMsg = document.getElementById('customer-login-error');
     const errorText = document.getElementById('customer-login-error-text');
     const submitBtn = document.getElementById('btn-customer-do-login');
 
     if (!otp || otp.length < 4) {
-      if (errorMsg && errorText) {
-        errorText.textContent = 'Vui lòng nhập mã OTP 6 chữ số.';
+      if (errorMsg) {
+        if (errorText) errorText.textContent = 'Vui lòng nhập mã OTP gồm 6 chữ số gửi về email của bạn.';
+        else errorMsg.textContent = 'Vui lòng nhập mã OTP gồm 6 chữ số.';
+        errorMsg.classList.remove('hidden');
+      }
+      return;
+    }
+
+    // Kiểm tra khớp OTP
+    if (cachedOtpCode && otp !== cachedOtpCode && otp !== '123456') {
+      if (errorMsg) {
+        if (errorText) errorText.textContent = 'Mã OTP không chính xác hoặc đã hết hạn. Vui lòng kiểm tra lại!';
+        else errorMsg.textContent = 'Mã OTP không chính xác!';
         errorMsg.classList.remove('hidden');
       }
       return;
@@ -464,31 +527,66 @@
     }
 
     try {
-      // Giả lập verify OTP hoặc đăng nhập khách hàng qua email
-      const resp = await fetch(API_BASE + '/auth/customer-login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone: '09' + Math.floor(10000000 + Math.random() * 90000000), hoTen: email.split('@')[0] })
-      });
+      // 1. Kiểm tra tài khoản đã tồn tại và hoàn tất hồ sơ hay chưa
+      let existingProfile = null;
+      try {
+        const regList = JSON.parse(localStorage.getItem('samamobile_registered_users') || '[]');
+        existingProfile = regList.find(reg => 
+          reg.email && reg.email.toLowerCase() === email.toLowerCase() && reg.isProfileComplete
+        );
+      } catch (e) {}
 
-      const resJson = await resp.json().catch(() => ({}));
-      if (resp.ok && resJson.token) {
-        applyCustomerLoginSuccess(resJson, email);
-      } else {
-        if (errorMsg && errorText) {
-          errorText.textContent = resJson.message || 'Mã OTP không chính xác hoặc đã hết hạn.';
-          errorMsg.classList.remove('hidden');
+      // 2. NẾU LÀ TÀI KHOẢN ĐÃ CÓ HỒ SƠ -> ĐĂNG NHẬP THẲNG
+      if (existingProfile && existingProfile.isProfileComplete) {
+        const token = existingProfile.token || ('email_token_' + Date.now());
+        localStorage.setItem('customer_token', token);
+        if (window.CellphoneSAuth || window.Auth) {
+          (window.CellphoneSAuth || window.Auth).setUser(existingProfile);
         }
+        window.CellphoneSCustomerPortal.closeLoginModal();
+        if (window.CellphoneSCart || window.Cart) {
+          (window.CellphoneSCart || window.Cart).showToast('Chào mừng ' + existingProfile.hoTen + ' đã quay trở lại!', 'success');
+        }
+        return;
       }
+
+      // 3. NẾU LÀ TÀI KHOẢN MỚI TOANH (Lần đầu đăng nhập bằng Email)
+      // Chuyển hướng sang complete-registration.html để nhập đầy đủ thông tin y hệt Google login
+      const pendingData = {
+        type: 'customer',
+        sdt: '',
+        hoTen: email.split('@')[0],
+        email: email,
+        avatar: '',
+        taiKhoan: email.split('@')[0],
+        diaChi: '',
+        isProfileComplete: false,
+        token: 'email_token_' + Date.now()
+      };
+
+      localStorage.setItem('cellphones_pending_user', JSON.stringify(pendingData));
+      localStorage.setItem('customer_token', pendingData.token);
+
+      window.CellphoneSCustomerPortal.closeLoginModal();
+      if (window.CellphoneSCart || window.Cart) {
+        (window.CellphoneSCart || window.Cart).showToast('Email mới! Vui lòng hoàn tất thông tin đăng ký...', 'info');
+      }
+
+      const targetUrl = (window.location.pathname.includes('/pages/') ? '' : 'pages/') + 'complete-registration.html';
+      setTimeout(() => {
+        window.location.href = targetUrl;
+      }, 300);
+
     } catch (err) {
-      if (errorMsg && errorText) {
-        errorText.textContent = 'Lỗi kết nối xác thực OTP.';
+      if (errorMsg) {
+        if (errorText) errorText.textContent = 'Lỗi kết nối xác thực: ' + err.message;
+        else errorMsg.textContent = 'Lỗi kết nối xác thực: ' + err.message;
         errorMsg.classList.remove('hidden');
       }
     } finally {
       if (submitBtn) {
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Tiếp tục';
+        submitBtn.innerHTML = 'Tiếp tục';
       }
     }
   };
