@@ -969,8 +969,8 @@
 
     const vName = selectedVersion ? selectedVersion.dungLuong : 'Tiêu chuẩn';
     const cName = selectedColor ? selectedColor.ten : 'Bạc';
-    const priceVal = selectedVersion ? selectedVersion.gia : currentProduct.donGia;
-    const oldPriceVal = selectedVersion ? selectedVersion.giaGoc : (currentProduct.giaGoc || currentProduct.donGia);
+    const priceVal = Number(selectedVersion ? selectedVersion.gia : currentProduct.donGia) || 0;
+    const oldPriceVal = Number(selectedVersion ? selectedVersion.giaGoc : (currentProduct.giaGoc || currentProduct.donGia)) || priceVal;
     const imgVal = selectedColor ? selectedColor.anh : currentProduct.anhChinh;
 
     const cartItem = {

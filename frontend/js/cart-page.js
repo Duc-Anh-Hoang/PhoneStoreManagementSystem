@@ -36,6 +36,26 @@
   // Dữ liệu đơn hàng: Không sử dụng dữ liệu ảo mẫu
   const SAMPLE_ORDERS = [];
 
+  function getCart() {
+    try {
+      const c = localStorage.getItem(STORAGE_KEY);
+      const parsed = c ? JSON.parse(c) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function saveCart(items) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(items || []));
+      updateHeaderBadge();
+    } catch (e) {}
+  }
+
+  window.getCart = getCart;
+  window.saveCart = saveCart;
+
   function getOrders() {
     try {
       const o = localStorage.getItem(ORDERS_STORAGE_KEY);
@@ -63,7 +83,7 @@
 
   function getCartFinalTotal() {
     const items = getCart();
-    const subtotal = items.reduce((s, it) => s + ((it.price || it.donGia || 0) * (it.qty || it.soLuong || 1)), 0);
+    const subtotal = items.reduce((s, it) => s + ((Number(it.price || it.donGia || 0)) * (Number(it.qty || it.soLuong || 1))), 0);
     let memberDiscount = 0;
     if (subtotal >= 1000000) memberDiscount = Math.round(subtotal * 0.01);
     let voucherDiscount = 0;
@@ -79,7 +99,7 @@
 
   function updateHeaderBadge() {
     const items = getCart();
-    const totalQty = items.reduce((s, it) => s + (it.qty || it.soLuong || 1), 0);
+    const totalQty = items.reduce((s, it) => s + (Number(it.qty || it.soLuong || 1)), 0);
     const badges = document.querySelectorAll('.cart-badge-count, #tab-badge-cart-count');
     badges.forEach(b => {
       b.textContent = totalQty;
@@ -380,7 +400,7 @@
     if (emptyState) emptyState.classList.add('hidden');
     if (mainContent) mainContent.classList.remove('hidden');
 
-    const totalQty = items.reduce((s, it) => s + (it.qty || it.soLuong || 1), 0);
+    const totalQty = items.reduce((s, it) => s + (Number(it.qty || it.soLuong || 1)), 0);
     if (itemsCountLabel) itemsCountLabel.textContent = `(${totalQty} sản phẩm)`;
 
     if (cartContainer) {
@@ -473,7 +493,7 @@
 
   function calculateTotals() {
     const items = getCart();
-    const subtotal = items.reduce((s, it) => s + ((it.price || it.donGia || 0) * (it.qty || it.soLuong || 1)), 0);
+    const subtotal = items.reduce((s, it) => s + ((Number(it.price || it.donGia || 0)) * (Number(it.qty || it.soLuong || 1))), 0);
 
     let memberDiscount = 0;
     if (subtotal >= 1000000) {
@@ -544,7 +564,7 @@
       return;
     }
 
-    const subtotal = getCart().reduce((s, it) => s + ((it.price || it.donGia || 0) * (it.qty || it.soLuong || 1)), 0);
+    const subtotal = getCart().reduce((s, it) => s + ((Number(it.price || it.donGia || 0)) * (Number(it.qty || it.soLuong || 1))), 0);
     if (subtotal < voucher.minOrder) {
       showVoucherMsg(`Mã ${code} chỉ áp dụng cho đơn từ ${formatVND(voucher.minOrder)}`, 'error');
       appliedVoucher = null;
@@ -746,7 +766,7 @@
       fullAddress = `${street}, ${ward ? ward + ', ' : ''}${district ? district + ', ' : ''}${province}`;
     }
 
-    const subtotal = items.reduce((s, it) => s + ((it.price || it.donGia || 0) * (it.qty || it.soLuong || 1)), 0);
+    const subtotal = items.reduce((s, it) => s + ((Number(it.price || it.donGia || 0)) * (Number(it.qty || it.soLuong || 1))), 0);
     let discount = 0;
     if (subtotal >= 1000000) discount += Math.round(subtotal * 0.01);
     if (appliedVoucher) {
@@ -775,9 +795,9 @@
       items: items.map(it => ({
         maHang: it.maHang || it.id,
         tenHang: it.tenHang || it.name,
-        soLuong: it.qty || it.soLuong || 1,
+        soLuong: Number(it.qty || it.soLuong || 1),
         donGia: it.price || it.donGia,
-        thanhTien: (it.price || it.donGia) * (it.qty || it.soLuong || 1),
+        thanhTien: (it.price || it.donGia) * (Number(it.qty || it.soLuong || 1)),
         image: it.image || it.hinhAnh
       }))
     };
