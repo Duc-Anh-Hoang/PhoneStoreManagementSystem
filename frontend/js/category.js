@@ -1002,22 +1002,31 @@
                 ` : ''}
               </div>
 
-              <!-- Dòng Member độc quyền & Trả góp -->
-              <div class="mt-1 text-xs sm:text-[13px] text-slate-700 font-semibold leading-tight">
-                Hoàng Hà Member chỉ từ: <strong class="text-[#008B8B] font-bold">${formatCurrency(memberPrice)}</strong>
-              </div>
-              <div class="text-xs text-slate-400 font-medium mt-0.5">
-                Hoặc ${formatCurrency(installmentMonth)} x 6T
+              <!-- Dòng Trả góp -->
+              <div class="mt-1 text-[#0057B7] text-[11px] sm:text-xs font-semibold flex items-center gap-1">
+                <i class="fa-solid fa-credit-card text-[10px]"></i>
+                <span>Hoặc ${formatCurrency(installmentMonth)} x 6T</span>
               </div>
 
-              <!-- Ưu đãi Ngân hàng & Trả góp 0% -->
-              <div class="mt-2.5 pt-2 border-t border-slate-100">
-                <div class="flex items-center gap-1.5 mb-1.5">
-                  <span class="h-4.5 px-1.5 rounded bg-slate-50 border border-slate-200 text-[9px] sm:text-[10px] font-black text-blue-800">BIDV</span>
-                  <span class="h-4.5 px-1.5 rounded bg-purple-50 border border-purple-200 text-[9px] sm:text-[10px] font-black text-purple-700">TPBank</span>
-                  <span class="h-4.5 px-1.5 rounded bg-teal-50 border border-teal-200 text-[9px] sm:text-[10px] font-black text-teal-700">0%</span>
-                </div>
-                <p class="text-xs text-slate-500 line-clamp-1 leading-tight">${bankPromo}</p>
+              <!-- Dải 4 Logo Ngân Hàng Đối Tác Trả Góp (Lưới 2x2 chuẩn) -->
+              <div class="grid grid-cols-2 gap-1.5 mt-2 pt-2 border-t border-slate-100 w-full">
+                <span class="h-6 sm:h-6.5 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-purple-400 hover:shadow-xs transition-all flex items-center justify-center p-0.5 w-full" title="TPBank Evo">
+                  <img src="${resolveAssetPath('images/brands/tpbank.png')}" alt="TPBank" class="h-3.5 sm:h-4 w-auto object-contain max-w-[85%] max-h-full" onerror="this.outerHTML='<span class=\'text-[10px] font-bold text-purple-700\'>TPBank</span>'" loading="lazy" />
+                </span>
+                <span class="h-6 sm:h-6.5 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-blue-400 hover:shadow-xs transition-all flex items-center justify-center p-0.5 w-full" title="VPBank">
+                  <img src="${resolveAssetPath('images/brands/vpbank.png')}" alt="VPBank" class="h-3.5 sm:h-4 w-auto object-contain max-w-[85%] max-h-full" onerror="this.outerHTML='<span class=\'text-[10px] font-bold text-blue-700\'>VPBank</span>'" loading="lazy" />
+                </span>
+                <span class="h-6 sm:h-6.5 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-blue-400 hover:shadow-xs transition-all flex items-center justify-center p-0.5 w-full" title="VIB">
+                  <img src="${resolveAssetPath('images/brands/vib.png')}" alt="VIB" class="h-3.5 sm:h-4 w-auto object-contain max-w-[85%] max-h-full" onerror="this.outerHTML='<span class=\'text-[10px] font-bold text-blue-700\'>VIB</span>'" loading="lazy" />
+                </span>
+                <span class="h-6 sm:h-6.5 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-blue-400 hover:shadow-xs transition-all flex items-center justify-center p-0.5 w-full" title="Trả góp 0%">
+                  <img src="${resolveAssetPath('images/brands/icon-2_639047641516424460.png')}" alt="Trả góp 0%" class="h-3.5 sm:h-4 w-auto object-contain max-w-[85%] max-h-full" onerror="this.src='${resolveAssetPath('images/brands/homecredit.png')}'" loading="lazy" />
+                </span>
+              </div>
+
+              <!-- Hộp ưu đãi ngân hàng nổi bật -->
+              <div class="text-[10px] sm:text-[11px] text-slate-600 line-clamp-2 mt-2 bg-slate-50 p-1.5 rounded-lg border border-slate-200 min-h-[34px] leading-snug">
+                ${bankPromo}
               </div>
             </div>
           </div>
@@ -1114,7 +1123,7 @@
         </p>
 
         <p id="art-sec-3" class="text-slate-700 leading-relaxed">
-          Đặc biệt, hội viên <strong>Hoàng Hà Member</strong> luôn được hưởng mức chiết khấu độc quyền giảm trực tiếp trên giá bán, kết hợp cùng hàng loạt ưu đãi tài chính từ các đối tác thẻ ngân hàng BIDV, TPBank, VPBank, VIB giúp bạn dễ dàng sở hữu thiết bị mơ ước với chi phí tiết kiệm nhất.
+          Đặc biệt, hội viên <strong>Sama Member</strong> luôn được hưởng mức chiết khấu độc quyền giảm trực tiếp trên giá bán, kết hợp cùng hàng loạt ưu đãi tài chính từ các đối tác thẻ ngân hàng BIDV, TPBank, VPBank, VIB giúp bạn dễ dàng sở hữu thiết bị mơ ước với chi phí tiết kiệm nhất.
         </p>
       `;
     }

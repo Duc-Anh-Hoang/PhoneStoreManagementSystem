@@ -219,7 +219,7 @@
                 </div>
 
                 <div class="mt-1 text-[10px] sm:text-[11px] text-slate-700 font-semibold leading-tight">
-                  Hoàng Hà Member: <strong class="text-[#008B8B] font-bold">${formatCurrency(memberPrice)}</strong>
+                  <span class="text-[#0057B7]"><i class="fa-solid fa-credit-card text-[9px] mr-1"></i>Trả góp 0%</span>
                 </div>
               </div>
             </div>
