@@ -245,12 +245,14 @@
         popoverList.innerHTML = rawList.slice(0, 4).map(function (p) {
           var price = Number(p.donGia) || 0;
           var pId = p.maHang || p.id;
+          var isPages = window.location.pathname.includes('/pages/') || window.location.href.includes('/pages/');
+          var targetUrl = (isPages ? '' : 'pages/') + 'product-detail.html?id=' + encodeURIComponent(pId);
           return `
-            <a href="pages/product-detail.html?id=${encodeURIComponent(pId)}" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-blue-50/70 transition-colors group">
-              <img src="${p.anhChinh}" alt="${p.tenHang}" class="w-12 h-12 object-contain rounded-lg border border-slate-200 bg-white p-1 flex-shrink-0" onerror="this.src='https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png';" />
+            <a href="${targetUrl}" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-50 transition-colors group/item">
+              <img src="${p.anhChinh}" alt="${p.tenHang}" class="w-12 h-12 object-contain rounded-lg border border-slate-200 bg-white p-1 flex-shrink-0 shadow-2xs" onerror="this.src='https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png';" />
               <div class="flex-1 min-w-0">
-                <p class="text-xs font-bold text-slate-800 line-clamp-1 group-hover:text-blue-600 transition-colors">${p.tenHang}</p>
-                <p class="text-xs font-black text-[#E0052B] font-mono mt-0.5">${formatCurrency(price)}</p>
+                <p class="text-xs sm:text-[13px] font-bold text-slate-900 line-clamp-1 group-hover/item:text-[#0057B7] transition-colors leading-snug">${p.tenHang}</p>
+                <p class="text-xs sm:text-[13px] font-black text-[#E11B1E] font-mono mt-0.5">${formatCurrency(price)}</p>
               </div>
             </a>
           `;

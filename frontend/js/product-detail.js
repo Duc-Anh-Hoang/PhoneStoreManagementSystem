@@ -224,8 +224,8 @@
                 <a href="product-detail.html?id=${encodeURIComponent(p.maHang || p.id)}" class="flex items-center gap-3 p-3 hover:bg-blue-50 transition-colors">
                   <img src="${resolveAssetPath(p.anhChinh || 'images/default-phone.png')}" class="w-10 h-10 object-contain rounded" onerror="this.src='../images/default-phone.png'" />
                   <div class="flex-1 min-w-0">
-                    <p class="text-xs font-bold text-slate-900 truncate">${p.tenHang}</p>
-                    <p class="text-[11px] text-rose-600 font-extrabold">${Number(p.donGia || 0).toLocaleString('vi-VN')} ₫</p>
+                    <p class="text-xs sm:text-[13px] font-bold text-slate-900 truncate">${p.tenHang}</p>
+                    <p class="text-xs sm:text-[13px] font-black text-[#E11B1E] font-mono mt-0.5">${Number(p.donGia || 0).toLocaleString('vi-VN')} ₫</p>
                   </div>
                 </a>
               `).join('');

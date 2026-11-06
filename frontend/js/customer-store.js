@@ -887,9 +887,9 @@
                   `}
                 </div>
                 <div class="flex-1 min-w-0">
-                  <h4 class="text-xs font-bold text-navy truncate">${p.tenHang}</h4>
+                  <h4 class="text-xs sm:text-[13px] font-bold text-slate-900 group-hover:text-[#0057B7] truncate transition-colors">${p.tenHang}</h4>
                   <div class="flex items-center gap-2 mt-0.5">
-                    <span class="text-xs font-bold text-rose-600">${(window.CellphoneSCart || window.Cart).formatMoney(p.donGia)}</span>
+                    <span class="text-xs sm:text-[13px] font-black text-[#E11B1E] font-mono">${(window.CellphoneSCart || window.Cart).formatMoney(p.donGia)}</span>
                     ${p.giaGoc > p.donGia ? `<span class="text-[10px] text-slate-400 line-through">${(window.CellphoneSCart || window.Cart).formatMoney(p.giaGoc)}</span>` : ''}
                   </div>
                 </div>
