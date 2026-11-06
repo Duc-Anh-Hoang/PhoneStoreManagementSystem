@@ -322,6 +322,8 @@
           const custName = document.getElementById('customer-header-name');
           const popName = document.getElementById('customer-popover-name');
           const popPhone = document.getElementById('customer-popover-phone');
+          const custPoints = document.getElementById('customer-header-points');
+          const popPoints = document.getElementById('customer-popover-points');
           const headerAvatar = document.getElementById('customer-header-avatar');
           const popAvatar = document.getElementById('customer-popover-avatar');
 
@@ -329,6 +331,8 @@
           if (custName) custName.textContent = displayName;
           if (popName) popName.textContent = displayName;
           if (popPhone) popPhone.textContent = u.email || u.sdt || 'Khách hàng Sama';
+          if (custPoints) custPoints.textContent = (u.diemTichLuy || 200) + ' Đ';
+          if (popPoints) popPoints.textContent = (u.diemTichLuy || 200);
 
           const firstLetter = displayName.trim().charAt(0).toUpperCase() || 'K';
           if (headerAvatar) headerAvatar.innerHTML = '<span class="font-extrabold text-[#0057B7] text-xs">' + firstLetter + '</span>';
