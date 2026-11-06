@@ -139,6 +139,16 @@
     'imou': 'images/brands/imou.png',
     'imou (camera)': 'images/brands/imou.png',
     'clair': 'images/brands/clair.png',
+    'tp-link': 'images/brands/tp-link.png',
+    'tapo': 'images/brands/tp-link.png',
+    'uniarch': 'images/brands/uniarch.png',
+    'mobifone': 'images/brands/viettel.png',
+    'dreame': 'images/brands/dreame.png',
+    'logitech': 'images/brands/acer.png',
+    'dareu': 'images/brands/asus.png',
+    'akko': 'images/brands/msi.png',
+    'razer': 'images/brands/razer.png',
+    'bravus': 'images/brands/abus.png',
     'myclair': 'images/brands/clair.png'
   };
 
@@ -487,8 +497,17 @@
 
     currentCategory = categoryMap[rawType] || 'dien-thoai';
 
+    const brandParamRaw = (params.get('brand') || '').toLowerCase().trim();
+    const catParamRaw = (params.get('cat') || '').toLowerCase().trim();
+
     // Xác định chuẩn currentSubCategory tương ứng
-    if (['tablet', 'may-tinh-bang', 'ipad', 'tab'].includes(rawType)) {
+    if (['camera', 'webcam'].includes(rawType) || ['camera', 'webcam'].includes(catParamRaw) || (['ezviz', 'imou', 'tapo'].some(b => brandParamRaw.includes(b)) && currentCategory === 'phu-kien')) {
+      currentCategory = 'phu-kien';
+      currentSubCategory = 'camera';
+    } else if (['smarthome', 'smart-home', 'network', 'thiet-bi-mang'].includes(rawType) || ['smarthome', 'smart-home', 'network'].includes(catParamRaw)) {
+      currentCategory = 'phu-kien';
+      currentSubCategory = 'smarthome';
+    } else if (['tablet', 'may-tinh-bang', 'ipad', 'tab'].includes(rawType)) {
       currentSubCategory = 'tablet';
     } else if (['dien-thoai', 'dienthoai', 'phone', 'smartphone'].includes(rawType)) {
       currentSubCategory = 'dien-thoai';
@@ -609,19 +628,24 @@
     } else if (currentCategory === 'phu-kien') {
       tabs = [
         { label: 'CỦ CÁP / SẠC DỰ PHÒNG', subType: 'sac-cap', catId: 'phu-kien' },
-        { label: 'CHUỘT & BÀN PHÍM / PHỤ KIỆN', subType: 'chuot-ban-phim', catId: 'phu-kien' }
+        { label: 'CHUỘT & BÀN PHÍM', subType: 'chuot-ban-phim', catId: 'phu-kien' },
+        { label: 'CAMERA AN NINH', subType: 'camera', catId: 'phu-kien' },
+        { label: 'SMART HOME & MẠNG', subType: 'smarthome', catId: 'phu-kien' }
       ];
     }
 
     if (tabs.length > 0) {
       switcher.classList.remove('hidden');
+      switcher.className = tabs.length > 2 
+        ? 'grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3 select-none' 
+        : 'grid grid-cols-2 gap-3 select-none';
       switcher.innerHTML = tabs.map((t, idx) => {
         // DUY NHẤT 1 tab được active sáng xanh tại một thời điểm
         const isActive = (t.subType === currentSubCategory) || (!currentSubCategory && idx === 0);
         return `
           <a href="category.html?type=${t.subType}" 
              onclick="event.preventDefault(); window.switchCategorySubTab('${t.subType}', '${t.catId}');" 
-             class="py-3.5 px-5 rounded-2xl font-black text-xs sm:text-sm md:text-base text-center uppercase tracking-wider transition-all shadow-xs cursor-pointer ${isActive ? 'dual-cat-tab-active shadow-md' : 'dual-cat-tab-inactive'}">
+             class="py-3 px-3 sm:px-4 rounded-2xl font-black text-xs sm:text-[13px] md:text-sm text-center uppercase tracking-wider transition-all shadow-xs cursor-pointer flex items-center justify-center min-h-[46px] ${isActive ? 'dual-cat-tab-active shadow-md' : 'dual-cat-tab-inactive'}">
             ${t.label}
           </a>
         `;
@@ -769,6 +793,52 @@
     });
 
     container.innerHTML = html;
+  }
+
+
+  // Trả về danh sách thương hiệu phù hợp ngữ cảnh danh mục & subcategory
+  function getActiveCategoryBrands() {
+    if (currentCategory === 'phu-kien') {
+      if (currentSubCategory === 'camera') {
+        return [
+          { name: 'EZVIZ', featured: true },
+          { name: 'IMOU', featured: true },
+          { name: 'TP-Link', featured: true },
+          { name: 'Xiaomi', featured: true },
+          { name: 'Uniarch', featured: true },
+          { name: 'MobiFone', featured: true }
+        ];
+      }
+      if (currentSubCategory === 'smarthome') {
+        return [
+          { name: 'Xiaomi', featured: true },
+          { name: 'Dreame', featured: true },
+          { name: 'Mova', featured: true },
+          { name: 'Philips', featured: true },
+          { name: 'Bravus', featured: true }
+        ];
+      }
+      if (currentSubCategory === 'chuot-ban-phim') {
+        return [
+          { name: 'Logitech', featured: true },
+          { name: 'DareU', featured: true },
+          { name: 'Akko', featured: true },
+          { name: 'Razer', featured: true },
+          { name: 'Rapoo', featured: true },
+          { name: 'Asus', featured: true }
+        ];
+      }
+      return [
+        { name: 'Anker', featured: true },
+        { name: 'Ugreen', featured: true },
+        { name: 'Baseus', featured: true },
+        { name: 'Innostyle', featured: false },
+        { name: 'Pisen', featured: false },
+        { name: 'Spigen', featured: false },
+        { name: 'UAG', featured: false }
+      ];
+    }
+    return activeCategoryObj && Array.isArray(activeCategoryObj.brands) ? activeCategoryObj.brands : [];
   }
 
   // 2. ZONE 2: Render Bộ Lọc Thương Hiệu (2-column Brand Grid)
@@ -988,14 +1058,23 @@
       return p.maNhom === 'AMTHANH' || pGroup.includes('âm thanh') || pName.includes('tai nghe') || pName.includes('loa') || pName.includes('airpods') || pName.includes('emberton');
     }
     if (catId === 'phu-kien') {
+      const pBrand = (p.nhanHieu || p.brand || '').toLowerCase();
+
+      if (currentSubCategory === 'camera') {
+        return pName.includes('camera') || pName.includes('webcam') || pName.includes('ezviz') || pName.includes('imou') || pName.includes('tapo') || pBrand.includes('ezviz') || pBrand.includes('imou') || pBrand.includes('uniarch');
+      }
+      if (currentSubCategory === 'smarthome') {
+        if (pName.includes('camera') || pName.includes('webcam') || pName.includes('ezviz') || pName.includes('imou')) return false;
+        return p.maNhom === 'SMARTHOME' || pGroup.includes('smart') || pName.includes('robot') || pName.includes('khóa cửa') || pName.includes('hút bụi') || pName.includes('ổ cắm') || pName.includes('router') || pName.includes('wi-fi');
+      }
       if (currentSubCategory === 'chuot-ban-phim') {
         return pName.includes('chuột') || pName.includes('bàn phím') || pName.includes('mouse') || pName.includes('keyboard');
       }
       if (currentSubCategory === 'sac-cap') {
-        if (pName.includes('chuột') || pName.includes('bàn phím')) return false;
-        return pName.includes('củ sạc') || pName.includes('cáp sạc') || pName.includes('sạc dự phòng') || pName.includes('pin dự phòng') || pName.includes('sạc nhanh');
+        if (pName.includes('chuột') || pName.includes('bàn phím') || pName.includes('camera') || pName.includes('robot') || pName.includes('khóa cửa')) return false;
+        return pName.includes('củ sạc') || pName.includes('cáp sạc') || pName.includes('sạc dự phòng') || pName.includes('pin dự phòng') || pName.includes('sạc nhanh') || pName.includes('ốp lưng') || pName.includes('cường lực');
       }
-      return p.maNhom === 'PHUKIEN' || pGroup.includes('phụ kiện') || pName.includes('củ sạc') || pName.includes('cáp sạc') || pName.includes('sạc dự phòng') || pName.includes('ốp lưng') || pName.includes('camera') || pName.includes('chuột');
+      return p.maNhom === 'PHUKIEN' || p.maNhom === 'SMARTHOME' || pGroup.includes('phụ kiện') || pName.includes('camera');
     }
     return false;
   }
@@ -1037,7 +1116,7 @@
 
   function extractBrandFromName(name) {
     const n = name.toLowerCase();
-    const brands = ['apple', 'samsung', 'xiaomi', 'oppo', 'honor', 'tecno', 'nubia', 'vivo', 'realme', 'nokia', 'itel', 'masstel', 'asus', 'dell', 'hp', 'lenovo', 'acer', 'msi', 'daikin', 'panasonic', 'casper', 'garmin', 'amazfit', 'jbl', 'marshall', 'sony', 'anker', 'ugreen', 'baseus', 'clair'];
+    const brands = ['apple', 'samsung', 'xiaomi', 'oppo', 'honor', 'tecno', 'nubia', 'vivo', 'realme', 'nokia', 'itel', 'masstel', 'asus', 'dell', 'hp', 'lenovo', 'acer', 'msi', 'daikin', 'panasonic', 'casper', 'garmin', 'amazfit', 'jbl', 'marshall', 'sony', 'anker', 'ugreen', 'baseus', 'clair', 'ezviz', 'imou', 'tapo', 'tp-link', 'mobifone', 'uniarch', 'dreame', 'mova', 'logitech', 'dareu', 'akko', 'pisen', 'innostyle', 'spigen', 'uag', 'bravus', 'philips'];
     for (let b of brands) {
       if (n.includes(b)) return b;
     }

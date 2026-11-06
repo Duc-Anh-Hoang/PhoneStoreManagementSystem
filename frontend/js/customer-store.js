@@ -3431,7 +3431,11 @@
   };
 
   window.loadMoreWatchProducts = function () {
-    window.location.href = 'pages/category.html?type=watch';
+    if (currentWatchCategory === 'camera') {
+      window.location.href = 'pages/category.html?type=camera';
+    } else {
+      window.location.href = 'pages/category.html?type=watch';
+    }
   };
 
   window.onWatchProductClick = function (id) {
