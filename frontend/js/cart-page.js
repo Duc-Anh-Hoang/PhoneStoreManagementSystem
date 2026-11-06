@@ -1,6 +1,6 @@
 // =========================================================================
 // SAMAMOBILE - CART & ORDER MANAGEMENT PAGE CONTROLLER (THUẦN FRONTEND)
-// Quản lý giỏ hàng, đặt hàng, quản lý đơn hàng đã đặt, theo dõi đơn & đơn đã hủy
+// Quản lý giỏ hàng, thanh toán VietQR & Ví điện tử, theo dõi đơn hàng & đơn hủy
 // =========================================================================
 
 (function () {
@@ -15,14 +15,25 @@
     'FREE50K': { code: 'FREE50K', discount: 50000, type: 'fixed', minOrder: 300000, desc: 'Tặng voucher 50.000đ' }
   };
 
+  const BANK_CONFIGS = {
+    'MB': { name: 'MBBank (Ngân hàng Quân Đội)', accountNo: '0901234567', accountName: 'CONG TY TNHH SAMA MOBILE' },
+    'VCB': { name: 'Vietcombank (Ngoại Thương VN)', accountNo: '1029384756', accountName: 'CONG TY TNHH SAMA MOBILE' },
+    'TCB': { name: 'Techcombank (Kỹ Thương VN)', accountNo: '1903847561', accountName: 'CONG TY TNHH SAMA MOBILE' },
+    'ACB': { name: 'ACB (Ngân hàng Á Châu)', accountNo: '246813579', accountName: 'CONG TY TNHH SAMA MOBILE' }
+  };
+
   let appliedVoucher = null;
   let deliveryMethod = 'delivery'; // 'delivery' | 'store'
-  let paymentMethod = 'cod'; // 'cod' | 'banking' | 'momo' | 'vnpay' | 'card'
+  let paymentMethod = 'banking'; // 'banking' | 'momo' | 'cod' | 'card'
+  let selectedBank = 'MB'; // 'MB' | 'VCB' | 'TCB' | 'ACB'
+  let selectedWallet = 'momo'; // 'momo' | 'vnpay' | 'zalopay'
   let currentActiveTab = 'cart'; // 'cart' | 'orders'
   let currentOrderStatusFilter = 'all'; // 'all' | 'cho_xac_nhan' | 'dang_giao' | 'da_giao' | 'da_huy'
   let pendingCancelOrderCode = null;
+  let activeModalOrderCode = null;
+  let qrCountdownInterval = null;
 
-  // Dữ liệu đơn hàng mẫu ban đầu (Initial Seed) giúp trải nghiệm trực quan ngay lập tức
+  // Dữ liệu đơn hàng mẫu ban đầu (Initial Seed)
   const SAMPLE_ORDERS = [
     {
       maDH: 'DH-261106-8921',
@@ -36,7 +47,8 @@
       subtotal: 28990000,
       discount: 389900,
       tongTien: 28600100,
-      trangThai: 'cho_xac_nhan', // Chờ xác nhận
+      trangThai: 'cho_xac_nhan',
+      daThanhToan: false,
       items: [
         {
           maHang: 'IPHONE16PM',
@@ -44,7 +56,7 @@
           soLuong: 1,
           donGia: 28990000,
           thanhTien: 28990000,
-          image: 'images/deal-tabs/deal-tab-phone.jpg'
+          image: '../images/deal-tabs/deal-tab-phone.jpg'
         }
       ]
     },
@@ -60,7 +72,8 @@
       subtotal: 23990000,
       discount: 239900,
       tongTien: 23750100,
-      trangThai: 'dang_giao', // Đang giao hàng
+      trangThai: 'dang_giao',
+      daThanhToan: false,
       items: [
         {
           maHang: 'SS24ULTRA',
@@ -68,7 +81,7 @@
           soLuong: 1,
           donGia: 23990000,
           thanhTien: 23990000,
-          image: 'images/deal-tabs/deal-tab-dienthoai.jpg'
+          image: '../images/deal-tabs/deal-tab-dienthoai.jpg'
         }
       ]
     },
@@ -84,7 +97,8 @@
       subtotal: 5390000,
       discount: 100000,
       tongTien: 5290000,
-      trangThai: 'da_giao', // Đã giao thành công
+      trangThai: 'da_giao',
+      daThanhToan: true,
       items: [
         {
           maHang: 'AIRPODS2USB',
@@ -92,32 +106,7 @@
           soLuong: 1,
           donGia: 5390000,
           thanhTien: 5390000,
-          image: 'images/deal-tabs/deal-tab-audio.jpg'
-        }
-      ]
-    },
-    {
-      maDH: 'DH-261028-1549',
-      ngayDat: '2026-10-28T16:20:00.000Z',
-      tenNguoiNhan: 'Anh Khang Nguyễn',
-      sdtNguoiNhan: '0901234567',
-      email: 'huykhang110206@gmail.com',
-      diaChiGiao: 'Số 12 Đường Số 9, P. Linh Trung, TP. Thủ Đức',
-      phuongThucThanhToan: 'cod',
-      ghiChu: 'Đổi ý mua màu khác',
-      subtotal: 450000,
-      discount: 0,
-      tongTien: 450000,
-      trangThai: 'da_huy', // Đã hủy
-      lyDoHuy: 'Tôi muốn đổi sang sản phẩm / màu sắc khác',
-      items: [
-        {
-          maHang: 'ANKER30W',
-          tenHang: 'Củ sạc nhanh Anker 30W PowerPort III Nano Chính Hãng',
-          soLuong: 1,
-          donGia: 450000,
-          thanhTien: 450000,
-          image: 'images/deal-tabs/deal-tab-phukien.jpg'
+          image: '../images/deal-tabs/deal-tab-audio.jpg'
         }
       ]
     }
@@ -125,8 +114,8 @@
 
   function getCart() {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      return raw ? JSON.parse(raw) : [];
+      const c = localStorage.getItem(STORAGE_KEY);
+      return c ? JSON.parse(c) : [];
     } catch (e) {
       return [];
     }
@@ -141,14 +130,12 @@
 
   function getOrders() {
     try {
-      const raw = localStorage.getItem(ORDERS_STORAGE_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      const o = localStorage.getItem(ORDERS_STORAGE_KEY);
+      if (!o) {
+        localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(SAMPLE_ORDERS));
+        return SAMPLE_ORDERS;
       }
-      // Khởi tạo đơn hàng mẫu nếu chưa có
-      localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(SAMPLE_ORDERS));
-      return SAMPLE_ORDERS;
+      return JSON.parse(o);
     } catch (e) {
       return SAMPLE_ORDERS;
     }
@@ -162,39 +149,53 @@
   }
 
   function formatVND(num) {
-    return new Intl.NumberFormat('vi-VN').format(Math.max(0, Math.round(num || 0))) + ' ₫';
+    if (!num || isNaN(num)) return '0 ₫';
+    return Number(num).toLocaleString('vi-VN') + ' ₫';
   }
 
-  function formatDate(isoStr) {
-    try {
-      const d = new Date(isoStr);
-      const pad = n => String(n).padStart(2, '0');
-      return `${pad(d.getHours())}:${pad(d.getMinutes())} - ${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()}`;
-    } catch (e) {
-      return isoStr || '';
+  function getCartFinalTotal() {
+    const items = getCart();
+    const subtotal = items.reduce((s, it) => s + ((it.price || it.donGia || 0) * (it.qty || it.soLuong || 1)), 0);
+    let memberDiscount = 0;
+    if (subtotal >= 1000000) memberDiscount = Math.round(subtotal * 0.01);
+    let voucherDiscount = 0;
+    if (appliedVoucher) {
+      if (appliedVoucher.type === 'percent') {
+        voucherDiscount = Math.round((subtotal * appliedVoucher.discount) / 100);
+      } else {
+        voucherDiscount = appliedVoucher.discount;
+      }
     }
+    return Math.max(0, subtotal - memberDiscount - voucherDiscount);
   }
 
   function updateHeaderBadge() {
     const items = getCart();
-    const count = items.reduce((s, it) => s + (it.qty || it.soLuong || 1), 0);
-    const cartTabBadge = document.getElementById('tab-badge-cart-count');
-    if (cartTabBadge) cartTabBadge.textContent = count;
+    const totalQty = items.reduce((s, it) => s + (it.qty || it.soLuong || 1), 0);
+    const badges = document.querySelectorAll('.cart-badge-count, #tab-badge-cart-count');
+    badges.forEach(b => {
+      b.textContent = totalQty;
+      if (totalQty > 0) {
+        b.classList.remove('hidden');
+      } else {
+        if (!b.id.includes('tab-badge')) b.classList.add('hidden');
+      }
+    });
   }
 
   function updateOrderCounts() {
     const orders = getOrders();
-    const ordersTabBadge = document.getElementById('tab-badge-orders-count');
-    if (ordersTabBadge) ordersTabBadge.textContent = orders.length;
-
-    const countAll = orders.length;
-    const countPending = orders.filter(o => o.trangThai === 'cho_xac_nhan').length;
+    const total = orders.length;
+    const countWaiting = orders.filter(o => o.trangThai === 'cho_xac_nhan').length;
     const countShipping = orders.filter(o => o.trangThai === 'dang_giao').length;
     const countDelivered = orders.filter(o => o.trangThai === 'da_giao').length;
     const countCancelled = orders.filter(o => o.trangThai === 'da_huy').length;
 
-    if (document.getElementById('count-status-all')) document.getElementById('count-status-all').textContent = countAll;
-    if (document.getElementById('count-status-pending')) document.getElementById('count-status-pending').textContent = countPending;
+    const bTabOrders = document.getElementById('tab-badge-orders-count');
+    if (bTabOrders) bTabOrders.textContent = total;
+
+    if (document.getElementById('count-status-all')) document.getElementById('count-status-all').textContent = total;
+    if (document.getElementById('count-status-waiting')) document.getElementById('count-status-waiting').textContent = countWaiting;
     if (document.getElementById('count-status-shipping')) document.getElementById('count-status-shipping').textContent = countShipping;
     if (document.getElementById('count-status-delivered')) document.getElementById('count-status-delivered').textContent = countDelivered;
     if (document.getElementById('count-status-cancelled')) document.getElementById('count-status-cancelled').textContent = countCancelled;
@@ -202,12 +203,13 @@
 
   // Khởi tạo trang
   document.addEventListener('DOMContentLoaded', () => {
+    setupMainHeader();
+    setupPaymentMethods();
     initPrefillUser();
     renderCart();
     updateHeaderBadge();
     updateOrderCounts();
 
-    // Lắng nghe URL Hash hoặc Query param để mở thẳng Tab tương ứng (#orders hoặc ?tab=orders)
     const urlParams = new URLSearchParams(window.location.search);
     const tabParam = urlParams.get('tab');
     if (window.location.hash === '#orders' || tabParam === 'orders') {
@@ -216,6 +218,180 @@
       window.switchCartTab('cart');
     }
   });
+
+  // Setup Header dùng chung
+  function setupMainHeader() {
+    window.toggleMegaMenu = function () {
+      const menu = document.getElementById('mega-menu-flyout');
+      if (menu) menu.classList.toggle('hidden');
+    };
+
+    window.toggleNotificationPopover = function () {
+      const pop = document.getElementById('notification-popover');
+      if (pop) pop.classList.toggle('hidden');
+    };
+
+    window.toggleCustomerAvatarMenu = function (e) {
+      if (e && e.stopPropagation) e.stopPropagation();
+      const pop = document.getElementById('customer-avatar-popover');
+      const chev = document.getElementById('customer-avatar-chevron');
+      if (!pop) return;
+      const isHidden = pop.classList.contains('hidden');
+      if (isHidden) {
+        pop.classList.remove('hidden');
+        if (chev) chev.style.transform = 'rotate(180deg)';
+      } else {
+        pop.classList.add('hidden');
+        if (chev) chev.style.transform = 'rotate(0deg)';
+      }
+    };
+
+    window.closeCustomerAvatarMenu = function () {
+      const pop = document.getElementById('customer-avatar-popover');
+      const chev = document.getElementById('customer-avatar-chevron');
+      if (pop) pop.classList.add('hidden');
+      if (chev) chev.style.transform = 'rotate(0deg)';
+    };
+
+    document.addEventListener('click', function (e) {
+      const pop = document.getElementById('customer-avatar-popover');
+      const btn = document.getElementById('btn-customer-avatar-toggle');
+      if (pop && !pop.classList.contains('hidden') && !pop.contains(e.target) && !btn?.contains(e.target)) {
+        window.closeCustomerAvatarMenu();
+      }
+
+      const notiPop = document.getElementById('notification-popover');
+      const notiBtn = document.getElementById('btn-notification-toggle');
+      if (notiPop && !notiPop.classList.contains('hidden') && !notiPop.contains(e.target) && !notiBtn?.contains(e.target)) {
+        notiPop.classList.add('hidden');
+      }
+
+      const mega = document.getElementById('mega-menu-flyout');
+      const megaBtn = document.getElementById('btn-mega-menu-toggle');
+      if (mega && !mega.classList.contains('hidden') && !mega.contains(e.target) && !megaBtn?.contains(e.target)) {
+        mega.classList.add('hidden');
+      }
+    });
+
+    // Thanh tìm kiếm
+    const searchInput = document.getElementById('search-input');
+    const clearBtn = document.getElementById('btn-clear-search');
+    if (searchInput) {
+      searchInput.addEventListener('input', function () {
+        if (clearBtn) clearBtn.classList.toggle('hidden', !this.value.trim());
+      });
+      searchInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          const q = this.value.trim();
+          window.location.href = 'category.html?q=' + encodeURIComponent(q);
+        }
+      });
+    }
+    if (clearBtn && searchInput) {
+      clearBtn.addEventListener('click', function () {
+        searchInput.value = '';
+        clearBtn.classList.add('hidden');
+        searchInput.focus();
+      });
+    }
+
+    // Tự động nạp tài khoản khách hàng nếu đã đăng nhập
+    try {
+      const savedUser = localStorage.getItem('cellphones_auth_user');
+      if (savedUser) {
+        const u = JSON.parse(savedUser);
+        const loginBtn = document.getElementById('btn-header-login');
+        const custMenu = document.getElementById('header-customer-menu');
+        const staffMenu = document.getElementById('header-staff-menu');
+
+        if (loginBtn) loginBtn.classList.add('hidden');
+
+        if (u.role === 'admin' || u.role === 'staff' || u.vaiTro === 'Nhân viên') {
+          if (staffMenu) {
+            staffMenu.style.display = 'inline-flex';
+            staffMenu.classList.remove('hidden');
+          }
+          const staffName = document.getElementById('staff-header-name');
+          if (staffName) staffName.textContent = u.hoTen || u.name || 'Nhân viên';
+        } else {
+          if (custMenu) {
+            custMenu.style.display = 'inline-flex';
+            custMenu.classList.remove('hidden');
+          }
+          const custName = document.getElementById('customer-header-name');
+          const popName = document.getElementById('customer-popover-name');
+          const popPhone = document.getElementById('customer-popover-phone');
+          const headerAvatar = document.getElementById('customer-header-avatar');
+          const popAvatar = document.getElementById('customer-popover-avatar');
+
+          const displayName = u.hoTen || u.name || 'Khách hàng';
+          if (custName) custName.textContent = displayName;
+          if (popName) popName.textContent = displayName;
+          if (popPhone) popPhone.textContent = u.email || u.sdt || 'Khách hàng Sama';
+
+          const firstLetter = displayName.trim().charAt(0).toUpperCase() || 'K';
+          if (headerAvatar) headerAvatar.innerHTML = '<span class="font-extrabold text-[#0057B7] text-xs">' + firstLetter + '</span>';
+          if (popAvatar) popAvatar.innerHTML = '<span class="font-black text-white text-base">' + firstLetter + '</span>';
+        }
+      }
+    } catch (e) {}
+
+    window.CellphoneSAuth = window.CellphoneSAuth || {
+      logout: function () {
+        localStorage.removeItem('cellphones_auth_user');
+        localStorage.removeItem('customer_token');
+        localStorage.removeItem('admin_token');
+        window.location.reload();
+      }
+    };
+  }
+
+  // Setup Bộ Chọn Phương Thức Thanh Toán (Tương tác động với QR Code)
+  function setupPaymentMethods() {
+    const wrappers = document.querySelectorAll('.payment-method-wrapper');
+    const vietQrBox = document.getElementById('vietqr-instructions-box');
+    const ewalletBox = document.getElementById('ewallet-instructions-box');
+
+    wrappers.forEach(w => {
+      w.addEventListener('click', function () {
+        const method = this.getAttribute('data-method');
+        if (!method) return;
+        paymentMethod = method;
+
+        const radio = this.querySelector('input[name="payment_method"]');
+        if (radio) radio.checked = true;
+
+        wrappers.forEach(item => {
+          if (item === w) {
+            item.className = 'payment-method-wrapper rounded-2xl border-2 border-[#0057B7] bg-blue-50/30 overflow-hidden transition-all shadow-xs';
+          } else {
+            item.className = 'payment-method-wrapper rounded-2xl border border-slate-200 bg-white overflow-hidden transition-all hover:border-slate-300';
+          }
+        });
+
+        if (vietQrBox) {
+          if (method === 'banking') {
+            vietQrBox.classList.remove('hidden');
+          } else {
+            vietQrBox.classList.add('hidden');
+          }
+        }
+
+        if (ewalletBox) {
+          if (method === 'momo') {
+            ewalletBox.classList.remove('hidden');
+          } else {
+            ewalletBox.classList.add('hidden');
+          }
+        }
+
+        const finalTotal = getCartFinalTotal();
+        updateVietQR(finalTotal);
+        updateEWalletQR(finalTotal);
+      });
+    });
+  }
 
   // Chuyển đổi giữa [Giỏ hàng] và [Đơn hàng của tôi]
   window.switchCartTab = function (tab) {
@@ -254,10 +430,6 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // =========================================================================
-  // LOGIC PHẦN 1: GIỎ HÀNG & ĐẶT HÀNG
-  // =========================================================================
-
   function initPrefillUser() {
     try {
       const userRaw = localStorage.getItem('cellphones_auth_user') || localStorage.getItem('auth_user');
@@ -269,7 +441,7 @@
           const emailInput = document.getElementById('order-email');
           const addressInput = document.getElementById('order-address');
 
-          if (nameInput && u.hoTen) nameInput.value = u.hoTen;
+          if (nameInput && (u.hoTen || u.name)) nameInput.value = u.hoTen || u.name;
           if (phoneInput && u.sdt) phoneInput.value = u.sdt;
           if (emailInput && u.email) emailInput.value = u.email;
           if (addressInput && u.diaChi) addressInput.value = u.diaChi;
@@ -289,7 +461,7 @@
       if (emptyState) emptyState.classList.remove('hidden');
       if (mainContent) mainContent.classList.add('hidden');
       if (itemsCountLabel) itemsCountLabel.textContent = '(0 sản phẩm)';
-      updateTotals(0, 0, 0);
+      updateTotals(0, 0, 0, 0);
       return;
     }
 
@@ -306,12 +478,13 @@
         const qty = item.qty || item.soLuong || 1;
         const subtotal = itemPrice * qty;
         const itemId = item.id || `${item.maHang}_${idx}`;
+        const itemImg = item.image || item.hinhAnh || '../images/deal-tabs/deal-tab-phone.jpg';
 
         return `
           <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded-2xl border border-slate-200/80 hover:border-blue-200 hover:shadow-xs transition-all bg-white">
             <div class="flex items-center gap-3.5 flex-1 min-w-0">
               <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl bg-slate-50 p-1.5 border border-slate-100 flex-shrink-0 flex items-center justify-center">
-                <img src="${item.image || item.hinhAnh || 'images/default-phone.png'}" alt="${item.tenHang || item.name}" class="w-full h-full object-contain" onerror="this.src='images/deal-tabs/deal-tab-phone.jpg'">
+                <img src="${itemImg}" alt="${item.tenHang || item.name}" class="w-full h-full object-contain" onerror="this.src='../images/deal-tabs/deal-tab-phone.jpg'">
               </div>
               <div class="flex-1 min-w-0 space-y-1">
                 <h4 class="font-extrabold text-xs sm:text-sm text-slate-900 leading-snug truncate" title="${item.tenHang || item.name}">
@@ -380,7 +553,7 @@
   };
 
   window.clearAllCart = function () {
-    if (confirm('Bạn có chắc muốn xóa toàn bộ sản phẩm trong giỏ hàng?')) {
+    if (confirm('Bạn có chắc muốn xóa toàn bộ sản phẩm khỏi giỏ hàng?')) {
       saveCart([]);
       renderCart();
     }
@@ -430,7 +603,9 @@
     }
 
     if (elFinal) elFinal.textContent = formatVND(finalTotal);
+
     updateVietQR(finalTotal);
+    updateEWalletQR(finalTotal);
   }
 
   window.quickApplyVoucher = function (code) {
@@ -441,7 +616,6 @@
 
   window.applyVoucherCode = function () {
     const input = document.getElementById('voucher-input');
-    const msgEl = document.getElementById('voucher-message');
     if (!input) return;
 
     const code = input.value.trim().toUpperCase();
@@ -499,20 +673,124 @@
     }
   };
 
+  // Cập nhật VietQR Code động
   function updateVietQR(amount) {
+    const cfg = BANK_CONFIGS[selectedBank] || BANK_CONFIGS['MB'];
     const qrImg = document.getElementById('vietqr-code-img');
     const qrAmount = document.getElementById('vietqr-amount-text');
+    const bankName = document.getElementById('vietqr-bank-name');
+    const accountNo = document.getElementById('vietqr-account-no');
+    const memoEl = document.getElementById('vietqr-memo-text');
+
     if (qrAmount) qrAmount.textContent = formatVND(amount);
+    if (bankName) bankName.textContent = cfg.name;
+    if (accountNo) accountNo.textContent = cfg.accountNo;
+
+    const memo = 'SAMA 261106';
+    if (memoEl) memoEl.textContent = memo;
 
     if (qrImg) {
-      const bankId = 'MB';
-      const accountNo = '0901234567';
-      const template = 'compact2';
-      const desc = encodeURIComponent('SAMA ' + Math.floor(100000 + Math.random() * 900000));
-      qrImg.src = `https://img.vietqr.io/image/${bankId}-${accountNo}-${template}.png?amount=${Math.round(amount)}&addInfo=${desc}&accountName=SAMA%20MOBILE%20STORE`;
+      const bankCode = selectedBank;
+      const amt = Math.max(10000, Math.round(amount));
+      qrImg.src = `https://img.vietqr.io/image/${bankCode}-${cfg.accountNo}-compact2.png?amount=${amt}&addInfo=${encodeURIComponent(memo)}&accountName=${encodeURIComponent(cfg.accountName)}`;
     }
   }
 
+  window.selectVietQrBank = function (bankCode) {
+    selectedBank = bankCode;
+    const buttons = document.querySelectorAll('.vietqr-bank-chip');
+    buttons.forEach(btn => {
+      btn.className = 'vietqr-bank-chip p-2 rounded-xl border border-slate-200 bg-white hover:border-slate-300 font-medium text-slate-700 flex items-center justify-center gap-2 cursor-pointer transition-all';
+    });
+    const targetBtn = document.getElementById(`bank-btn-${bankCode}`);
+    if (targetBtn) {
+      targetBtn.className = 'vietqr-bank-chip p-2 rounded-xl border-2 border-blue-600 bg-blue-50/60 font-bold text-blue-900 flex items-center justify-center gap-2 cursor-pointer transition-all';
+    }
+    const finalTotal = getCartFinalTotal();
+    updateVietQR(finalTotal);
+  };
+
+  // Cập nhật QR Ví Điện Tử
+  function updateEWalletQR(amount) {
+    const qrImg = document.getElementById('ewallet-qr-img');
+    const amtEl = document.getElementById('ewallet-amount-text');
+    const labelEl = document.getElementById('ewallet-name-label');
+    const appNameEl = document.getElementById('ewallet-app-name');
+
+    if (amtEl) amtEl.textContent = formatVND(amount);
+
+    const amt = Math.max(10000, Math.round(amount));
+    const memo = 'SAMA WALLET 261106';
+
+    if (qrImg) {
+      qrImg.src = `https://img.vietqr.io/image/MB-0901234567-compact2.png?amount=${amt}&addInfo=${encodeURIComponent(memo)}&accountName=SAMA%20MOBILE%20STORE`;
+    }
+
+    if (labelEl) {
+      labelEl.textContent = selectedWallet === 'vnpay' ? 'Cổng VNPAY-QR Doanh Nghiệp' : (selectedWallet === 'zalopay' ? 'Ví ZaloPay Doanh Nghiệp' : 'Ví MoMo Doanh Nghiệp');
+    }
+    if (appNameEl) {
+      appNameEl.textContent = selectedWallet === 'vnpay' ? 'VNPAY / App Ngân Hàng' : (selectedWallet === 'zalopay' ? 'ZaloPay' : 'MoMo');
+    }
+  }
+
+  window.selectEWallet = function (walletCode) {
+    selectedWallet = walletCode;
+    const buttons = document.querySelectorAll('.ewallet-tab-btn');
+    buttons.forEach(btn => {
+      btn.className = 'ewallet-tab-btn p-2 rounded-xl border border-slate-200 bg-white hover:border-slate-300 font-medium text-slate-700 flex items-center justify-center gap-2 cursor-pointer transition-all';
+    });
+    const target = document.getElementById(`ewallet-btn-${walletCode}`);
+    if (target) {
+      const color = walletCode === 'momo' ? 'pink' : (walletCode === 'vnpay' ? 'blue' : 'cyan');
+      target.className = `ewallet-tab-btn p-2 rounded-xl border-2 border-${color}-600 bg-${color}-50/60 font-bold text-${color}-900 flex items-center justify-center gap-2 cursor-pointer transition-all`;
+    }
+    const finalTotal = getCartFinalTotal();
+    updateEWalletQR(finalTotal);
+  };
+
+  // Sao chép văn bản & thông báo toast đẹp
+  window.copyText = function (text, label) {
+    if (!text) return;
+    const clean = String(text).trim();
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(clean).then(() => {
+        showToast(`Đã sao chép ${label || clean}!`);
+      }).catch(() => {
+        fallbackCopy(clean, label);
+      });
+    } else {
+      fallbackCopy(clean, label);
+    }
+  };
+
+  function fallbackCopy(clean, label) {
+    const el = document.createElement('textarea');
+    el.value = clean;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+    showToast(`Đã sao chép ${label || clean}!`);
+  }
+
+  function showToast(msg) {
+    let toast = document.getElementById('sama-toast-notification');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'sama-toast-notification';
+      toast.className = 'fixed bottom-6 right-6 z-50 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-2.5 text-xs font-bold animate-in fade-in slide-in-from-bottom-5 duration-200';
+      document.body.appendChild(toast);
+    }
+    toast.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400 text-sm"></i><span>${msg}</span>`;
+    toast.classList.remove('hidden');
+    clearTimeout(toast._timer);
+    toast._timer = setTimeout(() => {
+      toast.classList.add('hidden');
+    }, 2400);
+  }
+
+  // Submit Đặt Hàng
   window.submitCheckoutOrder = async function (e) {
     if (e) e.preventDefault();
 
@@ -581,6 +859,7 @@
       discount: discount,
       tongTien: finalTotal,
       trangThai: 'cho_xac_nhan',
+      daThanhToan: false,
       items: items.map(it => ({
         maHang: it.maHang || it.id,
         tenHang: it.tenHang || it.name,
@@ -597,7 +876,7 @@
       btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Đang tạo đơn hàng...';
     }
 
-    // Lưu vào LocalStorage
+    // Lưu đơn hàng
     try {
       const orders = getOrders();
       orders.unshift(orderData);
@@ -632,16 +911,14 @@
       if (elName) elName.textContent = order.tenNguoiNhan;
       if (elPhone) elPhone.textContent = order.sdtNguoiNhan;
       if (elAddress) elAddress.textContent = order.diaChiGiao;
-      if (elPayment) {
-        const paymentMap = {
-          'cod': 'Thanh toán tiền mặt khi nhận hàng (COD)',
-          'banking': 'Chuyển khoản Ngân hàng (VietQR)',
-          'momo': 'Ví điện tử MoMo',
-          'vnpay': 'Cổng VNPAY-QR',
-          'card': 'Thẻ Quốc tế / Trả góp 0%'
-        };
-        elPayment.textContent = paymentMap[order.phuongThucThanhToan] || 'COD';
-      }
+
+      const paymentMap = {
+        'cod': 'Thanh toán tiền mặt khi nhận hàng (COD)',
+        'banking': 'Chuyển khoản Ngân hàng (VietQR 24/7)',
+        'momo': 'Ví điện tử MoMo / VNPAY-QR',
+        'card': 'Thẻ Quốc tế / Trả góp 0%'
+      };
+      if (elPayment) elPayment.textContent = paymentMap[order.phuongThucThanhToan] || 'Chuyển khoản';
       if (elTotal) elTotal.textContent = formatVND(order.tongTien);
 
       if (elItemsList && order.items) {
@@ -655,21 +932,70 @@
 
       const vietQrBox = document.getElementById('success-vietqr-box');
       if (vietQrBox) {
-        if (order.phuongThucThanhToan === 'banking') {
+        if (order.phuongThucThanhToan === 'banking' || order.phuongThucThanhToan === 'momo') {
           vietQrBox.classList.remove('hidden');
           const qrImg = document.getElementById('success-vietqr-img');
           const memoText = document.getElementById('success-transfer-content');
-          const memo = `SAMA ${order.maDH.replace('DH-', '').replace(/-/g, '')}`;
+          const qrAmount = document.getElementById('success-qr-amount-text');
+          const memo = `SAMA ${order.maDH.replace(/[^0-9]/g, '')}`;
+
           if (memoText) memoText.textContent = memo;
+          if (qrAmount) qrAmount.textContent = formatVND(order.tongTien);
           if (qrImg) {
             qrImg.src = `https://img.vietqr.io/image/MB-0901234567-compact2.png?amount=${Math.round(order.tongTien)}&addInfo=${encodeURIComponent(memo)}&accountName=SAMA%20MOBILE%20STORE`;
           }
+
+          startQrCountdown();
         } else {
           vietQrBox.classList.add('hidden');
         }
       }
     }
   }
+
+  function startQrCountdown() {
+    clearInterval(qrCountdownInterval);
+    let secondsLeft = 15 * 60;
+    const timerEl = document.getElementById('success-qr-timer');
+
+    qrCountdownInterval = setInterval(() => {
+      secondsLeft--;
+      if (secondsLeft <= 0) {
+        clearInterval(qrCountdownInterval);
+        if (timerEl) timerEl.textContent = '00:00 (Hết hạn)';
+        return;
+      }
+      const mins = Math.floor(secondsLeft / 60);
+      const secs = secondsLeft % 60;
+      if (timerEl) {
+        timerEl.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+      }
+    }, 1000);
+  }
+
+  window.confirmQrTransferSuccess = function () {
+    const elCode = document.getElementById('success-order-code');
+    const orderCode = elCode ? elCode.textContent : '';
+    if (orderCode) {
+      const orders = getOrders();
+      const idx = orders.findIndex(o => o.maDH === orderCode);
+      if (idx > -1) {
+        orders[idx].daThanhToan = true;
+        saveOrders(orders);
+      }
+    }
+    showToast('Cảm ơn bạn! Hệ thống đã ghi nhận thanh toán thành công.');
+    setTimeout(() => {
+      window.switchCartTab('orders');
+    }, 1200);
+  };
+
+  window.downloadQrImage = function () {
+    const qrImg = document.getElementById('success-vietqr-img');
+    if (qrImg && qrImg.src) {
+      window.open(qrImg.src, '_blank');
+    }
+  };
 
   // =========================================================================
   // LOGIC PHẦN 2: QUẢN LÝ ĐƠN HÀNG, THEO DÕI HÀNH TRÌNH & ĐƠN ĐÃ HỦY
@@ -685,12 +1011,10 @@
 
     let filtered = orders;
 
-    // 1. Lọc theo trạng thái
     if (currentOrderStatusFilter !== 'all') {
       filtered = filtered.filter(o => o.trangThai === currentOrderStatusFilter);
     }
 
-    // 2. Lọc theo tìm kiếm (Mã đơn hoặc Số điện thoại)
     if (searchVal) {
       filtered = filtered.filter(o => 
         (o.maDH && o.maDH.toLowerCase().includes(searchVal)) ||
@@ -709,113 +1033,77 @@
 
     if (emptyState) emptyState.classList.add('hidden');
 
-    container.innerHTML = filtered.map(order => {
-      // Badge trạng thái
-      let statusBadge = '';
-      switch (order.trangThai) {
-        case 'cho_xac_nhan':
-          statusBadge = '<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200"><i class="fa-regular fa-clock"></i> Chờ xác nhận</span>';
-          break;
-        case 'dang_giao':
-          statusBadge = '<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-50 text-[#0057B7] border border-blue-200"><i class="fa-solid fa-truck-fast"></i> Đang giao hàng</span>';
-          break;
-        case 'da_giao':
-          statusBadge = '<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200"><i class="fa-solid fa-circle-check"></i> Đã giao thành công</span>';
-          break;
-        case 'da_huy':
-          statusBadge = '<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-rose-50 text-rose-700 border border-rose-200"><i class="fa-solid fa-ban"></i> Đã hủy</span>';
-          break;
-        default:
-          statusBadge = '<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700">Đang xử lý</span>';
-      }
+    const statusBadgeMap = {
+      'cho_xac_nhan': { label: 'Chờ xác nhận', color: 'bg-amber-100 text-amber-800 border-amber-200' },
+      'dang_giao': { label: 'Đang giao hàng', color: 'bg-blue-100 text-blue-800 border-blue-200' },
+      'da_giao': { label: 'Giao thành công', color: 'bg-emerald-100 text-emerald-800 border-emerald-200' },
+      'da_huy': { label: 'Đã hủy', color: 'bg-slate-100 text-slate-600 border-slate-200' }
+    };
 
-      // Danh sách sản phẩm của đơn
-      const itemsHtml = (order.items || []).map(it => `
-        <div class="flex items-center justify-between py-2.5 border-b border-slate-100 last:border-b-0 gap-3">
-          <div class="flex items-center gap-3 min-w-0">
-            <div class="w-12 h-12 rounded-xl bg-slate-50 p-1 border border-slate-200/80 flex-shrink-0 flex items-center justify-center">
-              <img src="${it.image || 'images/deal-tabs/deal-tab-phone.jpg'}" alt="${it.tenHang}" class="w-full h-full object-contain" onerror="this.src='images/deal-tabs/deal-tab-phone.jpg'">
-            </div>
-            <div class="min-w-0">
-              <p class="text-xs sm:text-sm font-bold text-slate-900 truncate">${it.tenHang}</p>
-              <p class="text-[11px] text-slate-500">Số lượng: <strong>x${it.soLuong}</strong> | Đơn giá: ${formatVND(it.donGia)}</p>
-            </div>
-          </div>
-          <div class="text-right flex-shrink-0 font-black text-xs sm:text-sm text-slate-900">
-            ${formatVND(it.thanhTien || (it.donGia * it.soLuong))}
-          </div>
-        </div>
-      `).join('');
+    container.innerHTML = filtered.map(order => {
+      const badge = statusBadgeMap[order.trangThai] || statusBadgeMap['cho_xac_nhan'];
+      const dateStr = new Date(order.ngayDat).toLocaleString('vi-VN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric' });
+      const canCancel = order.trangThai === 'cho_xac_nhan';
+      const isQrPayment = (order.phuongThucThanhToan === 'banking' || order.phuongThucThanhToan === 'momo') && !order.daThanhToan && order.trangThai === 'cho_xac_nhan';
 
       return `
-        <div class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-2xs hover:shadow-xs transition-all space-y-4">
-          <!-- Header Đơn -->
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+        <div class="bg-white rounded-3xl p-4 sm:p-6 border border-slate-200/90 shadow-xs space-y-4 hover:border-blue-200 transition-all">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-3 border-b border-slate-100">
             <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-2xl bg-blue-50 text-[#0057B7] flex items-center justify-center font-bold text-base shadow-xs">
+              <span class="w-8 h-8 rounded-xl bg-blue-50 text-[#0057B7] flex items-center justify-center text-sm font-bold">
                 <i class="fa-solid fa-receipt"></i>
-              </div>
+              </span>
               <div>
                 <div class="flex items-center gap-2">
-                  <span class="font-mono font-black text-sm sm:text-base text-slate-900">${order.maDH}</span>
-                  <button type="button" onclick="window.copyText('${order.maDH}')" class="text-slate-400 hover:text-[#0057B7] text-xs cursor-pointer" title="Sao chép mã đơn">
-                    <i class="fa-regular fa-copy"></i>
-                  </button>
+                  <h4 class="font-black text-sm sm:text-base text-slate-900 font-mono">${order.maDH}</h4>
+                  <span class="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold border ${badge.color}">${badge.label}</span>
+                  ${order.daThanhToan ? '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200"><i class="fa-solid fa-check"></i> Đã thanh toán</span>' : ''}
                 </div>
-                <div class="text-[11px] text-slate-400 mt-0.5">Đặt lúc: ${formatDate(order.ngayDat)}</div>
+                <div class="text-[11px] text-slate-400 mt-0.5">Đặt ngày: ${dateStr}</div>
               </div>
             </div>
+
+            <div class="text-right sm:text-right">
+              <span class="text-xs text-slate-500">Tổng thanh toán:</span>
+              <div class="font-black text-base sm:text-lg text-[#E0052B]">${formatVND(order.tongTien)}</div>
+            </div>
+          </div>
+
+          <!-- Danh sách sản phẩm trong đơn -->
+          <div class="space-y-3">
+            ${order.items.map(it => `
+              <div class="flex items-center gap-3 text-xs">
+                <img src="${it.image || '../images/deal-tabs/deal-tab-phone.jpg'}" alt="${it.tenHang}" class="w-12 h-12 rounded-xl object-contain border border-slate-100 p-1 bg-slate-50 flex-shrink-0" onerror="this.src='../images/deal-tabs/deal-tab-phone.jpg'">
+                <div class="flex-1 min-w-0">
+                  <div class="font-bold text-slate-800 line-clamp-1">${it.tenHang}</div>
+                  <div class="text-slate-400 text-[11px]">Số lượng: x${it.soLuong} • Đơn giá: ${formatVND(it.donGia)}</div>
+                </div>
+                <div class="font-black text-slate-900">${formatVND(it.thanhTien || (it.donGia * it.soLuong))}</div>
+              </div>
+            `).join('')}
+          </div>
+
+          <div class="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-600">
             <div>
-              ${statusBadge}
-            </div>
-          </div>
-
-          <!-- Danh sách mặt hàng -->
-          <div class="bg-slate-50/60 rounded-2xl p-3 sm:p-4 border border-slate-100 space-y-1">
-            ${itemsHtml}
-          </div>
-
-          <!-- Thông tin giao hàng & Lý do hủy (nếu có) -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs text-slate-600 bg-white pt-1">
-            <div>
-              <div>Người nhận: <strong class="text-slate-800">${order.tenNguoiNhan}</strong> (${order.sdtNguoiNhan})</div>
-              <div class="truncate mt-0.5" title="${order.diaChiGiao}">Địa chỉ: <span class="text-slate-800">${order.diaChiGiao}</span></div>
-            </div>
-            <div class="md:text-right">
-              <div>Thanh toán: <strong class="text-slate-800 uppercase">${order.phuongThucThanhToan}</strong></div>
-              ${order.lyDoHuy ? `<div class="text-rose-600 font-semibold mt-0.5">Lý do hủy: ${order.lyDoHuy}</div>` : ''}
-            </div>
-          </div>
-
-          <!-- Footer Đơn: Tổng tiền & Các nút hành động -->
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-3 border-t border-slate-100">
-            <div class="flex items-baseline gap-2">
-              <span class="text-xs text-slate-500 font-bold">Tổng thanh toán:</span>
-              <span class="text-base sm:text-lg font-black text-[#E0052B]">${formatVND(order.tongTien)}</span>
+              <i class="fa-solid fa-location-dot text-slate-400 mr-1"></i> Giao đến: <strong class="text-slate-800">${order.diaChiGiao}</strong>
             </div>
 
-            <!-- Cụm nút hành động -->
-            <div class="flex flex-wrap items-center gap-2">
-              
-              <!-- Nút Theo dõi hành trình (cho đơn chưa hủy) -->
-              ${order.trangThai !== 'da_huy' ? `
-                <button type="button" onclick="window.openTrackingModal('${order.maDH}')" class="px-3.5 py-2 rounded-xl bg-blue-50 hover:bg-blue-100 text-[#0057B7] font-bold text-xs border border-blue-200 transition-colors flex items-center gap-1.5 cursor-pointer">
-                  <i class="fa-solid fa-route"></i> Theo dõi hành trình
+            <div class="flex items-center gap-2">
+              ${isQrPayment ? `
+                <button type="button" onclick="window.showOrderQrModal('${order.maDH}')" class="px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-[#0057B7] font-bold text-xs transition-colors flex items-center gap-1.5 cursor-pointer">
+                  <i class="fa-solid fa-qrcode text-sm"></i> Quét mã QR thanh toán
                 </button>
               ` : ''}
 
-              <!-- Nút Hủy đơn (chỉ cho đơn chờ xác nhận) -->
-              ${order.trangThai === 'cho_xac_nhan' ? `
-                <button type="button" onclick="window.openCancelModal('${order.maDH}')" class="px-3.5 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-xs border border-rose-200 transition-colors flex items-center gap-1.5 cursor-pointer">
-                  <i class="fa-solid fa-ban"></i> Hủy đơn hàng
+              ${canCancel ? `
+                <button type="button" onclick="window.openCancelModal('${order.maDH}')" class="px-3 py-1.5 rounded-xl border border-rose-200 text-rose-600 hover:bg-rose-50 font-bold text-xs transition-colors cursor-pointer">
+                  Hủy đơn hàng
                 </button>
               ` : ''}
 
-              <!-- Nút Mua lại (cho đơn đã giao hoặc đã hủy) -->
-              <button type="button" onclick="window.reOrderItems('${order.maDH}')" class="px-4 py-2 rounded-xl bg-slate-900 hover:bg-[#0057B7] text-white font-bold text-xs transition-colors flex items-center gap-1.5 cursor-pointer">
-                <i class="fa-solid fa-arrows-rotate"></i> Mua lại
+              <button type="button" onclick="window.reOrderItems('${order.maDH}')" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-colors cursor-pointer">
+                Mua lại
               </button>
-
             </div>
           </div>
         </div>
@@ -823,130 +1111,75 @@
     }).join('');
   };
 
-  // Lọc theo trạng thái
-  window.filterOrdersByStatus = function (status, btnEl) {
+  window.filterOrdersByStatus = function (status) {
     currentOrderStatusFilter = status;
-
-    const btns = document.querySelectorAll('.order-filter-btn');
+    const btns = document.querySelectorAll('.order-status-tab-btn');
     btns.forEach(b => {
-      b.className = 'order-filter-btn px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer whitespace-nowrap transition-all';
+      b.className = 'order-status-tab-btn px-4 py-2 rounded-2xl text-xs font-bold border border-slate-200 bg-white text-slate-600 hover:border-slate-300 transition-all cursor-pointer whitespace-nowrap';
     });
-
-    if (btnEl) {
-      btnEl.className = 'order-filter-btn px-4 py-2 rounded-xl bg-[#0057B7] text-white shadow-xs cursor-pointer whitespace-nowrap transition-all';
+    const target = document.getElementById(`tab-status-${status}`);
+    if (target) {
+      target.className = 'order-status-tab-btn px-4 py-2 rounded-2xl text-xs font-black bg-[#0057B7] text-white shadow-xs transition-all cursor-pointer whitespace-nowrap';
     }
-
     window.renderOrders();
   };
 
-  // Tra cứu theo tìm kiếm
-  window.handleOrderSearch = function (e) {
-    if (e && e.key && e.key !== 'Enter') return;
-    window.renderOrders();
-  };
-
-  // Modal Theo dõi hành trình đơn hàng
-  window.openTrackingModal = function (maDH) {
+  window.showOrderQrModal = function (orderCode) {
     const orders = getOrders();
-    const order = orders.find(o => o.maDH === maDH);
+    const order = orders.find(o => o.maDH === orderCode);
     if (!order) return;
 
-    const modal = document.getElementById('order-tracking-modal');
-    const codeEl = document.getElementById('tracking-modal-code');
-    const addressEl = document.getElementById('tracking-modal-address');
-    const timelineBox = document.getElementById('tracking-timeline-box');
+    activeModalOrderCode = orderCode;
+    const modal = document.getElementById('order-qr-modal');
+    const title = document.getElementById('modal-qr-order-title');
+    const img = document.getElementById('modal-qr-img');
+    const amount = document.getElementById('modal-qr-amount');
+    const memo = document.getElementById('modal-qr-memo');
 
-    if (codeEl) codeEl.textContent = `Mã đơn hàng: ${order.maDH}`;
-    if (addressEl) addressEl.textContent = `${order.tenNguoiNhan} - ${order.sdtNguoiNhan} | ${order.diaChiGiao}`;
+    if (title) title.textContent = `Thanh toán đơn ${order.maDH}`;
+    if (amount) amount.textContent = formatVND(order.tongTien);
 
-    // Render timeline 4 bước
-    const isStep1Done = true;
-    const isStep2Done = order.trangThai === 'dang_giao' || order.trangThai === 'da_giao';
-    const isStep3Done = order.trangThai === 'dang_giao' || order.trangThai === 'da_giao';
-    const isStep4Done = order.trangThai === 'da_giao';
+    const memoText = `SAMA ${order.maDH.replace(/[^0-9]/g, '')}`;
+    if (memo) memo.textContent = memoText;
 
-    if (timelineBox) {
-      timelineBox.innerHTML = `
-        <!-- Bước 1 -->
-        <div class="relative flex items-start gap-3">
-          <div class="w-6 h-6 rounded-full ${isStep1Done ? 'bg-emerald-500 text-white' : 'bg-slate-300 text-slate-600'} flex items-center justify-center text-xs font-bold flex-shrink-0 z-10 shadow-sm">
-            <i class="fa-solid fa-check"></i>
-          </div>
-          <div>
-            <div class="text-xs sm:text-sm font-bold text-slate-900">Đặt hàng thành công</div>
-            <div class="text-[11px] text-slate-400">Đơn hàng đã được ghi nhận trên hệ thống SamaMobile</div>
-          </div>
-        </div>
-
-        <!-- Bước 2 -->
-        <div class="relative flex items-start gap-3">
-          <div class="w-6 h-6 rounded-full ${isStep2Done ? 'bg-emerald-500 text-white' : 'bg-slate-300 text-slate-600'} flex items-center justify-center text-xs font-bold flex-shrink-0 z-10 shadow-sm">
-            <i class="fa-solid ${isStep2Done ? 'fa-check' : 'fa-box'}"></i>
-          </div>
-          <div>
-            <div class="text-xs sm:text-sm font-bold ${isStep2Done ? 'text-slate-900' : 'text-slate-400'}">Đã tiếp nhận & đóng gói</div>
-            <div class="text-[11px] text-slate-400">Kho SamaMobile 241 Lê Văn Việt đang kiểm tra và đóng gói sản phẩm</div>
-          </div>
-        </div>
-
-        <!-- Bước 3 -->
-        <div class="relative flex items-start gap-3">
-          <div class="w-6 h-6 rounded-full ${isStep3Done ? 'bg-blue-600 text-white animate-pulse' : 'bg-slate-300 text-slate-600'} flex items-center justify-center text-xs font-bold flex-shrink-0 z-10 shadow-sm">
-            <i class="fa-solid fa-truck-fast"></i>
-          </div>
-          <div>
-            <div class="text-xs sm:text-sm font-bold ${isStep3Done ? 'text-[#0057B7]' : 'text-slate-400'}">Đang trên đường giao hàng</div>
-            <div class="text-[11px] text-slate-400">Tài xế công nghệ đang chuyển hàng tới địa chỉ của bạn (Dự kiến trong 2 giờ)</div>
-          </div>
-        </div>
-
-        <!-- Bước 4 -->
-        <div class="relative flex items-start gap-3">
-          <div class="w-6 h-6 rounded-full ${isStep4Done ? 'bg-emerald-500 text-white' : 'bg-slate-300 text-slate-600'} flex items-center justify-center text-xs font-bold flex-shrink-0 z-10 shadow-sm">
-            <i class="fa-solid fa-house-chimney-check"></i>
-          </div>
-          <div>
-            <div class="text-xs sm:text-sm font-bold ${isStep4Done ? 'text-emerald-700' : 'text-slate-400'}">Giao hàng thành công</div>
-            <div class="text-[11px] text-slate-400">Khách hàng kiểm tra sản phẩm và hoàn tất ký nhận</div>
-          </div>
-        </div>
-      `;
+    if (img) {
+      img.src = `https://img.vietqr.io/image/MB-0901234567-compact2.png?amount=${Math.round(order.tongTien)}&addInfo=${encodeURIComponent(memoText)}&accountName=SAMA%20MOBILE%20STORE`;
     }
 
-    if (modal) {
-      modal.classList.remove('hidden');
-      document.body.style.overflow = 'hidden';
-    }
+    if (modal) modal.classList.remove('hidden');
   };
 
-  window.closeTrackingModal = function () {
-    const modal = document.getElementById('order-tracking-modal');
-    if (modal) {
-      modal.classList.add('hidden');
-      document.body.style.overflow = '';
-    }
+  window.closeOrderQrModal = function () {
+    const modal = document.getElementById('order-qr-modal');
+    if (modal) modal.classList.add('hidden');
+    activeModalOrderCode = null;
   };
 
-  // Modal Hủy Đơn Hàng
+  window.confirmModalPayment = function () {
+    if (!activeModalOrderCode) return;
+    const orders = getOrders();
+    const idx = orders.findIndex(o => o.maDH === activeModalOrderCode);
+    if (idx > -1) {
+      orders[idx].daThanhToan = true;
+      saveOrders(orders);
+      window.renderOrders();
+      showToast(`Đã ghi nhận chuyển khoản cho đơn ${activeModalOrderCode}!`);
+    }
+    window.closeOrderQrModal();
+  };
+
   window.openCancelModal = function (maDH) {
     pendingCancelOrderCode = maDH;
     const modal = document.getElementById('cancel-order-modal');
-    const codeEl = document.getElementById('cancel-modal-code');
-    if (codeEl) codeEl.textContent = `Mã đơn: ${maDH}`;
-
-    if (modal) {
-      modal.classList.remove('hidden');
-      document.body.style.overflow = 'hidden';
-    }
+    const codeEl = document.getElementById('cancel-modal-order-code');
+    if (codeEl) codeEl.textContent = maDH;
+    if (modal) modal.classList.remove('hidden');
   };
 
   window.closeCancelModal = function () {
-    pendingCancelOrderCode = null;
     const modal = document.getElementById('cancel-order-modal');
-    if (modal) {
-      modal.classList.add('hidden');
-      document.body.style.overflow = '';
-    }
+    if (modal) modal.classList.add('hidden');
+    pendingCancelOrderCode = null;
   };
 
   window.confirmCancelOrder = function () {
@@ -961,13 +1194,12 @@
       orders[idx].lyDoHuy = reason;
       saveOrders(orders);
       window.renderOrders();
-      alert(`Đã hủy thành công đơn hàng ${pendingCancelOrderCode}! Đơn hàng đã được chuyển sang mục "Đơn đã hủy".`);
+      showToast(`Đã hủy thành công đơn hàng ${pendingCancelOrderCode}!`);
     }
 
     window.closeCancelModal();
   };
 
-  // Mua lại đơn hàng (Đưa các sản phẩm trong đơn vào giỏ hàng và chuyển sang Tab Giỏ Hàng)
   window.reOrderItems = function (maDH) {
     const orders = getOrders();
     const order = orders.find(o => o.maDH === maDH);
@@ -988,23 +1220,14 @@
           price: it.donGia,
           soLuong: it.soLuong || 1,
           qty: it.soLuong || 1,
-          image: it.image || 'images/deal-tabs/deal-tab-phone.jpg'
+          image: it.image || '../images/deal-tabs/deal-tab-phone.jpg'
         });
       }
     });
 
     saveCart(cartItems);
-    alert(`Đã thêm lại các sản phẩm của đơn ${maDH} vào giỏ hàng!`);
+    showToast(`Đã thêm lại các sản phẩm của đơn ${maDH} vào giỏ hàng!`);
     window.switchCartTab('cart');
-  };
-
-  window.copyText = function (text) {
-    if (!text) return;
-    navigator.clipboard.writeText(text).then(() => {
-      alert(`Đã sao chép: "${text}" vào bộ nhớ tạm!`);
-    }).catch(() => {
-      prompt('Sao chép mã này:', text);
-    });
   };
 
 })();
