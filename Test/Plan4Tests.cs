@@ -31,8 +31,8 @@ public class Plan4Tests
     private class MockCurrentUser : ICurrentUser
     {
         public string? UserName => "testuser";
-        public string? MaNV => "NV001";
-        public string? Role => AppConstants.Roles.Sales;
+        public string? MaNV { get; set; } = "NV001";
+        public string? Role { get; set; } = AppConstants.Roles.Sales;
         public string? MaKH => null;
         public bool IsAuthenticated => true;
         public bool IsInRole(string role) => role == Role;
@@ -241,7 +241,34 @@ public class Plan4Tests
         Assert.Equal("111111111111111", traResult.SoIMEI);
 
         var imeiInDb = await context.IMEIs.FirstAsync(i => i.SoIMEI == "111111111111111");
-        Assert.Equal("tra_hang", imeiInDb.TrangThai);
+        Assert.Equal("cho_duyet", imeiInDb.TrangThai);
+        Assert.Equal("tiep_nhan", traResult.TrangThai);
+
+        // Bước 2: Kỹ thuật kiểm tra
+        var techUser = new MockCurrentUser { MaNV = "NV002", Role = "ky_thuat" };
+        var returnsServiceTech = new ReturnsService(context, techUser, codeGen, sysSetting);
+        var ktResult = await returnsServiceTech.KiemTraAsync(traResult.MaTR, new KiemTraTraHangRequest
+        {
+            KetQuaKiemTra = "loi_nsx",
+            GhiChuKiemTra = "Lỗi nguồn phần cứng nhà sản xuất"
+        });
+        Assert.Equal("da_kiem_tra", ktResult.TrangThai);
+
+        // Bước 3: Quản lý duyệt
+        var managerUser = new MockCurrentUser { MaNV = "NV003", Role = "quan_ly" };
+        var returnsServiceManager = new ReturnsService(context, managerUser, codeGen, sysSetting);
+        var duyetResult = await returnsServiceManager.DuyetAsync(traResult.MaTR, new DuyetTraHangRequest
+        {
+            ChapNhan = true
+        });
+        Assert.Equal("da_duyet", duyetResult.TrangThai);
+
+        // Bước 4: Hoàn tất hồ sơ
+        var hoanTatResult = await returnsServiceManager.HoanTatAsync(traResult.MaTR, new HoanTatTraHangRequest());
+        Assert.Equal("hoan_tat", hoanTatResult.TrangThai);
+
+        imeiInDb = await context.IMEIs.FirstAsync(i => i.SoIMEI == "111111111111111");
+        Assert.Equal("dang_sua", imeiInDb.TrangThai);
     }
 
     [Fact]
