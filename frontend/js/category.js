@@ -777,28 +777,33 @@
     const pName = (p.tenHang || '').toLowerCase();
 
     if (catId === 'dien-thoai') {
-      return pGroup.includes('điện thoại') || pType.includes('điện thoại') || pName.includes('iphone') || pName.includes('galaxy s') || pName.includes('galaxy a') || pName.includes('nubia') || pName.includes('xiaomi 1') || pName.includes('redmi');
+      if (p.maNhom === 'TABLET' || pGroup.includes('máy tính bảng') || pName.includes('ipad') || pName.includes('galaxy tab')) return false;
+      return p.maNhom === 'DIENTHOAI' || pGroup.includes('điện thoại') || pType.includes('điện thoại') || pName.includes('iphone') || pName.includes('galaxy s') || pName.includes('galaxy a') || pName.includes('galaxy z') || pName.includes('nubia') || pName.includes('xiaomi 1') || pName.includes('redmi');
     }
     if (catId === 'tablet') {
-      return pGroup.includes('máy tính bảng') || pType.includes('tablet') || pName.includes('ipad') || pName.includes('tab s') || pName.includes('tab a') || pName.includes('matepad') || pName.includes('pad');
+      // Loại trừ hoàn toàn laptop (IdeaPad, ThinkPad, MacBook...) và phụ kiện
+      if (p.maNhom === 'LAPTOP' || pGroup.includes('laptop') || pName.includes('laptop') || pName.includes('ideapad') || pName.includes('thinkpad') || pName.includes('trackpad') || pName.includes('macbook') || pName.includes('chuột')) return false;
+      if (p.maNhom === 'TABLET' || pGroup.includes('máy tính bảng') || pType.includes('tablet')) return true;
+      return pName.includes('ipad') || pName.includes('galaxy tab') || pName.includes('tab s') || pName.includes('tab a') || pName.includes('matepad') || pName.includes('redmi pad') || pName.includes('xiaomi pad') || pName.includes('honor pad') || pName.includes('lenovo tab');
     }
     if (catId === 'laptop') {
-      return pGroup.includes('laptop') || pName.includes('macbook') || pName.includes('laptop') || pName.includes('vivobook') || pName.includes('thinkpad') || pName.includes('tuf gaming');
+      if (pName.includes('màn hình') || pName.includes('monitor') || pName.includes('chuột') || pName.includes('bàn phím') || pName.includes('trackpad')) return false;
+      return p.maNhom === 'LAPTOP' || pGroup.includes('laptop') || pName.includes('macbook') || pName.includes('laptop') || pName.includes('vivobook') || pName.includes('zenbook') || pName.includes('thinkpad') || pName.includes('ideapad') || pName.includes('tuf gaming');
     }
     if (catId === 'man-hinh') {
       return pName.includes('màn hình') || pName.includes('monitor') || pName.includes('ultrasharp');
     }
     if (catId === 'dieu-hoa-may-lanh') {
-      return pName.includes('điều hòa') || pName.includes('máy lạnh') || pName.includes('clair') || pName.includes('lọc không khí') || pGroup.includes('điện máy');
+      return p.maNhom === 'DIENMAY' || pName.includes('điều hòa') || pName.includes('máy lạnh') || pName.includes('clair') || pName.includes('lọc không khí') || pGroup.includes('điện máy');
     }
     if (catId === 'dong-ho-thong-minh') {
-      return pGroup.includes('đồng hồ') || pName.includes('watch') || pName.includes('smart band') || pName.includes('vòng đeo tay');
+      return p.maNhom === 'DONGHO' || pGroup.includes('đồng hồ') || pName.includes('watch') || pName.includes('smart band') || pName.includes('vòng đeo tay');
     }
     if (catId === 'am-thanh') {
-      return pGroup.includes('âm thanh') || pName.includes('tai nghe') || pName.includes('loa') || pName.includes('airpods') || pName.includes('emberton');
+      return p.maNhom === 'AMTHANH' || pGroup.includes('âm thanh') || pName.includes('tai nghe') || pName.includes('loa') || pName.includes('airpods') || pName.includes('emberton');
     }
     if (catId === 'phu-kien') {
-      return pGroup.includes('phụ kiện') || pName.includes('củ sạc') || pName.includes('cáp sạc') || pName.includes('sạc dự phòng') || pName.includes('ốp lưng') || pName.includes('camera') || pName.includes('chuột');
+      return p.maNhom === 'PHUKIEN' || pGroup.includes('phụ kiện') || pName.includes('củ sạc') || pName.includes('cáp sạc') || pName.includes('sạc dự phòng') || pName.includes('ốp lưng') || pName.includes('camera') || pName.includes('chuột');
     }
     return false;
   }
