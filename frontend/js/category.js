@@ -11,6 +11,40 @@
 
 (function () {
   'use strict';
+  // Helper chuẩn hóa đường dẫn tài nguyên (tương thích cả khi chạy từ / hoặc /pages/)
+  function resolveAssetPath(path) {
+    if (!path) return '';
+    if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('data:') || path.startsWith('//')) {
+      return path;
+    }
+    const clean = path.replace(/^\.\.\//, '').replace(/^\//, '');
+    const isInsidePages = window.location.pathname.includes('/pages/') || window.location.href.includes('/pages/');
+    return isInsidePages ? ('../' + clean) : clean;
+  }
+
+  // Tải JSON an toàn qua nhiều ứng viên đường dẫn (tránh 404 tuyệt đối)
+  async function fetchJsonSafely(relPath) {
+    const clean = relPath.replace(/^\.\.\//, '').replace(/^\//, '');
+    const candidates = [
+      resolveAssetPath(clean),
+      '../' + clean,
+      clean,
+      './' + clean,
+      '../../' + clean,
+      '/frontend/' + clean
+    ];
+    const unique = [...new Set(candidates)];
+    for (const url of unique) {
+      try {
+        const res = await fetch(url);
+        if (res.ok) {
+          return await res.json();
+        }
+      } catch (e) {}
+    }
+    return null;
+  }
+
 
   // 8 Category IDs chuẩn từ hoangha-categories.json:
   // 'dien-thoai', 'tablet', 'laptop', 'man-hinh', 'dieu-hoa-may-lanh', 'dong-ho-thong-minh', 'am-thanh', 'phu-kien'
@@ -122,13 +156,11 @@
     renderSeoArticleAndNews();
   }
 
-  // Tải dữ liệu hoangha-categories.json
+  // Tải dữ liệu hoangha-categories.json an toàn đa nguồn
   async function loadCategoriesData() {
     try {
-      let res = await fetch('data/hoangha-categories.json');
-      if (!res.ok) res = await fetch('hoangha-categories.json');
-      if (res.ok) {
-        const json = await res.json();
+      const json = await fetchJsonSafely('data/hoangha-categories.json');
+      if (json) {
         hoanghaCategoriesData = json;
       }
     } catch (e) {
@@ -191,8 +223,8 @@
             const matches = (allProducts || []).filter(p => p.tenHang && p.tenHang.toLowerCase().includes(val.toLowerCase())).slice(0, 5);
             if (matches.length > 0) {
               autoDropdown.innerHTML = matches.map(p => `
-                <a href="product-detail.html?id=${encodeURIComponent(p.maHang || p.id)}" class="flex items-center gap-3 p-3 hover:bg-blue-50 transition-colors">
-                  <img src="${p.anhChinh || 'images/default-phone.png'}" class="w-10 h-10 object-contain rounded" onerror="this.src='images/default-phone.png'" />
+                <a href="${(window.location.pathname.includes('/pages/') || window.location.href.includes('/pages/')) ? '' : 'pages/'}product-detail.html?id=${encodeURIComponent(p.maHang || p.id)}" class="flex items-center gap-3 p-3 hover:bg-blue-50 transition-colors">
+                  <img src="${resolveAssetPath(p.anhChinh || 'images/default-phone.png')}" class="w-10 h-10 object-contain rounded" onerror="this.src='../images/default-phone.png'" />
                   <div class="flex-1 min-w-0">
                     <p class="text-xs font-bold text-slate-900 truncate">${p.tenHang}</p>
                     <p class="text-[11px] text-rose-600 font-extrabold">${Number(p.donGia || 0).toLocaleString('vi-VN')} ₫</p>
@@ -290,13 +322,13 @@
     };
 
     window.CellphoneSCustomerPortal = window.CellphoneSCustomerPortal || {
-      openLoginModal: function () { window.location.href = 'index.html#login'; },
-      openPortal: function () { window.location.href = 'index.html#portal'; }
+      openLoginModal: function () { const isPages = window.location.pathname.includes('/pages/') || window.location.href.includes('/pages/'); window.location.href = (isPages ? '../' : '') + 'index.html#login'; },
+      openPortal: function () { const isPages = window.location.pathname.includes('/pages/') || window.location.href.includes('/pages/'); window.location.href = (isPages ? '../' : '') + 'index.html#portal'; }
     };
 
     window.CellphoneSLookup = window.CellphoneSLookup || {
-      openModal: function (tab) { window.location.href = 'index.html#' + tab; },
-      openTradeInModal: function () { window.location.href = 'index.html#hero-store'; }
+      openModal: function (tab) { const isPages = window.location.pathname.includes('/pages/') || window.location.href.includes('/pages/'); window.location.href = (isPages ? '../' : '') + 'index.html#' + tab; },
+      openTradeInModal: function () { const isPages = window.location.pathname.includes('/pages/') || window.location.href.includes('/pages/'); window.location.href = (isPages ? '../' : '') + 'index.html#hero-store'; }
     };
   }
 
@@ -356,7 +388,19 @@
       'mouse': 'phu-kien',
       'keyboard': 'phu-kien',
       'sac-cap': 'phu-kien',
-      'pin-du-phong': 'phu-kien'
+      'pin-du-phong': 'phu-kien',
+      'router': 'phu-kien',
+      'network': 'phu-kien',
+      'thiet-bi-mang': 'phu-kien',
+      'camera': 'phu-kien',
+      'smarthome': 'phu-kien',
+      'smart-home': 'phu-kien',
+      'sim': 'phu-kien',
+      'dich-vu-sim': 'phu-kien',
+      'linh-kien': 'man-hinh',
+      'linhkien': 'man-hinh',
+      'computer': 'laptop',
+      'may-tinh': 'laptop'
     };
 
     currentCategory = categoryMap[rawType] || 'dien-thoai';
@@ -404,7 +448,7 @@
     if (desc) desc.textContent = descText;
 
     if (banner) {
-      banner.src = CATEGORY_BANNERS[currentCategory] || 'images/banner/471331_S26-Series-1200x375.jpg';
+      banner.src = resolveAssetPath(CATEGORY_BANNERS[currentCategory] || 'images/banner/471331_S26-Series-1200x375.jpg');
     }
 
     // Cập nhật Subcategory Switcher Tabs (Thích ứng theo từng cặp danh mục)
@@ -573,7 +617,7 @@
       const bName = typeof b === 'string' ? b : b.name;
       const bKey = bName.toLowerCase();
       const isSelected = selectedBrand === bKey;
-      const logoUrl = BRAND_LOGOS[bKey] || getFallbackBrandLogo(bKey);
+      const rawLogo = BRAND_LOGOS[bKey] || getFallbackBrandLogo(bKey); const logoUrl = rawLogo ? resolveAssetPath(rawLogo) : '';
 
       return `
         <button type="button" onclick="window.onBrandFilterClick('${bKey}')" class="brand-filter-btn flex items-center justify-center p-2.5 rounded-xl border text-center transition-all cursor-pointer ${isSelected ? 'border-blue-600 bg-blue-50 text-blue-700 font-bold' : 'border-slate-200 bg-white hover:border-slate-300 text-slate-700 font-semibold'}">
@@ -611,7 +655,7 @@
       const bName = typeof b === 'string' ? b : b.name;
       const bKey = bName.toLowerCase();
       const isSel = selectedBrand === bKey;
-      const logoUrl = BRAND_LOGOS[bKey] || getFallbackBrandLogo(bKey);
+      const rawLogo = BRAND_LOGOS[bKey] || getFallbackBrandLogo(bKey); const logoUrl = rawLogo ? resolveAssetPath(rawLogo) : '';
 
       return `
         <button type="button" onclick="window.onBrandFilterClick('${bKey}')" class="chip-btn flex-shrink-0 px-4 py-2 rounded-full text-xs sm:text-sm font-bold transition-all cursor-pointer flex items-center gap-2 shadow-2xs ${isSel ? 'bg-[#0057B7] text-white border border-[#0057B7]' : 'bg-white border border-slate-200 text-slate-700 hover:border-slate-300'}">
@@ -655,7 +699,7 @@
           stock_status: sp.stock_status || 'Sẵn hàng',
           image_badges: sp.image_badges || [],
           bank_promo: sp.bank_promo,
-          anhChinh: getSampleProductImage(activeCategoryObj.id, idx, sp.name),
+          anhChinh: resolveAssetPath(getSampleProductImage(activeCategoryObj.id, idx, sp.name)),
           brand: extractBrandFromName(sp.name)
         });
       });
@@ -663,10 +707,8 @@
 
     // 2. Nạp thêm sản phẩm từ products-meta.json
     try {
-      let res = await fetch('data/products-meta.json');
-      if (!res.ok) res = await fetch('products-meta.json');
-      if (res.ok) {
-        const meta = await res.json();
+      const meta = await fetchJsonSafely('data/products-meta.json');
+      if (meta) {
         const matchedMeta = Object.values(meta).filter(p => isProductMatchCategory(p, currentCategory));
 
         matchedMeta.forEach(p => {
@@ -686,7 +728,7 @@
             stock_status: 'Sẵn hàng',
             image_badges: extractSpecBadges(p, currentCategory),
             bank_promo: 'TPBank Evo - Giảm đến 500.000đ, trả góp 0% đến 6 tháng',
-            anhChinh: p.anhChinh || p.image || 'images/banner/iphone-18-cat-082925094.png',
+            anhChinh: resolveAssetPath(p.anhChinh || p.image || 'images/banner/iphone-18-cat-082925094.png'),
             brand: extractBrandFromName(pName) || p.nhanHieu || ''
           });
         });
@@ -887,7 +929,7 @@
       const memberPrice = p.member_price || Math.round(price * 0.985);
       const installmentMonth = Math.round(price / 6);
       const discount = p.discount_percent || (oldPrice > price ? Math.round(((oldPrice - price) / oldPrice) * 100) : 0);
-      const img = p.anhChinh || 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png';
+      const img = resolveAssetPath(p.anhChinh || 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png');
       const pId = p.maHang || p.id || 'SP01';
       const badges = p.image_badges || [];
       const bankPromo = p.bank_promo || 'TPBank Evo - Giảm đến 500.000đ, trả góp 0%';
@@ -1042,7 +1084,7 @@
         </p>
 
         <div class="relative w-full h-[220px] sm:h-[280px] md:h-[340px] rounded-xl overflow-hidden border border-slate-200 my-4 shadow-2xs bg-slate-900">
-          <img src="${CATEGORY_BANNERS[currentCategory] || 'images/banner/471331_S26-Series-1200x375.jpg'}" alt="${catName}" class="w-full h-full object-cover object-center block" style="width: 100% !important; height: 100% !important;" />
+          <img src="${resolveAssetPath(CATEGORY_BANNERS[currentCategory] || 'images/banner/471331_S26-Series-1200x375.jpg')}" alt="${catName}" class="w-full h-full object-cover object-center block" style="width: 100% !important; height: 100% !important;" />
         </div>
 
         <p id="art-sec-2" class="text-slate-700 leading-relaxed">
@@ -1066,10 +1108,10 @@
       ];
 
       const sampleNewsImgs = [
-        'images/banner/iphone-18-cat-082925094.png',
+        resolveAssetPath('images/banner/iphone-18-cat-082925094.png'),
         'https://i.hoanghamobile.vn/Uploads/2026/01/08/nubia-v80-max-bac.png',
-        'images/banner/471331_S26-Series-1200x375.jpg',
-        'images/banner/iphone-18-web-082925157.jpg'
+        resolveAssetPath('images/banner/471331_S26-Series-1200x375.jpg'),
+        resolveAssetPath('images/banner/iphone-18-web-082925157.jpg')
       ];
 
       newsContainer.innerHTML = newsItems.slice(0, 4).map((item, idx) => `
@@ -1156,7 +1198,8 @@
         if (window.addRecentlyViewed) window.addRecentlyViewed(item);
       } catch (e) {}
     }
-    window.location.href = 'product-detail.html?id=' + encodeURIComponent(maHang);
+    const isPages = window.location.pathname.includes('/pages/') || window.location.href.includes('/pages/');
+    window.location.href = (isPages ? '' : 'pages/') + 'product-detail.html?id=' + encodeURIComponent(maHang);
   };
 
   window.quickAddToCart = function (maHang) {

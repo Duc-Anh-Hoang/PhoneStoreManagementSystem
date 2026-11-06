@@ -14,6 +14,40 @@
 
 (function () {
   'use strict';
+  // Helper chuẩn hóa đường dẫn tài nguyên (tương thích cả khi chạy từ / hoặc /pages/)
+  function resolveAssetPath(path) {
+    if (!path) return '';
+    if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('data:') || path.startsWith('//')) {
+      return path;
+    }
+    const clean = path.replace(/^\.\.\//, '').replace(/^\//, '');
+    const isInsidePages = window.location.pathname.includes('/pages/') || window.location.href.includes('/pages/');
+    return isInsidePages ? ('../' + clean) : clean;
+  }
+
+  // Tải JSON an toàn qua nhiều ứng viên đường dẫn (tránh 404 tuyệt đối)
+  async function fetchJsonSafely(relPath) {
+    const clean = relPath.replace(/^\.\.\//, '').replace(/^\//, '');
+    const candidates = [
+      resolveAssetPath(clean),
+      '../' + clean,
+      clean,
+      './' + clean,
+      '../../' + clean,
+      '/frontend/' + clean
+    ];
+    const unique = [...new Set(candidates)];
+    for (const url of unique) {
+      try {
+        const res = await fetch(url);
+        if (res.ok) {
+          return await res.json();
+        }
+      } catch (e) {}
+    }
+    return null;
+  }
+
 
   var currentProduct = null;
   var selectedVersion = null;
@@ -188,7 +222,7 @@
             if (matches.length > 0) {
               autoDropdown.innerHTML = matches.map(p => `
                 <a href="product-detail.html?id=${encodeURIComponent(p.maHang || p.id)}" class="flex items-center gap-3 p-3 hover:bg-blue-50 transition-colors">
-                  <img src="${p.anhChinh || 'images/default-phone.png'}" class="w-10 h-10 object-contain rounded" onerror="this.src='images/default-phone.png'" />
+                  <img src="${resolveAssetPath(p.anhChinh || 'images/default-phone.png')}" class="w-10 h-10 object-contain rounded" onerror="this.src='../images/default-phone.png'" />
                   <div class="flex-1 min-w-0">
                     <p class="text-xs font-bold text-slate-900 truncate">${p.tenHang}</p>
                     <p class="text-[11px] text-rose-600 font-extrabold">${Number(p.donGia || 0).toLocaleString('vi-VN')} ₫</p>
@@ -297,13 +331,12 @@
     };
   }
 
-  // Tải dữ liệu từ products-meta.json
+  // Tải dữ liệu từ products-meta.json an toàn đa nguồn
   async function loadProductsData() {
     try {
-      let res = await fetch('data/products-meta.json');
-      if (!res.ok) res = await fetch('products-meta.json');
-      if (res.ok) {
-        allProductsMeta = await res.json();
+      const data = await fetchJsonSafely('data/products-meta.json');
+      if (data) {
+        allProductsMeta = data;
       }
     } catch (e) {
       console.warn('Could not load products-meta.json, using built-in data', e);
@@ -367,7 +400,7 @@
   function normalizeProduct(p) {
     const donGia = Number(p.donGia) || 3890000;
     const giaGoc = Number(p.giaGoc) || Math.round(donGia * 1.15);
-    const anh = p.anhChinh || p.image || 'https://i.hoanghamobile.vn/Uploads/2026/01/08/nubia-v80-max-bac.png';
+    const anh = resolveAssetPath(p.anhChinh || p.image || 'https://i.hoanghamobile.vn/Uploads/2026/01/08/nubia-v80-max-bac.png');
 
     // Đảm bảo có danh sách phiên bản đầy đủ
     let phienBan = p.phienBan && p.phienBan.length > 0 ? p.phienBan : [];
@@ -831,8 +864,8 @@
     if (!container) return;
 
     const addons = [
-      { id: 'ADD-01', name: 'Củ sạc nhanh 30W Type-C SamaFast', price: 290000, img: 'images/banner/iphone-18-cat-082925094.png' },
-      { id: 'ADD-02', name: 'Tai nghe Bluetooth không dây TWS-09', price: 390000, img: 'images/products/airpods-pro-3.png' },
+      { id: 'ADD-01', name: 'Củ sạc nhanh 30W Type-C SamaFast', price: 290000, img: resolveAssetPath('images/banner/iphone-18-cat-082925094.png') },
+      { id: 'ADD-02', name: 'Tai nghe Bluetooth không dây TWS-09', price: 390000, img: resolveAssetPath('images/products/airpods-pro-3.png') },
       { id: 'ADD-03', name: 'Kính cường lực Full viền 9H chống va đập', price: 90000, img: 'https://i.hoanghamobile.vn/Uploads/2026/01/08/nubia-v80-max-bac.png' }
     ];
 
@@ -856,11 +889,11 @@
     if (!grid) return;
 
     const items = [
-      { id: 'MH108', name: 'Samsung Galaxy A08 4GB/64GB', price: 4490000, oldPrice: 4890000, img: 'images/products/phone-mh108.png' },
-      { id: 'MH109', name: 'Samsung Galaxy A18 6GB/128GB', price: 6690000, oldPrice: 7190000, img: 'images/products/phone-mh109.png' },
+      { id: 'MH108', name: 'Samsung Galaxy A08 4GB/64GB', price: 4490000, oldPrice: 4890000, img: resolveAssetPath('images/products/phone-mh108.png') },
+      { id: 'MH109', name: 'Samsung Galaxy A18 6GB/128GB', price: 6690000, oldPrice: 7190000, img: resolveAssetPath('images/products/phone-mh109.png') },
       { id: 'MH104', name: 'Nubia Air 5G 8GB/256GB', price: 5490000, oldPrice: 5990000, img: 'https://i.hoanghamobile.vn/Uploads/2026/07/07/back-gold1-171113527.png' },
-      { id: 'MH112', name: 'Xiaomi Redmi Note 17 6GB/128GB', price: 4890000, oldPrice: 5290000, img: 'images/products/phone-mh112.png' },
-      { id: 'MH114', name: 'OPPO A68 5G 8GB/128GB', price: 5690000, oldPrice: 6190000, img: 'images/products/phone-mh114.png' }
+      { id: 'MH112', name: 'Xiaomi Redmi Note 17 6GB/128GB', price: 4890000, oldPrice: 5290000, img: resolveAssetPath('images/products/phone-mh112.png') },
+      { id: 'MH114', name: 'OPPO A68 5G 8GB/128GB', price: 5690000, oldPrice: 6190000, img: resolveAssetPath('images/products/phone-mh114.png') }
     ];
 
     grid.innerHTML = items.map(p => `

@@ -463,7 +463,7 @@
             <li><button type="button" onclick="window.filterPhoneBrand('Apple', true); window.toggleMegaMenu();" class="hover:text-[#2563EB] font-semibold">Apple iPhone (18/17/16)</button></li>
             <li><button type="button" onclick="window.filterPhoneBrand('Samsung', true); window.toggleMegaMenu();" class="hover:text-[#2563EB] font-semibold">Samsung Galaxy (S24/Z Fold)</button></li>
             <li><button type="button" onclick="window.filterPhoneBrand('Xiaomi', true); window.toggleMegaMenu();" class="hover:text-[#2563EB]">Xiaomi Leica Siêu Phẩm</button></li>
-            <li><button type="button" onclick="window.filterPhoneBrand('all', true); window.toggleMegaMenu();" class="hover:text-[#2563EB] text-[#2563EB] font-bold">Xem tất cả điện thoại &rarr;</button></li>
+            <li><a href="pages/category.html?type=dien-thoai" class="hover:text-[#2563EB] text-[#2563EB] font-bold block">Xem tất cả điện thoại &rarr;</a></li>
           </ul>
         </div>
 
@@ -474,9 +474,9 @@
             <span>Tablet / iPad</span>
           </div>
           <ul class="space-y-2 text-slate-600">
-            <li><button type="button" onclick="window.quickSearchTag('iPad'); window.toggleMegaMenu();" class="hover:text-[#2563EB]">iPad Pro M4 Mỏng Nhất</button></li>
+            <li><a href="pages/category.html?type=tablet&brand=apple" class="hover:text-[#2563EB] block">iPad Pro M4 Mỏng Nhất</a></li>
             <li><button type="button" onclick="window.quickSearchTag('iPad Air'); window.toggleMegaMenu();" class="hover:text-[#2563EB]">iPad Air M2 11/13 inch</button></li>
-            <li><button type="button" onclick="window.quickSearchTag('Galaxy Tab'); window.toggleMegaMenu();" class="hover:text-[#2563EB]">Samsung Galaxy Tab S9</button></li>
+            <li><a href="pages/category.html?type=tablet&brand=samsung" class="hover:text-[#2563EB] block">Samsung Galaxy Tab S9</a></li>
             <li><button type="button" onclick="window.quickSearchTag('Bút cảm ứng'); window.toggleMegaMenu();" class="hover:text-[#2563EB]">Apple Pencil & Bàn phím</button></li>
           </ul>
         </div>
@@ -630,10 +630,10 @@
             </h2>
           </div>
 
-          <!-- Lưới 16 Danh mục (Hàng 1: 8 mục, Hàng 2: 8 mục trên Desktop / 4 cột trên Mobile) -->
+          <!-- Lưới 16 Danh mục: Chuyển trực tiếp sang trang chuyên mục tương ứng theo yêu cầu -->
           <div class="grid grid-cols-4 md:grid-cols-8">
             <!-- 1. Điện thoại -->
-            <a href="javascript:void(0)" onclick="window.quickSearchTag('Điện thoại')" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-[#ebf3fe] transition-all duration-200 group cursor-pointer" title="Điện thoại">
+            <a href="pages/category.html?type=dien-thoai" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-[#ebf3fe] transition-all duration-200 group cursor-pointer" title="Điện thoại">
               <div class="w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center mb-1.5 sm:mb-2">
                 <img src="images/categories/dien-thoai.png" onerror="this.onerror=null; this.src='images/categories/dien-thoai.png';" alt="Điện thoại" class="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-300" loading="lazy" />
               </div>
@@ -641,7 +641,7 @@
             </a>
 
             <!-- 2. Laptop -->
-            <a href="javascript:void(0)" onclick="window.quickSearchTag('Laptop')" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-[#ebf3fe] transition-all duration-200 group cursor-pointer" title="Laptop">
+            <a href="pages/category.html?type=laptop" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-[#ebf3fe] transition-all duration-200 group cursor-pointer" title="Laptop">
               <div class="w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center mb-1.5 sm:mb-2">
                 <img src="images/categories/laptop.png" onerror="this.onerror=null; this.src='images/categories/laptop.png';" alt="Laptop" class="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-300" loading="lazy" />
               </div>
@@ -649,7 +649,7 @@
             </a>
 
             <!-- 3. Tablet -->
-            <a href="javascript:void(0)" onclick="window.quickSearchTag('iPad')" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-[#ebf3fe] transition-all duration-200 group cursor-pointer" title="Tablet">
+            <a href="pages/category.html?type=tablet" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-[#ebf3fe] transition-all duration-200 group cursor-pointer" title="Tablet">
               <div class="w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center mb-1.5 sm:mb-2">
                 <img src="images/categories/tablet.png" onerror="this.onerror=null; this.src='images/categories/tablet.png';" alt="Tablet" class="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-300" loading="lazy" />
               </div>
@@ -657,7 +657,7 @@
             </a>
 
             <!-- 4. Màn hình -->
-            <a href="javascript:void(0)" onclick="window.quickSearchTag('Màn hình')" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-[#ebf3fe] transition-all duration-200 group cursor-pointer" title="Màn hình">
+            <a href="pages/category.html?type=man-hinh" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-[#ebf3fe] transition-all duration-200 group cursor-pointer" title="Màn hình">
               <div class="w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center mb-1.5 sm:mb-2">
                 <img src="images/categories/man-hinh.png" onerror="this.onerror=null; this.src='images/categories/man-hinh.png';" alt="Màn hình" class="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-300" loading="lazy" />
               </div>
@@ -665,7 +665,7 @@
             </a>
 
             <!-- 5. PC, linh kiện máy tính -->
-            <a href="javascript:void(0)" onclick="window.quickSearchTag('PC')" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-[#ebf3fe] transition-all duration-200 group cursor-pointer" title="PC, linh kiện máy tính">
+            <a href="pages/category.html?type=man-hinh" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-[#ebf3fe] transition-all duration-200 group cursor-pointer" title="PC, linh kiện máy tính">
               <div class="w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center mb-1.5 sm:mb-2">
                 <img src="images/categories/pc-linh-kien.png" onerror="this.onerror=null; this.src='images/categories/pc-linh-kien.png';" alt="PC, linh kiện máy tính" class="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-300" loading="lazy" />
               </div>
@@ -673,7 +673,7 @@
             </a>
 
             <!-- 6. Đồng hồ -->
-            <a href="javascript:void(0)" onclick="window.quickSearchTag('Đồng hồ')" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-[#ebf3fe] transition-all duration-200 group cursor-pointer" title="Đồng hồ">
+            <a href="pages/category.html?type=dong-ho-thong-minh" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-[#ebf3fe] transition-all duration-200 group cursor-pointer" title="Đồng hồ">
               <div class="w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center mb-1.5 sm:mb-2">
                 <img src="images/categories/dong-ho.png" onerror="this.onerror=null; this.src='images/categories/dong-ho.png';" alt="Đồng hồ" class="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-300" loading="lazy" />
               </div>
@@ -681,7 +681,7 @@
             </a>
 
             <!-- 7. Âm thanh -->
-            <a href="javascript:void(0)" onclick="window.quickSearchTag('Tai nghe')" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-[#ebf3fe] transition-all duration-200 group cursor-pointer" title="Âm thanh">
+            <a href="pages/category.html?type=am-thanh" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-[#ebf3fe] transition-all duration-200 group cursor-pointer" title="Âm thanh">
               <div class="w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center mb-1.5 sm:mb-2">
                 <img src="images/categories/am-thanh.png" onerror="this.onerror=null; this.src='images/categories/am-thanh.png';" alt="Âm thanh" class="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-300" loading="lazy" />
               </div>
@@ -689,7 +689,7 @@
             </a>
 
             <!-- 8. Tivi, Điện máy -->
-            <a href="javascript:void(0)" onclick="window.quickSearchTag('Tivi')" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-[#ebf3fe] transition-all duration-200 group cursor-pointer" title="Tivi, Điện máy">
+            <a href="pages/category.html?type=dieu-hoa-may-lanh" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-[#ebf3fe] transition-all duration-200 group cursor-pointer" title="Tivi, Điện máy">
               <div class="w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center mb-1.5 sm:mb-2">
                 <img src="images/categories/tivi-dien-may.png" onerror="this.onerror=null; this.src='images/categories/tivi-dien-may.png';" alt="Tivi, Điện máy" class="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-300" loading="lazy" />
               </div>
@@ -697,7 +697,7 @@
             </a>
 
             <!-- 9. Smart home -->
-            <a href="javascript:void(0)" onclick="window.quickSearchTag('Smart home')" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-[#ebf3fe] transition-all duration-200 group cursor-pointer" title="Smart home">
+            <a href="pages/category.html?type=phu-kien&cat=smarthome" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-[#ebf3fe] transition-all duration-200 group cursor-pointer" title="Smart home">
               <div class="w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center mb-1.5 sm:mb-2">
                 <img src="images/categories/smart-home.png" onerror="this.onerror=null; this.src='images/categories/smart-home.png';" alt="Smart home" class="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-300" loading="lazy" />
               </div>
@@ -705,7 +705,7 @@
             </a>
 
             <!-- 10. Camera -->
-            <a href="javascript:void(0)" onclick="window.quickSearchTag('Camera')" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-[#ebf3fe] transition-all duration-200 group cursor-pointer" title="Camera">
+            <a href="pages/category.html?type=phu-kien&brand=ezviz" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-[#ebf3fe] transition-all duration-200 group cursor-pointer" title="Camera">
               <div class="w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center mb-1.5 sm:mb-2">
                 <img src="images/categories/camera.png" onerror="this.onerror=null; this.src='images/categories/camera.png';" alt="Camera" class="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-300" loading="lazy" />
               </div>
@@ -713,7 +713,7 @@
             </a>
 
             <!-- 11. Thiết bị mạng -->
-            <a href="javascript:void(0)" onclick="window.quickSearchTag('Router')" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-[#ebf3fe] transition-all duration-200 group cursor-pointer" title="Thiết bị mạng">
+            <a href="pages/category.html?type=phu-kien&cat=network" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-[#ebf3fe] transition-all duration-200 group cursor-pointer" title="Thiết bị mạng">
               <div class="w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center mb-1.5 sm:mb-2">
                 <img src="images/categories/thiet-bi-mang.png" onerror="this.onerror=null; this.src='images/categories/thiet-bi-mang.png';" alt="Thiết bị mạng" class="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-300" loading="lazy" />
               </div>
@@ -721,7 +721,7 @@
             </a>
 
             <!-- 12. Phụ kiện -->
-            <a href="javascript:void(0)" onclick="window.quickSearchTag('Phụ kiện')" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-[#ebf3fe] transition-all duration-200 group cursor-pointer" title="Phụ kiện">
+            <a href="pages/category.html?type=phu-kien" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-[#ebf3fe] transition-all duration-200 group cursor-pointer" title="Phụ kiện">
               <div class="w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center mb-1.5 sm:mb-2">
                 <img src="images/categories/phu-kien.png" onerror="this.onerror=null; this.src='images/categories/phu-kien.png';" alt="Phụ kiện" class="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-300" loading="lazy" />
               </div>
@@ -729,7 +729,7 @@
             </a>
 
             <!-- 13. Hàng cũ -->
-            <a href="javascript:void(0)" onclick="window.quickSearchTag('Cũ')" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-[#ebf3fe] transition-all duration-200 group cursor-pointer" title="Hàng cũ">
+            <a href="pages/category.html?type=dien-thoai&used=true" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-[#ebf3fe] transition-all duration-200 group cursor-pointer" title="Hàng cũ">
               <div class="w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center mb-1.5 sm:mb-2">
                 <img src="images/categories/hang-cu.png" onerror="this.onerror=null; this.src='images/categories/hang-cu.png';" alt="Hàng cũ" class="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-300" loading="lazy" />
               </div>
@@ -737,7 +737,7 @@
             </a>
 
             <!-- 14. Thu cũ đổi mới -->
-            <a href="javascript:void(0)" onclick="if(window.CellphoneSLookup?.openTradeInModal){window.CellphoneSLookup.openTradeInModal()}else{window.quickSearchTag('Thu cũ')}" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-[#ebf3fe] transition-all duration-200 group cursor-pointer" title="Thu cũ đổi mới">
+            <a href="pages/category.html?type=dien-thoai&tradein=true" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-[#ebf3fe] transition-all duration-200 group cursor-pointer" title="Thu cũ đổi mới">
               <div class="w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center mb-1.5 sm:mb-2">
                 <img src="images/categories/thu-cu-doi-moi.png" onerror="this.onerror=null; this.src='images/categories/thu-cu-doi-moi.png';" alt="Thu cũ đổi mới" class="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-300" loading="lazy" />
               </div>
@@ -745,7 +745,7 @@
             </a>
 
             <!-- 15. Dịch vụ SIM thẻ -->
-            <a href="javascript:void(0)" onclick="if(typeof window.showToast==='function'){window.showToast('Dịch vụ SIM thẻ & Nạp thẻ chính hãng sẵn sàng tại showroom!','info')}else{window.quickSearchTag('SIM')}" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-[#ebf3fe] transition-all duration-200 group cursor-pointer" title="Dịch vụ SIM thẻ">
+            <a href="pages/category.html?type=phu-kien&cat=sim" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-[#ebf3fe] transition-all duration-200 group cursor-pointer" title="Dịch vụ SIM thẻ">
               <div class="w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center mb-1.5 sm:mb-2">
                 <img src="images/categories/dich-vu-sim.png" onerror="this.onerror=null; this.src='images/categories/dich-vu-sim.png';" alt="Dịch vụ SIM thẻ" class="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-300" loading="lazy" />
               </div>
@@ -753,7 +753,7 @@
             </a>
 
             <!-- 16. Khuyến mại -->
-            <a href="javascript:void(0)" onclick="if(typeof window.showStudentPromo==='function'){window.showStudentPromo()}else{window.quickSearchTag('Khuyến mại')}" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-[#ebf3fe] transition-all duration-200 group cursor-pointer" title="Khuyến mại">
+            <a href="pages/category.html?type=dien-thoai&promo=true" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-[#ebf3fe] transition-all duration-200 group cursor-pointer" title="Khuyến mại">
               <div class="w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center mb-1.5 sm:mb-2">
                 <img src="images/categories/khuyen-mai.png" onerror="this.onerror=null; this.src='images/categories/khuyen-mai.png';" alt="Khuyến mại" class="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-300" loading="lazy" />
               </div>
