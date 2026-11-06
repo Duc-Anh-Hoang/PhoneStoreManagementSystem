@@ -1913,26 +1913,35 @@ async function openTraHangModal() {
 async function saveTraHang(e) {
   e.preventDefault();
   const form = e.target;
+  const soHDVal = (form.soHD?.value || form.elements['soHD']?.value || '').trim();
+  const soIMEIVal = (form.soIMEI?.value || form.soImei?.value || form.elements['soIMEI']?.value || form.elements['soImei']?.value || '').trim();
+  const lyDoVal = (form.lyDo?.value || form.elements['lyDo']?.value || '').trim();
+  const hinhThucVal = form.hinhThucHoanTien?.value || form.hinhThuc?.value || form.elements['hinhThucHoanTien']?.value || form.elements['hinhThuc']?.value || 'tien_mat';
+
+  if (!soIMEIVal) {
+    alert('Vui lòng nhập số IMEI máy cần đổi trả.');
+    return;
+  }
+
   const payload = {
-    soHD: form.soHD.value.trim(),
-    soIMEI: form.soIMEI.value.trim(),
-    lyDo: form.lyDo.value.trim(),
-    hinhThucHoanTien: form.hinhThucHoanTien.value
+    soHD: soHDVal,
+    soIMEI: soIMEIVal,
+    lyDo: lyDoVal,
+    hinhThucHoanTien: hinhThucVal
   };
 
   try {
     const res = await api.post('/trahang', payload);
-    showToast('Tạo phiếu đổi trả ' + res.maTR + ' thành công! IMEI đã chuyển sang trạng thái tra_hang.', 'success');
+    showToast('Tạo phiếu đổi trả ' + res.maTR + ' thành công! Trạng thái: ' + (res.trangThai || 'tiếp nhận'), 'success');
     closeModal('modal-trahang');
     form.reset();
     await renderTraHangTable();
     if (typeof renderTonKhoTable === 'function') renderTonKhoTable();
     if (typeof renderImeiTable === 'function') renderImeiTable();
   } catch (err) {
-    alert('Lỗi tạo phiếu đổi trả: ' + err.message);
+    alert('Lỗi tạo phiếu đổi trả: ' + (err.message || 'Không thể tạo phiếu'));
   }
 }
-
 // -------------------------------------------------------------
 // 8. KHÁCH HÀNG & ĐIỂM S-MEMBER (API TRỰC TIẾP)
 // -------------------------------------------------------------
