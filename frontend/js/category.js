@@ -158,6 +158,10 @@
 
   // Tải dữ liệu hoangha-categories.json an toàn đa nguồn
   async function loadCategoriesData() {
+    if (window.HOANGHA_CATEGORIES_DATA && Array.isArray(window.HOANGHA_CATEGORIES_DATA.categories)) {
+      hoanghaCategoriesData = window.HOANGHA_CATEGORIES_DATA;
+      return;
+    }
     try {
       const json = await fetchJsonSafely('data/hoangha-categories.json');
       if (json) {
@@ -736,6 +740,34 @@
     } catch (e) {
       console.warn('Could not load products-meta.json:', e);
     }
+    // Đảm bảo không bao giờ rỗng sản phẩm nếu products-meta bị lỗi
+    if (allProducts.length === 0 && activeCategoryObj) {
+      const sampleNames = {
+        'tablet': ['iPad Gen 10 10.9 inch (2022) - Wi-Fi 64GB', 'Samsung Galaxy Tab S9 FE 5G - 6GB/128GB', 'Xiaomi Pad 6 8GB/256GB Chính Hãng', 'iPad Air 5 M1 10.9 inch Wi-Fi 64GB', 'iPad Pro M4 11 inch Ultra Retina XDR', 'Lenovo Tab M11 4GB/128GB Kèm Bút', 'Huawei MatePad 11.5 inch PaperMatte', 'Redmi Pad Pro 12.1 inch 8GB/128GB'],
+        'laptop': ['MacBook Air 13 M3 2024 - 16GB / 256GB SSD', 'ASUS TUF Gaming F15 FX506HF Core i5', 'Lenovo ThinkPad E14 Gen 5 Core i5', 'Dell Inspiron 15 3520 Core i5 16GB', 'HP Pavilion 15 Core i7 16GB SSD 512GB'],
+        'man-hinh': ['Màn hình Gaming ASUS TUF VG249Q3A 24" 180Hz', 'Màn hình Dell UltraSharp U2724D 27" 2K 120Hz', 'Màn hình Samsung ViewFinity S9 27" 5K', 'Màn hình LG UltraGear 27GR75Q-B 2K 165Hz'],
+        'am-thanh': ['Apple AirPods 4 Chính Hãng VN/A', 'Loa Marshall Emberton II Bluetooth', 'Tai nghe Sony WH-1000XM5 Chống Ồn', 'Loa JBL Flip 6 Chống Nước IP67'],
+        'phu-kien': ['Củ sạc nhanh Anker 511 Nano 3 30W GaN', 'Pin sạc dự phòng Baseus 20000mAh 65W', 'Cáp sạc Type-C to Lightning Ugreen MFi', 'Chuột không dây Logitech MX Master 3S']
+      };
+      const names = sampleNames[currentCategory] || ['Sản phẩm công nghệ cao cấp SamaMobile'];
+      names.forEach((name, idx) => {
+        const pPrice = 3000000 + (idx * 2500000);
+        allProducts.push({
+          maHang: 'SP-CAT-' + currentCategory + '-' + (idx + 1),
+          id: 'SP-CAT-' + currentCategory + '-' + (idx + 1),
+          tenHang: name,
+          donGia: pPrice,
+          giaGoc: Math.round(pPrice * 1.18),
+          discount_percent: 15,
+          member_price: Math.round(pPrice * 0.98),
+          stock_status: 'Sẵn hàng',
+          image_badges: [],
+          bank_promo: 'Hỗ trợ trả góp 0% qua thẻ tín dụng',
+          anhChinh: resolveAssetPath(getSampleProductImage(currentCategory, idx, name)),
+          brand: extractBrandFromName(name)
+        });
+      });
+    }
   }
 
   // Khớp sản phẩm từ meta với 8 categories chuẩn
@@ -748,7 +780,7 @@
       return pGroup.includes('điện thoại') || pType.includes('điện thoại') || pName.includes('iphone') || pName.includes('galaxy s') || pName.includes('galaxy a') || pName.includes('nubia') || pName.includes('xiaomi 1') || pName.includes('redmi');
     }
     if (catId === 'tablet') {
-      return pGroup.includes('máy tính bảng') || pType.includes('tablet') || pName.includes('ipad') || pName.includes('tab s') || pName.includes('tab a') || pName.includes('matepad');
+      return pGroup.includes('máy tính bảng') || pType.includes('tablet') || pName.includes('ipad') || pName.includes('tab s') || pName.includes('tab a') || pName.includes('matepad') || pName.includes('pad');
     }
     if (catId === 'laptop') {
       return pGroup.includes('laptop') || pName.includes('macbook') || pName.includes('laptop') || pName.includes('vivobook') || pName.includes('thinkpad') || pName.includes('tuf gaming');
