@@ -19,7 +19,7 @@
 
   const getApiBase = () => window.API_BASE || (
     (typeof window !== 'undefined' && (window.location.protocol === 'file:' || window.location.port === '5500' || window.location.port === '5501' || window.location.port === '3000'))
-      ? 'http://localhost:8080/api'
+      ? 'http://localhost:5132/api'
       : '/api'
   );
   var API_BASE = getApiBase();

@@ -255,44 +255,46 @@
           }
         } catch (e) {}
 
-        // 2. NẾU LÀ TÀI KHOẢN ĐÃ HOÀN TẤT HỒ SƠ -> ĐĂNG NHẬP THẲNG
-        if (existingUser && existingUser.isProfileComplete) {
-          if (backendToken) existingUser.token = backendToken;
-          localStorage.setItem('customer_token', existingUser.token || ('cust_token_' + Date.now()));
-          if (window.CellphoneSAuth || window.Auth) {
-            (window.CellphoneSAuth || window.Auth).setUser(existingUser);
-          }
-          this.closeLoginModal();
-          if (window.CellphoneSCart || window.Cart) {
-            (window.CellphoneSCart || window.Cart).showToast('Chào mừng ' + existingUser.hoTen + ' đã quay trở lại!', 'success');
-          }
-          return;
-        }
-
-        // 3. NẾU LÀ TÀI KHOẢN MỚI TOANH (Lần đầu đăng nhập)
-        // Chuyển hướng sang complete-registration.html để nhập đầy đủ thông tin y hệt Google login
-        const pendingData = {
+        // 2. Tự động đăng nhập và lưu hồ sơ (không bắt chuyển sang complete-registration.html)
+        const completeUser = {
           type: 'customer',
+          role: 'CUSTOMER',
+          maKH: existingUser?.maKH || ('KH_' + Math.floor(100000 + Math.random() * 900000)),
+          hoTen: existingUser?.hoTen || ('Khách hàng ' + phone.slice(-4)),
           sdt: phone,
-          taiKhoan: 'user_' + phone.slice(-4),
-          hoTen: '',
-          email: '',
-          diaChi: '',
-          isProfileComplete: false,
-          token: backendToken || ('cust_token_' + Date.now())
+          email: existingUser?.email || '',
+          diaChi: existingUser?.diaChi || 'TP. Hồ Chí Minh',
+          taiKhoan: existingUser?.taiKhoan || ('user_' + phone.slice(-4)),
+          avatar: existingUser?.avatar || '',
+          isProfileComplete: true,
+          diemTichLuy: existingUser?.diemTichLuy || 100,
+          hangThanhVien: existingUser?.hangThanhVien || 'S-Member',
+          token: backendToken || existingUser?.token || ('cust_token_' + Date.now())
         };
-        localStorage.setItem('cellphones_pending_user', JSON.stringify(pendingData));
-        localStorage.setItem('customer_token', pendingData.token);
 
+        localStorage.setItem('cellphones_auth_user', JSON.stringify(completeUser));
+        localStorage.setItem('customer_token', completeUser.token);
+        localStorage.removeItem('cellphones_pending_user');
+
+        try {
+          let regList = JSON.parse(localStorage.getItem('samamobile_registered_users') || '[]');
+          const idx = regList.findIndex(u => u.sdt && u.sdt.replace(/\s/g, '') === phone);
+          if (idx > -1) {
+            regList[idx] = { ...regList[idx], ...completeUser };
+          } else {
+            regList.push(completeUser);
+          }
+          localStorage.setItem('samamobile_registered_users', JSON.stringify(regList));
+        } catch (e) {}
+
+        if (window.CellphoneSAuth || window.Auth) {
+          (window.CellphoneSAuth || window.Auth).setUser(completeUser);
+        }
         this.closeLoginModal();
         if (window.CellphoneSCart || window.Cart) {
-          (window.CellphoneSCart || window.Cart).showToast('Số điện thoại mới! Vui lòng hoàn tất thông tin đăng ký...', 'info');
+          (window.CellphoneSCart || window.Cart).showToast('Chào mừng ' + completeUser.hoTen + ' đã đăng nhập!', 'success');
         }
-
-        const targetUrl = (window.location.pathname.includes('/pages/') ? '' : 'pages/') + 'complete-registration.html';
-        setTimeout(() => {
-          window.location.href = targetUrl;
-        }, 300);
+        return;
 
       } catch (err) {
         if (errorMsg) {
@@ -606,46 +608,46 @@
         );
       } catch (e) {}
 
-      // 2. NẾU LÀ TÀI KHOẢN ĐÃ CÓ HỒ SƠ -> ĐĂNG NHẬP THẲNG
-      if (existingProfile && existingProfile.isProfileComplete) {
-        const token = existingProfile.token || ('email_token_' + Date.now());
-        localStorage.setItem('customer_token', token);
-        if (window.CellphoneSAuth || window.Auth) {
-          (window.CellphoneSAuth || window.Auth).setUser(existingProfile);
-        }
-        window.CellphoneSCustomerPortal.closeLoginModal();
-        if (window.CellphoneSCart || window.Cart) {
-          (window.CellphoneSCart || window.Cart).showToast('Chào mừng ' + existingProfile.hoTen + ' đã quay trở lại!', 'success');
-        }
-        return;
-      }
-
-      // 3. NẾU LÀ TÀI KHOẢN MỚI TOANH (Lần đầu đăng nhập bằng Email)
-      // Chuyển hướng sang complete-registration.html để nhập đầy đủ thông tin y hệt Google login
-      const pendingData = {
+      // 2. Tự động đăng nhập và lưu hồ sơ (không bắt chuyển sang complete-registration.html)
+      const completeUser = {
         type: 'customer',
-        sdt: '',
-        hoTen: email.split('@')[0],
+        role: 'CUSTOMER',
+        maKH: existingProfile?.maKH || ('KH_' + Math.floor(100000 + Math.random() * 900000)),
+        hoTen: existingProfile?.hoTen || (email.split('@')[0]),
         email: email,
-        avatar: '',
-        taiKhoan: email.split('@')[0],
-        diaChi: '',
-        isProfileComplete: false,
-        token: 'email_token_' + Date.now()
+        sdt: existingProfile?.sdt || '',
+        diaChi: existingProfile?.diaChi || 'TP. Hồ Chí Minh',
+        taiKhoan: existingProfile?.taiKhoan || (email.split('@')[0]),
+        avatar: existingProfile?.avatar || '',
+        isProfileComplete: true,
+        diemTichLuy: existingProfile?.diemTichLuy || 100,
+        hangThanhVien: existingProfile?.hangThanhVien || 'S-Member',
+        token: existingProfile?.token || ('email_token_' + Date.now())
       };
 
-      localStorage.setItem('cellphones_pending_user', JSON.stringify(pendingData));
-      localStorage.setItem('customer_token', pendingData.token);
+      localStorage.setItem('cellphones_auth_user', JSON.stringify(completeUser));
+      localStorage.setItem('customer_token', completeUser.token);
+      localStorage.removeItem('cellphones_pending_user');
 
+      try {
+        let regList = JSON.parse(localStorage.getItem('samamobile_registered_users') || '[]');
+        const idx = regList.findIndex(reg => reg.email && reg.email.toLowerCase() === email.toLowerCase());
+        if (idx > -1) {
+          regList[idx] = { ...regList[idx], ...completeUser };
+        } else {
+          regList.push(completeUser);
+        }
+        localStorage.setItem('samamobile_registered_users', JSON.stringify(regList));
+      } catch (e) {}
+
+      if (window.CellphoneSAuth || window.Auth) {
+        (window.CellphoneSAuth || window.Auth).setUser(completeUser);
+      }
       window.CellphoneSCustomerPortal.closeLoginModal();
       if (window.CellphoneSCart || window.Cart) {
-        (window.CellphoneSCart || window.Cart).showToast('Email mới! Vui lòng hoàn tất thông tin đăng ký...', 'info');
+        (window.CellphoneSCart || window.Cart).showToast('Chào mừng ' + completeUser.hoTen + ' đã đăng nhập!', 'success');
       }
-
-      const targetUrl = (window.location.pathname.includes('/pages/') ? '' : 'pages/') + 'complete-registration.html';
-      setTimeout(() => {
-        window.location.href = targetUrl;
-      }, 300);
+      return;
 
     } catch (err) {
       if (errorMsg) {
@@ -787,48 +789,67 @@
     const emailVal = (u.email || fallbackEmail || '').trim();
     const phoneVal = (u.sdt || '').trim();
 
-    // 1. Kiểm tra xem tài khoản này đã từng hoàn tất đăng ký thông tin chưa
+    // 1. Kiểm tra tài khoản đã từng đăng nhập chưa
     let existingProfile = null;
     try {
       const regList = JSON.parse(localStorage.getItem('samamobile_registered_users') || '[]');
       existingProfile = regList.find(reg => 
-        (emailVal && reg.email && reg.email.toLowerCase() === emailVal.toLowerCase() && reg.isProfileComplete) ||
-        (phoneVal && reg.sdt && reg.sdt.replace(/\s/g, '') === phoneVal.replace(/\s/g, '') && reg.isProfileComplete)
+        (emailVal && reg.email && reg.email.toLowerCase() === emailVal.toLowerCase()) ||
+        (phoneVal && reg.sdt && reg.sdt.replace(/\s/g, '') === phoneVal.replace(/\s/g, ''))
       );
     } catch (e) {}
 
-    // 2. Nếu ĐÃ hoàn tất thông tin từ trước -> Cho đăng nhập thẳng vào trang web
-    if (existingProfile && existingProfile.isProfileComplete) {
-      existingProfile.token = resJson.token || existingProfile.token;
-      localStorage.setItem('customer_token', existingProfile.token);
-      if (window.CellphoneSAuth || window.Auth) {
-        (window.CellphoneSAuth || window.Auth).setUser(existingProfile);
-      }
-      window.CellphoneSCustomerPortal.closeLoginModal();
-      if (window.CellphoneSCart || window.Cart) {
-        (window.CellphoneSCart || window.Cart).showToast('Chào mừng ' + existingProfile.hoTen + ' đã quay trở lại!', 'success');
-      }
-      return;
-    }
-
-    // 3. Nếu là LẦN ĐẦU ĐĂNG NHẬP (Google, SĐT, hoặc Email mới) -> Chuyển đến trang Cập nhật thông tin
-    const pendingData = {
+    // 2. Tạo đối tượng hoàn chỉnh và lưu ngay vào Auth (Không bắt đăng ký lại)
+    const completeUser = {
       type: 'customer',
-      sdt: phoneVal,
-      hoTen: u.hoTen || (emailVal ? emailVal.split('@')[0] : 'Khách Hàng'),
-      email: emailVal,
-      avatar: u.avatar || '',
-      taiKhoan: emailVal ? emailVal.split('@')[0] : (phoneVal ? 'user_' + phoneVal.slice(-4) : ''),
-      diaChi: u.diaChi || '',
-      isProfileComplete: false,
-      token: resJson.token
+      role: 'CUSTOMER',
+      maKH: existingProfile?.maKH || u.maKH || ('KH_' + Math.floor(100000 + Math.random() * 900000)),
+      hoTen: existingProfile?.hoTen || u.hoTen || (emailVal ? emailVal.split('@')[0] : 'Khách Hàng'),
+      email: emailVal || existingProfile?.email || '',
+      sdt: phoneVal || existingProfile?.sdt || '',
+      avatar: u.avatar || existingProfile?.avatar || '',
+      taiKhoan: existingProfile?.taiKhoan || (emailVal ? emailVal.split('@')[0] : (phoneVal ? 'user_' + phoneVal.slice(-4) : 'user')),
+      diaChi: existingProfile?.diaChi || u.diaChi || 'TP. Hồ Chí Minh',
+      isProfileComplete: true,
+      diemTichLuy: existingProfile?.diemTichLuy || 100,
+      hangThanhVien: existingProfile?.hangThanhVien || 'S-Member',
+      token: resJson.token || existingProfile?.token || ('cust_token_' + Date.now())
     };
 
-    localStorage.setItem('cellphones_pending_user', JSON.stringify(pendingData));
-    localStorage.setItem('customer_token', resJson.token);
+    localStorage.setItem('cellphones_auth_user', JSON.stringify(completeUser));
+    localStorage.setItem('customer_token', completeUser.token);
+    localStorage.removeItem('cellphones_pending_user');
 
-    // Chuyển hướng sang complete-registration.html để nhập đầy đủ thông tin trước khi vào web
-    window.location.href = (window.location.pathname.includes('/pages/') ? '' : 'pages/') + 'complete-registration.html';
+    // Lưu vào danh sách tài khoản đã đăng ký (samamobile_registered_users)
+    try {
+      let regList = JSON.parse(localStorage.getItem('samamobile_registered_users') || '[]');
+      const idx = regList.findIndex(reg => 
+        (completeUser.email && reg.email && reg.email.toLowerCase() === completeUser.email.toLowerCase()) ||
+        (completeUser.sdt && reg.sdt && reg.sdt.replace(/\s/g, '') === completeUser.sdt.replace(/\s/g, ''))
+      );
+      if (idx > -1) {
+        regList[idx] = { ...regList[idx], ...completeUser };
+      } else {
+        regList.push(completeUser);
+      }
+      localStorage.setItem('samamobile_registered_users', JSON.stringify(regList));
+    } catch (e) {}
+
+    // Kích hoạt Auth & UI
+    if (window.CellphoneSAuth || window.Auth) {
+      (window.CellphoneSAuth || window.Auth).setUser(completeUser);
+    }
+    if (window.CellphoneSCustomerPortal) {
+      window.CellphoneSCustomerPortal.closeLoginModal();
+    }
+    if (window.CellphoneSCart || window.Cart) {
+      (window.CellphoneSCart || window.Cart).showToast('Chào mừng ' + completeUser.hoTen + ' đã đăng nhập thành công!', 'success');
+    }
+
+    // Nếu đang ở trang complete-registration.html, tự động chuyển về trang chủ
+    if (window.location.pathname.includes('complete-registration.html')) {
+      window.location.href = '../index.html';
+    }
   }
 
   window.quickSocialLogin = function(provider) {

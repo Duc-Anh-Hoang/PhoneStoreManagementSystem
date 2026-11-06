@@ -7,7 +7,7 @@
 // ĐỊA CHỈ API BACKEND
 var API_BASE = window.API_BASE = window.API_BASE || (window.APP_CONFIG && window.APP_CONFIG.API_BASE) || (
   (window.location.protocol === 'file:' || window.location.port === '5500' || window.location.port === '5501' || window.location.port === '3000')
-    ? 'http://localhost:8080/api'
+    ? 'http://localhost:5132/api'
     : '/api'
 );
 

@@ -8,7 +8,7 @@
 (function () {
   const getApiBase = () => window.API_BASE || (
     (typeof window !== 'undefined' && (window.location.protocol === 'file:' || window.location.port === '5500' || window.location.port === '5501' || window.location.port === '3000'))
-      ? 'http://localhost:8080/api'
+      ? 'http://localhost:5132/api'
       : '/api'
   );
   var API_BASE = getApiBase();
@@ -166,20 +166,31 @@
         // Backend offline -> xử lý frontend
       }
 
-      // 3. Nếu là số mới / chưa có hồ sơ: Lưu dữ liệu tạm và chuyển hướng sang complete-registration.html
-      const pendingData = {
+      // 3. Nếu là số mới / chưa có hồ sơ: Tự động khởi tạo và đăng nhập ngay
+      const userObj = {
         type: 'customer',
+        role: 'CUSTOMER',
+        maKH: 'KH_' + Math.floor(100000 + Math.random() * 900000),
+        hoTen: 'Khách hàng ' + phone.slice(-4),
         sdt: phone,
         taiKhoan: 'user_' + phone.slice(-4),
-        hoTen: '',
         email: '',
-        diaChi: '',
-        isProfileComplete: false,
+        diaChi: 'TP. Hồ Chí Minh',
+        isProfileComplete: true,
+        diemTichLuy: 100,
+        hangThanhVien: 'S-Member',
         token: 'cust_token_' + Date.now()
       };
-      localStorage.setItem('cellphones_pending_user', JSON.stringify(pendingData));
-      window.location.href = (window.location.pathname.includes('/pages/') ? '' : 'pages/') + 'complete-registration.html';
-      return { success: true, redirect: 'complete-registration.html', user: pendingData };
+      localStorage.setItem('customer_token', userObj.token);
+      this.setUser(userObj);
+      try {
+        let regList = JSON.parse(localStorage.getItem('samamobile_registered_users') || '[]');
+        const idx = regList.findIndex(u => u.sdt && u.sdt.replace(/\s/g, '') === phone);
+        if (idx > -1) regList[idx] = { ...regList[idx], ...userObj };
+        else regList.push(userObj);
+        localStorage.setItem('samamobile_registered_users', JSON.stringify(regList));
+      } catch (e) {}
+      return { success: true, redirect: 'index.html', user: userObj };
     },
 
     async logout() {

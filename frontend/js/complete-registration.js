@@ -126,6 +126,44 @@
   };
 
   // 5. Submit form Hoàn tất đăng ký
+  window.skipToShopping = function () {
+    let pending = null;
+    try {
+      const raw = localStorage.getItem(PENDING_STORAGE_KEY) || localStorage.getItem(AUTH_STORAGE_KEY);
+      if (raw) pending = JSON.parse(raw);
+    } catch (e) {}
+
+    const completeUser = {
+      type: 'customer',
+      role: 'CUSTOMER',
+      maKH: (pending && pending.maKH) || ('KH_' + Math.floor(100000 + Math.random() * 900000)),
+      hoTen: (pending && pending.hoTen) || 'Khang Huy',
+      sdt: (pending && pending.sdt) || '0901234567',
+      taiKhoan: (pending && pending.taiKhoan) || 'huykhang666',
+      email: (pending && pending.email) || 'huykhang666@gmail.com',
+      diaChi: (pending && pending.diaChi) || 'TP. Hồ Chí Minh',
+      isProfileComplete: true,
+      diemTichLuy: 100,
+      hangThanhVien: 'S-Member',
+      avatar: (pending && pending.avatar) || '',
+      token: (pending && pending.token) || ('cust_token_' + Date.now())
+    };
+
+    localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(completeUser));
+    localStorage.setItem('customer_token', completeUser.token);
+    localStorage.removeItem(PENDING_STORAGE_KEY);
+
+    try {
+      let regList = JSON.parse(localStorage.getItem(REGISTERED_USERS_KEY) || '[]');
+      const idx = regList.findIndex(u => (completeUser.email && u.email && u.email.toLowerCase() === completeUser.email.toLowerCase()) || (completeUser.sdt && u.sdt && u.sdt === completeUser.sdt));
+      if (idx > -1) regList[idx] = { ...regList[idx], ...completeUser };
+      else regList.push(completeUser);
+      localStorage.setItem(REGISTERED_USERS_KEY, JSON.stringify(regList));
+    } catch (e) {}
+
+    window.location.href = '../index.html';
+  };
+
   window.handleCompleteRegistration = function (event) {
     event.preventDefault();
 
@@ -142,14 +180,9 @@
     const isBusiness = document.getElementById('reg-is-business')?.checked || false;
 
     // Validate
-    if (!phone) {
-      alert('Vui lòng nhập số điện thoại');
-      document.getElementById('reg-phone')?.focus();
-      return;
-    }
-
+    let validPhone = phone || '0901234567';
     const phoneRegex = /^(0)(3[2-9]|5[2689]|7[06-9]|8[1-9]|9[0-9])[0-9]{7}$/;
-    if (!phoneRegex.test(phone)) {
+    if (phone && !phoneRegex.test(phone)) {
       alert('Số điện thoại không hợp lệ. Vui lòng nhập đúng 10 chữ số (Ví dụ: 0901234567)');
       document.getElementById('reg-phone')?.focus();
       return;
@@ -187,7 +220,7 @@
       role: 'CUSTOMER',
       maKH: 'KH_' + Math.floor(100000 + Math.random() * 900000),
       hoTen: fullname,
-      sdt: phone,
+      sdt: validPhone || phone,
       taiKhoan: username || ('user_' + phone.slice(-4)),
       email: email,
       ngaySinh: dob,
