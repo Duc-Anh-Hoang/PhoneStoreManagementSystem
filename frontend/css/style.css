@@ -443,9 +443,9 @@ body {
 
 /* Dual Category Tabs (Phone & Tablet, Laptop, etc. - Bright Blue Header-BG Theme) */
 .dual-cat-tab-active {
-  background: url('../images/header-bg.jpg') center center / cover no-repeat !important;
+  background: #0057B7 url('../images/tab-active-bg.jpg') center center / cover no-repeat !important;
   color: #ffffff !important;
-  box-shadow: 0 4px 18px rgba(0, 102, 255, 0.38) !important;
+  box-shadow: 0 4px 18px rgba(0, 87, 183, 0.4) !important;
   border: 1px solid rgba(255, 255, 255, 0.3) !important;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25) !important;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
@@ -469,7 +469,7 @@ body {
 
 /* Hover trên tab không active: Sử dụng nền header-bg sáng rực rỡ với hiệu ứng nổi 3D */
 .dual-cat-tab-inactive:hover {
-  background: linear-gradient(135deg, rgba(14, 116, 255, 0.88), rgba(0, 85, 220, 0.92)), url('../images/header-bg.jpg') center center / cover no-repeat !important;
+  background: linear-gradient(135deg, rgba(14, 116, 255, 0.88), rgba(0, 85, 220, 0.92)), url('../images/tab-active-bg.jpg') center center / cover no-repeat !important;
   color: #ffffff !important;
   border-color: rgba(255, 255, 255, 0.3) !important;
   box-shadow: 0 6px 22px rgba(0, 102, 255, 0.38) !important;

@@ -502,7 +502,7 @@
       switcher.innerHTML = tabs.map((t, idx) => {
         const isActive = (idx === 0 && currentCategory === t.catId) || (idx === 1 && currentCategory === t.catId);
         return `
-          <a href="category.html?type=${t.catId}" class="py-3.5 px-5 rounded-2xl font-black text-xs sm:text-sm md:text-base text-center uppercase tracking-wider transition-all shadow-xs ${isActive ? 'bg-[#0057B7] text-white border border-[#0057B7] shadow-md' : 'bg-white text-blue-900 border border-slate-200 hover:border-blue-400'}">
+          <a href="category.html?type=${t.catId}" class="py-3.5 px-5 rounded-2xl font-black text-xs sm:text-sm md:text-base text-center uppercase tracking-wider transition-all shadow-xs ${isActive ? 'dual-cat-tab-active shadow-md' : 'dual-cat-tab-inactive'}">
             ${t.label}
           </a>
         `;
