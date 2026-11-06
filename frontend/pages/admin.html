@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi" class="h-full bg-slate-100">
 <head>
   <meta charset="UTF-8">
@@ -1670,25 +1670,38 @@
       <form onsubmit="saveTraHang(event)" class="space-y-4 text-xs">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
           <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1.5 h-4 leading-4 truncate">Mã phiếu trả:</label>
-            <input type="text" id="tr-maTR" name="maTR" readonly class="w-full h-10 px-3.5 border border-slate-200 rounded-xl bg-slate-50 font-mono">
+            <label class="block text-xs font-bold text-slate-700 mb-1.5 h-4 leading-4 truncate">Số hóa đơn mua hàng (tùy chọn):</label>
+            <input type="text" id="tr-soHD" name="soHD" placeholder="Tự tra từ IMEI nếu để trống..." class="w-full h-10 px-3.5 border border-slate-200 rounded-xl font-mono focus:outline-none focus:border-rose-500">
           </div>
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1.5 h-4 leading-4 truncate">Số IMEI máy trả:</label>
-            <input type="text" name="soImei" placeholder="Nhập IMEI đã bán..." required class="w-full h-10 px-3.5 border border-slate-200 rounded-xl font-mono focus:outline-none focus:border-rose-500">
+            <input type="text" id="tr-soIMEI" name="soIMEI" placeholder="Nhập 15 số IMEI đã bán..." required class="w-full h-10 px-3.5 border border-slate-200 rounded-xl font-mono focus:outline-none focus:border-rose-500">
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1.5 h-4 leading-4 truncate">Loại yêu cầu:</label>
+            <select name="loaiYeuCau" class="w-full h-10 px-3.5 border border-slate-200 rounded-xl bg-white focus:outline-none focus:border-rose-500">
+              <option value="loi_ky_thuat">Lỗi kỹ thuật nhà sản xuất (30 ngày)</option>
+              <option value="doi_y">Khách đổi ý (7 ngày, nguyên seal)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1.5 h-4 leading-4 truncate">Hình thức đề xuất:</label>
+            <select name="hinhThucHoanTien" class="w-full h-10 px-3.5 border border-slate-200 rounded-xl bg-white focus:outline-none focus:border-rose-500">
+              <option value="doi_hang">Đổi máy mới cùng loại (1 đổi 1)</option>
+              <option value="tien_mat">Hoàn tiền mặt 100%</option>
+              <option value="chuyen_khoan">Hoàn tiền chuyển khoản</option>
+            </select>
           </div>
         </div>
         <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1.5 h-4 leading-4 truncate">Lý do đổi trả:</label>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5 h-4 leading-4 truncate">Lý do đổi trả (*):</label>
           <input type="text" name="lyDo" placeholder="Ví dụ: Lỗi màn hình trong vòng 30 ngày..." required class="w-full h-10 px-3.5 border border-slate-200 rounded-xl focus:outline-none focus:border-rose-500">
         </div>
         <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1.5 h-4 leading-4 truncate">Hình thức xử lý hoàn tiền:</label>
-          <select name="hinhThucHoanTien" class="w-full h-10 px-3.5 border border-slate-200 rounded-xl bg-white focus:outline-none focus:border-rose-500">
-            <option value="doi_hang">Đổi máy mới cùng loại (1 đổi 1)</option>
-            <option value="tien_mat">Hoàn tiền mặt 100%</option>
-            <option value="chuyen_khoan">Hoàn tiền chuyển khoản</option>
-          </select>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5 h-4 leading-4 truncate">Tình trạng ngoại quan & phụ kiện:</label>
+          <input type="text" name="checklistNgoaiQuan" placeholder="Ví dụ: Đầy đủ hộp phụ kiện, máy đẹp không trầy xước..." class="w-full h-10 px-3.5 border border-slate-200 rounded-xl focus:outline-none focus:border-rose-500">
         </div>
         <div class="pt-3 border-t flex justify-end gap-2.5">
           <button type="button" onclick="closeModal('modal-trahang')" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 font-bold rounded-xl text-slate-700 transition-colors">Hủy</button>

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * ADMIN PORTAL JAVASCRIPT - QUẢN LÝ CỬA HÀNG ĐIỆN THOẠI
  * Hỗ trợ: Giao diện Cập nhật dữ liệu, Xử lý dữ liệu & Báo cáo thống kê
  * Dựa trên cấu trúc CSDL QuanLyCuaHangDienThoai (Table.sql & Code.sql)
@@ -475,10 +475,15 @@ let currentActiveSection = 'view-dashboard';
 const ROLE_PERMISSIONS = {
   'ADMIN': ['view-dashboard', 'view-mathang', 'view-nhomloai', 'view-thuoctinh', 'view-khuyenmai', 'view-thamso', 'view-nhanvien', 'view-taikhoan', 'view-donhang', 'view-tonkho', 'view-imei', 'view-hoadon', 'view-hoadon-list', 'view-trahang', 'view-baohanh', 'view-tracuu-baohanh', 'view-nhacungcap', 'view-nhapkho', 'view-khachhang'],
   'QUANLY': ['view-dashboard', 'view-mathang', 'view-nhomloai', 'view-thuoctinh', 'view-khuyenmai', 'view-thamso', 'view-nhanvien', 'view-taikhoan', 'view-donhang', 'view-tonkho', 'view-imei', 'view-hoadon', 'view-hoadon-list', 'view-trahang', 'view-baohanh', 'view-tracuu-baohanh', 'view-nhacungcap', 'view-nhapkho', 'view-khachhang'],
-  'BANHANG': ['view-donhang', 'view-tonkho', 'view-imei', 'view-hoadon', 'view-hoadon-list', 'view-khachhang'],
-  'THUNGAN': ['view-hoadon', 'view-hoadon-list', 'view-trahang'],
+  'MANAGER': ['view-dashboard', 'view-mathang', 'view-nhomloai', 'view-thuoctinh', 'view-khuyenmai', 'view-thamso', 'view-nhanvien', 'view-taikhoan', 'view-donhang', 'view-tonkho', 'view-imei', 'view-hoadon', 'view-hoadon-list', 'view-trahang', 'view-baohanh', 'view-tracuu-baohanh', 'view-nhacungcap', 'view-nhapkho', 'view-khachhang'],
+  'BANHANG': ['view-donhang', 'view-tonkho', 'view-imei', 'view-hoadon', 'view-hoadon-list', 'view-trahang', 'view-khachhang'],
+  'SALES': ['view-donhang', 'view-tonkho', 'view-imei', 'view-hoadon', 'view-hoadon-list', 'view-trahang', 'view-khachhang'],
+  'THUNGAN': ['view-hoadon', 'view-hoadon-list', 'view-trahang', 'view-khachhang'],
+  'CASHIER': ['view-hoadon', 'view-hoadon-list', 'view-trahang', 'view-khachhang'],
   'KHO': ['view-nhacungcap', 'view-nhapkho', 'view-imei', 'view-tonkho'],
-  'KYTHUAT': ['view-baohanh', 'view-tracuu-baohanh']
+  'STOCK': ['view-nhacungcap', 'view-nhapkho', 'view-imei', 'view-tonkho'],
+  'KYTHUAT': ['view-baohanh', 'view-tracuu-baohanh', 'view-trahang'],
+  'TECH': ['view-baohanh', 'view-tracuu-baohanh', 'view-trahang']
 };
 
 function applyRoleFilter(role) {
@@ -1878,31 +1883,137 @@ async function renderTraHangTable() {
       return;
     }
 
+    const formatBadgeTrangThai = (tt) => {
+      switch (tt) {
+        case 'tiep_nhan': return '<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 text-[10px] font-bold">1. Chờ Kỹ Thuật</span>';
+        case 'da_kiem_tra': return '<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-[10px] font-bold">2. Chờ Duyệt</span>';
+        case 'da_duyet': return '<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 text-[10px] font-bold">3. Chờ Hoàn Tất</span>';
+        case 'tu_choi': return '<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200 text-[10px] font-bold">Từ Chối</span>';
+        case 'hoan_tat': return '<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold">Đã Hoàn Tất</span>';
+        case 'da_huy': return '<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 text-[10px] font-bold">Đã Hủy</span>';
+        default: return `<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-slate-50 text-slate-700 border border-slate-200 text-[10px] font-bold">${tt}</span>`;
+      }
+    };
+
     tbody.innerHTML = list.map(t => {
       const ngay = t.ngayTR ? t.ngayTR.replace('T', ' ').substring(0, 16) : '-';
+      const badgeTT = formatBadgeTrangThai(t.trangThai || 'tiep_nhan');
+      
+      let actionButtons = '';
+      if (t.trangThai === 'tiep_nhan') {
+        actionButtons = `
+          <button onclick="actionKiemTraTraHang('${t.maTR}')" class="px-2 py-1 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-[10px] font-bold shadow-sm transition-all">Kiểm tra KT</button>
+          <button onclick="actionHuyTraHang('${t.maTR}')" class="px-2 py-1 bg-slate-200 hover:bg-rose-100 text-slate-700 hover:text-rose-700 rounded-lg text-[10px] font-semibold transition-all">Hủy</button>
+        `;
+      } else if (t.trangThai === 'da_kiem_tra') {
+        actionButtons = `
+          <button onclick="actionDuyetTraHang('${t.maTR}', true)" class="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-[10px] font-bold shadow-sm transition-all">Duyệt</button>
+          <button onclick="actionDuyetTraHang('${t.maTR}', false)" class="px-2 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-[10px] font-bold shadow-sm transition-all">Từ chối</button>
+        `;
+      } else if (t.trangThai === 'da_duyet') {
+        actionButtons = `
+          <button onclick="actionHoanTatTraHang('${t.maTR}', '${t.hinhThucHoanTien}')" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[10px] font-bold shadow-sm transition-all">Hoàn tất</button>
+        `;
+      }
+
       return `
         <tr class="border-b border-slate-200 hover:bg-slate-50 transition-colors">
           <td class="p-3.5 font-mono font-bold text-xs text-[#15803D] whitespace-nowrap">${t.maTR}</td>
           <td class="p-3.5 font-mono font-bold text-xs text-slate-700 whitespace-nowrap">${t.soHD || '-'}</td>
           <td class="p-3.5 font-mono font-bold text-xs text-indigo-700 whitespace-nowrap">${t.soIMEI || t.maIMEI || '-'}</td>
           <td class="p-3.5 text-xs text-slate-500 whitespace-nowrap">${ngay}</td>
-          <td class="p-3.5 text-xs text-slate-600 max-w-[220px] truncate" title="${t.lyDo || ''}">
+          <td class="p-3.5 text-xs text-slate-600 max-w-[200px] truncate" title="${t.lyDo || ''}">
             <div class="font-medium text-slate-800">${t.lyDo || '-'}</div>
             ${t.tenHang ? `<div class="text-[11px] text-slate-400 truncate">${t.tenHang}</div>` : ''}
+            ${t.ketQuaKiemTra ? `<div class="text-[10px] text-blue-600 font-medium">KT: ${t.ketQuaKiemTra}</div>` : ''}
           </td>
           <td class="p-3.5 text-xs text-center whitespace-nowrap">${Format.statusBadge(t.hinhThucHoanTien)}</td>
           <td class="p-3.5 text-xs text-slate-600 whitespace-nowrap">${t.tenNV || t.tenNhanVien || t.maNV || '-'}</td>
           <td class="p-3.5 text-xs text-right whitespace-nowrap">
-            <span class="inline-flex items-center px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold">Hợp lệ (30 ngày)</span>
+            <div class="inline-flex items-center gap-1.5 flex-wrap justify-end">
+              ${badgeTT}
+              ${actionButtons}
+            </div>
           </td>
         </tr>
       `;
     }).join('');
   } catch (err) {
     console.warn('Lỗi kết nối API /trahang:', err);
-    tbody.innerHTML = '<tr><td colspan="8" class="p-5 text-center text-slate-400 font-medium">Chưa có phiếu đổi trả nào phát sinh trong 30 ngày qua</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="8" class="p-5 text-center text-rose-500 font-medium">Lỗi tải danh sách đổi trả: ' + (err.message || 'Không thể tải') + '</td></tr>';
   }
 }
+
+async function actionKiemTraTraHang(maTR) {
+  const kq = prompt('Nhập kết quả kiểm tra kỹ thuật (loi_nsx / khong_loi / hu_hong_do_nguoi_dung):', 'loi_nsx');
+  if (!kq) return;
+  const ghiChu = prompt('Nhập ghi chú chi tiết kiểm tra:', 'Kỹ thuật viên đã kiểm tra xác nhận lỗi phần cứng NSX.') || 'Đã kiểm tra';
+  try {
+    await api.put('/trahang/' + encodeURIComponent(maTR) + '/kiemtra', { ketQuaKiemTra: kq.trim(), ghiChuKiemTra: ghiChu.trim() });
+    showToast('Cập nhật kết quả kiểm tra thành công!', 'success');
+    await renderTraHangTable();
+  } catch (e) {
+    alert('Lỗi kiểm tra kỹ thuật: ' + (e.message || 'Thất bại'));
+  }
+}
+
+async function actionDuyetTraHang(maTR, chapNhan) {
+  if (chapNhan) {
+    if (!confirm('Bạn có chắc chắn muốn DUYỆT phiếu đổi trả ' + maTR + '?')) return;
+    try {
+      await api.put('/trahang/' + encodeURIComponent(maTR) + '/duyet', { chapNhan: true });
+      showToast('Đã duyệt hồ sơ ' + maTR + ' thành công!', 'success');
+      await renderTraHangTable();
+    } catch (e) {
+      alert('Lỗi duyệt hồ sơ: ' + (e.message || 'Thất bại'));
+    }
+  } else {
+    const lyDo = prompt('Nhập lý do TỪ CHỐI hồ sơ:');
+    if (!lyDo) return;
+    try {
+      await api.put('/trahang/' + encodeURIComponent(maTR) + '/duyet', { chapNhan: false, lyDoTuChoi: lyDo.trim() });
+      showToast('Đã từ chối hồ sơ ' + maTR, 'info');
+      await renderTraHangTable();
+    } catch (e) {
+      alert('Lỗi từ chối hồ sơ: ' + (e.message || 'Thất bại'));
+    }
+  }
+}
+
+async function actionHoanTatTraHang(maTR, hinhThuc) {
+  let maGD = null;
+  if (hinhThuc === 'chuyen_khoan') {
+    maGD = prompt('Nhập mã giao dịch chuyển khoản ngân hàng hoàn tiền:');
+    if (!maGD) return;
+  }
+  if (!confirm('Xác nhận hoàn tất xử lý phiếu ' + maTR + ' (' + hinhThuc + ')?')) return;
+  try {
+    await api.put('/trahang/' + encodeURIComponent(maTR) + '/hoantat', { maGiaoDich: maGD });
+    showToast('Hoàn tất đổi trả phiếu ' + maTR + ' thành công!', 'success');
+    await renderTraHangTable();
+    if (typeof renderTonKhoTable === 'function') renderTonKhoTable();
+    if (typeof renderImeiTable === 'function') renderImeiTable();
+  } catch (e) {
+    alert('Lỗi hoàn tất đổi trả: ' + (e.message || 'Thất bại'));
+  }
+}
+
+async function actionHuyTraHang(maTR) {
+  const lyDo = prompt('Nhập lý do hủy hồ sơ đổi trả:');
+  if (!lyDo) return;
+  try {
+    await api.put('/trahang/' + encodeURIComponent(maTR) + '/huy', { lyDo: lyDo.trim() });
+    showToast('Đã hủy hồ sơ ' + maTR, 'info');
+    await renderTraHangTable();
+  } catch (e) {
+    alert('Lỗi hủy hồ sơ: ' + (e.message || 'Thất bại'));
+  }
+}
+
+window.actionKiemTraTraHang = actionKiemTraTraHang;
+window.actionDuyetTraHang = actionDuyetTraHang;
+window.actionHoanTatTraHang = actionHoanTatTraHang;
+window.actionHuyTraHang = actionHuyTraHang;
 
 async function openTraHangModal() {
   const modal = document.getElementById('modal-trahang');
@@ -1923,11 +2034,16 @@ async function saveTraHang(e) {
     return;
   }
 
+  const loaiYeuCauVal = form.loaiYeuCau?.value || form.elements['loaiYeuCau']?.value || 'loi_ky_thuat';
+  const checklistVal = (form.checklistNgoaiQuan?.value || form.elements['checklistNgoaiQuan']?.value || '').trim();
+
   const payload = {
-    soHD: soHDVal,
+    soHD: soHDVal || null,
     soIMEI: soIMEIVal,
+    loaiYeuCau: loaiYeuCauVal,
     lyDo: lyDoVal,
-    hinhThucHoanTien: hinhThucVal
+    hinhThucHoanTien: hinhThucVal,
+    checklistNgoaiQuan: checklistVal || null
   };
 
   try {
