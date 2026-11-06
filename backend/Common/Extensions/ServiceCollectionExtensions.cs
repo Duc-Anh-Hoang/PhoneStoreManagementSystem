@@ -128,9 +128,10 @@ public static class ServiceCollectionExtensions
         {
             options.AddPolicy("AllowAll", policy =>
             {
-                policy.AllowAnyOrigin()
+                policy.SetIsOriginAllowed(_ => true)
                       .AllowAnyMethod()
                       .AllowAnyHeader()
+                      .AllowCredentials()
                       .WithExposedHeaders("X-Total-Count");
             });
 

@@ -1249,6 +1249,16 @@ function quickApproveOrder(maDH) {
 async function approveOrder(maDH) {
   AdminRealtimeData.updateOrderStatus(maDH, 'da_xac_nhan');
   showToast('Đã duyệt xác nhận đơn hàng ' + maDH, 'success');
+  // Realtime notification qua SignalR
+  const oApprove = (AdminRealtimeData.orders || []).find(x => x.maDH === maDH);
+  if (window.OrderSignalR && typeof window.OrderSignalR.notifyOrderStatusChanged === 'function') {
+    window.OrderSignalR.notifyOrderStatusChanged(
+      maDH,
+      'da_xac_nhan',
+      'Đơn đặt hàng #' + maDH + ' đã được Admin xác nhận thành công! Đang chuẩn bị đóng gói.',
+      oApprove ? oApprove.sdtNguoiNhan : ''
+    );
+  }
   try {
     await api.put('/donhangonline/' + encodeURIComponent(maDH) + '/trangthai', { trangThai: 'da_xac_nhan' });
   } catch (err) {}
@@ -1257,6 +1267,16 @@ async function approveOrder(maDH) {
 async function shipOrder(maDH) {
   AdminRealtimeData.updateOrderStatus(maDH, 'dang_giao');
   showToast('Đang giao hàng đơn ' + maDH, 'info');
+  // Realtime notification qua SignalR
+  const oShip = (AdminRealtimeData.orders || []).find(x => x.maDH === maDH);
+  if (window.OrderSignalR && typeof window.OrderSignalR.notifyOrderStatusChanged === 'function') {
+    window.OrderSignalR.notifyOrderStatusChanged(
+      maDH,
+      'dang_giao',
+      'Đơn đặt hàng #' + maDH + ' đã được xuất kho và đang trên đường giao đến bạn!',
+      oShip ? oShip.sdtNguoiNhan : ''
+    );
+  }
   try {
     await api.put('/donhangonline/' + encodeURIComponent(maDH) + '/trangthai', { trangThai: 'dang_giao' });
   } catch (err) {}
@@ -1266,6 +1286,16 @@ async function cancelOrder(maDH) {
   if (!confirm('Bạn chắc chắn muốn hủy đơn hàng ' + maDH + '?')) return;
   AdminRealtimeData.updateOrderStatus(maDH, 'da_huy');
   showToast('Đã hủy đơn hàng ' + maDH, 'warning');
+  // Realtime notification qua SignalR
+  const oCancel = (AdminRealtimeData.orders || []).find(x => x.maDH === maDH);
+  if (window.OrderSignalR && typeof window.OrderSignalR.notifyOrderStatusChanged === 'function') {
+    window.OrderSignalR.notifyOrderStatusChanged(
+      maDH,
+      'da_huy',
+      'Đơn đặt hàng #' + maDH + ' đã được cập nhật trạng thái: Đã hủy.',
+      oCancel ? oCancel.sdtNguoiNhan : ''
+    );
+  }
   try {
     await api.put('/donhangonline/' + encodeURIComponent(maDH) + '/trangthai', { trangThai: 'da_huy' });
   } catch (err) {}
@@ -1275,6 +1305,16 @@ async function completeOrder(maDH) {
   const genHD = 'HD' + Math.floor(10000 + Math.random() * 90000);
   AdminRealtimeData.updateOrderStatus(maDH, 'hoan_thanh', genHD);
   showToast('Đã thu tiền & hoàn tất đơn hàng ' + maDH + ' (Mã hóa đơn: ' + genHD + ')!', 'success');
+  // Realtime notification qua SignalR
+  const oComp = (AdminRealtimeData.orders || []).find(x => x.maDH === maDH);
+  if (window.OrderSignalR && typeof window.OrderSignalR.notifyOrderStatusChanged === 'function') {
+    window.OrderSignalR.notifyOrderStatusChanged(
+      maDH,
+      'hoan_thanh',
+      'Đơn đặt hàng #' + maDH + ' đã được giao thành công và hoàn tất! Cảm ơn bạn đã mua hàng.',
+      oComp ? oComp.sdtNguoiNhan : ''
+    );
+  }
   try {
     await api.put('/donhangonline/' + encodeURIComponent(maDH) + '/trangthai', {
       trangThai: 'hoan_thanh',
@@ -4685,3 +4725,55 @@ window.toggleAdminPasswordVisibility = function() {
 
 window.viewImeiTimeline = viewImeiTimeline;
 window.updatePosImeiOptions = updatePosImeiOptions;
+
+
+// =========================================================================
+// SIGNALR REALTIME LISTENERS DÀNH CHO ADMIN
+// =========================================================================
+window.addEventListener('samamobile:new_order', function (e) {
+  const order = e.detail;
+  if (!order || !order.maDH) return;
+
+  console.log('Admin received real-time new order:', order);
+
+  // 1. Thêm đơn hàng mới vào đầu danh sách nếu chưa có
+  if (!AdminRealtimeData.orders) AdminRealtimeData.orders = [];
+  const exists = AdminRealtimeData.orders.some(o => o.maDH === order.maDH);
+  if (!exists) {
+    AdminRealtimeData.orders.unshift(order);
+    try {
+      localStorage.setItem('cellphones_online_orders', JSON.stringify(AdminRealtimeData.orders));
+    } catch (err) {}
+  }
+
+  // 2. Chuông báo & Thông báo Toast nổi bật
+  const ten = order.tenNguoiNhan || 'Khách hàng';
+  const tien = (typeof Format !== 'undefined' && Format.currency) 
+    ? Format.currency(order.tongTien || 0) 
+    : ((order.tongTien || 0).toLocaleString('vi-VN') + 'đ');
+  showToast('🔔 ĐƠN HÀNG MỚI! ' + ten + ' vừa đặt đơn #' + order.maDH + ' (' + tien + ')', 'info');
+
+  // 3. Tự động vẽ lại bảng đơn hàng nếu đang mở
+  if (typeof renderDonHangOnlineTable === 'function') {
+    renderDonHangOnlineTable();
+  }
+  if (typeof updateDashboardStats === 'function') {
+    updateDashboardStats();
+  }
+});
+
+window.addEventListener('samamobile:order_status_updated', function (e) {
+  const data = e.detail;
+  if (!data || !data.maDH) return;
+
+  if (AdminRealtimeData.orders) {
+    const o = AdminRealtimeData.orders.find(x => x.maDH === data.maDH);
+    if (o) {
+      o.trangThai = data.trangThai;
+      if (data.soHD) o.soHD = data.soHD;
+      if (typeof renderDonHangOnlineTable === 'function') {
+        renderDonHangOnlineTable();
+      }
+    }
+  }
+});

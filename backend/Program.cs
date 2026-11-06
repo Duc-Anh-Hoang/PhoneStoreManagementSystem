@@ -1,3 +1,4 @@
+using PhoneStoreAPI.Features.OnlineOrders.Hubs;
 using Microsoft.EntityFrameworkCore;
 using PhoneStoreAPI.Common.Extensions;
 using PhoneStoreAPI.Common.Middlewares;
@@ -44,6 +45,9 @@ builder.Services.AddAppRateLimiting();
 
 // 6. Cấu hình CORS
 builder.Services.AddAppCors(builder.Configuration);
+
+// Đăng ký dịch vụ SignalR phục vụ realtime đơn hàng
+builder.Services.AddSignalR();
 
 // 7. Cấu hình Swagger / OpenAPI kèm Bearer Authorize
 builder.Services.AddAppSwagger();
@@ -111,6 +115,7 @@ app.MapGet("/api/health", () => Results.Ok(new
 }));
 
 app.MapControllers();
+app.MapHub<OrderHub>("/hubs/order");
 
 try
 {

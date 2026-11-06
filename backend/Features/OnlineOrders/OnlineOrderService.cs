@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.SignalR;
+using PhoneStoreAPI.Features.OnlineOrders.Hubs;
 using Microsoft.EntityFrameworkCore;
 using PhoneStoreAPI.Common.Constants;
 using PhoneStoreAPI.Common.Exceptions;
@@ -16,19 +18,22 @@ public class OnlineOrderService : IOnlineOrderService
     private readonly ICodeGenerator _codeGenerator;
     private readonly IWarrantyService _warrantyService;
     private readonly IEmailService? _emailService;
+    private readonly IHubContext<OrderHub>? _hubContext;
 
     public OnlineOrderService(
         AppDbContext context,
         ICurrentUser currentUser,
         ICodeGenerator codeGenerator,
         IWarrantyService warrantyService,
-        IEmailService? emailService = null)
+        IEmailService? emailService = null,
+        IHubContext<OrderHub>? hubContext = null)
     {
         _context = context;
         _currentUser = currentUser;
         _codeGenerator = codeGenerator;
         _warrantyService = warrantyService;
         _emailService = emailService;
+        _hubContext = hubContext;
     }
 
     public async Task<OrderDto> CreateOrderAsync(CreateOrderRequest request)
@@ -158,6 +163,42 @@ public class OnlineOrderService : IOnlineOrderService
                         );
                     }
                     catch { /* Không chặn luồng nếu gửi mail gặp sự cố */ }
+                });
+            }
+
+            
+            // Phát tín hiệu Realtime qua SignalR đến AdminGroup
+            if (_hubContext != null)
+            {
+                var hubPayload = new
+                {
+                    maDH = donHang.MaDH,
+                    tenNguoiNhan = donHang.TenNguoiNhan,
+                    sdtNguoiNhan = donHang.SdtNguoiNhan,
+                    diaChiGiao = donHang.DiaChiGiao,
+                    tongTien = donHang.TongTien,
+                    trangThai = donHang.TrangThai,
+                    phuongThucThanhToan = donHang.PhuongThucThanhToan,
+                    ngayDat = donHang.NgayDat,
+                    message = $"Khách hàng {donHang.TenNguoiNhan} ({donHang.SdtNguoiNhan}) vừa đặt đơn hàng mới #{donHang.MaDH} trị giá {donHang.TongTien:N0}đ",
+                    items = chiTietList.Select(ct => new
+                    {
+                        maHang = ct.MaHang,
+                        tenHang = ct.MatHang?.TenHang ?? ct.MaHang,
+                        soLuong = ct.SoLuong,
+                        donGia = ct.DonGia,
+                        thanhTien = ct.SoLuong * ct.DonGia
+                    }).ToList()
+                };
+
+                _ = Task.Run(async () =>
+                {
+                    try
+                    {
+                        await _hubContext.Clients.Group(OrderHub.AdminGroup).SendAsync("ReceiveNewOrder", hubPayload);
+                        await _hubContext.Clients.All.SendAsync("OrderCreatedNotification", hubPayload);
+                    }
+                    catch { }
                 });
             }
 

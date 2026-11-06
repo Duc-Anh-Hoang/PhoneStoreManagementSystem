@@ -883,6 +883,35 @@
       saveOrders(orders);
     } catch (e) {}
 
+    // Gửi realtime qua SignalR tới Admin ngay lập tức
+    try {
+      if (window.OrderSignalR && typeof window.OrderSignalR.notifyNewOrder === 'function') {
+        window.OrderSignalR.notifyNewOrder(orderData);
+        window.OrderSignalR.joinOrderGroup(orderData.maDH);
+        if (orderData.sdtNguoiNhan) window.OrderSignalR.joinCustomerGroup(orderData.sdtNguoiNhan);
+      }
+    } catch (e) {}
+
+    // Gửi lên REST API backend
+    try {
+      if (window.api && typeof window.api.post === 'function') {
+        window.api.post('/orders', {
+          tenNguoiNhan: orderData.tenNguoiNhan,
+          sdtNguoiNhan: orderData.sdtNguoiNhan,
+          email: orderData.email,
+          diaChiGiao: orderData.diaChiGiao,
+          phuongThucThanhToan: orderData.phuongThucThanhToan,
+          ghiChu: orderData.ghiChu,
+          items: orderData.items.map(it => ({
+            maHang: it.maHang,
+            tenHang: it.tenHang,
+            soLuong: it.soLuong,
+            donGia: it.donGia
+          }))
+        }).catch(() => {});
+      }
+    } catch (e) {}
+
     // Xóa giỏ hàng
     saveCart([]);
 
@@ -1230,4 +1259,31 @@
     window.switchCartTab('cart');
   };
 
+
+  // Lắng nghe sự kiện cập nhật trạng thái đơn hàng realtime từ SignalR
+  window.addEventListener('samamobile:order_status_updated', function (e) {
+    const data = e.detail;
+    if (!data || !data.maDH) return;
+
+    const orders = getOrders();
+    const order = orders.find(o => o.maDH === data.maDH);
+    if (order) {
+      order.trangThai = data.trangThai;
+      if (data.soHD) order.soHD = data.soHD;
+      saveOrders(orders);
+
+      if (typeof window.renderOrders === 'function') {
+        window.renderOrders();
+      }
+
+      // Cập nhật modal tracking nếu đang mở
+      const trackingModal = document.getElementById('order-tracking-modal');
+      if (trackingModal && !trackingModal.classList.contains('hidden')) {
+        const codeEl = document.getElementById('tracking-modal-code');
+        if (codeEl && codeEl.textContent.includes(data.maDH)) {
+          window.openTrackingModal(data.maDH);
+        }
+      }
+    }
+  });
 })();
