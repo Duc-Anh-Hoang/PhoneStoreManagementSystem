@@ -912,22 +912,20 @@
 
   window.handleOpenProfile = function() {
     window.closeCustomerAvatarMenu();
-    if (window.CellphoneSCustomerPortal) {
-      window.CellphoneSCustomerPortal.openPortal('profile');
-    }
+    const isPagesDir = window.location.pathname.includes('/pages/') || window.location.href.includes('/pages/');
+    window.location.href = isPagesDir ? 'profile.html?tab=profile' : 'pages/profile.html?tab=profile';
   };
 
   window.handleOpenOrders = function() {
     window.closeCustomerAvatarMenu();
-    const target = window.location.pathname.includes('/pages/') ? 'cart.html#orders' : 'pages/cart.html#orders';
-    window.location.href = target;
+    const isPagesDir = window.location.pathname.includes('/pages/') || window.location.href.includes('/pages/');
+    window.location.href = isPagesDir ? 'cart.html#orders' : 'pages/cart.html#orders';
   };
 
   window.handleOpenSettings = function() {
     window.closeCustomerAvatarMenu();
-    if (window.CellphoneSCustomerPortal) {
-      window.CellphoneSCustomerPortal.openPortal('settings');
-    }
+    const isPagesDir = window.location.pathname.includes('/pages/') || window.location.href.includes('/pages/');
+    window.location.href = isPagesDir ? 'profile.html?tab=settings' : 'pages/profile.html?tab=settings';
   };
 
   // Tự động đóng dropdown khi nhấp ra ngoài hoặc ấn ESC
