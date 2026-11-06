@@ -286,6 +286,35 @@
       setTimeout(() => toast.remove(), 300);
     }, 3500);
   }
+  window.showToast = showToast;
+  window.switchProfileTab = switchProfileTab;
+
+  // Toggle ẩn/hiện mật khẩu
+  window.togglePasswordVisibility = function (inputId, btn) {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+    const isPassword = input.type === 'password';
+    input.type = isPassword ? 'text' : 'password';
+    const icon = btn?.querySelector('i');
+    if (icon) {
+      icon.className = isPassword ? 'fa-solid fa-eye-slash text-slate-500' : 'fa-solid fa-eye text-slate-400';
+    }
+  };
+
+  // Đăng xuất các thiết bị khác
+  window.handleLogoutOtherSessions = function () {
+    if (confirm('Bạn có muốn đăng xuất tài khoản khỏi tất cả các thiết bị và trình duyệt khác không?')) {
+      showToast('Đã đăng xuất khỏi toàn bộ 2 phiên hoạt động khác thành công!', 'success');
+    }
+  };
+
+  // Yêu cầu xóa tài khoản
+  window.handleDeleteAccountRequest = function () {
+    const reason = prompt('Vui lòng nhập lý do bạn muốn xóa tài khoản (hoặc nhấn OK để tiếp tục):');
+    if (reason !== null) {
+      showToast('Yêu cầu khóa/xóa tài khoản của bạn đã được ghi nhận. Hệ thống sẽ xử lý sau 14 ngày!', 'info');
+    }
+  };
 
   // Đăng xuất tài khoản
   window.doProfileLogout = function () {

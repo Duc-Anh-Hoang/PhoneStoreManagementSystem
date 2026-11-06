@@ -682,187 +682,435 @@
             </div>
           </div>
 
+        </div>
+
         <!-- ==================== TAB 2: CÀI ĐẶT TÀI KHOẢN & BẢO MẬT ==================== -->
         <div id="panel-settings" class="hidden space-y-6">
           
-          <!-- Đổi Mật Khẩu -->
+          <!-- 1. Đổi Mật Khẩu -->
           <div class="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-7 shadow-xs">
-            <div class="border-b border-slate-100 pb-4 mb-6">
-              <h2 class="text-lg sm:text-xl font-black text-slate-900">Đổi Mật Khẩu</h2>
-              <p class="text-xs sm:text-sm text-slate-500 mt-1">Để bảo mật tài khoản, vui lòng không chia sẻ mật khẩu cho người khác</p>
+            <div class="border-b border-slate-100 pb-4 mb-6 flex items-center justify-between flex-wrap gap-2">
+              <div>
+                <h2 class="text-lg sm:text-xl font-black text-slate-900 flex items-center gap-2">
+                  <i class="fa-solid fa-key text-blue-600"></i> Đổi Mật Khẩu
+                </h2>
+                <p class="text-xs sm:text-sm text-slate-500 mt-1">Để bảo mật tài khoản, vui lòng sử dụng mật khẩu mạnh và không chia sẻ cho người khác</p>
+              </div>
+              <span class="text-xs font-bold text-amber-700 bg-amber-50 px-3 py-1 rounded-full border border-amber-200 flex items-center gap-1.5">
+                <i class="fa-solid fa-shield-halved text-amber-500"></i> Bảo mật cấp cao
+              </span>
             </div>
 
-            <form id="form-change-password" class="max-w-md space-y-4">
+            <form id="form-change-password" class="max-w-xl space-y-4">
               <div>
                 <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1.5">
                   Mật khẩu hiện tại <span class="text-rose-500">*</span>
                 </label>
-                <input type="password" id="pwd-current" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-sm font-semibold text-slate-800 transition-all outline-none" placeholder="Nhập mật khẩu hiện tại...">
+                <div class="relative">
+                  <input type="password" id="pwd-current" required class="w-full pl-4 pr-10 py-2.5 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-sm font-semibold text-slate-800 transition-all outline-none" placeholder="Nhập mật khẩu hiện tại...">
+                  <button type="button" onclick="window.togglePasswordVisibility('pwd-current', this)" class="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 text-sm">
+                    <i class="fa-solid fa-eye"></i>
+                  </button>
+                </div>
               </div>
 
               <div>
                 <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1.5">
                   Mật khẩu mới <span class="text-rose-500">*</span>
                 </label>
-                <input type="password" id="pwd-new" required minlength="6" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-sm font-semibold text-slate-800 transition-all outline-none" placeholder="Tối thiểu 6 ký tự...">
+                <div class="relative">
+                  <input type="password" id="pwd-new" required minlength="6" class="w-full pl-4 pr-10 py-2.5 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-sm font-semibold text-slate-800 transition-all outline-none" placeholder="Tối thiểu 6 ký tự gồm chữ và số...">
+                  <button type="button" onclick="window.togglePasswordVisibility('pwd-new', this)" class="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 text-sm">
+                    <i class="fa-solid fa-eye"></i>
+                  </button>
+                </div>
               </div>
 
               <div>
                 <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1.5">
                   Xác nhận mật khẩu mới <span class="text-rose-500">*</span>
                 </label>
-                <input type="password" id="pwd-confirm" required minlength="6" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-sm font-semibold text-slate-800 transition-all outline-none" placeholder="Nhập lại mật khẩu mới...">
+                <div class="relative">
+                  <input type="password" id="pwd-confirm" required minlength="6" class="w-full pl-4 pr-10 py-2.5 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-sm font-semibold text-slate-800 transition-all outline-none" placeholder="Nhập lại chính xác mật khẩu mới...">
+                  <button type="button" onclick="window.togglePasswordVisibility('pwd-confirm', this)" class="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 text-sm">
+                    <i class="fa-solid fa-eye"></i>
+                  </button>
+                </div>
               </div>
 
-              <div class="pt-3">
-                <button type="submit" class="px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm shadow-md transition-all active:scale-95 cursor-pointer flex items-center gap-2">
+              <div class="pt-3 flex items-center gap-3">
+                <button type="submit" class="px-6 py-2.5 rounded-xl bg-[#0057B7] hover:bg-[#004494] text-white font-bold text-sm shadow-md transition-all active:scale-95 cursor-pointer flex items-center gap-2">
                   <i class="fa-solid fa-lock text-xs"></i>
                   <span>Cập nhật mật khẩu</span>
+                </button>
+                <button type="reset" class="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 font-bold text-sm transition-all">
+                  Hủy
                 </button>
               </div>
             </form>
           </div>
 
-          <!-- Bảo Mật & Thông Báo -->
+          <!-- 2. Bảo Mật & Xác Thực Hai Yếu Tố (2FA) -->
           <div class="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-7 shadow-xs space-y-5">
             <div class="border-b border-slate-100 pb-4">
-              <h2 class="text-lg sm:text-xl font-black text-slate-900">Bảo Mật & Thông Báo</h2>
-              <p class="text-xs sm:text-sm text-slate-500 mt-1">Cài đặt các phương thức xác thực và kênh nhận thông báo</p>
+              <h2 class="text-lg sm:text-xl font-black text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-shield-halved text-emerald-600"></i> Bảo Mật & Xác Thực Hai Lớp
+              </h2>
+              <p class="text-xs sm:text-sm text-slate-500 mt-1">Gia tăng phòng vệ tài khoản chống lại các truy cập trái phép</p>
             </div>
 
             <div class="space-y-4 divide-y divide-slate-100 text-sm">
               <!-- 2FA -->
               <div class="flex items-center justify-between pt-3">
                 <div class="pr-4">
-                  <h4 class="font-bold text-slate-800">Xác thực 2 yếu tố (2FA qua OTP)</h4>
-                  <p class="text-xs text-slate-500 mt-0.5">Yêu cầu mã xác thực gửi về email hoặc SMS khi đăng nhập thiết bị mới</p>
+                  <h4 class="font-bold text-slate-800 flex items-center gap-2">
+                    <span>Xác thực 2 yếu tố (2FA qua Email / SMS OTP)</span>
+                    <span class="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full">Khuyên dùng</span>
+                  </h4>
+                  <p class="text-xs text-slate-500 mt-0.5">Yêu cầu nhập mã xác thực OTP 6 chữ số gửi về điện thoại hoặc email khi đăng nhập trên thiết bị lạ</p>
                 </div>
                 <label class="relative inline-flex items-center cursor-pointer flex-shrink-0">
-                  <input type="checkbox" checked class="sr-only peer">
+                  <input type="checkbox" checked onchange="window.showToast(this.checked ? 'Đã kích hoạt xác thực 2 lớp (2FA)!' : 'Đã tắt xác thực 2 lớp!', 'success')" class="sr-only peer">
                   <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                 </label>
               </div>
 
-              <!-- Thông báo đơn hàng -->
+              <!-- Cảnh báo đăng nhập lạ -->
               <div class="flex items-center justify-between pt-4">
                 <div class="pr-4">
-                  <h4 class="font-bold text-slate-800">Thông báo tiến trình đơn hàng (Realtime)</h4>
-                  <p class="text-xs text-slate-500 mt-0.5">Nhận thông báo nổi và âm thanh khi đơn hàng được duyệt, đang giao hoặc giao thành công</p>
+                  <h4 class="font-bold text-slate-800">Cảnh báo đăng nhập thiết bị mới</h4>
+                  <p class="text-xs text-slate-500 mt-0.5">Gửi thông báo khẩn cấp và email tức thì khi phát hiện đăng nhập từ địa chỉ IP hoặc trình duyệt mới</p>
                 </div>
                 <label class="relative inline-flex items-center cursor-pointer flex-shrink-0">
-                  <input type="checkbox" checked class="sr-only peer">
+                  <input type="checkbox" checked onchange="window.showToast(this.checked ? 'Đã bật cảnh báo đăng nhập mới!' : 'Đã tắt cảnh báo đăng nhập!', 'success')" class="sr-only peer">
                   <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                 </label>
               </div>
 
-              <!-- Thông báo khuyến mãi -->
+              <!-- Đăng xuất thiết bị khác -->
               <div class="flex items-center justify-between pt-4">
                 <div class="pr-4">
-                  <h4 class="font-bold text-slate-800">Nhận tin khuyến mãi & Voucher giảm giá</h4>
-                  <p class="text-xs text-slate-500 mt-0.5">Nhận mã giảm giá thành viên độc quyền và thông tin mở bán sản phẩm mới</p>
+                  <h4 class="font-bold text-slate-800">Đăng xuất khỏi tất cả thiết bị khác</h4>
+                  <p class="text-xs text-slate-500 mt-0.5">Hủy bỏ phiên đăng nhập trên các máy tính, điện thoại hoặc máy tính bảng khác ngoài thiết bị hiện tại</p>
+                </div>
+                <button type="button" onclick="if(confirm('Bạn có chắc chắn muốn đăng xuất phiên đăng nhập trên mọi thiết bị khác không?')) window.showToast('Đã đăng xuất thành công khỏi mọi thiết bị khác!', 'success')" class="px-4 py-2 rounded-xl border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-bold transition-all cursor-pointer whitespace-nowrap active:scale-95">
+                  <i class="fa-solid fa-arrow-right-from-bracket mr-1 text-slate-400"></i> Đăng xuất khác
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Liên Kết Tài Khoản Mạng Xã Hội & SSO -->
+          <div class="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-7 shadow-xs space-y-5">
+            <div class="border-b border-slate-100 pb-4">
+              <h2 class="text-lg sm:text-xl font-black text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-link text-indigo-600"></i> Liên Kết Tài Khoản & Đăng Nhập Nhanh
+              </h2>
+              <p class="text-xs sm:text-sm text-slate-500 mt-1">Liên kết tài khoản Google hoặc mạng xã hội để đăng nhập 1 chạm an toàn</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- Google -->
+              <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50/50 flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-white shadow-2xs border border-slate-200/80 flex items-center justify-center text-lg flex-shrink-0">
+                    <i class="fa-brands fa-google text-red-500"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-slate-900 text-xs sm:text-sm">Tài khoản Google</h4>
+                    <p class="text-[11px] text-slate-500 user-display-email truncate max-w-[150px]">huykhang666@gmail.com</p>
+                  </div>
+                </div>
+                <span class="text-[11px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full whitespace-nowrap">
+                  <i class="fa-solid fa-check"></i> Đã kết nối
+                </span>
+              </div>
+
+              <!-- Zalo / SĐT -->
+              <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50/50 flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-white shadow-2xs border border-slate-200/80 flex items-center justify-center text-lg flex-shrink-0">
+                    <i class="fa-solid fa-mobile-screen text-blue-600"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-slate-900 text-xs sm:text-sm">Số điện thoại xác thực</h4>
+                    <p class="text-[11px] text-slate-500 user-display-phone">0383224846</p>
+                  </div>
+                </div>
+                <span class="text-[11px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full whitespace-nowrap">
+                  <i class="fa-solid fa-check"></i> Đã kích hoạt
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Cài Đặt Thông Báo & Kênh Liên Lạc -->
+          <div class="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-7 shadow-xs space-y-5">
+            <div class="border-b border-slate-100 pb-4">
+              <h2 class="text-lg sm:text-xl font-black text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-bell text-amber-500"></i> Cài Đặt Nhận Thông Báo
+              </h2>
+              <p class="text-xs sm:text-sm text-slate-500 mt-1">Tùy chỉnh thông báo bạn muốn nhận trên website và hòm thư điện tử</p>
+            </div>
+
+            <div class="space-y-4 divide-y divide-slate-100 text-sm">
+              <!-- Thông báo tiến trình đơn hàng -->
+              <div class="flex items-center justify-between pt-3">
+                <div class="pr-4">
+                  <h4 class="font-bold text-slate-800">Thông báo trạng thái đơn hàng (Realtime)</h4>
+                  <p class="text-xs text-slate-500 mt-0.5">Nhận thông báo nổi khi đơn hàng chuyển sang trạng thái: Đã duyệt, Đang giao hoặc Đã giao thành công</p>
                 </div>
                 <label class="relative inline-flex items-center cursor-pointer flex-shrink-0">
-                  <input type="checkbox" checked class="sr-only peer">
+                  <input type="checkbox" checked onchange="window.showToast(this.checked ? 'Đã bật thông báo tiến trình đơn hàng!' : 'Đã tắt thông báo đơn hàng!', 'success')" class="sr-only peer">
+                  <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                </label>
+              </div>
+
+              <!-- Thông báo ưu đãi & Voucher -->
+              <div class="flex items-center justify-between pt-4">
+                <div class="pr-4">
+                  <h4 class="font-bold text-slate-800">Chương trình khuyến mãi & Mã giảm giá thành viên</h4>
+                  <p class="text-xs text-slate-500 mt-0.5">Cập nhật các chương trình Flash Sale độc quyền và quà tặng sinh nhật dành riêng cho bạn</p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer flex-shrink-0">
+                  <input type="checkbox" checked onchange="window.showToast(this.checked ? 'Đã bật thông báo ưu đãi thành viên!' : 'Đã tắt thông báo ưu đãi!', 'success')" class="sr-only peer">
+                  <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                </label>
+              </div>
+
+              <!-- Thông báo biến động điểm SamaMember -->
+              <div class="flex items-center justify-between pt-4">
+                <div class="pr-4">
+                  <h4 class="font-bold text-slate-800">Biến động điểm thưởng SamaMember</h4>
+                  <p class="text-xs text-slate-500 mt-0.5">Nhận thông báo khi bạn tích lũy điểm thưởng từ đơn mua hoặc sử dụng điểm trừ tiền trực tiếp</p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer flex-shrink-0">
+                  <input type="checkbox" checked onchange="window.showToast(this.checked ? 'Đã bật thông báo điểm thưởng!' : 'Đã tắt thông báo điểm!', 'success')" class="sr-only peer">
                   <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                 </label>
               </div>
             </div>
-
           </div>
 
-        </div>
+          <!-- 5. Phiên Đăng Nhập Hoạt Động Gần Đây -->
+          <div class="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-7 shadow-xs space-y-4">
+            <div class="border-b border-slate-100 pb-4">
+              <h2 class="text-lg sm:text-xl font-black text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-laptop text-slate-700"></i> Phiên Đăng Nhập Hoạt Động
+              </h2>
+              <p class="text-xs sm:text-sm text-slate-500 mt-1">Danh sách các thiết bị hiện đang duy trì phiên kết nối vào tài khoản</p>
+            </div>
 
-      </section>
+            <div class="p-4 rounded-2xl border border-blue-200/80 bg-blue-50/40 flex items-center justify-between gap-3">
+              <div class="flex items-center gap-3.5">
+                <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center text-lg flex-shrink-0 shadow-sm">
+                  <i class="fa-solid fa-desktop"></i>
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <h4 class="font-extrabold text-slate-900 text-sm">Windows 11 • Chrome 126</h4>
+                    <span class="text-[10px] bg-emerald-500 text-white font-extrabold px-2 py-0.5 rounded-full shadow-2xs">Thiết bị hiện tại</span>
+                  </div>
+                  <p class="text-xs text-slate-500 mt-0.5">TP. Hồ Chí Minh, Việt Nam • Hoạt động vài giây trước</p>
+                </div>
+              </div>
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 ring-4 ring-emerald-100 flex-shrink-0" title="Đang hoạt động"></span>
+            </div>
+          </div>
 
-    </div>
-  </main>
+          <!-- 6. Vùng Nguy Hiểm & Quản Lý Dữ Liệu -->
+          <div class="bg-white rounded-2xl border border-rose-200/80 p-5 sm:p-7 shadow-xs space-y-4">
+            <div class="border-b border-rose-100 pb-4">
+              <h2 class="text-lg sm:text-xl font-black text-rose-700 flex items-center gap-2">
+                <i class="fa-solid fa-triangle-exclamation text-rose-600"></i> Vùng Nguy Hiểm & Dữ Liệu
+              </h2>
+              <p class="text-xs sm:text-sm text-slate-500 mt-1">Các thao tác ảnh hưởng vĩnh viễn tới dữ liệu cá nhân của bạn</p>
+            </div>
 
-  <!-- =========================================================================
-       4. FOOTER DÙNG CHUNG
-       ========================================================================= -->
-  <footer class="bg-[#0F172A] text-slate-400 text-xs pt-16 pb-12 border-t border-slate-800">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between flex-wrap gap-3 pt-1">
+              <div>
+                <h4 class="font-bold text-slate-900 text-sm">Yêu cầu xóa tài khoản vĩnh viễn</h4>
+                <p class="text-xs text-slate-500 mt-0.5 max-w-lg">
+                  Khi thực hiện, toàn bộ thông tin tài khoản, điểm thưởng SamaMember và lịch sử đơn hàng sẽ bị xóa vĩnh viễn và không thể khôi phục.
+                </p>
+              </div>
+              <button type="button" onclick="if(confirm('CẢNH BÁO: Bạn có chắc chắn muốn gửi yêu cầu xóa vĩnh viễn tài khoản không? Hành động này không thể hoàn tác!')) window.showToast('Yêu cầu xóa tài khoản đã được ghi nhận. Bộ phận hỗ trợ sẽ liên hệ xác nhận trong 24h.', 'error')" class="px-4 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-bold transition-all cursor-pointer whitespace-nowrap active:scale-95">
+                <i class="fa-solid fa-trash-can mr-1"></i> Xóa tài khoản
+              </button>
+            </div>
+          </div>
+
+        </div> <!-- /#panel-settings -->
+
+      left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                </label>
+              </div>
+
+              <!-- Cảnh báo đăng nhập lạ -->
+              <div class="flex items-center justify-between pt-4">
+                <div class="pr-4">
+                  <h4 class="font-bold text-slate-800">Cảnh báo đăng nhập thiết bị mới</h4>
+                  <p class="text-xs text-slate-500 mt-0.5">Gửi thông báo khẩn cấp và email tức thì khi phát hiện đăng nhập từ địa chỉ IP hoặc trình duyệt mới</p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer flex-shrink-0">
+                  <input type="checkbox" checked onchange="window.showToast(this.checked ? 'Đã bật cảnh báo đăng nhập mới!' : 'Đã tắt cảnh báo đăng nhập!', 'success')" class="sr-only peer">
+                  <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                </label>
+              </div>
+
+              <!-- Đăng xuất thiết bị khác -->
+              <div class="flex items-center justify-between pt-4">
+                <div class="pr-4">
+                  <h4 class="font-bold text-slate-800">Đăng xuất khỏi tất cả thiết bị khác</h4>
+                  <p class="text-xs text-slate-500 mt-0.5">Hủy bỏ phiên đăng nhập trên các máy tính, điện thoại hoặc máy tính bảng khác ngoài thiết bị hiện tại</p>
+                </div>
+                <button type="button" onclick="if(confirm('Bạn có chắc chắn muốn đăng xuất phiên đăng nhập trên mọi thiết bị khác không?')) window.showToast('Đã đăng xuất thành công khỏi mọi thiết bị khác!', 'success')" class="px-4 py-2 rounded-xl border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-bold transition-all cursor-pointer whitespace-nowrap active:scale-95">
+                  <i class="fa-solid fa-arrow-right-from-bracket mr-1 text-slate-400"></i> Đăng xuất khác
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Liên Kết Tài Khoản Mạng Xã Hội & SSO -->
+          <div class="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-7 shadow-xs space-y-5">
+            <div class="border-b border-slate-100 pb-4">
+              <h2 class="text-lg sm:text-xl font-black text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-link text-indigo-600"></i> Liên Kết Tài Khoản & Đăng Nhập Nhanh
+              </h2>
+              <p class="text-xs sm:text-sm text-slate-500 mt-1">Liên kết tài khoản Google hoặc mạng xã hội để đăng nhập 1 chạm an toàn</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- Google -->
+              <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50/50 flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-white shadow-2xs border border-slate-200/80 flex items-center justify-center text-lg flex-shrink-0">
+                    <i class="fa-brands fa-google text-red-500"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-slate-900 text-xs sm:text-sm">Tài khoản Google</h4>
+                    <p class="text-[11px] text-slate-500 user-display-email truncate max-w-[150px]">huykhang666@gmail.com</p>
+                  </div>
+                </div>
+                <span class="text-[11px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full whitespace-nowrap">
+                  <i class="fa-solid fa-check"></i> Đã kết nối
+                </span>
+              </div>
+
+              <!-- Zalo / SĐT -->
+              <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50/50 flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-white shadow-2xs border border-slate-200/80 flex items-center justify-center text-lg flex-shrink-0">
+                    <i class="fa-solid fa-mobile-screen text-blue-600"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-slate-900 text-xs sm:text-sm">Số điện thoại xác thực</h4>
+                    <p class="text-[11px] text-slate-500 user-display-phone">0383224846</p>
+                  </div>
+                </div>
+                <span class="text-[11px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full whitespace-nowrap">
+                  <i class="fa-solid fa-check"></i> Đã kích hoạt
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Cài Đặt Thông Báo & Kênh Liên Lạc -->
+          <div class="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-7 shadow-xs space-y-5">
+            <div class="border-b border-slate-100 pb-4">
+              <h2 class="text-lg sm:text-xl font-black text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-bell text-amber-500"></i> Cài Đặt Nhận Thông Báo
+              </h2>
+              <p class="text-xs sm:text-sm text-slate-500 mt-1">Tùy chỉnh thông báo bạn muốn nhận trên website và hòm thư điện tử</p>
+            </div>
+
+            <div class="space-y-4 divide-y divide-slate-100 text-sm">
+              <!-- Thông báo tiến trình đơn hàng -->
+              <div class="flex items-center justify-between pt-3">
+                <div class="pr-4">
+                  <h4 class="font-bold text-slate-800">Thông báo trạng thái đơn hàng (Realtime)</h4>
+                  <p class="text-xs text-slate-500 mt-0.5">Nhận thông báo nổi khi đơn hàng chuyển sang trạng thái: Đã duyệt, Đang giao hoặc Đã giao thành công</p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer flex-shrink-0">
+                  <input type="checkbox" checked onchange="window.showToast(this.checked ? 'Đã bật thông báo tiến trình đơn hàng!' : 'Đã tắt thông báo đơn hàng!', 'success')" class="sr-only peer">
+                  <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                </label>
+              </div>
+
+              <!-- Thông báo ưu đãi & Voucher -->
+              <div class="flex items-center justify-between pt-4">
+                <div class="pr-4">
+                  <h4 class="font-bold text-slate-800">Chương trình khuyến mãi & Mã giảm giá thành viên</h4>
+                  <p class="text-xs text-slate-500 mt-0.5">Cập nhật các chương trình Flash Sale độc quyền và quà tặng sinh nhật dành riêng cho bạn</p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer flex-shrink-0">
+                  <input type="checkbox" checked onchange="window.showToast(this.checked ? 'Đã bật thông báo ưu đãi thành viên!' : 'Đã tắt thông báo ưu đãi!', 'success')" class="sr-only peer">
+                  <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                </label>
+              </div>
+
+              <!-- Thông báo biến động điểm SamaMember -->
+              <div class="flex items-center justify-between pt-4">
+                <div class="pr-4">
+                  <h4 class="font-bold text-slate-800">Biến động điểm thưởng SamaMember</h4>
+                  <p class="text-xs text-slate-500 mt-0.5">Nhận thông báo khi bạn tích lũy điểm thưởng từ đơn mua hoặc sử dụng điểm trừ tiền trực tiếp</p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer flex-shrink-0">
+                  <input type="checkbox" checked onchange="window.showToast(this.checked ? 'Đã bật thông báo điểm thưởng!' : 'Đã tắt thông báo điểm!', 'success')" class="sr-only peer">
+                  <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- 5. Phiên Đăng Nhập Hoạt Động Gần Đây -->
+          <div class="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-7 shadow-xs space-y-4">
+            <div class="border-b border-slate-100 pb-4">
+              <h2 class="text-lg sm:text-xl font-black text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-laptop text-slate-700"></i> Phiên Đăng Nhập Hoạt Động
+              </h2>
+              <p class="text-xs sm:text-sm text-slate-500 mt-1">Danh sách các thiết bị hiện đang duy trì phiên kết nối vào tài khoản</p>
+            </div>
+
+            <div class="p-4 rounded-2xl border border-blue-200/80 bg-blue-50/40 flex items-center justify-between gap-3">
+              <div class="flex items-center gap-3.5">
+                <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center text-lg flex-shrink-0 shadow-sm">
+                  <i class="fa-solid fa-desktop"></i>
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <h4 class="font-extrabold text-slate-900 text-sm">Windows 11 • Chrome 126</h4>
+                    <span class="text-[10px] bg-emerald-500 text-white font-extrabold px-2 py-0.5 rounded-full shadow-2xs">Thiết bị hiện tại</span>
+                  </div>
+                  <p class="text-xs text-slate-500 mt-0.5">TP. Hồ Chí Minh, Việt Nam • Hoạt động vài giây trước</p>
+                </div>
+              </div>
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 ring-4 ring-emerald-100 flex-shrink-0" title="Đang hoạt động"></span>
+            </div>
+          </div>
+
+          <!-- 6. Vùng Nguy Hiểm & Quản Lý Dữ Liệu -->
+          <div class="bg-white rounded-2xl border border-rose-200/80 p-5 sm:p-7 shadow-xs space-y-4">
+            <div class="border-b border-rose-100 pb-4">
+              <h2 class="text-lg sm:text-xl font-black text-rose-700 flex items-center gap-2">
+                <i class="fa-solid fa-triangle-exclamation text-rose-600"></i> Vùng Nguy Hiểm & Dữ Liệu
+              </h2>
+              <p class="text-xs sm:text-sm text-slate-500 mt-1">Các thao tác ảnh hưởng vĩnh viễn tới dữ liệu cá nhân của bạn</p>
+            </div>
+
+            <div class="flex items-center justify-between flex-wrap gap-3 pt-1">
+              <div>
+                <h4 class="font-bold text-slate-900 text-sm">Yêu cầu xóa tài khoản vĩnh viễn</h4>
+                <p class="text-xs text-slate-500 mt-0.5 max-w-lg">
+                  Khi thực hiện, toàn bộ thông tin tài khoản, điểm thưởng SamaMember và lịch sử đơn hàng sẽ bị xóa vĩnh viễn và không thể khôi phục.
+                </p>
+              </div>
+              <button type="button" onclick="if(confirm('CẢNH BÁO: Bạn có chắc chắn muốn gửi yêu cầu xóa vĩnh viễn tài khoản không? Hành động này không thể hoàn tác!')) window.showToast('Yêu cầu xóa tài khoản đã được ghi nhận. Bộ phận hỗ trợ sẽ liên hệ xác nhận trong 24h.', 'error')" class="px-4 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-bold transition-all cursor-pointer whitespace-nowrap active:scale-95">
+                <i class="fa-solid fa-trash-can mr-1"></i> Xóa tài khoản
+              </button>
+            </div>
+          </div>
+
+        </div> <!-- /#panel-settings -->
+
       
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 mb-12">
-        
-        <!-- Cột 1: Thông tin thương hiệu -->
-        <div class="lg:col-span-2 space-y-4">
-          <div class="flex items-center gap-3">
-            <img src="../images/samamobile-logo.png" alt="SAMAMOBILE.COM" class="h-10 sm:h-12 w-auto object-contain">
-          </div>
-          <p class="text-slate-400 text-xs leading-relaxed max-w-sm">
-            SAMAMOBILE.COM là hệ thống bán lẻ các thiết bị công nghệ điện thoại, máy tính bảng và phụ kiện chính hãng hàng đầu tại Việt Nam. Cam kết 100% hàng mới nguyên seal, chính sách bảo hành minh bạch và trải nghiệm dịch vụ khách hàng 5 sao.
-          </p>
-          <div class="space-y-1.5 text-xs text-slate-300">
-            <div><strong class="text-white">Địa chỉ:</strong> 241 Lê Văn Việt, Tăng Nhơn Phú B, TP. Thủ Đức, TP. Hồ Chí Minh</div>
-            <div><strong class="text-white">Tổng đài tư vấn:</strong> <a href="tel:18006868" class="text-[#FF7A00] hover:underline">1800 6868</a> (8:00 - 22:00)</div>
-            <div><strong class="text-white">Email hỗ trợ:</strong> hotro@samamobile.com</div>
-          </div>
-        </div>
-
-        <!-- Cột 2: Chính sách mua hàng -->
-        <div class="space-y-3">
-          <h5 class="text-sm font-bold text-white uppercase tracking-wider">Chính Sách & Hỗ Trợ</h5>
-          <ul class="space-y-2">
-            <li><a href="../index.html#policy" class="hover:text-white transition-colors">Chính sách bảo hành 12 tháng</a></li>
-            <li><a href="../index.html#policy" class="hover:text-white transition-colors">Chính sách 1 đổi 1 trong 30 ngày</a></li>
-            <li><a href="../index.html#policy" class="hover:text-white transition-colors">Chính sách giao hàng hỏa tốc</a></li>
-            <li><a href="../index.html#policy" class="hover:text-white transition-colors">Bảo mật thông tin khách hàng</a></li>
-            <li><a href="../index.html#policy" class="hover:text-white transition-colors">Điều khoản dịch vụ</a></li>
-          </ul>
-        </div>
-
-        <!-- Cột 3: Hướng dẫn & Tiện ích -->
-        <div class="space-y-3">
-          <h5 class="text-sm font-bold text-white uppercase tracking-wider">Hướng Dẫn Tiện Ích</h5>
-          <ul class="space-y-2">
-            <li><a href="../index.html#order" class="hover:text-white transition-colors">Hướng dẫn đặt hàng online</a></li>
-            <li><a href="../index.html#policy" class="hover:text-white transition-colors text-left cursor-pointer">Quy trình mua trả góp 0%</a></li>
-            <li><a href="category.html?type=dien-thoai" class="hover:text-white transition-colors">Bảng so sánh thông số cấu hình</a></li>
-            <li><a href="../index.html#order" class="hover:text-white transition-colors">Kiểm tra bảo hành qua IMEI/Serial</a></li>
-          </ul>
-        </div>
-
-        <!-- Cột 4: Thanh toán & Đối tác -->
-        <div class="space-y-3">
-          <h5 class="text-sm font-bold text-white uppercase tracking-wider">Đối Tác Thanh Toán</h5>
-          <div class="grid grid-cols-3 gap-2 text-slate-300">
-            <div class="bg-slate-800 p-2 rounded-lg text-center font-bold text-xs">VISA</div>
-            <div class="bg-slate-800 p-2 rounded-lg text-center font-bold text-xs">MASTER</div>
-            <div class="bg-slate-800 p-2 rounded-lg text-center font-bold text-xs">NAPAS</div>
-            <div class="bg-slate-800 p-2 rounded-lg text-center font-bold text-xs">VNPAY</div>
-            <div class="bg-slate-800 p-2 rounded-lg text-center font-bold text-xs">MOMO</div>
-            <div class="bg-slate-800 p-2 rounded-lg text-center font-bold text-xs">ZALO</div>
-          </div>
-          <div class="pt-2 text-xs">
-            <span class="block text-slate-400 mb-1.5 font-bold">Vận chuyển hỏa tốc:</span>
-            <div class="flex items-center gap-2 text-slate-300 text-xs">
-              <span class="bg-slate-800 px-2 py-1 rounded">GHTK</span>
-              <span class="bg-slate-800 px-2 py-1 rounded">GrabExpress</span>
-              <span class="bg-slate-800 px-2 py-1 rounded">AhaMove</span>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Bản quyền & Lưu ý -->
-      <div class="pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-slate-500">
-        <div>
-          © 2026 SAMAMOBILE.COM - 241 Lê Văn Việt. Hệ thống bán lẻ thiết bị công nghệ chính hãng.
-        </div>
-        <div class="flex items-center gap-4 text-base text-slate-400">
-          <a href="#" class="hover:text-[#60A5FA] transition-colors" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
-          <a href="#" class="hover:text-red-400 transition-colors" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
-          <a href="#" class="hover:text-white transition-colors" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
-        </div>
-      </div>
-
-    </div>
-  </footer>
-
-  <!-- Scripts -->
-  <script src="../js/profile.js?v=1.0"></script>
-  <script src="../js/recently-viewed.js"></script>
-</body>
-</html>
