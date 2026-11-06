@@ -28,7 +28,7 @@ jobs:
       - name: Verify Core Files Existence
         run: |
           test -f frontend/index.html || { echo "index.html missing"; exit 1; }
-          test -f frontend/admin.html || { echo "admin.html missing"; exit 1; }
+          (test -f frontend/pages/admin.html || test -f frontend/admin.html) || { echo "admin.html missing"; exit 1; }
           test -f frontend/nginx.conf || { echo "nginx.conf missing"; exit 1; }
           test -f frontend/Dockerfile || { echo "Dockerfile missing"; exit 1; }
           echo "All core frontend files are present."
