@@ -626,7 +626,7 @@
       return `
         <button type="button" onclick="window.onBrandFilterClick('${bKey}')" class="brand-filter-btn flex items-center justify-center p-2.5 rounded-xl border text-center transition-all cursor-pointer ${isSelected ? 'border-blue-600 bg-blue-50 text-blue-700 font-bold' : 'border-slate-200 bg-white hover:border-slate-300 text-slate-700 font-semibold'}">
           ${logoUrl ? `<img src="${logoUrl}" alt="${bName}" class="max-h-6 max-w-[85px] object-contain" onerror="this.style.display='none'" />` : ''}
-          <span class="text-xs truncate ${logoUrl ? 'hidden sm:inline-block ml-1.5' : ''}">${bName}</span>
+          ${logoUrl ? '' : `<span class="text-xs font-semibold">${bName}</span>`}
         </button>
       `;
     }).join('');
@@ -650,7 +650,7 @@
       <div class="flex items-center gap-2.5 w-full">
         <span class="text-xs sm:text-sm font-black text-slate-800 whitespace-nowrap px-1.5 flex-shrink-0">Hot Search:</span>
         <div id="quick-chips-scroll" class="flex-1 flex items-center gap-2.5 overflow-x-auto no-scrollbar py-1">
-          <button type="button" onclick="window.onBrandFilterClick('all')" class="chip-btn flex-shrink-0 px-4 py-2 rounded-full text-xs sm:text-sm font-black transition-all cursor-pointer shadow-xs ${selectedBrand === 'all' ? 'bg-[#0057B7] text-white' : 'bg-white border border-slate-200 text-slate-700 hover:border-slate-300'}">
+          <button type="button" onclick="window.onBrandFilterClick('all')" class="chip-btn flex-shrink-0 px-5 py-2 rounded-full text-xs sm:text-sm font-black transition-all cursor-pointer flex items-center justify-center h-9 sm:h-10 shadow-xs ${selectedBrand === 'all' ? 'bg-[#0057B7] text-white' : 'bg-white border border-slate-200 text-slate-700 hover:border-slate-300'}">
             Tất cả
           </button>
     `;
@@ -662,9 +662,9 @@
       const rawLogo = BRAND_LOGOS[bKey] || getFallbackBrandLogo(bKey); const logoUrl = rawLogo ? resolveAssetPath(rawLogo) : '';
 
       return `
-        <button type="button" onclick="window.onBrandFilterClick('${bKey}')" class="chip-btn flex-shrink-0 px-4 py-2 rounded-full text-xs sm:text-sm font-bold transition-all cursor-pointer flex items-center gap-2 shadow-2xs ${isSel ? 'bg-[#0057B7] text-white border border-[#0057B7]' : 'bg-white border border-slate-200 text-slate-700 hover:border-slate-300'}">
-          ${logoUrl ? `<img src="${logoUrl}" alt="${bName}" class="h-4 max-w-[60px] object-contain filter ${isSel ? 'brightness-0 invert' : ''}" onerror="this.style.display='none'" />` : ''}
-          <span class="${logoUrl ? 'hidden sm:inline' : ''}">${bName}</span>
+        <button type="button" onclick="window.onBrandFilterClick('${bKey}')" title="${bName}" class="chip-btn flex-shrink-0 px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-bold transition-all cursor-pointer flex items-center justify-center h-9 sm:h-10 shadow-2xs ${isSel ? 'bg-[#0057B7] text-white border border-[#0057B7]' : 'bg-white border border-slate-200 text-slate-700 hover:border-slate-300'}">
+          ${logoUrl ? `<img src="${logoUrl}" alt="${bName}" class="h-4.5 sm:h-5 max-w-[70px] sm:max-w-[85px] object-contain filter ${isSel ? 'brightness-0 invert' : ''}" onerror="this.style.display='none'" />` : ''}
+          ${logoUrl ? '' : `<span>${bName}</span>`}
         </button>
       `;
     }).join('');
