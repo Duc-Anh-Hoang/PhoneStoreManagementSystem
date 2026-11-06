@@ -481,6 +481,31 @@
 
     currentCategory = categoryMap[rawType] || 'dien-thoai';
 
+    // Xác định chuẩn subCategory mặc định nếu chưa có
+    if (!currentSubCategory) {
+      if (currentCategory === 'dieu-hoa-may-lanh') currentSubCategory = 'dieu-hoa';
+      else if (currentCategory === 'dong-ho-thong-minh') currentSubCategory = 'dong-ho-thong-minh';
+      else if (currentCategory === 'am-thanh') currentSubCategory = 'tai-nghe';
+      else if (currentCategory === 'phu-kien') currentSubCategory = 'sac-cap';
+      else if (currentCategory === 'tablet') currentSubCategory = 'tablet';
+      else if (currentCategory === 'dien-thoai') currentSubCategory = 'dien-thoai';
+      else if (currentCategory === 'man-hinh') currentSubCategory = 'man-hinh';
+      else if (currentCategory === 'laptop') currentSubCategory = 'laptop';
+    } else {
+      if (['purifier', 'may-loc-khong-khi', 'dien-may', 'tivi', 'gia-dung'].includes(currentSubCategory)) currentSubCategory = 'purifier';
+      else if (['dieu-hoa', 'may-lanh', 'dieu-hoa-may-lanh', 'air'].includes(currentSubCategory)) currentSubCategory = 'dieu-hoa';
+      else if (['smartband', 'vong-deo-tay', 'band'].includes(currentSubCategory)) currentSubCategory = 'smartband';
+      else if (['dong-ho-thong-minh', 'smartwatch', 'watch', 'dong-ho'].includes(currentSubCategory)) currentSubCategory = 'dong-ho-thong-minh';
+      else if (['loa', 'speaker', 'soundbar'].includes(currentSubCategory)) currentSubCategory = 'loa';
+      else if (['tai-nghe', 'headphone', 'earphone', 'am-thanh', 'audio'].includes(currentSubCategory)) currentSubCategory = 'tai-nghe';
+      else if (['chuot-ban-phim', 'chuot', 'ban-phim', 'mouse', 'keyboard'].includes(currentSubCategory)) currentSubCategory = 'chuot-ban-phim';
+      else if (['sac-cap', 'pin-du-phong', 'phu-kien', 'accessories'].includes(currentSubCategory)) currentSubCategory = 'sac-cap';
+      else if (currentCategory === 'tablet') currentSubCategory = 'tablet';
+      else if (currentCategory === 'dien-thoai') currentSubCategory = 'dien-thoai';
+      else if (currentCategory === 'man-hinh') currentSubCategory = 'man-hinh';
+      else if (currentCategory === 'laptop') currentSubCategory = 'laptop';
+    }
+
     if (hoanghaCategoriesData && Array.isArray(hoanghaCategoriesData.categories)) {
       activeCategoryObj = hoanghaCategoriesData.categories.find(c => c.id === currentCategory) || hoanghaCategoriesData.categories[0];
     }
@@ -539,42 +564,45 @@
     var tabs = [];
     if (currentCategory === 'dien-thoai' || currentCategory === 'tablet') {
       tabs = [
-        { label: 'ĐIỆN THOẠI', catId: 'dien-thoai' },
-        { label: 'MÁY TÍNH BẢNG (TABLET)', catId: 'tablet' }
+        { label: 'ĐIỆN THOẠI', subType: 'dien-thoai', catId: 'dien-thoai' },
+        { label: 'MÁY TÍNH BẢNG (TABLET)', subType: 'tablet', catId: 'tablet' }
       ];
     } else if (currentCategory === 'laptop' || currentCategory === 'man-hinh') {
       tabs = [
-        { label: 'LAPTOP CHÍNH HÃNG', catId: 'laptop' },
-        { label: 'MÀN HÌNH MÁY TÍNH', catId: 'man-hinh' }
+        { label: 'LAPTOP CHÍNH HÃNG', subType: 'laptop', catId: 'laptop' },
+        { label: 'MÀN HÌNH MÁY TÍNH', subType: 'man-hinh', catId: 'man-hinh' }
       ];
     } else if (currentCategory === 'dieu-hoa-may-lanh') {
       tabs = [
-        { label: 'MÁY LẠNH / ĐIỀU HÒA', catId: 'dieu-hoa-may-lanh' },
-        { label: 'ĐIỆN MÁY GIA DỤNG & LỌC KHÍ', catId: 'dieu-hoa-may-lanh' }
+        { label: 'MÁY LẠNH / ĐIỀU HÒA', subType: 'dieu-hoa', catId: 'dieu-hoa-may-lanh' },
+        { label: 'ĐIỆN MÁY GIA DỤNG & LỌC KHÍ', subType: 'purifier', catId: 'dieu-hoa-may-lanh' }
       ];
     } else if (currentCategory === 'dong-ho-thong-minh') {
       tabs = [
-        { label: 'ĐỒNG HỒ THÔNG MINH', catId: 'dong-ho-thong-minh' },
-        { label: 'VÒNG ĐEO TAY (SMARTBAND)', catId: 'dong-ho-thong-minh' }
+        { label: 'ĐỒNG HỒ THÔNG MINH', subType: 'dong-ho-thong-minh', catId: 'dong-ho-thong-minh' },
+        { label: 'VÒNG ĐEO TAY (SMARTBAND)', subType: 'smartband', catId: 'dong-ho-thong-minh' }
       ];
     } else if (currentCategory === 'am-thanh') {
       tabs = [
-        { label: 'TAI NGHE CHÍNH HÃNG', catId: 'am-thanh' },
-        { label: 'LOA BLUETOOTH', catId: 'am-thanh' }
+        { label: 'TAI NGHE CHÍNH HÃNG', subType: 'tai-nghe', catId: 'am-thanh' },
+        { label: 'LOA BLUETOOTH', subType: 'loa', catId: 'am-thanh' }
       ];
     } else if (currentCategory === 'phu-kien') {
       tabs = [
-        { label: 'CỦ CÁP / SẠC DỰ PHÒNG', catId: 'phu-kien' },
-        { label: 'CHUỘT & BÀN PHÍM / PHỤ KIỆN', catId: 'phu-kien' }
+        { label: 'CỦ CÁP / SẠC DỰ PHÒNG', subType: 'sac-cap', catId: 'phu-kien' },
+        { label: 'CHUỘT & BÀN PHÍM / PHỤ KIỆN', subType: 'chuot-ban-phim', catId: 'phu-kien' }
       ];
     }
 
     if (tabs.length > 0) {
       switcher.classList.remove('hidden');
       switcher.innerHTML = tabs.map((t, idx) => {
-        const isActive = (idx === 0 && currentCategory === t.catId) || (idx === 1 && currentCategory === t.catId);
+        // DUY NHẤT 1 tab được active sáng xanh tại một thời điểm
+        const isActive = (t.subType === currentSubCategory) || (!currentSubCategory && idx === 0);
         return `
-          <a href="category.html?type=${t.catId}" class="py-3.5 px-5 rounded-2xl font-black text-xs sm:text-sm md:text-base text-center uppercase tracking-wider transition-all shadow-xs ${isActive ? 'dual-cat-tab-active shadow-md' : 'dual-cat-tab-inactive'}">
+          <a href="category.html?type=${t.subType}" 
+             onclick="event.preventDefault(); window.switchCategorySubTab('${t.subType}', '${t.catId}');" 
+             class="py-3.5 px-5 rounded-2xl font-black text-xs sm:text-sm md:text-base text-center uppercase tracking-wider transition-all shadow-xs cursor-pointer ${isActive ? 'dual-cat-tab-active shadow-md' : 'dual-cat-tab-inactive'}">
             ${t.label}
           </a>
         `;
@@ -583,6 +611,49 @@
       switcher.classList.add('hidden');
     }
   }
+
+  // Hàm chuyển tab subcategory mượt mà, đổi màu xanh tức thì
+  window.switchCategorySubTab = function(subType, catId) {
+    currentCategory = catId;
+    currentSubCategory = subType;
+    selectedBrand = 'all';
+    selectedPriceRange = 'all';
+    selectedSpecs = {};
+
+    if (hoanghaCategoriesData && Array.isArray(hoanghaCategoriesData.categories)) {
+      activeCategoryObj = hoanghaCategoriesData.categories.find(c => c.id === currentCategory) || hoanghaCategoriesData.categories[0];
+    }
+
+    // Cập nhật URL trình duyệt không cần reload
+    const newUrl = window.location.pathname + '?type=' + encodeURIComponent(subType);
+    window.history.pushState({ type: subType, category: catId }, '', newUrl);
+
+    // Cập nhật giao diện Header & Breadcrumb & Tabs
+    renderCategoryHeader();
+    renderPriceFilters();
+    renderSpecialSpecsFilters();
+    renderBrandFilters();
+    renderQuickBrandChips();
+
+    // Tải và lọc lại danh sách sản phẩm theo tab
+    loadCategoryProducts().then(() => {
+      applyFiltersAndSort();
+      renderSeoArticleAndNews();
+    });
+  };
+
+  window.addEventListener('popstate', function() {
+    resolveCategoryFromUrl();
+    renderCategoryHeader();
+    renderPriceFilters();
+    renderSpecialSpecsFilters();
+    renderBrandFilters();
+    renderQuickBrandChips();
+    loadCategoryProducts().then(() => {
+      applyFiltersAndSort();
+      renderSeoArticleAndNews();
+    });
+  });
 
   // 2. ZONE 2: Render Bộ Lọc Khoảng Giá (Dynamic Price Ranges with Item Count)
   function renderPriceFilters() {
@@ -846,14 +917,13 @@
   function isProductMatchCategory(p, catId) {
     const pGroup = (p.tenNhom || p.maNhom || '').toLowerCase();
     const pType = (p.tenLoai || p.maLoai || '').toLowerCase();
-    const pName = (p.tenHang || '').toLowerCase();
+    const pName = (p.tenHang || p.name || '').toLowerCase();
 
     if (catId === 'dien-thoai') {
       if (p.maNhom === 'TABLET' || pGroup.includes('máy tính bảng') || pName.includes('ipad') || pName.includes('galaxy tab')) return false;
       return p.maNhom === 'DIENTHOAI' || pGroup.includes('điện thoại') || pType.includes('điện thoại') || pName.includes('iphone') || pName.includes('galaxy s') || pName.includes('galaxy a') || pName.includes('galaxy z') || pName.includes('nubia') || pName.includes('xiaomi 1') || pName.includes('redmi');
     }
     if (catId === 'tablet') {
-      // Loại trừ hoàn toàn laptop (IdeaPad, ThinkPad, MacBook...) và phụ kiện
       if (p.maNhom === 'LAPTOP' || pGroup.includes('laptop') || pName.includes('laptop') || pName.includes('ideapad') || pName.includes('thinkpad') || pName.includes('trackpad') || pName.includes('macbook') || pName.includes('chuột')) return false;
       if (p.maNhom === 'TABLET' || pGroup.includes('máy tính bảng') || pType.includes('tablet')) return true;
       return pName.includes('ipad') || pName.includes('galaxy tab') || pName.includes('tab s') || pName.includes('tab a') || pName.includes('matepad') || pName.includes('redmi pad') || pName.includes('xiaomi pad') || pName.includes('honor pad') || pName.includes('lenovo tab');
@@ -866,15 +936,46 @@
       return pName.includes('màn hình') || pName.includes('monitor') || pName.includes('ultrasharp');
     }
     if (catId === 'dieu-hoa-may-lanh') {
+      // Phân tách chuẩn giữa Tab Máy Lạnh và Tab Điện Máy Lọc Khí
+      if (currentSubCategory === 'purifier') {
+        if (pName.includes('điều hòa') || pName.includes('máy lạnh') || pName.includes('inverter 9.000') || pName.includes('inverter 12.000')) return false;
+        return pName.includes('clair') || pName.includes('lọc không khí') || pName.includes('tivi') || pName.includes('hút bụi') || pName.includes('quạt') || pGroup.includes('gia dụng') || pGroup.includes('lọc khí') || pGroup.includes('điện máy');
+      }
+      if (currentSubCategory === 'dieu-hoa') {
+        if (pName.includes('clair') || pName.includes('lọc không khí') || pName.includes('tivi')) return false;
+        return pName.includes('điều hòa') || pName.includes('máy lạnh') || pName.includes('inverter') || pName.includes('daikin') || pName.includes('casper') || pName.includes('panasonic');
+      }
       return p.maNhom === 'DIENMAY' || pName.includes('điều hòa') || pName.includes('máy lạnh') || pName.includes('clair') || pName.includes('lọc không khí') || pGroup.includes('điện máy');
     }
     if (catId === 'dong-ho-thong-minh') {
+      if (currentSubCategory === 'smartband') {
+        return pName.includes('band') || pName.includes('vòng đeo tay') || pName.includes('fit');
+      }
+      if (currentSubCategory === 'dong-ho-thong-minh') {
+        if (pName.includes('band') || pName.includes('vòng đeo tay')) return false;
+        return p.maNhom === 'DONGHO' || pGroup.includes('đồng hồ') || pName.includes('watch');
+      }
       return p.maNhom === 'DONGHO' || pGroup.includes('đồng hồ') || pName.includes('watch') || pName.includes('smart band') || pName.includes('vòng đeo tay');
     }
     if (catId === 'am-thanh') {
+      if (currentSubCategory === 'loa') {
+        if (pName.includes('tai nghe') || pName.includes('airpods')) return false;
+        return pName.includes('loa') || pName.includes('speaker') || pName.includes('soundbar') || pName.includes('emberton');
+      }
+      if (currentSubCategory === 'tai-nghe') {
+        if (pName.includes('loa') && !pName.includes('tai nghe')) return false;
+        return pName.includes('tai nghe') || pName.includes('airpods') || pName.includes('earphone') || pName.includes('headphone');
+      }
       return p.maNhom === 'AMTHANH' || pGroup.includes('âm thanh') || pName.includes('tai nghe') || pName.includes('loa') || pName.includes('airpods') || pName.includes('emberton');
     }
     if (catId === 'phu-kien') {
+      if (currentSubCategory === 'chuot-ban-phim') {
+        return pName.includes('chuột') || pName.includes('bàn phím') || pName.includes('mouse') || pName.includes('keyboard');
+      }
+      if (currentSubCategory === 'sac-cap') {
+        if (pName.includes('chuột') || pName.includes('bàn phím')) return false;
+        return pName.includes('củ sạc') || pName.includes('cáp sạc') || pName.includes('sạc dự phòng') || pName.includes('pin dự phòng') || pName.includes('sạc nhanh');
+      }
       return p.maNhom === 'PHUKIEN' || pGroup.includes('phụ kiện') || pName.includes('củ sạc') || pName.includes('cáp sạc') || pName.includes('sạc dự phòng') || pName.includes('ốp lưng') || pName.includes('camera') || pName.includes('chuột');
     }
     return false;
