@@ -755,29 +755,26 @@
             </div>
           </div>
 
-          <!-- Lưới 4 đối tác ngân hàng / trả góp (2x2) -->
-          <div class="grid grid-cols-2 gap-1.5 mt-2.5">
-            <div class="h-6.5 px-2 rounded-lg border border-slate-200 bg-white flex items-center justify-center gap-1 text-[10.5px] font-bold text-slate-700 shadow-2xs hover:border-slate-300 transition-colors">
-              <span class="text-[#EA5A00] text-[9px] font-black">▼</span>
-              <span class="text-[#742E86] font-extrabold text-[10px]">TP</span><span class="text-[#EA5A00] font-extrabold text-[10px]">Bank</span>
-            </div>
-            <div class="h-6.5 px-2 rounded-lg border border-slate-200 bg-white flex items-center justify-center gap-1 text-[10.5px] font-bold text-slate-700 shadow-2xs hover:border-slate-300 transition-colors">
-              <span class="w-2 h-2 rounded-full bg-[#009A44] inline-block"></span>
-              <span class="text-[#009A44] font-bold text-[10px]">VP</span><span class="text-[#E0052B] font-bold text-[10px]">Bank</span>
-            </div>
-            <div class="h-6.5 px-2 rounded-lg border border-slate-200 bg-white flex items-center justify-center gap-1 text-[10.5px] font-bold text-slate-700 shadow-2xs hover:border-slate-300 transition-colors">
-              <span class="text-[#0057B7] font-black text-[10px]">VIB</span>
-              <span class="text-amber-400 text-[10px] font-bold">✦</span>
-            </div>
-            <div class="h-6.5 px-2 rounded-lg border border-slate-200 bg-white flex items-center justify-center gap-1 text-[10.5px] font-bold text-[#00A859] shadow-2xs hover:border-slate-300 transition-colors">
-              <span class="italic font-black text-[10.5px]">muadee</span>
-              <span class="text-[9.5px] font-bold ml-0.5">0%</span>
-            </div>
+          <!-- 4 Bank badges 2x2: To rõ, viền & nền mang màu thương hiệu nổi bật -->
+          <div class="grid grid-cols-2 gap-1.5 mt-2.5 w-full">
+            <span class="h-7 sm:h-8 bg-purple-50/70 border border-purple-200 rounded-xl shadow-2xs hover:border-purple-400 hover:bg-purple-100/50 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="TPBank Evo">
+              <img src="images/brands/tpbank.png" alt="TPBank" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full transition-transform group-hover:scale-105" onerror="this.outerHTML='<span class=\'text-[11px] font-black text-purple-700\'>TPBank</span>'" loading="lazy" />
+            </span>
+            <span class="h-7 sm:h-8 bg-emerald-50/70 border border-emerald-200 rounded-xl shadow-2xs hover:border-emerald-400 hover:bg-emerald-100/50 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="VPBank">
+              <img src="images/brands/vpbank.png" alt="VPBank" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full transition-transform group-hover:scale-105" onerror="this.outerHTML='<span class=\'text-[11px] font-black text-emerald-700\'>VPBank</span>'" loading="lazy" />
+            </span>
+            <span class="h-7 sm:h-8 bg-blue-50/70 border border-blue-200 rounded-xl shadow-2xs hover:border-blue-400 hover:bg-blue-100/50 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="VIB">
+              <img src="images/brands/vib.png" alt="VIB" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full transition-transform group-hover:scale-105" onerror="this.outerHTML='<span class=\'text-[11px] font-black text-blue-700\'>VIB</span>'" loading="lazy" />
+            </span>
+            <span class="h-7 sm:h-8 bg-teal-50/70 border border-teal-200 rounded-xl shadow-2xs hover:border-teal-400 hover:bg-teal-100/50 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="Trả góp 0%">
+              <img src="images/brands/icon-2_639047641516424460.png" alt="Trả góp 0%" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full transition-transform group-hover:scale-105" onerror="this.src=\'images/brands/homecredit.png\'" loading="lazy" />
+            </span>
           </div>
 
-          <!-- Khung ưu đãi dịch vụ / tài chính -->
-          <div class="mt-2 p-2 rounded-xl bg-slate-50 border border-slate-200/80 text-[11px] text-slate-600 leading-snug line-clamp-2">
-            ${promoDesc}
+          <!-- Khung ưu đãi dịch vụ / tài chính: To rõ, tương phản cao, dễ nhìn -->
+          <div class="mt-2 p-2 rounded-xl bg-gradient-to-r from-blue-50/60 to-slate-50 border border-blue-100/80 text-[11px] text-slate-700 font-semibold leading-snug line-clamp-2 flex items-start gap-1.5 shadow-2xs">
+            <i class="fa-solid fa-gift text-rose-500 text-xs mt-0.5 flex-shrink-0"></i>
+            <span class="flex-1">${promoDesc}</span>
           </div>
         </div>
 
@@ -1956,19 +1953,19 @@
             ${item.oldPrice ? `<div class="text-[11px] text-slate-400 line-through mt-0.5">${formatCurrency(item.oldPrice)}</div>` : '<div class="h-[18px]"></div>'}
           </div>
 
-          <!-- Dải logo ngân hàng đối tác trả góp (Lưới 2x2 cân đối tuyệt đối) -->
-          <div class="grid grid-cols-2 gap-1 mb-2 w-full">
-            <span class="h-6 sm:h-6.5 bg-white border border-slate-200 rounded shadow-2xs flex items-center justify-center p-0.5 w-full" title="TPBank">
-              <img src="images/brands/tpbank.png" alt="TPBank" class="h-3.5 w-auto object-contain max-w-[85%] max-h-full" loading="lazy">
+          <!-- Dải logo ngân hàng đối tác trả góp (Lưới 2x2 to rõ có màu nổi bật) -->
+          <div class="grid grid-cols-2 gap-1.5 mb-2 w-full">
+            <span class="h-7 sm:h-7.5 bg-purple-50/70 border border-purple-200 rounded-xl shadow-2xs flex items-center justify-center p-1 w-full" title="TPBank">
+              <img src="images/brands/tpbank.png" alt="TPBank" class="h-4 w-auto object-contain max-w-[85%] max-h-full" loading="lazy">
             </span>
-            <span class="h-6 sm:h-6.5 bg-white border border-slate-200 rounded shadow-2xs flex items-center justify-center p-0.5 w-full" title="VPBank">
-              <img src="images/brands/vpbank.png" alt="VPBank" class="h-3.5 w-auto object-contain max-w-[85%] max-h-full" loading="lazy">
+            <span class="h-7 sm:h-7.5 bg-emerald-50/70 border border-emerald-200 rounded-xl shadow-2xs flex items-center justify-center p-1 w-full" title="VPBank">
+              <img src="images/brands/vpbank.png" alt="VPBank" class="h-4 w-auto object-contain max-w-[85%] max-h-full" loading="lazy">
             </span>
-            <span class="h-6 sm:h-6.5 bg-white border border-slate-200 rounded shadow-2xs flex items-center justify-center p-0.5 w-full" title="VIB">
-              <img src="images/brands/vib.png" alt="VIB" class="h-3.5 w-auto object-contain max-w-[85%] max-h-full" loading="lazy">
+            <span class="h-7 sm:h-7.5 bg-blue-50/70 border border-blue-200 rounded-xl shadow-2xs flex items-center justify-center p-1 w-full" title="VIB">
+              <img src="images/brands/vib.png" alt="VIB" class="h-4 w-auto object-contain max-w-[85%] max-h-full" loading="lazy">
             </span>
-            <span class="h-6 sm:h-6.5 bg-white border border-slate-200 rounded shadow-2xs flex items-center justify-center p-0.5 w-full" title="Trả góp 0%">
-              <img src="images/brands/icon-2_639047641516424460.png" alt="Trả góp 0%" class="h-3.5 w-auto object-contain max-w-[85%] max-h-full" onerror="this.src='images/brands/homecredit.png'" loading="lazy">
+            <span class="h-7 sm:h-7.5 bg-teal-50/70 border border-teal-200 rounded-xl shadow-2xs flex items-center justify-center p-1 w-full" title="Trả góp 0%">
+              <img src="images/brands/icon-2_639047641516424460.png" alt="Trả góp 0%" class="h-4 w-auto object-contain max-w-[85%] max-h-full" onerror="this.src='images/brands/homecredit.png'" loading="lazy">
             </span>
           </div>
 
@@ -2383,25 +2380,26 @@
               ${installmentText}
             </div>
 
-            <!-- 6. Dải 4 logo thẻ ngân hàng / app đối tác (Lưới 2x2 cân đối tuyệt đối, căn đều 50%-50%) -->
+            <!-- 6. Dải 4 logo thẻ ngân hàng có màu nổi bật, to rõ -->
             <div class="grid grid-cols-2 gap-1.5 mt-2.5 w-full">
-              <span class="h-7 sm:h-7.5 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-purple-400 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="TPBank Evo">
-                <img src="images/brands/tpbank.png" alt="TPBank" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full" onerror="this.outerHTML='<span class=\'text-[11px] font-bold text-purple-700\'>TPBank</span>'" loading="lazy" />
+              <span class="h-7 sm:h-8 bg-purple-50/70 border border-purple-200 rounded-xl shadow-2xs hover:border-purple-400 hover:bg-purple-100/50 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="TPBank Evo">
+                <img src="images/brands/tpbank.png" alt="TPBank" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full transition-transform group-hover:scale-105" onerror="this.outerHTML='<span class=\'text-[11px] font-black text-purple-700\'>TPBank</span>'" loading="lazy" />
               </span>
-              <span class="h-7 sm:h-7.5 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-blue-400 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="VPBank">
-                <img src="images/brands/vpbank.png" alt="VPBank" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full" onerror="this.outerHTML='<span class=\'text-[11px] font-bold text-blue-700\'>VPBank</span>'" loading="lazy" />
+              <span class="h-7 sm:h-8 bg-emerald-50/70 border border-emerald-200 rounded-xl shadow-2xs hover:border-emerald-400 hover:bg-emerald-100/50 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="VPBank">
+                <img src="images/brands/vpbank.png" alt="VPBank" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full transition-transform group-hover:scale-105" onerror="this.outerHTML='<span class=\'text-[11px] font-black text-emerald-700\'>VPBank</span>'" loading="lazy" />
               </span>
-              <span class="h-7 sm:h-7.5 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-blue-400 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="VIB">
-                <img src="images/brands/vib.png" alt="VIB" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full" onerror="this.outerHTML='<span class=\'text-[11px] font-bold text-blue-700\'>VIB</span>'" loading="lazy" />
+              <span class="h-7 sm:h-8 bg-blue-50/70 border border-blue-200 rounded-xl shadow-2xs hover:border-blue-400 hover:bg-blue-100/50 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="VIB">
+                <img src="images/brands/vib.png" alt="VIB" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full transition-transform group-hover:scale-105" onerror="this.outerHTML='<span class=\'text-[11px] font-black text-blue-700\'>VIB</span>'" loading="lazy" />
               </span>
-              <span class="h-7 sm:h-7.5 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-blue-400 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="Trả góp 0%">
-                <img src="images/brands/icon-2_639047641516424460.png" alt="Trả góp 0%" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full" onerror="this.src='images/brands/homecredit.png'" loading="lazy" />
+              <span class="h-7 sm:h-8 bg-teal-50/70 border border-teal-200 rounded-xl shadow-2xs hover:border-teal-400 hover:bg-teal-100/50 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="Trả góp 0%">
+                <img src="images/brands/icon-2_639047641516424460.png" alt="Trả góp 0%" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full transition-transform group-hover:scale-105" onerror="this.src=\'images/brands/homecredit.png\'" loading="lazy" />
               </span>
             </div>
 
-            <!-- 7. Dòng khuyến mãi ngân hàng -->
-            <div class="text-[11px] text-slate-600 line-clamp-2 mt-2 bg-slate-50 p-2 rounded-lg border border-slate-200 min-h-[38px] leading-snug">
-              ${bankPromo}
+            <!-- 7. Dòng khuyến mãi ngân hàng: To rõ, dễ nhìn -->
+            <div class="text-[11px] text-slate-700 font-semibold line-clamp-2 mt-2 bg-gradient-to-r from-blue-50/60 to-slate-50 p-2 rounded-xl border border-blue-100/80 min-h-[38px] leading-snug flex items-start gap-1.5 shadow-2xs">
+              <i class="fa-solid fa-gift text-rose-500 text-xs mt-0.5 flex-shrink-0"></i>
+              <span class="flex-1">${bankPromo}</span>
             </div>
           </div>
 
@@ -2814,23 +2812,26 @@
               <span>${installmentText}</span>
             </div>
 
+            <!-- 4 Bank badges 2x2: To rõ, viền & nền mang màu thương hiệu nổi bật -->
             <div class="grid grid-cols-2 gap-1.5 mt-2.5 w-full">
-              <span class="h-7 sm:h-7.5 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-purple-400 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="TPBank Evo">
-                <img src="images/brands/tpbank.png" alt="TPBank" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full" onerror="this.outerHTML='<span class=\\'text-[11px] font-bold text-purple-700\\'>TPBank</span>'" loading="lazy" />
+              <span class="h-7 sm:h-8 bg-purple-50/70 border border-purple-200 rounded-xl shadow-2xs hover:border-purple-400 hover:bg-purple-100/50 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="TPBank Evo">
+                <img src="images/brands/tpbank.png" alt="TPBank" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full transition-transform group-hover:scale-105" onerror="this.outerHTML='<span class=\'text-[11px] font-black text-purple-700\'>TPBank</span>'" loading="lazy" />
               </span>
-              <span class="h-7 sm:h-7.5 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-blue-400 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="VPBank">
-                <img src="images/brands/vpbank.png" alt="VPBank" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full" onerror="this.outerHTML='<span class=\\'text-[11px] font-bold text-blue-700\\'>VPBank</span>'" loading="lazy" />
+              <span class="h-7 sm:h-8 bg-emerald-50/70 border border-emerald-200 rounded-xl shadow-2xs hover:border-emerald-400 hover:bg-emerald-100/50 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="VPBank">
+                <img src="images/brands/vpbank.png" alt="VPBank" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full transition-transform group-hover:scale-105" onerror="this.outerHTML='<span class=\'text-[11px] font-black text-emerald-700\'>VPBank</span>'" loading="lazy" />
               </span>
-              <span class="h-7 sm:h-7.5 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-blue-400 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="VIB">
-                <img src="images/brands/vib.png" alt="VIB" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full" onerror="this.outerHTML='<span class=\\'text-[11px] font-bold text-blue-700\\'>VIB</span>'" loading="lazy" />
+              <span class="h-7 sm:h-8 bg-blue-50/70 border border-blue-200 rounded-xl shadow-2xs hover:border-blue-400 hover:bg-blue-100/50 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="VIB">
+                <img src="images/brands/vib.png" alt="VIB" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full transition-transform group-hover:scale-105" onerror="this.outerHTML='<span class=\'text-[11px] font-black text-blue-700\'>VIB</span>'" loading="lazy" />
               </span>
-              <span class="h-7 sm:h-7.5 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-blue-400 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="Trả góp 0%">
-                <img src="images/brands/icon-2_639047641516424460.png" alt="Trả góp 0%" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full" onerror="this.src=\\'images/brands/homecredit.png\\'" loading="lazy" />
+              <span class="h-7 sm:h-8 bg-teal-50/70 border border-teal-200 rounded-xl shadow-2xs hover:border-teal-400 hover:bg-teal-100/50 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="Trả góp 0%">
+                <img src="images/brands/icon-2_639047641516424460.png" alt="Trả góp 0%" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full transition-transform group-hover:scale-105" onerror="this.src=\'images/brands/homecredit.png\'" loading="lazy" />
               </span>
             </div>
 
-            <div class="text-[11px] text-slate-600 line-clamp-2 mt-2 bg-slate-50 p-2 rounded-lg border border-slate-200 min-h-[38px] leading-snug">
-              ${bankPromo}
+            <!-- Khuyến mãi ngân hàng: To rõ, dễ nhìn -->
+            <div class="text-[11px] text-slate-700 font-semibold line-clamp-2 mt-2 bg-gradient-to-r from-blue-50/60 to-slate-50 p-2 rounded-xl border border-blue-100/80 min-h-[38px] leading-snug flex items-start gap-1.5 shadow-2xs">
+              <i class="fa-solid fa-gift text-rose-500 text-xs mt-0.5 flex-shrink-0"></i>
+              <span class="flex-1">${bankPromo}</span>
             </div>
           </div>
 
@@ -2919,25 +2920,26 @@
             <span>${installmentText}</span>
           </div>
 
-          <!-- 4 Bank badges 2x2 symmetrical -->
-          <div class="grid grid-cols-2 gap-1.5 mt-2 w-full">
-            <span class="h-6 sm:h-7 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-purple-400 hover:shadow-xs transition-all flex items-center justify-center p-0.5 w-full" title="TPBank Evo">
-              <img src="images/brands/tpbank.png" alt="TPBank" class="h-3.5 sm:h-4 w-auto object-contain max-w-[85%] max-h-full grayscale opacity-75 hover:grayscale-0 hover:opacity-100 transition-all" onerror="this.outerHTML='<span class=\'text-[10px] font-bold text-purple-700\'>TPBank</span>'" loading="lazy" />
+          <!-- 4 Bank badges 2x2: To rõ, viền & nền mang màu thương hiệu nổi bật -->
+          <div class="grid grid-cols-2 gap-1.5 mt-2.5 w-full">
+            <span class="h-7 sm:h-8 bg-purple-50/70 border border-purple-200 rounded-xl shadow-2xs hover:border-purple-400 hover:bg-purple-100/50 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="TPBank Evo">
+              <img src="images/brands/tpbank.png" alt="TPBank" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full transition-transform group-hover:scale-105" onerror="this.outerHTML='<span class=\'text-[11px] font-black text-purple-700\'>TPBank</span>'" loading="lazy" />
             </span>
-            <span class="h-6 sm:h-7 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-blue-400 hover:shadow-xs transition-all flex items-center justify-center p-0.5 w-full" title="VPBank">
-              <img src="images/brands/vpbank.png" alt="VPBank" class="h-3.5 sm:h-4 w-auto object-contain max-w-[85%] max-h-full grayscale opacity-75 hover:grayscale-0 hover:opacity-100 transition-all" onerror="this.outerHTML='<span class=\'text-[10px] font-bold text-blue-700\'>VPBank</span>'" loading="lazy" />
+            <span class="h-7 sm:h-8 bg-emerald-50/70 border border-emerald-200 rounded-xl shadow-2xs hover:border-emerald-400 hover:bg-emerald-100/50 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="VPBank">
+              <img src="images/brands/vpbank.png" alt="VPBank" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full transition-transform group-hover:scale-105" onerror="this.outerHTML='<span class=\'text-[11px] font-black text-emerald-700\'>VPBank</span>'" loading="lazy" />
             </span>
-            <span class="h-6 sm:h-7 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-blue-400 hover:shadow-xs transition-all flex items-center justify-center p-0.5 w-full" title="VIB">
-              <img src="images/brands/vib.png" alt="VIB" class="h-3.5 sm:h-4 w-auto object-contain max-w-[85%] max-h-full grayscale opacity-75 hover:grayscale-0 hover:opacity-100 transition-all" onerror="this.outerHTML='<span class=\'text-[10px] font-bold text-blue-700\'>VIB</span>'" loading="lazy" />
+            <span class="h-7 sm:h-8 bg-blue-50/70 border border-blue-200 rounded-xl shadow-2xs hover:border-blue-400 hover:bg-blue-100/50 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="VIB">
+              <img src="images/brands/vib.png" alt="VIB" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full transition-transform group-hover:scale-105" onerror="this.outerHTML='<span class=\'text-[11px] font-black text-blue-700\'>VIB</span>'" loading="lazy" />
             </span>
-            <span class="h-6 sm:h-7 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-blue-400 hover:shadow-xs transition-all flex items-center justify-center p-0.5 w-full" title="Trả góp 0%">
-              <img src="images/brands/icon-2_639047641516424460.png" alt="Trả góp 0%" class="h-3.5 sm:h-4 w-auto object-contain max-w-[85%] max-h-full grayscale opacity-75 hover:grayscale-0 hover:opacity-100 transition-all" onerror="this.src=\'images/brands/homecredit.png\'" loading="lazy" />
+            <span class="h-7 sm:h-8 bg-teal-50/70 border border-teal-200 rounded-xl shadow-2xs hover:border-teal-400 hover:bg-teal-100/50 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="Trả góp 0%">
+              <img src="images/brands/icon-2_639047641516424460.png" alt="Trả góp 0%" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full transition-transform group-hover:scale-105" onerror="this.src=\'images/brands/homecredit.png\'" loading="lazy" />
             </span>
           </div>
 
-          <!-- Bank promo text box -->
-          <div class="text-[10px] sm:text-[11px] text-slate-600 line-clamp-2 mt-2 bg-slate-50 p-1.5 rounded-lg border border-slate-200 min-h-[34px] leading-snug">
-            ${bankPromo}
+          <!-- Bank promo text box: To rõ, tương phản cao, dễ nhìn -->
+          <div class="text-[11px] text-slate-700 font-semibold line-clamp-2 mt-2 bg-gradient-to-r from-blue-50/60 to-slate-50 p-2 rounded-xl border border-blue-100/80 min-h-[38px] leading-snug flex items-start gap-1.5 shadow-2xs">
+            <i class="fa-solid fa-gift text-rose-500 text-xs mt-0.5 flex-shrink-0"></i>
+            <span class="flex-1">${bankPromo}</span>
           </div>
         </div>
 

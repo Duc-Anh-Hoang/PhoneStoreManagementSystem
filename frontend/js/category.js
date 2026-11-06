@@ -1085,25 +1085,26 @@
                 <span>Hoặc ${formatCurrency(installmentMonth)} x 6T</span>
               </div>
 
-              <!-- Dải 4 Logo Ngân Hàng Đối Tác Trả Góp (Lưới 2x2 chuẩn) -->
-              <div class="grid grid-cols-2 gap-1.5 mt-2 pt-2 border-t border-slate-100 w-full">
-                <span class="h-6 sm:h-6.5 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-purple-400 hover:shadow-xs transition-all flex items-center justify-center p-0.5 w-full" title="TPBank Evo">
-                  <img src="${resolveAssetPath('images/brands/tpbank.png')}" alt="TPBank" class="h-3.5 sm:h-4 w-auto object-contain max-w-[85%] max-h-full grayscale opacity-75 hover:grayscale-0 hover:opacity-100 transition-all" onerror="this.outerHTML='<span class=\'text-[10px] font-bold text-purple-700\'>TPBank</span>'" loading="lazy" />
+              <!-- Dải 4 Logo Ngân Hàng Đối Tác Trả Góp (To rõ, có màu sắc thương hiệu nổi bật) -->
+              <div class="grid grid-cols-2 gap-1.5 mt-2.5 pt-2 border-t border-slate-100 w-full">
+                <span class="h-7 sm:h-8 bg-purple-50/70 border border-purple-200 rounded-xl shadow-2xs hover:border-purple-400 hover:bg-purple-100/50 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="TPBank Evo">
+                  <img src="${resolveAssetPath('images/brands/tpbank.png')}" alt="TPBank" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full transition-transform group-hover:scale-105" onerror="this.outerHTML='<span class=\'text-[11px] font-black text-purple-700\'>TPBank</span>'" loading="lazy" />
                 </span>
-                <span class="h-6 sm:h-6.5 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-blue-400 hover:shadow-xs transition-all flex items-center justify-center p-0.5 w-full" title="VPBank">
-                  <img src="${resolveAssetPath('images/brands/vpbank.png')}" alt="VPBank" class="h-3.5 sm:h-4 w-auto object-contain max-w-[85%] max-h-full grayscale opacity-75 hover:grayscale-0 hover:opacity-100 transition-all" onerror="this.outerHTML='<span class=\'text-[10px] font-bold text-blue-700\'>VPBank</span>'" loading="lazy" />
+                <span class="h-7 sm:h-8 bg-emerald-50/70 border border-emerald-200 rounded-xl shadow-2xs hover:border-emerald-400 hover:bg-emerald-100/50 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="VPBank">
+                  <img src="${resolveAssetPath('images/brands/vpbank.png')}" alt="VPBank" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full transition-transform group-hover:scale-105" onerror="this.outerHTML='<span class=\'text-[11px] font-black text-emerald-700\'>VPBank</span>'" loading="lazy" />
                 </span>
-                <span class="h-6 sm:h-6.5 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-blue-400 hover:shadow-xs transition-all flex items-center justify-center p-0.5 w-full" title="VIB">
-                  <img src="${resolveAssetPath('images/brands/vib.png')}" alt="VIB" class="h-3.5 sm:h-4 w-auto object-contain max-w-[85%] max-h-full grayscale opacity-75 hover:grayscale-0 hover:opacity-100 transition-all" onerror="this.outerHTML='<span class=\'text-[10px] font-bold text-blue-700\'>VIB</span>'" loading="lazy" />
+                <span class="h-7 sm:h-8 bg-blue-50/70 border border-blue-200 rounded-xl shadow-2xs hover:border-blue-400 hover:bg-blue-100/50 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="VIB">
+                  <img src="${resolveAssetPath('images/brands/vib.png')}" alt="VIB" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full transition-transform group-hover:scale-105" onerror="this.outerHTML='<span class=\'text-[11px] font-black text-blue-700\'>VIB</span>'" loading="lazy" />
                 </span>
-                <span class="h-6 sm:h-6.5 bg-white border border-slate-200/90 rounded-lg shadow-2xs hover:border-blue-400 hover:shadow-xs transition-all flex items-center justify-center p-0.5 w-full" title="Trả góp 0%">
-                  <img src="${resolveAssetPath('images/brands/icon-2_639047641516424460.png')}" alt="Trả góp 0%" class="h-3.5 sm:h-4 w-auto object-contain max-w-[85%] max-h-full grayscale opacity-75 hover:grayscale-0 hover:opacity-100 transition-all" onerror="this.src='${resolveAssetPath('images/brands/homecredit.png')}'" loading="lazy" />
+                <span class="h-7 sm:h-8 bg-teal-50/70 border border-teal-200 rounded-xl shadow-2xs hover:border-teal-400 hover:bg-teal-100/50 hover:shadow-xs transition-all flex items-center justify-center p-1 w-full" title="Trả góp 0%">
+                  <img src="${resolveAssetPath('images/brands/icon-2_639047641516424460.png')}" alt="Trả góp 0%" class="h-4 sm:h-4.5 w-auto object-contain max-w-[85%] max-h-full transition-transform group-hover:scale-105" onerror="this.src='${resolveAssetPath('images/brands/homecredit.png')}'" loading="lazy" />
                 </span>
               </div>
 
-              <!-- Hộp ưu đãi ngân hàng nổi bật -->
-              <div class="text-[10px] sm:text-[11px] text-slate-600 line-clamp-2 mt-2 bg-slate-50 p-1.5 rounded-lg border border-slate-200 min-h-[34px] leading-snug">
-                ${bankPromo}
+              <!-- Hộp ưu đãi ngân hàng nổi bật: To rõ, tương phản sắc nét -->
+              <div class="text-[11px] text-slate-700 font-semibold line-clamp-2 mt-2 bg-gradient-to-r from-blue-50/60 to-slate-50 p-2 rounded-xl border border-blue-100/80 min-h-[38px] leading-snug flex items-start gap-1.5 shadow-2xs">
+                <i class="fa-solid fa-gift text-rose-500 text-xs mt-0.5 flex-shrink-0"></i>
+                <span class="flex-1">${bankPromo}</span>
               </div>
             </div>
           </div>
