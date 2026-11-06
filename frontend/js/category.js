@@ -953,7 +953,7 @@
             </div>
 
             <!-- Tên sản phẩm 2 dòng cỡ chữ to rõ -->
-            <h3 class="text-[14px] sm:text-[15px] font-bold text-slate-900 group-hover:text-[#0057B7] line-clamp-2 leading-snug min-h-[42px] transition-colors" style="font-family: Arial, Helvetica, sans-serif;" title="${p.tenHang}">
+            <h3 class="text-[14px] sm:text-[15px] font-bold text-slate-900 group-hover:text-[#0057B7] line-clamp-2 leading-snug min-h-[42px] transition-colors" title="${p.tenHang}">
               ${p.tenHang}
             </h3>
 

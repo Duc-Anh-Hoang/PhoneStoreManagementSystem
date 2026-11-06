@@ -22,7 +22,7 @@
       theme: {
         extend: {
           fontFamily: {
-            sans: ['Arial', 'Helvetica', 'Inter', 'sans-serif'],
+            sans: ['Inter', '"Plus Jakarta Sans"', 'system-ui', '-apple-system', 'sans-serif'],
           },
           colors: {
             navy: '#0b45a6',
@@ -36,7 +36,7 @@
   </script>
 
   <style>
-    body { font-family: Arial, Helvetica, sans-serif; font-size: 14px; background-color: #f4f6f8; color: #1e293b; }
+    body { font-family: 'Inter', 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #f4f6f8; color: #1e293b; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     
@@ -431,7 +431,7 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-3">
     
     <!-- Breadcrumb -->
-    <nav class="text-[14px] text-slate-600 flex items-center flex-wrap select-none mb-3.5" id="category-breadcrumbs" style="font-family: Arial, Helvetica, sans-serif;">
+    <nav class="text-[14px] text-slate-600 flex items-center flex-wrap select-none mb-3.5" id="category-breadcrumbs">
       <a href="../index.html" class="hover:text-blue-600 font-medium">Trang Chủ</a>
       <span class="mx-2 text-slate-400">/</span>
       <span class="text-slate-800 font-bold" id="bc-current-cat">Điện thoại chính hãng</span>
@@ -449,10 +449,10 @@
 
     <!-- Tiêu đề trang & Mô tả danh mục -->
     <div class="pt-6 pb-3">
-      <h1 id="category-page-title" class="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 tracking-tight" style="font-family: Arial, Helvetica, sans-serif;">
+      <h1 id="category-page-title" class="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 tracking-tight">
         Điện thoại chính hãng
       </h1>
-      <p id="category-page-desc" class="text-[14px] sm:text-[15px] text-slate-700 mt-2 leading-relaxed w-full font-medium" style="font-family: Arial, Helvetica, sans-serif;">
+      <p id="category-page-desc" class="text-[14px] sm:text-[15px] text-slate-700 mt-2 leading-relaxed w-full font-medium">
         Điện thoại tại SamaMobile gồm nhiều lựa chọn chính hãng từ Apple, Samsung, Xiaomi, OPPO, HONOR, vivo, realme và các thương hiệu khác. Bạn có thể sử dụng bộ lọc để chọn sản phẩm theo hãng, khoảng giá, bộ nhớ, dung lượng pin, kích thước màn hình, kết nối 5G hoặc nhu cầu chơi game...
       </p>
     </div>
@@ -521,10 +521,10 @@
         
         <!-- 0. Subcategory Switcher Tabs (Chuẩn Screenshot 1) -->
         <div id="subcategory-switcher" class="grid grid-cols-2 gap-3">
-          <a href="category.html?type=dienthoai" id="tab-subcat-dienthoai" class="py-3 px-4 rounded-2xl font-black text-[14px] sm:text-[15px] text-center uppercase tracking-wider transition-all shadow-md" style="font-family: Arial, Helvetica, sans-serif;">
+          <a href="category.html?type=dienthoai" id="tab-subcat-dienthoai" class="py-3 px-4 rounded-2xl font-black text-[14px] sm:text-[15px] text-center uppercase tracking-wider transition-all shadow-md">
             ĐIỆN THOẠI
           </a>
-          <a href="category.html?type=tablet" id="tab-subcat-tablet" class="py-3 px-4 rounded-2xl font-black text-[14px] sm:text-[15px] text-center uppercase tracking-wider transition-all shadow-md" style="font-family: Arial, Helvetica, sans-serif;">
+          <a href="category.html?type=tablet" id="tab-subcat-tablet" class="py-3 px-4 rounded-2xl font-black text-[14px] sm:text-[15px] text-center uppercase tracking-wider transition-all shadow-md">
             TABLET
           </a>
         </div>
@@ -535,7 +535,7 @@
         </div>
 
         <!-- 2. Thanh Sắp Xếp (Sorting Bar) -->
-        <div class="bg-white rounded-2xl border border-slate-200/90 p-3.5 shadow-xs flex flex-wrap items-center justify-between gap-3 text-[14px]" style="font-family: Arial, Helvetica, sans-serif;">
+        <div class="bg-white rounded-2xl border border-slate-200/90 p-3.5 shadow-xs flex flex-wrap items-center justify-between gap-3 text-[14px]">
           <div class="flex items-center gap-2 overflow-x-auto no-scrollbar">
             <span class="font-extrabold text-slate-800 whitespace-nowrap">Sắp xếp theo:</span>
             <button type="button" onclick="window.setSortOption('default')" class="sort-btn px-3.5 py-2 rounded-xl border border-blue-600 bg-blue-50 text-blue-700 font-bold whitespace-nowrap cursor-pointer">Mặc định</button>

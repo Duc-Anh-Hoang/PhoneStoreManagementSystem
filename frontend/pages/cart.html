@@ -10,6 +10,17 @@
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', '"Plus Jakarta Sans"', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+          }
+        }
+      }
+    };
+  </script>
   
   <!-- Font Awesome Pro 6.5.1 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -20,7 +31,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <style>
-    body { font-family: Arial, Helvetica, sans-serif; font-size: 14px; }
+    body { font-family: 'Inter', 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
     .btn-header-glossy {
       background: linear-gradient(135deg, #ffffff 0%, #eff6ff 100%);
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8);
@@ -439,10 +450,10 @@
             <p class="text-xs text-slate-500 max-w-xs mx-auto leading-relaxed">Không có sản phẩm nào trong giỏ hàng. Hãy khám phá hàng ngàn thiết bị công nghệ chính hãng giá tốt ngay!</p>
           </div>
           <div class="pt-2 flex flex-col sm:flex-row gap-3 justify-center">
-            <a href="category.html?type=dien-thoai" class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-[#0057B7] hover:bg-[#004494] text-white font-extrabold text-sm shadow-md transition-all active:scale-95">
+            <a href="category.html?type=dien-thoai" class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-[#0057B7] hover:bg-[#004494] text-white font-extrabold text-sm shadow-md transition-all active:scale-95 whitespace-nowrap">
               <i class="fa-solid fa-arrow-left text-xs"></i> Mua sắm ngay
             </a>
-            <button type="button" onclick="window.switchCartTab('orders')" class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-sm transition-all cursor-pointer">
+            <button type="button" onclick="window.switchCartTab('orders')" class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-sm transition-all cursor-pointer whitespace-nowrap">
               <i class="fa-solid fa-box-open text-xs text-[#0057B7]"></i> Xem đơn hàng đã đặt
             </button>
           </div>
@@ -1137,17 +1148,84 @@
   <!-- =========================================================================
        5. FOOTER CHUẨN SAMA MOBILE
        ========================================================================= -->
-  <footer class="mt-auto bg-[#0F172A] text-slate-400 text-xs py-8 border-t border-slate-800">
-    <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-      <div class="flex items-center gap-3">
-        <img src="../images/samamobile-logo.png" alt="SamaMobile" class="h-6 w-auto object-contain">
-        <span>© 2026 SamaMobile - Hệ thống bán lẻ điện thoại & thiết bị công nghệ chính hãng</span>
+  <footer class="mt-auto bg-[#0F172A] text-slate-400 text-xs pt-16 pb-12 border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 mb-12">
+        
+        <!-- Cột 1: Thông tin thương hiệu -->
+        <div class="lg:col-span-2 space-y-4">
+          <div class="flex items-center gap-3">
+            <img src="../images/samamobile-logo.png" alt="SAMAMOBILE.COM" class="h-10 sm:h-12 w-auto object-contain">
+          </div>
+          <p class="text-slate-400 text-xs leading-relaxed max-w-sm">
+            SAMAMOBILE.COM là hệ thống bán lẻ các thiết bị công nghệ điện thoại, máy tính bảng và phụ kiện chính hãng hàng đầu tại Việt Nam. Cam kết 100% hàng mới nguyên seal, chính sách bảo hành minh bạch và trải nghiệm dịch vụ khách hàng 5 sao.
+          </p>
+          <div class="space-y-1.5 text-xs text-slate-300">
+            <div><strong class="text-white">Địa chỉ:</strong> 241 Lê Văn Việt, Tăng Nhơn Phú B, TP. Thủ Đức, TP. Hồ Chí Minh</div>
+            <div><strong class="text-white">Tổng đài tư vấn:</strong> <a href="tel:18006868" class="text-[#FF7A00] hover:underline">1800 6868</a> (8:00 - 22:00)</div>
+            <div><strong class="text-white">Email hỗ trợ:</strong> hotro@samamobile.com</div>
+          </div>
+        </div>
+
+        <!-- Cột 2: Chính sách mua hàng -->
+        <div class="space-y-3">
+          <h5 class="text-sm font-bold text-white uppercase tracking-wider">Chính Sách & Hỗ Trợ</h5>
+          <ul class="space-y-2">
+            <li><a href="../index.html#policy" class="hover:text-white transition-colors">Chính sách bảo hành 12 tháng</a></li>
+            <li><a href="../index.html#policy" class="hover:text-white transition-colors">Chính sách 1 đổi 1 trong 30 ngày</a></li>
+            <li><a href="../index.html#policy" class="hover:text-white transition-colors">Chính sách giao hàng hỏa tốc</a></li>
+            <li><a href="../index.html#policy" class="hover:text-white transition-colors">Bảo mật thông tin khách hàng</a></li>
+            <li><a href="../index.html#policy" class="hover:text-white transition-colors">Điều khoản dịch vụ</a></li>
+          </ul>
+        </div>
+
+        <!-- Cột 3: Hướng dẫn & Tiện ích -->
+        <div class="space-y-3">
+          <h5 class="text-sm font-bold text-white uppercase tracking-wider">Hướng Dẫn Tiện Ích</h5>
+          <ul class="space-y-2">
+            <li><a href="../index.html#order" class="hover:text-white transition-colors">Hướng dẫn đặt hàng online</a></li>
+            <li><a href="../index.html#policy" class="hover:text-white transition-colors text-left cursor-pointer">Quy trình mua trả góp 0%</a></li>
+            <li><a href="category.html?type=dien-thoai" class="hover:text-white transition-colors">Bảng so sánh thông số cấu hình</a></li>
+            <li><a href="../index.html#order" class="hover:text-white transition-colors">Kiểm tra bảo hành qua IMEI/Serial</a></li>
+          </ul>
+        </div>
+
+        <!-- Cột 4: Thanh toán & Đối tác -->
+        <div class="space-y-3">
+          <h5 class="text-sm font-bold text-white uppercase tracking-wider">Đối Tác Thanh Toán</h5>
+          <div class="grid grid-cols-3 gap-2 text-slate-300">
+            <div class="bg-slate-800 p-2 rounded-lg text-center font-bold text-xs">VISA</div>
+            <div class="bg-slate-800 p-2 rounded-lg text-center font-bold text-xs">MASTER</div>
+            <div class="bg-slate-800 p-2 rounded-lg text-center font-bold text-xs">NAPAS</div>
+            <div class="bg-slate-800 p-2 rounded-lg text-center font-bold text-xs">VNPAY</div>
+            <div class="bg-slate-800 p-2 rounded-lg text-center font-bold text-xs">MOMO</div>
+            <div class="bg-slate-800 p-2 rounded-lg text-center font-bold text-xs">ZALO</div>
+          </div>
+          <div class="pt-2 text-xs">
+            <span class="block text-slate-400 mb-1.5 font-bold">Vận chuyển hỏa tốc:</span>
+            <div class="flex items-center gap-2 text-slate-300 text-xs">
+              <span class="bg-slate-800 px-2 py-1 rounded">GHTK</span>
+              <span class="bg-slate-800 px-2 py-1 rounded">GrabExpress</span>
+              <span class="bg-slate-800 px-2 py-1 rounded">AhaMove</span>
+            </div>
+          </div>
+        </div>
+
       </div>
-      <div class="flex items-center gap-4 text-white/80">
-        <a href="../index.html" class="hover:text-white transition-colors">Trang chủ</a>
-        <a href="category.html?type=dien-thoai" class="hover:text-white transition-colors">Điện thoại</a>
-        <a href="admin.html" class="hover:text-white transition-colors">Quản trị viên</a>
+
+      <!-- Bản quyền & Lưu ý -->
+      <div class="pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-slate-500">
+        <div>
+          © 2026 SAMAMOBILE.COM - 241 Lê Văn Việt. Hệ thống bán lẻ thiết bị công nghệ chính hãng.
+        </div>
+        <div class="flex items-center gap-4 text-base text-slate-400">
+          <a href="#" class="hover:text-[#60A5FA] transition-colors" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+          <a href="#" class="hover:text-red-400 transition-colors" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+          <a href="#" class="hover:text-white transition-colors" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+        </div>
       </div>
+
     </div>
   </footer>
 

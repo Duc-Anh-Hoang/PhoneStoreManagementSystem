@@ -358,8 +358,8 @@
         const isActive = domIdx === 8;
         return `
           <button type="button" onclick="window.onTabItemClick(${domIdx})" data-dom-index="${domIdx}" data-slide-index="${slideIdx}" class="hero-tab-item w-1/2 md:w-1/4 flex-shrink-0 py-3.5 sm:py-4 px-2.5 sm:px-3 flex flex-col items-center justify-center cursor-pointer transition-colors ${isActive ? 'active-tab' : ''}">
-            <span class="tab-title text-[15px] sm:text-[16px] lg:text-[17px] font-bold leading-tight line-clamp-2 w-full text-center min-h-[40px] flex items-center justify-center ${isActive ? 'text-[#2563EB] font-extrabold' : 'text-slate-800'}" style="font-family: Arial, Helvetica, sans-serif;">${s.title}</span>
-            <span class="tab-subtitle text-[14px] leading-tight truncate w-full text-center mt-1 ${isActive ? 'text-[#2563EB] font-semibold' : 'text-slate-600 font-medium'}" style="font-family: Arial, Helvetica, sans-serif;">${s.subtitle || ''}</span>
+            <span class="tab-title text-[15px] sm:text-[16px] lg:text-[17px] font-bold leading-tight line-clamp-2 w-full text-center min-h-[40px] flex items-center justify-center ${isActive ? 'text-[#2563EB] font-extrabold' : 'text-slate-800'}">${s.title}</span>
+            <span class="tab-subtitle text-[14px] leading-tight truncate w-full text-center mt-1 ${isActive ? 'text-[#2563EB] font-semibold' : 'text-slate-600 font-medium'}">${s.subtitle || ''}</span>
           </button>
         `;
       }).join('');
