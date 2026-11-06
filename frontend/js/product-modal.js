@@ -19,7 +19,7 @@
   return {
     open: function (maHang) {
       if (!maHang) return;
-      window.location.href = 'product-detail.html?id=' + encodeURIComponent(maHang);
+      window.location.href = 'pages/product-detail.html?id=' + encodeURIComponent(maHang);
     },
     close: function () {
       // Không còn modal để đóng

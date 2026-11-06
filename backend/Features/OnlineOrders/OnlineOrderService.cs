@@ -15,17 +15,20 @@ public class OnlineOrderService : IOnlineOrderService
     private readonly ICurrentUser _currentUser;
     private readonly ICodeGenerator _codeGenerator;
     private readonly IWarrantyService _warrantyService;
+    private readonly IEmailService? _emailService;
 
     public OnlineOrderService(
         AppDbContext context,
         ICurrentUser currentUser,
         ICodeGenerator codeGenerator,
-        IWarrantyService warrantyService)
+        IWarrantyService warrantyService,
+        IEmailService? emailService = null)
     {
         _context = context;
         _currentUser = currentUser;
         _codeGenerator = codeGenerator;
         _warrantyService = warrantyService;
+        _emailService = emailService;
     }
 
     public async Task<OrderDto> CreateOrderAsync(CreateOrderRequest request)
@@ -57,9 +60,14 @@ public class OnlineOrderService : IOnlineOrderService
                     HoTen = request.TenNguoiNhan.Trim(),
                     Sdt = sdtNorm,
                     DiaChi = request.DiaChiGiao.Trim(),
-                    Email = $"{sdtNorm}@cellphones.customer"
+                    Email = !string.IsNullOrWhiteSpace(request.Email) ? request.Email.Trim() : $"{sdtNorm}@cellphones.customer"
                 };
                 _context.KhachHangs.Add(khachHang);
+                await _context.SaveChangesAsync();
+            }
+            else if (!string.IsNullOrWhiteSpace(request.Email))
+            {
+                khachHang.Email = request.Email.Trim();
                 await _context.SaveChangesAsync();
             }
 
@@ -137,6 +145,31 @@ public class OnlineOrderService : IOnlineOrderService
             await _context.SaveChangesAsync();
 
             await transaction.CommitAsync();
+
+            if (_emailService != null && !string.IsNullOrWhiteSpace(khachHang.Email) && !khachHang.Email.EndsWith("@cellphones.customer"))
+            {
+                var emailItems = chiTietList.Select(ct => new OrderItemEmailDto
+                {
+                    TenHang = _context.MatHangs.FirstOrDefault(m => m.MaHang == ct.MaHang)?.TenHang ?? ct.MaHang,
+                    SoLuong = ct.SoLuong,
+                    DonGia = ct.DonGia
+                }).ToList();
+
+                _ = Task.Run(async () =>
+                {
+                    try
+                    {
+                        await _emailService.SendOrderConfirmationEmailAsync(
+                            khachHang.Email,
+                            donHang.TenNguoiNhan,
+                            donHang.MaDH,
+                            donHang.TongTien,
+                            emailItems
+                        );
+                    }
+                    catch { /* Không chặn luồng nếu gửi mail gặp sự cố */ }
+                });
+            }
 
             return new OrderDto
             {
@@ -462,4 +495,77 @@ public class OnlineOrderService : IOnlineOrderService
             throw;
         }
     }
+
+    public async Task<OrderDto> CancelOrderByCustomerAsync(string maDH, CancelOrderRequest request)
+    {
+        if (string.IsNullOrWhiteSpace(maDH))
+        {
+            throw new BadRequestException("Mã đơn hàng không hợp lệ.");
+        }
+
+        var donHang = await _context.DonHangOnlines.FirstOrDefaultAsync(d => d.MaDH == maDH.Trim());
+        if (donHang == null)
+        {
+            throw new NotFoundException($"Không tìm thấy đơn hàng {maDH}");
+        }
+
+        // Kiểm tra số điện thoại người nhận để xác thực
+        var sdtNorm = (request.Sdt ?? string.Empty).Trim().Replace(" ", "").Replace(".", "").Replace("-", "");
+        if (!string.IsNullOrEmpty(sdtNorm) && !donHang.SdtNguoiNhan.Equals(sdtNorm, StringComparison.OrdinalIgnoreCase))
+        {
+            throw new BadRequestException("Số điện thoại không khớp với thông tin đơn hàng.");
+        }
+
+        // Chỉ cho phép hủy khi đơn chưa giao
+        if (donHang.TrangThai == AppConstants.OrderStatus.DangGiao || donHang.TrangThai == AppConstants.OrderStatus.HoanThanh)
+        {
+            throw new BadRequestException("Đơn hàng đang giao hoặc đã hoàn thành, không thể tự hủy trực tuyến. Vui lòng liên hệ hotline.");
+        }
+
+        if (donHang.TrangThai == AppConstants.OrderStatus.DaHuy)
+        {
+            throw new BadRequestException("Đơn hàng này đã được hủy trước đó.");
+        }
+
+        donHang.TrangThai = AppConstants.OrderStatus.DaHuy;
+
+        await _context.SaveChangesAsync();
+
+        // Gửi email thông báo hủy nếu có email khách
+        if (_emailService != null)
+        {
+            var kh = await _context.KhachHangs.FirstOrDefaultAsync(k => k.MaKH == donHang.MaKH);
+            if (kh != null && !string.IsNullOrWhiteSpace(kh.Email) && !kh.Email.EndsWith("@cellphones.customer"))
+            {
+                _ = Task.Run(async () =>
+                {
+                    try
+                    {
+                        string body = $"<p>Xin chào <strong>{donHang.TenNguoiNhan}</strong>,</p>" +
+                                      $"<p>Đơn hàng <strong>#{donHang.MaDH}</strong> đã được hủy thành công theo yêu cầu của bạn.</p>" +
+                                      (!string.IsNullOrEmpty(request.LyDo) ? $"<p>Lý do hủy: {request.LyDo}</p>" : "") +
+                                      $"<p>Cảm ơn bạn đã đồng hành cùng Sama Mobile!</p>";
+                        await _emailService.SendEmailAsync(kh.Email, $"[Sama Mobile] Đã hủy đơn hàng #{donHang.MaDH}", body);
+                    }
+                    catch { }
+                });
+            }
+        }
+
+        return new OrderDto
+        {
+            MaDH = donHang.MaDH,
+            NgayDat = donHang.NgayDat,
+            MaKH = donHang.MaKH,
+            TenNguoiNhan = donHang.TenNguoiNhan,
+            SdtNguoiNhan = donHang.SdtNguoiNhan,
+            DiaChiGiao = donHang.DiaChiGiao,
+            PhuongThucThanhToan = donHang.PhuongThucThanhToan,
+            TongTien = donHang.TongTien,
+            TrangThai = donHang.TrangThai,
+            MaNV = donHang.MaNV,
+            SoHD = donHang.SoHD
+        };
+    }
+
 }

@@ -934,23 +934,57 @@
   window.handleAddToCart = function (openCheckout) {
     if (!currentProduct) return;
 
+    const vName = selectedVersion ? selectedVersion.dungLuong : 'Tiêu chuẩn';
+    const cName = selectedColor ? selectedColor.ten : 'Bạc';
+    const priceVal = selectedVersion ? selectedVersion.gia : currentProduct.donGia;
+    const oldPriceVal = selectedVersion ? selectedVersion.giaGoc : (currentProduct.giaGoc || currentProduct.donGia);
+    const imgVal = selectedColor ? selectedColor.anh : currentProduct.anhChinh;
+
     const cartItem = {
+      id: currentProduct.maHang + '_' + vName + '_' + cName,
       maHang: currentProduct.maHang,
       tenHang: currentProduct.tenHang,
-      donGia: selectedVersion ? selectedVersion.gia : currentProduct.donGia,
-      giaGoc: selectedVersion ? selectedVersion.giaGoc : currentProduct.giaGoc,
-      hinhAnh: selectedColor ? selectedColor.anh : currentProduct.anhChinh,
+      donGia: priceVal,
+      giaGoc: oldPriceVal,
+      hinhAnh: imgVal,
       soLuong: 1,
-      mauSac: selectedColor ? selectedColor.ten : 'Bạc',
-      phienBan: selectedVersion ? selectedVersion.dungLuong : 'Tiêu chuẩn'
+      mauSac: cName,
+      phienBan: vName,
+      price: priceVal,
+      oldPrice: oldPriceVal,
+      image: imgVal,
+      qty: 1,
+      colorName: cName,
+      variantName: vName
     };
 
     if (window.CellphoneSCart || window.Cart) {
       const cart = window.CellphoneSCart || window.Cart;
       cart.addItem(cartItem);
-      cart.openDrawer();
+      if (openCheckout) {
+        window.location.href = 'cart.html';
+      } else {
+        cart.openDrawer();
+      }
     } else {
-      alert(`Đã thêm "${currentProduct.tenHang}" vào giỏ hàng thành công!`);
+      // LocalStorage fallback
+      try {
+        const raw = localStorage.getItem('cellphones_cart');
+        const list = raw ? JSON.parse(raw) : [];
+        const existing = list.find(it => it.id === cartItem.id);
+        if (existing) {
+          existing.qty = (existing.qty || 1) + 1;
+        } else {
+          list.push(cartItem);
+        }
+        localStorage.setItem('cellphones_cart', JSON.stringify(list));
+      } catch (e) {}
+
+      if (openCheckout) {
+        window.location.href = 'cart.html';
+      } else {
+        alert('Đã thêm "' + currentProduct.tenHang + '" vào giỏ hàng thành công!');
+      }
     }
   };
 

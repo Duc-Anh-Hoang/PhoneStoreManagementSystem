@@ -6,6 +6,7 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy mã nguồn trang web vào thư mục web root của Nginx
 COPY *.html /usr/share/nginx/html/
+COPY pages/ /usr/share/nginx/html/pages/
 COPY favicon.ico /usr/share/nginx/html/
 COPY css/ /usr/share/nginx/html/css/
 COPY js/ /usr/share/nginx/html/js/

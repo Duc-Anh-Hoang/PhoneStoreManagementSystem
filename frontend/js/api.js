@@ -1,9 +1,18 @@
 /**
- * API client helper - CellphoneS 241 Lê Văn Việt
+ * API client helper - CellphoneS / SamaMobile 241 Lê Văn Việt
  */
-var API_BASE = window.API_BASE = window.API_BASE || ((window.location.protocol === 'file:' || window.location.port === '5500')
+var API_BASE = window.API_BASE = window.API_BASE || (window.APP_CONFIG && window.APP_CONFIG.API_BASE) || (
+  (window.location.protocol === 'file:' || window.location.port === '5500' || window.location.port === '5501' || window.location.port === '3000')
     ? 'http://localhost:8080/api'
-    : '/api');
+    : '/api'
+);
+
+// Tự động phát hiện nếu developer đang chạy dotnet run ở cổng 5132
+if (typeof window !== 'undefined' && (window.location.protocol === 'file:' || window.location.port === '5500' || window.location.port === '5501')) {
+  fetch('http://localhost:5132/api/health', { method: 'GET', signal: AbortSignal.timeout(800) })
+    .then(r => { if (r.ok) { window.API_BASE = API_BASE = 'http://localhost:5132/api'; } })
+    .catch(() => {});
+}
 
 function getAuthHeaders(extraHeaders = {}) {
     const headers = { ...extraHeaders };

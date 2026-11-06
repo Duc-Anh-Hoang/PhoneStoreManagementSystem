@@ -71,6 +71,39 @@
      */
     addItem(product, variant, color, qty = 1) {
       if (!product) return { success: false, message: 'Sản phẩm không hợp lệ' };
+
+      // Hỗ trợ truyền 1 đối tượng item duy nhất { maHang, tenHang, price/donGia, ... }
+      if (arguments.length === 1 && typeof product === 'object' && (product.price !== undefined || product.donGia !== undefined)) {
+        const itemObj = product;
+        const vName = itemObj.variantName || itemObj.phienBan || '';
+        const cName = itemObj.colorName || itemObj.mauSac || '';
+        const cartItemId = itemObj.id || (itemObj.maHang + '_' + (vName || 'def') + '_' + (cName || 'def'));
+        const addQty = Math.max(1, parseInt(itemObj.qty || itemObj.soLuong, 10) || 1);
+        const stockAvailable = itemObj.maxStock || itemObj.tonKho || 99;
+
+        const existingIndex = this.items.findIndex(item => item.id === cartItemId);
+        if (existingIndex > -1) {
+          this.items[existingIndex].qty += addQty;
+        } else {
+          this.items.push({
+            id: cartItemId,
+            maHang: itemObj.maHang || cartItemId,
+            tenHang: itemObj.tenHang || itemObj.name || 'Sản phẩm',
+            variantName: vName,
+            colorName: cName,
+            colorHex: itemObj.colorHex || '#16A34A',
+            image: itemObj.image || itemObj.hinhAnh || itemObj.anhChinh || 'images/default-phone.png',
+            price: Number(itemObj.price || itemObj.donGia || 0),
+            oldPrice: Number(itemObj.oldPrice || itemObj.giaGoc || itemObj.price || itemObj.donGia || 0),
+            qty: addQty,
+            maxStock: stockAvailable
+          });
+        }
+        this.saveCart();
+        this.showToast('Đã thêm "' + (itemObj.tenHang || 'sản phẩm') + '" vào giỏ hàng!', 'success');
+        return { success: true };
+      }
+
       qty = Math.max(1, parseInt(qty, 10) || 1);
 
       const variantId = variant ? variant.id : 'default';

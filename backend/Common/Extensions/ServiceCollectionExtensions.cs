@@ -1,3 +1,4 @@
+using PhoneStoreAPI.Features.Payment;
 ﻿using System.Net;
 using System.Security.Claims;
 using System.Text;
@@ -107,6 +108,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IDashboardService, DashboardService>();
         services.AddScoped<ISystemSettingService, SystemSettingService>();
         services.AddScoped<IEmailService, EmailService>();
+        services.AddScoped<IPaymentService, PaymentService>();
 
         // FluentValidation tự động đăng ký tất cả validator trong assembly
         services.AddValidatorsFromAssembly(typeof(ServiceCollectionExtensions).Assembly);

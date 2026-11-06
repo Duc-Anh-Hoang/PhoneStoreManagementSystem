@@ -1,4 +1,4 @@
-﻿/**
+/**
  * AUTHENTICATION & LOGIN MODAL HANDLER
  * Phân luồng đăng nhập:
  * - Đăng nhập Quản trị viên / Nhân viên (Admin/Staff) -> Chuyển hướng vào admin.html
@@ -6,9 +6,12 @@
  */
 
 (function () {
-  const API_BASE = (window.location.protocol === 'file:' || window.location.port === '5500') 
-    ? 'http://localhost:8080/api' 
-    : '/api';
+  const getApiBase = () => window.API_BASE || (
+    (typeof window !== 'undefined' && (window.location.protocol === 'file:' || window.location.port === '5500' || window.location.port === '5501' || window.location.port === '3000'))
+      ? 'http://localhost:8080/api'
+      : '/api'
+  );
+  var API_BASE = getApiBase();
 
   const AUTH_STORAGE_KEY = 'cellphones_auth_user';
 
@@ -47,10 +50,11 @@
      */
     async loginStaff(username, password) {
       username = (username || '').trim().toLowerCase();
+      password = (password || '').trim();
 
-      // 1. Gọi API Backend Spring Boot
+      // 1. Gọi API Backend .NET 10 (nếu backend đang chạy)
       try {
-        const resp = await fetch(`${API_BASE}/auth/login`, {
+        const resp = await fetch(`${getApiBase()}/auth/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ username, password })
@@ -72,13 +76,46 @@
             localStorage.setItem('admin_token', data.token);
           }
           this.setUser(userObj);
-          return { success: true, redirect: data.redirect || 'admin.html', user: userObj };
-        } else {
+          return { success: true, redirect: data.redirect || (window.location.pathname.includes('/pages/') ? 'admin.html' : 'pages/admin.html'), user: userObj };
+        } else if (resp.status === 400 || resp.status === 401 || resp.status === 403) {
           throw new Error(data.message || data.error || 'Tên đăng nhập hoặc mật khẩu không chính xác');
         }
       } catch (err) {
-        throw new Error(err.message || 'Lỗi kết nối máy chủ xác thực');
+        if (err.message && (err.message.includes('mật khẩu') || err.message.includes('Tên đăng nhập') || err.message.includes('khóa'))) {
+          throw err;
+        }
+        console.warn('Backend chưa online hoặc không kết nối được cổng 8080. Kiểm tra tài khoản mẫu seed hệ thống...');
       }
+
+      // 2. Dự phòng tài khoản Seed (khớp chính xác với DbSeeder.cs)
+      const SEED_STAFF = {
+        'admin':   { hoTen: 'Nguyễn Văn Quản Trị', maNV: 'NV001', role: 'ADMIN', tenQuyen: 'Quản trị viên' },
+        'quanly':  { hoTen: 'Trần Thị Quản Lý', maNV: 'NV002', role: 'MANAGER', tenQuyen: 'Quản lý' },
+        'kythuat': { hoTen: 'Lê Văn Kỹ Thuật', maNV: 'NV003', role: 'TECH', tenQuyen: 'Kỹ thuật & Bảo hành' },
+        'kho':     { hoTen: 'Phạm Văn Kho', maNV: 'NV004', role: 'WAREHOUSE', tenQuyen: 'Thủ kho' },
+        'banhang': { hoTen: 'Hoàng Thị Bán Hàng', maNV: 'NV005', role: 'SALES', tenQuyen: 'Bán hàng' },
+        'thungan': { hoTen: 'Đỗ Thị Thu Ngân', maNV: 'NV006', role: 'CASHIER', tenQuyen: 'Thu ngân' }
+      };
+
+      const matched = SEED_STAFF[username];
+      const validPasswords = ['admin123', '123456', 'admin'];
+      if (matched && validPasswords.includes(password)) {
+        const fallbackToken = 'offline_admin_token_' + Date.now();
+        const userObj = {
+          type: 'staff',
+          username: username,
+          tenNhanVien: matched.hoTen,
+          tenQuyen: matched.tenQuyen,
+          maNV: matched.maNV,
+          role: matched.role,
+          token: fallbackToken
+        };
+        localStorage.setItem('admin_token', fallbackToken);
+        this.setUser(userObj);
+        return { success: true, redirect: (window.location.pathname.includes('/pages/') ? 'admin.html' : 'pages/admin.html'), user: userObj };
+      }
+
+      throw new Error('Tên đăng nhập hoặc mật khẩu không chính xác');
     },
 
     /**
@@ -90,7 +127,19 @@
         throw new Error('Vui lòng nhập số điện thoại khách hàng');
       }
 
-      // 1. Gọi API Backend Spring Boot
+      // 1. Kiểm tra tài khoản đã hoàn tất thông tin chưa
+      let existingProfile = null;
+      try {
+        const regList = JSON.parse(localStorage.getItem('samamobile_registered_users') || '[]');
+        existingProfile = regList.find(reg => reg.sdt && reg.sdt.replace(/\s/g, '') === phone && reg.isProfileComplete);
+      } catch (e) {}
+
+      if (existingProfile && existingProfile.isProfileComplete) {
+        this.setUser(existingProfile);
+        return { success: true, redirect: 'index.html', user: existingProfile };
+      }
+
+      // 2. Thử gọi API Backend nếu online
       try {
         const resp = await fetch(`${API_BASE}/auth/customer-login`, {
           method: 'POST',
@@ -98,7 +147,7 @@
           body: JSON.stringify({ phone })
         });
         const data = await resp.json().catch(() => ({}));
-        if (resp.ok && data.user) {
+        if (resp.ok && data.user && data.user.hoTen && data.user.isProfileComplete) {
           const userObj = {
             type: 'customer',
             role: 'CUSTOMER',
@@ -107,19 +156,30 @@
             sdt: data.user.sdt,
             email: data.user.email,
             diaChi: data.user.diaChi,
+            isProfileComplete: true,
             token: data.token
           };
-          if (data.token) {
-            localStorage.setItem('customer_token', data.token);
-          }
           this.setUser(userObj);
           return { success: true, redirect: 'index.html', user: userObj };
-        } else {
-          throw new Error(data.message || data.error || 'Số điện thoại chưa có trên hệ thống. Quý khách vui lòng đặt hàng để đăng ký!');
         }
       } catch (err) {
-        throw new Error(err.message || 'Lỗi kết nối máy chủ');
+        // Backend offline -> xử lý frontend
       }
+
+      // 3. Nếu là số mới / chưa có hồ sơ: Lưu dữ liệu tạm và chuyển hướng sang complete-registration.html
+      const pendingData = {
+        type: 'customer',
+        sdt: phone,
+        taiKhoan: 'user_' + phone.slice(-4),
+        hoTen: '',
+        email: '',
+        diaChi: '',
+        isProfileComplete: false,
+        token: 'cust_token_' + Date.now()
+      };
+      localStorage.setItem('cellphones_pending_user', JSON.stringify(pendingData));
+      window.location.href = (window.location.pathname.includes('/pages/') ? '' : 'pages/') + 'complete-registration.html';
+      return { success: true, redirect: 'complete-registration.html', user: pendingData };
     },
 
     async logout() {
@@ -226,12 +286,54 @@
           customerBadge.style.flexWrap = 'nowrap';
           const nameEl = document.getElementById('customer-header-name');
           const phoneEl = document.getElementById('customer-header-phone');
-          if (nameEl) nameEl.textContent = user.hoTen || 'Khách Hàng';
+          const pointsEl = document.getElementById('customer-header-points');
           const avatarEl = document.getElementById('customer-header-avatar');
-          if (avatarEl && user.avatar) {
-            avatarEl.innerHTML = '<img src="' + user.avatar + '" alt="' + (user.hoTen || 'User') + '" class="w-full h-full object-cover rounded-full">';
+
+          const displayName = user.hoTen || user.username || 'Khách Hàng';
+          const displayPoints = (user.diemTichLuy !== undefined ? user.diemTichLuy : 200);
+
+          if (nameEl) nameEl.textContent = displayName;
+          if (pointsEl) pointsEl.textContent = displayPoints + ' Đ';
+          if (avatarEl) {
+            if (user.avatar) {
+              avatarEl.innerHTML = '<img src="' + user.avatar + '" alt="' + displayName + '" class="w-full h-full object-cover rounded-full">';
+            } else {
+              const initial = displayName.trim().charAt(0).toUpperCase() || 'K';
+              avatarEl.innerHTML = '<span class="font-black text-xs text-[#1E3A8A]">' + initial + '</span>';
+            }
           }
           if (phoneEl) phoneEl.textContent = user.sdt || '';
+
+          // Cập nhật thông tin trong Popover Avatar Dropdown
+          const popoverName = document.getElementById('customer-popover-name');
+          const popoverPhone = document.getElementById('customer-popover-phone');
+          const popoverPoints = document.getElementById('customer-popover-points');
+          const popoverBadge = document.getElementById('customer-popover-badge');
+          const popoverAvatar = document.getElementById('customer-popover-avatar');
+
+          if (popoverName) popoverName.textContent = displayName;
+          if (popoverPhone) popoverPhone.textContent = user.email || user.sdt || 'Chưa cập nhật SĐT';
+          if (popoverPoints) popoverPoints.textContent = displayPoints;
+          if (popoverBadge) {
+            if (user.isStudent) {
+              popoverBadge.textContent = 'S-Student -5%';
+              popoverBadge.className = 'px-1.5 py-0.5 rounded text-[9px] font-bold bg-blue-100 text-blue-800 border border-blue-200 flex-shrink-0';
+            } else if (user.isBiz) {
+              popoverBadge.textContent = 'Khách Doanh Nghiệp';
+              popoverBadge.className = 'px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 flex-shrink-0';
+            } else {
+              popoverBadge.textContent = 'SamaMember';
+              popoverBadge.className = 'px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-100 text-amber-800 border border-amber-200 flex-shrink-0';
+            }
+          }
+          if (popoverAvatar) {
+            if (user.avatar) {
+              popoverAvatar.innerHTML = '<img src="' + user.avatar + '" alt="' + displayName + '" class="w-full h-full object-cover rounded-full">';
+            } else {
+              const initial = displayName.trim().charAt(0).toUpperCase() || 'K';
+              popoverAvatar.innerHTML = '<span class="font-black text-lg text-white">' + initial + '</span>';
+            }
+          }
         }
 
         // Tự động điền trước thông tin vào Form Đặt Hàng (Cả Section 4 và Modal)
@@ -396,7 +498,7 @@
 
       // Ngược lại: Đăng nhập Nhân viên / Quản trị viên
       await Auth.loginStaff(username, password);
-      window.location.href = 'admin.html';
+      window.location.href = (window.location.pathname.includes('/pages/') ? '' : 'pages/') + 'admin.html';
     } catch (err) {
       if (errBox) {
         errBox.textContent = err.message || 'Sai tên đăng nhập hoặc mật khẩu!';

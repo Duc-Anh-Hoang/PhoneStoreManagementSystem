@@ -184,7 +184,7 @@
         var img = p.anhChinh || 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png';
 
         return `
-          <div class="product-card bg-white rounded-2xl border border-slate-200/90 p-3 sm:p-3.5 hover:border-blue-400 hover:shadow-lg transition-all duration-300 flex flex-col justify-between group cursor-pointer relative" onclick="window.navigateToDetail ? window.navigateToDetail('${pId}') : window.location.href='product-detail.html?id=${encodeURIComponent(pId)}'">
+          <div class="product-card bg-white rounded-2xl border border-slate-200/90 p-3 sm:p-3.5 hover:border-blue-400 hover:shadow-lg transition-all duration-300 flex flex-col justify-between group cursor-pointer relative" onclick="window.navigateToDetail ? window.navigateToDetail('${pId}') : window.location.href = (window.location.pathname.includes('/pages/') ? '' : 'pages/') + 'product-detail.html'?id=${encodeURIComponent(pId)}'">
             
             ${hasCustom ? `
               <button type="button" onclick="event.stopPropagation(); window.removeRecentlyViewedItem('${pId}')" class="absolute top-2 right-2 w-6 h-6 rounded-full bg-slate-100 hover:bg-rose-100 text-slate-400 hover:text-rose-600 flex items-center justify-center text-[10px] transition-colors z-20 shadow-xs cursor-pointer" title="Xóa khỏi lịch sử">
@@ -246,7 +246,7 @@
           var price = Number(p.donGia) || 0;
           var pId = p.maHang || p.id;
           return `
-            <a href="product-detail.html?id=${encodeURIComponent(pId)}" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-blue-50/70 transition-colors group">
+            <a href="product-detail.html"?id=${encodeURIComponent(pId)}" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-blue-50/70 transition-colors group">
               <img src="${p.anhChinh}" alt="${p.tenHang}" class="w-12 h-12 object-contain rounded-lg border border-slate-200 bg-white p-1 flex-shrink-0" onerror="this.src='https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png';" />
               <div class="flex-1 min-w-0">
                 <p class="text-xs font-bold text-slate-800 line-clamp-1 group-hover:text-blue-600 transition-colors">${p.tenHang}</p>

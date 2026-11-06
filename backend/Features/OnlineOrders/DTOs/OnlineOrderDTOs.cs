@@ -8,6 +8,7 @@ public class CreateOrderRequest
     public string PhuongThucThanhToan { get; set; } = "cod"; // cod, chuyen_khoan, the
     public string? MaKH { get; set; }
     public string? GhiChu { get; set; }
+    public string? Email { get; set; }
     public List<OrderItemRequest> Items { get; set; } = new();
 }
 
@@ -47,4 +48,11 @@ public class UpdateOrderStatusRequest
 {
     public string TrangThai { get; set; } = string.Empty;
     public string? SoHD { get; set; } // Hỗ trợ nếu client gửi kèm
+}
+
+
+public class CancelOrderRequest
+{
+    public string Sdt { get; set; } = string.Empty;
+    public string? LyDo { get; set; }
 }

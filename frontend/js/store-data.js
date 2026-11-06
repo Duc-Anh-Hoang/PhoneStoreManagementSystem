@@ -15,9 +15,7 @@
 }(typeof self !== 'undefined' ? self : this, function () {
   'use strict';
 
-  var API_BASE = window.API_BASE || (window.location.protocol === 'file:' || window.location.port === '5500') 
-    ? 'http://localhost:8080/api' 
-    : '/api';
+  var API_BASE = window.API_BASE || '/api';
 
   class StoreDataManager {
     constructor() {

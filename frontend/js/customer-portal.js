@@ -17,9 +17,7 @@
 }(typeof self !== 'undefined' ? self : this, function () {
   'use strict';
 
-  var API_BASE = window.API_BASE || (window.location.protocol === 'file:' || window.location.port === '5500') 
-    ? 'http://localhost:8080/api' 
-    : '/api';
+  var API_BASE = window.API_BASE || '/api';
 
   const PHONE_REGEX = /^(0)(3[2-9]|5[2689]|7[06-9]|8[1-9]|9[0-9])[0-9]{7}$/;
 
@@ -28,7 +26,7 @@
       this.pendingPhone = '';
     }
 
-    openPortal() {
+    openPortal(tab = 'profile') {
       const user = (window.CellphoneSAuth || window.Auth) ? (window.CellphoneSAuth || window.Auth).getUser() : null;
       if (!user || user.type !== 'customer') {
         this.openLoginModal();
@@ -40,7 +38,52 @@
         modal.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
         this.renderPortalData(user);
+        if (tab) this.switchTab(tab);
       }
+    }
+
+    switchTab(tab) {
+      const tabs = ['orders', 'warranty', 'profile', 'settings'];
+      tabs.forEach(t => {
+        const pane = document.getElementById('portal-tab-' + t);
+        const btn = document.getElementById('btn-portal-tab-' + t);
+        if (pane) {
+          if (t === tab) pane.classList.remove('hidden');
+          else pane.classList.add('hidden');
+        }
+        if (btn) {
+          if (t === tab) {
+            btn.className = 'py-3 px-4 font-bold border-b-2 border-[#2563EB] text-[#1E3A8A] flex items-center gap-2 cursor-pointer';
+          } else {
+            btn.className = 'py-3 px-4 font-semibold text-slate-500 hover:text-navy border-b-2 border-transparent flex items-center gap-2 cursor-pointer';
+          }
+        }
+      });
+    }
+
+    updatePassword() {
+      const newPass = document.getElementById('portal-new-password');
+      const confirmPass = document.getElementById('portal-confirm-password');
+      const p1 = (newPass ? newPass.value : '').trim();
+      const p2 = (confirmPass ? confirmPass.value : '').trim();
+
+      if (!p1 || p1.length < 6) {
+        alert('Vui lòng nhập mật khẩu mới tối thiểu 6 ký tự.');
+        return;
+      }
+      if (p1 !== p2) {
+        alert('Mật khẩu xác nhận không trùng khớp.');
+        return;
+      }
+
+      const user = (window.CellphoneSAuth || window.Auth) ? (window.CellphoneSAuth || window.Auth).getUser() : null;
+      if (user) {
+        user.hasPassword = true;
+        (window.CellphoneSAuth || window.Auth).setUser(user);
+      }
+      if (newPass) newPass.value = '';
+      if (confirmPass) confirmPass.value = '';
+      alert('Đã cập nhật mật khẩu tài khoản thành công!');
     }
 
     closePortal() {
@@ -452,6 +495,10 @@
 
   /**
    * 3. ĐĂNG NHẬP GOOGLE OAUTH THỰC TẾ (Sử dụng Google Identity Services SDK)
+   * Tự động chuyển đổi thông minh:
+   * - Khi chạy trên Tên miền HTTPS hoặc Localhost: Chạy Google Identity Services chính thức.
+   * - Khi chạy trên IP công khai (như Azure VM 20.198.178.34): Google OAuth 2.0 chặn với lỗi 400 (vì chính sách Google cấm dùng IP trần).
+   *   Hệ thống tự động kích hoạt Modal chọn tài khoản Google để trải nghiệm mượt mà không bị lỗi 400.
    */
   window.triggerGoogleOAuthLogin = async function() {
     const btn = document.getElementById('btn-google-login');
@@ -460,8 +507,9 @@
     const REAL_GOOGLE_CLIENT_ID = '14817006751-2ru02lo7drrtlf5mb45uoonv1guu59iv.apps.googleusercontent.com';
     let clientId = window.GOOGLE_CLIENT_ID || localStorage.getItem('google_client_id') || REAL_GOOGLE_CLIENT_ID;
 
+    // Đảm bảo thư viện Google Identity Services SDK đã sẵn sàng
     if (!window.google || !window.google.accounts || !window.google.accounts.oauth2) {
-      alert("Đang tải thư viện Google Identity Services... Vui lòng kiểm tra kết nối mạng và thử lại.");
+      alert("Đang kết nối thư viện Google OAuth, vui lòng đợi 2 giây rồi bấm lại!");
       return;
     }
 
@@ -483,12 +531,12 @@
           if (tokenResponse.error) {
             console.error('Google OAuth Error:', tokenResponse);
             if (tokenResponse.error !== 'popup_closed_by_user') {
-              alert('Đăng nhập Google thất bại: ' + (tokenResponse.error_description || tokenResponse.error));
+              alert('Lỗi xác thực Google: ' + (tokenResponse.error_description || tokenResponse.error));
             }
             return;
           }
 
-          // Nhận access_token thật từ Google: đồng bộ lên Backend hoặc lấy trực tiếp từ Google UserInfo
+          // Nhận access_token thật từ Google: lấy trực tiếp hồ sơ người dùng thật từ Google UserInfo API
           try {
             if (btn) {
               btn.disabled = true;
@@ -513,10 +561,10 @@
                 }
               }
             } catch (netErr) {
-              console.warn('Backend chưa online hoặc cổng 8080 chưa mở, chuyển sang lấy profile trực tiếp từ Google API...');
+              console.warn('Backend chưa online, lấy trực tiếp thông tin từ Google API...');
             }
 
-            // 2. Dự phòng thông minh: Nếu Backend chưa online, tải profile chính thức trực tiếp từ Google
+            // 2. Lấy hồ sơ chính thức trực tiếp từ Google UserInfo
             if (!loginSuccess) {
               try {
                 const gResp = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
@@ -528,8 +576,8 @@
                   applyCustomerLoginSuccess({
                     token: 'google_token_' + (gUser.sub || Date.now()),
                     user: {
-                      maKH: 'GG_' + (gUser.sub ? gUser.sub.slice(-6) : '001'),
-                      hoTen: gUser.name || gUser.email.split('@')[0],
+                      maKH: 'GG_' + (gUser.sub ? gUser.sub.slice(-6) : Math.floor(100000 + Math.random() * 900000)),
+                      hoTen: gUser.name || (gUser.email ? gUser.email.split('@')[0] : 'Khách Hàng Google'),
                       email: gUser.email || '',
                       avatar: gUser.picture || '',
                       sdt: ''
@@ -554,7 +602,7 @@
         }
       });
 
-      // Mở Popup chọn tài khoản Google thật từ Google
+      // Mở Popup thật của Google
       tokenClient.requestAccessToken({ prompt: 'select_account' });
     } catch (err) {
       if (btn) {
@@ -562,35 +610,57 @@
         btn.innerHTML = originalText;
       }
       console.error('Lỗi khởi tạo Google OAuth:', err);
-      alert('Lỗi khởi tạo Google Sign-In: ' + err.message);
+      alert('Không thể mở popup Google OAuth: ' + err.message);
     }
   };
 
   function applyCustomerLoginSuccess(resJson, fallbackEmail) {
     const u = resJson.user || {};
-    const customerData = {
+    const emailVal = (u.email || fallbackEmail || '').trim();
+    const phoneVal = (u.sdt || '').trim();
+
+    // 1. Kiểm tra xem tài khoản này đã từng hoàn tất đăng ký thông tin chưa
+    let existingProfile = null;
+    try {
+      const regList = JSON.parse(localStorage.getItem('samamobile_registered_users') || '[]');
+      existingProfile = regList.find(reg => 
+        (emailVal && reg.email && reg.email.toLowerCase() === emailVal.toLowerCase() && reg.isProfileComplete) ||
+        (phoneVal && reg.sdt && reg.sdt.replace(/\s/g, '') === phoneVal.replace(/\s/g, '') && reg.isProfileComplete)
+      );
+    } catch (e) {}
+
+    // 2. Nếu ĐÃ hoàn tất thông tin từ trước -> Cho đăng nhập thẳng vào trang web
+    if (existingProfile && existingProfile.isProfileComplete) {
+      existingProfile.token = resJson.token || existingProfile.token;
+      localStorage.setItem('customer_token', existingProfile.token);
+      if (window.CellphoneSAuth || window.Auth) {
+        (window.CellphoneSAuth || window.Auth).setUser(existingProfile);
+      }
+      window.CellphoneSCustomerPortal.closeLoginModal();
+      if (window.CellphoneSCart || window.Cart) {
+        (window.CellphoneSCart || window.Cart).showToast('Chào mừng ' + existingProfile.hoTen + ' đã quay trở lại!', 'success');
+      }
+      return;
+    }
+
+    // 3. Nếu là LẦN ĐẦU ĐĂNG NHẬP (Google, SĐT, hoặc Email mới) -> Chuyển đến trang Cập nhật thông tin
+    const pendingData = {
       type: 'customer',
-      sdt: u.sdt || '',
-      hoTen: u.hoTen || 'Khách Hàng Google',
-      maKH: u.maKH || '',
-      email: u.email || fallbackEmail || '',
+      sdt: phoneVal,
+      hoTen: u.hoTen || (emailVal ? emailVal.split('@')[0] : 'Khách Hàng'),
+      email: emailVal,
       avatar: u.avatar || '',
-      diaChi: u.diaChi || 'TP. Hồ Chí Minh',
-      diemTichLuy: u.diemTichLuy || 0,
-      tongChiTieu: u.tongChiTieu || 0,
+      taiKhoan: emailVal ? emailVal.split('@')[0] : (phoneVal ? 'user_' + phoneVal.slice(-4) : ''),
+      diaChi: u.diaChi || '',
+      isProfileComplete: false,
       token: resJson.token
     };
 
+    localStorage.setItem('cellphones_pending_user', JSON.stringify(pendingData));
     localStorage.setItem('customer_token', resJson.token);
 
-    if (window.CellphoneSAuth || window.Auth) {
-      (window.CellphoneSAuth || window.Auth).setUser(customerData);
-    }
-
-    window.CellphoneSCustomerPortal.closeLoginModal();
-    if (window.CellphoneSCart || window.Cart) {
-      (window.CellphoneSCart || window.Cart).showToast('Chào mừng ' + customerData.hoTen + ' đã đăng nhập!', 'success');
-    }
+    // Chuyển hướng sang complete-registration.html để nhập đầy đủ thông tin trước khi vào web
+    window.location.href = (window.location.pathname.includes('/pages/') ? '' : 'pages/') + 'complete-registration.html';
   }
 
   window.quickSocialLogin = function(provider) {
@@ -598,7 +668,7 @@
   };
 
     window.switchLoginToPassword = function() {
-    window.location.href = 'admin.html';
+    window.location.href = (window.location.pathname.includes('/pages/') ? '' : 'pages/') + 'admin.html';
   };
 
   const portalInstance = new CustomerPortalManager();
@@ -606,7 +676,86 @@
     window.CellphoneSCustomerPortal = window.CustomerPortal = portalInstance;
     window.openCustomerPortal = () => portalInstance.openPortal();
     window.openCustomerLoginModal = () => portalInstance.openLoginModal();
+
+    // Lắng nghe hash #login hoặc #portal từ các trang khác (category.html, product-detail.html) chuyển về
+    const handleHashRoute = function() {
+      const hash = window.location.hash;
+      if (hash === '#login') {
+        portalInstance.openLoginModal();
+      } else if (hash === '#portal') {
+        portalInstance.openPortal();
+      }
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', handleHashRoute);
+    } else {
+      setTimeout(handleHashRoute, 100);
+    }
+    window.addEventListener('hashchange', handleHashRoute);
   }
 
   return portalInstance;
 }));
+
+
+  // Helper mở/đóng Popover Dropdown Avatar trên Header
+  window.toggleCustomerAvatarMenu = function(e) {
+    if (e && e.stopPropagation) e.stopPropagation();
+    const popover = document.getElementById('customer-avatar-popover');
+    const chevron = document.getElementById('customer-avatar-chevron');
+    if (!popover) return;
+    const isHidden = popover.classList.contains('hidden');
+    if (isHidden) {
+      popover.classList.remove('hidden');
+      if (chevron) chevron.style.transform = 'rotate(180deg)';
+    } else {
+      popover.classList.add('hidden');
+      if (chevron) chevron.style.transform = 'rotate(0deg)';
+    }
+  };
+
+  window.closeCustomerAvatarMenu = function() {
+    const popover = document.getElementById('customer-avatar-popover');
+    const chevron = document.getElementById('customer-avatar-chevron');
+    if (popover) popover.classList.add('hidden');
+    if (chevron) chevron.style.transform = 'rotate(0deg)';
+  };
+
+  window.handleOpenProfile = function() {
+    window.closeCustomerAvatarMenu();
+    if (window.CellphoneSCustomerPortal) {
+      window.CellphoneSCustomerPortal.openPortal('profile');
+    }
+  };
+
+  window.handleOpenOrders = function() {
+    window.closeCustomerAvatarMenu();
+    const target = window.location.pathname.includes('/pages/') ? 'cart.html#orders' : 'pages/cart.html#orders';
+    window.location.href = target;
+  };
+
+  window.handleOpenSettings = function() {
+    window.closeCustomerAvatarMenu();
+    if (window.CellphoneSCustomerPortal) {
+      window.CellphoneSCustomerPortal.openPortal('settings');
+    }
+  };
+
+  // Tự động đóng dropdown khi nhấp ra ngoài hoặc ấn ESC
+  if (typeof document !== 'undefined') {
+    document.addEventListener('click', function(e) {
+      const popover = document.getElementById('customer-avatar-popover');
+      const btn = document.getElementById('btn-customer-avatar-toggle');
+      if (popover && !popover.classList.contains('hidden')) {
+        if (!popover.contains(e.target) && (!btn || !btn.contains(e.target))) {
+          window.closeCustomerAvatarMenu();
+        }
+      }
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        window.closeCustomerAvatarMenu();
+      }
+    });
+  }

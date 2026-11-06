@@ -55,4 +55,17 @@ public class OnlineOrdersController : ControllerBase
         var result = await _onlineOrderService.GetOrdersByPhoneAsync(sdt);
         return Ok(result);
     }
+
+    /// <summary>
+    /// Khách hàng tự hủy đơn hàng trực tuyến khi chưa giao
+    /// </summary>
+    [HttpPut("{maDH}/cancel")]
+    [HttpPost("{maDH}/cancel")]
+    [AllowAnonymous]
+    public async Task<IActionResult> CancelOrder(string maDH, [FromBody] CancelOrderRequest request)
+    {
+        var result = await _onlineOrderService.CancelOrderByCustomerAsync(maDH, request);
+        return Ok(result);
+    }
+
 }

@@ -57,7 +57,8 @@ public class EmailService : IEmailService
 
             if (!string.IsNullOrWhiteSpace(_settings.Username) && !string.IsNullOrWhiteSpace(_settings.Password))
             {
-                await client.AuthenticateAsync(_settings.Username, _settings.Password);
+                var cleanPassword = _settings.Password.Replace(" ", "").Trim();
+                await client.AuthenticateAsync(_settings.Username.Trim(), cleanPassword);
             }
 
             await client.SendAsync(message);
