@@ -1050,9 +1050,15 @@
            SECTION 13: BÁO CÁO TRA CỨU: TỒN KHO (vw_TonKho)
            ===================================================================== -->
       <section id="view-tonkho" class="admin-view-section hidden space-y-6">
-        <div>
-          <h2 class="text-xl font-extrabold text-navy tracking-tight">Xem Tồn Kho (vw_TonKho)</h2>
-          <p class="text-xs text-slate-500 mt-0.5">Dữ liệu tổng nhập, tổng xuất và tồn kho tức thời từng model</p>
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h2 class="text-xl font-extrabold text-navy tracking-tight">Xem Tồn Kho (vw_TonKho)</h2>
+            <p class="text-xs text-slate-500 mt-0.5">Dữ liệu tổng nhập, tổng xuất và tồn kho tức thời từng model</p>
+          </div>
+          <button type="button" onclick="renderTonKhoTable(); showToast('Đã làm mới dữ liệu tồn kho!', 'info');" class="px-4 py-2 bg-emerald-50 hover:bg-emerald-100 text-[#15803D] font-bold rounded-xl text-xs flex items-center gap-2 border border-emerald-200 shadow-sm hover:shadow transition-all cursor-pointer">
+            <i class="fa-solid fa-arrows-rotate"></i>
+            <span>Làm Mới Tồn Kho</span>
+          </button>
         </div>
         <div class="bg-white rounded-2xl border border-slate-200/80 shadow-card-sleek p-5 space-y-4">
           <!-- Công cụ tìm kiếm tồn kho -->
@@ -1111,9 +1117,15 @@
             <h2 class="text-xl font-extrabold text-navy tracking-tight">Tra Cứu Lịch Sử IMEI</h2>
             <p class="text-xs text-slate-500 mt-0.5">Truy vết vòng đời từng thiết bị: Ngày nhập kho, NCC, Ngày bán, Khách hàng, Bảo hành, Đổi trả (vw_IMEIConHang)</p>
           </div>
-          <div class="max-w-xs w-full relative">
-            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-xs"></i>
-            <input type="text" id="search-imei-input" placeholder="Lọc theo 15 số IMEI hoặc tên máy..." class="w-full pl-9 pr-4 py-2 text-xs border border-slate-200 rounded-xl font-mono focus:ring-2 focus:ring-[#16A34A]/20 focus:border-[#16A34A] focus:outline-none">
+          <div class="flex items-center gap-2 w-full sm:w-auto">
+            <div class="max-w-xs w-full relative">
+              <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-xs"></i>
+              <input type="text" id="search-imei-input" placeholder="Lọc theo 15 số IMEI hoặc tên máy..." class="w-full pl-9 pr-4 py-2 text-xs border border-slate-200 rounded-xl font-mono focus:ring-2 focus:ring-[#16A34A]/20 focus:border-[#16A34A] focus:outline-none">
+            </div>
+            <button type="button" onclick="renderImeiTable(); showToast('Đã làm mới danh sách IMEI!', 'info');" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs flex items-center gap-1.5 border border-slate-200 shadow-sm transition-all cursor-pointer whitespace-nowrap">
+              <i class="fa-solid fa-arrows-rotate"></i>
+              <span>Làm Mới</span>
+            </button>
           </div>
         </div>
         <div class="bg-white rounded-2xl border border-slate-200/80 shadow-card-sleek p-5">

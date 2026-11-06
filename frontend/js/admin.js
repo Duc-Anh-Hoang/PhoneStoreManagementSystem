@@ -2253,7 +2253,16 @@ async function actionHoanTatTraHang(maTR, hinhThuc) {
       }
     } else {
       if (doiHangSec) doiHangSec.classList.add('hidden');
-      const tienHoanFormatted = Format.currency(data.soTienHoan || 0);
+      let soTienHoanVal = data.soTienHoan || data.soTienThucTra || data.donGiaBan || 0;
+      if (!soTienHoanVal && data.soIMEI) {
+        try {
+          const tc = await api.get('/trahang/tracuu?soIMEI=' + encodeURIComponent(data.soIMEI));
+          if (tc && (tc.soTienThucTra || tc.donGiaBan)) {
+            soTienHoanVal = tc.soTienThucTra || tc.donGiaBan;
+          }
+        } catch (e) {}
+      }
+      const tienHoanFormatted = Format.currency(soTienHoanVal);
 
       if (data.hinhThucHoanTien === 'tien_mat') {
         if (tienMatSec) tienMatSec.classList.remove('hidden');

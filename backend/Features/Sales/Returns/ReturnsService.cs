@@ -142,6 +142,26 @@ public class ReturnsService : IReturnsService
             imeiRecord.TrangThai = "cho_duyet";
             _context.IMEIs.Update(imeiRecord);
 
+            // Tính toán trước số tiền hoàn thực tế từ hóa đơn gốc
+            decimal? soTienHoanBanDau = null;
+            if (request.HinhThucHoanTien != "doi_hang")
+            {
+                var ctGoc = await _context.ChiTietHoaDons.FirstOrDefaultAsync(c => c.SoHD == soHD && c.MaIMEI == imeiRecord.MaIMEI);
+                if (ctGoc != null)
+                {
+                    decimal donGia = ctGoc.DonGiaBan * ctGoc.SlBan;
+                    if (hoaDon.TongTien > 0 && hoaDon.TienGiamGia > 0)
+                    {
+                        decimal tileGiam = hoaDon.TienGiamGia / hoaDon.TongTien;
+                        soTienHoanBanDau = Math.Round(donGia * (1m - tileGiam), 0);
+                    }
+                    else
+                    {
+                        soTienHoanBanDau = donGia;
+                    }
+                }
+            }
+
             // 8. Tạo phiếu TraHang trạng thái tiep_nhan
             var maTR = await _codeGenerator.NextAsync("TR");
             var traHang = new TraHang
@@ -151,6 +171,7 @@ public class ReturnsService : IReturnsService
                 MaIMEI = imeiRecord.MaIMEI,
                 LoaiYeuCau = loaiYeuCau,
                 HinhThucHoanTien = request.HinhThucHoanTien,
+                SoTienHoan = soTienHoanBanDau,
                 LyDo = request.LyDo.Trim(),
                 TrangThai = "tiep_nhan",
                 NgayTR = now,
@@ -683,6 +704,26 @@ public class ReturnsService : IReturnsService
 
         if (t == null) throw new NotFoundException($"Không tìm thấy phiếu đổi trả {maTR}");
 
+        decimal? soTienHoan = t.SoTienHoan;
+        if ((soTienHoan == null || soTienHoan <= 0) && t.HinhThucHoanTien != "doi_hang")
+        {
+            var ct = await _context.ChiTietHoaDons.FirstOrDefaultAsync(c => c.SoHD == t.SoHD && c.MaIMEI == t.MaIMEI);
+            if (ct != null)
+            {
+                var hd = await _context.HoaDons.FirstOrDefaultAsync(h => h.SoHD == t.SoHD);
+                decimal donGia = ct.DonGiaBan * ct.SlBan;
+                if (hd != null && hd.TongTien > 0 && hd.TienGiamGia > 0)
+                {
+                    decimal tileGiam = hd.TienGiamGia / hd.TongTien;
+                    soTienHoan = Math.Round(donGia * (1m - tileGiam), 0);
+                }
+                else
+                {
+                    soTienHoan = donGia;
+                }
+            }
+        }
+
         return new TraHangDto
         {
             MaTR = t.MaTR,
@@ -708,7 +749,7 @@ public class ReturnsService : IReturnsService
             TenNVDuyet = t.NhanVienDuyet?.HoTen,
             NgayDuyet = t.NgayDuyet,
             LyDoTuChoi = t.LyDoTuChoi,
-            SoTienHoan = t.SoTienHoan,
+            SoTienHoan = soTienHoan ?? t.SoTienHoan,
             MaGiaoDich = t.MaGiaoDich,
             MaIMEIMoi = t.MaIMEIMoi,
             SoIMEIMoi = t.IMEIMoi?.SoIMEI,
