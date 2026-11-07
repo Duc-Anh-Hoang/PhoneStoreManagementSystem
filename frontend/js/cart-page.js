@@ -347,7 +347,17 @@
             custMenu.classList.remove('hidden');
           }
           const custName = document.getElementById('customer-header-name');
-          const popName = document.getElementById('customer-popover-name');
+          const popBadge = document.getElementById('customer-popover-badge');
+    if (popBadge) {
+      if (user.isStudent || user.hangThanhVien === 'S-Student' || user.hangThanhVien === 'S - Student') {
+        popBadge.textContent = 'S-Student -5%';
+        popBadge.className = 'px-1.5 py-0.5 rounded text-[9px] font-bold bg-blue-100 text-blue-800 border border-blue-200 flex-shrink-0';
+      } else {
+        popBadge.textContent = user.hangThanhVien || 'SamaMember';
+        popBadge.className = 'px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-100 text-amber-800 border border-amber-200 flex-shrink-0';
+      }
+    }
+    const popName = document.getElementById('customer-popover-name');
           const popPhone = document.getElementById('customer-popover-phone');
           const custPoints = document.getElementById('customer-header-points');
           const popPoints = document.getElementById('customer-popover-points');

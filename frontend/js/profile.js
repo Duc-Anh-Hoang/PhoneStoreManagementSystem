@@ -420,6 +420,16 @@
       custAvatar.innerHTML = user.avatar ? `<img src="${user.avatar}" class="w-full h-full object-cover rounded-full" />` : `<span class="font-black text-xs text-[#1E3A8A]">${letter}</span>`;
     }
 
+    const popBadge = document.getElementById('customer-popover-badge');
+    if (popBadge) {
+      if (user.isStudent || user.hangThanhVien === 'S-Student' || user.hangThanhVien === 'S - Student') {
+        popBadge.textContent = 'S-Student -5%';
+        popBadge.className = 'px-1.5 py-0.5 rounded text-[9px] font-bold bg-blue-100 text-blue-800 border border-blue-200 flex-shrink-0';
+      } else {
+        popBadge.textContent = user.hangThanhVien || 'SamaMember';
+        popBadge.className = 'px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-100 text-amber-800 border border-amber-200 flex-shrink-0';
+      }
+    }
     const popName = document.getElementById('customer-popover-name');
     if (popName) popName.textContent = user.hoTen || user.taiKhoan || 'Khang Huy';
 
@@ -431,6 +441,7 @@
 
     const popAvatar = document.getElementById('customer-popover-avatar');
     if (popAvatar) {
+      popAvatar.className = "w-12 h-12 rounded-full bg-teal-600 text-white flex items-center justify-center text-lg font-black shadow-md flex-shrink-0 overflow-hidden ring-2 ring-white";
       popAvatar.innerHTML = user.avatar ? `<img src="${user.avatar}" class="w-full h-full object-cover rounded-full" />` : letter;
     }
   }
