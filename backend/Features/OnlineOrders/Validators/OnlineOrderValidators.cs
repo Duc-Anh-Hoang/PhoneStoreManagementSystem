@@ -5,7 +5,7 @@ namespace PhoneStoreAPI.Features.OnlineOrders.Validators;
 
 public class CreateOrderRequestValidator : AbstractValidator<CreateOrderRequest>
 {
-    private static readonly string[] ValidPaymentMethods = { "cod", "chuyen_khoan", "the" };
+    private static readonly string[] ValidPaymentMethods = { "cod", "chuyen_khoan", "the", "banking", "momo", "vnpay", "zalopay", "card", "tien_mat" };
 
     public CreateOrderRequestValidator()
     {
@@ -24,7 +24,7 @@ public class CreateOrderRequestValidator : AbstractValidator<CreateOrderRequest>
 
         RuleFor(x => x.PhuongThucThanhToan)
             .NotEmpty().WithMessage("Phương thức thanh toán không được để trống")
-            .Must(m => ValidPaymentMethods.Contains(m))
+            .Must(m => !string.IsNullOrWhiteSpace(m) && ValidPaymentMethods.Contains(m.Trim().ToLowerInvariant()))
             .WithMessage("Phương thức thanh toán phải là cod, chuyen_khoan hoặc the");
 
         RuleFor(x => x.Items)
@@ -42,6 +42,6 @@ public class OrderItemRequestValidator : AbstractValidator<OrderItemRequest>
             .NotEmpty().WithMessage("Mã mặt hàng không được để trống");
 
         RuleFor(x => x.SoLuong)
-            .InclusiveBetween(1, 10).WithMessage("Số lượng mua mỗi sản phẩm phải từ 1 đến 10");
+            .InclusiveBetween(1, 99).WithMessage("Số lượng mua mỗi sản phẩm phải từ 1 đến 10");
     }
 }

@@ -10,24 +10,58 @@
     "anhChinh": "https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png",
     "mauSac": [
       {
-        "id": "c_default",
-        "ten": "Tiêu chuẩn",
-        "hex": "#3B82F6",
+        "id": "c_burgundy",
+        "ten": "Titan Đỏ Rượu",
+        "hex": "#5B1E31",
         "anh": "https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png"
+      },
+      {
+        "id": "c_glacier",
+        "ten": "Titan Trắng Băng",
+        "hex": "#E2E8F0",
+        "anh": "https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-glacier-pdp-images-vi-vn-021233298.png"
+      },
+      {
+        "id": "c_desert",
+        "ten": "Titan Sa Mạc",
+        "hex": "#C5A992",
+        "anh": "https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-sa-mac-1.png"
+      },
+      {
+        "id": "c_natural",
+        "ten": "Titan Tự Nhiên",
+        "hex": "#8E8B82",
+        "anh": "https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-tu-nhien-1.png"
       }
     ],
     "phienBan": [
       {
-        "id": "v_default",
+        "id": "v_256",
         "dungLuong": "256GB",
         "gia": 41490000,
         "giaGoc": 44809200
+      },
+      {
+        "id": "v_512",
+        "dungLuong": "512GB",
+        "gia": 46990000,
+        "giaGoc": 49990000
+      },
+      {
+        "id": "v_1tb",
+        "dungLuong": "1TB",
+        "gia": 52990000,
+        "giaGoc": 55990000
       }
     ],
     "thongSo": {
-      "Vi xử lý": "A20 Pro",
-      "Bộ nhớ trong": "256 GB",
-      "Kích thước màn hình": "6,9\""
+      "Vi xử lý": "Apple A20 Pro (3nm)",
+      "Bộ nhớ trong": "256GB NVMe",
+      "Kích thước màn hình": "6.9\" Super Retina XDR OLED",
+      "Camera sau": "48MP Fusion + 48MP Ultra Wide + 12MP Telephoto 5x",
+      "Camera trước": "12MP TrueDepth (Autofocus)",
+      "Hệ điều hành": "iOS 19 (Apple Intelligence)",
+      "Dung lượng pin": "5000mAh (Sạc nhanh 45W, MagSafe 25W)"
     },
     "slug": "/dien-thoai/iphone-18-pro-max",
     "maHang": "MH101"
@@ -47362,13 +47396,13 @@
     "tenNhom": "Phụ kiện hiện đại",
     "donGia": 190000,
     "giaGoc": 450000,
-    "anhChinh": "https://i.hoanghamobile.vn/Uploads/2020/09/19/C&#xE1",
+    "anhChinh": "https://i.hoanghamobile.vn/Uploads/2026/03/21/a1638-den.png",
     "mauSac": [
       {
         "id": "c_default",
         "ten": "Đen",
         "hex": "#1F2937",
-        "anh": "https://i.hoanghamobile.vn/Uploads/2020/09/19/C&#xE1"
+        "anh": "https://i.hoanghamobile.vn/Uploads/2026/03/21/a1638-den.png"
       }
     ],
     "phienBan": [
@@ -78658,13 +78692,13 @@
     "tenNhom": "Smart home, Camera",
     "donGia": 2290000,
     "giaGoc": 2473200,
-    "anhChinh": "https://i.hoanghamobile.vn/Uploads/2025/11/27/&#x767D",
+    "anhChinh": "https://i.hoanghamobile.vn/Uploads/2026/03/21/a1638-den.png",
     "mauSac": [
       {
         "id": "c_default",
         "ten": "Tiêu chuẩn",
         "hex": "#3B82F6",
-        "anh": "https://i.hoanghamobile.vn/Uploads/2025/11/27/&#x767D"
+        "anh": "https://i.hoanghamobile.vn/Uploads/2026/03/21/a1638-den.png"
       }
     ],
     "phienBan": [
@@ -83265,13 +83299,13 @@
     "tenNhom": "Phụ kiện hiện đại",
     "donGia": 690000,
     "giaGoc": 745200,
-    "anhChinh": "https://i.hoanghamobile.vn/Uploads/2020/09/23/1.%20m&#x1ED9",
+    "anhChinh": "https://i.hoanghamobile.vn/Uploads/2026/03/21/a1638-den.png",
     "mauSac": [
       {
         "id": "c_default",
         "ten": "Tiêu chuẩn",
         "hex": "#3B82F6",
-        "anh": "https://i.hoanghamobile.vn/Uploads/2020/09/23/1.%20m&#x1ED9"
+        "anh": "https://i.hoanghamobile.vn/Uploads/2026/03/21/a1638-den.png"
       }
     ],
     "phienBan": [
@@ -83468,13 +83502,13 @@
     "tenNhom": "Phụ kiện hiện đại",
     "donGia": 590000,
     "giaGoc": 1350000,
-    "anhChinh": "https://i.hoanghamobile.vn/Uploads/2020/09/23/C&#x1ED5",
+    "anhChinh": "https://i.hoanghamobile.vn/Uploads/2026/03/21/a1638-den.png",
     "mauSac": [
       {
         "id": "c_default",
         "ten": "Tiêu chuẩn",
         "hex": "#3B82F6",
-        "anh": "https://i.hoanghamobile.vn/Uploads/2020/09/23/C&#x1ED5"
+        "anh": "https://i.hoanghamobile.vn/Uploads/2026/03/21/a1638-den.png"
       }
     ],
     "phienBan": [
@@ -86658,13 +86692,13 @@
     "tenNhom": "Phụ kiện hiện đại",
     "donGia": 750000,
     "giaGoc": 939000,
-    "anhChinh": "https://i.hoanghamobile.vn/Uploads/2020/09/17/T&#xDA",
+    "anhChinh": "https://i.hoanghamobile.vn/Uploads/2026/03/21/a1638-den.png",
     "mauSac": [
       {
         "id": "c_default",
         "ten": "Tiêu chuẩn",
         "hex": "#3B82F6",
-        "anh": "https://i.hoanghamobile.vn/Uploads/2020/09/17/T&#xDA"
+        "anh": "https://i.hoanghamobile.vn/Uploads/2026/03/21/a1638-den.png"
       }
     ],
     "phienBan": [
@@ -99273,13 +99307,13 @@
     "tenNhom": "Hàng cũ giá tốt",
     "donGia": 469000,
     "giaGoc": 1390000,
-    "anhChinh": "https://i.hoanghamobile.vn/Uploads/2020/09/16/Samsung-Galaxy-Fit-(SM---R370)---Ch&#xED",
+    "anhChinh": "https://i.hoanghamobile.vn/Uploads/2026/03/21/a1638-den.png",
     "mauSac": [
       {
         "id": "c_default",
         "ten": "Tiêu chuẩn",
         "hex": "#3B82F6",
-        "anh": "https://i.hoanghamobile.vn/Uploads/2020/09/16/Samsung-Galaxy-Fit-(SM---R370)---Ch&#xED"
+        "anh": "https://i.hoanghamobile.vn/Uploads/2026/03/21/a1638-den.png"
       }
     ],
     "phienBan": [
@@ -102289,13 +102323,13 @@
     "tenNhom": "Phụ kiện hiện đại",
     "donGia": 290000,
     "giaGoc": 313200,
-    "anhChinh": "https://i.hoanghamobile.vn/Uploads/2020/09/17/Th&#x1EBB",
+    "anhChinh": "https://i.hoanghamobile.vn/Uploads/2026/03/21/a1638-den.png",
     "mauSac": [
       {
         "id": "c_default",
         "ten": "Tiêu chuẩn",
         "hex": "#3B82F6",
-        "anh": "https://i.hoanghamobile.vn/Uploads/2020/09/17/Th&#x1EBB"
+        "anh": "https://i.hoanghamobile.vn/Uploads/2026/03/21/a1638-den.png"
       }
     ],
     "phienBan": [
@@ -102318,13 +102352,13 @@
     "tenNhom": "Phụ kiện hiện đại",
     "donGia": 1390000,
     "giaGoc": 1501200,
-    "anhChinh": "https://i.hoanghamobile.vn/Uploads/2020/09/17/Th&#x1EBB",
+    "anhChinh": "https://i.hoanghamobile.vn/Uploads/2026/03/21/a1638-den.png",
     "mauSac": [
       {
         "id": "c_default",
         "ten": "Tiêu chuẩn",
         "hex": "#3B82F6",
-        "anh": "https://i.hoanghamobile.vn/Uploads/2020/09/17/Th&#x1EBB"
+        "anh": "https://i.hoanghamobile.vn/Uploads/2026/03/21/a1638-den.png"
       }
     ],
     "phienBan": [
@@ -109511,7 +109545,7 @@
     "tenNhom": "Điện thoại",
     "donGia": 38490000,
     "giaGoc": 41569000,
-    "anhChinh": "images/banner/iphone-18-cat-082925094.png",
+    "anhChinh": "https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png",
     "phienBan": [
       {
         "id": "v_256",
@@ -109531,13 +109565,13 @@
         "id": "c_titan",
         "ten": "Titan Tự Nhiên",
         "hex": "#A8A29E",
-        "anh": "images/banner/iphone-18-cat-082925094.png"
+        "anh": "https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png"
       },
       {
         "id": "c_sa",
         "ten": "Titan Sa Mạc",
         "hex": "#D7C4B7",
-        "anh": "images/banner/iphone-18-cat-082925094.png"
+        "anh": "https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png"
       }
     ],
     "thongSoNoiBat": {
@@ -109545,6 +109579,683 @@
       "Bộ nhớ trong": "256GB",
       "Vi xử lý": "Apple A20 Pro",
       "Dung lượng pin hiển thị": "4850mAh"
+    }
+  },
+  "AP_PRO2": {
+    "maHang": "AP_PRO2",
+    "tenHang": "AirPods Pro 2 Type-C",
+    "nhanHieu": "Apple",
+    "maLoai": "APPLE",
+    "maNhom": "AMTHANH",
+    "tenNhom": "Thiết bị âm thanh",
+    "donGia": 5490000,
+    "giaGoc": 6190000,
+    "anhChinh": "https://i.hoanghamobile.vn/Uploads/2023/10/27/airpods-pro-2nd-gen-usb-c-1.png",
+    "mauSac": [
+      {
+        "id": "c_white",
+        "ten": "Trắng",
+        "hex": "#F8FAFC",
+        "anh": "https://i.hoanghamobile.vn/Uploads/2023/10/27/airpods-pro-2nd-gen-usb-c-1.png"
+      }
+    ],
+    "phienBan": [
+      {
+        "id": "v_std",
+        "dungLuong": "USB-C MagSafe",
+        "gia": 5490000,
+        "giaGoc": 6190000
+      }
+    ],
+    "thongSo": {
+      "Chip xử lý": "Apple H2",
+      "Chống ồn": "Chống ồn chủ động ANC gấp 2 lần",
+      "Thời lượng pin": "Lên đến 30 giờ kèm hộp sạc MagSafe USB-C",
+      "Kháng nước": "IP54"
+    }
+  },
+  "CAP_C_L": {
+    "maHang": "CAP_C_L",
+    "tenHang": "Cáp sạc USB-C to Lightning 1m",
+    "nhanHieu": "Apple",
+    "maLoai": "APPLE",
+    "maNhom": "PHUKIEN",
+    "tenNhom": "Phụ kiện công nghệ",
+    "donGia": 250000,
+    "giaGoc": 550000,
+    "anhChinh": "https://i.hoanghamobile.vn/Uploads/2025/07/10/st-530gy.png",
+    "mauSac": [
+      {
+        "id": "c_white",
+        "ten": "Trắng",
+        "hex": "#F8FAFC",
+        "anh": "https://i.hoanghamobile.vn/Uploads/2025/07/10/st-530gy.png"
+      }
+    ],
+    "phienBan": [
+      {
+        "id": "v_1m",
+        "dungLuong": "1m Chuẩn MFi",
+        "gia": 250000,
+        "giaGoc": 550000
+      }
+    ],
+    "thongSo": {
+      "Chuẩn kết nối": "USB-C to Lightning",
+      "Chiều dài": "1 mét",
+      "Công suất hỗ trợ": "Sạc nhanh PD lên đến 30W"
+    }
+  },
+  "IP15128": {
+    "maHang": "IP15128",
+    "tenHang": "iPhone 15 128GB",
+    "nhanHieu": "Apple",
+    "maLoai": "APPLE",
+    "maNhom": "DIENTHOAI",
+    "tenNhom": "Điện thoại",
+    "donGia": 19790000,
+    "giaGoc": 22669200,
+    "anhChinh": "https://i.hoanghamobile.vn/Uploads/2023/09/13/iphone-15-pink-pure-back-iphone-15-pink-pure-front-2up-screen-usen.png",
+    "mauSac": [
+      {
+        "id": "c_pink",
+        "ten": "Hồng",
+        "hex": "#F9D2D5",
+        "anh": "https://i.hoanghamobile.vn/Uploads/2023/09/13/iphone-15-pink-pure-back-iphone-15-pink-pure-front-2up-screen-usen.png"
+      },
+      {
+        "id": "c_blue",
+        "ten": "Xanh dương",
+        "hex": "#D5E2E8",
+        "anh": "https://i.hoanghamobile.vn/Uploads/2023/09/13/iphone-15-plus-blue-pure-back-iphone-15-plus-blue-pure-front-2up-screen-usen.png"
+      }
+    ],
+    "phienBan": [
+      {
+        "id": "v_128",
+        "dungLuong": "128GB",
+        "gia": 19790000,
+        "giaGoc": 22669200
+      },
+      {
+        "id": "v_256",
+        "dungLuong": "256GB",
+        "gia": 22790000,
+        "giaGoc": 25990000
+      }
+    ],
+    "thongSo": {
+      "Vi xử lý": "Apple A16 Bionic (4nm)",
+      "Bộ nhớ trong": "128GB NVMe",
+      "Kích thước màn hình": "6.1\" Super Retina XDR OLED (Dynamic Island)",
+      "Camera sau": "Chính 48MP + Góc siêu rộng 12MP",
+      "Camera trước": "12MP TrueDepth",
+      "Hệ điều hành": "iOS 18",
+      "Dung lượng pin": "3349 mAh (Sạc nhanh USB-C 20W)"
+    }
+  },
+  "IP15P128": {
+    "maHang": "IP15P128",
+    "tenHang": "iPhone 15 Pro 128GB",
+    "nhanHieu": "Apple",
+    "maLoai": "APPLE",
+    "maNhom": "DIENTHOAI",
+    "tenNhom": "Điện thoại",
+    "donGia": 24990000,
+    "giaGoc": 26989200,
+    "anhChinh": "https://i.hoanghamobile.vn/Uploads/2023/09/13/iphone-15-pro-finish-select-202309-6-7inch-naturaltitanium-removebg-preview-1.png",
+    "mauSac": [
+      {
+        "id": "c_natural",
+        "ten": "Titan Tự Nhiên",
+        "hex": "#8E8B82",
+        "anh": "https://i.hoanghamobile.vn/Uploads/2023/09/13/iphone-15-pro-finish-select-202309-6-7inch-naturaltitanium-removebg-preview-1.png"
+      },
+      {
+        "id": "c_desert",
+        "ten": "Titan Sa Mạc",
+        "hex": "#C5A992",
+        "anh": "https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-sa-mac-1.png"
+      }
+    ],
+    "phienBan": [
+      {
+        "id": "v_128",
+        "dungLuong": "128GB",
+        "gia": 24990000,
+        "giaGoc": 26989200
+      },
+      {
+        "id": "v_256",
+        "dungLuong": "256GB",
+        "gia": 27990000,
+        "giaGoc": 29990000
+      },
+      {
+        "id": "v_512",
+        "dungLuong": "512GB",
+        "gia": 32990000,
+        "giaGoc": 35990000
+      }
+    ],
+    "thongSo": {
+      "Vi xử lý": "Apple A17 Pro (3nm)",
+      "Bộ nhớ trong": "128GB NVMe",
+      "Kích thước màn hình": "6.1\" Super Retina XDR OLED 120Hz ProMotion",
+      "Camera sau": "48MP Main + 12MP Ultra Wide + 12MP Telephoto 3x",
+      "Camera trước": "12MP TrueDepth",
+      "Hệ điều hành": "iOS 18 (Apple Intelligence)",
+      "Dung lượng pin": "3274 mAh (USB-C 3.0 10Gbps)"
+    }
+  },
+  "IP15PM256": {
+    "maHang": "IP15PM256",
+    "tenHang": "iPhone 15 Pro Max 256GB",
+    "nhanHieu": "Apple",
+    "maLoai": "APPLE",
+    "maNhom": "DIENTHOAI",
+    "tenNhom": "Điện thoại",
+    "donGia": 29490000,
+    "giaGoc": 31849200,
+    "anhChinh": "https://i.hoanghamobile.vn/Uploads/2023/09/13/iphone-15-pro-max-natural-titanium-pure-back-iphone-15-pro-max-natural-titanium-pure-front-2up-screen-usen-1.png",
+    "mauSac": [
+      {
+        "id": "c_natural",
+        "ten": "Titan Tự Nhiên",
+        "hex": "#8E8B82",
+        "anh": "https://i.hoanghamobile.vn/Uploads/2023/09/13/iphone-15-pro-max-natural-titanium-pure-back-iphone-15-pro-max-natural-titanium-pure-front-2up-screen-usen-1.png"
+      },
+      {
+        "id": "c_desert",
+        "ten": "Titan Sa Mạc",
+        "hex": "#C5A992",
+        "anh": "https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-sa-mac-1.png"
+      }
+    ],
+    "phienBan": [
+      {
+        "id": "v_256",
+        "dungLuong": "256GB",
+        "gia": 29490000,
+        "giaGoc": 31849200
+      },
+      {
+        "id": "v_512",
+        "dungLuong": "512GB",
+        "gia": 34990000,
+        "giaGoc": 37990000
+      },
+      {
+        "id": "v_1tb",
+        "dungLuong": "1TB",
+        "gia": 39990000,
+        "giaGoc": 43990000
+      }
+    ],
+    "thongSo": {
+      "Vi xử lý": "Apple A17 Pro (3nm)",
+      "Bộ nhớ trong": "256GB NVMe",
+      "Kích thước màn hình": "6.7\" Super Retina XDR OLED 120Hz ProMotion",
+      "Camera sau": "48MP Main + 12MP Ultra Wide + 12MP Telephoto 5x Tetraprism",
+      "Camera trước": "12MP TrueDepth",
+      "Hệ điều hành": "iOS 18 (Apple Intelligence)",
+      "Dung lượng pin": "4422 mAh (Sạc nhanh 27W, MagSafe 15W)"
+    }
+  },
+  "IPAD_A6": {
+    "maHang": "IPAD_A6",
+    "tenHang": "iPad Air 6 M2 11 inch 128GB",
+    "nhanHieu": "Apple",
+    "maLoai": "APPLE",
+    "maNhom": "TABLET",
+    "tenNhom": "Máy tính bảng",
+    "donGia": 16990000,
+    "giaGoc": 18349200,
+    "anhChinh": "https://i.hoanghamobile.vn/Uploads/2026/04/06/ipad-air-11-in-m4-wifi-purple-pdp-image-position-1-th-en.jpg",
+    "mauSac": [
+      {
+        "id": "c_purple",
+        "ten": "Tím Purple",
+        "hex": "#C4B5FD",
+        "anh": "https://i.hoanghamobile.vn/Uploads/2026/04/06/ipad-air-11-in-m4-wifi-purple-pdp-image-position-1-th-en.jpg"
+      },
+      {
+        "id": "c_blue",
+        "ten": "Xanh Blue",
+        "hex": "#93C5FD",
+        "anh": "https://i.hoanghamobile.vn/Uploads/2026/04/06/ipad-air-13-in-m4-wifi-blue-pdp-image-position-1-th-en.jpg"
+      }
+    ],
+    "phienBan": [
+      {
+        "id": "v_128",
+        "dungLuong": "128GB",
+        "gia": 16990000,
+        "giaGoc": 18349200
+      },
+      {
+        "id": "v_256",
+        "dungLuong": "256GB",
+        "gia": 19490000,
+        "giaGoc": 21490000
+      }
+    ],
+    "thongSo": {
+      "Vi xử lý": "Apple M2 (8 nhân CPU, 9 nhân GPU)",
+      "Bộ nhớ trong": "128GB",
+      "Kích thước màn hình": "11 inch Liquid Retina IPS LCD",
+      "Camera sau": "12MP Wide",
+      "Camera trước": "12MP Ultra Wide (Cạnh ngang)",
+      "Hệ điều hành": "iPadOS 18",
+      "Dung lượng pin": "28.93 Wh (Sạc nhanh USB-C 20W)"
+    }
+  },
+  "S24256": {
+    "maHang": "S24256",
+    "tenHang": "Samsung Galaxy S24 256GB",
+    "nhanHieu": "Samsung",
+    "maLoai": "SAMSUNG",
+    "maNhom": "DIENTHOAI",
+    "tenNhom": "Điện thoại",
+    "donGia": 17990000,
+    "giaGoc": 19990000,
+    "anhChinh": "https://i.hoanghamobile.vn/Uploads/2025/09/03/galaxy-s25-fe-navy-1.png",
+    "mauSac": [
+      {
+        "id": "c_navy",
+        "ten": "Xanh Sapphire",
+        "hex": "#1E3A8A",
+        "anh": "https://i.hoanghamobile.vn/Uploads/2025/09/03/galaxy-s25-fe-navy-1.png"
+      },
+      {
+        "id": "c_gold",
+        "ten": "Vàng Amber",
+        "hex": "#FDE68A",
+        "anh": "https://i.hoanghamobile.vn/Uploads/2024/01/16/s24-ultra-vang_638409930027889246.png"
+      }
+    ],
+    "phienBan": [
+      {
+        "id": "v_256",
+        "dungLuong": "256GB",
+        "gia": 17990000,
+        "giaGoc": 19990000
+      },
+      {
+        "id": "v_512",
+        "dungLuong": "512GB",
+        "gia": 20990000,
+        "giaGoc": 22990000
+      }
+    ],
+    "thongSo": {
+      "Vi xử lý": "Exynos 2400 (4nm) tích hợp Galaxy AI",
+      "Bộ nhớ trong": "256GB UFS 4.0",
+      "Kích thước màn hình": "6.2\" Dynamic LTPO AMOLED 2X 120Hz",
+      "Camera sau": "50MP OIS + 10MP Tele 3x + 12MP Ultra Wide",
+      "Camera trước": "12MP Dual Pixel AF",
+      "Hệ điều hành": "Android 14, One UI 6.1",
+      "Dung lượng pin": "4000 mAh (Sạc nhanh 25W)"
+    }
+  },
+  "S24U512": {
+    "maHang": "S24U512",
+    "tenHang": "Samsung Galaxy S24 Ultra 512GB",
+    "nhanHieu": "Samsung",
+    "maLoai": "SAMSUNG",
+    "maNhom": "DIENTHOAI",
+    "tenNhom": "Điện thoại",
+    "donGia": 31990000,
+    "giaGoc": 34990000,
+    "anhChinh": "https://i.hoanghamobile.vn/Uploads/2024/01/16/s24-ultra-vang_638409930027889246.png",
+    "mauSac": [
+      {
+        "id": "c_gold",
+        "ten": "Xám Titan",
+        "hex": "#A8A29E",
+        "anh": "https://i.hoanghamobile.vn/Uploads/2024/01/16/s24-ultra-vang_638409930027889246.png"
+      },
+      {
+        "id": "c_black",
+        "ten": "Đen Titan",
+        "hex": "#1E293B",
+        "anh": "https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png"
+      }
+    ],
+    "phienBan": [
+      {
+        "id": "v_256",
+        "dungLuong": "256GB",
+        "gia": 28990000,
+        "giaGoc": 31990000
+      },
+      {
+        "id": "v_512",
+        "dungLuong": "512GB",
+        "gia": 31990000,
+        "giaGoc": 34990000
+      },
+      {
+        "id": "v_1tb",
+        "dungLuong": "1TB",
+        "gia": 37990000,
+        "giaGoc": 41990000
+      }
+    ],
+    "thongSo": {
+      "Vi xử lý": "Snapdragon 8 Gen 3 for Galaxy (4nm)",
+      "Bộ nhớ trong": "512GB UFS 4.0",
+      "Kích thước màn hình": "6.8\" Dynamic LTPO AMOLED 2X QHD+ 120Hz (Kèm S-Pen)",
+      "Camera sau": "200MP OIS + 50MP Periscope 5x + 10MP Tele 3x + 12MP Ultra Wide",
+      "Camera trước": "12MP Dual Pixel",
+      "Hệ điều hành": "Android 14, One UI 6.1 (Galaxy AI)",
+      "Dung lượng pin": "5000 mAh (Sạc siêu nhanh 45W)"
+    }
+  },
+  "SAC_ANKER": {
+    "maHang": "SAC_ANKER",
+    "tenHang": "Củ sạc Anker 30W Nano III",
+    "nhanHieu": "Anker",
+    "maLoai": "ANKER",
+    "maNhom": "PHUKIEN",
+    "tenNhom": "Phụ kiện công nghệ",
+    "donGia": 420000,
+    "giaGoc": 550000,
+    "anhChinh": "https://i.hoanghamobile.vn/Uploads/2026/03/21/a1638-den.png",
+    "mauSac": [
+      {
+        "id": "c_black",
+        "ten": "Đen",
+        "hex": "#1E293B",
+        "anh": "https://i.hoanghamobile.vn/Uploads/2026/03/21/a1638-den.png"
+      }
+    ],
+    "phienBan": [
+      {
+        "id": "v_30w",
+        "dungLuong": "30W GaN II",
+        "gia": 420000,
+        "giaGoc": 550000
+      }
+    ],
+    "thongSo": {
+      "Công nghệ": "Anker GaN II + PowerIQ 3.0",
+      "Công suất tối đa": "30W USB-C PD",
+      "Tính năng an toàn": "ActiveShield 2.0 kiểm soát nhiệt độ"
+    }
+  },
+  "XM14256": {
+    "maHang": "XM14256",
+    "tenHang": "Xiaomi 14 256GB",
+    "nhanHieu": "Xiaomi",
+    "maLoai": "XIAOMI",
+    "maNhom": "DIENTHOAI",
+    "tenNhom": "Điện thoại",
+    "donGia": 18490000,
+    "giaGoc": 20990000,
+    "anhChinh": "https://i.hoanghamobile.vn/Uploads/2025/09/09/o12u-mocha-gold-front-r3-wallpaper1.png",
+    "mauSac": [
+      {
+        "id": "c_gold",
+        "ten": "Đen Tuyền Leica",
+        "hex": "#1E293B",
+        "anh": "https://i.hoanghamobile.vn/Uploads/2025/09/09/o12u-mocha-gold-front-r3-wallpaper1.png"
+      },
+      {
+        "id": "c_rose",
+        "ten": "Xanh Ngọc Bích",
+        "hex": "#10B981",
+        "anh": "https://i.hoanghamobile.vn/Uploads/2025/09/09/o12a-rose-gold-back-r31.png"
+      }
+    ],
+    "phienBan": [
+      {
+        "id": "v_256",
+        "dungLuong": "256GB",
+        "gia": 18490000,
+        "giaGoc": 20990000
+      },
+      {
+        "id": "v_512",
+        "dungLuong": "512GB",
+        "gia": 20990000,
+        "giaGoc": 22990000
+      }
+    ],
+    "thongSo": {
+      "Vi xử lý": "Snapdragon 8 Gen 3 (4nm)",
+      "Bộ nhớ trong": "256GB UFS 4.0",
+      "Kích thước màn hình": "6.36\" LTPO OLED C8 120Hz (3000 nits)",
+      "Camera sau": "Hệ thống 3 camera Leica Summilux 50MP OIS",
+      "Camera trước": "32MP 4K 60fps",
+      "Hệ điều hành": "Xiaomi HyperOS",
+      "Dung lượng pin": "4610 mAh (Sạc HyperCharge 90W)"
+    }
+  },
+  "MH002": {
+    "maHang": "MH002",
+    "tenHang": "REDMAGIC Gaming Tablet Pro 256GB",
+    "nhanHieu": "Nubia",
+    "maLoai": "NUBIA",
+    "maNhom": "TABLET",
+    "tenNhom": "Máy tính bảng",
+    "donGia": 15990000,
+    "giaGoc": 17990000,
+    "anhChinh": "https://i.hoanghamobile.vn/Uploads/2026/04/06/ipad-air-11-in-m4-wifi-purple-pdp-image-position-1-th-en.jpg",
+    "mauSac": [
+      {
+        "id": "c_std",
+        "ten": "Đen Gaming",
+        "hex": "#1E293B",
+        "anh": "https://i.hoanghamobile.vn/Uploads/2026/04/06/ipad-air-11-in-m4-wifi-purple-pdp-image-position-1-th-en.jpg"
+      }
+    ],
+    "phienBan": [
+      {
+        "id": "v_256",
+        "dungLuong": "256GB",
+        "gia": 15990000,
+        "giaGoc": 17990000
+      }
+    ],
+    "thongSo": {
+      "Vi xử lý": "Snapdragon 8 Gen 3 Leading Version",
+      "Bộ nhớ trong": "256GB",
+      "Kích thước màn hình": "10.9\" 2.8K 144Hz"
+    }
+  },
+  "MH003": {
+    "maHang": "MH003",
+    "tenHang": "Samsung Galaxy S26 Ultra 12GB/256GB",
+    "nhanHieu": "Samsung",
+    "maLoai": "SAMSUNG",
+    "maNhom": "DIENTHOAI",
+    "tenNhom": "Điện thoại",
+    "donGia": 30490000,
+    "giaGoc": 33990000,
+    "anhChinh": "https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png",
+    "mauSac": [
+      {
+        "id": "c_std",
+        "ten": "Titan Đen",
+        "hex": "#1E293B",
+        "anh": "https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png"
+      }
+    ],
+    "phienBan": [
+      {
+        "id": "v_256",
+        "dungLuong": "256GB",
+        "gia": 30490000,
+        "giaGoc": 33990000
+      },
+      {
+        "id": "v_512",
+        "dungLuong": "512GB",
+        "gia": 34490000,
+        "giaGoc": 37990000
+      }
+    ],
+    "thongSo": {
+      "Vi xử lý": "Snapdragon 8 Elite for Galaxy",
+      "Bộ nhớ trong": "256GB",
+      "Kích thước màn hình": "6.9\" Dynamic AMOLED 2X 120Hz"
+    }
+  },
+  "MH004": {
+    "maHang": "MH004",
+    "tenHang": "Samsung Galaxy A08 4GB/64GB",
+    "nhanHieu": "Samsung",
+    "maLoai": "SAMSUNG",
+    "maNhom": "DIENTHOAI",
+    "tenNhom": "Điện thoại",
+    "donGia": 4490000,
+    "giaGoc": 4790000,
+    "anhChinh": "https://i.hoanghamobile.vn/Uploads/2026/10/02/a08-silver-135259154.jpg",
+    "mauSac": [
+      {
+        "id": "c_std",
+        "ten": "Bạc Silver",
+        "hex": "#CBD5E1",
+        "anh": "https://i.hoanghamobile.vn/Uploads/2026/10/02/a08-silver-135259154.jpg"
+      }
+    ],
+    "phienBan": [
+      {
+        "id": "v_64",
+        "dungLuong": "64GB",
+        "gia": 4490000,
+        "giaGoc": 4790000
+      }
+    ],
+    "thongSo": {
+      "Vi xử lý": "MediaTek Helio G99",
+      "Bộ nhớ trong": "64GB",
+      "Dung lượng pin": "6000mAh"
+    }
+  },
+  "MH006": {
+    "maHang": "MH006",
+    "tenHang": "Củ sạc nhanh Apple 20W USB-C Chính hãng",
+    "nhanHieu": "Apple",
+    "maLoai": "APPLE",
+    "maNhom": "PHUKIEN",
+    "tenNhom": "Phụ kiện công nghệ",
+    "donGia": 490000,
+    "giaGoc": 690000,
+    "anhChinh": "https://i.hoanghamobile.vn/Uploads/2026/03/21/a1638-den.png",
+    "mauSac": [
+      {
+        "id": "c_std",
+        "ten": "Trắng",
+        "hex": "#F8FAFC",
+        "anh": "https://i.hoanghamobile.vn/Uploads/2026/03/21/a1638-den.png"
+      }
+    ],
+    "phienBan": [
+      {
+        "id": "v_20w",
+        "dungLuong": "20W USB-C",
+        "gia": 490000,
+        "giaGoc": 690000
+      }
+    ],
+    "thongSo": {
+      "Công suất": "20W USB-C PD",
+      "Tương thích": "iPhone, iPad, AirPods"
+    }
+  },
+  "MH007": {
+    "maHang": "MH007",
+    "tenHang": "Ốp lưng MagSafe trong suốt cho iPhone Pro Max",
+    "nhanHieu": "Apple",
+    "maLoai": "APPLE",
+    "maNhom": "PHUKIEN",
+    "tenNhom": "Phụ kiện công nghệ",
+    "donGia": 990000,
+    "giaGoc": 1290000,
+    "anhChinh": "https://i.hoanghamobile.vn/Uploads/2023/09/22/clear-case-iphone-15-pro-1.png",
+    "mauSac": [
+      {
+        "id": "c_clear",
+        "ten": "Trong suốt",
+        "hex": "#F8FAFC",
+        "anh": "https://i.hoanghamobile.vn/Uploads/2023/09/22/clear-case-iphone-15-pro-1.png"
+      }
+    ],
+    "phienBan": [
+      {
+        "id": "v_std",
+        "dungLuong": "Chuẩn MagSafe",
+        "gia": 990000,
+        "giaGoc": 1290000
+      }
+    ],
+    "thongSo": {
+      "Chất liệu": "Polycarbonate trong suốt chống ố vàng",
+      "Tính năng": "Tích hợp vòng nam châm MagSafe"
+    }
+  },
+  "MH008": {
+    "maHang": "MH008",
+    "tenHang": "Tai nghe AirPods Pro 2 USB-C MagSafe",
+    "nhanHieu": "Apple",
+    "maLoai": "APPLE",
+    "maNhom": "AMTHANH",
+    "tenNhom": "Thiết bị âm thanh",
+    "donGia": 5490000,
+    "giaGoc": 6190000,
+    "anhChinh": "https://i.hoanghamobile.vn/Uploads/2023/10/27/airpods-pro-2nd-gen-usb-c-1.png",
+    "mauSac": [
+      {
+        "id": "c_white",
+        "ten": "Trắng",
+        "hex": "#F8FAFC",
+        "anh": "https://i.hoanghamobile.vn/Uploads/2023/10/27/airpods-pro-2nd-gen-usb-c-1.png"
+      }
+    ],
+    "phienBan": [
+      {
+        "id": "v_std",
+        "dungLuong": "USB-C",
+        "gia": 5490000,
+        "giaGoc": 6190000
+      }
+    ],
+    "thongSo": {
+      "Chip xử lý": "Apple H2",
+      "Chống ồn": "ANC Chủ động + Xuyên âm thích ứng"
+    }
+  },
+  "MH010": {
+    "maHang": "MH010",
+    "tenHang": "Pin sạc dự phòng Anker MagGo Qi2 10000mAh 45W",
+    "nhanHieu": "Anker",
+    "maLoai": "ANKER",
+    "maNhom": "PHUKIEN",
+    "tenNhom": "Phụ kiện công nghệ",
+    "donGia": 1290000,
+    "giaGoc": 1590000,
+    "anhChinh": "https://i.hoanghamobile.vn/Uploads/2026/09/18/sac-du-phong-anker-maggo-2-pro-polymer-10000mah-khong-day-magnetic-qi2-25w-type-c-pd-45w-a110r-1-085750889.png",
+    "mauSac": [
+      {
+        "id": "c_black",
+        "ten": "Đen",
+        "hex": "#1E293B",
+        "anh": "https://i.hoanghamobile.vn/Uploads/2026/09/18/sac-du-phong-anker-maggo-2-pro-polymer-10000mah-khong-day-magnetic-qi2-25w-type-c-pd-45w-a110r-1-085750889.png"
+      }
+    ],
+    "phienBan": [
+      {
+        "id": "v_10000",
+        "dungLuong": "10000mAh Qi2",
+        "gia": 1290000,
+        "giaGoc": 1590000
+      }
+    ],
+    "thongSo": {
+      "Dung lượng": "10.000 mAh",
+      "Công suất": "Sạc không dây Qi2 15W / USB-C PD 45W"
     }
   }
 }

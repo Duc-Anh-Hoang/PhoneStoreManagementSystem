@@ -49,13 +49,15 @@
 
         const mergedList = [];
         const seenIds = new Set();
+        const seenNames = new Set();
 
         for (const item of backendItems) {
           seenIds.add(item.maHang);
+          if (item.tenHang) seenNames.add(item.tenHang.trim().toLowerCase());
           const meta = metaMap[item.maHang] || metaValues.find(m => m.tenHang && item.tenHang && m.tenHang.toLowerCase() === item.tenHang.toLowerCase());
           const tonKho = item.tonKho !== undefined ? Number(item.tonKho) : (meta?.tonKho || 15);
           const donGia = Number(item.donGia) || meta?.donGia || 0;
-          const anhChinh = meta?.anhChinh || item.hinhAnh || 'https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-natural-titan.png';
+          const anhChinh = meta?.anhChinh || item.hinhAnh || 'https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-tu-nhien-1.png';
 
           mergedList.push({
             maHang: item.maHang,
@@ -80,7 +82,10 @@
 
         // Add metadata products not yet in backend
         for (const meta of metaValues) {
-          if (!seenIds.has(meta.maHang)) {
+          const normName = (meta.tenHang || '').trim().toLowerCase();
+          if (!seenIds.has(meta.maHang) && (!normName || !seenNames.has(normName))) {
+            seenIds.add(meta.maHang);
+            if (normName) seenNames.add(normName);
             mergedList.push({
               maHang: meta.maHang,
               tenHang: meta.tenHang,

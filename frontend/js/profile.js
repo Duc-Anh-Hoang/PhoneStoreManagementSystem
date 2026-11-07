@@ -331,7 +331,17 @@
   function setupMainHeader(user) {
     window.toggleMegaMenu = function () {
       const menu = document.getElementById('mega-menu-flyout');
-      if (menu) menu.classList.toggle('hidden');
+      if (menu) {
+        const willShow = menu.classList.contains('hidden');
+        menu.classList.toggle('hidden');
+        if (willShow) {
+          const autoDrop = document.getElementById('search-autocomplete-dropdown');
+          if (autoDrop) autoDrop.classList.add('hidden');
+          const noti = document.getElementById('notification-popover');
+          if (noti) noti.classList.add('hidden');
+          if (window.closeCustomerAvatarMenu) window.closeCustomerAvatarMenu();
+        }
+      }
     };
 
     window.toggleNotificationPopover = function () {

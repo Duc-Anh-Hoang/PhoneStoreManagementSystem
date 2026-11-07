@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using PhoneStoreAPI.Common.Constants;
 using PhoneStoreAPI.Models.Entities;
 
@@ -6,6 +6,111 @@ namespace PhoneStoreAPI.Data.Seeders;
 
 public static class DbSeeder
 {
+    private static async Task EnsureSchemaUpgradedAsync(AppDbContext context, ILogger logger)
+    {
+        try
+        {
+            const string migrationSql = @"
+CREATE SEQUENCE IF NOT EXISTS seq_PhieuNhap AS BIGINT START WITH 10 INCREMENT BY 1;
+CREATE SEQUENCE IF NOT EXISTS seq_HoaDon AS BIGINT START WITH 10 INCREMENT BY 1;
+CREATE SEQUENCE IF NOT EXISTS seq_BaoHanh AS BIGINT START WITH 10 INCREMENT BY 1;
+CREATE SEQUENCE IF NOT EXISTS seq_TraHang AS BIGINT START WITH 10 INCREMENT BY 1;
+CREATE SEQUENCE IF NOT EXISTS seq_TiepNhan AS BIGINT START WITH 10 INCREMENT BY 1;
+CREATE SEQUENCE IF NOT EXISTS seq_DonHang AS BIGINT START WITH 10 INCREMENT BY 1;
+
+SELECT setval('seq_PhieuNhap', GREATEST((SELECT last_value FROM seq_PhieuNhap), 10), true);
+SELECT setval('seq_HoaDon', GREATEST((SELECT last_value FROM seq_HoaDon), 10), true);
+SELECT setval('seq_BaoHanh', GREATEST((SELECT last_value FROM seq_BaoHanh), 10), true);
+SELECT setval('seq_TraHang', GREATEST((SELECT last_value FROM seq_TraHang), 10), true);
+SELECT setval('seq_TiepNhan', GREATEST((SELECT last_value FROM seq_TiepNhan), 10), true);
+SELECT setval('seq_DonHang', GREATEST((SELECT last_value FROM seq_DonHang), 10), true);
+
+ALTER TABLE IMEI DROP CONSTRAINT IF EXISTS imei_trangthai_check;
+ALTER TABLE IMEI ADD CONSTRAINT imei_trangthai_check
+    CHECK (TRANGTHAI IN ('con_hang', 'da_ban', 'tra_hang', 'cho_duyet', 'dang_sua'));
+
+ALTER TABLE TraHang DROP CONSTRAINT IF EXISTS trahang_maimei_key;
+
+ALTER TABLE TraHang ADD COLUMN IF NOT EXISTS LOAIYEUCAU VARCHAR(20) NOT NULL DEFAULT 'loi_ky_thuat';
+ALTER TABLE TraHang ADD COLUMN IF NOT EXISTS TRANGTHAI VARCHAR(20) NOT NULL DEFAULT 'tiep_nhan';
+ALTER TABLE TraHang ADD COLUMN IF NOT EXISTS CHECKLIST_NGOAIQUAN TEXT NULL;
+ALTER TABLE TraHang ADD COLUMN IF NOT EXISTS KETQUA_KIEMTRA VARCHAR(30) NULL;
+ALTER TABLE TraHang ADD COLUMN IF NOT EXISTS GHICHU_KIEMTRA TEXT NULL;
+ALTER TABLE TraHang ADD COLUMN IF NOT EXISTS MANV_KIEMTRA VARCHAR(10) NULL REFERENCES NhanVien(MANV);
+ALTER TABLE TraHang ADD COLUMN IF NOT EXISTS NGAY_KIEMTRA TIMESTAMPTZ NULL;
+ALTER TABLE TraHang ADD COLUMN IF NOT EXISTS MANV_DUYET VARCHAR(10) NULL REFERENCES NhanVien(MANV);
+ALTER TABLE TraHang ADD COLUMN IF NOT EXISTS NGAY_DUYET TIMESTAMPTZ NULL;
+ALTER TABLE TraHang ADD COLUMN IF NOT EXISTS LYDO_TUCHOI VARCHAR(255) NULL;
+ALTER TABLE TraHang ADD COLUMN IF NOT EXISTS SOTIENHOAN DECIMAL(18,2) NULL;
+ALTER TABLE TraHang ADD COLUMN IF NOT EXISTS MAGIAODICH VARCHAR(50) NULL;
+ALTER TABLE TraHang ADD COLUMN IF NOT EXISTS MAIMEI_MOI VARCHAR(20) NULL REFERENCES IMEI(MAIMEI);
+ALTER TABLE TraHang ADD COLUMN IF NOT EXISTS MANV_HOANTAT VARCHAR(10) NULL REFERENCES NhanVien(MANV);
+ALTER TABLE TraHang ADD COLUMN IF NOT EXISTS NGAY_HOANTAT TIMESTAMPTZ NULL;
+
+CREATE UNIQUE INDEX IF NOT EXISTS UQ_TraHang_Active_IMEI ON TraHang(MAIMEI)
+    WHERE TRANGTHAI NOT IN ('tu_choi', 'da_huy');
+
+CREATE TABLE IF NOT EXISTS TraHangLichSu (
+    MALICHSU       BIGSERIAL PRIMARY KEY,
+    MATR           VARCHAR(15)  NOT NULL REFERENCES TraHang(MATR) ON DELETE CASCADE,
+    TRANGTHAI_CU   VARCHAR(20)  NULL,
+    TRANGTHAI_MOI  VARCHAR(20)  NOT NULL,
+    MANV           VARCHAR(10)  NOT NULL REFERENCES NhanVien(MANV),
+    THOIDIEM       TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    GHICHU         VARCHAR(255) NULL
+);
+CREATE INDEX IF NOT EXISTS IX_TraHangLichSu_MaTR ON TraHangLichSu(MATR);
+
+INSERT INTO ThamSo (MATHAMSO, TENTHAMSO, GIATRI, DONVI) VALUES
+    ('HAN_DOI_Y_NGAY', 'Hạn đổi trả đối với lý do đổi ý (nguyên seal)', 7, 'ngày')
+ON CONFLICT (MATHAMSO) DO NOTHING;
+
+CREATE OR REPLACE VIEW vw_TonKho AS
+SELECT m.MAHANG, m.TENHANG, m.MANHOM, m.MALOAI, m.DONGIA,
+       COALESCE(n.TONGNHAP, 0) AS TONGNHAP,
+       COALESCE(b.TONGBAN, 0) AS TONGBAN,
+       CASE 
+         WHEN m.QUANLYIMEI = TRUE THEN COALESCE(im.TONKHO_IMEI, 0)
+         ELSE COALESCE(n.TONGNHAP, 0) - COALESCE(b.TONGBAN, 0)
+       END AS TONKHO
+FROM MatHang m
+LEFT JOIN (SELECT MAHANG, SUM(SLNHAP) AS TONGNHAP FROM ChiTietPhieuNhap GROUP BY MAHANG) n ON n.MAHANG = m.MAHANG
+LEFT JOIN (SELECT MAHANG, SUM(SLBAN) AS TONGBAN FROM ChiTietHoaDon GROUP BY MAHANG) b ON b.MAHANG = m.MAHANG
+LEFT JOIN (SELECT MAHANG, COUNT(*) AS TONKHO_IMEI FROM IMEI WHERE TRANGTHAI = 'con_hang' GROUP BY MAHANG) im ON im.MAHANG = m.MAHANG;
+
+CREATE OR REPLACE VIEW vw_diemtichluy AS
+SELECT 
+    k.MAKH,
+    k.HOTEN,
+    k.SDT,
+    k.EMAIL,
+    COALESCE(s.TongChiTieu, 0) AS TongChiTieu,
+    COALESCE(r.TongTienTra, 0) AS TongTienTra,
+    GREATEST(0, FLOOR((COALESCE(s.TongChiTieu, 0) - COALESCE(r.TongTienTra, 0)) / NULLIF(p.GIATRI, 0))) AS DiemTichLuy
+FROM KhachHang k
+LEFT JOIN (SELECT h.MAKH, SUM(h.THANHTIEN) AS TongChiTieu
+           FROM HoaDon h
+           WHERE h.MAKH IS NOT NULL
+           GROUP BY h.MAKH) s ON s.MAKH = k.MAKH
+LEFT JOIN (SELECT h.MAKH, SUM(COALESCE(t.SOTIENHOAN, ct.SLBAN * ct.DONGIA_BAN)) AS TongTienTra
+           FROM TraHang t
+           JOIN HoaDon h ON h.SOHD = t.SOHD
+           JOIN ChiTietHoaDon ct ON ct.SOHD = t.SOHD AND ct.MAIMEI = t.MAIMEI
+           WHERE t.TRANGTHAI = 'hoan_tat' 
+             AND t.HINHTHUCHOANTIEN IN ('tien_mat', 'chuyen_khoan') 
+             AND h.MAKH IS NOT NULL
+           GROUP BY h.MAKH) r ON r.MAKH = k.MAKH
+LEFT JOIN LATERAL (SELECT GIATRI FROM ThamSo WHERE MATHAMSO = 'DIEM_MOI_VND') p ON TRUE;
+";
+            await context.Database.ExecuteSqlRawAsync(migrationSql);
+            logger.LogInformation("Đã kiểm tra và đồng bộ schema bảng TraHang & TraHangLichSu thành công.");
+        }
+        catch (Exception ex)
+        {
+            logger.LogWarning(ex, "Cảnh báo khi đồng bộ schema TraHang: {Message}", ex.Message);
+        }
+    }
+
     public static async Task SeedAsync(AppDbContext context, ILogger logger)
     {
         try
@@ -16,6 +121,9 @@ public static class DbSeeder
                 return;
             }
 
+            // 0. Đảm bảo schema bảng TraHang, TraHangLichSu, IMEI constraint và Views luôn được nâng cấp đầy đủ
+            await EnsureSchemaUpgradedAsync(context, logger);
+
             // 1. Seed ThamSo (kiểm tra độc lập)
             if (!await context.ThamSos.AnyAsync())
             {
@@ -23,7 +131,8 @@ public static class DbSeeder
                 context.ThamSos.AddRange(
                     new ThamSo { MaThamSo = "VAT_PHANTRAM", TenThamSo = "Thuế VAT đã gồm trong giá bán", GiaTri = 10, DonVi = "%" },
                     new ThamSo { MaThamSo = "DIEM_MOI_VND", TenThamSo = "Số tiền chi tiêu để được 1 điểm", GiaTri = 100000, DonVi = "VND" },
-                    new ThamSo { MaThamSo = "HAN_DOITRA_NGAY", TenThamSo = "Hạn đổi trả tính từ ngày lập hóa đơn", GiaTri = 30, DonVi = "ngày" }
+                    new ThamSo { MaThamSo = "HAN_DOITRA_NGAY", TenThamSo = "Hạn đổi trả tính từ ngày lập hóa đơn", GiaTri = 30, DonVi = "ngày" },
+                    new ThamSo { MaThamSo = "HAN_DOI_Y_NGAY", TenThamSo = "Hạn đổi trả đối với lý do đổi ý (nguyên seal)", GiaTri = 7, DonVi = "ngày" }
                 );
                 await context.SaveChangesAsync();
                 logger.LogInformation("Seed ThamSo thành công.");
@@ -176,6 +285,79 @@ public static class DbSeeder
 
                 context.IMEIs.AddRange(sampleImeis);
                 await context.SaveChangesAsync();
+            }
+
+            // 6. Seed Hóa đơn mẫu có gắn IMEI đã bán và Phiếu đổi trả mẫu (nếu chưa có) để phục vụ kiểm thử Đổi trả & Bảo hành
+            if (!await context.HoaDons.AnyAsync(h => h.SoHD == "HD261100001"))
+            {
+                var imeiSold1 = await context.IMEIs.FirstOrDefaultAsync(i => i.MaIMEI == "IMEI_IP15PM_05");
+                var imeiSold2 = await context.IMEIs.FirstOrDefaultAsync(i => i.MaIMEI == "IMEI_IP15P_05");
+                if (imeiSold1 != null && imeiSold2 != null && imeiSold1.TrangThai == "con_hang" && imeiSold2.TrangThai == "con_hang")
+                {
+                    var saleDate = DateTime.UtcNow.AddDays(-2);
+                    var kh = await context.KhachHangs.Select(k => k.MaKH).FirstOrDefaultAsync();
+
+                    var hdSample = new HoaDon
+                    {
+                        SoHD = "HD261100001",
+                        NgayLap = saleDate,
+                        MaKH = kh,
+                        MaNV = "NV002",
+                        KenhBan = "tai_quay",
+                        TongTien = 54480000m,
+                        TienGiamGia = 0m,
+                        PhuongThucThanhToan = "chuyen_khoan"
+                    };
+                    context.HoaDons.Add(hdSample);
+                    await context.SaveChangesAsync();
+
+                    context.ChiTietHoaDons.AddRange(
+                        new ChiTietHoaDon { SoHD = "HD261100001", MaHang = "IP15PM256", MaIMEI = "IMEI_IP15PM_05", SlBan = 1, DonGiaBan = 29490000m },
+                        new ChiTietHoaDon { SoHD = "HD261100001", MaHang = "IP15P128", MaIMEI = "IMEI_IP15P_05", SlBan = 1, DonGiaBan = 24990000m }
+                    );
+                    await context.SaveChangesAsync();
+
+                    imeiSold1.TrangThai = "da_ban";
+                    imeiSold2.TrangThai = "cho_duyet";
+                    await context.SaveChangesAsync();
+
+                    if (!await context.BaoHanhs.AnyAsync(b => b.MaIMEI == "IMEI_IP15PM_05"))
+                    {
+                        context.BaoHanhs.AddRange(
+                            new BaoHanh { MaBH = "BH261100001", SoHD = "HD261100001", MaIMEI = "IMEI_IP15PM_05", NgayBD = saleDate, ThoiHanThang = 12, NgayKT = saleDate.AddMonths(12), DieuKien = "Bảo hành tiêu chuẩn 12 tháng" },
+                            new BaoHanh { MaBH = "BH261100002", SoHD = "HD261100001", MaIMEI = "IMEI_IP15P_05", NgayBD = saleDate, ThoiHanThang = 12, NgayKT = saleDate.AddMonths(12), DieuKien = "Bảo hành tiêu chuẩn 12 tháng" }
+                        );
+                        await context.SaveChangesAsync();
+                    }
+
+                    if (!await context.TraHangs.AnyAsync())
+                    {
+                        var trSample = new TraHang
+                        {
+                            MaTR = "TR261100001",
+                            SoHD = "HD261100001",
+                            MaIMEI = "IMEI_IP15P_05",
+                            LoaiYeuCau = "loi_ky_thuat",
+                            HinhThucHoanTien = "doi_hang",
+                            LyDo = "Màn hình xuất hiện sọc xanh nhẹ khi để độ sáng thấp",
+                            TrangThai = "tiep_nhan",
+                            NgayTR = DateTime.UtcNow.AddHours(-3),
+                            MaNV = "NV003",
+                            ChecklistNgoaiQuan = "Máy đẹp 99%, không trầy xước, đầy đủ hộp và cáp sạc zin"
+                        };
+                        context.TraHangs.Add(trSample);
+                        context.Set<TraHangLichSu>().Add(new TraHangLichSu
+                        {
+                            MaTR = "TR261100001",
+                            TrangThaiCu = null,
+                            TrangThaiMoi = "tiep_nhan",
+                            MaNV = "NV003",
+                            ThoiDiem = DateTime.UtcNow.AddHours(-3),
+                            GhiChu = "Tiếp nhận hồ sơ đổi trả tại quầy"
+                        });
+                        await context.SaveChangesAsync();
+                    }
+                }
             }
         }
         catch (Exception ex)

@@ -821,7 +821,7 @@
       hinhAnh: prod.anhChinh || prod.image || 'images/banner/iphone-18-cat-082925094.png',
       soLuong: 1,
       mauSac: 'Mặc định',
-      phienBan: 'Tiêu chuẩn'
+      phienBan: ((prod.tenHang || '').match(/\b(?:64|128|256|512)\s*GB\b|\b[12]\s*TB\b/i)?.[0] || 'Tiêu chuẩn')
     };
 
     if (window.CellphoneSCart || window.Cart) {
@@ -848,7 +848,23 @@
 
     if (!input || !dropdown) return;
 
+    const hideOtherHeaderFlyouts = () => {
+      const mega = document.getElementById('mega-menu-flyout');
+      if (mega) mega.classList.add('hidden');
+      const noti = document.getElementById('notification-popover');
+      if (noti) noti.classList.add('hidden');
+      if (window.closeCustomerAvatarMenu) window.closeCustomerAvatarMenu();
+    };
+
+    input.addEventListener('focus', () => {
+      hideOtherHeaderFlyouts();
+      if (input.value.trim() && dropdown.innerHTML.trim()) {
+        dropdown.classList.remove('hidden');
+      }
+    });
+
     input.addEventListener('input', (e) => {
+      hideOtherHeaderFlyouts();
       const q = e.target.value.trim();
       if (clearBtn) {
         if (q) clearBtn.classList.remove('hidden');
@@ -878,7 +894,7 @@
               <div class="p-2.5 flex items-center gap-3 hover:bg-slate-50 rounded-xl cursor-pointer transition-colors" onclick="window.location.href = 'pages/product-detail.html?id=' + encodeURIComponent('${p.maHang}'); document.getElementById('search-autocomplete-dropdown').classList.add('hidden');">
                 <div class="w-10 h-10 object-contain p-1 rounded-lg bg-slate-50 border border-slate-100 flex-shrink-0 flex items-center justify-center">
                   ${p.anhChinh ? `
-                    <img src="${p.anhChinh}" class="w-full h-full object-contain" alt="${p.tenHang}">
+                    <img src="${p.anhChinh}" class="w-full h-full object-contain" alt="${p.tenHang}" onerror="this.onerror=null; this.src='images/products/phone-mh101.png';">
                   ` : `
                     <i class="fa-solid fa-mobile-screen-button text-slate-300 text-xs"></i>
                   `}
@@ -4038,9 +4054,27 @@
   window.toggleMegaMenu = function () {
     const menu = document.getElementById('mega-menu-flyout');
     if (menu) {
+      const willShow = menu.classList.contains('hidden');
       menu.classList.toggle('hidden');
+      if (willShow) {
+        const searchDrop = document.getElementById('search-autocomplete-dropdown');
+        if (searchDrop) searchDrop.classList.add('hidden');
+        const noti = document.getElementById('notification-popover');
+        if (noti) noti.classList.add('hidden');
+        if (window.closeCustomerAvatarMenu) window.closeCustomerAvatarMenu();
+      }
     }
   };
+
+  document.addEventListener('click', (e) => {
+    const mega = document.getElementById('mega-menu-flyout');
+    const megaBtn = document.getElementById('btn-mega-menu-toggle');
+    if (mega && !mega.classList.contains('hidden')) {
+      if (!mega.contains(e.target) && (!megaBtn || !megaBtn.contains(e.target))) {
+        mega.classList.add('hidden');
+      }
+    }
+  });
 
   // Khởi động toàn bộ ứng dụng sau khi toàn bộ hằng số và hàm đã được định nghĩa
   if (document.readyState === 'loading') {

@@ -21,6 +21,21 @@
   const STORAGE_KEY = 'cellphones_cart';
   const PROMO_STORAGE_KEY = 'cellphones_applied_promo';
 
+
+  function formatProductVariantTitle(baseTitle, variantName) {
+    if (!baseTitle) return 'Sản phẩm';
+    const v = (variantName || '').trim();
+    if (!v || v === 'Tiêu chuẩn' || v === 'Mặc định') return baseTitle;
+    const capRegex = /(\d+\s*GB\s*\/\s*\d+\s*(?:GB|TB)|\b(?:64|128|256|512)\s*GB\b|\b[12]\s*TB\b)/i;
+    if (capRegex.test(baseTitle)) {
+      return baseTitle.replace(capRegex, v);
+    }
+    if (!baseTitle.toLowerCase().includes(v.toLowerCase())) {
+      return baseTitle + ' ' + v;
+    }
+    return baseTitle;
+  }
+
   class CartManager {
     constructor() {
       this.items = this.loadCart();
@@ -88,7 +103,7 @@
           this.items.push({
             id: cartItemId,
             maHang: itemObj.maHang || cartItemId,
-            tenHang: itemObj.tenHang || itemObj.name || 'Sản phẩm',
+            tenHang: formatProductVariantTitle(itemObj.tenHang || itemObj.name || 'Sản phẩm', vName),
             variantName: vName,
             colorName: cName,
             colorHex: itemObj.colorHex || '#16A34A',
@@ -136,7 +151,7 @@
         this.items.push({
           id: cartItemId,
           maHang: product.maHang,
-          tenHang: product.tenHang,
+          tenHang: formatProductVariantTitle(product.tenHang, variant ? variant.dungLuong : ''),
           variantName: variant ? variant.dungLuong : '',
           colorName: color ? color.ten : '',
           colorHex: color ? color.hex : '#16A34A',

@@ -237,28 +237,78 @@ const AdminRealtimeData = {
     }
   },
 
-  initOrders(backendOrders) {
-    let localOrders = [];
+  mergeAllOrderSources(backendOrders = []) {
+    const map = new Map();
+
+    // 1. Đọc đơn từ User (samamobile_user_orders)
     try {
-      const raw = localStorage.getItem('cellphones_online_orders');
-      if (raw) localOrders = JSON.parse(raw);
+      const userRaw = localStorage.getItem('samamobile_user_orders');
+      if (userRaw) {
+        const userList = JSON.parse(userRaw);
+        if (Array.isArray(userList)) {
+          userList.forEach(o => {
+            if (o && o.maDH) map.set(o.maDH, o);
+          });
+        }
+      }
     } catch (e) {}
 
-    // Gộp đơn từ backend nếu có
+    // 2. Đọc đơn từ kho Admin (cellphones_online_orders)
+    try {
+      const adminRaw = localStorage.getItem('cellphones_online_orders');
+      if (adminRaw) {
+        const adminList = JSON.parse(adminRaw);
+        if (Array.isArray(adminList)) {
+          adminList.forEach(o => {
+            if (o && o.maDH) {
+              if (!map.has(o.maDH)) {
+                map.set(o.maDH, o);
+              } else {
+                const prev = map.get(o.maDH);
+                map.set(o.maDH, {
+                  ...prev,
+                  ...o,
+                  items: (o.items && o.items.length) ? o.items : (prev.items || [])
+                });
+              }
+            }
+          });
+        }
+      }
+    } catch (e) {}
+
+    // 3. Gộp đơn đang có trong bộ nhớ
+    (this.orders || []).forEach(o => {
+      if (o && o.maDH && !map.has(o.maDH)) {
+        map.set(o.maDH, o);
+      }
+    });
+
+    // 4. Gộp đơn từ Backend API (/api/donhangonline)
     if (Array.isArray(backendOrders) && backendOrders.length > 0) {
-      const existingIds = new Set(localOrders.map(o => o.maDH));
       backendOrders.forEach(bo => {
-        if (!existingIds.has(bo.maDH)) {
-          localOrders.push(bo);
-          existingIds.add(bo.maDH);
+        if (bo && bo.maDH) {
+          if (!map.has(bo.maDH)) {
+            map.set(bo.maDH, bo);
+          } else {
+            const prev = map.get(bo.maDH);
+            map.set(bo.maDH, {
+              ...prev,
+              ...bo,
+              phuongThucThanhToan: (prev.phuongThucThanhToan && ['banking', 'momo', 'vnpay', 'zalopay', 'card'].includes(prev.phuongThucThanhToan)) ? prev.phuongThucThanhToan : (bo.phuongThucThanhToan || prev.phuongThucThanhToan),
+              items: (bo.items && bo.items.length) ? bo.items : (prev.items || [])
+            });
+          }
         }
       });
     }
 
-    // Nếu rỗng, tạo 4 đơn hàng thực tế từ chính các sản phẩm trong kho JSON
-    if (localOrders.length === 0) {
+    let merged = Array.from(map.values());
+
+    // Nếu rỗng hoàn toàn, tạo 4 đơn hàng mẫu ban đầu
+    if (merged.length === 0) {
       const now = new Date();
-      localOrders = [
+      merged = [
         {
           maDH: 'DH' + Math.floor(100000 + Math.random() * 900000),
           ngayDat: new Date(now.getTime() - 15 * 60000).toISOString(),
@@ -305,23 +355,35 @@ const AdminRealtimeData = {
           items: [{ maHang: 'IP15PM256', tenHang: 'iPhone 15 Pro Max 256GB Titan Tự Nhiên', soLuong: 1, donGia: 29490000 }]
         }
       ];
-      localStorage.setItem('cellphones_online_orders', JSON.stringify(localOrders));
     }
 
-    this.orders = localOrders;
+    // Sắp xếp đơn mới nhất lên đầu
+    merged.sort((a, b) => new Date(b.ngayDat || 0).getTime() - new Date(a.ngayDat || 0).getTime());
+
+    this.orders = merged;
+    try {
+      localStorage.setItem('cellphones_online_orders', JSON.stringify(merged));
+    } catch (e) {}
+
+    return merged;
+  },
+
+  initOrders(backendOrders) {
+    this.mergeAllOrderSources(backendOrders);
   },
 
   setupRealtimeListeners() {
     window.addEventListener('storage', (e) => {
-      if (e.key === 'cellphones_online_orders' || e.key === 'cellphones_order_last_updated') {
+      if (e.key === 'samamobile_user_orders' || e.key === 'cellphones_online_orders' || e.key === 'cellphones_order_last_updated') {
         try {
-          const updatedOrders = JSON.parse(localStorage.getItem('cellphones_online_orders') || '[]');
-          if (updatedOrders.length > this.orders.length) {
+          const prevCount = (this.orders || []).length;
+          const prevTopId = (this.orders && this.orders[0]) ? this.orders[0].maDH : null;
+          const updatedOrders = this.mergeAllOrderSources([]);
+          if (updatedOrders.length > prevCount || (updatedOrders[0] && updatedOrders[0].maDH !== prevTopId)) {
             const newest = updatedOrders[0];
             this.playOrderChime();
-            showToast(`🔔 Đơn hàng mới: ${newest.tenNguoiNhan} - ${Format.currency(newest.tongTien)}!`, 'success');
+            showToast(`🔔 Đơn hàng mới: ${newest.tenNguoiNhan} (#${newest.maDH}) - ${Format.currency(newest.tongTien)}!`, 'success');
           }
-          this.orders = updatedOrders;
           this.refreshUI();
         } catch (err) {}
       }
@@ -381,8 +443,32 @@ const AdminRealtimeData = {
         });
       }
 
-      localStorage.setItem('cellphones_online_orders', JSON.stringify(this.orders));
-      localStorage.setItem('cellphones_order_last_updated', Date.now().toString());
+      try {
+        localStorage.setItem('cellphones_online_orders', JSON.stringify(this.orders));
+        // Đồng bộ trạng thái ngược lại sang samamobile_user_orders của khách hàng
+        const userRaw = localStorage.getItem('samamobile_user_orders');
+        if (userRaw) {
+          const userOrders = JSON.parse(userRaw);
+          if (Array.isArray(userOrders)) {
+            const uo = userOrders.find(x => x && x.maDH === maDH);
+            if (uo) {
+              uo.trangThai = newStatus;
+              if (soHD) uo.soHD = soHD;
+              localStorage.setItem('samamobile_user_orders', JSON.stringify(userOrders));
+            }
+          }
+        }
+        localStorage.setItem('cellphones_order_last_updated', Date.now().toString());
+      } catch (e) {}
+
+      try {
+        if (typeof BroadcastChannel !== 'undefined') {
+          const bc = new BroadcastChannel('samamobile_orders');
+          bc.postMessage({ type: 'order_status_updated', maDH: maDH, trangThai: newStatus, soHD: soHD });
+          bc.close();
+        }
+      } catch (e) {}
+
       this.refreshUI();
       return true;
     }
@@ -432,6 +518,12 @@ const Format = {
       doi_hang:     { labelVi: 'Đổi máy 1-1', cls: 'bg-blue-50 text-[#166534] border-blue-200' },
       tien_mat:     { labelVi: 'Tiền mặt', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
       chuyen_khoan: { labelVi: 'Chuyển khoản', cls: 'bg-purple-50 text-purple-700 border-purple-200' },
+      banking:      { labelVi: 'VietQR Ngân hàng', cls: 'bg-purple-50 text-purple-700 border-purple-200' },
+      momo:         { labelVi: 'Ví MoMo / QR', cls: 'bg-pink-50 text-pink-700 border-pink-200' },
+      vnpay:        { labelVi: 'VNPAY-QR', cls: 'bg-blue-50 text-blue-700 border-blue-200' },
+      zalopay:      { labelVi: 'ZaloPay', cls: 'bg-sky-50 text-sky-700 border-sky-200' },
+      card:         { labelVi: 'Thẻ Quốc tế', cls: 'bg-indigo-50 text-indigo-700 border-indigo-200' },
+      da_giao:      { labelVi: 'Hoàn thành', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
       the:          { labelVi: 'Thẻ POS', cls: 'bg-indigo-50 text-indigo-700 border-indigo-200' },
       cod:          { labelVi: 'Thu hộ COD', cls: 'bg-slate-100 text-slate-700 border-slate-200' },
       tai_quay:     { labelVi: 'Tại quầy', cls: 'bg-blue-50 text-[#166534] border-blue-200' },
@@ -1195,34 +1287,13 @@ async function renderDonHangTable(filter = 'all') {
     await AdminRealtimeData.init();
   }
 
-  // Đảm bảo đồng bộ ngay lập tức đơn hàng mới đặt từ index/cart (localStorage + API backend)
+  // Đảm bảo đồng bộ ngay lập tức đơn hàng mới đặt từ index/cart (samamobile_user_orders + cellphones_online_orders + API backend)
   try {
-    const raw = localStorage.getItem('cellphones_online_orders');
-    if (raw) {
-      const local = JSON.parse(raw);
-      if (Array.isArray(local) && local.length > 0) {
-        const map = new Map();
-        local.forEach(o => map.set(o.maDH, o));
-        (AdminRealtimeData.orders || []).forEach(o => {
-          if (!map.has(o.maDH)) map.set(o.maDH, o);
-        });
-        AdminRealtimeData.orders = Array.from(map.values());
-      }
-    }
     const backendOrders = await api.get('/donhangonline').catch(() => []);
-    if (Array.isArray(backendOrders) && backendOrders.length > 0) {
-      const map = new Map();
-      (AdminRealtimeData.orders || []).forEach(o => map.set(o.maDH, o));
-      backendOrders.forEach(bo => {
-        if (!map.has(bo.maDH)) {
-          map.set(bo.maDH, bo);
-        } else {
-          map.set(bo.maDH, { ...map.get(bo.maDH), ...bo });
-        }
-      });
-      AdminRealtimeData.orders = Array.from(map.values());
-    }
-  } catch (e) {}
+    AdminRealtimeData.mergeAllOrderSources(backendOrders);
+  } catch (e) {
+    AdminRealtimeData.mergeAllOrderSources([]);
+  }
 
   let orders = AdminRealtimeData.orders || [];
   cachedDonHangList = orders;
@@ -1261,9 +1332,11 @@ async function renderDonHangTable(filter = 'all') {
         </div>
       `;
     } else if (o.trangThai === 'dang_giao') {
+      const pm = String(o.phuongThucThanhToan || o.paymentMethod || '').toLowerCase();
+      const isPaidOnline = ['chuyen_khoan', 'banking', 'momo', 'vnpay', 'zalopay', 'card', 'the'].includes(pm) || o.paymentStatus === 'paid';
       actions = `
-        <button onclick="completeOrder('${o.maDH}')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs transition-colors shadow-2xs cursor-pointer" title="Tạo hóa đơn online & Hoàn tất">
-          Thu tiền & Hoàn tất
+        <button onclick="completeOrder('${o.maDH}')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs transition-colors shadow-2xs cursor-pointer" title="${isPaidOnline ? 'Đơn đã thanh toán trước - Xác nhận giao thành công & Hoàn tất' : 'Thu tiền COD & Hoàn tất đơn hàng'}">
+          ${isPaidOnline ? 'Xác nhận đã giao' : 'Thu tiền & Hoàn tất'}
         </button>
       `;
     } else if (o.trangThai === 'hoan_thanh') {
@@ -1291,7 +1364,14 @@ async function renderDonHangTable(filter = 'all') {
         <td class="p-3.5 text-xs text-slate-600 max-w-[200px] truncate" title="${o.diaChiGiao || ''}">${o.diaChiGiao || '-'}</td>
         <td class="p-3.5 text-xs text-slate-700 min-w-[180px] max-w-[260px]">${itemsSummary}</td>
         <td class="p-3.5 font-bold text-sm text-navy text-right whitespace-nowrap">${Format.currency(o.tongTien)}</td>
-        <td class="p-3.5 text-xs text-center whitespace-nowrap">${Format.statusBadge(o.phuongThucThanhToan)}</td>
+        <td class="p-3.5 text-xs text-center whitespace-nowrap">
+          ${Format.statusBadge(o.phuongThucThanhToan)}
+          ${(['chuyen_khoan', 'banking', 'momo', 'vnpay', 'zalopay', 'card', 'the'].includes(String(o.phuongThucThanhToan || o.paymentMethod || '').toLowerCase()) || o.paymentStatus === 'paid')
+            ? '<div class="text-[10px] font-bold text-emerald-600 mt-1"><i class="fa-solid fa-circle-check mr-0.5"></i>Đã thanh toán</div>'
+            : (o.trangThai === 'hoan_thanh'
+              ? '<div class="text-[10px] font-bold text-emerald-600 mt-1"><i class="fa-solid fa-circle-check mr-0.5"></i>Đã thu tiền</div>'
+              : (o.trangThai !== 'da_huy' ? '<div class="text-[10px] font-semibold text-amber-600 mt-1">Chưa thu tiền</div>' : ''))}
+        </td>
         <td class="p-3.5 text-xs text-center whitespace-nowrap">${Format.statusBadge(o.trangThai)}</td>
         <td class="p-3.5 text-xs text-right whitespace-nowrap">${actions}</td>
       </tr>
@@ -1359,12 +1439,19 @@ async function cancelOrder(maDH) {
 }
 
 async function completeOrder(maDH) {
+  const oComp = (AdminRealtimeData.orders || []).find(x => x.maDH === maDH);
+  const pm = String(oComp?.phuongThucThanhToan || oComp?.paymentMethod || '').toLowerCase();
+  const isPaidOnline = ['chuyen_khoan', 'banking', 'momo', 'vnpay', 'zalopay', 'card', 'the'].includes(pm) || oComp?.paymentStatus === 'paid';
   const genHD = 'HD' + Math.floor(10000 + Math.random() * 90000);
   AdminRealtimeData.updateOrderStatus(maDH, 'hoan_thanh', genHD);
   if (typeof renderDashboard === 'function') renderDashboard();
-  showToast('Đã thu tiền & hoàn tất đơn hàng ' + maDH + ' (Mã hóa đơn: ' + genHD + ')!', 'success');
+  showToast(
+    isPaidOnline
+      ? ('Đã xác nhận giao thành công & hoàn tất đơn ' + maDH + ' (Đã thanh toán - Mã HĐ: ' + genHD + ')!')
+      : ('Đã thu tiền COD & hoàn tất đơn hàng ' + maDH + ' (Mã hóa đơn: ' + genHD + ')!'),
+    'success'
+  );
   // Realtime notification qua SignalR
-  const oComp = (AdminRealtimeData.orders || []).find(x => x.maDH === maDH);
   if (window.OrderSignalR && typeof window.OrderSignalR.notifyOrderStatusChanged === 'function') {
     window.OrderSignalR.notifyOrderStatusChanged(
       maDH,

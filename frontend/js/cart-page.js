@@ -123,11 +123,32 @@
 
   const SAMPLE_ORDERS = [];
 
+
+  function formatProductVariantTitle(baseTitle, variantName) {
+    if (!baseTitle) return 'Sản phẩm';
+    const v = (variantName || '').trim();
+    if (!v || v === 'Tiêu chuẩn' || v === 'Mặc định') return baseTitle;
+    const capRegex = /(\d+\s*GB\s*\/\s*\d+\s*(?:GB|TB)|\b(?:64|128|256|512)\s*GB\b|\b[12]\s*TB\b)/i;
+    if (capRegex.test(baseTitle)) {
+      return baseTitle.replace(capRegex, v);
+    }
+    if (!baseTitle.toLowerCase().includes(v.toLowerCase())) {
+      return baseTitle + ' ' + v;
+    }
+    return baseTitle;
+  }
+
   function getCart() {
     try {
       const c = localStorage.getItem(STORAGE_KEY);
       const parsed = c ? JSON.parse(c) : [];
-      return Array.isArray(parsed) ? parsed : [];
+      if (!Array.isArray(parsed)) return [];
+      return parsed.map(it => {
+        if (!it) return it;
+        const vName = it.variantName || it.phienBan || '';
+        const syncedTitle = formatProductVariantTitle(it.tenHang || it.name || 'Sản phẩm', vName);
+        return { ...it, tenHang: syncedTitle, name: syncedTitle };
+      });
     } catch (e) {
       return [];
     }
@@ -146,11 +167,33 @@
   function getOrders() {
     try {
       const o = localStorage.getItem(ORDERS_STORAGE_KEY);
-      if (!o) {
-        localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(SAMPLE_ORDERS));
-        return SAMPLE_ORDERS;
-      }
-      return JSON.parse(o);
+      let userOrders = o ? JSON.parse(o) : [];
+      if (!Array.isArray(userOrders)) userOrders = [];
+
+      // Đồng bộ trạng thái mới nhất từ kho đơn Admin (cellphones_online_orders)
+      try {
+        const adminRaw = localStorage.getItem('cellphones_online_orders');
+        if (adminRaw) {
+          const adminOrders = JSON.parse(adminRaw);
+          if (Array.isArray(adminOrders)) {
+            const adminMap = new Map(adminOrders.filter(x => x && x.maDH).map(x => [x.maDH, x]));
+            let changed = false;
+            userOrders.forEach(uo => {
+              const ao = adminMap.get(uo.maDH);
+              if (ao && ao.trangThai && ao.trangThai !== uo.trangThai) {
+                uo.trangThai = ao.trangThai;
+                if (ao.soHD) uo.soHD = ao.soHD;
+                changed = true;
+              }
+            });
+            if (changed) {
+              localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(userOrders));
+            }
+          }
+        }
+      } catch (err) {}
+
+      return userOrders;
     } catch (e) {
       return SAMPLE_ORDERS;
     }
@@ -159,6 +202,29 @@
   function saveOrders(orders) {
     try {
       localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(orders));
+
+      // Đồng bộ sang kho đơn hàng chung của Admin (cellphones_online_orders)
+      try {
+        const adminRaw = localStorage.getItem('cellphones_online_orders');
+        const adminOrders = adminRaw ? JSON.parse(adminRaw) : [];
+        const map = new Map();
+        (Array.isArray(orders) ? orders : []).forEach(o => {
+          if (o && o.maDH) map.set(o.maDH, o);
+        });
+        (Array.isArray(adminOrders) ? adminOrders : []).forEach(ao => {
+          if (ao && ao.maDH) {
+            if (!map.has(ao.maDH)) {
+              map.set(ao.maDH, ao);
+            } else {
+              map.set(ao.maDH, { ...ao, ...map.get(ao.maDH) });
+            }
+          }
+        });
+        const merged = Array.from(map.values()).sort((a, b) => new Date(b.ngayDat || 0).getTime() - new Date(a.ngayDat || 0).getTime());
+        localStorage.setItem('cellphones_online_orders', JSON.stringify(merged));
+        localStorage.setItem('cellphones_order_last_updated', Date.now().toString());
+      } catch (err) {}
+
       updateOrderCounts();
     } catch (e) {}
   }
@@ -212,9 +278,9 @@
   function updateOrderCounts() {
     const orders = getOrders();
     const total = orders.length;
-    const countWaiting = orders.filter(o => o.trangThai === 'cho_xac_nhan').length;
+    const countWaiting = orders.filter(o => o.trangThai === 'cho_xac_nhan' || o.trangThai === 'da_xac_nhan').length;
     const countShipping = orders.filter(o => o.trangThai === 'dang_giao').length;
-    const countDelivered = orders.filter(o => o.trangThai === 'da_giao').length;
+    const countDelivered = orders.filter(o => o.trangThai === 'da_giao' || o.trangThai === 'hoan_thanh').length;
     const countCancelled = orders.filter(o => o.trangThai === 'da_huy').length;
 
     const bTabOrders = document.getElementById('tab-badge-orders-count');
@@ -250,7 +316,17 @@
   function setupMainHeader() {
     window.toggleMegaMenu = function () {
       const menu = document.getElementById('mega-menu-flyout');
-      if (menu) menu.classList.toggle('hidden');
+      if (menu) {
+        const willShow = menu.classList.contains('hidden');
+        menu.classList.toggle('hidden');
+        if (willShow) {
+          const autoDrop = document.getElementById('search-autocomplete-dropdown');
+          if (autoDrop) autoDrop.classList.add('hidden');
+          const noti = document.getElementById('notification-popover');
+          if (noti) noti.classList.add('hidden');
+          if (window.closeCustomerAvatarMenu) window.closeCustomerAvatarMenu();
+        }
+      }
     };
 
     window.toggleNotificationPopover = function () {
@@ -1290,10 +1366,11 @@
       }
     } catch (e) {}
 
-    // Gửi lên REST API backend
+    // Gửi lên REST API backend (đồng bộ MaDH để Admin và DB khớp 100%)
     try {
       if (window.api && typeof window.api.post === 'function') {
-        window.api.post('/orders', {
+        const postPromise = window.api.post('/orders', {
+          maDH: orderData.maDH,
           tenNguoiNhan: orderData.tenNguoiNhan,
           sdtNguoiNhan: orderData.sdtNguoiNhan,
           email: orderData.email,
@@ -1301,12 +1378,16 @@
           phuongThucThanhToan: orderData.phuongThucThanhToan,
           ghiChu: orderData.ghiChu,
           items: orderData.items.map(it => ({
-            maHang: it.maHang,
+            maHang: String(it.maHang || 'MH001').substring(0, 10),
             tenHang: it.tenHang,
             soLuong: it.soLuong,
             donGia: it.donGia
           }))
-        }).catch(() => {});
+        });
+        await Promise.race([
+          postPromise,
+          new Promise(resolve => setTimeout(resolve, 2500))
+        ]).catch(() => {});
       }
     } catch (e) {}
 
@@ -1472,8 +1553,10 @@
 
     const statusBadgeMap = {
       'cho_xac_nhan': { label: 'Chờ xác nhận', color: 'bg-amber-100 text-amber-800 border-amber-200' },
+      'da_xac_nhan': { label: 'Đã xác nhận', color: 'bg-sky-100 text-sky-800 border-sky-200' },
       'dang_giao': { label: 'Đang giao hàng', color: 'bg-blue-100 text-blue-800 border-blue-200' },
       'da_giao': { label: 'Giao thành công', color: 'bg-emerald-100 text-emerald-800 border-emerald-200' },
+      'hoan_thanh': { label: 'Hoàn thành', color: 'bg-emerald-100 text-emerald-800 border-emerald-200' },
       'da_huy': { label: 'Đã hủy', color: 'bg-slate-100 text-slate-600 border-slate-200' }
     };
 
@@ -1672,6 +1755,24 @@
     showToast(`Đã thêm lại các sản phẩm của đơn ${maDH} vào giỏ hàng!`);
     window.switchCartTab('cart');
   };
+
+  // Lắng nghe đồng bộ liên tab (storage & BroadcastChannel) từ Admin
+  window.addEventListener('storage', function (e) {
+    if (e.key === 'cellphones_online_orders' || e.key === 'samamobile_user_orders' || e.key === 'cellphones_order_last_updated') {
+      if (typeof window.renderOrders === 'function') window.renderOrders();
+    }
+  });
+
+  if (typeof BroadcastChannel !== 'undefined') {
+    try {
+      const userBC = new BroadcastChannel('samamobile_orders');
+      userBC.onmessage = function (e) {
+        if (e.data && e.data.type === 'order_status_updated' && e.data.maDH) {
+          window.dispatchEvent(new CustomEvent('samamobile:order_status_updated', { detail: e.data }));
+        }
+      };
+    } catch (err) {}
+  }
 
   // Lắng nghe sự kiện cập nhật trạng thái đơn hàng realtime từ SignalR
   window.addEventListener('samamobile:order_status_updated', function (e) {

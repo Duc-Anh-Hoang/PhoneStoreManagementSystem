@@ -2,6 +2,7 @@ namespace PhoneStoreAPI.Features.OnlineOrders.DTOs;
 
 public class CreateOrderRequest
 {
+    public string? MaDH { get; set; }
     public string TenNguoiNhan { get; set; } = string.Empty;
     public string SdtNguoiNhan { get; set; } = string.Empty;
     public string DiaChiGiao { get; set; } = string.Empty;

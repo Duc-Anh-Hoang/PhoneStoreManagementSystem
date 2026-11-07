@@ -46,7 +46,7 @@
   function getHubUrl() {
     let apiBase = window.API_BASE || '';
     if (!apiBase) {
-      const isLocal = window.location.protocol === 'file:' || window.location.port === '5500' || window.location.port === '5501';
+      const isLocal = window.location.protocol === 'file:' || window.location.port === '5500' || window.location.port === '5501' || window.location.port === '3000';
       apiBase = isLocal ? 'http://localhost:5132/api' : '/api';
     }
     const root = apiBase.replace(/\/api\/?$/, '');
@@ -166,12 +166,25 @@
       .build();
 
     // Lắng nghe sự kiện: Đơn hàng mới (dành cho Admin)
-    connection.on('ReceiveNewOrder', function (order) {
-      console.log('SignalR: ReceiveNewOrder', order);
+    const recentNewOrders = new Set();
+    function handleSignalRNewOrder(order) {
+      if (!order || !order.maDH) return;
+      if (recentNewOrders.has(order.maDH)) return;
+      recentNewOrders.add(order.maDH);
+      setTimeout(() => recentNewOrders.delete(order.maDH), 10000);
+      console.log('SignalR: NewOrder received', order);
       playChime('new_order');
-
-      // Dispatch CustomEvent
       window.dispatchEvent(new CustomEvent('samamobile:new_order', { detail: order }));
+    }
+
+    connection.on('ReceiveNewOrder', handleSignalRNewOrder);
+    connection.on('OrderCreatedNotification', handleSignalRNewOrder);
+
+    connection.onreconnected(async function () {
+      const isAdminPage = window.location.pathname.includes('admin.html');
+      if (isAdminPage) {
+        try { await connection.invoke('JoinAdminGroup'); } catch (e) {}
+      }
     });
 
     // Lắng nghe sự kiện: Trạng thái đơn thay đổi (dành cho User & Admin)

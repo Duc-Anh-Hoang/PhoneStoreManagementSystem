@@ -177,7 +177,17 @@
     // 1. Toggle Mega Menu
     window.toggleMegaMenu = function () {
       const menu = document.getElementById('mega-menu-flyout');
-      if (menu) menu.classList.toggle('hidden');
+      if (menu) {
+        const willShow = menu.classList.contains('hidden');
+        menu.classList.toggle('hidden');
+        if (willShow) {
+          const autoDrop = document.getElementById('search-autocomplete-dropdown');
+          if (autoDrop) autoDrop.classList.add('hidden');
+          const noti = document.getElementById('notification-popover');
+          if (noti) noti.classList.add('hidden');
+          if (window.closeCustomerAvatarMenu) window.closeCustomerAvatarMenu();
+        }
+      }
     };
 
     // 2. Toggle Notification Popover
@@ -283,7 +293,17 @@
     const autoDropdown = document.getElementById('search-autocomplete-dropdown');
 
     if (searchInput) {
+      searchInput.addEventListener('focus', function () {
+        const mega = document.getElementById('mega-menu-flyout');
+        if (mega) mega.classList.add('hidden');
+        if (this.value.trim().length >= 2 && autoDropdown && autoDropdown.innerHTML.trim()) {
+          autoDropdown.classList.remove('hidden');
+        }
+      });
+
       searchInput.addEventListener('input', function () {
+        const mega = document.getElementById('mega-menu-flyout');
+        if (mega) mega.classList.add('hidden');
         const val = this.value.trim();
         if (clearBtn) clearBtn.classList.toggle('hidden', !val);
 
@@ -476,7 +496,19 @@
 
     // Đảm bảo có danh sách phiên bản đầy đủ
     let phienBan = p.phienBan && p.phienBan.length > 0 ? p.phienBan : [];
-    if (phienBan.length === 0) {
+    if (phienBan.length <= 1 && p.tenHang && p.tenHang.toLowerCase().includes('iphone 18 pro max') && !p.tenHang.toLowerCase().includes('máy cũ')) {
+      phienBan = [
+        { id: 'v_256', dungLuong: '256GB', gia: 41490000, giaGoc: 44809200 },
+        { id: 'v_512', dungLuong: '512GB', gia: 46990000, giaGoc: 49990000 },
+        { id: 'v_1tb', dungLuong: '1TB', gia: 52990000, giaGoc: 55990000 }
+      ];
+    } else if (phienBan.length <= 1 && p.tenHang && p.tenHang.toLowerCase().includes('iphone 18 pro') && !p.tenHang.toLowerCase().includes('máy cũ')) {
+      phienBan = [
+        { id: 'v_256', dungLuong: '256GB', gia: 38490000, giaGoc: 41569200 },
+        { id: 'v_512', dungLuong: '512GB', gia: 44990000, giaGoc: 48589200 },
+        { id: 'v_1tb', dungLuong: '1TB', gia: 57490000, giaGoc: 62089200 }
+      ];
+    } else if (phienBan.length === 0) {
       if (p.tenHang && p.tenHang.toLowerCase().includes('nubia')) {
         phienBan = [
           { id: 'v_4_128', dungLuong: '4GB/128GB', gia: 3590000, giaGoc: 3990000 },
@@ -494,10 +526,23 @@
       }
     }
 
-    // Đảm bảo có danh sách màu sắc
+        // Đảm bảo có danh sách màu sắc
     let mauSac = p.mauSac && p.mauSac.length > 0 ? p.mauSac : [];
-    if (mauSac.length === 0) {
-      if (p.tenHang && p.tenHang.toLowerCase().includes('nubia')) {
+    if (mauSac.length === 0 || (mauSac.length === 1 && mauSac[0].ten === 'Tiêu chuẩn')) {
+      const pNameLower = (p.tenHang || '').toLowerCase();
+      if (pNameLower.includes('iphone 18')) {
+        mauSac = [
+          { id: 'c_burgundy', ten: 'Titan Đỏ Rượu', hex: '#5B1E31', anh: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png' },
+          { id: 'c_glacier', ten: 'Titan Trắng Băng', hex: '#E2E8F0', anh: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-glacier-pdp-images-vi-vn-021233298.png' },
+          { id: 'c_desert', ten: 'Titan Sa Mạc', hex: '#C5A992', anh: 'https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-sa-mac-1.png' },
+          { id: 'c_natural', ten: 'Titan Tự Nhiên', hex: '#8E8B82', anh: 'https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-tu-nhien-1.png' }
+        ];
+      } else if (pNameLower.includes('iphone')) {
+        mauSac = [
+          { id: 'c_desert', ten: 'Titan Sa Mạc', hex: '#C5A992', anh: 'https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-sa-mac-1.png' },
+          { id: 'c_natural', ten: 'Titan Tự Nhiên', hex: '#8E8B82', anh: 'https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-tu-nhien-1.png' }
+        ];
+      } else if (pNameLower.includes('nubia')) {
         mauSac = [
           { id: 'c_bac', ten: 'Bạc', hex: '#E2E8F0', anh: 'https://i.hoanghamobile.vn/Uploads/2026/01/08/nubia-v80-max-bac.png' },
           { id: 'c_den', ten: 'Đen', hex: '#1E293B', anh: 'https://i.hoanghamobile.vn/Uploads/2026/01/08/nubia-v80-max-den.png' }
@@ -510,15 +555,32 @@
     }
 
     // Thông số nổi bật 4 ô có icon
-    let thongSoNoiBat = p.thongSoNoiBat || {
+    const isIphone = (p.tenHang || '').toLowerCase().includes('iphone');
+    let thongSoNoiBat = p.thongSoNoiBat || (isIphone ? {
+      'Kích thước màn hình': '6.9\" Super Retina XDR',
+      'Bộ nhớ trong': p.thongSo?.['Bộ nhớ trong'] || '256GB NVMe',
+      'Vi xử lý': 'Apple A20 Pro (3nm)',
+      'Dung lượng pin hiển thị': '5000mAh (Sạc 45W)'
+    } : {
       'Kích thước màn hình': '6.9\"',
       'Bộ nhớ trong': '128GB',
       'Vi xử lý': 'Unisoc T7280',
       'Dung lượng pin hiển thị': '6000mAh'
-    };
+    });
 
     // Thông số kỹ thuật chi tiết
-    let thongSoChiTiet = p.thongSoChiTiet || p.thongSo || {
+    let thongSoChiTiet = p.thongSoChiTiet || (isIphone ? {
+      'Kích thước màn hình': p.thongSo?.['Kích thước màn hình'] || '6.9" Super Retina XDR OLED, ProMotion 120Hz',
+      'Vi xử lý': p.thongSo?.['Vi xử lý'] || 'Apple A20 Pro (tiến trình 3nm thế hệ mới)',
+      'Hệ điều hành': p.thongSo?.['Hệ điều hành'] || 'iOS 19 (Tích hợp Apple Intelligence)',
+      'Bộ nhớ trong': p.thongSo?.['Bộ nhớ trong'] || '256GB NVMe',
+      'Camera sau': p.thongSo?.['Camera sau'] || '48MP Fusion + 48MP Ultra Wide + 12MP Telephoto 5x',
+      'Camera trước': p.thongSo?.['Camera trước'] || '12MP TrueDepth Autofocus, Face ID',
+      'Khung viền & Chất liệu': 'Khung Titanium cấp 5, mặt kính Ceramic Shield thế hệ mới',
+      'Chuẩn kháng nước/bụi': 'IP68 (chống nước ở độ sâu 6m trong 30 phút)',
+      'Pin & Sạc': p.thongSo?.['Dung lượng pin'] || '5000mAh, Sạc nhanh USB-C 45W, MagSafe 25W',
+      'Kết nối': '5G, Wi-Fi 7, Bluetooth 5.4, NFC, USB-C DisplayPort'
+    } : p.thongSo) || {
       'Kích thước': '171.55 x 77.75 x 8.3 mm',
       'Trọng lượng': '191g',
       'Chuẩn kháng nước/bụi': 'IP64',
@@ -552,14 +614,93 @@
     };
   }
 
+
+  function formatProductVariantTitle(baseTitle, variantName) {
+    if (!baseTitle) return 'Sản phẩm';
+    const v = (variantName || '').trim();
+    if (!v || v === 'Tiêu chuẩn' || v === 'Mặc định') return baseTitle;
+    const capRegex = /(\d+\s*GB\s*\/\s*\d+\s*(?:GB|TB)|\b(?:64|128|256|512)\s*GB\b|\b[12]\s*TB\b)/i;
+    if (capRegex.test(baseTitle)) {
+      return baseTitle.replace(capRegex, v);
+    }
+    if (!baseTitle.toLowerCase().includes(v.toLowerCase())) {
+      return baseTitle + ' ' + v;
+    }
+    return baseTitle;
+  }
+
   function formatCurrency(val) {
     if (!val || isNaN(val)) return '0 ₫';
     return Number(val).toLocaleString('vi-VN') + ' ₫';
   }
 
   // Render toàn bộ giao diện sản phẩm
+  
+  // Khởi tạo gallery ảnh đúng chuẩn từng dòng máy (không bao giờ gán nhầm ảnh hãng khác)
+  function buildProductGallery(prod) {
+    const list = [];
+    const pName = (prod.tenHang || '').toLowerCase();
+
+    if (prod.anhChinh) {
+      list.push(prod.anhChinh);
+    }
+
+    if (Array.isArray(prod.mauSac)) {
+      prod.mauSac.forEach(c => {
+        if (c.anh && !list.includes(c.anh)) {
+          list.push(c.anh);
+        }
+      });
+    }
+
+    if (pName.includes('iphone 18')) {
+      const ip18Imgs = [
+        'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png',
+        'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-glacier-pdp-images-vi-vn-021233298.png',
+        'https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-sa-mac-1.png',
+        'https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-tu-nhien-1.png'
+      ];
+      ip18Imgs.forEach(img => {
+        if (!list.includes(img)) list.push(img);
+      });
+    } else if (pName.includes('iphone 16') || pName.includes('iphone 17')) {
+      const ipImgs = [
+        'https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-sa-mac-1.png',
+        'https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-tu-nhien-1.png',
+        'https://i.hoanghamobile.vn/Uploads/2024/09/10/ip16-xanh-mong-ket.png',
+        'https://i.hoanghamobile.vn/Uploads/2024/09/10/ip16-xanh-luu-ly.png'
+      ];
+      ipImgs.forEach(img => {
+        if (!list.includes(img)) list.push(img);
+      });
+    } else if (pName.includes('s25') || pName.includes('s24') || pName.includes('galaxy')) {
+      const samImgs = [
+        'https://i.hoanghamobile.vn/Uploads/2026/01/22/galaxy-s25-ultra-titan-den-1.png',
+        'https://i.hoanghamobile.vn/Uploads/2024/01/18/galaxy-s24-ultra-xam-1.png',
+        'https://i.hoanghamobile.vn/Uploads/2024/01/18/galaxy-s24-ultra-vang-1.png'
+      ];
+      samImgs.forEach(img => {
+        if (!list.includes(img)) list.push(img);
+      });
+    } else if (pName.includes('nubia')) {
+      const nubiaImgs = [
+        'https://i.hoanghamobile.vn/Uploads/2026/01/08/nubia-v80-max-bac.png',
+        'https://i.hoanghamobile.vn/Uploads/2026/01/08/nubia-v80-max-den.png'
+      ];
+      nubiaImgs.forEach(img => {
+        if (!list.includes(img)) list.push(img);
+      });
+    }
+
+    if (list.length === 0 && prod.anhChinh) {
+      list.push(prod.anhChinh);
+    }
+    return list;
+  }
+
   function renderProductDetail(prod) {
-    selectedVersion = prod.phienBan[prod.phienBan.length > 1 ? 1 : 0];
+    const matchedVer = (prod.phienBan || []).find(v => v.dungLuong && prod.tenHang && prod.tenHang.toLowerCase().includes(v.dungLuong.toLowerCase()));
+    selectedVersion = matchedVer || prod.phienBan[0];
     selectedColor = prod.mauSac[0];
 
     // Cập nhật title trình duyệt
@@ -586,17 +727,8 @@
     const artTitle = document.getElementById('article-product-name');
     if (artTitle) artTitle.textContent = prod.tenHang;
 
-    // 3. Khởi tạo danh sách ảnh Gallery Carousel
-    galleryImages = [
-      prod.anhChinh,
-      'https://i.hoanghamobile.vn/Uploads/2026/01/08/nubia-v80-max-bac.png',
-      'https://i.hoanghamobile.vn/Uploads/2026/01/08/nubia-v80-max-den.png',
-      'https://i.hoanghamobile.vn/Uploads/2026/01/07/v80-max-bac-1.png',
-      'https://i.hoanghamobile.vn/Uploads/2026/01/07/v80-max-bac-2.png',
-      'https://i.hoanghamobile.vn/Uploads/2026/01/07/v80-max-bac-3.png',
-      'https://i.hoanghamobile.vn/Uploads/2026/01/12/nubia-v80-max-8-128gb-10.jpg',
-      'https://i.hoanghamobile.vn/Uploads/2026/01/12/nubia-v80-max-8-128gb-02.jpg'
-    ];
+    // 3. Khởi tạo danh sách ảnh Gallery Carousel chuẩn theo từng dòng sản phẩm
+    galleryImages = buildProductGallery(prod);
     currentGalleryIndex = 0;
     updateGalleryView();
 
@@ -628,7 +760,8 @@
     renderAddons();
     renderSimilarProducts();
 
-    // 13. Đồng bộ Sticky Bottom Bar
+    // 13. Đồng bộ Title, Specs & Sticky Bottom Bar theo phiên bản đang chọn
+    syncProductTitleAndSpecsWithVersion();
     updateStickyBar();
   }
 
@@ -656,22 +789,41 @@
     }
   }
 
-  // Thumbnails dưới ảnh chính (Screenshot 2)
+    // Thumbnails dưới ảnh chính (Hiển thị đúng màu sắc và ảnh của sản phẩm)
+  var currentThumbnailTabs = [];
+
   function renderGalleryThumbnails(prod) {
     const container = document.getElementById('gallery-thumbnails');
     if (!container) return;
 
-    const tabs = [
-      { id: 't_star', label: 'Tính năng nổi bật', icon: 'fa-solid fa-star', type: 'icon' },
-      { id: 't_video', label: 'Video', icon: 'fa-solid fa-circle-play', type: 'icon' },
-      { id: 't_c1', label: prod.mauSac[0] ? prod.mauSac[0].ten : 'Bạc', img: prod.mauSac[0] ? prod.mauSac[0].anh : prod.anhChinh, type: 'img' },
-      { id: 't_c2', label: prod.mauSac[1] ? prod.mauSac[1].ten : 'Đen', img: prod.mauSac[1] ? prod.mauSac[1].anh : prod.anhChinh, type: 'img' },
-      { id: 't_specs', label: 'Thông số kỹ thuật', icon: 'fa-solid fa-gear', type: 'icon' },
-      { id: 't_info', label: 'Thông tin sản phẩm', icon: 'fa-solid fa-book-open', type: 'icon' },
-      { id: 't_qr', label: 'Xem trên điện thoại', icon: 'fa-solid fa-mobile-screen', type: 'icon' }
+    currentThumbnailTabs = [
+      { id: 't_star', label: 'Điểm nổi bật', icon: 'fa-solid fa-star', type: 'icon', targetIndex: 0 },
+      { id: 't_video', label: 'Video trên tay', icon: 'fa-solid fa-circle-play', type: 'icon', targetIndex: 0 }
     ];
 
-    container.innerHTML = tabs.map((tab, idx) => {
+    // Thêm các tab màu sắc thực tế của sản phẩm
+    (prod.mauSac || []).forEach((c, cIdx) => {
+      let targetImgIdx = galleryImages.indexOf(c.anh);
+      if (targetImgIdx === -1) targetImgIdx = Math.min(cIdx, galleryImages.length - 1);
+
+      currentThumbnailTabs.push({
+        id: 't_c_' + cIdx,
+        label: c.ten,
+        img: c.anh || prod.anhChinh,
+        colorId: c.id,
+        type: 'img',
+        targetIndex: targetImgIdx
+      });
+    });
+
+    // Thêm các tab tiện ích
+    currentThumbnailTabs.push(
+      { id: 't_specs', label: 'Thông số kỹ thuật', icon: 'fa-solid fa-gear', type: 'icon', action: 'specs' },
+      { id: 't_info', label: 'Thông tin sản phẩm', icon: 'fa-solid fa-book-open', type: 'icon', action: 'info' },
+      { id: 't_qr', label: 'Xem trên điện thoại', icon: 'fa-solid fa-mobile-screen', type: 'icon', action: 'qr' }
+    );
+
+    container.innerHTML = currentThumbnailTabs.map((tab, idx) => {
       const activeClass = idx === 0 ? 'border-blue-600 bg-blue-50/70 text-blue-700' : 'border-slate-200 text-slate-600 hover:border-slate-300';
       const visual = tab.type === 'icon'
         ? `<i class="${tab.icon} text-lg mb-1"></i>`
@@ -696,22 +848,23 @@
       }
     });
 
-    if (idx === 0 || idx === 1) {
-      currentGalleryIndex = 0;
+    const tab = currentThumbnailTabs[idx];
+    if (!tab) return;
+
+    if (tab.action === 'specs') {
+      document.getElementById('detailed-specs-section')?.scrollIntoView({ behavior: 'smooth' });
+    } else if (tab.action === 'info') {
+      document.getElementById('review-article-section')?.scrollIntoView({ behavior: 'smooth' });
+    } else if (tab.action === 'qr') {
+      alert('Quét mã QR hoặc truy cập đường link để xem trực tiếp sản phẩm này trên ứng dụng điện thoại!');
+    } else {
+      currentGalleryIndex = tab.targetIndex || 0;
       updateGalleryView();
-    } else if (idx === 2) {
-      currentGalleryIndex = 1;
-      updateGalleryView();
-    } else if (idx === 3) {
-      currentGalleryIndex = 2;
-      updateGalleryView();
-    } else if (idx === 4) {
-      document.getElementById('detailed-specs-section').scrollIntoView({ behavior: 'smooth' });
-    } else if (idx === 6) {
-      alert('Quét mã QR để mở trực tiếp trang sản phẩm này trên ứng dụng điện thoại!');
+      if (tab.colorId && window.selectColor) {
+        window.selectColor(tab.colorId);
+      }
     }
   };
-
   // Render Thông Số Nổi Bật 4 Ô Có Icon (Screenshot 2)
   function renderKeySpecsGrid(specs) {
     const grid = document.getElementById('key-specs-grid');
@@ -756,6 +909,126 @@
     }).join('');
   }
 
+  function renderReviewArticle(prod) {
+    if (!prod) return;
+    const verLabel = selectedVersion ? selectedVersion.dungLuong : '';
+    const displayTitle = formatProductVariantTitle(prod.tenHang, verLabel);
+    const pLower = displayTitle.toLowerCase();
+    const isIp = pLower.includes('iphone') || (prod.nhanHieu || '').toLowerCase() === 'apple';
+    const isSam = pLower.includes('samsung') || pLower.includes('galaxy') || (prod.nhanHieu || '').toLowerCase() === 'samsung';
+
+    const img1 = (galleryImages && galleryImages[0]) ? galleryImages[0] : prod.anhChinh;
+    const img2 = (galleryImages && galleryImages[1]) ? galleryImages[1] : ((prod.mauSac && prod.mauSac[1] && prod.mauSac[1].anh) ? prod.mauSac[1].anh : img1);
+    const img3 = (galleryImages && galleryImages[2]) ? galleryImages[2] : ((prod.mauSac && prod.mauSac[2] && prod.mauSac[2].anh) ? prod.mauSac[2].anh : null);
+
+    const cpu = (prod.thongSoNoiBat && prod.thongSoNoiBat['Vi xử lý']) || (prod.thongSoChiTiet && prod.thongSoChiTiet['Vi xử lý']) || (isIp ? 'Apple A20 Pro (3nm)' : 'Flagship Octa-core');
+    const screen = (prod.thongSoNoiBat && prod.thongSoNoiBat['Kích thước màn hình']) || (prod.thongSoChiTiet && prod.thongSoChiTiet['Kích thước màn hình']) || '6.9" Super Retina XDR OLED';
+    const rom = verLabel && verLabel !== 'Tiêu chuẩn' ? verLabel : ((prod.thongSoNoiBat && prod.thongSoNoiBat['Bộ nhớ trong']) || '256GB');
+    const pin = (prod.thongSoNoiBat && prod.thongSoNoiBat['Dung lượng pin hiển thị']) || '5000mAh';
+
+    const quickSpecsEl = document.getElementById('quick-specs-summary');
+    if (quickSpecsEl) {
+      const screenTech = isIp ? 'Super Retina XDR OLED' : (isSam ? 'Dynamic AMOLED 2X' : 'AMOLED / IPS 120Hz');
+      const osName = isIp ? 'iOS (Apple Intelligence)' : 'Android chính hãng';
+      quickSpecsEl.innerHTML = `
+        <div class="flex items-center justify-between py-1.5 border-b border-slate-100">
+          <span class="text-slate-500">Tần số quét (Hz):</span>
+          <span class="font-bold text-slate-800">120Hz ProMotion</span>
+        </div>
+        <div class="flex items-center justify-between py-1.5 border-b border-slate-100">
+          <span class="text-slate-500">Công nghệ màn hình:</span>
+          <span class="font-bold text-slate-800">${screenTech}</span>
+        </div>
+        <div class="flex items-center justify-between py-1.5 border-b border-slate-100">
+          <span class="text-slate-500">Vi xử lý & Bộ nhớ:</span>
+          <span class="font-bold text-slate-800">${cpu} • ${rom}</span>
+        </div>
+        <div class="flex items-center justify-between py-1.5">
+          <span class="text-slate-500">Hệ điều hành:</span>
+          <span class="font-bold text-slate-800">${osName}</span>
+        </div>
+      `;
+    }
+
+    const articleEl = document.getElementById('review-article-content');
+    if (!articleEl) return;
+
+    const colorShowcaseHtml = (prod.mauSac && prod.mauSac.length > 1)
+      ? `<div class="grid grid-cols-2 sm:grid-cols-${Math.min(4, prod.mauSac.length)} gap-4 p-5 bg-slate-50/70">
+          ${prod.mauSac.slice(0, 4).map(c => `
+            <div class="flex flex-col items-center text-center bg-white p-3 rounded-xl border border-slate-100 shadow-2xs">
+              <img src="${c.anh || img1}" alt="${c.ten}" class="h-36 sm:h-44 w-auto object-contain mb-2" />
+              <span class="text-xs font-bold text-slate-800">${c.ten}</span>
+            </div>
+          `).join('')}
+        </div>`
+      : `<div class="flex items-center justify-center p-6 bg-slate-50/70">
+          <img src="${img1}" alt="${displayTitle}" class="max-h-[360px] w-auto object-contain" />
+        </div>`;
+
+    const p1 = isIp
+      ? `<strong id="article-product-name" class="font-bold text-slate-900">${displayTitle}</strong> là siêu phẩm đầu bảng mới nhất của Apple, sở hữu khung viền Titanium cấp hàng không vũ trụ siêu bền nhẹ cùng màn hình <strong>${screen}</strong> tần số quét ProMotion 120Hz. Sức mạnh từ vi xử lý <strong>${cpu}</strong> kết hợp dung lượng bộ nhớ <strong>${rom}</strong> mang lại hiệu năng xử lý đồ họa và tác vụ AI (Apple Intelligence) vượt trội.`
+      : `<strong id="article-product-name" class="font-bold text-slate-900">${displayTitle}</strong> nổi bật trong phân khúc nhờ sự kết hợp hoàn hảo giữa thiết kế hiện đại, màn hình <strong>${screen}</strong> sắc nét và hiệu năng mạnh mẽ từ vi xử lý <strong>${cpu}</strong>. Phiên bản bộ nhớ <strong>${rom}</strong> cùng viên pin <strong>${pin}</strong> đáp ứng trọn vẹn nhu cầu làm việc đa nhiệm và giải trí đỉnh cao cả ngày dài.`;
+
+    const p2 = isIp
+      ? `Hệ thống camera Pro Fusion độ phân giải cao trên <strong>${displayTitle}</strong> hỗ trợ quay video chuẩn điện ảnh 4K Dolby Vision, zoom quang học sắc nét và chụp đêm ấn tượng. Viên pin dung lượng lớn <strong>${pin}</strong> tối ưu hóa cùng tiến trình chip thế hệ mới giúp kéo dài thời lượng sử dụng bền bỉ suốt cả ngày.`
+      : `Với định hướng tối ưu trải nghiệm thực tế, <strong>${displayTitle}</strong> được trang bị hệ thống camera sắc nét, kết nối 5G tốc độ cao và khả năng sạc nhanh an toàn, phù hợp cho cả công việc lẫn giải trí chuyên sâu.`;
+
+    articleEl.innerHTML = `
+      <p id="toc-specs">${p1}</p>
+
+      <div class="rounded-2xl overflow-hidden border border-slate-200 my-4 bg-white">
+        ${colorShowcaseHtml}
+        <div class="p-2.5 text-center text-xs text-slate-500 bg-slate-50 border-t border-slate-200 font-medium">
+          Các tùy chọn màu sắc chính hãng và thiết kế sang trọng trên ${displayTitle}
+        </div>
+      </div>
+
+      <p id="toc-release">${p2}</p>
+
+      <div class="rounded-2xl overflow-hidden border border-slate-200 my-4 bg-white">
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-6 p-6 bg-slate-50/50">
+          <img src="${img2}" alt="${displayTitle}" class="max-h-[300px] w-auto object-contain" />
+          ${img3 && img3 !== img2 ? `<img src="${img3}" alt="${displayTitle}" class="max-h-[300px] w-auto object-contain hidden sm:block" />` : ''}
+        </div>
+        <div class="p-2.5 text-center text-xs text-slate-500 bg-slate-50 border-t border-slate-200 font-medium">
+          Màn hình ${screen} cùng hiệu năng ${cpu} mượt mà ấn tượng trên ${displayTitle}
+        </div>
+      </div>
+
+      <p id="toc-price">
+        Hiện nay, <strong>${displayTitle}</strong> đang được phân phối chính hãng VN/A tại hệ thống <strong>SAMAMOBILE.COM</strong> với mức giá cực kỳ ưu đãi, đi kèm chính sách bảo hành chính hãng 12 tháng, 1 đổi 1 trong 30 ngày đầu và hỗ trợ trả góp 0% lãi suất.
+      </p>
+    `;
+  }
+
+  function syncProductTitleAndSpecsWithVersion() {
+    if (!currentProduct || !selectedVersion) return;
+    const verLabel = selectedVersion.dungLuong || '';
+    const displayTitle = formatProductVariantTitle(currentProduct.tenHang, verLabel);
+
+    const bcProd = document.getElementById('bc-product-name');
+    const titleEl = document.getElementById('product-title');
+    const artTitle = document.getElementById('article-product-name');
+    if (bcProd) bcProd.textContent = displayTitle;
+    if (titleEl) titleEl.textContent = displayTitle;
+    if (artTitle) artTitle.textContent = displayTitle;
+    document.title = displayTitle + ' - SAMAMOBILE.COM';
+
+    if (verLabel && verLabel !== 'Tiêu chuẩn') {
+      if (currentProduct.thongSoNoiBat) {
+        const isIp = (currentProduct.tenHang || '').toLowerCase().includes('iphone');
+        currentProduct.thongSoNoiBat['Bộ nhớ trong'] = isIp && !verLabel.includes('NVMe') ? (verLabel + ' NVMe') : verLabel;
+        renderKeySpecsGrid(currentProduct.thongSoNoiBat);
+      }
+      if (currentProduct.thongSoChiTiet) {
+        currentProduct.thongSoChiTiet['Bộ nhớ trong'] = verLabel;
+        renderDetailedSpecsTable(currentProduct.thongSoChiTiet);
+      }
+    }
+    renderReviewArticle(currentProduct);
+  }
+
   window.selectVersion = function (vId) {
     if (!currentProduct) return;
     const v = currentProduct.phienBan.find(item => item.id === vId);
@@ -763,6 +1036,7 @@
       selectedVersion = v;
       renderVersionSelector(currentProduct);
       updatePriceDisplay();
+      syncProductTitleAndSpecsWithVersion();
       updateStickyBar();
     }
   };
@@ -787,14 +1061,20 @@
     }).join('');
   }
 
-  window.selectColor = function (cId) {
+    window.selectColor = function (cId) {
     if (!currentProduct) return;
     const c = currentProduct.mauSac.find(item => item.id === cId);
     if (c) {
       selectedColor = c;
       renderColorSelector(currentProduct);
       const mainImg = document.getElementById('main-product-image');
-      if (mainImg) mainImg.src = c.anh;
+      if (mainImg && c.anh) mainImg.src = c.anh;
+      const imgIdx = galleryImages.indexOf(c.anh);
+      if (imgIdx !== -1) {
+        currentGalleryIndex = imgIdx;
+        const badge = document.getElementById('gallery-counter-badge');
+        if (badge) badge.textContent = `${currentGalleryIndex + 1}/${galleryImages.length}`;
+      }
       updateStickyBar();
     }
   };
@@ -938,7 +1218,7 @@
     const addons = [
       { id: 'ADD-01', name: 'Củ sạc nhanh 30W Type-C SamaFast', price: 290000, img: resolveAssetPath('images/banner/iphone-18-cat-082925094.png') },
       { id: 'ADD-02', name: 'Tai nghe Bluetooth không dây TWS-09', price: 390000, img: resolveAssetPath('images/products/airpods-pro-3.png') },
-      { id: 'ADD-03', name: 'Kính cường lực Full viền 9H chống va đập', price: 90000, img: 'https://i.hoanghamobile.vn/Uploads/2026/01/08/nubia-v80-max-bac.png' }
+      { id: 'ADD-03', name: 'Kính cường lực Full viền 9H chống va đập', price: 190000, img: (currentProduct && currentProduct.anhChinh) ? currentProduct.anhChinh : resolveAssetPath('images/banner/iphone-18-cat-082925094.png') }
     ];
 
     container.innerHTML = addons.map(item => `
@@ -996,7 +1276,7 @@
     const colText = selectedColor ? selectedColor.ten : 'Bạc';
 
     if (thumb) thumb.src = selectedColor ? selectedColor.anh : currentProduct.anhChinh;
-    if (title) title.textContent = currentProduct.tenHang;
+    if (title) title.textContent = formatProductVariantTitle(currentProduct.tenHang, verText);
     if (variant) variant.textContent = `Phân loại: ${colText} - ${verText}`;
     if (price) price.textContent = formatCurrency(curPrice);
   }
@@ -1045,10 +1325,12 @@
     const oldPriceVal = Number(selectedVersion ? selectedVersion.giaGoc : (currentProduct.giaGoc || currentProduct.donGia)) || priceVal;
     const imgVal = selectedColor ? selectedColor.anh : currentProduct.anhChinh;
 
+    const displayTitle = formatProductVariantTitle(currentProduct.tenHang, vName);
     const cartItem = {
       id: currentProduct.maHang + '_' + vName + '_' + cName,
       maHang: currentProduct.maHang,
-      tenHang: currentProduct.tenHang,
+      tenHang: displayTitle,
+      name: displayTitle,
       donGia: priceVal,
       giaGoc: oldPriceVal,
       hinhAnh: imgVal,

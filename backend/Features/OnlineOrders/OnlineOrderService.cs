@@ -59,6 +59,7 @@ public class OnlineOrderService : IOnlineOrderService
             if (khachHang == null)
             {
                 var newMaKH = await _codeGenerator.NextAsync("KH");
+                while (await _context.KhachHangs.AnyAsync(k => k.MaKH == newMaKH)) { newMaKH = "KH" + Random.Shared.Next(10000000, 99999999); }
                 khachHang = new KhachHang
                 {
                     MaKH = newMaKH,
@@ -80,7 +81,8 @@ public class OnlineOrderService : IOnlineOrderService
             decimal tongTien = 0m;
             var chiTietList = new List<ChiTietDonHangOnline>();
 
-            foreach (var item in request.Items)
+            var groupedItems = request.Items.GroupBy(x => (x.MaHang ?? "MH001").Trim().Substring(0, Math.Min(10, (x.MaHang ?? "MH001").Trim().Length))).Select(g => new OrderItemRequest { MaHang = g.Key, TenHang = g.First().TenHang, SoLuong = g.Sum(i => i.SoLuong), DonGia = g.First().DonGia }).ToList();
+            foreach (var item in groupedItems)
             {
                 var matHang = await _context.MatHangs.FirstOrDefaultAsync(m => m.MaHang == item.MaHang);
                 if (matHang == null)
@@ -102,7 +104,7 @@ public class OnlineOrderService : IOnlineOrderService
                     await _context.SaveChangesAsync();
                 }
 
-                decimal donGiaDb = matHang.DonGia > 0 ? matHang.DonGia : (item.DonGia > 0 ? item.DonGia : 5000000m);
+                decimal donGiaDb = item.DonGia > 0 ? item.DonGia : (matHang.DonGia > 0 ? matHang.DonGia : 5000000m);
                 tongTien += donGiaDb * item.SoLuong;
 
                 chiTietList.Add(new ChiTietDonHangOnline
@@ -114,7 +116,8 @@ public class OnlineOrderService : IOnlineOrderService
             }
 
             // 4. Tạo DonHangOnline
-            var maDH = await _codeGenerator.NextAsync("DH");
+            var reqMaDH = !string.IsNullOrWhiteSpace(request.MaDH) ? request.MaDH.Trim().Substring(0, Math.Min(15, request.MaDH.Trim().Length)) : null;
+            var maDH = (!string.IsNullOrWhiteSpace(reqMaDH) && !await _context.DonHangOnlines.AnyAsync(d => d.MaDH == reqMaDH)) ? reqMaDH : await _codeGenerator.NextAsync("DH");
             var donHang = new DonHangOnline
             {
                 MaDH = maDH,
@@ -123,7 +126,7 @@ public class OnlineOrderService : IOnlineOrderService
                 TenNguoiNhan = request.TenNguoiNhan.Trim(),
                 SdtNguoiNhan = sdtNorm,
                 DiaChiGiao = request.DiaChiGiao.Trim(),
-                PhuongThucThanhToan = request.PhuongThucThanhToan,
+                PhuongThucThanhToan = (request.PhuongThucThanhToan ?? "cod").Trim().ToLowerInvariant() switch { "banking" or "momo" or "vnpay" or "zalopay" or "chuyen_khoan" => "chuyen_khoan", "card" or "the" => "the", _ => "cod" },
                 TongTien = tongTien,
                 TrangThai = AppConstants.OrderStatus.ChoXacNhan
             };

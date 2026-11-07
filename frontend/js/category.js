@@ -189,7 +189,17 @@
   function setupMainHeader() {
     window.toggleMegaMenu = function () {
       const menu = document.getElementById('mega-menu-flyout');
-      if (menu) menu.classList.toggle('hidden');
+      if (menu) {
+        const willShow = menu.classList.contains('hidden');
+        menu.classList.toggle('hidden');
+        if (willShow) {
+          const autoDrop = document.getElementById('search-autocomplete-dropdown');
+          if (autoDrop) autoDrop.classList.add('hidden');
+          const noti = document.getElementById('notification-popover');
+          if (noti) noti.classList.add('hidden');
+          if (window.closeCustomerAvatarMenu) window.closeCustomerAvatarMenu();
+        }
+      }
     };
 
     window.toggleNotificationPopover = function () {
@@ -303,7 +313,17 @@
     const autoDropdown = document.getElementById('search-autocomplete-dropdown');
 
     if (searchInput) {
+      searchInput.addEventListener('focus', function () {
+        const mega = document.getElementById('mega-menu-flyout');
+        if (mega) mega.classList.add('hidden');
+        if (this.value.trim().length >= 2 && autoDropdown && autoDropdown.innerHTML.trim()) {
+          autoDropdown.classList.remove('hidden');
+        }
+      });
+
       searchInput.addEventListener('input', function () {
+        const mega = document.getElementById('mega-menu-flyout');
+        if (mega) mega.classList.add('hidden');
         const val = this.value.trim();
         if (clearBtn) clearBtn.classList.toggle('hidden', !val);
 
@@ -1523,7 +1543,7 @@
       hinhAnh: prod.anhChinh || prod.image,
       soLuong: 1,
       mauSac: 'Mặc định',
-      phienBan: 'Tiêu chuẩn'
+      phienBan: ((prod.tenHang || '').match(/\b(?:64|128|256|512)\s*GB\b|\b[12]\s*TB\b/i)?.[0] || 'Tiêu chuẩn')
     };
     if (window.CellphoneSCart || window.Cart) {
       (window.CellphoneSCart || window.Cart).addItem(item);
