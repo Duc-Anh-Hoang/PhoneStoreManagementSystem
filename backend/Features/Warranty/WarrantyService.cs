@@ -36,7 +36,6 @@ public class WarrantyService : IWarrantyService
 
         string maBH = await _codeGenerator.NextAsync("BH");
 
-        // Npgsql bắt buộc DateTime phải là UTC khi ghi vào cột timestamptz
         var ngayBD = DateTime.UtcNow;
         var ngayKT = ngayBD.AddMonths(matHang.ThoiHanBaoHanh);
 

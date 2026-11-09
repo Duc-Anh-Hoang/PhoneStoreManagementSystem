@@ -358,8 +358,8 @@
         const isActive = domIdx === 8;
         return `
           <button type="button" onclick="window.onTabItemClick(${domIdx})" data-dom-index="${domIdx}" data-slide-index="${slideIdx}" class="hero-tab-item w-1/2 md:w-1/4 flex-shrink-0 py-3.5 sm:py-4 px-2.5 sm:px-3 flex flex-col items-center justify-center cursor-pointer transition-colors ${isActive ? 'active-tab' : ''}">
-            <span class="tab-title text-[15px] sm:text-[16px] lg:text-[17px] font-bold leading-tight line-clamp-2 w-full text-center min-h-[40px] flex items-center justify-center ${isActive ? 'text-[#2563EB] font-extrabold' : 'text-slate-800'}">${s.title}</span>
-            <span class="tab-subtitle text-[14px] leading-tight truncate w-full text-center mt-1 ${isActive ? 'text-[#2563EB] font-semibold' : 'text-slate-600 font-medium'}">${s.subtitle || ''}</span>
+            <span class="tab-title text-[15px] sm:text-[16px] lg:text-[17px] font-bold leading-tight line-clamp-2 w-full text-center min-h-[40px] flex items-center justify-center ${isActive ? 'text-[#1D4ED8] font-bold' : 'text-[#0F172A] font-semibold'}">${s.title}</span>
+            <span class="tab-subtitle text-[14px] leading-tight truncate w-full text-center mt-1 ${isActive ? 'text-[#1D4ED8] font-medium' : 'text-[#64748B] font-normal'}">${s.subtitle || ''}</span>
           </button>
         `;
       }).join('');
@@ -697,9 +697,15 @@
       <div class="product-card group relative flex flex-col justify-between bg-white rounded-2xl border border-slate-200/90 p-3.5 sm:p-4 hover:border-blue-400 hover:shadow-xl hover:-translate-y-1 transition-all duration-200 cursor-pointer" onclick="window.location.href = 'pages/product-detail.html?id=' + encodeURIComponent('${p.maHang}')">
         
         <div>
-          <!-- Icon ngôi sao / sparkle góc trên bên trái -->
-          <div class="flex items-center justify-between mb-1">
-            <span class="text-blue-500 font-black text-sm">✦</span>
+          <!-- Thanh tiện ích trên đỉnh Card: Trả góp 0% / Nút So Sánh Sản Phẩm -->
+          <div class="flex items-center justify-between mb-1 gap-1">
+            <span class="inline-flex items-center gap-1 text-[10px] font-black text-blue-600 uppercase bg-blue-50 px-1.5 py-0.5 rounded-md">
+              <span class="text-amber-500">✦</span> Trả góp 0%
+            </span>
+            <button type="button" data-ma-hang="${p.maHang}" onclick="window.toggleCompareProduct('${p.maHang}', event)" class="btn-compare-product px-2 py-0.5 rounded-lg border border-slate-200 bg-white/90 text-slate-700 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all text-[10px] font-bold shadow-2xs flex items-center gap-1 z-10 cursor-pointer" title="Thêm vào bảng so sánh đối đầu">
+              <i class="fa-solid fa-code-compare text-[9px]"></i>
+              <span>So sánh</span>
+            </button>
           </div>
 
           <!-- Ảnh sản phẩm kèm Spec Badges nổi (Chip, Màn hình, Dung lượng...) -->
@@ -734,7 +740,7 @@
           <!-- Khối giá: Giá bán đỏ to, Badge giảm giá, Giá gốc gạch ngang, Trả góp 6T -->
           <div class="mt-2.5">
             <div class="flex items-center gap-2 flex-wrap">
-              <span class="text-base sm:text-lg font-black text-[#E0052B] font-mono leading-none">
+              <span class="text-base sm:text-lg font-bold text-[#DC2626] tabular-nums leading-none">
                 ${formatCardMoney(donGia)}
               </span>
               ${discountPercent > 0 ? `
@@ -778,15 +784,17 @@
           </div>
         </div>
 
-        <!-- Hàng chân card: Trạng thái Sẵn hàng & Nút icon giỏ hàng mua nhanh -->
-        <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between">
-          <div class="flex items-center gap-1.5 text-xs font-bold text-emerald-600">
-            <i class="fa-regular fa-circle-check text-emerald-500 text-sm"></i>
-            <span>${tonKho > 0 ? 'Sẵn hàng' : 'Liên hệ'}</span>
-          </div>
-          <button type="button" onclick="window.quickAddToCart('${p.maHang}', event)" class="w-8 h-8 rounded-xl bg-blue-50 hover:bg-[#0057B7] text-[#0057B7] hover:text-white border border-blue-200 flex items-center justify-center transition-all cursor-pointer shadow-xs active:scale-95" title="Thêm vào giỏ hàng">
-            <i class="fa-solid fa-cart-shopping text-xs"></i>
+        <!-- Hàng chân card: Trạng thái Sẵn hàng, Nút Thu Cũ & Nút Mua Nhanh -->
+        <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between gap-1.5">
+          <button type="button" onclick="window.openTradeInModal('${p.maHang}', event)" class="inline-flex items-center gap-1 px-2 py-1 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200/90 text-[10.5px] font-bold transition-all shadow-2xs cursor-pointer" title="Thu cũ đổi mới - Trợ giá đến 2.5 Triệu">
+            <i class="fa-solid fa-arrows-rotate text-[10px] text-amber-600"></i>
+            <span>Thu cũ trợ giá</span>
           </button>
+          <div class="flex items-center gap-1.5">
+            <button type="button" onclick="window.quickAddToCart('${p.maHang}', event)" class="w-8 h-8 rounded-xl bg-blue-50 hover:bg-[#0057B7] text-[#0057B7] hover:text-white border border-blue-200 flex items-center justify-center transition-all cursor-pointer shadow-xs active:scale-95" title="Thêm vào giỏ hàng">
+              <i class="fa-solid fa-cart-shopping text-xs"></i>
+            </button>
+          </div>
         </div>
 
       </div>

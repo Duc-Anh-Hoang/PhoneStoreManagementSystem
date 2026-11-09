@@ -48,7 +48,7 @@
       donGia: 26990000,
       oldPrice: 33990000,
       giaGoc: 33990000,
-      image: 'https://i.hoanghamobile.vn/Uploads/2026/01/22/galaxy-s25-ultra-titan-den-1.png',
+      image: 'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png',
       discount: '-21%',
       category: 'dien-thoai',
       badge: 'Galaxy AI'
@@ -1358,13 +1358,7 @@
         if (orderData.sdtNguoiNhan) window.OrderSignalR.joinCustomerGroup(orderData.sdtNguoiNhan);
       }
     } catch (e) {}
-    try {
-      if (typeof BroadcastChannel !== 'undefined') {
-        const bc = new BroadcastChannel('samamobile_orders');
-        bc.postMessage({ type: 'new_order', order: orderData });
-        bc.close();
-      }
-    } catch (e) {}
+
 
     // Gửi lên REST API backend (đồng bộ MaDH để Admin và DB khớp 100%)
     try {
@@ -1715,11 +1709,27 @@
     const idx = orders.findIndex(o => o.maDH === pendingCancelOrderCode);
 
     if (idx > -1) {
-      orders[idx].trangThai = 'da_huy';
-      orders[idx].lyDoHuy = reason;
+      const canceledOrder = orders[idx];
+      canceledOrder.trangThai = 'da_huy';
+      canceledOrder.lyDoHuy = reason;
       saveOrders(orders);
       window.renderOrders();
       showToast(`Đã hủy thành công đơn hàng ${pendingCancelOrderCode}!`);
+      if (window.OrderSignalR && typeof window.OrderSignalR.notifyOrderStatusChanged === 'function') {
+        window.OrderSignalR.notifyOrderStatusChanged(
+          canceledOrder.maDH,
+          'da_huy',
+          `Khách hàng ${canceledOrder.tenNguoiNhan || ''} vừa hủy đơn hàng #${canceledOrder.maDH} (Lý do: ${reason})`,
+          canceledOrder.sdtNguoiNhan || '',
+          'user'
+        );
+      }
+      if (window.api && typeof window.api.put === 'function') {
+        window.api.put('/orders/' + encodeURIComponent(canceledOrder.maDH) + '/cancel', {
+          sdt: canceledOrder.sdtNguoiNhan || '',
+          lyDo: reason
+        }).catch(() => {});
+      }
     }
 
     window.closeCancelModal();

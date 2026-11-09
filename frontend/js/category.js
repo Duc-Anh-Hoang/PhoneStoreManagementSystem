@@ -336,7 +336,7 @@
                   <img src="${resolveAssetPath(p.anhChinh || 'images/default-phone.png')}" class="w-10 h-10 object-contain rounded" onerror="this.src='../images/default-phone.png'" />
                   <div class="flex-1 min-w-0">
                     <p class="text-xs sm:text-[13px] font-bold text-slate-900 truncate">${p.tenHang}</p>
-                    <p class="text-xs sm:text-[13px] font-black text-[#E11B1E] font-mono mt-0.5">${Number(p.donGia || 0).toLocaleString('vi-VN')} ₫</p>
+                    <p class="text-xs sm:text-[13px] font-bold text-[#E11B1E] tabular-nums mt-0.5">${Number(p.donGia || 0).toLocaleString('vi-VN')} ₫</p>
                   </div>
                 </a>
               `).join('');
@@ -437,7 +437,7 @@
 
     window.CellphoneSLookup = window.CellphoneSLookup || {
       openModal: function (tab) { const isPages = window.location.pathname.includes('/pages/') || window.location.href.includes('/pages/'); window.location.href = (isPages ? '../' : '') + 'index.html#' + tab; },
-      openTradeInModal: function () { const isPages = window.location.pathname.includes('/pages/') || window.location.href.includes('/pages/'); window.location.href = (isPages ? '../' : '') + 'index.html#hero-store'; }
+      openTradeInModal: function () { window.location.href = 'trade-in.html'; }
     };
   }
 
@@ -797,7 +797,7 @@
 
       html += `
         <div class="border-t border-slate-100 pt-4">
-          <label class="block text-xs sm:text-[13px] font-black text-slate-800 uppercase tracking-wide mb-2.5">
+          <label class="block text-xs sm:text-[13px] font-semibold text-[#0F172A] uppercase tracking-wide mb-2.5">
             ${title}
           </label>
           <div class="flex flex-wrap gap-2 max-h-[180px] overflow-y-auto custom-scrollbar pr-0.5">
@@ -902,7 +902,7 @@
 
     let html = `
       <div class="flex items-center gap-2.5 w-full">
-        <span class="text-xs sm:text-sm font-black text-slate-800 whitespace-nowrap px-1.5 flex-shrink-0">Hot Search:</span>
+        <span class="text-xs sm:text-sm font-semibold text-[#0F172A] whitespace-nowrap px-1.5 flex-shrink-0">Hot Search:</span>
         <div id="quick-chips-scroll" class="flex-1 flex items-center gap-2.5 overflow-x-auto no-scrollbar py-1">
           <button type="button" onclick="window.onBrandFilterClick('all')" class="chip-btn flex-shrink-0 px-5 py-2 rounded-full text-xs sm:text-sm font-black transition-all cursor-pointer flex items-center justify-center h-9 sm:h-10 shadow-xs ${selectedBrand === 'all' ? 'bg-[#0057B7] text-white' : 'bg-white border border-slate-200 text-slate-700 hover:border-slate-300'}">
             Tất cả
@@ -1147,22 +1147,22 @@
 
   function getSampleProductImage(catId, idx, name) {
     const n = name.toLowerCase();
-    if (n.includes('s25 ultra')) return 'https://i.hoanghamobile.vn/Uploads/2026/01/22/galaxy-s25-ultra-titan-den-1.png';
+    if (n.includes('s25 ultra')) return 'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png';
     if (n.includes('a57')) return 'https://i.hoanghamobile.vn/Uploads/2026/01/08/nubia-v80-max-bac.png';
     if (n.includes('a27')) return 'https://i.hoanghamobile.vn/Uploads/2026/07/07/back-gold1-171113527.png';
     if (n.includes('a18')) return 'https://i.hoanghamobile.vn/Uploads/2026/08/01/q15a-green-back1-091121733.png';
-    if (n.includes('ipad')) return 'https://i.hoanghamobile.vn/Uploads/2022/10/19/ipad-gen-10-silver.png';
-    if (n.includes('tab s9')) return 'https://i.hoanghamobile.vn/Uploads/2023/10/04/tab-s9-fe-gray-1.png';
-    if (n.includes('macbook')) return 'https://i.hoanghamobile.vn/Uploads/2024/03/05/macbook-air-m3-midnight-1.png';
-    if (n.includes('tuf gaming')) return 'https://i.hoanghamobile.vn/Uploads/2023/06/15/asus-tuf-gaming-f15-fx506hf-hn014w-1.png';
-    if (n.includes('vg249q3a')) return 'https://i.hoanghamobile.vn/Uploads/2023/11/10/man-hinh-gaming-asus-tuf-vg249q3a-1.png';
-    if (n.includes('ultrasharp')) return 'https://i.hoanghamobile.vn/Uploads/2023/12/01/dell-ultrasharp-u2724d-1.png';
-    if (n.includes('casper')) return 'https://i.hoanghamobile.vn/Uploads/2024/04/10/dieu-hoa-casper-inverter-tc-09is36-1.png';
-    if (n.includes('daikin')) return 'https://i.hoanghamobile.vn/Uploads/2023/05/20/dieu-hoa-daikin-inverter-ftkb35xvmv-1.png';
-    if (n.includes('band 9')) return 'https://i.hoanghamobile.vn/Uploads/2024/07/20/xiaomi-smart-band-9-black-1.png';
-    if (n.includes('airpods')) return 'https://i.hoanghamobile.vn/Uploads/2024/09/10/airpods-4-1.png';
-    if (n.includes('marshall')) return 'https://i.hoanghamobile.vn/Uploads/2022/06/15/marshall-emberton-ii-black-and-brass-1.png';
-    if (n.includes('anker')) return 'https://i.hoanghamobile.vn/Uploads/2022/10/05/anker-511-nano-3-30w-a2147-1.png';
+    if (n.includes('ipad')) return 'https://i.hoanghamobile.vn/Uploads/2025/03/06/ipad-a16-wifi-pink-pdp-image-position-1-vn-vi.png';
+    if (n.includes('tab s9')) return 'https://i.hoanghamobile.vn/Uploads/2026/10/15/s10-fe-3-134808082.png';
+    if (n.includes('macbook')) return 'https://i.hoanghamobile.vn/Uploads/2026/03/04/macbook-air-13-in-m5-starlight-pdp-image-position-1-vn-vi.jpg';
+    if (n.includes('tuf gaming')) return 'https://i.hoanghamobile.vn/Uploads/2026/06/02/asus-tuf-1.png';
+    if (n.includes('vg249q3a')) return 'https://i.hoanghamobile.vn/Uploads/2026/04/06/vg249q5r-1.png';
+    if (n.includes('ultrasharp')) return 'https://i.hoanghamobile.vn/Uploads/2024/02/22/u2424he.png';
+    if (n.includes('casper')) return 'https://i.hoanghamobile.vn/Uploads/MayLanh/4757/Slider/casper-tc-09is35-2-1.jpg';
+    if (n.includes('daikin')) return 'https://i.hoanghamobile.vn/Uploads/2025/04/16/ftkb25yvmv-1.png';
+    if (n.includes('band 9')) return 'https://i.hoanghamobile.vn/Uploads/2024/11/27/n69-pink-side45.png';
+    if (n.includes('airpods')) return 'https://i.hoanghamobile.vn/Uploads/2024/09/10/airpods-4.png';
+    if (n.includes('marshall')) return 'https://i.hoanghamobile.vn/Uploads/2026/07/30/marshall-stockwell-lll-trang-1-153237088.png';
+    if (n.includes('anker')) return 'https://i.hoanghamobile.vn/Uploads/2026/03/21/a1638-den.png';
 
     return 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png';
   }
@@ -1278,6 +1278,12 @@
                 </span>
               ` : ''}
 
+              <!-- Nút So sánh góc phải ảnh -->
+              <button type="button" data-ma-hang="${pId}" onclick="event.stopPropagation(); if(window.ProductCompare) window.ProductCompare.toggleCompare('${pId}', event);" class="btn-compare-product absolute top-2.5 right-2.5 px-2 py-0.5 rounded-lg border border-slate-200 bg-white/95 text-slate-700 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all text-[10px] font-bold shadow-2xs flex items-center gap-1 z-10 cursor-pointer" title="So sánh đối đầu">
+                <i class="fa-solid fa-code-compare text-[9px]"></i>
+                <span>So sánh</span>
+              </button>
+
               <!-- Ảnh sản phẩm to rõ nét -->
               <img src="${img}" alt="${p.tenHang}" class="max-w-[155px] max-h-[155px] sm:max-w-[170px] sm:max-h-[170px] object-contain transition-transform duration-300 group-hover:scale-105" loading="lazy" onerror="this.onerror=null; this.src='https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png';" />
             </div>
@@ -1290,7 +1296,7 @@
             <!-- Khối Giá 3 Tầng Chuẩn Hoàng Hà Mobile: Giá bán lẻ đỏ to, Giá gốc gạch, Dòng Member xanh cyan -->
             <div class="mt-2.5">
               <div class="flex items-baseline gap-2 flex-wrap">
-                <span class="text-base sm:text-lg font-black text-[#E0052B] font-mono">
+                <span class="text-base sm:text-lg font-bold text-[#E0052B] tabular-nums">
                   ${formatCurrency(price)}
                 </span>
                 ${oldPrice > price ? `
@@ -1330,14 +1336,17 @@
             </div>
           </div>
 
-          <!-- Trạng thái "Sẵn hàng" & Nút icon giỏ hàng đỏ mua nhanh -->
-          <div class="mt-3.5 pt-3 border-t border-slate-100 flex items-center justify-between">
-            <span class="text-xs sm:text-[13px] font-bold text-emerald-600 flex items-center gap-1.5">
-              <i class="fa-solid fa-circle text-[8px] text-emerald-500"></i> ${p.stock_status || 'Sẵn hàng'}
-            </span>
-            <button type="button" onclick="event.stopPropagation(); window.quickAddToCart('${pId}')" class="w-8 h-8 rounded-xl bg-rose-50 hover:bg-[#E0052B] text-[#E0052B] hover:text-white flex items-center justify-center transition-all cursor-pointer shadow-2xs" title="Thêm vào giỏ hàng">
-              <i class="fa-solid fa-cart-shopping text-sm"></i>
+          <!-- Trạng thái "Sẵn hàng", Nút Thu Cũ & Nút Giỏ Hàng -->
+          <div class="mt-3.5 pt-3 border-t border-slate-100 flex items-center justify-between gap-1.5">
+            <button type="button" onclick="event.stopPropagation(); if(window.openTradeInModal) window.openTradeInModal('${pId}', event);" class="inline-flex items-center gap-1 px-2 py-1 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200/90 text-[10.5px] font-bold transition-all shadow-2xs cursor-pointer" title="Thu cũ đổi mới - Trợ giá đến 2.5 Triệu">
+              <i class="fa-solid fa-arrows-rotate text-[10px] text-amber-600"></i>
+              <span>Thu cũ trợ giá</span>
             </button>
+            <div class="flex items-center gap-1.5">
+              <button type="button" onclick="event.stopPropagation(); window.quickAddToCart('${pId}')" class="w-8 h-8 rounded-xl bg-rose-50 hover:bg-[#E0052B] text-[#E0052B] hover:text-white flex items-center justify-center transition-all cursor-pointer shadow-2xs" title="Thêm vào giỏ hàng">
+                <i class="fa-solid fa-cart-shopping text-sm"></i>
+              </button>
+            </div>
           </div>
 
         </div>

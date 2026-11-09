@@ -11,6 +11,25 @@ var API_BASE = window.API_BASE = window.API_BASE || (window.APP_CONFIG && window
     : '/api'
 );
 
+// ĐỊNH DẠNG NGÀY GIỜ THEO MÚI GIỜ VIỆT NAM (backend trả về UTC dạng ISO có 'Z')
+function fmtLocalDateTime(value, dateOnly = false) {
+  if (!value) return '-';
+  const d = new Date(value);
+  if (isNaN(d.getTime())) {
+    const s = String(value).replace('T', ' ');
+    return dateOnly ? s.substring(0, 10) : s.substring(0, 16);
+  }
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Ho_Chi_Minh',
+    year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit', hour12: false
+  }).formatToParts(d).reduce((acc, p) => { acc[p.type] = p.value; return acc; }, {});
+  const hour = parts.hour === '24' ? '00' : parts.hour;
+  const datePart = `${parts.year}-${parts.month}-${parts.day}`;
+  return dateOnly ? datePart : `${datePart} ${hour}:${parts.minute}`;
+}
+window.fmtLocalDateTime = fmtLocalDateTime;
+
 // QUẢN LÝ STATE TRONG BỘ NHỚ (IN-MEMORY ONLY)
 class AdminStore {
   constructor() {
@@ -1131,7 +1150,7 @@ async function renderMatHangTable(page = 1, keyword = null, category = null, bra
     }
 
     const thumbImg = m.anhChinh
-      ? `<img src="${m.anhChinh}" alt="${m.tenHang}" class="w-9 h-9 object-contain rounded-lg border border-slate-200 bg-white p-0.5 flex-shrink-0" onerror="this.onerror=null;this.src='https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-natural-titan.png'">`
+      ? `<img src="${m.anhChinh}" alt="${m.tenHang}" class="w-9 h-9 object-contain rounded-lg border border-slate-200 bg-white p-0.5 flex-shrink-0" onerror="this.onerror=null;this.src='https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-tu-nhien-1.png'">`
       : `<div class="w-9 h-9 rounded-lg bg-slate-100 text-slate-400 flex items-center justify-center text-xs flex-shrink-0"><i class="fa-solid fa-mobile"></i></div>`;
 
     return `
@@ -1307,7 +1326,7 @@ async function renderDonHangTable(filter = 'all') {
   }
 
   tbody.innerHTML = orders.map(o => {
-    const ngay = o.ngayDat ? o.ngayDat.replace('T', ' ').substring(0, 16) : '-';
+    const ngay = fmtLocalDateTime(o.ngayDat);
     let actions = '';
     if (o.trangThai === 'cho_xac_nhan') {
       actions = `
@@ -1457,7 +1476,9 @@ async function completeOrder(maDH) {
       maDH,
       'hoan_thanh',
       'Đơn đặt hàng #' + maDH + ' đã được giao thành công và hoàn tất! Cảm ơn bạn đã mua hàng.',
-      oComp ? oComp.sdtNguoiNhan : ''
+      oComp ? oComp.sdtNguoiNhan : '',
+      'admin',
+      genHD
     );
   }
   try {
@@ -1494,7 +1515,7 @@ async function renderHoaDonTable() {
       const imeiStr = imeiList.length > 0
         ? `<span class="font-mono text-indigo-700">${imeiList.join(', ')}</span>`
         : `<span class="text-slate-400 italic text-[11px]">Không áp dụng (Phụ kiện)</span>`;
-      const ngay = h.ngayLap ? h.ngayLap.replace('T', ' ').substring(0, 16) : '-';
+      const ngay = fmtLocalDateTime(h.ngayLap);
       const tenKh = h.tenKhachHang || h.tenKH || 'Khách lẻ';
 
       return `
@@ -1680,7 +1701,7 @@ async function lookupTraHangIMEI(soImei) {
         if (soHDInput && !soHDInput.value) {
           soHDInput.value = data.soHD || '';
         }
-        const ngayMuaStr = data.ngayMua ? data.ngayMua.replace('T', ' ').substring(0, 10) : '-';
+        const ngayMuaStr = fmtLocalDateTime(data.ngayMua, true);
         const hanText = data.conHanDoiTra
           ? `<span class="text-emerald-700 font-bold">Còn hạn đổi trả (hạn 30 ngày)</span>`
           : `<span class="text-rose-600 font-bold">Đã quá hạn đổi trả 30 ngày</span>`;
@@ -1732,7 +1753,7 @@ async function renderNhapKhoTable() {
     tbody.innerHTML = list.map(p => {
       const sl = p.chiTiet ? p.chiTiet.reduce((s, ct) => s + (ct.slNhap || 0), 0) : 0;
       const tongTien = p.chiTiet ? p.chiTiet.reduce((s, ct) => s + ((ct.slNhap || 0) * (ct.donGiaNhap || 0)), 0) : 0;
-      const ngay = p.ngayNhap ? p.ngayNhap.replace('T', ' ').substring(0, 16) : '-';
+      const ngay = fmtLocalDateTime(p.ngayNhap);
 
       return `
         <tr class="border-b border-slate-200 hover:bg-slate-50 transition-colors">
@@ -2243,7 +2264,7 @@ async function renderTraHangTable() {
     };
 
     tbody.innerHTML = list.map(t => {
-      const ngay = t.ngayTR ? t.ngayTR.replace('T', ' ').substring(0, 16) : '-';
+      const ngay = fmtLocalDateTime(t.ngayTR);
       const badgeTT = formatBadgeTrangThai(t.trangThai || 'tiep_nhan');
       
       let actionButtons = '';
@@ -3039,7 +3060,7 @@ async function renderHoaDonListTable(keyword = '') {
       const imeiStr = (h.chiTiet && h.chiTiet.length > 0)
         ? h.chiTiet.map(ct => ct.soIMEI || ct.maIMEI).filter(Boolean).join(', ')
         : (h.maImei || '-');
-      const ngay = h.ngayLap ? h.ngayLap.replace('T', ' ').substring(0, 16) : '-';
+      const ngay = fmtLocalDateTime(h.ngayLap);
       const tenKh = h.tenKhachHang || h.tenKH || 'Khách lẻ';
 
       return `
@@ -3105,7 +3126,7 @@ async function viewHoaDonDetail(soHD) {
     }
     const vatPercent = 10;
     const vatAmount = Math.round((h.thanhTien * vatPercent) / 110);
-    const ngay = h.ngayLap ? h.ngayLap.replace('T', ' ').substring(0, 16) : '-';
+    const ngay = fmtLocalDateTime(h.ngayLap);
     const tenKh = h.tenKhachHang || h.tenKH || 'Khách lẻ';
 
     let itemsHtml = '';
@@ -3393,7 +3414,7 @@ async function viewImeiTimeline(soImei) {
           <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
             <div class="flex justify-between items-center text-xs">
               <span class="font-bold text-navy">2. Xuất bán cho khách hàng</span>
-              <span class="text-slate-400 font-mono">${hd ? (hd.ngayLap ? hd.ngayLap.substring(0, 10) : '-') : 'Chưa xuất bán'}</span>
+              <span class="text-slate-400 font-mono">${hd ? fmtLocalDateTime(hd.ngayLap, true) : 'Chưa xuất bán'}</span>
             </div>
             ${hd ? `
               <div class="text-[11px] text-slate-600 mt-1">
@@ -4937,16 +4958,14 @@ window.addEventListener('samamobile:order_status_updated', function (e) {
   }
 });
 
-// BroadcastChannel cho kết nối liên tab trong cùng trình duyệt với độ trễ 0ms
-if (typeof BroadcastChannel !== 'undefined') {
-  try {
-    const adminBC = new BroadcastChannel('samamobile_orders');
-    adminBC.onmessage = function (e) {
-      if (e.data && e.data.type === 'new_order' && e.data.order) {
-        handleIncomingAdminOrder(e.data.order);
-      } else if (e.data && e.data.type === 'orders_updated' && Array.isArray(e.data.orders) && e.data.orders.length > 0) {
-        handleIncomingAdminOrder(e.data.orders[0]);
-      }
-    };
-  } catch (err) {}
-}
+
+
+document.addEventListener('click', function (e) {
+  const pop = document.getElementById('notification-popover');
+  const btn = document.getElementById('btn-notification-toggle');
+  if (pop && !pop.classList.contains('hidden')) {
+    if (btn && !btn.contains(e.target) && !pop.contains(e.target)) {
+      pop.classList.add('hidden');
+    }
+  }
+});

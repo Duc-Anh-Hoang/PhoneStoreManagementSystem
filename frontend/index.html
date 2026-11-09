@@ -15,7 +15,7 @@
   <!-- Google Fonts: Be Vietnam Pro & Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
 
   <!-- Font Awesome 6 Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -28,7 +28,7 @@
       theme: {
         extend: {
           fontFamily: {
-            sans: ['Be Vietnam Pro', 'Plus Jakarta Sans', 'system-ui', '-apple-system', 'sans-serif'],
+            sans: ['"Be Vietnam Pro"', 'system-ui', '-apple-system', 'sans-serif'],
           },
           colors: {
             primary: {
@@ -101,7 +101,7 @@
   </script>
 
   <!-- Custom CSS -->
-  <link rel="stylesheet" href="css/style.css?v=5.7">
+  <link rel="stylesheet" href="css/style.css?v=6.0">
   <style>
     @keyframes marqueeScroll {
       0% { transform: translate3d(0, 0, 0); }
@@ -367,10 +367,11 @@
         <div class="flex items-center justify-between sm:justify-end min-h-[42px] overflow-x-auto lg:overflow-visible no-scrollbar gap-3 sm:gap-5 lg:gap-6 text-xs sm:text-[13px] md:text-sm font-bold whitespace-nowrap text-slate-700">
           
           <!-- 1. Thu cũ giá tốt -->
-          <button type="button" onclick="window.CellphoneSLookup.openTradeInModal ? window.CellphoneSLookup.openTradeInModal() : (window.CellphoneSLookup && window.CellphoneSLookup.openModal('warranty'))" class="inline-flex items-center gap-2 hover:text-[#2563EB] transition-colors cursor-pointer py-1.5 flex-shrink-0">
-            <i class="fa-solid fa-arrows-rotate text-[#2563EB] text-sm"></i>
-            <span>Thu cũ đổi mới - Trợ giá đến 5 triệu</span>
-          </button>
+          <a href="pages/trade-in.html" class="inline-flex items-center gap-2 text-blue-700 hover:text-blue-800 bg-blue-50/80 hover:bg-blue-100 px-3 py-1 rounded-full border border-blue-200 transition-colors cursor-pointer py-1.5 flex-shrink-0" title="Đến trung tâm Thu Cũ Lên Đời SamaMobile">
+            <i class="fa-solid fa-arrows-rotate text-blue-600 text-sm"></i>
+            <span class="font-extrabold">Thu cũ đổi mới - Trợ giá đến 2.5 triệu</span>
+            <span class="px-1.5 py-0.2 text-[9px] font-black bg-rose-500 text-white rounded-full">HOT</span>
+          </a>
           <span class="hidden sm:inline text-slate-300">|</span>
 
           <!-- 2. Sản phẩm đã xem -->
@@ -506,7 +507,7 @@
             <span>Dịch Vụ Nổi Bật</span>
           </div>
           <ul class="space-y-2 text-slate-600">
-            <li><button type="button" onclick="window.CellphoneSLookup.openTradeInModal(); window.toggleMegaMenu();" class="hover:text-[#2563EB] font-bold text-[#2563EB]">Thu Cũ Trợ Giá 2.5TR</button></li>
+            <li><a href="pages/trade-in.html" class="hover:text-[#2563EB] font-bold text-[#2563EB]">Thu Cũ Trợ Giá 2.5TR</a></li>
             <li><button type="button" onclick="window.openInstallmentModal(); window.toggleMegaMenu();" class="hover:text-[#2563EB] font-bold text-[#2563EB]">Trả Góp 0% Lãi Suất</button></li>
             <li><button type="button" onclick="window.CellphoneSLookup.openModal('warranty'); window.toggleMegaMenu();" class="hover:text-[#2563EB]">Tra cứu bảo hành IMEI</button></li>
             <li><button type="button" onclick="window.CellphoneSLookup.openModal('order'); window.toggleMegaMenu();" class="hover:text-[#2563EB]">Tra cứu tiến độ đơn hàng</button></li>
@@ -727,7 +728,7 @@
             </a>
 
             <!-- 14. Thu cũ đổi mới -->
-            <a href="pages/category.html?type=dien-thoai&tradein=true" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-[#ebf3fe] transition-all duration-200 group cursor-pointer" title="Thu cũ đổi mới">
+            <a href="pages/trade-in.html" class="featured-cat-item flex flex-col items-center justify-between text-center p-2.5 sm:py-3.5 sm:px-2 hover:bg-[#ebf3fe] transition-all duration-200 group cursor-pointer" title="Thu cũ đổi mới">
               <div class="w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center mb-1.5 sm:mb-2">
                 <img src="images/categories/thu-cu-doi-moi.png" onerror="this.onerror=null; this.src='images/categories/thu-cu-doi-moi.png';" alt="Thu cũ đổi mới" class="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-300" loading="lazy" />
               </div>
@@ -1482,7 +1483,7 @@
 
           <!-- Lưới 5 cột sản phẩm đã xem -->
           <div class="recently-viewed-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3.5 sm:gap-4">
-            <!-- Render tự động bằng recently-viewed.js -->
+            <!-- Render tự động bằng recently-viewed.js?v=6.3 -->
           </div>
 
         </div>
@@ -2720,18 +2721,89 @@
   <!-- GOOGLE IDENTITY SERVICES SDK (Xác thực Google OAuth thật) -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.7/signalr.min.js"></script>
-  <script src="js/order-signalr.js?v=1.0"></script>
+  <script src="js/order-signalr.js?v=1.2"></script>
   <script src="js/api.js?v=3.2"></script>
   <script src="js/store-data.js?v=3.8"></script>
   <script src="js/cart.js?v=3.7"></script>
   <script src="js/checkout.js?v=3.2"></script>
   <script src="js/customer-portal.js?v=3.4"></script>
   <script src="js/lookup.js?v=3.2"></script>
+  <script src="js/compare.js?v=1.0"></script>
+  <script src="js/trade-in.js?v=1.0"></script>
   <script src="js/product-modal.js?v=3.7"></script>
   <script src="js/auth.js?v=3.3"></script>
-  <script src="js/customer-store.js?v=6.4"></script>
-  <script src="js/recently-viewed.js?v=6.0"></script>
+  <script src="js/customer-store.js?v=6.5"></script>
+  <script src="js/recently-viewed.js?v=6.5"></script>
+  <script src="js/floating-promo.js?v=1.2"></script>
   <script src="js/main.js?v=3.2"></script>
+
+  <!-- =========================================================================
+       FLOATING COMPARE DOCK (THANH SO SÁNH NỔI DƯỚI ĐÁY MÀN HÌNH)
+       ========================================================================= -->
+  <div id="compare-floating-dock" class="fixed bottom-16 lg:bottom-4 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 translate-y-32 opacity-0 pointer-events-none w-[94%] max-w-3xl">
+    <div class="bg-slate-900/95 backdrop-blur-md text-white rounded-2xl sm:rounded-full p-2.5 sm:px-4 sm:py-2.5 border border-slate-700 shadow-2xl flex flex-wrap sm:flex-nowrap items-center justify-between gap-2.5 sm:gap-4">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-black shadow-md flex-shrink-0">
+          <i class="fa-solid fa-code-compare"></i>
+        </div>
+        <div class="text-xs font-extrabold whitespace-nowrap">
+          So sánh (<span id="compare-dock-count" class="text-amber-400">0</span>/3):
+        </div>
+      </div>
+      
+      <!-- List sản phẩm đã chọn -->
+      <div id="compare-dock-items" class="flex items-center gap-2 flex-1 overflow-x-auto no-scrollbar py-0.5">
+        <!-- Render động qua compare.js -->
+      </div>
+
+      <!-- Action buttons -->
+      <div class="flex items-center gap-2 flex-shrink-0 w-full sm:w-auto justify-end">
+        <button type="button" onclick="window.ProductCompare.clearAll()" class="px-2.5 py-2 text-[11px] font-bold text-slate-400 hover:text-white cursor-pointer transition-colors" title="Xóa tất cả">
+          Xóa
+        </button>
+        <button type="button" onclick="window.ProductCompare.openModal()" class="px-4 py-2 rounded-xl sm:rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-extrabold text-xs shadow-lg shadow-blue-500/30 active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap">
+          <span>SO SÁNH NGAY</span>
+          <i class="fa-solid fa-chevron-right text-[10px]"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL: SO SÁNH SẢN PHẨM ĐỐI ĐẦU (COMPARE MODAL)
+       ========================================================================= -->
+  <div id="compare-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-slate-950/80 backdrop-blur-md overflow-y-auto">
+    <div class="bg-white w-full max-w-5xl rounded-3xl shadow-2xl border border-slate-200 overflow-hidden my-4 max-h-[94vh] flex flex-col animate-in fade-in zoom-in-95 duration-200">
+      
+      <!-- Header Modal -->
+      <div class="p-4 sm:px-6 sm:py-4 bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-white flex items-center justify-between border-b border-slate-800">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center text-sm shadow-md">
+            <i class="fa-solid fa-code-compare"></i>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-sm sm:text-base">So Sánh Sản Phẩm Đối Đầu</h3>
+            <p class="text-[11px] text-slate-400">Đối chiếu chi tiết cấu hình, camera, pin và giá bán</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="window.ProductCompare.clearAll()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 transition-colors">
+            Xóa hết
+          </button>
+          <button type="button" onclick="window.ProductCompare.closeModal()" class="w-8 h-8 rounded-xl bg-slate-800 hover:bg-rose-600 text-slate-300 hover:text-white flex items-center justify-center text-sm transition-colors cursor-pointer" aria-label="Đóng">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Body Modal -->
+      <div id="compare-modal-content" class="flex-1 overflow-y-auto">
+        <!-- Render động bằng compare.js -->
+      </div>
+    </div>
+  </div>
+
+
 </body>
 </html>
 

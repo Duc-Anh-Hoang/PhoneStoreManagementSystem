@@ -1,22 +1,55 @@
 /**
- * SAMAMOBILE.COM - PRODUCT DETAIL CONTROLLER
- * Xử lý toàn bộ logic giao diện chi tiết sản phẩm chuẩn Hoàng Hà Mobile / SamaMobile:
- * - Gallery ảnh lớn, Carousel đa góc, Thumbnails tính năng & màu sắc
- * - Thông số nổi bật 4 ô có icon trực quan
- * - Bộ chọn Phiên bản & Màu sắc có checkmark active
- * - Khung giá to rõ, nút Mua ngay, Giỏ hàng, Trả góp 0%
- * - Khối Địa chỉ còn hàng (108 cửa hàng) có bộ lọc tìm kiếm & tỉnh thành
- * - Gói bảo hành mở rộng SamaCare (HCare 6 ô)
- * - Bài viết đánh giá chuyên sâu & Bảng Thông số kỹ thuật chi tiết 2 cột (Zebra table)
- * - Đánh giá & Bình luận (Interactive comments)
- * - Sticky bottom purchase bar tự động xuất hiện khi cuộn
+ * SAMAMOBILE.COM - PRODUCT DETAIL CONTROLLER (VERSION 6.4 - CHUẨN HOÀNG HÀ MOBILE)
+ * Thiết kế giao diện chi tiết sản phẩm 100% khớp 5 Screenshots từ người dùng:
+ * 1. Hero Showcase: Tên sản phẩm, SKU, Đánh giá 4.6 (10 đánh giá), Nút Thông số, So sánh, Thu cũ
+ *    Gallery ảnh lớn có Prev/Next, counter badge 1/19, thumbnails (Video, Màu sắc, Specs, Info, QR)
+ *    Thông số nổi bật 4 ô có icon, Cam kết sản phẩm 4 tiêu chí
+ *    Phiên bản & Màu sắc có checkmark badge ở góc dưới phải
+ *    Khung giá bán & Trả góp chia đôi nét đứt nền xanh #F0F6FE
+ *    Cụm 3 nút CTA: Giỏ hàng (đỏ), MUA NGAY (đỏ lớn), TRẢ GÓP (xanh)
+ * 2. Địa chỉ còn hàng và trải nghiệm (114 cửa hàng) có tìm kiếm, khu vực, tag Có hàng trải nghiệm, phone, Xem chi tiết, Đang sẵn hàng
+ *    Sama Member Card (giảm 366.000₫ & EDU 200.000₫, mascot sóc)
+ *    Thu cũ lên đời chỉ từ 26.124.000₫ (trợ giá đến 4.000.000₫)
+ *    Ưu đãi thanh toán ngân hàng (TPBank, VPBank, VIB, ZaloPay, Kredivo)
+ *    Sản phẩm mua kèm có filter tabs (Tất cả, Ốp lưng, Dán màn hình, Củ sạc, Sạc dự phòng)
+ * 3. Bảng thông số kỹ thuật chi tiết chuẩn 2 cột Zebra Table (16 thông số kỹ thuật đầy đủ)
+ * 4. Bài viết đánh giá chuyên sâu có Mục lục nội dung chính (5 mục clickable), định dạng bài viết chuẩn,
+ *    nút Xem thêm / Thu gọn có lớp phủ mờ chuyển màu gradient mượt mà
+ *    Video đánh giá trên tay & Gói bảo hành mở rộng SamaCare (6 ô HCare)
+ * 5. Khối Đánh giá & Bình luận: Điểm số 4.6/5, 5 thanh tiến trình sao (90%, 0%, 0%, 10%, 0%),
+ *    Ảnh đánh giá từ khách hàng, Form gửi bình luận nhanh 3 input + textarea
+ * 6. Sticky bottom purchase bar tự động xuất hiện khi cuộn
+ * 7. Tương thích thông minh & năng động với MỌI thiết bị (Điện thoại, Laptop, Tablet, Smartwatch, Tai nghe, Phụ kiện)
  */
 
 (function () {
   'use strict';
-  // Helper chuẩn hóa đường dẫn tài nguyên (tương thích cả khi chạy từ / hoặc /pages/)
+
+  var BROKEN_IMAGE_REMAP = {
+    "iphone-16-pro-natural-titan.png": "https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-tu-nhien-1.png",
+    "galaxy-s25-ultra-titan-den-1.png": "https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png",
+    "galaxy-s24-ultra-xam-1.png": "https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-tim-1.png",
+    "galaxy-s24-ultra-vang-1.png": "https://i.hoanghamobile.vn/Uploads/2024/01/16/s24-ultra-vang_638409930027889246.png",
+    "ipad-gen-10-silver.png": "https://i.hoanghamobile.vn/Uploads/2025/03/06/ipad-a16-wifi-pink-pdp-image-position-1-vn-vi.png",
+    "tab-s9-fe-gray-1.png": "https://i.hoanghamobile.vn/Uploads/2026/10/15/s10-fe-3-134808082.png",
+    "macbook-air-m3-midnight-1.png": "https://i.hoanghamobile.vn/Uploads/2026/03/04/macbook-air-13-in-m5-starlight-pdp-image-position-1-vn-vi.jpg",
+    "macbook-air-13-in-m5-space-gray-pdp-image-position-1-vn-vi.jpg": "https://i.hoanghamobile.vn/Uploads/2026/10/28/macbook-pro-14-inch-m6-space-black-pdp-image-position-1-vi-vn-145528508.png",
+    "asus-tuf-gaming-f15-fx506hf-hn014w-1.png": "https://i.hoanghamobile.vn/Uploads/2026/06/02/asus-tuf-1.png",
+    "man-hinh-gaming-asus-tuf-vg249q3a-1.png": "https://i.hoanghamobile.vn/Uploads/2026/04/06/vg249q5r-1.png",
+    "dell-ultrasharp-u2724d-1.png": "https://i.hoanghamobile.vn/Uploads/2024/02/22/u2424he.png",
+    "dieu-hoa-casper-inverter-tc-09is36-1.png": "https://i.hoanghamobile.vn/Uploads/MayLanh/4757/Slider/casper-tc-09is35-2-1.jpg",
+    "dieu-hoa-daikin-inverter-ftkb35xvmv-1.png": "https://i.hoanghamobile.vn/Uploads/2025/04/16/ftkb25yvmv-1.png",
+    "xiaomi-smart-band-9-black-1.png": "https://i.hoanghamobile.vn/Uploads/2024/11/27/n69-pink-side45.png",
+    "airpods-4-1.png": "https://i.hoanghamobile.vn/Uploads/2024/09/10/airpods-4.png",
+    "marshall-emberton-ii-black-and-brass-1.png": "https://i.hoanghamobile.vn/Uploads/2026/07/30/marshall-stockwell-lll-trang-1-153237088.png",
+    "anker-511-nano-3-30w-a2147-1.png": "https://i.hoanghamobile.vn/Uploads/2026/03/21/a1638-den.png"
+  };
+
   function resolveAssetPath(path) {
     if (!path) return '';
+    for (const [brokenFile, fixedUrl] of Object.entries(BROKEN_IMAGE_REMAP)) {
+      if (path.includes(brokenFile)) return fixedUrl;
+    }
     if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('data:') || path.startsWith('//')) {
       return path;
     }
@@ -25,7 +58,6 @@
     return isInsidePages ? ('../' + clean) : clean;
   }
 
-  // Tải JSON an toàn qua nhiều ứng viên đường dẫn (tránh 404 tuyệt đối)
   async function fetchJsonSafely(relPath) {
     const clean = relPath.replace(/^\.\.\//, '').replace(/^\//, '');
     const candidates = [
@@ -48,37 +80,142 @@
     return null;
   }
 
-
   var currentProduct = null;
   var selectedVersion = null;
   var selectedColor = null;
   var allProductsMeta = {};
   var currentGalleryIndex = 0;
   var galleryImages = [];
+  var isArticleExpanded = false;
 
-  // Danh mục 108 chi nhánh của SAMAMOBILE chuẩn Hoàng Hà Mobile (Screenshot 3)
+  // Danh mục 114 chi nhánh của SAMAMOBILE chuẩn Hoàng Hà Mobile (Screenshot 2)
   var STORE_LOCATIONS = [
-    { city: 'hanoi', name: '122 Thái Hà, Phường Đống Đa, Hà Nội', phone: '0973790122', stock: true },
-    { city: 'hanoi', name: '194 Lê Duẩn, Phường Văn Miếu - Quốc Tử Giám, Hà Nội', phone: '0962066208', stock: true },
-    { city: 'hanoi', name: '196 Quang Trung, Phường Hà Đông, Hà Nội', phone: '0375866186', stock: true },
-    { city: 'hcm', name: 'Số 215 Lê Văn Việt, Phường Tăng Nhơn Phú, Hồ Chí Minh', phone: '0866356215', stock: true },
-    { city: 'thanhhoa', name: '222 Trần Phú, Phường Hạc Thành, Thanh Hóa', phone: '0888203536', stock: true },
-    { city: 'haiphong', name: 'Số 258 Đường Tô Hiệu, Phường Lê Chân, Hải Phòng', phone: '0961791516', stock: true },
-    { city: 'hanoi', name: '28 Trần Phú, Phường Hà Đông, Hà Nội', phone: '0903202328', stock: true },
-    { city: 'hanoi', name: '348 Hồ Tùng Mậu, Phường Cầu Diễn, Hà Nội', phone: '0965868348', stock: true },
-    { city: 'hanoi', name: '382 Nguyễn Văn Cừ, Phường Bồ Đề, Hà Nội', phone: '0915963222', stock: true },
-    { city: 'hanoi', name: '392 Cầu Giấy, Phường Cầu Giấy, Hà Nội', phone: '0968323399', stock: true },
-    { city: 'hcm', name: '241 Lê Văn Việt, Phường Tăng Nhơn Phú B, TP. Thủ Đức, TP.HCM', phone: '18006868', stock: true },
-    { city: 'hcm', name: '55 Trần Quang Khải, Phường Tân Định, Quận 1, TP.HCM', phone: '0908889977', stock: true },
-    { city: 'hcm', name: '1060 Quang Trung, Phường 8, Gò Vấp, TP.HCM', phone: '0903332211', stock: true },
-    { city: 'hcm', name: '347 Hoàng Văn Thụ, Phường 2, Tân Bình, TP.HCM', phone: '0902223344', stock: true },
-    { city: 'danang', name: '153 Hàm Nghi, Quận Thanh Khê, Đà Nẵng', phone: '0905556677', stock: true },
-    { city: 'danang', name: '580 Điện Biên Phủ, Quận Thanh Khê, Đà Nẵng', phone: '0905123789', stock: true },
-    { city: 'cantho', name: '221 Đường 30 Tháng 4, Phường Hưng Lợi, Ninh Kiều, Cần Thơ', phone: '0939998877', stock: true }
+    { city: 'hanoi', name: '194 Lê Duẩn, Phường Văn Miếu - Quốc Tử Giám, Hà Nội', phone: '0962066208', stock: true, demo: true },
+    { city: 'hanoi', name: '196 Quang Trung, Phường Hà Đông, Hà Nội', phone: '0375866186', stock: true, demo: true },
+    { city: 'thanhhoa', name: '222 Trần Phú, Phường Hạc Thành, Thanh Hóa', phone: '0888203536', stock: true, demo: true },
+    { city: 'hanoi', name: '28 Trần Phú, Phường Hà Đông, Hà Nội', phone: '0903202328', stock: true, demo: true },
+    { city: 'hcm', name: '232 Nguyễn Thái Học, Phường Quy Nhơn Nam, TP.HCM', phone: '0898198383', stock: true, demo: true },
+    { city: 'hanoi', name: '122 Thái Hà, Phường Đống Đa, Hà Nội', phone: '0973790122', stock: true, demo: true },
+    { city: 'hcm', name: '241 Lê Văn Việt, Tăng Nhơn Phú B, TP. Thủ Đức, TP.HCM', phone: '18006868', stock: true, demo: true },
+    { city: 'hcm', name: '55 Trần Quang Khải, Phường Tân Định, Quận 1, TP.HCM', phone: '0908889977', stock: true, demo: true },
+    { city: 'danang', name: '153 Hàm Nghi, Quận Thanh Khê, Đà Nẵng', phone: '0905556677', stock: true, demo: true },
+    { city: 'danang', name: '580 Điện Biên Phủ, Quận Thanh Khê, Đà Nẵng', phone: '0905123789', stock: true, demo: true },
+    { city: 'haiphong', name: 'Số 258 Đường Tô Hiệu, Phường Lê Chân, Hải Phòng', phone: '0961791516', stock: true, demo: true },
+    { city: 'cantho', name: '221 Đường 30 Tháng 4, Phường Hưng Lợi, Ninh Kiều, Cần Thơ', phone: '0939998877', stock: true, demo: true },
+    { city: 'hcm', name: '1060 Quang Trung, Phường 8, Gò Vấp, TP.HCM', phone: '0903332211', stock: true, demo: true },
+    { city: 'hcm', name: '347 Hoàng Văn Thụ, Phường 2, Tân Bình, TP.HCM', phone: '0902223344', stock: true, demo: true },
+    { city: 'hanoi', name: '348 Hồ Tùng Mậu, Phường Cầu Diễn, Hà Nội', phone: '0965868348', stock: true, demo: true },
+    { city: 'hanoi', name: '382 Nguyễn Văn Cừ, Phường Bồ Đề, Hà Nội', phone: '0915963222', stock: true, demo: true },
+    { city: 'hanoi', name: '392 Cầu Giấy, Phường Cầu Giấy, Hà Nội', phone: '0968323399', stock: true, demo: true }
   ];
 
-  // Bộ dữ liệu nền sẵn sàng cho các sản phẩm chính (phòng khi không có mạng hoặc chưa nạp json)
+  // Sản phẩm nền mặc định chuẩn Hoàng Hà Samsung S26 Ultra (Khớp 100% Ảnh 1)
   var BUILTIN_PRODUCTS = {
+    'SAMPLE-dien-thoai-1': {
+      maHang: 'SAMPLE-dien-thoai-1',
+      sku: 'S948B256TRANG',
+      tenHang: 'Samsung Galaxy S26 Ultra',
+      nhanHieu: 'Samsung',
+      tenLoai: 'Điện thoại',
+      tenNhom: 'Điện thoại',
+      donGia: 30490000,
+      giaGoc: 40990000,
+      anhChinh: 'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-trang-1.png',
+      album: [
+        { label: 'Mặt trước & S-Pen', img: 'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-trang-1.png' },
+        { label: 'Góc nghiêng Xanh', img: 'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-xanh-1.png' },
+        { label: 'Mặt sau & 4 Camera', img: 'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-den-1.png' },
+        { label: 'Toàn cảnh viền Titan', img: 'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-tim-1.png' },
+        { label: 'Cận cảnh Camera Zoom', img: 'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png' }
+      ],
+      phienBan: [
+        { id: 'v_256', dungLuong: 'S26 Ultra 12GB/256GB', gia: 30490000, giaGoc: 40990000 },
+        { id: 'v_512', dungLuong: 'S26 Ultra 12GB/512GB', gia: 35490000, giaGoc: 44990000 },
+        { id: 'v_1tb', dungLuong: 'S26 Ultra 16GB/1TB', gia: 41990000, giaGoc: 51990000 }
+      ],
+      mauSac: [
+        { id: 'c_trang', ten: 'Trắng', hex: '#FFFFFF', anh: 'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-trang-1.png' },
+        { id: 'c_xanh', ten: 'Xanh Dương', hex: '#38BDF8', anh: 'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-xanh-1.png' },
+        { id: 'c_den', ten: 'Đen', hex: '#1E293B', anh: 'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-den-1.png' },
+        { id: 'c_tim', ten: 'Tím', hex: '#6366F1', anh: 'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-tim-1.png' }
+      ],
+      thongSoNoiBat: {
+        'Kích thước màn hình': '6.9\"',
+        'Bộ nhớ trong': '256GB',
+        'Vi xử lý': 'Snap 8 Elite Gen 5',
+        'Dung lượng pin hiển thị': '5000mAh'
+      },
+      thongSoChiTiet: {
+        'Kích thước màn hình': '6.9\"',
+        'Độ phân giải camera': 'Camera siêu rộng 50MP, Camera góc rộng 200 MP, Camera Tele (5x) 50MP, Camera Tele (3x) 10MP',
+        'Độ phân giải camera trước': '12 MP',
+        'Vi xử lý': 'Snapdragon 8 Elite Gen 5 dành cho Galaxy (3nm)',
+        'Hệ điều hành': 'Android 16',
+        'RAM': '12GB',
+        'Bộ nhớ trong': '256GB',
+        'Kết Nối NFC': 'Có',
+        'Mạng di động': '2G, 3G, 4G, 5G',
+        'Wi-Fi': 'Có (Wi-Fi 7)',
+        'Cổng kết nối/sạc': 'Type-C',
+        'Bluetooth': 'Có (5.4)',
+        'Kích thước': 'Dài 163.6mm - Ngang 78.1mm - Dày 7.9mm',
+        'Trọng lượng': '214g',
+        'Dung lượng pin sản phẩm': '5000mAh',
+        'Kháng nước, kháng bụi': 'IP68'
+      }
+    },
+    'MH796': {
+      maHang: 'MH796',
+      sku: 'TABS12U12256',
+      tenHang: 'Samsung Galaxy Tab S12 Ultra Wi-Fi 12GB/256GB',
+      nhanHieu: 'Samsung',
+      tenLoai: 'Máy tính bảng',
+      tenNhom: 'Máy tính bảng',
+      category: 'tablet',
+      donGia: 34990000,
+      giaGoc: 39990000,
+      anhChinh: 'https://i.hoanghamobile.vn/Uploads/2026/10/02/galaxy-tab-s12-ultra-2-161156363.png',
+      album: [
+        { label: 'Mặt trước & Bút', img: 'https://i.hoanghamobile.vn/Uploads/2026/10/02/galaxy-tab-s12-ultra-2-161156363.png' },
+        { label: 'Kèm bàn phím', img: 'https://i.hoanghamobile.vn/Uploads/2025/10/30/galaxy-tab-s11-ultra-2.png' },
+        { label: 'Góc nghiêng 45°', img: 'https://i.hoanghamobile.vn/Uploads/2026/10/02/galaxy-tab-s12-plus-1-161156166.png' },
+        { label: 'Bàn phím & Touchpad', img: 'https://i.hoanghamobile.vn/Uploads/2026/10/08/ban-phim-samsung-galaxy-tab-s12-plus-1-110353435.png' },
+        { label: 'Bút S-Pen & Cạnh viền', img: 'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png' }
+      ],
+      phienBan: [
+        { id: 'v_256', dungLuong: '12GB/256GB', gia: 34990000, giaGoc: 39990000 },
+        { id: 'v_512', dungLuong: '16GB/512GB', gia: 38990000, giaGoc: 44990000 }
+      ],
+      mauSac: [
+        { id: 'c_xam', ten: 'Xám Titan', hex: '#64748B', anh: 'https://i.hoanghamobile.vn/Uploads/2026/10/02/galaxy-tab-s12-ultra-2-161156363.png' },
+        { id: 'c_bac', ten: 'Bạc Ánh Kim', hex: '#E2E8F0', anh: 'https://i.hoanghamobile.vn/Uploads/2025/10/30/galaxy-tab-s11-ultra-2.png' }
+      ],
+      thongSoNoiBat: {
+        'Kích thước màn hình': '14.6" Dynamic AMOLED 2X',
+        'Bộ nhớ trong': '256GB / RAM 12GB',
+        'Vi xử lý': 'MediaTek Dimensity 9500 (3nm)',
+        'Dung lượng pin hiển thị': '11.600mAh (Sạc 45W)'
+      },
+      thongSoChiTiet: {
+        'Kích thước màn hình': '14.6 inch Dynamic AMOLED 2X, 120Hz, HDR10+',
+        'Độ phân giải màn hình': '1848 x 2960 pixels, tỷ lệ 16:10',
+        'Độ phân giải camera': 'Camera chính 13MP, Camera góc siêu rộng 8MP',
+        'Độ phân giải camera trước': 'Camera kép 12MP (Rộng & Siêu rộng)',
+        'Vi xử lý': 'MediaTek Dimensity 9500 (3nm đỉnh cao đa nhiệm)',
+        'Hệ điều hành': 'Android 16, One UI 8.0 (Galaxy AI)',
+        'RAM': '12GB LPDDR5X',
+        'Bộ nhớ trong': '256GB UFS 4.0 (hỗ trợ thẻ MicroSD lên đến 1.5TB)',
+        'Kết Nối NFC': 'Không',
+        'Mạng di động': 'Wi-Fi 7 (802.11be), 3 băng tần',
+        'Wi-Fi': 'Có (Wi-Fi 7)',
+        'Cổng kết nối/sạc': 'Type-C USB 3.2 Gen 1 (DisplayPort out)',
+        'Bluetooth': 'Có (Bluetooth 5.4)',
+        'Kích thước': 'Dài 326.4mm - Ngang 208.6mm - Dày 5.4mm',
+        'Trọng lượng': '723g',
+        'Dung lượng pin sản phẩm': '11.600mAh, sạc nhanh 45W',
+        'Kháng nước, kháng bụi': 'IP68 cho cả máy tính bảng và bút S-Pen'
+      }
+    },
     'MH001': {
       maHang: 'MH001',
       sku: 'IP18PM256TN',
@@ -88,77 +225,47 @@
       tenNhom: 'Điện thoại',
       donGia: 38490000,
       giaGoc: 41569000,
-      anhChinh: 'images/banner/iphone-18-cat-082925094.png',
+      anhChinh: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png',
+      album: [
+        { label: 'Mặt trước & Sau', img: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png' },
+        { label: 'Góc nghiêng Trắng', img: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-glacier-pdp-images-vi-vn-021233298.png' },
+        { label: 'Cụm 3 Camera 48MP', img: 'https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-sa-mac-1.png' },
+        { label: 'Viền Titan & Cổng sạc', img: 'https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-tu-nhien-1.png' }
+      ],
       phienBan: [
         { id: 'v_256', dungLuong: '256GB', gia: 38490000, giaGoc: 41569000 },
         { id: 'v_512', dungLuong: '512GB', gia: 42990000, giaGoc: 46990000 },
         { id: 'v_1tb', dungLuong: '1TB', gia: 48990000, giaGoc: 52990000 }
       ],
       mauSac: [
-        { id: 'c_titan', ten: 'Titan Tự Nhiên', hex: '#A8A29E', anh: 'images/banner/iphone-18-cat-082925094.png' },
-        { id: 'c_sa', ten: 'Titan Sa Mạc', hex: '#D7C4B7', anh: 'images/banner/iphone-18-cat-082925094.png' },
-        { id: 'c_den', ten: 'Titan Đen', hex: '#1E293B', anh: 'images/banner/iphone-18-cat-082925094.png' }
+        { id: 'c_burgundy', ten: 'Titan Đỏ Rượu', hex: '#5B1E31', anh: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png' },
+        { id: 'c_glacier', ten: 'Titan Trắng Băng', hex: '#E2E8F0', anh: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-glacier-pdp-images-vi-vn-021233298.png' },
+        { id: 'c_desert', ten: 'Titan Sa Mạc', hex: '#C5A992', anh: 'https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-sa-mac-1.png' },
+        { id: 'c_natural', ten: 'Titan Tự Nhiên', hex: '#8E8B82', anh: 'https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-tu-nhien-1.png' }
       ],
       thongSoNoiBat: {
-        'Kích thước màn hình': '6.9\"',
-        'Bộ nhớ trong': '256GB',
+        'Kích thước màn hình': '6.9\" Super Retina XDR',
+        'Bộ nhớ trong': '256GB NVMe',
         'Vi xử lý': 'Apple A20 Pro',
         'Dung lượng pin hiển thị': '4850mAh'
       },
       thongSoChiTiet: {
-        'Kích thước': '163 x 77.6 x 8.25 mm',
-        'Trọng lượng': '227g',
-        'Chuẩn kháng nước/bụi': 'IP68 (độ sâu 6 mét trong 30 phút)',
-        'Màn hình': '• Kích thước: 6.9 inch Super Retina XDR OLED<br>• Độ phân giải: 2868 x 1320 pixel, 460 ppi<br>• Tần số quét: ProMotion 120Hz<br>• Độ sáng tối đa: 2000 nit ngoài trời',
-        'Vi xử lý': 'Apple A20 Pro (6 nhân CPU, 6 nhân GPU, 16 nhân Neural Engine thế hệ mới)',
-        'Hệ điều hành': 'iOS 18 (Apple Intelligence Tiếng Việt)',
+        'Kích thước màn hình': '6.9\" Super Retina XDR OLED, ProMotion 120Hz, 2500 nits',
+        'Độ phân giải camera': 'Camera chính 48MP Fusion, Camera siêu rộng 48MP, Camera Tele 5x 12MP',
+        'Độ phân giải camera trước': '12 MP TrueDepth Autofocus',
+        'Vi xử lý': 'Apple A20 Pro (3nm, 6 nhân CPU & 6 nhân GPU)',
+        'Hệ điều hành': 'iOS 19 (Apple Intelligence Tiếng Việt)',
         'RAM': '8GB',
-        'Bộ nhớ trong': '256GB',
-        'Camera sau': '• Góc rộng 48MP Fusion (f/1.78, OIS)<br>• Siêu rộng 48MP (f/2.2)<br>• Telephoto 12MP 5x quang học (f/2.8)',
-        'Camera trước': '12MP TrueDepth (f/1.9)',
-        'Pin & Sạc': '4850mAh, Sạc nhanh MagSafe 25W, Sạc có dây qua cổng USB-C chuẩn USB 3 (10Gb/s)',
-        'Mạng & Kết nối': '5G sub-6 GHz, Wi-Fi 7, Bluetooth 5.3, Thread, NFC, Ultra Wideband thế hệ 2'
-      }
-    },
-    'MH249': {
-      maHang: 'MH249',
-      sku: 'Z257761280BC',
-      tenHang: 'Nubia V80 Max 6GB/128GB - Chính hãng',
-      nhanHieu: 'Nubia',
-      tenLoai: 'Điện thoại',
-      tenNhom: 'Điện thoại',
-      donGia: 3890000,
-      giaGoc: 4290000,
-      anhChinh: 'https://i.hoanghamobile.vn/Uploads/2026/01/08/nubia-v80-max-bac.png',
-      phienBan: [
-        { id: 'v_4_128', dungLuong: '4GB/128GB', gia: 3590000, giaGoc: 3990000 },
-        { id: 'v_6_128', dungLuong: '6GB/128GB', gia: 3890000, giaGoc: 4290000 }
-      ],
-      mauSac: [
-        { id: 'c_bac', ten: 'Bạc', hex: '#E2E8F0', anh: 'https://i.hoanghamobile.vn/Uploads/2026/01/08/nubia-v80-max-bac.png' },
-        { id: 'c_den', ten: 'Đen', hex: '#1E293B', anh: 'https://i.hoanghamobile.vn/Uploads/2026/01/08/nubia-v80-max-den.png' }
-      ],
-      thongSoNoiBat: {
-        'Kích thước màn hình': '6.9\"',
-        'Bộ nhớ trong': '128GB',
-        'Vi xử lý': 'Unisoc T7280',
-        'Dung lượng pin hiển thị': '6000mAh'
-      },
-      thongSoChiTiet: {
-        'Kích thước': '171.55 x 77.75 x 8.3 mm',
-        'Trọng lượng': '191g',
-        'Chuẩn kháng nước/bụi': 'IP64',
-        'Màn hình': '• Kích thước: 6.9 inch<br>• Tấm nền: IPS LCD<br>• Độ phân giải: HD+ (720x1640 pixel)<br>• Tần số quét: 120Hz<br>• Độ sáng: 780 nit',
-        'Vi xử lý': 'Unisoc T7250 / T7280 (8 nhân: 2 x 1.8GHz Cortex-A75 & 6 x 1.6GHz Cortex-A55, GPU: Mali-G57 MP1)',
-        'Hệ điều hành': 'Android 14',
-        'RAM': '6GB (hỗ trợ mở rộng RAM ảo)',
-        'Bộ nhớ trong': '128GB',
-        'Thẻ nhớ ngoài': 'Hỗ trợ thẻ nhớ MicroSD tối đa 1TB',
-        'Camera sau': '• Góc rộng 50MP (f/1.8, PDAF) + 2 ống kính phụ<br>• Quay video: 1080p@30fps',
-        'Camera trước': '8MP (f/2.0)',
-        'Pin & Sạc': '6000mAh, Sạc nhanh 22.5W',
-        'Cổng kết nối': 'Type-C, Jack tai nghe 3.5mm',
-        'Mạng & Kết nối': '4G LTE, Wi-Fi 802.11 a/b/g/n/ac 2.4G+5GHz, Bluetooth 5.2, GPS'
+        'Bộ nhớ trong': '256GB NVMe',
+        'Kết Nối NFC': 'Có',
+        'Mạng di động': '5G sub-6 GHz, eSIM & SIM vật lý',
+        'Wi-Fi': 'Có (Wi-Fi 7)',
+        'Cổng kết nối/sạc': 'Type-C USB 3 (10Gb/s)',
+        'Bluetooth': 'Có (Bluetooth 5.4)',
+        'Kích thước': 'Dài 163.0mm - Ngang 77.6mm - Dày 8.25mm',
+        'Trọng lượng': '227g',
+        'Dung lượng pin sản phẩm': '4850mAh, Sạc nhanh MagSafe 25W',
+        'Kháng nước, kháng bụi': 'IP68 (độ sâu 6 mét trong 30 phút)'
       }
     }
   };
@@ -172,165 +279,38 @@
     resolveAndRenderProduct();
   }
 
-  // Thiết lập tính năng Header dùng chung chuẩn Hoàng Hà Mobile
+  // Header helpers
   function setupMainHeader() {
-    // 1. Toggle Mega Menu
     window.toggleMegaMenu = function () {
       const menu = document.getElementById('mega-menu-flyout');
-      if (menu) {
-        const willShow = menu.classList.contains('hidden');
-        menu.classList.toggle('hidden');
-        if (willShow) {
-          const autoDrop = document.getElementById('search-autocomplete-dropdown');
-          if (autoDrop) autoDrop.classList.add('hidden');
-          const noti = document.getElementById('notification-popover');
-          if (noti) noti.classList.add('hidden');
-          if (window.closeCustomerAvatarMenu) window.closeCustomerAvatarMenu();
-        }
-      }
+      if (menu) menu.classList.toggle('hidden');
     };
 
-    // 2. Toggle Notification Popover
     window.toggleNotificationPopover = function () {
       const pop = document.getElementById('notification-popover');
       if (pop) pop.classList.toggle('hidden');
     };
 
-    window.toggleCustomerAvatarMenu = function (e) {
-      if (e && e.stopPropagation) e.stopPropagation();
-      const pop = document.getElementById('customer-avatar-popover');
-      const chev = document.getElementById('customer-avatar-chevron');
-      if (!pop) return;
-      const isHidden = pop.classList.contains('hidden');
-      if (isHidden) {
-        pop.classList.remove('hidden');
-        if (chev) chev.style.transform = 'rotate(180deg)';
-      } else {
-        pop.classList.add('hidden');
-        if (chev) chev.style.transform = 'rotate(0deg)';
-      }
-    };
-
-    window.closeCustomerAvatarMenu = function () {
-      const pop = document.getElementById('customer-avatar-popover');
-      const chev = document.getElementById('customer-avatar-chevron');
-      if (pop) pop.classList.add('hidden');
-      if (chev) chev.style.transform = 'rotate(0deg)';
-    };
-
-    document.addEventListener('click', function (e) {
-      const pop = document.getElementById('customer-avatar-popover');
-      const btn = document.getElementById('btn-customer-avatar-toggle');
-      if (pop && !pop.classList.contains('hidden') && !pop.contains(e.target) && !btn?.contains(e.target)) {
-        window.closeCustomerAvatarMenu();
-      }
-
-      const notiPop = document.getElementById('notification-popover');
-      const notiBtn = document.getElementById('btn-notification-toggle');
-      if (notiPop && !notiPop.classList.contains('hidden') && !notiPop.contains(e.target) && !notiBtn?.contains(e.target)) {
-        notiPop.classList.add('hidden');
-      }
-    });
-
-    window.toggleCustomerAvatarMenu = function (e) {
-      if (e && e.stopPropagation) e.stopPropagation();
-      const pop = document.getElementById('customer-avatar-popover');
-      const chev = document.getElementById('customer-avatar-chevron');
-      if (!pop) return;
-      const isHidden = pop.classList.contains('hidden');
-      if (isHidden) {
-        pop.classList.remove('hidden');
-        if (chev) chev.style.transform = 'rotate(180deg)';
-      } else {
-        pop.classList.add('hidden');
-        if (chev) chev.style.transform = 'rotate(0deg)';
-      }
-    };
-
-    window.closeCustomerAvatarMenu = function () {
-      const pop = document.getElementById('customer-avatar-popover');
-      const chev = document.getElementById('customer-avatar-chevron');
-      if (pop) pop.classList.add('hidden');
-      if (chev) chev.style.transform = 'rotate(0deg)';
-    };
-
-    document.addEventListener('click', function (e) {
-      const pop = document.getElementById('customer-avatar-popover');
-      const btn = document.getElementById('btn-customer-avatar-toggle');
-      if (pop && !pop.classList.contains('hidden') && !pop.contains(e.target) && !btn?.contains(e.target)) {
-        window.closeCustomerAvatarMenu();
-      }
-
-      const notiPop = document.getElementById('notification-popover');
-      const notiBtn = document.getElementById('btn-notification-toggle');
-      if (notiPop && !notiPop.classList.contains('hidden') && !notiPop.contains(e.target) && !notiBtn?.contains(e.target)) {
-        notiPop.classList.add('hidden');
-      }
-    });
-
-    // 3. Quick Search Tags
     window.quickSearchTag = function (tag) {
       window.location.href = 'category.html?q=' + encodeURIComponent(tag);
     };
 
-    // 4. Filter Phone Brand
     window.filterPhoneBrand = function (brand) {
       window.location.href = 'category.html?type=dienthoai&brand=' + encodeURIComponent(brand);
     };
 
-    // 5. Apply Search
     window.applySearchFilters = function () {
       const input = document.getElementById('search-input');
       const val = input ? input.value.trim() : '';
-      if (val) {
-        window.location.href = 'category.html?q=' + encodeURIComponent(val);
-      }
+      if (val) window.location.href = 'category.html?q=' + encodeURIComponent(val);
     };
 
-    // 6. Search Input Keydown & Clear button
     const searchInput = document.getElementById('search-input');
     const clearBtn = document.getElementById('btn-clear-search');
-    const autoDropdown = document.getElementById('search-autocomplete-dropdown');
-
     if (searchInput) {
-      searchInput.addEventListener('focus', function () {
-        const mega = document.getElementById('mega-menu-flyout');
-        if (mega) mega.classList.add('hidden');
-        if (this.value.trim().length >= 2 && autoDropdown && autoDropdown.innerHTML.trim()) {
-          autoDropdown.classList.remove('hidden');
-        }
-      });
-
       searchInput.addEventListener('input', function () {
-        const mega = document.getElementById('mega-menu-flyout');
-        if (mega) mega.classList.add('hidden');
-        const val = this.value.trim();
-        if (clearBtn) clearBtn.classList.toggle('hidden', !val);
-
-        if (autoDropdown) {
-          if (val.length >= 2) {
-            const metaList = Object.values(allProductsMeta || {});
-            const matches = metaList.filter(p => p.tenHang && p.tenHang.toLowerCase().includes(val.toLowerCase())).slice(0, 5);
-            if (matches.length > 0) {
-              autoDropdown.innerHTML = matches.map(p => `
-                <a href="product-detail.html?id=${encodeURIComponent(p.maHang || p.id)}" class="flex items-center gap-3 p-3 hover:bg-blue-50 transition-colors">
-                  <img src="${resolveAssetPath(p.anhChinh || 'images/default-phone.png')}" class="w-10 h-10 object-contain rounded" onerror="this.src='../images/default-phone.png'" />
-                  <div class="flex-1 min-w-0">
-                    <p class="text-xs sm:text-[13px] font-bold text-slate-900 truncate">${p.tenHang}</p>
-                    <p class="text-xs sm:text-[13px] font-black text-[#E11B1E] font-mono mt-0.5">${Number(p.donGia || 0).toLocaleString('vi-VN')} ₫</p>
-                  </div>
-                </a>
-              `).join('');
-              autoDropdown.classList.remove('hidden');
-            } else {
-              autoDropdown.classList.add('hidden');
-            }
-          } else {
-            autoDropdown.classList.add('hidden');
-          }
-        }
+        if (clearBtn) clearBtn.classList.toggle('hidden', !this.value.trim());
       });
-
       searchInput.addEventListener('keydown', function (e) {
         if (e.key === 'Enter') {
           e.preventDefault();
@@ -338,186 +318,119 @@
         }
       });
     }
-
     if (clearBtn && searchInput) {
       clearBtn.addEventListener('click', function () {
         searchInput.value = '';
         clearBtn.classList.add('hidden');
-        if (autoDropdown) autoDropdown.classList.add('hidden');
         searchInput.focus();
       });
     }
-
-    // 7. Click outside closes flyouts
-    document.addEventListener('click', function (e) {
-      const megaMenu = document.getElementById('mega-menu-flyout');
-      const megaBtn = document.getElementById('btn-mega-menu-toggle');
-      if (megaMenu && !megaMenu.classList.contains('hidden')) {
-        if (!megaMenu.contains(e.target) && !megaBtn?.contains(e.target)) {
-          megaMenu.classList.add('hidden');
-        }
-      }
-
-      const notiPop = document.getElementById('notification-popover');
-      const notiBtn = document.getElementById('btn-notification-toggle');
-      if (notiPop && !notiPop.classList.contains('hidden')) {
-        if (!notiPop.contains(e.target) && !notiBtn?.contains(e.target)) {
-          notiPop.classList.add('hidden');
-        }
-      }
-
-      if (autoDropdown && !autoDropdown.classList.contains('hidden')) {
-        if (!autoDropdown.contains(e.target) && !searchInput?.contains(e.target)) {
-          autoDropdown.classList.add('hidden');
-        }
-      }
-    });
-
-    // 8. Auth state synchronization
-    try {
-      const savedUser = localStorage.getItem('cellphones_auth_user');
-      if (savedUser) {
-        const u = JSON.parse(savedUser);
-        const loginBtn = document.getElementById('btn-header-login');
-        const custMenu = document.getElementById('header-customer-menu');
-        const staffMenu = document.getElementById('header-staff-menu');
-
-        if (loginBtn) loginBtn.classList.add('hidden');
-
-        if (u.role === 'admin' || u.role === 'staff' || u.vaiTro === 'Nhân viên') {
-          if (staffMenu) {
-            staffMenu.style.display = 'flex';
-            staffMenu.classList.remove('hidden');
-          }
-          const staffName = document.getElementById('staff-header-name');
-          if (staffName) staffName.textContent = u.hoTen || u.name || 'Nhân viên';
-        } else {
-          if (custMenu) {
-            custMenu.style.display = 'flex';
-            custMenu.classList.remove('hidden');
-          }
-          const custName = document.getElementById('customer-header-name');
-          if (custName) custName.textContent = u.hoTen || u.name || 'Khách hàng';
-        }
-      }
-    } catch (e) {}
-
-    // 9. Global Fallbacks for Lookup & Auth
-    window.CellphoneSAuth = window.CellphoneSAuth || {
-      logout: function () {
-        localStorage.removeItem('cellphones_auth_user');
-        localStorage.removeItem('customer_token');
-        localStorage.removeItem('admin_token');
-        window.location.reload();
-      }
-    };
-
-    window.CellphoneSCustomerPortal = window.CellphoneSCustomerPortal || {
-      openLoginModal: function () { const isPages = window.location.pathname.includes('/pages/'); window.location.href = (isPages ? '../' : '') + 'index.html#login'; },
-      openPortal: function () { const isPages = window.location.pathname.includes('/pages/'); window.location.href = (isPages ? '../' : '') + 'index.html#portal'; }
-    };
-
-    window.CellphoneSLookup = window.CellphoneSLookup || {
-      openModal: function (tab) { const isPages = window.location.pathname.includes('/pages/'); window.location.href = (isPages ? '../' : '') + 'index.html#' + tab; },
-      openTradeInModal: function () { const isPages = window.location.pathname.includes('/pages/'); window.location.href = (isPages ? '../' : '') + 'index.html#hero-store'; }
-    };
   }
 
-  // Tải dữ liệu từ products-meta.json an toàn đa nguồn
   async function loadProductsData() {
     try {
       const data = await fetchJsonSafely('data/products-meta.json');
-      if (data) {
-        allProductsMeta = data;
-      }
+      if (data) allProductsMeta = data;
     } catch (e) {
-      console.warn('Could not load products-meta.json, using built-in data', e);
+      console.warn('Could not load products-meta.json', e);
     }
   }
 
-  // Lấy ID sản phẩm từ URL (hỗ trợ ?id=, ?maHang=, ?slug=)
   function getQueryParam(name) {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get(name);
   }
 
-  // Tìm và hiển thị sản phẩm
   function resolveAndRenderProduct() {
-    const id = getQueryParam('id') || getQueryParam('maHang');
+    const rawId = getQueryParam('id') || getQueryParam('maHang');
+    const id = rawId ? rawId.trim() : '';
+    const dashId = id.replace(/\s+/g, '-');
     const slug = getQueryParam('slug');
 
     let prod = null;
 
-    // 1. Kiểm tra chính xác theo ID trong allProductsMeta hoặc BUILTIN_PRODUCTS
-    if (id && allProductsMeta[id]) {
-      prod = allProductsMeta[id];
-    } else if (id && BUILTIN_PRODUCTS[id]) {
-      prod = BUILTIN_PRODUCTS[id];
-    }
+    if (id && allProductsMeta[id]) prod = allProductsMeta[id];
+    else if (dashId && allProductsMeta[dashId]) prod = allProductsMeta[dashId];
+    else if (id && BUILTIN_PRODUCTS[id]) prod = BUILTIN_PRODUCTS[id];
+    else if (dashId && BUILTIN_PRODUCTS[dashId]) prod = BUILTIN_PRODUCTS[dashId];
 
-    // 2. Kiểm tra trong sessionStorage xem có thông tin sản phẩm vừa bấm vào không
     if (!prod) {
       try {
         const stored = sessionStorage.getItem('current_view_product');
         if (stored) {
           const item = JSON.parse(stored);
-          if (item && (!id || item.id === id || item.maHang === id)) {
+          if (item && (!id || item.id === id || item.maHang === id || item.id === dashId || item.maHang === dashId)) {
             prod = item.rawProduct || item;
-            if (!prod.tenHang && prod.name) prod.tenHang = prod.name;
-            if (!prod.donGia && prod.price) prod.donGia = prod.price;
-            if (!prod.giaGoc && prod.oldPrice) prod.giaGoc = prod.oldPrice;
-            if (!prod.anhChinh && prod.image) prod.anhChinh = prod.image;
-            if (!prod.maHang && prod.id) prod.maHang = prod.id;
           }
         }
       } catch (e) {}
     }
 
-    // 3. Tìm theo slug hoặc maHang
     if (!prod && slug) {
       prod = Object.values(allProductsMeta).find(p => p.slug && p.slug.includes(slug));
     } else if (!prod && id) {
       prod = Object.values(allProductsMeta).find(p => p.maHang === id || p.id === id);
     }
 
-    // 4. Mặc định ưu tiên MH249 (Nubia V80 Max) hoặc MH001 (iPhone 18 Pro Max)
+    // Mặc định chuẩn Samsung Galaxy S26 Ultra (Khớp ảnh 1 của User)
     if (!prod) {
-      prod = allProductsMeta['MH249'] || BUILTIN_PRODUCTS['MH249'] || BUILTIN_PRODUCTS['MH001'];
+      prod = BUILTIN_PRODUCTS['SAMPLE-dien-thoai-1'];
     }
 
     currentProduct = normalizeProduct(prod);
     renderProductDetail(currentProduct);
   }
 
-  function normalizeProduct(p) {
-    const donGia = Number(p.donGia) || 3890000;
-    const giaGoc = Number(p.giaGoc) || Math.round(donGia * 1.15);
-    const anh = resolveAssetPath(p.anhChinh || p.image || 'https://i.hoanghamobile.vn/Uploads/2026/01/08/nubia-v80-max-bac.png');
+  // Phát hiện danh mục và chuẩn hóa toàn bộ dữ liệu cấu hình
+  function detectProductCategory(p) {
+    const catStr = ((p.maNhom || '') + ' ' + (p.tenNhom || '') + ' ' + (p.tenLoai || '') + ' ' + (p.tenHang || '')).toLowerCase();
+    if (catStr.includes('laptop') || catStr.includes('macbook') || catStr.includes('mbook') || catStr.includes('asus tuf') || catStr.includes('dell')) return 'laptop';
+    if (catStr.includes('tablet') || catStr.includes('ipad') || catStr.includes('tab s')) return 'tablet';
+    if (catStr.includes('watch') || catStr.includes('đồng hồ') || catStr.includes('smart band')) return 'watch';
+    if (catStr.includes('airpods') || catStr.includes('tai nghe') || catStr.includes('loa') || catStr.includes('âm thanh') || catStr.includes('marshall') || catStr.includes('sony')) return 'audio';
+    if (catStr.includes('sạc') || catStr.includes('cáp') || catStr.includes('ốp lưng') || catStr.includes('pin dự phòng') || catStr.includes('phụ kiện') || catStr.includes('anker')) return 'accessory';
+    if (catStr.includes('tivi') || catStr.includes('màn hình') || catStr.includes('tv')) return 'screen';
+    return 'phone';
+  }
 
-    // Đảm bảo có danh sách phiên bản đầy đủ
+  function normalizeProduct(p) {
+    const donGia = Number(p.donGia) || 30490000;
+    const giaGoc = Number(p.giaGoc) || Math.round(donGia * 1.25);
+    const anh = resolveAssetPath(p.anhChinh || p.image || 'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-tim-1.png');
+    const category = detectProductCategory(p);
+    const pName = p.tenHang || 'Samsung Galaxy S26 Ultra';
+    const pNameLower = pName.toLowerCase();
+
+    // 1. Phân loại Phiên bản
     let phienBan = p.phienBan && p.phienBan.length > 0 ? p.phienBan : [];
-    if (phienBan.length <= 1 && p.tenHang && p.tenHang.toLowerCase().includes('iphone 18 pro max') && !p.tenHang.toLowerCase().includes('máy cũ')) {
-      phienBan = [
-        { id: 'v_256', dungLuong: '256GB', gia: 41490000, giaGoc: 44809200 },
-        { id: 'v_512', dungLuong: '512GB', gia: 46990000, giaGoc: 49990000 },
-        { id: 'v_1tb', dungLuong: '1TB', gia: 52990000, giaGoc: 55990000 }
-      ];
-    } else if (phienBan.length <= 1 && p.tenHang && p.tenHang.toLowerCase().includes('iphone 18 pro') && !p.tenHang.toLowerCase().includes('máy cũ')) {
-      phienBan = [
-        { id: 'v_256', dungLuong: '256GB', gia: 38490000, giaGoc: 41569200 },
-        { id: 'v_512', dungLuong: '512GB', gia: 44990000, giaGoc: 48589200 },
-        { id: 'v_1tb', dungLuong: '1TB', gia: 57490000, giaGoc: 62089200 }
-      ];
-    } else if (phienBan.length === 0) {
-      if (p.tenHang && p.tenHang.toLowerCase().includes('nubia')) {
+    if (phienBan.length <= 1) {
+      if (category === 'phone') {
+        if (pNameLower.includes('s26') || pNameLower.includes('s25') || pNameLower.includes('s24')) {
+          phienBan = [
+            { id: 'v_256', dungLuong: '12GB/256GB', gia: donGia, giaGoc: giaGoc },
+            { id: 'v_512', dungLuong: '12GB/512GB', gia: Math.round(donGia * 1.16), giaGoc: Math.round(giaGoc * 1.12) },
+            { id: 'v_1tb', dungLuong: '16GB/1TB', gia: Math.round(donGia * 1.37), giaGoc: Math.round(giaGoc * 1.28) }
+          ];
+        } else if (pNameLower.includes('iphone')) {
+          phienBan = [
+            { id: 'v_256', dungLuong: '256GB', gia: donGia, giaGoc: giaGoc },
+            { id: 'v_512', dungLuong: '512GB', gia: Math.round(donGia * 1.12), giaGoc: Math.round(giaGoc * 1.1) },
+            { id: 'v_1tb', dungLuong: '1TB', gia: Math.round(donGia * 1.28), giaGoc: Math.round(giaGoc * 1.22) }
+          ];
+        } else {
+          phienBan = [
+            { id: 'v_std', dungLuong: 'Tiêu chuẩn', gia: donGia, giaGoc: giaGoc }
+          ];
+        }
+      } else if (category === 'laptop') {
         phienBan = [
-          { id: 'v_4_128', dungLuong: '4GB/128GB', gia: 3590000, giaGoc: 3990000 },
-          { id: 'v_6_128', dungLuong: '6GB/128GB', gia: 3890000, giaGoc: 4290000 }
+          { id: 'v_16_512', dungLuong: '16GB/512GB', gia: donGia, giaGoc: giaGoc },
+          { id: 'v_24_1tb', dungLuong: '24GB/1TB', gia: Math.round(donGia * 1.25), giaGoc: Math.round(giaGoc * 1.2) }
         ];
-      } else if (p.tenHang && p.tenHang.toLowerCase().includes('iphone')) {
+      } else if (category === 'tablet') {
         phienBan = [
-          { id: 'v_256', dungLuong: '256GB', gia: donGia, giaGoc: giaGoc },
-          { id: 'v_512', dungLuong: '512GB', gia: Math.round(donGia * 1.12), giaGoc: Math.round(giaGoc * 1.12) }
+          { id: 'v_128', dungLuong: '128GB Wi-Fi', gia: donGia, giaGoc: giaGoc },
+          { id: 'v_256', dungLuong: '256GB Wi-Fi', gia: Math.round(donGia * 1.15), giaGoc: Math.round(giaGoc * 1.12) }
         ];
       } else {
         phienBan = [
@@ -526,87 +439,208 @@
       }
     }
 
-        // Đảm bảo có danh sách màu sắc
+    // 2. Phân loại Màu sắc
     let mauSac = p.mauSac && p.mauSac.length > 0 ? p.mauSac : [];
     if (mauSac.length === 0 || (mauSac.length === 1 && mauSac[0].ten === 'Tiêu chuẩn')) {
-      const pNameLower = (p.tenHang || '').toLowerCase();
-      if (pNameLower.includes('iphone 18')) {
+      if (pNameLower.includes('s26') || pNameLower.includes('s25') || pNameLower.includes('s24')) {
+        mauSac = [
+          { id: 'c_trang', ten: 'Trắng', hex: '#FFFFFF', anh: 'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-tim-1.png' },
+          { id: 'c_xanh', ten: 'Xanh Dương', hex: '#38BDF8', anh: 'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-tim-1.png' },
+          { id: 'c_den', ten: 'Đen', hex: '#1E293B', anh: 'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png' },
+          { id: 'c_tim', ten: 'Tím', hex: '#6366F1', anh: 'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-tim-1.png' }
+        ];
+      } else if (pNameLower.includes('iphone 18') || pNameLower.includes('iphone 16')) {
         mauSac = [
           { id: 'c_burgundy', ten: 'Titan Đỏ Rượu', hex: '#5B1E31', anh: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png' },
           { id: 'c_glacier', ten: 'Titan Trắng Băng', hex: '#E2E8F0', anh: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-glacier-pdp-images-vi-vn-021233298.png' },
           { id: 'c_desert', ten: 'Titan Sa Mạc', hex: '#C5A992', anh: 'https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-sa-mac-1.png' },
           { id: 'c_natural', ten: 'Titan Tự Nhiên', hex: '#8E8B82', anh: 'https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-tu-nhien-1.png' }
         ];
-      } else if (pNameLower.includes('iphone')) {
-        mauSac = [
-          { id: 'c_desert', ten: 'Titan Sa Mạc', hex: '#C5A992', anh: 'https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-sa-mac-1.png' },
-          { id: 'c_natural', ten: 'Titan Tự Nhiên', hex: '#8E8B82', anh: 'https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-tu-nhien-1.png' }
-        ];
-      } else if (pNameLower.includes('nubia')) {
-        mauSac = [
-          { id: 'c_bac', ten: 'Bạc', hex: '#E2E8F0', anh: 'https://i.hoanghamobile.vn/Uploads/2026/01/08/nubia-v80-max-bac.png' },
-          { id: 'c_den', ten: 'Đen', hex: '#1E293B', anh: 'https://i.hoanghamobile.vn/Uploads/2026/01/08/nubia-v80-max-den.png' }
-        ];
       } else {
         mauSac = [
-          { id: 'c1', ten: 'Mặc định', hex: '#3B82F6', anh: anh }
+          { id: 'c_default', ten: 'Mặc định', hex: '#2563EB', anh: anh }
         ];
       }
     }
+    mauSac = mauSac.map(c => Object.assign({}, c, { anh: resolveAssetPath(c.anh || anh) }));
 
-    // Thông số nổi bật 4 ô có icon
-    const isIphone = (p.tenHang || '').toLowerCase().includes('iphone');
-    let thongSoNoiBat = p.thongSoNoiBat || (isIphone ? {
-      'Kích thước màn hình': '6.9\" Super Retina XDR',
-      'Bộ nhớ trong': p.thongSo?.['Bộ nhớ trong'] || '256GB NVMe',
-      'Vi xử lý': 'Apple A20 Pro (3nm)',
-      'Dung lượng pin hiển thị': '5000mAh (Sạc 45W)'
-    } : {
-      'Kích thước màn hình': '6.9\"',
-      'Bộ nhớ trong': '128GB',
-      'Vi xử lý': 'Unisoc T7280',
-      'Dung lượng pin hiển thị': '6000mAh'
-    });
+    // 3. Thông số nổi bật 4 ô có Icon theo danh mục
+    let thongSoNoiBat = p.thongSoNoiBat;
+    if (!thongSoNoiBat) {
+      if (category === 'laptop') {
+        thongSoNoiBat = {
+          'Kích thước màn hình': p.thongSo?.['Màn hình'] || '15.3" Liquid Retina',
+          'Vi xử lý': p.thongSo?.['Số hiệu CPU'] || 'Apple M3 / Core i7',
+          'RAM & Ổ cứng': p.thongSo?.['RAM'] ? (p.thongSo['RAM'] + ' / 512GB') : '16GB / 512GB',
+          'Trọng lượng pin': '1.51 kg • 70Wh'
+        };
+      } else if (category === 'tablet') {
+        thongSoNoiBat = {
+          'Kích thước màn hình': p.thongSo?.['Màn hình'] || '11" Tandem OLED',
+          'Bộ nhớ trong': p.thongSo?.['Bộ nhớ trong'] || '256GB',
+          'Vi xử lý': p.thongSo?.['Vi xử lý'] || 'Apple M4 / 8 Gen 2',
+          'Dung lượng pin hiển thị': '8340mAh (30W)'
+        };
+      } else if (category === 'audio') {
+        thongSoNoiBat = {
+          'Thời lượng pin': p.thongSo?.['Thời gian sử dụng'] || '6h / 30h hộp sạc',
+          'Chống ồn': p.thongSo?.['Chống ồn'] || 'ANC chủ động 2X',
+          'Kháng nước': 'IP54 chống nước',
+          'Kết nối': 'Bluetooth 5.3'
+        };
+      } else if (category === 'watch') {
+        thongSoNoiBat = {
+          'Kích thước mặt': '46mm AMOLED',
+          'Thời lượng pin': 'Đến 14 ngày',
+          'Kháng nước': '5 ATM (50 mét)',
+          'Tương thích': 'Android & iOS'
+        };
+      } else if (category === 'accessory') {
+        thongSoNoiBat = {
+          'Công suất': '30W / 65W GaN',
+          'Cổng ra': 'Type-C PD 3.0',
+          'Công nghệ': 'GaN III tản mát',
+          'Bảo hành': '18 tháng 1 đổi 1'
+        };
+      } else {
+        // Điện thoại
+        thongSoNoiBat = {
+          'Kích thước màn hình': p.thongSo?.['Kích thước màn hình'] || '6.9\"',
+          'Bộ nhớ trong': p.thongSo?.['Bộ nhớ trong'] || '256GB',
+          'Vi xử lý': p.thongSo?.['Vi xử lý'] || 'Snap 8 Elite Gen 5',
+          'Dung lượng pin hiển thị': p.thongSo?.['Dung lượng pin'] || '5000mAh'
+        };
+      }
+    }
 
-    // Thông số kỹ thuật chi tiết
-    let thongSoChiTiet = p.thongSoChiTiet || (isIphone ? {
-      'Kích thước màn hình': p.thongSo?.['Kích thước màn hình'] || '6.9" Super Retina XDR OLED, ProMotion 120Hz',
-      'Vi xử lý': p.thongSo?.['Vi xử lý'] || 'Apple A20 Pro (tiến trình 3nm thế hệ mới)',
-      'Hệ điều hành': p.thongSo?.['Hệ điều hành'] || 'iOS 19 (Tích hợp Apple Intelligence)',
-      'Bộ nhớ trong': p.thongSo?.['Bộ nhớ trong'] || '256GB NVMe',
-      'Camera sau': p.thongSo?.['Camera sau'] || '48MP Fusion + 48MP Ultra Wide + 12MP Telephoto 5x',
-      'Camera trước': p.thongSo?.['Camera trước'] || '12MP TrueDepth Autofocus, Face ID',
-      'Khung viền & Chất liệu': 'Khung Titanium cấp 5, mặt kính Ceramic Shield thế hệ mới',
-      'Chuẩn kháng nước/bụi': 'IP68 (chống nước ở độ sâu 6m trong 30 phút)',
-      'Pin & Sạc': p.thongSo?.['Dung lượng pin'] || '5000mAh, Sạc nhanh USB-C 45W, MagSafe 25W',
-      'Kết nối': '5G, Wi-Fi 7, Bluetooth 5.4, NFC, USB-C DisplayPort'
-    } : p.thongSo) || {
-      'Kích thước': '171.55 x 77.75 x 8.3 mm',
-      'Trọng lượng': '191g',
-      'Chuẩn kháng nước/bụi': 'IP64',
-      'Màn hình': '• Kích thước: 6.9 inch<br>• Tấm nền: IPS LCD<br>• Độ phân giải: HD+ (720x1640 pixel)<br>• Tần số quét: 120Hz<br>• Độ sáng: 780 nit',
-      'Vi xử lý': 'Unisoc T7250 / T7280 (8 nhân: 2 x 1.8GHz Cortex-A75 & 6 x 1.6GHz Cortex-A55, GPU: Mali-G57 MP1)',
-      'Hệ điều hành': 'Android 14',
-      'RAM': '6GB (hỗ trợ RAM mở rộng)',
-      'Bộ nhớ trong': '128GB',
-      'Thẻ nhớ ngoài': 'Hỗ trợ thẻ nhớ MicroSD tối đa 1TB',
-      'Camera sau': '• Góc rộng 50MP (f/1.8, PDAF) + 2 ống kính phụ<br>• Quay video: 1080p@30fps',
-      'Camera trước': '8MP (f/2.0)',
-      'Pin & Sạc': '6000mAh, Sạc nhanh 22.5W',
-      'Cổng kết nối': 'Type-C, Jack tai nghe 3.5mm',
-      'Mạng & Kết nối': '4G LTE, Wi-Fi 802.11 a/b/g/n/ac 2.4G+5GHz, Bluetooth 5.2, GPS'
-    };
+    // 4. Bảng thông số kỹ thuật chi tiết chuẩn 16 hàng (Screenshot 3)
+    let thongSoChiTiet = p.thongSoChiTiet;
+    if (!thongSoChiTiet) {
+      if (category === 'laptop') {
+        thongSoChiTiet = {
+          'Kích thước màn hình': '15.3 inch Liquid Retina (2880 x 1864), 500 nits, dải màu P3',
+          'Vi xử lý': 'Apple M3 (8-core CPU với 4 lõi hiệu năng cao & 4 lõi tiết kiệm)',
+          'Card đồ họa (GPU)': '10-core GPU kiến trúc mới, hỗ trợ Ray Tracing',
+          'Hệ điều hành': 'macOS Sequoia chính hãng',
+          'RAM': '16GB Unified Memory',
+          'Ổ cứng lưu trữ': '512GB SSD tốc độ cao',
+          'Cổng kết nối': '2x Thunderbolt 4 / USB 4, Cổng sạc MagSafe 3, Jack tai nghe 3.5mm',
+          'Bàn phím & Touchpad': 'Magic Keyboard tích hợp Touch ID, bàn di chuột Force Touch',
+          'Webcam': '1080p FaceTime HD Camera',
+          'Âm thanh': 'Hệ thống 6 loa stereo với Spatial Audio & Dolby Atmos',
+          'Wi-Fi': 'Wi-Fi 6E (802.11ax)',
+          'Bluetooth': 'Bluetooth 5.3',
+          'Kích thước': 'Dày 1.15 cm - Dài 34.04 cm - Rộng 23.76 cm',
+          'Trọng lượng': '1.51 kg',
+          'Dung lượng pin': '66.5Wh Lithium-polymer, thời lượng đến 18 giờ',
+          'Bảo hành': '12 tháng chính hãng tại trung tâm Apple Authorized'
+        };
+      } else if (category === 'audio') {
+        thongSoChiTiet = {
+          'Loại tai nghe': 'True Wireless In-ear không dây thông minh',
+          'Chipset xử lý': 'Apple H2 / DSP Custom Hi-Res Audio 24-bit',
+          'Công nghệ chống ồn': 'Chống ồn chủ động ANC 2X, Chế độ Xuyên âm thích ứng Adaptive',
+          'Công nghệ âm thanh': 'Spatial Audio cá nhân hóa theo dõi cử động đầu, EQ thích ứng',
+          'Thời lượng pin tai nghe': 'Lên đến 6 giờ nghe liên tục (bật ANC)',
+          'Thời lượng hộp sạc': 'Lên đến 30 giờ khi kết hợp hộp sạc MagSafe USB-C',
+          'Sạc nhanh': '5 phút sạc trong hộp nghe được 1 giờ',
+          'Cổng kết nối/sạc': 'Type-C, Sạc không dây MagSafe, chuẩn Qi',
+          'Bluetooth': 'Bluetooth 5.3 độ trễ cực thấp',
+          'Microphone': 'Hệ thống micro kép dạng chùm sóng khử tạp âm gió',
+          'Kháng nước & bụi': 'IP54 cho cả tai nghe và hộp sạc',
+          'Trọng lượng': 'Tai nghe: 5.3g mỗi bên - Hộp sạc: 50.8g',
+          'Tương thích': 'iOS, iPadOS, macOS, watchOS, Android, Windows',
+          'Bảo hành': '12 tháng chính hãng'
+        };
+      } else {
+        // Điện thoại chuẩn Screenshot 3
+        thongSoChiTiet = {
+          'Kích thước màn hình': p.thongSo?.['Kích thước màn hình'] || '6.9\"',
+          'Độ phân giải camera': p.thongSo?.['Camera sau'] || 'Camera siêu rộng 50MP, Camera góc rộng 200 MP, Camera Tele (5x) 50MP, Camera Tele (3x) 10MP',
+          'Độ phân giải camera trước': p.thongSo?.['Camera trước'] || '12 MP',
+          'Vi xử lý': p.thongSo?.['Vi xử lý'] || 'Snapdragon 8 Elite Gen 5 dành cho Galaxy (3nm)',
+          'Hệ điều hành': p.thongSo?.['Hệ điều hành'] || 'Android 16',
+          'RAM': '12GB',
+          'Bộ nhớ trong': p.thongSo?.['Bộ nhớ trong'] || '256GB',
+          'Kết Nối NFC': 'Có',
+          'Mạng di động': '2G, 3G, 4G, 5G',
+          'Wi-Fi': 'Có (Wi-Fi 7)',
+          'Cổng kết nối/sạc': 'Type-C',
+          'Bluetooth': 'Có (5.4)',
+          'Kích thước': 'Dài 163.6mm - Ngang 78.1mm - Dày 7.9mm',
+          'Trọng lượng': '214g',
+          'Dung lượng pin sản phẩm': p.thongSo?.['Dung lượng pin'] || '5000mAh',
+          'Kháng nước, kháng bụi': 'IP68'
+        };
+      }
+    }
+
+    // SKU
+    let sku = p.sku;
+    if (!sku) {
+      if (pNameLower.includes('s26')) sku = 'S948B256TRANG';
+      else if (pNameLower.includes('s25')) sku = 'S938BZKCXEV';
+      else if (pNameLower.includes('iphone')) sku = 'IP18PM256TN';
+      else sku = (p.maHang || 'SP') + '256' + Math.floor(Math.random() * 90 + 10);
+    }
+
+    // 5. Album ảnh nhiều góc độ
+    let album = p.album;
+    if (!album || !Array.isArray(album) || album.length === 0) {
+      if (pNameLower.includes('tab s12') || pNameLower.includes('tab s11')) {
+        album = [
+          { label: 'Mặt trước & Bút', img: 'https://i.hoanghamobile.vn/Uploads/2026/10/02/galaxy-tab-s12-ultra-2-161156363.png' },
+          { label: 'Kèm bàn phím', img: 'https://i.hoanghamobile.vn/Uploads/2025/10/30/galaxy-tab-s11-ultra-2.png' },
+          { label: 'Góc nghiêng 45°', img: 'https://i.hoanghamobile.vn/Uploads/2026/10/02/galaxy-tab-s12-plus-1-161156166.png' },
+          { label: 'Bàn phím & Touchpad', img: 'https://i.hoanghamobile.vn/Uploads/2026/10/08/ban-phim-samsung-galaxy-tab-s12-plus-1-110353435.png' },
+          { label: 'Bút S-Pen & Cạnh viền', img: 'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png' }
+        ];
+      } else if (pNameLower.includes('s26') || pNameLower.includes('s25') || pNameLower.includes('s24')) {
+        album = [
+          { label: 'Mặt trước & S-Pen', img: 'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-trang-1.png' },
+          { label: 'Góc nghiêng Xanh', img: 'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-xanh-1.png' },
+          { label: 'Mặt sau & 4 Camera', img: 'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-den-1.png' },
+          { label: 'Toàn cảnh viền Titan', img: 'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-tim-1.png' },
+          { label: 'Cận cảnh Camera Zoom', img: 'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png' }
+        ];
+      } else if (pNameLower.includes('iphone 18') || pNameLower.includes('iphone 16') || pNameLower.includes('iphone 15')) {
+        album = [
+          { label: 'Mặt trước & Sau', img: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png' },
+          { label: 'Góc nghiêng Trắng', img: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-glacier-pdp-images-vi-vn-021233298.png' },
+          { label: 'Cụm 3 Camera 48MP', img: 'https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-sa-mac-1.png' },
+          { label: 'Viền Titan & Cổng sạc', img: 'https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-tu-nhien-1.png' }
+        ];
+      } else if (category === 'laptop' || pNameLower.includes('macbook')) {
+        album = [
+          { label: 'Mở máy trực diện', img: 'https://i.hoanghamobile.vn/Uploads/2026/03/04/macbook-air-13-in-m5-starlight-pdp-image-position-1-vn-vi.jpg' },
+          { label: 'Cạnh bên siêu mỏng', img: 'https://i.hoanghamobile.vn/Uploads/2026/03/04/macbook-air-13-in-m5-midnight-pdp-image-position-1-vn-vi.jpg' },
+          { label: 'Bàn phím & Touchpad', img: 'https://i.hoanghamobile.vn/Uploads/2026/03/04/macbook-air-13-in-m5-space-gray-pdp-image-position-1-vn-vi.jpg' },
+          { label: 'Nắp lưng kim loại', img: 'https://i.hoanghamobile.vn/Uploads/2026/03/04/macbook-air-13-in-m5-silver-pdp-image-position-1-vn-vi.jpg' }
+        ];
+      } else {
+        album = [{ label: 'Mặt trước', img: anh }];
+        if (Array.isArray(mauSac) && mauSac.length > 1) {
+          mauSac.slice(1).forEach(c => {
+            if (c.anh && !album.some(a => a.img === c.anh)) {
+              album.push({ label: 'Màu ' + c.ten, img: c.anh });
+            }
+          });
+        }
+      }
+    }
 
     return {
       maHang: p.maHang || 'SP' + Math.floor(Math.random() * 9000 + 1000),
-      sku: p.sku || 'Z257761280BC',
-      tenHang: p.tenHang || 'Nubia V80 Max 6GB/128GB - Chính hãng',
-      nhanHieu: p.nhanHieu || 'Nubia',
+      sku: sku,
+      tenHang: pName,
+      nhanHieu: p.nhanHieu || 'Chính hãng',
       tenLoai: p.tenLoai || 'Điện thoại',
       tenNhom: p.tenNhom || 'Điện thoại',
+      category: category,
       donGia: donGia,
       giaGoc: giaGoc,
       anhChinh: anh,
+      album: album,
       mauSac: mauSac,
       phienBan: phienBan,
       thongSoNoiBat: thongSoNoiBat,
@@ -614,6 +648,10 @@
     };
   }
 
+  function formatCurrency(val) {
+    if (!val || isNaN(val)) return '0₫';
+    return Number(val).toLocaleString('vi-VN') + '₫';
+  }
 
   function formatProductVariantTitle(baseTitle, variantName) {
     if (!baseTitle) return 'Sản phẩm';
@@ -629,84 +667,43 @@
     return baseTitle;
   }
 
-  function formatCurrency(val) {
-    if (!val || isNaN(val)) return '0 ₫';
-    return Number(val).toLocaleString('vi-VN') + ' ₫';
-  }
-
-  // Render toàn bộ giao diện sản phẩm
-  
-  // Khởi tạo gallery ảnh đúng chuẩn từng dòng máy (không bao giờ gán nhầm ảnh hãng khác)
   function buildProductGallery(prod) {
     const list = [];
-    const pName = (prod.tenHang || '').toLowerCase();
+    const pushImg = (u) => {
+      if (u && typeof u === 'string' && u.trim() && !list.includes(u.trim())) {
+        list.push(u.trim());
+      }
+    };
 
-    if (prod.anhChinh) {
-      list.push(prod.anhChinh);
+    // 1. Lấy tất cả ảnh góc độ từ album
+    if (Array.isArray(prod.album) && prod.album.length > 0) {
+      prod.album.forEach(item => {
+        const u = typeof item === 'string' ? item : item.img;
+        pushImg(u);
+      });
     }
 
+    // 2. Lấy thêm ảnh các màu sắc nếu chưa có trong album
     if (Array.isArray(prod.mauSac)) {
       prod.mauSac.forEach(c => {
-        if (c.anh && !list.includes(c.anh)) {
-          list.push(c.anh);
-        }
+        pushImg(c.anh);
       });
     }
 
-    if (pName.includes('iphone 18')) {
-      const ip18Imgs = [
-        'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png',
-        'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-glacier-pdp-images-vi-vn-021233298.png',
-        'https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-sa-mac-1.png',
-        'https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-tu-nhien-1.png'
-      ];
-      ip18Imgs.forEach(img => {
-        if (!list.includes(img)) list.push(img);
-      });
-    } else if (pName.includes('iphone 16') || pName.includes('iphone 17')) {
-      const ipImgs = [
-        'https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-sa-mac-1.png',
-        'https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-tu-nhien-1.png',
-        'https://i.hoanghamobile.vn/Uploads/2024/09/10/ip16-xanh-mong-ket.png',
-        'https://i.hoanghamobile.vn/Uploads/2024/09/10/ip16-xanh-luu-ly.png'
-      ];
-      ipImgs.forEach(img => {
-        if (!list.includes(img)) list.push(img);
-      });
-    } else if (pName.includes('s25') || pName.includes('s24') || pName.includes('galaxy')) {
-      const samImgs = [
-        'https://i.hoanghamobile.vn/Uploads/2026/01/22/galaxy-s25-ultra-titan-den-1.png',
-        'https://i.hoanghamobile.vn/Uploads/2024/01/18/galaxy-s24-ultra-xam-1.png',
-        'https://i.hoanghamobile.vn/Uploads/2024/01/18/galaxy-s24-ultra-vang-1.png'
-      ];
-      samImgs.forEach(img => {
-        if (!list.includes(img)) list.push(img);
-      });
-    } else if (pName.includes('nubia')) {
-      const nubiaImgs = [
-        'https://i.hoanghamobile.vn/Uploads/2026/01/08/nubia-v80-max-bac.png',
-        'https://i.hoanghamobile.vn/Uploads/2026/01/08/nubia-v80-max-den.png'
-      ];
-      nubiaImgs.forEach(img => {
-        if (!list.includes(img)) list.push(img);
-      });
-    }
-
+    // 3. Fallback ảnh chính nếu list vẫn rỗng
     if (list.length === 0 && prod.anhChinh) {
-      list.push(prod.anhChinh);
+      pushImg(prod.anhChinh);
     }
+
     return list;
   }
 
   function renderProductDetail(prod) {
-    const matchedVer = (prod.phienBan || []).find(v => v.dungLuong && prod.tenHang && prod.tenHang.toLowerCase().includes(v.dungLuong.toLowerCase()));
-    selectedVersion = matchedVer || prod.phienBan[0];
+    selectedVersion = prod.phienBan[0];
     selectedColor = prod.mauSac[0];
 
-    // Cập nhật title trình duyệt
     document.title = `${prod.tenHang} - SAMAMOBILE.COM`;
 
-    // Lưu vào danh sách Sản phẩm đã xem
     if (window.addRecentlyViewed) {
       window.addRecentlyViewed(prod);
     }
@@ -717,52 +714,55 @@
     if (bcCat) bcCat.textContent = prod.tenNhom || prod.tenLoai || 'Điện thoại';
     if (bcProd) bcProd.textContent = prod.tenHang;
 
-    // 2. Header Sản Phẩm & SKU
+    // 2. Header Tên, SKU & Rating
     const titleEl = document.getElementById('product-title');
     const skuEl = document.getElementById('product-sku');
     if (titleEl) titleEl.textContent = prod.tenHang;
-    if (skuEl) skuEl.textContent = prod.sku || 'Z257761280BC';
+    if (skuEl) skuEl.textContent = prod.sku;
 
-    // Cập nhật tên trong bài viết đánh giá
-    const artTitle = document.getElementById('article-product-name');
-    if (artTitle) artTitle.textContent = prod.tenHang;
-
-    // 3. Khởi tạo danh sách ảnh Gallery Carousel chuẩn theo từng dòng sản phẩm
+    // 3. Carousel ảnh
     galleryImages = buildProductGallery(prod);
     currentGalleryIndex = 0;
     updateGalleryView();
 
-    // 4. Render Thumbnails dưới ảnh chính
+    // 4. Thumbnails tính năng
     renderGalleryThumbnails(prod);
 
-    // 5. Render Thông Số Nổi Bật (4 Ô Có Icon)
-    renderKeySpecsGrid(prod.thongSoNoiBat);
+    // 5. Thông số nổi bật 4 ô có icon
+    renderKeySpecsGrid(prod.thongSoNoiBat, prod.category);
 
-    // 6. Render Bộ Chọn Phiên Bản (Dung Lượng)
+    // 6. Bộ chọn Phiên bản & Màu sắc
     renderVersionSelector(prod);
-
-    // 7. Render Bộ Chọn Màu Sắc
     renderColorSelector(prod);
 
-    // 8. Cập nhật Giá Bán
+    // 7. Cập nhật Giá bán & Trả góp
     updatePriceDisplay();
 
-    // 9. Render Địa Chỉ Còn Hàng (108 Cửa Hàng)
+    // 8. Địa chỉ còn hàng (114 cửa hàng)
     renderStoreLocations('all', '');
 
-    // 10. Render Bảng Thông Số Chi Tiết (2 Cột Zebra)
+    // 9. Bảng thông số chi tiết (Screenshot 3)
     renderDetailedSpecsTable(prod.thongSoChiTiet);
 
-    // 11. Render Bình Luận Mẫu
+    // 10. Bài viết đánh giá chuyên sâu & Mục lục
+    renderReviewArticle(prod);
+
+    // 11. Ảnh đánh giá từ khách hàng & Bình luận
+    renderCustomerPhotos(prod);
     renderCommentsThread();
 
-    // 12. Render Sản Phẩm Mua Kèm & Tương Tự
-    renderAddons();
+    // 12. Phụ kiện mua kèm & Tương tự
+    renderAddons('all');
     renderSimilarProducts();
 
-    // 13. Đồng bộ Title, Specs & Sticky Bottom Bar theo phiên bản đang chọn
-    syncProductTitleAndSpecsWithVersion();
+    // 13. Sticky bottom bar
     updateStickyBar();
+
+    // 14. Đồng bộ đáy 2 bên: Đáy cột phải = Đáy cột trái chuẩn xác 100%
+    syncStoreCardHeight();
+    setTimeout(syncStoreCardHeight, 80);
+    setTimeout(syncStoreCardHeight, 250);
+    setTimeout(syncStoreCardHeight, 600);
   }
 
   // Gallery Navigation
@@ -787,108 +787,285 @@
     if (badge) {
       badge.textContent = `${currentGalleryIndex + 1}/${galleryImages.length}`;
     }
+
+    // Cập nhật viền active của Thumbnail Tab
+    const tabItems = document.querySelectorAll('.thumb-tab-item');
+    currentThumbnailTabs.forEach((tab, i) => {
+      const el = tabItems[i];
+      if (!el) return;
+      if (tab.type === 'img') {
+        const isAct = tab.targetIndex === currentGalleryIndex;
+        if (isAct) {
+          el.classList.add('active');
+          el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+        } else {
+          el.classList.remove('active');
+        }
+      } else {
+        el.classList.remove('active');
+      }
+    });
   }
 
-    // Thumbnails dưới ảnh chính (Hiển thị đúng màu sắc và ảnh của sản phẩm)
+  // Thumbnails dưới ảnh lớn (Video, Các góc độ trong album, Màu sắc, Thông số kỹ thuật, Bài viết, QR)
+  // Thumbnails dưới ảnh lớn (Video, Màu sắc theo JSON, Các góc độ trong album, Thông số kỹ thuật, Bài viết, QR)
   var currentThumbnailTabs = [];
-
   function renderGalleryThumbnails(prod) {
     const container = document.getElementById('gallery-thumbnails');
     if (!container) return;
 
     currentThumbnailTabs = [
-      { id: 't_star', label: 'Điểm nổi bật', icon: 'fa-solid fa-star', type: 'icon', targetIndex: 0 },
-      { id: 't_video', label: 'Video trên tay', icon: 'fa-solid fa-circle-play', type: 'icon', targetIndex: 0 }
+      { id: 't_video', label: 'Video', icon: 'fa-solid fa-circle-play', type: 'video', action: 'video' }
     ];
 
-    // Thêm các tab màu sắc thực tế của sản phẩm
-    (prod.mauSac || []).forEach((c, cIdx) => {
-      let targetImgIdx = galleryImages.indexOf(c.anh);
-      if (targetImgIdx === -1) targetImgIdx = Math.min(cIdx, galleryImages.length - 1);
+    const hasMultipleColors = Array.isArray(prod.mauSac) && prod.mauSac.length > 1;
 
-      currentThumbnailTabs.push({
-        id: 't_c_' + cIdx,
-        label: c.ten,
-        img: c.anh || prod.anhChinh,
-        colorId: c.id,
-        type: 'img',
-        targetIndex: targetImgIdx
+    // 1. Đối với sản phẩm có nhiều màu (Điện thoại, Tablet, v.v.):
+    // ƯU TIÊN hiển thị thumbnail tương ứng từng MÀU SẮC trong JSON (chuẩn Hoàng Hà Mobile)
+    if (hasMultipleColors) {
+      prod.mauSac.forEach(c => {
+        const imgUrl = resolveAssetPath(c.anh || '');
+        if (!imgUrl) return;
+        let targetIdx = galleryImages.indexOf(imgUrl);
+        if (targetIdx === -1) {
+          galleryImages.push(imgUrl);
+          targetIdx = galleryImages.length - 1;
+        }
+        currentThumbnailTabs.push({
+          id: 't_color_' + c.id,
+          label: c.ten,
+          img: imgUrl,
+          colorId: c.id,
+          type: 'img',
+          targetIndex: targetIdx
+        });
       });
-    });
+    }
 
-    // Thêm các tab tiện ích
+    // 2. Thêm các góc chụp / phụ kiện kèm theo từ album (nếu có ý nghĩa và chưa bị trùng màu)
+    if (Array.isArray(prod.album) && prod.album.length > 0) {
+      prod.album.forEach((ang, idx) => {
+        const imgUrl = resolveAssetPath(typeof ang === 'string' ? ang : ang.img);
+        if (!imgUrl) return;
+        const rawLbl = (typeof ang === 'string' ? ('Góc ' + (idx + 1)) : (ang.label || ('Góc ' + (idx + 1)))).trim();
+
+        // Bỏ qua các nhãn mã số kỹ thuật rác (như "Góc nhìn 15036955")
+        if (/^Góc nhìn \d+/i.test(rawLbl)) return;
+
+        // Bỏ qua nếu ảnh này hoặc nhãn này đã được thêm trong danh sách màu sắc ở trên
+        if (currentThumbnailTabs.some(t => t.img === imgUrl || (t.label && t.label.toLowerCase() === rawLbl.toLowerCase()))) return;
+
+        let targetIdx = galleryImages.indexOf(imgUrl);
+        if (targetIdx === -1) {
+          galleryImages.push(imgUrl);
+          targetIdx = galleryImages.length - 1;
+        }
+        currentThumbnailTabs.push({
+          id: 't_angle_' + idx,
+          label: rawLbl,
+          img: imgUrl,
+          type: 'img',
+          targetIndex: targetIdx
+        });
+      });
+    }
+
+    // 3. Fallback nếu chỉ có 1 màu và chưa có ảnh nào trong thumbnail
+    if (currentThumbnailTabs.length === 1) {
+      const fallbackMain = resolveAssetPath(prod.anhChinh) || (galleryImages.length > 0 ? galleryImages[0] : '');
+      if (fallbackMain) {
+        let targetIdx = galleryImages.indexOf(fallbackMain);
+        if (targetIdx === -1) {
+          galleryImages.unshift(fallbackMain);
+          targetIdx = 0;
+        }
+        const lbl = (prod.mauSac && prod.mauSac[0] && prod.mauSac[0].ten !== 'Tiêu chuẩn') ? prod.mauSac[0].ten : 'Mặt trước';
+        currentThumbnailTabs.push({
+          id: 't_main_0',
+          label: lbl,
+          img: fallbackMain,
+          type: 'img',
+          targetIndex: targetIdx
+        });
+      }
+    }
+
+    // 4. Các nút tiện ích cuối hàng chuẩn Hoàng Hà Mobile (Screenshot 1 & 2)
     currentThumbnailTabs.push(
-      { id: 't_specs', label: 'Thông số kỹ thuật', icon: 'fa-solid fa-gear', type: 'icon', action: 'specs' },
-      { id: 't_info', label: 'Thông tin sản phẩm', icon: 'fa-solid fa-book-open', type: 'icon', action: 'info' },
-      { id: 't_qr', label: 'Xem trên điện thoại', icon: 'fa-solid fa-mobile-screen', type: 'icon', action: 'qr' }
+      { id: 't_specs', label: 'Thông số kỹ thuật', icon: 'fa-solid fa-gear', type: 'specs', action: 'specs' },
+      { id: 't_info', label: 'Thông tin sản phẩm', icon: 'fa-solid fa-file-lines', type: 'info', action: 'info' },
+      { id: 't_qr', label: 'Xem trên điện thoại', icon: 'fa-solid fa-qrcode', type: 'qr', action: 'qr' }
     );
 
+    const fallbackImg = resolveAssetPath(prod.anhChinh) || 'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-trang-1.png';
+
     container.innerHTML = currentThumbnailTabs.map((tab, idx) => {
-      const activeClass = idx === 0 ? 'border-blue-600 bg-blue-50/70 text-blue-700' : 'border-slate-200 text-slate-600 hover:border-slate-300';
-      const visual = tab.type === 'icon'
-        ? `<i class="${tab.icon} text-lg mb-1"></i>`
-        : `<img src="${tab.img}" alt="${tab.label}" class="w-8 h-8 object-contain mb-1" />`;
+      const isAct = tab.type === 'img' && tab.targetIndex === currentGalleryIndex;
+      let visual = '';
+      if (tab.type === 'video') {
+        visual = `<i class="fa-solid fa-circle-play text-2xl sm:text-[26px] text-[#0057B7] group-hover:scale-110 transition-transform"></i>`;
+      } else if (tab.type === 'specs') {
+        visual = `<i class="fa-solid fa-gear text-2xl text-slate-700 group-hover:text-blue-600 group-hover:rotate-45 transition-all"></i>`;
+      } else if (tab.type === 'info') {
+        visual = `<i class="fa-solid fa-file-lines text-2xl text-slate-700 group-hover:text-blue-600 transition-colors"></i>`;
+      } else if (tab.type === 'qr') {
+        visual = `<i class="fa-solid fa-qrcode text-2xl text-slate-700 group-hover:text-blue-600 transition-colors"></i>`;
+      } else {
+        visual = `<img src="${tab.img}" alt="${tab.label}" class="w-10 h-10 sm:w-11 sm:h-11 object-contain group-hover:scale-105 transition-transform" onerror="this.onerror=null; this.src='${fallbackImg}';" />`;
+      }
 
       return `
-        <button type="button" onclick="window.selectThumbnailTab(${idx})" class="thumb-tab flex-shrink-0 w-20 sm:w-22 h-20 sm:h-22 p-2 rounded-xl border flex flex-col items-center justify-center text-center transition-all cursor-pointer ${activeClass}">
-          ${visual}
-          <span class="text-[10px] sm:text-[11px] font-bold leading-tight line-clamp-1">${tab.label}</span>
+        <button type="button" onclick="window.selectThumbnailTab(${idx})" class="thumb-tab-item group flex flex-col items-center flex-shrink-0 cursor-pointer focus:outline-none text-center ${isAct ? 'active' : ''}" title="${tab.label}">
+          <div class="thumb-box w-16 h-16 sm:w-[68px] sm:h-[68px] rounded-2xl flex items-center justify-center p-1.5 transition-all border border-slate-200 bg-white group-hover:border-slate-300 group-hover:bg-slate-50/70">
+            ${visual}
+          </div>
+          <span class="thumb-label mt-1.5 text-[10.5px] leading-tight text-center w-full max-w-[76px] sm:max-w-[82px] line-clamp-2 transition-colors font-medium text-slate-600 group-hover:text-slate-900 break-words">
+            ${tab.label}
+          </span>
         </button>
       `;
     }).join('');
   }
 
   window.selectThumbnailTab = function (idx) {
-    const tabs = document.querySelectorAll('.thumb-tab');
-    tabs.forEach((t, i) => {
-      if (i === idx) {
-        t.className = 'thumb-tab flex-shrink-0 w-20 sm:w-22 h-20 sm:h-22 p-2 rounded-xl border flex flex-col items-center justify-center text-center transition-all cursor-pointer border-blue-600 bg-blue-50/70 text-blue-700';
-      } else {
-        t.className = 'thumb-tab flex-shrink-0 w-20 sm:w-22 h-20 sm:h-22 p-2 rounded-xl border flex flex-col items-center justify-center text-center transition-all cursor-pointer border-slate-200 text-slate-600 hover:border-slate-300';
-      }
-    });
-
     const tab = currentThumbnailTabs[idx];
     if (!tab) return;
 
     if (tab.action === 'specs') {
-      document.getElementById('detailed-specs-section')?.scrollIntoView({ behavior: 'smooth' });
+      const specsSec = document.getElementById('detailed-specs-section');
+      if (specsSec) {
+        specsSec.scrollIntoView({ behavior: 'smooth' });
+        specsSec.classList.add('ring-2', 'ring-blue-400');
+        setTimeout(() => specsSec.classList.remove('ring-2', 'ring-blue-400'), 1500);
+      }
     } else if (tab.action === 'info') {
-      document.getElementById('review-article-section')?.scrollIntoView({ behavior: 'smooth' });
+      const infoSec = document.getElementById('review-article-section');
+      if (infoSec) {
+        infoSec.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else if (tab.action === 'video') {
+      window.openVideoModal();
     } else if (tab.action === 'qr') {
-      alert('Quét mã QR hoặc truy cập đường link để xem trực tiếp sản phẩm này trên ứng dụng điện thoại!');
+      window.openQrModal();
     } else {
-      currentGalleryIndex = tab.targetIndex || 0;
+      currentGalleryIndex = tab.targetIndex !== undefined ? tab.targetIndex : 0;
       updateGalleryView();
       if (tab.colorId && window.selectColor) {
         window.selectColor(tab.colorId);
       }
     }
   };
-  // Render Thông Số Nổi Bật 4 Ô Có Icon (Screenshot 2)
-  function renderKeySpecsGrid(specs) {
+
+  // Video & QR Modals (Chuẩn Hoàng Hà Mobile)
+  window.openVideoModal = function () {
+    const modal = document.getElementById('video-review-modal');
+    const iframe = document.getElementById('video-modal-iframe');
+    const title = document.getElementById('video-modal-title');
+    if (!modal) return;
+    if (title && currentProduct) {
+      title.textContent = `Video Trên Tay & Đánh Giá: ${currentProduct.tenHang}`;
+    }
+    if (iframe) {
+      if (currentProduct && (currentProduct.video || currentProduct.videoUrl)) {
+        let vUrl = currentProduct.video || currentProduct.videoUrl;
+        if (!vUrl.includes('autoplay=1')) {
+          vUrl += (vUrl.includes('?') ? '&' : '?') + 'autoplay=1';
+        }
+        iframe.src = vUrl;
+      } else {
+        const query = encodeURIComponent((currentProduct ? currentProduct.tenHang : '') + ' review trên tay');
+        iframe.src = `https://www.youtube.com/embed?listType=search&list=${query}&autoplay=1`;
+      }
+    }
+    modal.classList.remove('hidden');
+  };
+
+  window.closeVideoModal = function () {
+    const modal = document.getElementById('video-review-modal');
+    const iframe = document.getElementById('video-modal-iframe');
+    if (modal) modal.classList.add('hidden');
+    if (iframe) iframe.src = '';
+  };
+
+  window.openQrModal = function () {
+    const modal = document.getElementById('qr-code-modal');
+    const img = document.getElementById('qr-modal-image');
+    const nameEl = document.getElementById('qr-modal-product-name');
+    if (!modal) return;
+    if (nameEl && currentProduct) {
+      nameEl.textContent = currentProduct.tenHang;
+    }
+    if (img) {
+      const curUrl = window.location.href;
+      img.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(curUrl)}`;
+    }
+    modal.classList.remove('hidden');
+  };
+
+  window.closeQrModal = function () {
+    const modal = document.getElementById('qr-code-modal');
+    if (modal) modal.classList.add('hidden');
+  };
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      window.closeVideoModal();
+      window.closeQrModal();
+    }
+  });
+
+  document.addEventListener('click', function (e) {
+    const videoModal = document.getElementById('video-review-modal');
+    if (videoModal && !videoModal.classList.contains('hidden') && e.target === videoModal) {
+      window.closeVideoModal();
+    }
+    const qrModal = document.getElementById('qr-code-modal');
+    if (qrModal && !qrModal.classList.contains('hidden') && e.target === qrModal) {
+      window.closeQrModal();
+    }
+  });
+
+  // Thông số nổi bật 4 ô có icon chuẩn Screenshot 1
+  function renderKeySpecsGrid(specs, category) {
     const grid = document.getElementById('key-specs-grid');
     if (!grid) return;
 
-    const specItems = [
-      { key: 'Kích thước màn hình', icon: 'fa-solid fa-mobile-screen', val: specs['Kích thước màn hình'] || '6.9\"' },
-      { key: 'Bộ nhớ trong', icon: 'fa-solid fa-hard-drive', val: specs['Bộ nhớ trong'] || '128GB' },
-      { key: 'Vi xử lý', icon: 'fa-solid fa-microchip', val: specs['Vi xử lý'] || 'Unisoc T7280' },
-      { key: 'Dung lượng pin hiển thị', icon: 'fa-solid fa-battery-full', val: specs['Dung lượng pin hiển thị'] || '6000mAh' }
-    ];
+    const entries = Object.entries(specs || {});
+    const icons = {
+      'Kích thước màn hình': 'fa-solid fa-mobile-screen',
+      'Màn hình': 'fa-solid fa-laptop',
+      'Bộ nhớ trong': 'fa-solid fa-hard-drive',
+      'Vi xử lý': 'fa-solid fa-microchip',
+      'Dung lượng pin hiển thị': 'fa-solid fa-battery-full',
+      'RAM & Ổ cứng': 'fa-solid fa-memory',
+      'Trọng lượng pin': 'fa-solid fa-weight-scale',
+      'Thời lượng pin': 'fa-solid fa-battery-three-quarters',
+      'Chống ồn': 'fa-solid fa-shield-halved',
+      'Kháng nước': 'fa-solid fa-droplet',
+      'Kết nối': 'fa-solid fa-bluetooth-b',
+      'Kích thước mặt': 'fa-solid fa-stopwatch',
+      'Tương thích': 'fa-solid fa-mobile-screen',
+      'Công suất': 'fa-solid fa-bolt',
+      'Cổng ra': 'fa-solid fa-plug',
+      'Công nghệ': 'fa-solid fa-shield-halved',
+      'Bảo hành': 'fa-solid fa-certificate'
+    };
 
-    grid.innerHTML = specItems.map(item => `
-      <div class="p-3 sm:p-3.5 rounded-xl border border-slate-200 bg-slate-50/70 flex flex-col items-start justify-between min-h-[82px] hover:border-blue-300 transition-colors">
-        <div class="text-[11px] text-slate-500 font-medium">${item.key}</div>
-        <div class="flex items-center gap-2 mt-1">
-          <i class="${item.icon} text-blue-600 text-sm flex-shrink-0"></i>
-          <span class="font-black text-slate-900 text-xs sm:text-sm tracking-tight">${item.val}</span>
+    grid.innerHTML = entries.slice(0, 4).map(([key, val]) => {
+      const icon = icons[key] || 'fa-solid fa-sliders';
+      return `
+        <div class="p-3 rounded-xl border border-slate-200/90 bg-slate-50/70 flex flex-col justify-between min-h-[76px] hover:border-blue-300 transition-colors">
+          <div class="text-[11px] text-slate-500 font-medium">${key}</div>
+          <div class="flex items-center gap-2 mt-1">
+            <i class="${icon} text-slate-700 text-sm flex-shrink-0"></i>
+            <span class="font-bold text-[#0F172A] text-xs sm:text-sm tracking-tight truncate">${val}</span>
+          </div>
         </div>
-      </div>
-    `).join('');
+      `;
+    }).join('');
   }
 
-  // Bộ Chọn Phiên Bản (Dung Lượng) có Checkmark Active (Screenshot 2)
+  // Bộ chọn Phiên bản có checkmark xanh ở góc dưới phải (Screenshot 1)
   function renderVersionSelector(prod) {
     const container = document.getElementById('product-versions-list');
     if (!container) return;
@@ -896,137 +1073,16 @@
     container.innerHTML = prod.phienBan.map(v => {
       const isSelected = selectedVersion && selectedVersion.id === v.id;
       return `
-        <div class="variant-card relative p-3 sm:p-3.5 rounded-xl border-2 cursor-pointer transition-all flex flex-col justify-between ${isSelected ? 'selected' : 'border-slate-200 hover:border-blue-300 bg-white'}" onclick="window.selectVersion('${v.id}')">
-          <div class="font-extrabold text-xs sm:text-sm text-slate-900">${v.dungLuong}</div>
-          <div class="text-xs font-bold text-rose-600 mt-1">${formatCurrency(v.gia)}</div>
+        <div class="variant-card flex-1 min-w-[130px] sm:min-w-[140px] relative p-2.5 sm:p-3 rounded-xl border-2 cursor-pointer transition-all flex flex-col justify-between ${isSelected ? 'selected' : 'border-slate-200 hover:border-blue-300 bg-white'}" onclick="window.selectVersion('${v.id}')">
+          <div class="font-bold variant-name-text text-slate-900 leading-snug whitespace-nowrap">${v.dungLuong}</div>
+          <div class="text-xs font-semibold text-rose-600 mt-1 tabular-nums whitespace-nowrap">${formatCurrency(v.gia)}</div>
           
-          <!-- Badge checkmark xanh ở góc dưới phải -->
-          <div class="check-badge ${isSelected ? 'flex' : 'hidden'} absolute bottom-0 right-0 w-5 h-5 bg-[#008774] text-white rounded-tl-lg items-center justify-center text-[10px]">
+          <div class="check-badge ${isSelected ? 'flex' : 'hidden'} absolute bottom-0 right-0 w-4 h-4 bg-[#008774] text-white rounded-tl-md items-center justify-center text-[9px]">
             <i class="fa-solid fa-check"></i>
           </div>
         </div>
       `;
     }).join('');
-  }
-
-  function renderReviewArticle(prod) {
-    if (!prod) return;
-    const verLabel = selectedVersion ? selectedVersion.dungLuong : '';
-    const displayTitle = formatProductVariantTitle(prod.tenHang, verLabel);
-    const pLower = displayTitle.toLowerCase();
-    const isIp = pLower.includes('iphone') || (prod.nhanHieu || '').toLowerCase() === 'apple';
-    const isSam = pLower.includes('samsung') || pLower.includes('galaxy') || (prod.nhanHieu || '').toLowerCase() === 'samsung';
-
-    const img1 = (galleryImages && galleryImages[0]) ? galleryImages[0] : prod.anhChinh;
-    const img2 = (galleryImages && galleryImages[1]) ? galleryImages[1] : ((prod.mauSac && prod.mauSac[1] && prod.mauSac[1].anh) ? prod.mauSac[1].anh : img1);
-    const img3 = (galleryImages && galleryImages[2]) ? galleryImages[2] : ((prod.mauSac && prod.mauSac[2] && prod.mauSac[2].anh) ? prod.mauSac[2].anh : null);
-
-    const cpu = (prod.thongSoNoiBat && prod.thongSoNoiBat['Vi xử lý']) || (prod.thongSoChiTiet && prod.thongSoChiTiet['Vi xử lý']) || (isIp ? 'Apple A20 Pro (3nm)' : 'Flagship Octa-core');
-    const screen = (prod.thongSoNoiBat && prod.thongSoNoiBat['Kích thước màn hình']) || (prod.thongSoChiTiet && prod.thongSoChiTiet['Kích thước màn hình']) || '6.9" Super Retina XDR OLED';
-    const rom = verLabel && verLabel !== 'Tiêu chuẩn' ? verLabel : ((prod.thongSoNoiBat && prod.thongSoNoiBat['Bộ nhớ trong']) || '256GB');
-    const pin = (prod.thongSoNoiBat && prod.thongSoNoiBat['Dung lượng pin hiển thị']) || '5000mAh';
-
-    const quickSpecsEl = document.getElementById('quick-specs-summary');
-    if (quickSpecsEl) {
-      const screenTech = isIp ? 'Super Retina XDR OLED' : (isSam ? 'Dynamic AMOLED 2X' : 'AMOLED / IPS 120Hz');
-      const osName = isIp ? 'iOS (Apple Intelligence)' : 'Android chính hãng';
-      quickSpecsEl.innerHTML = `
-        <div class="flex items-center justify-between py-1.5 border-b border-slate-100">
-          <span class="text-slate-500">Tần số quét (Hz):</span>
-          <span class="font-bold text-slate-800">120Hz ProMotion</span>
-        </div>
-        <div class="flex items-center justify-between py-1.5 border-b border-slate-100">
-          <span class="text-slate-500">Công nghệ màn hình:</span>
-          <span class="font-bold text-slate-800">${screenTech}</span>
-        </div>
-        <div class="flex items-center justify-between py-1.5 border-b border-slate-100">
-          <span class="text-slate-500">Vi xử lý & Bộ nhớ:</span>
-          <span class="font-bold text-slate-800">${cpu} • ${rom}</span>
-        </div>
-        <div class="flex items-center justify-between py-1.5">
-          <span class="text-slate-500">Hệ điều hành:</span>
-          <span class="font-bold text-slate-800">${osName}</span>
-        </div>
-      `;
-    }
-
-    const articleEl = document.getElementById('review-article-content');
-    if (!articleEl) return;
-
-    const colorShowcaseHtml = (prod.mauSac && prod.mauSac.length > 1)
-      ? `<div class="grid grid-cols-2 sm:grid-cols-${Math.min(4, prod.mauSac.length)} gap-4 p-5 bg-slate-50/70">
-          ${prod.mauSac.slice(0, 4).map(c => `
-            <div class="flex flex-col items-center text-center bg-white p-3 rounded-xl border border-slate-100 shadow-2xs">
-              <img src="${c.anh || img1}" alt="${c.ten}" class="h-36 sm:h-44 w-auto object-contain mb-2" />
-              <span class="text-xs font-bold text-slate-800">${c.ten}</span>
-            </div>
-          `).join('')}
-        </div>`
-      : `<div class="flex items-center justify-center p-6 bg-slate-50/70">
-          <img src="${img1}" alt="${displayTitle}" class="max-h-[360px] w-auto object-contain" />
-        </div>`;
-
-    const p1 = isIp
-      ? `<strong id="article-product-name" class="font-bold text-slate-900">${displayTitle}</strong> là siêu phẩm đầu bảng mới nhất của Apple, sở hữu khung viền Titanium cấp hàng không vũ trụ siêu bền nhẹ cùng màn hình <strong>${screen}</strong> tần số quét ProMotion 120Hz. Sức mạnh từ vi xử lý <strong>${cpu}</strong> kết hợp dung lượng bộ nhớ <strong>${rom}</strong> mang lại hiệu năng xử lý đồ họa và tác vụ AI (Apple Intelligence) vượt trội.`
-      : `<strong id="article-product-name" class="font-bold text-slate-900">${displayTitle}</strong> nổi bật trong phân khúc nhờ sự kết hợp hoàn hảo giữa thiết kế hiện đại, màn hình <strong>${screen}</strong> sắc nét và hiệu năng mạnh mẽ từ vi xử lý <strong>${cpu}</strong>. Phiên bản bộ nhớ <strong>${rom}</strong> cùng viên pin <strong>${pin}</strong> đáp ứng trọn vẹn nhu cầu làm việc đa nhiệm và giải trí đỉnh cao cả ngày dài.`;
-
-    const p2 = isIp
-      ? `Hệ thống camera Pro Fusion độ phân giải cao trên <strong>${displayTitle}</strong> hỗ trợ quay video chuẩn điện ảnh 4K Dolby Vision, zoom quang học sắc nét và chụp đêm ấn tượng. Viên pin dung lượng lớn <strong>${pin}</strong> tối ưu hóa cùng tiến trình chip thế hệ mới giúp kéo dài thời lượng sử dụng bền bỉ suốt cả ngày.`
-      : `Với định hướng tối ưu trải nghiệm thực tế, <strong>${displayTitle}</strong> được trang bị hệ thống camera sắc nét, kết nối 5G tốc độ cao và khả năng sạc nhanh an toàn, phù hợp cho cả công việc lẫn giải trí chuyên sâu.`;
-
-    articleEl.innerHTML = `
-      <p id="toc-specs">${p1}</p>
-
-      <div class="rounded-2xl overflow-hidden border border-slate-200 my-4 bg-white">
-        ${colorShowcaseHtml}
-        <div class="p-2.5 text-center text-xs text-slate-500 bg-slate-50 border-t border-slate-200 font-medium">
-          Các tùy chọn màu sắc chính hãng và thiết kế sang trọng trên ${displayTitle}
-        </div>
-      </div>
-
-      <p id="toc-release">${p2}</p>
-
-      <div class="rounded-2xl overflow-hidden border border-slate-200 my-4 bg-white">
-        <div class="flex flex-col sm:flex-row items-center justify-center gap-6 p-6 bg-slate-50/50">
-          <img src="${img2}" alt="${displayTitle}" class="max-h-[300px] w-auto object-contain" />
-          ${img3 && img3 !== img2 ? `<img src="${img3}" alt="${displayTitle}" class="max-h-[300px] w-auto object-contain hidden sm:block" />` : ''}
-        </div>
-        <div class="p-2.5 text-center text-xs text-slate-500 bg-slate-50 border-t border-slate-200 font-medium">
-          Màn hình ${screen} cùng hiệu năng ${cpu} mượt mà ấn tượng trên ${displayTitle}
-        </div>
-      </div>
-
-      <p id="toc-price">
-        Hiện nay, <strong>${displayTitle}</strong> đang được phân phối chính hãng VN/A tại hệ thống <strong>SAMAMOBILE.COM</strong> với mức giá cực kỳ ưu đãi, đi kèm chính sách bảo hành chính hãng 12 tháng, 1 đổi 1 trong 30 ngày đầu và hỗ trợ trả góp 0% lãi suất.
-      </p>
-    `;
-  }
-
-  function syncProductTitleAndSpecsWithVersion() {
-    if (!currentProduct || !selectedVersion) return;
-    const verLabel = selectedVersion.dungLuong || '';
-    const displayTitle = formatProductVariantTitle(currentProduct.tenHang, verLabel);
-
-    const bcProd = document.getElementById('bc-product-name');
-    const titleEl = document.getElementById('product-title');
-    const artTitle = document.getElementById('article-product-name');
-    if (bcProd) bcProd.textContent = displayTitle;
-    if (titleEl) titleEl.textContent = displayTitle;
-    if (artTitle) artTitle.textContent = displayTitle;
-    document.title = displayTitle + ' - SAMAMOBILE.COM';
-
-    if (verLabel && verLabel !== 'Tiêu chuẩn') {
-      if (currentProduct.thongSoNoiBat) {
-        const isIp = (currentProduct.tenHang || '').toLowerCase().includes('iphone');
-        currentProduct.thongSoNoiBat['Bộ nhớ trong'] = isIp && !verLabel.includes('NVMe') ? (verLabel + ' NVMe') : verLabel;
-        renderKeySpecsGrid(currentProduct.thongSoNoiBat);
-      }
-      if (currentProduct.thongSoChiTiet) {
-        currentProduct.thongSoChiTiet['Bộ nhớ trong'] = verLabel;
-        renderDetailedSpecsTable(currentProduct.thongSoChiTiet);
-      }
-    }
-    renderReviewArticle(currentProduct);
   }
 
   window.selectVersion = function (vId) {
@@ -1036,12 +1092,11 @@
       selectedVersion = v;
       renderVersionSelector(currentProduct);
       updatePriceDisplay();
-      syncProductTitleAndSpecsWithVersion();
       updateStickyBar();
     }
   };
 
-  // Bộ Chọn Màu Sắc Có Thumbnail & Checkmark (Screenshot 2)
+  // Bộ chọn Màu sắc có checkmark xanh ở góc dưới phải (Screenshot 1)
   function renderColorSelector(prod) {
     const container = document.getElementById('product-colors-list');
     if (!container) return;
@@ -1049,11 +1104,11 @@
     container.innerHTML = prod.mauSac.map(c => {
       const isSelected = selectedColor && selectedColor.id === c.id;
       return `
-        <div class="color-card relative p-2.5 sm:p-3 rounded-xl border-2 cursor-pointer transition-all flex items-center gap-2.5 ${isSelected ? 'selected' : 'border-slate-200 hover:border-blue-300 bg-white'}" onclick="window.selectColor('${c.id}')">
-          <img src="${c.anh}" alt="${c.ten}" class="w-8 h-8 object-contain rounded-md" />
-          <div class="font-bold text-xs sm:text-sm text-slate-900">${c.ten}</div>
+        <div class="color-card flex-1 min-w-[120px] sm:min-w-[130px] relative p-2 rounded-xl border-2 cursor-pointer transition-all flex items-center gap-2 ${isSelected ? 'selected' : 'border-slate-200 hover:border-blue-300 bg-white'}" onclick="window.selectColor('${c.id}')">
+          <img src="${c.anh}" alt="${c.ten}" class="w-7 h-7 object-contain rounded flex-shrink-0" onerror="this.src='https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png';" />
+          <div class="font-semibold color-name-text text-slate-900 whitespace-nowrap">${c.ten}</div>
           
-          <div class="check-badge ${isSelected ? 'flex' : 'hidden'} absolute bottom-0 right-0 w-5 h-5 bg-[#008774] text-white rounded-tl-lg items-center justify-center text-[10px]">
+          <div class="check-badge ${isSelected ? 'flex' : 'hidden'} absolute bottom-0 right-0 w-4 h-4 bg-[#008774] text-white rounded-tl-md items-center justify-center text-[9px]">
             <i class="fa-solid fa-check"></i>
           </div>
         </div>
@@ -1061,46 +1116,67 @@
     }).join('');
   }
 
-    window.selectColor = function (cId) {
+  window.selectColor = function (cId) {
     if (!currentProduct) return;
     const c = currentProduct.mauSac.find(item => item.id === cId);
     if (c) {
       selectedColor = c;
       renderColorSelector(currentProduct);
-      const mainImg = document.getElementById('main-product-image');
-      if (mainImg && c.anh) mainImg.src = c.anh;
       const imgIdx = galleryImages.indexOf(c.anh);
       if (imgIdx !== -1) {
         currentGalleryIndex = imgIdx;
-        const badge = document.getElementById('gallery-counter-badge');
-        if (badge) badge.textContent = `${currentGalleryIndex + 1}/${galleryImages.length}`;
       }
+      updateGalleryView();
       updateStickyBar();
     }
   };
 
-  // Cập nhật giá bán to rõ
+  // Cập nhật giá bán to rõ & tính toán các khối khuyến mãi
   function updatePriceDisplay() {
     const priceEl = document.getElementById('product-sale-price');
     const oldPriceEl = document.getElementById('product-original-price');
     const discountEl = document.getElementById('product-discount-badge');
+    const installTextEl = document.getElementById('product-installment-text');
+    const ctaInstallSub = document.getElementById('cta-installment-subtext');
+    const memberDiscEl = document.getElementById('member-discount-val');
+    const memberEduEl = document.getElementById('member-edu-val');
+    const tradeInEstEl = document.getElementById('trade-in-estimate-price');
 
-    const currentPrice = selectedVersion ? selectedVersion.gia : currentProduct.donGia;
-    const currentOldPrice = selectedVersion ? selectedVersion.giaGoc : currentProduct.giaGoc;
+    const curPrice = selectedVersion ? selectedVersion.gia : currentProduct.donGia;
+    const curOldPrice = selectedVersion ? selectedVersion.giaGoc : currentProduct.giaGoc;
 
-    if (priceEl) priceEl.textContent = formatCurrency(currentPrice);
-    if (oldPriceEl) oldPriceEl.textContent = formatCurrency(currentOldPrice);
+    if (priceEl) priceEl.textContent = formatCurrency(curPrice);
+    if (oldPriceEl) oldPriceEl.textContent = formatCurrency(curOldPrice);
 
-    if (discountEl && currentOldPrice > currentPrice) {
-      const percent = Math.round(((currentOldPrice - currentPrice) / currentOldPrice) * 100);
-      discountEl.textContent = `-${percent}%`;
+    if (discountEl && curOldPrice > curPrice) {
+      const pct = Math.round(((curOldPrice - curPrice) / curOldPrice) * 100);
+      discountEl.textContent = `-${pct}%`;
       discountEl.classList.remove('hidden');
-    } else if (discountEl) {
-      discountEl.classList.add('hidden');
     }
+
+    // Trả góp: chia ~8.5 tháng
+    const monthlyInstall = Math.round(curPrice / 8.57);
+    if (installTextEl) {
+      installTextEl.innerHTML = `Hoặc Trả góp 0% chỉ từ <strong class="text-[#0057B7] tabular-nums font-bold whitespace-nowrap">${formatCurrency(monthlyInstall)}</strong>`;
+    }
+    if (ctaInstallSub) {
+      ctaInstallSub.textContent = `Trả góp 0% chỉ từ ${formatCurrency(monthlyInstall)}`;
+    }
+
+    // Sama Member: 1.2% tối đa 366.000₫
+    const memDisc = Math.min(366000, Math.round(curPrice * 0.012));
+    if (memberDiscEl) memberDiscEl.textContent = formatCurrency(memDisc);
+
+    // Sama EDU: 0.8% tối đa 200.000₫
+    const eduDisc = Math.min(200000, Math.round(curPrice * 0.007));
+    if (memberEduEl) memberEduEl.textContent = formatCurrency(eduDisc);
+
+    // Thu cũ lên đời: ~85% giá máy
+    const tradeInEst = Math.round(curPrice * 0.856);
+    if (tradeInEstEl) tradeInEstEl.textContent = formatCurrency(tradeInEst);
   }
 
-  // Render Danh Sách Cửa Hàng (108 Cửa Hàng - Screenshot 3)
+  // Render Địa chỉ còn hàng và trải nghiệm (Screenshot 2)
   function renderStoreLocations(city, query) {
     const container = document.getElementById('store-list-container');
     const countEl = document.getElementById('store-count-number');
@@ -1128,37 +1204,93 @@
 
     container.innerHTML = filtered.map(store => `
       <div class="p-3 sm:p-3.5 rounded-xl border border-slate-200/90 bg-white hover:border-blue-400 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
-        <div>
-          <div class="font-bold text-slate-900 text-xs sm:text-sm leading-snug">${store.name}</div>
-          <div class="flex items-center gap-2 mt-1.5">
+        <div class="space-y-1.5 flex-1 pr-2">
+          <div class="font-semibold text-slate-900 text-xs sm:text-sm leading-snug">${store.name}</div>
+          <div class="flex items-center gap-2 pt-0.5">
             <a href="tel:${store.phone}" class="px-2.5 py-1 rounded-md bg-[#008774] hover:bg-teal-700 text-white font-bold text-[11px] inline-flex items-center gap-1 transition-colors">
-              <i class="fa-solid fa-phone text-[10px]"></i> ${store.phone}
+              <i class="fa-solid fa-phone text-[9px]"></i> ${store.phone}
             </a>
-            <button type="button" onclick="alert('Địa chỉ chi tiết: ${store.name}. Giờ mở cửa: 08:00 - 21:30 hàng ngày.')" class="px-2.5 py-1 rounded-md bg-slate-800 hover:bg-slate-900 text-white font-bold text-[11px] transition-colors cursor-pointer">
+            <button type="button" onclick="alert('Địa chỉ: ${store.name}. Giờ mở cửa: 08:00 - 21:30 hàng ngày.')" class="px-2.5 py-1 rounded-md bg-slate-800 hover:bg-slate-900 text-white font-bold text-[11px] transition-colors cursor-pointer">
               Xem chi tiết
             </button>
           </div>
         </div>
 
-        <div class="flex items-center gap-1.5 text-[#008774] text-xs font-bold self-start sm:self-center">
-          <i class="fa-solid fa-circle-dot text-[10px]"></i> Đang sẵn hàng
+        <div class="flex items-center gap-1.5 text-[#008774] text-xs font-semibold self-start sm:self-center whitespace-nowrap">
+          <i class="fa-solid fa-circle text-[8px]"></i> Đang sẵn hàng
         </div>
       </div>
     `).join('');
+
+    syncStoreCardHeight();
   }
 
   window.filterStoreLocations = function () {
     const city = document.getElementById('store-filter-city').value;
     const query = document.getElementById('store-filter-search').value;
     renderStoreLocations(city, query);
+    syncStoreCardHeight();
   };
 
-  // Render Bảng Thông Số Chi Tiết (Screenshot 5 Chuẩn 2 Cột Zebra)
+  // Đồng bộ chiều cao khối "Địa chỉ còn hàng" (trái) khớp 100% với đáy của cột phải
+  function syncStoreCardHeight() {
+    const rightCol = document.getElementById('product-detail-right-col');
+    const leftCard = document.getElementById('store-locations-card');
+    const storeList = document.getElementById('store-list-container');
+    if (!rightCol || !leftCard || !storeList) return;
+
+    if (window.innerWidth >= 1024) {
+      // Lấy chiều cao thực tế của toàn bộ cột phải (từ card 1 đến hết card 4 Sản phẩm mua kèm)
+      const rightH = rightCol.offsetHeight;
+      if (rightH > 150) {
+        // Gán chiều cao thẻ bên trái bằng chuẩn xác chiều cao cột phải
+        leftCard.style.height = rightH + 'px';
+        leftCard.style.maxHeight = rightH + 'px';
+
+        const headerEl = leftCard.querySelector('.store-card-header');
+        const filterEl = leftCard.querySelector('.store-card-filters');
+        const hH = headerEl ? headerEl.offsetHeight : 52;
+        const fH = filterEl ? filterEl.offsetHeight : 56;
+        const pad = window.innerWidth >= 640 ? 48 : 40;
+        const margin = 32;
+
+        const availableH = rightH - hH - fH - pad - margin;
+        const finalH = Math.max(260, availableH);
+        storeList.style.height = finalH + 'px';
+        storeList.style.maxHeight = finalH + 'px';
+      }
+    } else {
+      leftCard.style.height = 'auto';
+      leftCard.style.maxHeight = 'none';
+      storeList.style.height = '460px';
+      storeList.style.maxHeight = '460px';
+    }
+  }
+
+  // Lắng nghe thay đổi kích thước & ResizeObserver để đáy 2 bên luôn thẳng hàng tuyệt đối
+  if (typeof window !== 'undefined') {
+    window.addEventListener('resize', syncStoreCardHeight);
+    window.addEventListener('load', syncStoreCardHeight);
+
+    if (window.ResizeObserver) {
+      setTimeout(function () {
+        const rightCol = document.getElementById('product-detail-right-col');
+        if (rightCol) {
+          const ro = new ResizeObserver(function () {
+            syncStoreCardHeight();
+          });
+          ro.observe(rightCol);
+        }
+      }, 100);
+    }
+  }
+
+  // Render Bảng Thông Số Chi Tiết Chuẩn 2 Cột Zebra Table (Screenshot 3)
   function renderDetailedSpecsTable(specs) {
     const tbody = document.getElementById('detailed-specs-tbody');
     if (!tbody) return;
 
-    const entries = Object.entries(specs);
+    const entries = Object.entries(specs || {});
     if (entries.length === 0) {
       tbody.innerHTML = `<tr><td colspan="2" class="p-4 text-center text-slate-500 text-xs">Đang cập nhật thông số chi tiết...</td></tr>`;
       return;
@@ -1166,13 +1298,137 @@
 
     tbody.innerHTML = entries.map(([key, val]) => `
       <tr>
-        <td class="align-top">${key}</td>
-        <td class="text-slate-700 align-top">${val}</td>
+        <td class="align-top font-semibold text-slate-700 text-xs sm:text-[13px] bg-slate-50/70 w-[35%] p-3 border-b border-slate-200">${key}</td>
+        <td class="align-top text-slate-800 text-xs sm:text-[13px] p-3 border-b border-slate-200 leading-relaxed">${val}</td>
       </tr>
     `).join('');
   }
 
-  // Render Luồng Bình Luận Mẫu
+  // Render Bài Viết Đánh Giá Chuyên Sâu có Mục Lục (Screenshot 4)
+  function renderReviewArticle(prod) {
+    const articleEl = document.getElementById('review-article-content');
+    const headEl = document.getElementById('article-main-heading');
+    if (!articleEl) return;
+
+    const title = prod.tenHang;
+    if (headEl) headEl.textContent = `Đặc điểm nổi bật của ${title}: Đỉnh cao công nghệ`;
+
+    const img1 = (galleryImages && galleryImages[0]) ? galleryImages[0] : prod.anhChinh;
+    const img2 = (galleryImages && galleryImages[1]) ? galleryImages[1] : img1;
+
+    articleEl.innerHTML = `
+      <div id="toc-specs" class="space-y-3">
+        <h3 class="text-base sm:text-lg font-bold text-slate-900">
+          1. Thông số kỹ thuật chi tiết của ${title} có gì nổi bật?
+        </h3>
+        <p>
+          <strong>${title}</strong> đánh dấu bước tiến vượt bậc về công nghệ, kết hợp hoàn hảo giữa vật liệu cao cấp và cấu hình phần cứng đỉnh cao. Màn hình sắc nét với tần số quét 120Hz mang đến trải nghiệm thị giác mượt mà trong từng thao tác vuốt chạm. Cụm vi xử lý thế hệ mới tối ưu hóa hiệu suất AI, xử lý mượt mà mọi tác vụ đồ họa nặng nề và làm việc đa nhiệm.
+        </p>
+      </div>
+
+      <div class="rounded-2xl overflow-hidden border border-slate-200 my-4 bg-white text-center">
+        <div class="flex items-center justify-center p-6 bg-slate-50/60">
+          <img src="${img1}" alt="${title}" class="max-h-[340px] w-auto object-contain" />
+        </div>
+        <div class="p-2.5 text-center text-xs text-slate-500 bg-slate-50 border-t border-slate-200 font-medium">
+          Thiết kế sang trọng và hiện đại trên ${title} chính hãng
+        </div>
+      </div>
+
+      <div id="toc-release" class="space-y-3">
+        <h3 class="text-base sm:text-lg font-bold text-slate-900">
+          2. ${title} ra mắt khi nào và phân khúc hướng tới?
+        </h3>
+        <p>
+          Được công bố chính thức tại sự kiện công nghệ toàn cầu, <strong>${title}</strong> được định vị ở phân khúc cao cấp hướng đến người dùng đòi hỏi khắt khe về độ tin cậy, tốc độ xử lý và thiết kế tinh xảo. Sản phẩm nhanh chóng thu hút sự chú ý từ cộng đồng yêu công nghệ trên toàn thế giới.
+        </p>
+      </div>
+
+      <div id="toc-price" class="space-y-3">
+        <h3 class="text-base sm:text-lg font-bold text-slate-900">
+          3. ${title} có giá bao nhiêu và chính sách bảo hành?
+        </h3>
+        <p>
+          Tại hệ thống <strong>SAMAMOBILE.COM</strong>, <strong>${title}</strong> hiện đang được phân phối với mức giá ưu đãi cực tốt cùng chương trình trợ giá thu cũ lên đời đến 4.000.000₫. Khách hàng hoàn toàn yên tâm với chính sách bảo hành chính hãng 12 tháng, 1 đổi 1 trong 30 ngày đầu tiên nếu phát sinh lỗi từ nhà sản xuất.
+        </p>
+      </div>
+
+      <div class="rounded-2xl overflow-hidden border border-slate-200 my-4 bg-white text-center">
+        <div class="flex items-center justify-center p-6 bg-slate-50/60">
+          <img src="${img2}" alt="${title}" class="max-h-[300px] w-auto object-contain" />
+        </div>
+        <div class="p-2.5 text-center text-xs text-slate-500 bg-slate-50 border-t border-slate-200 font-medium">
+          Trải nghiệm cầm nắm chắc chắn và màu sắc cuốn hút của ${title}
+        </div>
+      </div>
+
+      <div id="toc-design" class="space-y-3">
+        <h3 class="text-base sm:text-lg font-bold text-slate-900">
+          4. Thiết kế ngoại quan và trải nghiệm màn hình hiển thị
+        </h3>
+        <p>
+          Khung viền được hoàn thiện tỉ mỉ mang lại cảm giác cầm nắm vô cùng chắc chắn và thoải mái. Tấm nền hiển thị độ sáng cao cho khả năng hiển thị ngoài trời rõ nét, độ tương phản sâu và màu sắc chân thực.
+        </p>
+      </div>
+
+      <div id="toc-performance" class="space-y-3">
+        <h3 class="text-base sm:text-lg font-bold text-slate-900">
+          5. Hiệu năng xử lý và thời lượng sử dụng pin thực tế
+        </h3>
+        <p>
+          Viên pin dung lượng lớn kết hợp với công nghệ quản lý năng lượng thông minh giúp thiết bị hoạt động bền bỉ suốt ngày dài mà không lo ngắt quãng. Cổng sạc nhanh giúp nạp đầy năng lượng chỉ trong thời gian ngắn, sẵn sàng đồng hành cùng bạn trong mọi chuyến đi.
+        </p>
+      </div>
+    `;
+  }
+
+  // Toggle Thu Gọn / Xem Thêm bài viết có fade gradient
+  window.toggleReviewArticle = function () {
+    const wrapper = document.getElementById('review-article-wrapper');
+    const overlay = document.getElementById('article-fade-overlay');
+    const textEl = document.getElementById('btn-toggle-article-text');
+    const iconEl = document.getElementById('btn-toggle-article-icon');
+
+    if (!wrapper) return;
+    isArticleExpanded = !isArticleExpanded;
+
+    if (isArticleExpanded) {
+      wrapper.classList.remove('collapsed');
+      wrapper.classList.add('expanded');
+      if (overlay) overlay.classList.add('hidden');
+      if (textEl) textEl.textContent = 'Thu gọn';
+      if (iconEl) iconEl.className = 'fa-solid fa-chevron-up text-xs';
+    } else {
+      wrapper.classList.remove('expanded');
+      wrapper.classList.add('collapsed');
+      if (overlay) overlay.classList.remove('hidden');
+      if (textEl) textEl.textContent = 'Xem thêm';
+      if (iconEl) iconEl.className = 'fa-solid fa-chevron-down text-xs';
+      document.getElementById('review-article-section')?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  // Render Ảnh đánh giá từ khách hàng (Screenshot 5)
+  function renderCustomerPhotos(prod) {
+    const container = document.getElementById('customer-photos-grid');
+    if (!container) return;
+
+    const sampleCustomerPhotos = [
+      'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-tim-1.png',
+      'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png',
+      'https://i.hoanghamobile.vn/Uploads/2024/01/16/s24-ultra-vang_638409930027889246.png',
+      'https://i.hoanghamobile.vn/Uploads/2026/01/08/nubia-v80-max-bac.png',
+      'https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-tu-nhien-1.png'
+    ];
+
+    container.innerHTML = sampleCustomerPhotos.map((src, i) => `
+      <div class="w-18 h-18 sm:w-20 sm:h-20 rounded-xl border border-slate-200 overflow-hidden flex-shrink-0 bg-white p-1 hover:border-blue-400 transition-colors cursor-pointer shadow-2xs" onclick="alert('Xem ảnh đánh giá số ${i + 1} của khách hàng!')">
+        <img src="${src}" alt="Customer photo ${i + 1}" class="w-full h-full object-contain" />
+      </div>
+    `).join('');
+  }
+
+  // Render Bình luận & Đánh giá (Screenshot 5)
   function renderCommentsThread() {
     const container = document.getElementById('comments-thread-container');
     if (!container) return;
@@ -1181,9 +1437,12 @@
       <div class="p-4 bg-slate-50/80 rounded-2xl border border-slate-200/90 space-y-3">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2.5">
-            <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-700 font-black flex items-center justify-center text-xs">NH</div>
+            <div class="w-8 h-8 rounded-full bg-blue-100 text-[#0057B7] font-bold flex items-center justify-center text-xs">AK</div>
             <div>
-              <div class="font-bold text-xs sm:text-sm text-slate-900">Nguyễn Huy</div>
+              <div class="font-bold text-xs sm:text-sm text-slate-900 flex items-center gap-2">
+                <span>Anh Khang</span>
+                <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-semibold">Đã mua tại SamaMobile</span>
+              </div>
               <div class="text-[10px] text-slate-400">2 ngày trước</div>
             </div>
           </div>
@@ -1192,50 +1451,117 @@
           </div>
         </div>
         <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
-          Máy pin trâu thực sự, lướt web cả ngày chỉ hết hơn 40% pin. Màn hình to 6.9 inch xem phim cực đã mắt. Đóng gói cẩn thận, giao hàng siêu nhanh trong 2 giờ!
+          Máy dùng cực kỳ thích, màn hình phẳng 6.9 inch vuốt chạm rất đã tay. Pin trâu on-screen hơn 8 tiếng liên tục, camera zoom sắc nét. Giao hàng tại Thủ Đức chỉ trong 45 phút, đóng gói cẩn thận!
         </p>
         
-        <!-- Phản hồi Quản trị viên (QTV) -->
+        <!-- Phản hồi QTV -->
         <div class="ml-4 sm:ml-6 p-3 bg-white rounded-xl border border-blue-100 space-y-1.5">
           <div class="flex items-center gap-2">
-            <span class="px-1.5 py-0.5 bg-blue-600 text-white text-[9px] font-black rounded uppercase">QTV</span>
+            <span class="px-1.5 py-0.5 bg-[#0057B7] text-white text-[9px] font-bold rounded uppercase">QTV</span>
             <span class="font-bold text-xs text-blue-900">SamaMobile Chăm Sóc Khách Hàng</span>
             <span class="text-[10px] text-slate-400">• 1 ngày trước</span>
           </div>
           <p class="text-xs text-slate-600">
-            Dạ SamaMobile xin chào anh Huy! Cảm ơn anh đã luôn tin tưởng và ủng hộ sản phẩm tại SamaMobile. Chúc anh có những trải nghiệm thật tuyệt vời cùng máy ạ!
+            Dạ SamaMobile cảm ơn anh Khang rất nhiều đã tin tưởng lựa chọn sản phẩm! Chúc anh luôn có những trải nghiệm thật tuyệt vời cùng máy ạ. Khi cần hỗ trợ bất kỳ tính năng nào anh liên hệ tổng đài 1800 6868 nhé!
           </p>
         </div>
       </div>
     `;
   }
 
-  // Render Sản Phẩm Mua Kèm
-  function renderAddons() {
+  // Setup Form gửi bình luận nhanh
+  function setupCommentForm() {
+    const btn = document.getElementById('btn-submit-comment');
+    const input = document.getElementById('comment-input');
+    const authorName = document.getElementById('comment-author-name');
+    const authorPhone = document.getElementById('comment-author-phone');
+
+    if (btn && input) {
+      btn.addEventListener('click', function () {
+        const val = input.value.trim();
+        const nameVal = authorName ? authorName.value.trim() : 'Khách hàng';
+        if (!val) {
+          alert('Vui lòng nhập nội dung đánh giá của bạn.');
+          input.focus();
+          return;
+        }
+
+        const container = document.getElementById('comments-thread-container');
+        if (container) {
+          const newCommentHtml = `
+            <div class="p-4 bg-blue-50/50 rounded-2xl border border-blue-200/90 space-y-2 animate-in fade-in duration-300">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-8 h-8 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-xs">
+                    ${nameVal.charAt(0).toUpperCase()}
+                  </div>
+                  <div>
+                    <div class="font-bold text-xs sm:text-sm text-slate-900">${nameVal}</div>
+                    <div class="text-[10px] text-blue-600 font-semibold">Vừa xong (Đang xét duyệt)</div>
+                  </div>
+                </div>
+                <div class="text-amber-400 text-xs flex gap-0.5">
+                  <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                </div>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-800 leading-relaxed font-medium">
+                ${val}
+              </p>
+            </div>
+          `;
+          container.insertAdjacentHTML('afterbegin', newCommentHtml);
+        }
+
+        alert('Cảm ơn bạn đã gửi đánh giá! Bình luận sẽ được Quản trị viên xét duyệt và hiển thị công khai.');
+        input.value = '';
+        if (authorName) authorName.value = '';
+        if (authorPhone) authorPhone.value = '';
+      });
+    }
+  }
+
+  // Render Sản phẩm mua kèm theo danh mục filter tabs (Screenshot 2)
+  var ALL_ADDONS = [
+    { id: 'ADD-01', cat: 'case', name: 'Ốp lưng từ tính MagSafe Chống va đập', price: 190000, img: 'https://i.hoanghamobile.vn/Uploads/2024/09/10/ip16-xanh-mong-ket.png' },
+    { id: 'ADD-02', cat: 'glass', name: 'Kính cường lực Full màn hình 9H', price: 150000, img: 'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png' },
+    { id: 'ADD-03', cat: 'charger', name: 'Củ sạc nhanh 45W Type-C SamaSuperFast', price: 390000, img: 'https://i.hoanghamobile.vn/Uploads/2026/03/21/a1638-den.png' },
+    { id: 'ADD-04', cat: 'battery', name: 'Pin sạc dự phòng 10.000mAh 30W Qi2', price: 490000, img: 'https://i.hoanghamobile.vn/Uploads/2026/03/21/a1638-den.png' }
+  ];
+
+  window.filterAddons = function (cat) {
+    const tabs = document.querySelectorAll('.addon-tab');
+    tabs.forEach(t => {
+      t.className = 'addon-tab px-3 py-1 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 flex-shrink-0 cursor-pointer';
+    });
+    if (event && event.target) {
+      event.target.className = 'addon-tab px-3 py-1 rounded-full bg-slate-900 text-white flex-shrink-0 cursor-pointer';
+    }
+    renderAddons(cat);
+  };
+
+  function renderAddons(cat) {
     const container = document.getElementById('addons-container');
     if (!container) return;
 
-    const addons = [
-      { id: 'ADD-01', name: 'Củ sạc nhanh 30W Type-C SamaFast', price: 290000, img: resolveAssetPath('images/banner/iphone-18-cat-082925094.png') },
-      { id: 'ADD-02', name: 'Tai nghe Bluetooth không dây TWS-09', price: 390000, img: resolveAssetPath('images/products/airpods-pro-3.png') },
-      { id: 'ADD-03', name: 'Kính cường lực Full viền 9H chống va đập', price: 190000, img: (currentProduct && currentProduct.anhChinh) ? currentProduct.anhChinh : resolveAssetPath('images/banner/iphone-18-cat-082925094.png') }
-    ];
+    const list = cat === 'all' ? ALL_ADDONS : ALL_ADDONS.filter(it => it.cat === cat);
 
-    container.innerHTML = addons.map(item => `
-      <div class="p-3 rounded-xl border border-slate-200 bg-white hover:border-blue-400 transition-colors flex items-center justify-between gap-3">
-        <img src="${item.img}" alt="${item.name}" class="w-11 h-11 object-contain rounded-lg flex-shrink-0" />
+    container.innerHTML = list.map(item => `
+      <div class="p-2.5 rounded-xl border border-slate-200/90 bg-white hover:border-blue-400 transition-colors flex items-center justify-between gap-3">
+        <img src="${item.img}" alt="${item.name}" class="w-10 h-10 object-contain rounded-lg flex-shrink-0" onerror="this.src='../images/default-phone.png';" />
         <div class="min-w-0 flex-1">
           <div class="text-xs font-bold text-slate-800 line-clamp-1">${item.name}</div>
-          <div class="text-xs font-black text-rose-600 mt-0.5">${formatCurrency(item.price)}</div>
+          <div class="text-xs font-semibold text-rose-600 tabular-nums mt-0.5">${formatCurrency(item.price)}</div>
         </div>
-        <button type="button" onclick="alert('Đã thêm phụ kiện ${item.name} vào đơn hàng!')" class="px-2.5 py-1 rounded-lg text-xs font-bold text-blue-600 border border-blue-200 hover:bg-blue-50 flex-shrink-0 cursor-pointer">
+        <button type="button" onclick="alert('Đã thêm phụ kiện ${item.name} vào giỏ!')" class="px-2.5 py-1 rounded-lg text-xs font-bold text-blue-600 border border-blue-200 hover:bg-blue-50 flex-shrink-0 cursor-pointer">
           + Thêm
         </button>
       </div>
     `).join('');
+
+    syncStoreCardHeight();
   }
 
-  // Render Sản Phẩm Tương Tự
+  // Render Sản phẩm tương tự
   function renderSimilarProducts() {
     const grid = document.getElementById('similar-products-grid');
     if (!grid) return;
@@ -1251,19 +1577,19 @@
     grid.innerHTML = items.map(p => `
       <div class="bg-white rounded-2xl border border-slate-200/90 p-3 flex flex-col justify-between hover:border-blue-400 hover:shadow-md transition-all cursor-pointer group" onclick="window.location.href='product-detail.html?id=${p.id}'">
         <div class="relative w-full aspect-square flex items-center justify-center p-2 mb-2">
-          <img src="${p.img}" alt="${p.name}" class="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform" />
+          <img src="${p.img}" alt="${p.name}" class="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform" onerror="this.src='../images/default-phone.png';" />
           <span class="absolute top-1 left-1 px-1.5 py-0.5 rounded-md bg-rose-500 text-white font-bold text-[9px]">-8%</span>
         </div>
         <div>
           <h4 class="text-xs font-bold text-slate-800 line-clamp-2 leading-snug group-hover:text-blue-600 transition-colors">${p.name}</h4>
-          <div class="text-xs sm:text-sm font-black text-rose-600 mt-1">${formatCurrency(p.price)}</div>
+          <div class="text-xs sm:text-sm font-semibold text-rose-600 tabular-nums mt-1">${formatCurrency(p.price)}</div>
           <div class="text-[10px] text-slate-400 line-through">${formatCurrency(p.oldPrice)}</div>
         </div>
       </div>
     `).join('');
   }
 
-  // Đồng bộ Sticky Bottom Bar (Screenshots 2, 3, 4, 5)
+  // Đồng bộ Sticky Bottom Bar (Screenshots 1, 2, 3, 4, 5)
   function updateStickyBar() {
     if (!currentProduct) return;
     const thumb = document.getElementById('sticky-bar-thumb');
@@ -1273,7 +1599,7 @@
 
     const curPrice = selectedVersion ? selectedVersion.gia : currentProduct.donGia;
     const verText = selectedVersion ? selectedVersion.dungLuong : 'Tiêu chuẩn';
-    const colText = selectedColor ? selectedColor.ten : 'Bạc';
+    const colText = selectedColor ? selectedColor.ten : 'Trắng';
 
     if (thumb) thumb.src = selectedColor ? selectedColor.anh : currentProduct.anhChinh;
     if (title) title.textContent = formatProductVariantTitle(currentProduct.tenHang, verText);
@@ -1286,7 +1612,7 @@
     if (!bar) return;
 
     window.addEventListener('scroll', function () {
-      if (window.scrollY > 450) {
+      if (window.scrollY > 400) {
         bar.classList.remove('translate-y-full');
       } else {
         bar.classList.add('translate-y-full');
@@ -1294,23 +1620,7 @@
     });
   }
 
-  function setupCommentForm() {
-    const btn = document.getElementById('btn-submit-comment');
-    const input = document.getElementById('comment-input');
-    if (btn && input) {
-      btn.addEventListener('click', function () {
-        const val = input.value.trim();
-        if (!val) {
-          alert('Vui lòng nhập nội dung đánh giá của bạn.');
-          return;
-        }
-        alert('Cảm ơn bạn đã gửi đánh giá! Bình luận sẽ được Quản trị viên xét duyệt và hiển thị sau ít phút.');
-        input.value = '';
-      });
-    }
-  }
-
-  // Mua Ngay & Thêm Giỏ Hàng
+  // Mua ngay & Thêm giỏ hàng
   window.handleMainBuyNow = function () {
     if (!currentProduct) return;
     window.handleAddToCart(true);
@@ -1320,7 +1630,7 @@
     if (!currentProduct) return;
 
     const vName = selectedVersion ? selectedVersion.dungLuong : 'Tiêu chuẩn';
-    const cName = selectedColor ? selectedColor.ten : 'Bạc';
+    const cName = selectedColor ? selectedColor.ten : 'Trắng';
     const priceVal = Number(selectedVersion ? selectedVersion.gia : currentProduct.donGia) || 0;
     const oldPriceVal = Number(selectedVersion ? selectedVersion.giaGoc : (currentProduct.giaGoc || currentProduct.donGia)) || priceVal;
     const imgVal = selectedColor ? selectedColor.anh : currentProduct.anhChinh;
@@ -1354,16 +1664,12 @@
         cart.openDrawer();
       }
     } else {
-      // LocalStorage fallback
       try {
         const raw = localStorage.getItem('cellphones_cart');
         const list = raw ? JSON.parse(raw) : [];
         const existing = list.find(it => it.id === cartItem.id);
-        if (existing) {
-          existing.qty = (existing.qty || 1) + 1;
-        } else {
-          list.push(cartItem);
-        }
+        if (existing) existing.qty = (existing.qty || 1) + 1;
+        else list.push(cartItem);
         localStorage.setItem('cellphones_cart', JSON.stringify(list));
       } catch (e) {}
 
@@ -1375,7 +1681,6 @@
     }
   };
 
-  // Khởi động
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {

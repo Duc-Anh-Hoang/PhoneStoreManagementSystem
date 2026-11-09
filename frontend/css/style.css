@@ -1,3 +1,20 @@
+
+/* 1 FONT DUY NHẤT TOÀN DIỆN: Be Vietnam Pro chuẩn nét tròn hiện đại */
+:root {
+  --font-sans: "Be Vietnam Pro", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+body, button, input, select, textarea, .font-sans, #hero-store, .hero-section, #category-hero-section, #product-hero-section {
+  font-family: var(--font-sans) !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+}
+
+/* Số hiển thị tròn đẹp chuẩn tabular-nums (bỏ font-mono khô khan) */
+.tabular-nums, .num, .price-text {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
 /* Global High-Contrast Typography & Sharp Font Smoothing */
 * {
   -webkit-font-smoothing: antialiased !important;
@@ -7,7 +24,7 @@
 input, button, select, textarea {
   font-family: inherit;
 }
-@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap');
 /* ==========================================================================
    STYLE CHÍNH CHO LANDING PAGE BÁN ĐIỆN THOẠI FLAGSHIP
    Hiện đại - Công nghệ - Tối giản (Modern Tech)
@@ -55,7 +72,7 @@ html {
 }
 
 body {
-  font-family: 'Be Vietnam Pro', 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: "Be Vietnam Pro", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
   background-color: var(--color-background);
   color: var(--color-text);
   overflow-x: hidden;

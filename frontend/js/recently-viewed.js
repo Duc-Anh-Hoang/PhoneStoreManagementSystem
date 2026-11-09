@@ -40,7 +40,7 @@
       tenHang: 'Samsung Galaxy S25 Ultra - 12GB/256GB',
       donGia: 25790000,
       giaGoc: 33990000,
-      anhChinh: 'https://i.hoanghamobile.vn/Uploads/2026/01/22/galaxy-s25-ultra-titan-den-1.png',
+      anhChinh: 'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png',
       member_price: 25481000,
       badges: ['Snap 8 Elite', '5000mAh', '256GB']
     },
@@ -60,19 +60,55 @@
       tenHang: 'MacBook Air 13 M3 2024 - 16GB / 256GB SSD',
       donGia: 27490000,
       giaGoc: 31990000,
-      anhChinh: 'https://i.hoanghamobile.vn/Uploads/2024/03/05/macbook-air-m3-midnight-1.png',
+      anhChinh: 'https://i.hoanghamobile.vn/Uploads/2026/03/04/macbook-air-13-in-m5-starlight-pdp-image-position-1-vn-vi.jpg',
       member_price: 27150000,
       badges: ['Apple M3', '16GB RAM', '256GB SSD']
     }
   ];
 
   // Lấy danh sách sản phẩm đã xem từ LocalStorage
+  var BROKEN_IMAGE_REMAP = {
+    "iphone-16-pro-natural-titan.png": "https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-tu-nhien-1.png",
+    "galaxy-s25-ultra-titan-den-1.png": "https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png",
+    "galaxy-s24-ultra-xam-1.png": "https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-tim-1.png",
+    "galaxy-s24-ultra-vang-1.png": "https://i.hoanghamobile.vn/Uploads/2024/01/16/s24-ultra-vang_638409930027889246.png",
+    "ipad-gen-10-silver.png": "https://i.hoanghamobile.vn/Uploads/2025/03/06/ipad-a16-wifi-pink-pdp-image-position-1-vn-vi.png",
+    "tab-s9-fe-gray-1.png": "https://i.hoanghamobile.vn/Uploads/2026/10/15/s10-fe-3-134808082.png",
+    "macbook-air-m3-midnight-1.png": "https://i.hoanghamobile.vn/Uploads/2026/03/04/macbook-air-13-in-m5-starlight-pdp-image-position-1-vn-vi.jpg",
+    "asus-tuf-gaming-f15-fx506hf-hn014w-1.png": "https://i.hoanghamobile.vn/Uploads/2026/06/02/asus-tuf-1.png",
+    "man-hinh-gaming-asus-tuf-vg249q3a-1.png": "https://i.hoanghamobile.vn/Uploads/2026/04/06/vg249q5r-1.png",
+    "dell-ultrasharp-u2724d-1.png": "https://i.hoanghamobile.vn/Uploads/2024/02/22/u2424he.png",
+    "dieu-hoa-casper-inverter-tc-09is36-1.png": "https://i.hoanghamobile.vn/Uploads/MayLanh/4757/Slider/casper-tc-09is35-2-1.jpg",
+    "dieu-hoa-daikin-inverter-ftkb35xvmv-1.png": "https://i.hoanghamobile.vn/Uploads/2025/04/16/ftkb25yvmv-1.png",
+    "xiaomi-smart-band-9-black-1.png": "https://i.hoanghamobile.vn/Uploads/2024/11/27/n69-pink-side45.png",
+    "airpods-4-1.png": "https://i.hoanghamobile.vn/Uploads/2024/09/10/airpods-4.png",
+    "marshall-emberton-ii-black-and-brass-1.png": "https://i.hoanghamobile.vn/Uploads/2026/07/30/marshall-stockwell-lll-trang-1-153237088.png",
+    "anker-511-nano-3-30w-a2147-1.png": "https://i.hoanghamobile.vn/Uploads/2026/03/21/a1638-den.png"
+};
+
   window.getRecentlyViewed = function () {
     try {
       var data = localStorage.getItem(STORAGE_KEY);
       if (data) {
         var list = JSON.parse(data);
-        if (Array.isArray(list) && list.length > 0) return list;
+        if (Array.isArray(list) && list.length > 0) {
+          var changed = false;
+          list.forEach(function (item) {
+            if (item && item.anhChinh) {
+              for (var k in BROKEN_IMAGE_REMAP) {
+                if (item.anhChinh.indexOf(k) !== -1) {
+                  item.anhChinh = BROKEN_IMAGE_REMAP[k];
+                  changed = true;
+                  break;
+                }
+              }
+            }
+          });
+          if (changed) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+          }
+          return list;
+        }
       }
     } catch (e) {
       console.warn('Lỗi đọc recently viewed:', e);
@@ -174,65 +210,40 @@
       c.textContent = hasCustom ? rawList.length : 'Gợi ý';
     });
 
-    // 2. Render Khối trên trang (#recently-viewed-grid)
+    // 2. Render Khối trên trang (#recently-viewed-grid) - Đồng bộ 100% với Sản phẩm tương tự
     var grids = document.querySelectorAll('.recently-viewed-grid');
     grids.forEach(function (grid) {
       grid.innerHTML = displayList.map(function (p) {
         var price = Number(p.donGia) || 0;
         var oldPrice = Number(p.giaGoc) || Math.round(price * 1.15);
-        var memberPrice = p.member_price || Math.round(price * 0.985);
         var discount = oldPrice > price ? Math.round(((oldPrice - price) / oldPrice) * 100) : 0;
         var pId = p.maHang || p.id;
+        var isPages = window.location.pathname.includes('/pages/') || window.location.href.includes('/pages/');
+        var targetUrl = (isPages ? '' : 'pages/') + 'product-detail.html?id=' + encodeURIComponent(pId);
         var img = p.anhChinh || 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png';
 
         return `
-          <div class="product-card bg-white rounded-2xl border border-slate-200/90 p-3 sm:p-3.5 hover:border-blue-400 hover:shadow-lg transition-all duration-300 flex flex-col justify-between group cursor-pointer relative" onclick="window.navigateToDetail ? window.navigateToDetail('${pId}') : window.location.href = (window.location.pathname.includes('/pages/') ? '' : 'pages/') + 'pages/product-detail.html?id=' + encodeURIComponent(pId)">
+          <div class="product-card bg-white rounded-2xl border border-slate-200/90 p-3 flex flex-col justify-between hover:border-blue-400 hover:shadow-md transition-all cursor-pointer group relative" onclick="window.location.href='${targetUrl}'">
             
             ${hasCustom ? `
-              <button type="button" onclick="event.stopPropagation(); window.removeRecentlyViewedItem('${pId}')" class="absolute top-2 right-2 w-6 h-6 rounded-full bg-slate-100 hover:bg-rose-100 text-slate-400 hover:text-rose-600 flex items-center justify-center text-[10px] transition-colors z-20 shadow-xs cursor-pointer" title="Xóa khỏi lịch sử">
+              <button type="button" onclick="event.stopPropagation(); window.removeRecentlyViewedItem('${pId}')" class="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-slate-100 hover:bg-rose-100 text-slate-400 hover:text-rose-600 flex items-center justify-center text-[9px] transition-colors z-20 shadow-xs cursor-pointer" title="Xóa khỏi lịch sử">
                 <i class="fa-solid fa-xmark"></i>
               </button>
             ` : ''}
 
-            <div>
-              <div class="relative h-44 sm:h-48 flex items-center justify-center p-2 mb-2 bg-slate-50/50 rounded-xl overflow-hidden">
-                ${discount > 0 ? `
-                  <span class="absolute top-2 left-2 px-1.5 py-0.5 rounded-md bg-[#E0052B] text-white font-black text-[10px] shadow-xs z-10">
-                    -${discount}%
-                  </span>
-                ` : ''}
-                <img src="${img}" alt="${p.tenHang}" class="max-w-[130px] max-h-[130px] object-contain transition-transform duration-300 group-hover:scale-105" loading="lazy" onerror="this.onerror=null; this.src='https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png';" />
-              </div>
-
-              <h4 class="text-xs sm:text-[13px] font-bold text-slate-900 group-hover:text-[#0057B7] line-clamp-2 leading-snug min-h-[34px] transition-colors" title="${p.tenHang}">
-                ${p.tenHang}
-              </h4>
-
-              <div class="mt-2">
-                <div class="flex items-baseline gap-1.5 flex-wrap">
-                  <span class="text-sm sm:text-base font-black text-[#E0052B] font-mono">
-                    ${formatCurrency(price)}
-                  </span>
-                  ${oldPrice > price ? `
-                    <span class="text-[10px] sm:text-[11px] text-slate-400 line-through">
-                      ${formatCurrency(oldPrice)}
-                    </span>
-                  ` : ''}
-                </div>
-
-                <div class="mt-1 text-[10px] sm:text-[11px] text-slate-700 font-semibold leading-tight">
-                  <span class="text-[#0057B7]"><i class="fa-solid fa-credit-card text-[9px] mr-1"></i>Trả góp 0%</span>
-                </div>
-              </div>
+            <div class="relative w-full aspect-square flex items-center justify-center p-2 mb-2">
+              <img src="${img}" alt="${p.tenHang}" class="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform" loading="lazy" onerror="this.onerror=null; this.src='../images/default-phone.png';" />
+              ${discount > 0 ? `
+                <span class="absolute top-1 left-1 px-1.5 py-0.5 rounded-md bg-rose-500 text-white font-bold text-[9px]">-${discount}%</span>
+              ` : ''}
             </div>
 
-            <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between">
-              <span class="text-[10px] sm:text-[11px] font-bold text-emerald-600 flex items-center gap-1">
-                <i class="fa-solid fa-circle text-[7px] text-emerald-500"></i> Sẵn hàng
-              </span>
-              <button type="button" onclick="event.stopPropagation(); window.quickAddToCart ? window.quickAddToCart('${pId}') : alert('Đã thêm vào giỏ!')" class="w-7 h-7 rounded-lg bg-rose-50 hover:bg-[#E0052B] text-[#E0052B] hover:text-white flex items-center justify-center transition-all cursor-pointer shadow-2xs" title="Thêm vào giỏ">
-                <i class="fa-solid fa-cart-shopping text-xs"></i>
-              </button>
+            <div>
+              <h4 class="text-xs font-bold text-slate-800 line-clamp-2 leading-snug group-hover:text-blue-600 transition-colors" title="${p.tenHang}">${p.tenHang}</h4>
+              <div class="text-xs sm:text-sm font-semibold text-rose-600 tabular-nums mt-1">${formatCurrency(price)}</div>
+              ${oldPrice > price ? `
+                <div class="text-[10px] text-slate-400 line-through">${formatCurrency(oldPrice)}</div>
+              ` : ''}
             </div>
 
           </div>
@@ -254,7 +265,7 @@
               <img src="${p.anhChinh}" alt="${p.tenHang}" class="w-12 h-12 object-contain rounded-lg border border-slate-200 bg-white p-1 flex-shrink-0 shadow-2xs" onerror="this.src='https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png';" />
               <div class="flex-1 min-w-0">
                 <p class="text-xs sm:text-[13px] font-bold text-slate-900 line-clamp-1 group-hover/item:text-[#0057B7] transition-colors leading-snug">${p.tenHang}</p>
-                <p class="text-xs sm:text-[13px] font-black text-[#E11B1E] font-mono mt-0.5">${formatCurrency(price)}</p>
+                <p class="text-xs sm:text-[13px] font-black text-[#E11B1E] tabular-nums mt-0.5">${formatCurrency(price)}</p>
               </div>
             </a>
           `;
@@ -272,7 +283,7 @@
 
   function formatCurrency(val) {
     if (!val || isNaN(val)) return '0 ₫';
-    return Number(val).toLocaleString('vi-VN') + ' ₫';
+    return Number(val).toLocaleString('vi-VN') + '₫';
   }
 
   // Khởi tạo khi DOM sẵn sàng

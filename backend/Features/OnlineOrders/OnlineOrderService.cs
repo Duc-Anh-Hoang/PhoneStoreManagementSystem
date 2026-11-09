@@ -521,6 +521,40 @@ public class OnlineOrderService : IOnlineOrderService
             await _context.SaveChangesAsync();
             await transaction.CommitAsync();
 
+            if (_hubContext != null)
+            {
+                string msg = newTrangThai switch
+                {
+                    AppConstants.OrderStatus.DaXacNhan => $"Đơn đặt hàng #{donHang.MaDH} đã được Admin xác nhận thành công! Đang chuẩn bị đóng gói.",
+                    AppConstants.OrderStatus.DangGiao => $"Đơn đặt hàng #{donHang.MaDH} đã được xuất kho và đang trên đường giao đến bạn!",
+                    AppConstants.OrderStatus.HoanThanh => $"Đơn đặt hàng #{donHang.MaDH} đã được giao thành công và hoàn tất! Cảm ơn bạn đã mua hàng.",
+                    AppConstants.OrderStatus.DaHuy => $"Đơn đặt hàng #{donHang.MaDH} đã được cập nhật trạng thái: Đã hủy.",
+                    _ => $"Đơn đặt hàng #{donHang.MaDH} đã được cập nhật trạng thái mới."
+                };
+
+                var statusPayload = new
+                {
+                    maDH = donHang.MaDH,
+                    trangThai = donHang.TrangThai,
+                    soHD = donHang.SoHD,
+                    statusText = msg,
+                    message = msg,
+                    sdt = donHang.SdtNguoiNhan,
+                    tenNguoiNhan = donHang.TenNguoiNhan,
+                    tongTien = donHang.TongTien,
+                    updatedAt = DateTime.UtcNow
+                };
+
+                _ = Task.Run(async () =>
+                {
+                    try
+                    {
+                        await _hubContext.Clients.All.SendAsync("OrderStatusUpdated", statusPayload);
+                    }
+                    catch { }
+                });
+            }
+
             return new OrderDto
             {
                 MaDH = donHang.MaDH,
@@ -577,6 +611,33 @@ public class OnlineOrderService : IOnlineOrderService
         donHang.TrangThai = AppConstants.OrderStatus.DaHuy;
 
         await _context.SaveChangesAsync();
+
+        if (_hubContext != null)
+        {
+            string cancelMsg = $"Khách hàng {donHang.TenNguoiNhan} ({donHang.SdtNguoiNhan}) đã hủy đơn hàng #{donHang.MaDH}" +
+                               (!string.IsNullOrWhiteSpace(request.LyDo) ? $" (Lý do: {request.LyDo})" : "");
+            var cancelPayload = new
+            {
+                maDH = donHang.MaDH,
+                trangThai = donHang.TrangThai,
+                statusText = cancelMsg,
+                message = cancelMsg,
+                sdt = donHang.SdtNguoiNhan,
+                tenNguoiNhan = donHang.TenNguoiNhan,
+                tongTien = donHang.TongTien,
+                updatedAt = DateTime.UtcNow
+            };
+
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await _hubContext.Clients.All.SendAsync("OrderStatusUpdated", cancelPayload);
+                    await _hubContext.Clients.Group(OrderHub.AdminGroup).SendAsync("ReceiveOrderCancelled", cancelPayload);
+                }
+                catch { }
+            });
+        }
 
         // Gửi email thông báo hủy nếu có email khách
         if (_emailService != null)

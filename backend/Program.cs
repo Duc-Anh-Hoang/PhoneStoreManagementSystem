@@ -105,6 +105,55 @@ app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
 
+// 15. Root & Health check endpoints
+app.MapGet("/", (HttpContext context) =>
+{
+    var accept = context.Request.Headers["Accept"].ToString();
+    if (accept.Contains("text/html"))
+    {
+        return Results.Content(@"
+<!DOCTYPE html>
+<html lang='vi'>
+<head>
+    <meta charset='UTF-8'>
+    <title>PhoneStore API Server - SamaMobile</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0f172a; color: #f8fafc; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .card { background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 32px; max-width: 520px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5); text-align: center; }
+        h1 { color: #60a5fa; font-size: 22px; margin-bottom: 8px; }
+        p { color: #94a3b8; font-size: 14px; line-height: 1.6; margin-bottom: 24px; }
+        .badge { display: inline-block; background: #065f46; color: #34d399; font-weight: bold; font-size: 12px; padding: 4px 12px; border-radius: 9999px; margin-bottom: 16px; }
+        .btn-group { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+        .btn { display: inline-block; padding: 10px 20px; border-radius: 8px; font-weight: bold; font-size: 13px; text-decoration: none; transition: 0.2s; }
+        .btn-primary { background: #2563eb; color: white; }
+        .btn-primary:hover { background: #1d4ed8; }
+        .btn-secondary { background: #334155; color: #f8fafc; }
+        .btn-secondary:hover { background: #475569; }
+    </style>
+</head>
+<body>
+    <div class='card'>
+        <span class='badge'>● Backend API Đang Hoạt Động</span>
+        <h1>SAMAMOBILE.COM - API Server</h1>
+        <p>Cổng <strong>:5132</strong> là dịch vụ Backend (.NET 10 Web API, SignalR & PostgreSQL).<br>Giao diện người dùng (Frontend) được mở tại cổng <strong>:3000</strong>.</p>
+        <div class='btn-group'>
+            <a href='http://localhost:3000' class='btn btn-primary' target='_blank'>Mở Giao Diện Web (Cổng 3000)</a>
+            <a href='/swagger' class='btn btn-secondary'>Xem Tài Liệu API (Swagger)</a>
+        </div>
+    </div>
+</body>
+</html>", "text/html; charset=utf-8");
+    }
+    return Results.Ok(new
+    {
+        service = "PhoneStoreAPI",
+        status = "running",
+        framework = ".NET 10",
+        swagger = "/swagger",
+        frontend = "http://localhost:3000"
+    });
+});
+
 // 15. Health check endpoint cho Docker & Load Balancer
 app.MapGet("/api/health", () => Results.Ok(new
 {
