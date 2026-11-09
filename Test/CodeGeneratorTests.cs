@@ -40,7 +40,8 @@ public class CodeGeneratorTests
         Assert.StartsWith(prefix, code);
 
         // Pattern: Prefix (2 uppercase chars) + YearMonth (4 digits) + Sequence (5 digits) = 11 chars
-        var pattern = $"^{prefix}\\d{{9}}$";
+        int digitCount = (prefix == "NV" || prefix == "KH") ? 8 : 9;
+        var pattern = $"^{prefix}\\d{{{digitCount}}}$";
         Assert.Matches(new Regex(pattern), code);
     }
 

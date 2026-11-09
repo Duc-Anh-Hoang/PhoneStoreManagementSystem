@@ -104,7 +104,7 @@ public class OnlineOrderService : IOnlineOrderService
                     await _context.SaveChangesAsync();
                 }
 
-                decimal donGiaDb = item.DonGia > 0 ? item.DonGia : (matHang.DonGia > 0 ? matHang.DonGia : 5000000m);
+                decimal donGiaDb = matHang.DonGia > 0 ? matHang.DonGia : (item.DonGia > 0 ? item.DonGia : 5000000m);
                 tongTien += donGiaDb * item.SoLuong;
 
                 chiTietList.Add(new ChiTietDonHangOnline
