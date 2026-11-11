@@ -223,8 +223,8 @@
       nhanHieu: 'Apple',
       tenLoai: 'Điện thoại',
       tenNhom: 'Điện thoại',
-      donGia: 38490000,
-      giaGoc: 41569000,
+      donGia: 41790000,
+      giaGoc: 44990000,
       anhChinh: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png',
       album: [
         { label: 'Mặt trước & Sau', img: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png' },
@@ -233,15 +233,16 @@
         { label: 'Viền Titan & Cổng sạc', img: 'https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-tu-nhien-1.png' }
       ],
       phienBan: [
-        { id: 'v_256', dungLuong: '256GB', gia: 38490000, giaGoc: 41569000 },
-        { id: 'v_512', dungLuong: '512GB', gia: 42990000, giaGoc: 46990000 },
-        { id: 'v_1tb', dungLuong: '1TB', gia: 48990000, giaGoc: 52990000 }
+        { id: 'v_256', dungLuong: '256GB', gia: 41790000, giaGoc: 44990000 },
+        { id: 'v_512', dungLuong: '512GB', gia: 47990000, giaGoc: 51990000 },
+        { id: 'v_1tb', dungLuong: '1TB', gia: 59990000, giaGoc: 63990000 },
+        { id: 'v_2tb', dungLuong: '2TB', gia: 78990000, giaGoc: 82990000 }
       ],
       mauSac: [
-        { id: 'c_burgundy', ten: 'Titan Đỏ Rượu', hex: '#5B1E31', anh: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png' },
-        { id: 'c_glacier', ten: 'Titan Trắng Băng', hex: '#E2E8F0', anh: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-glacier-pdp-images-vi-vn-021233298.png' },
-        { id: 'c_desert', ten: 'Titan Sa Mạc', hex: '#C5A992', anh: 'https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-sa-mac-1.png' },
-        { id: 'c_natural', ten: 'Titan Tự Nhiên', hex: '#8E8B82', anh: 'https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-tu-nhien-1.png' }
+        { id: 'c_den', ten: 'Đen', hex: '#1E293B', anh: 'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png' },
+        { id: 'c_bac', ten: 'Bạc', hex: '#E2E8F0', anh: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-glacier-pdp-images-vi-vn-021233298.png' },
+        { id: 'c_burgundy', ten: 'Đỏ Burgundy', hex: '#5B1E31', anh: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png' },
+        { id: 'c_bang_thanh', ten: 'Băng Thanh', hex: '#B0C4DE', anh: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-glacier-pdp-images-vi-vn-021233298.png' }
       ],
       thongSoNoiBat: {
         'Kích thước màn hình': '6.9\" Super Retina XDR',
@@ -414,8 +415,9 @@
         } else if (pNameLower.includes('iphone')) {
           phienBan = [
             { id: 'v_256', dungLuong: '256GB', gia: donGia, giaGoc: giaGoc },
-            { id: 'v_512', dungLuong: '512GB', gia: Math.round(donGia * 1.12), giaGoc: Math.round(giaGoc * 1.1) },
-            { id: 'v_1tb', dungLuong: '1TB', gia: Math.round(donGia * 1.28), giaGoc: Math.round(giaGoc * 1.22) }
+            { id: 'v_512', dungLuong: '512GB', gia: Math.round(donGia * 1.15), giaGoc: Math.round(giaGoc * 1.12) },
+            { id: 'v_1tb', dungLuong: '1TB', gia: Math.round(donGia * 1.43), giaGoc: Math.round(giaGoc * 1.35) },
+            { id: 'v_2tb', dungLuong: '2TB', gia: Math.round(donGia * 1.88), giaGoc: Math.round(giaGoc * 1.75) }
           ];
         } else {
           phienBan = [
@@ -449,12 +451,12 @@
           { id: 'c_den', ten: 'Đen', hex: '#1E293B', anh: 'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png' },
           { id: 'c_tim', ten: 'Tím', hex: '#6366F1', anh: 'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-tim-1.png' }
         ];
-      } else if (pNameLower.includes('iphone 18') || pNameLower.includes('iphone 16')) {
+      } else if (pNameLower.includes('iphone 18') || pNameLower.includes('iphone 16') || pNameLower.includes('iphone')) {
         mauSac = [
-          { id: 'c_burgundy', ten: 'Titan Đỏ Rượu', hex: '#5B1E31', anh: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png' },
-          { id: 'c_glacier', ten: 'Titan Trắng Băng', hex: '#E2E8F0', anh: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-glacier-pdp-images-vi-vn-021233298.png' },
-          { id: 'c_desert', ten: 'Titan Sa Mạc', hex: '#C5A992', anh: 'https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-sa-mac-1.png' },
-          { id: 'c_natural', ten: 'Titan Tự Nhiên', hex: '#8E8B82', anh: 'https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-tu-nhien-1.png' }
+          { id: 'c_den', ten: 'Đen', hex: '#1E293B', anh: 'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png' },
+          { id: 'c_bac', ten: 'Bạc', hex: '#E2E8F0', anh: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-glacier-pdp-images-vi-vn-021233298.png' },
+          { id: 'c_burgundy', ten: 'Đỏ Burgundy', hex: '#5B1E31', anh: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png' },
+          { id: 'c_bang_thanh', ten: 'Băng Thanh', hex: '#B0C4DE', anh: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-glacier-pdp-images-vi-vn-021233298.png' }
         ];
       } else {
         mauSac = [
@@ -1065,19 +1067,22 @@
     }).join('');
   }
 
-  // Bộ chọn Phiên bản có checkmark xanh ở góc dưới phải (Screenshot 1)
+  // Bộ chọn Phiên bản có checkmark xanh ở góc dưới phải (Chuẩn Hoàng Hà Mobile Screenshot)
   function renderVersionSelector(prod) {
     const container = document.getElementById('product-versions-list');
     if (!container) return;
 
+    const cols = prod.phienBan && prod.phienBan.length === 2 ? 'grid-cols-2' : 'grid-cols-3';
+    container.className = `grid ${cols} gap-2.5`;
+
     container.innerHTML = prod.phienBan.map(v => {
       const isSelected = selectedVersion && selectedVersion.id === v.id;
       return `
-        <div class="variant-card flex-1 min-w-[130px] sm:min-w-[140px] relative p-2.5 sm:p-3 rounded-xl border-2 cursor-pointer transition-all flex flex-col justify-between ${isSelected ? 'selected' : 'border-slate-200 hover:border-blue-300 bg-white'}" onclick="window.selectVersion('${v.id}')">
+        <div class="variant-card relative p-2 sm:p-2.5 rounded-xl border-2 cursor-pointer transition-all flex flex-col justify-center items-center text-center overflow-hidden min-w-0 ${isSelected ? 'selected' : 'border-slate-200 hover:border-slate-300 bg-white'}" onclick="window.selectVersion('${v.id}')">
           <div class="font-bold variant-name-text text-slate-900 leading-snug whitespace-nowrap">${v.dungLuong}</div>
-          <div class="text-xs font-semibold text-rose-600 mt-1 tabular-nums whitespace-nowrap">${formatCurrency(v.gia)}</div>
+          <div class="variant-price-text text-xs font-semibold text-rose-600 mt-1 tabular-nums whitespace-nowrap">${formatCurrency(v.gia)}</div>
           
-          <div class="check-badge ${isSelected ? 'flex' : 'hidden'} absolute bottom-0 right-0 w-4 h-4 bg-[#008774] text-white rounded-tl-md items-center justify-center text-[9px]">
+          <div class="check-badge ${isSelected ? 'flex' : 'hidden'} absolute bottom-0 right-0 w-3.5 h-3.5 sm:w-4 sm:h-4 bg-[#008774] text-white rounded-tl-md items-center justify-center text-[8px] sm:text-[9px]">
             <i class="fa-solid fa-check"></i>
           </div>
         </div>
@@ -1096,19 +1101,22 @@
     }
   };
 
-  // Bộ chọn Màu sắc có checkmark xanh ở góc dưới phải (Screenshot 1)
+  // Bộ chọn Màu sắc có checkmark xanh ở góc dưới phải (Chuẩn Hoàng Hà Mobile Screenshot)
   function renderColorSelector(prod) {
     const container = document.getElementById('product-colors-list');
     if (!container) return;
 
+    const cols = prod.mauSac && prod.mauSac.length === 2 ? 'grid-cols-2' : 'grid-cols-3';
+    container.className = `grid ${cols} gap-2.5`;
+
     container.innerHTML = prod.mauSac.map(c => {
       const isSelected = selectedColor && selectedColor.id === c.id;
       return `
-        <div class="color-card flex-1 min-w-[120px] sm:min-w-[130px] relative p-2 rounded-xl border-2 cursor-pointer transition-all flex items-center gap-2 ${isSelected ? 'selected' : 'border-slate-200 hover:border-blue-300 bg-white'}" onclick="window.selectColor('${c.id}')">
-          <img src="${c.anh}" alt="${c.ten}" class="w-7 h-7 object-contain rounded flex-shrink-0" onerror="this.src='https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png';" />
-          <div class="font-semibold color-name-text text-slate-900 whitespace-nowrap">${c.ten}</div>
+        <div class="color-card relative p-2 rounded-xl border-2 cursor-pointer transition-all flex items-center gap-2 overflow-hidden min-w-0 ${isSelected ? 'selected' : 'border-slate-200 hover:border-slate-300 bg-white'}" onclick="window.selectColor('${c.id}')" title="${c.ten}">
+          <img src="${c.anh}" alt="${c.ten}" class="w-6 h-6 sm:w-7 sm:h-7 object-contain rounded flex-shrink-0" onerror="this.src='https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png';" />
+          <div class="font-semibold color-name-text text-slate-900 whitespace-nowrap truncate min-w-0 flex-1 text-left">${c.ten}</div>
           
-          <div class="check-badge ${isSelected ? 'flex' : 'hidden'} absolute bottom-0 right-0 w-4 h-4 bg-[#008774] text-white rounded-tl-md items-center justify-center text-[9px]">
+          <div class="check-badge ${isSelected ? 'flex' : 'hidden'} absolute bottom-0 right-0 w-3.5 h-3.5 sm:w-4 sm:h-4 bg-[#008774] text-white rounded-tl-md items-center justify-center text-[8px] sm:text-[9px]">
             <i class="fa-solid fa-check"></i>
           </div>
         </div>

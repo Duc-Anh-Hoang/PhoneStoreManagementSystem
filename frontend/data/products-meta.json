@@ -147526,35 +147526,59 @@
     "nhanHieu": "Apple",
     "tenLoai": "Điện thoại",
     "tenNhom": "Điện thoại",
-    "donGia": 38490000,
-    "giaGoc": 41569000,
+    "donGia": 41790000,
+    "giaGoc": 44990000,
     "anhChinh": "https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png",
     "phienBan": [
       {
         "id": "v_256",
         "dungLuong": "256GB",
-        "gia": 38490000,
-        "giaGoc": 41569000
+        "gia": 41790000,
+        "giaGoc": 44990000
       },
       {
         "id": "v_512",
         "dungLuong": "512GB",
-        "gia": 42990000,
-        "giaGoc": 46990000
+        "gia": 47990000,
+        "giaGoc": 51990000
+      },
+      {
+        "id": "v_1tb",
+        "dungLuong": "1TB",
+        "gia": 59990000,
+        "giaGoc": 63990000
+      },
+      {
+        "id": "v_2tb",
+        "dungLuong": "2TB",
+        "gia": 78990000,
+        "giaGoc": 82990000
       }
     ],
     "mauSac": [
       {
-        "id": "c_titan",
-        "ten": "Titan Tự Nhiên",
-        "hex": "#A8A29E",
+        "id": "c_den",
+        "ten": "Đen",
+        "hex": "#1E293B",
+        "anh": "https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png"
+      },
+      {
+        "id": "c_bac",
+        "ten": "Bạc",
+        "hex": "#E2E8F0",
+        "anh": "https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-glacier-pdp-images-vi-vn-021233298.png"
+      },
+      {
+        "id": "c_burgundy",
+        "ten": "Đỏ Burgundy",
+        "hex": "#5B1E31",
         "anh": "https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png"
       },
       {
-        "id": "c_sa",
-        "ten": "Titan Sa Mạc",
-        "hex": "#D7C4B7",
-        "anh": "https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png"
+        "id": "c_bang_thanh",
+        "ten": "Băng Thanh",
+        "hex": "#B0C4DE",
+        "anh": "https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-glacier-pdp-images-vi-vn-021233298.png"
       }
     ],
     "thongSoNoiBat": {

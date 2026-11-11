@@ -230,8 +230,8 @@
   }
 
   function formatVND(num) {
-    if (!num || isNaN(num)) return '0 ₫';
-    return Number(num).toLocaleString('vi-VN') + ' ₫';
+    if (!num || isNaN(num)) return '0₫';
+    return Number(num).toLocaleString('vi-VN') + '₫';
   }
 
   function getCartFinalTotal() {
@@ -614,7 +614,43 @@
 
   // Render giỏ hàng chính
   window.renderCart = function () {
-    const items = getCart();
+    let items = getCart();
+    if ((!items || items.length === 0) && new URLSearchParams(window.location.search).get('demo') === '1') {
+      const demoItems = [
+        {
+          id: 'DEMO_1',
+          maHang: 'SP_S25U',
+          name: 'Samsung Galaxy S25 Ultra - 256GB',
+          tenHang: 'Samsung Galaxy S25 Ultra - 256GB',
+          price: 25790000,
+          donGia: 25790000,
+          oldPrice: 33990000,
+          giaGoc: 33990000,
+          qty: 1,
+          soLuong: 1,
+          variantName: '256GB',
+          colorName: 'Mặc định',
+          image: 'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png'
+        },
+        {
+          id: 'DEMO_2',
+          maHang: 'SP_A18',
+          name: 'Samsung Galaxy A18 - 128GB',
+          tenHang: 'Samsung Galaxy A18 - 128GB',
+          price: 6690000,
+          donGia: 6690000,
+          oldPrice: 7190000,
+          giaGoc: 7190000,
+          qty: 1,
+          soLuong: 1,
+          variantName: '128GB',
+          colorName: 'Mặc định',
+          image: 'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-tim-1.png'
+        }
+      ];
+      saveCart(demoItems);
+      items = demoItems;
+    }
     const cartContainer = document.getElementById('cart-items-container');
     const emptyState = document.getElementById('cart-empty-state');
     const mainContent = document.getElementById('cart-main-content');

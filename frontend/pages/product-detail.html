@@ -57,10 +57,10 @@
       transform: translateY(-1px);
     }
 
-    /* Selected Badge Checkmark (Chuẩn Screenshot 1) */
+    /* Selected Badge Checkmark (Chuẩn Hoàng Hà Mobile & Screenshot) */
     .variant-card.selected, .color-card.selected {
-      border-color: #0057B7 !important;
-      background-color: #f0f6fe !important;
+      border-color: #008774 !important;
+      background-color: #ffffff !important;
     }
     .variant-card.selected .check-badge, .color-card.selected .check-badge {
       display: flex !important;
@@ -163,11 +163,17 @@
       line-height: 1.45 !important;
     }
     .color-card .color-name-text {
-      font-size: 13px !important;
+      font-size: 12.5px !important;
       white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
     }
     .variant-card .variant-name-text {
-      font-size: 14px !important;
+      font-size: 13.5px !important;
+      white-space: nowrap !important;
+    }
+    .variant-card .variant-price-text {
+      font-size: 12px !important;
       white-space: nowrap !important;
     }
 
@@ -690,7 +696,7 @@
             <label class="block text-xs sm:text-sm font-bold text-slate-800 mb-2">
               Phiên bản
             </label>
-            <div id="product-versions-list" class="flex flex-wrap gap-2.5">
+            <div id="product-versions-list" class="grid grid-cols-3 gap-2.5">
               <!-- Render động -->
             </div>
           </div>
@@ -700,7 +706,7 @@
             <label class="block text-xs sm:text-sm font-bold text-slate-800 mb-2">
               Màu sắc
             </label>
-            <div id="product-colors-list" class="flex flex-wrap gap-2.5">
+            <div id="product-colors-list" class="grid grid-cols-3 gap-2.5">
               <!-- Render động -->
             </div>
           </div>
@@ -1345,7 +1351,7 @@
   <script src="../js/compare.js?v=1.0"></script>
   <script src="../js/trade-in.js?v=1.0"></script>
   <script src="../js/cart.js?v=6.0"></script>
-  <script src="../js/product-detail.js?v=6.7"></script>
+  <script src="../js/product-detail.js?v=6.8"></script>
   <script src="../js/recently-viewed.js?v=6.5"></script>
   <script src="../js/floating-promo.js?v=1.2"></script>
 

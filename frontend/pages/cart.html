@@ -47,6 +47,9 @@
     .scrollbar-thin::-webkit-scrollbar-track { background: #F1F5F9; border-radius: 9999px; }
     .scrollbar-thin::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 9999px; }
     .scrollbar-thin::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+    #summary-final-total, #summary-subtotal, #summary-member-discount, #summary-voucher-discount, #vietqr-amount-text, #ewallet-amount-text {
+      white-space: nowrap !important;
+    }
   </style>
 </head>
 <body class="min-h-full flex flex-col bg-[#F8FAFC] text-slate-800 antialiased selection:bg-[#0057B7] selection:text-white">
@@ -446,7 +449,7 @@
     </div>
 
     <!-- MAIN NỘI DUNG GIỎ HÀNG -->
-    <main class="flex-1 max-w-6xl w-full mx-auto px-3 sm:px-6 py-6 sm:py-8">
+    <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 py-6 sm:py-8">
       
       <!-- KHUNG ĐẶT HÀNG CHÍNH -->
       <div id="cart-main-wrapper" class="space-y-6">
@@ -611,8 +614,8 @@
         <!-- BỐ CỤC 2 CỘT KHI CÓ SẢN PHẨM -->
         <div id="cart-main-content" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           
-          <!-- CỘT TRÁI (~65% / lg:col-span-7 xl:col-span-8): Freeship bar + Chọn tất cả + Danh sách sản phẩm + Giao hàng + Thanh toán -->
-          <div class="lg:col-span-7 xl:col-span-8 space-y-4">
+          <!-- CỘT TRÁI (~60% / lg:col-span-7 xl:col-span-7): Freeship bar + Chọn tất cả + Danh sách sản phẩm + Giao hàng + Thanh toán -->
+          <div class="lg:col-span-7 xl:col-span-7 space-y-4">
 
             <!-- THANH TIẾN TRÌNH FREESHIP -->
             <div id="freeship-progress-bar-container" class="bg-gradient-to-r from-blue-50/90 via-indigo-50/50 to-white rounded-2xl p-3.5 border border-blue-200/90 shadow-2xs space-y-2">
@@ -779,8 +782,8 @@
                   <label class="p-4 flex items-center justify-between cursor-pointer">
                     <div class="flex items-center gap-3">
                       <input type="radio" name="payment_method" value="banking" checked class="w-4 h-4 text-[#0057B7] focus:ring-[#0057B7]">
-                      <div class="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center flex-shrink-0 text-base shadow-sm">
-                        <i class="fa-solid fa-qrcode"></i>
+                      <div class="h-10 px-2.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs flex items-center justify-center flex-shrink-0">
+                        <img src="../images/payment/vietqr.svg" alt="VietQR 247" class="h-6 w-auto object-contain">
                       </div>
                       <div>
                         <div class="font-extrabold text-xs sm:text-sm text-slate-900 flex items-center gap-2">
@@ -801,18 +804,22 @@
                         <span>Chọn ngân hàng thụ hưởng:</span>
                         <span class="text-[11px] text-emerald-600 font-semibold"><i class="fa-solid fa-bolt"></i> Miễn phí chuyển tiền 24/7</span>
                       </div>
-                      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
-                        <button type="button" onclick="window.selectVietQrBank('MB')" id="bank-btn-MB" class="vietqr-bank-chip p-2 rounded-xl border-2 border-blue-600 bg-blue-50/60 font-bold text-blue-900 flex items-center justify-center gap-2 cursor-pointer transition-all">
-                          <span class="w-2 h-2 rounded-full bg-blue-600"></span> MBBank
+                      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs">
+                        <button type="button" onclick="window.selectVietQrBank('MB')" id="bank-btn-MB" class="vietqr-bank-chip p-2.5 rounded-xl border-2 border-blue-600 bg-blue-50/60 font-bold text-blue-900 flex items-center justify-center gap-2 cursor-pointer transition-all hover:shadow-xs">
+                          <img src="../images/payment/mbbank.png" alt="MBBank" class="h-5 w-auto object-contain">
+                          <span>MBBank</span>
                         </button>
-                        <button type="button" onclick="window.selectVietQrBank('VCB')" id="bank-btn-VCB" class="vietqr-bank-chip p-2 rounded-xl border border-slate-200 bg-white hover:border-slate-300 font-medium text-slate-700 flex items-center justify-center gap-2 cursor-pointer transition-all">
-                          Vietcombank
+                        <button type="button" onclick="window.selectVietQrBank('VCB')" id="bank-btn-VCB" class="vietqr-bank-chip p-2.5 rounded-xl border border-slate-200 bg-white hover:border-slate-300 font-medium text-slate-700 flex items-center justify-center gap-2 cursor-pointer transition-all hover:shadow-xs">
+                          <img src="../images/payment/vietcombank.png" alt="VCB" class="h-5 w-auto object-contain">
+                          <span>Vietcombank</span>
                         </button>
-                        <button type="button" onclick="window.selectVietQrBank('TCB')" id="bank-btn-TCB" class="vietqr-bank-chip p-2 rounded-xl border border-slate-200 bg-white hover:border-slate-300 font-medium text-slate-700 flex items-center justify-center gap-2 cursor-pointer transition-all">
-                          Techcombank
+                        <button type="button" onclick="window.selectVietQrBank('TCB')" id="bank-btn-TCB" class="vietqr-bank-chip p-2.5 rounded-xl border border-slate-200 bg-white hover:border-slate-300 font-medium text-slate-700 flex items-center justify-center gap-2 cursor-pointer transition-all hover:shadow-xs">
+                          <img src="../images/payment/techcombank.png" alt="Techcombank" class="h-5 w-auto object-contain">
+                          <span>Techcombank</span>
                         </button>
-                        <button type="button" onclick="window.selectVietQrBank('ACB')" id="bank-btn-ACB" class="vietqr-bank-chip p-2 rounded-xl border border-slate-200 bg-white hover:border-slate-300 font-medium text-slate-700 flex items-center justify-center gap-2 cursor-pointer transition-all">
-                          ACB
+                        <button type="button" onclick="window.selectVietQrBank('ACB')" id="bank-btn-ACB" class="vietqr-bank-chip p-2.5 rounded-xl border border-slate-200 bg-white hover:border-slate-300 font-medium text-slate-700 flex items-center justify-center gap-2 cursor-pointer transition-all hover:shadow-xs">
+                          <img src="../images/payment/acb.png" alt="ACB" class="h-5 w-auto object-contain">
+                          <span>ACB</span>
                         </button>
                       </div>
                     </div>
@@ -851,7 +858,7 @@
                         <div class="flex items-center justify-between pb-1.5 border-b border-slate-100">
                           <span class="text-slate-500">Số tiền:</span>
                           <div class="flex items-center gap-2">
-                            <strong id="vietqr-amount-text" class="text-rose-600 font-black text-sm sm:text-base">0 ₫</strong>
+                            <strong id="vietqr-amount-text" class="text-rose-600 font-black text-sm sm:text-base">0₫</strong>
                             <button type="button" onclick="window.copyText(document.getElementById('vietqr-amount-text')?.textContent.replace(/[^0-9]/g,''), 'Số tiền')" class="px-2 py-0.5 rounded bg-rose-100 hover:bg-rose-200 text-rose-700 font-bold text-[11px] transition-colors cursor-pointer">
                               <i class="fa-regular fa-copy"></i> Copy
                             </button>
@@ -876,8 +883,16 @@
                   <label class="p-4 flex items-center justify-between cursor-pointer">
                     <div class="flex items-center gap-3">
                       <input type="radio" name="payment_method" value="momo" class="w-4 h-4 text-[#0057B7] focus:ring-[#0057B7]">
-                      <div class="w-9 h-9 rounded-xl bg-pink-100 text-[#A50064] flex items-center justify-center flex-shrink-0 text-base shadow-sm">
-                        <i class="fa-solid fa-wallet"></i>
+                      <div class="flex items-center -space-x-1.5 flex-shrink-0">
+                        <div class="w-8 h-8 rounded-lg bg-white border border-slate-200 shadow-2xs p-0.5 overflow-hidden flex items-center justify-center z-30">
+                          <img src="../images/payment/momo.png" alt="MoMo" class="w-full h-full object-contain rounded">
+                        </div>
+                        <div class="w-8 h-8 rounded-lg bg-white border border-slate-200 shadow-2xs p-0.5 overflow-hidden flex items-center justify-center z-20">
+                          <img src="../images/payment/vnpay.png" alt="VNPAY" class="w-full h-full object-contain rounded">
+                        </div>
+                        <div class="w-8 h-8 rounded-lg bg-white border border-slate-200 shadow-2xs p-0.5 overflow-hidden flex items-center justify-center z-10">
+                          <img src="../images/payment/zalopay.png" alt="ZaloPay" class="w-full h-full object-contain rounded">
+                        </div>
                       </div>
                       <div>
                         <div class="font-extrabold text-xs sm:text-sm text-slate-900 flex items-center gap-2">
@@ -892,15 +907,18 @@
                   <!-- Khung QR Ví Điện Tử (chỉ hiện khi chọn momo) -->
                   <div id="ewallet-instructions-box" class="hidden p-4 bg-white border-t border-slate-100 space-y-4">
                     <!-- Chọn ví điện tử -->
-                    <div class="grid grid-cols-3 gap-2 text-xs">
+                    <div class="grid grid-cols-3 gap-2.5 text-xs">
                       <button type="button" onclick="window.selectEWallet('momo')" id="ewallet-btn-momo" class="ewallet-tab-btn p-2 rounded-xl border-2 border-pink-600 bg-pink-50/60 font-bold text-pink-900 flex items-center justify-center gap-2 cursor-pointer transition-all">
-                        <i class="fa-solid fa-wallet text-pink-600"></i> MoMo QR
+                        <img src="../images/payment/momo.png" alt="MoMo" class="w-5 h-5 object-contain rounded">
+                        <span>MoMo QR</span>
                       </button>
                       <button type="button" onclick="window.selectEWallet('vnpay')" id="ewallet-btn-vnpay" class="ewallet-tab-btn p-2 rounded-xl border border-slate-200 bg-white hover:border-slate-300 font-medium text-slate-700 flex items-center justify-center gap-2 cursor-pointer transition-all">
-                        <i class="fa-solid fa-qrcode text-blue-600"></i> VNPAY-QR
+                        <img src="../images/payment/vnpay.png" alt="VNPAY" class="w-5 h-5 object-contain rounded">
+                        <span>VNPAY-QR</span>
                       </button>
                       <button type="button" onclick="window.selectEWallet('zalopay')" id="ewallet-btn-zalopay" class="ewallet-tab-btn p-2 rounded-xl border border-slate-200 bg-white hover:border-slate-300 font-medium text-slate-700 flex items-center justify-center gap-2 cursor-pointer transition-all">
-                        <i class="fa-solid fa-bolt text-cyan-600"></i> ZaloPay
+                        <img src="../images/payment/zalopay.png" alt="ZaloPay" class="w-5 h-5 object-contain rounded">
+                        <span>ZaloPay</span>
                       </button>
                     </div>
 
@@ -914,7 +932,7 @@
                         </div>
                         <div class="text-slate-600">Số tài khoản ví: <strong class="font-mono text-slate-900 font-bold">0901234567</strong></div>
                         <div class="text-slate-600">Tên người nhận: <strong class="text-slate-900 font-bold">SAMA MOBILE STORE</strong></div>
-                        <div class="text-slate-600">Số tiền: <strong id="ewallet-amount-text" class="text-rose-600 font-black text-sm">0 ₫</strong></div>
+                        <div class="text-slate-600">Số tiền: <strong id="ewallet-amount-text" class="text-rose-600 font-black text-sm">0₫</strong></div>
                         <div class="text-[11px] text-slate-500">Mở app <span id="ewallet-app-name" class="font-bold text-slate-800">MoMo</span> &gt; Chọn "Quét Mã" để thanh toán ngay.</div>
                       </div>
                     </div>
@@ -926,15 +944,15 @@
                   <label class="p-4 flex items-center justify-between cursor-pointer">
                     <div class="flex items-center gap-3">
                       <input type="radio" name="payment_method" value="cod" class="w-4 h-4 text-[#0057B7] focus:ring-[#0057B7]">
-                      <div class="w-9 h-9 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center flex-shrink-0 text-base shadow-sm">
-                        <i class="fa-solid fa-money-bill-wave"></i>
+                      <div class="h-10 w-12 rounded-xl bg-amber-50 border border-amber-200/90 shadow-2xs flex items-center justify-center flex-shrink-0 p-1">
+                        <img src="../images/payment/cod.svg" alt="COD" class="w-full h-full object-contain">
                       </div>
                       <div>
                         <div class="font-extrabold text-xs sm:text-sm text-slate-900">Thanh toán khi nhận hàng (COD)</div>
                         <div class="text-[11px] text-slate-500 mt-0.5">Kiểm tra sản phẩm, tem niêm phong và hóa đơn rồi mới thanh toán tiền mặt</div>
                       </div>
                     </div>
-                    <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded-lg hidden sm:inline">Kiểm hàng trước</span>
+                    <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded-lg hidden sm:inline border border-emerald-200">Kiểm hàng trước</span>
                   </label>
                 </div>
 
@@ -943,14 +961,17 @@
                   <label class="p-4 flex items-center justify-between cursor-pointer">
                     <div class="flex items-center gap-3">
                       <input type="radio" name="payment_method" value="card" class="w-4 h-4 text-[#0057B7] focus:ring-[#0057B7]">
-                      <div class="w-9 h-9 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center flex-shrink-0 text-base shadow-sm">
-                        <i class="fa-regular fa-credit-card"></i>
+                      <div class="flex items-center gap-1.5 flex-shrink-0">
+                        <img src="../images/payment/visa.svg" alt="Visa" class="h-7 w-auto object-contain">
+                        <img src="../images/payment/mastercard.svg" alt="MasterCard" class="h-7 w-auto object-contain">
+                        <img src="../images/payment/jcb.svg" alt="JCB" class="h-7 w-auto object-contain">
                       </div>
                       <div>
-                        <div class="font-extrabold text-xs sm:text-sm text-slate-900">Thẻ Visa, MasterCard & Trả góp 0%</div>
+                        <div class="font-extrabold text-xs sm:text-sm text-slate-900">Thẻ Visa, MasterCard, JCB & Trả góp 0%</div>
                         <div class="text-[11px] text-slate-500 mt-0.5">Bảo mật chuẩn quốc tế 3D-Secure qua 25 ngân hàng đối tác liên kết</div>
                       </div>
                     </div>
+                    <span class="text-[10px] font-bold text-indigo-700 bg-indigo-50 px-2 py-1 rounded-lg hidden sm:inline border border-indigo-200">Trả góp 0%</span>
                   </label>
                 </div>
 
@@ -959,8 +980,8 @@
 
           </div>
 
-          <!-- CỘT PHẢI (4-5 Cột): Tóm tắt đơn hàng & Nút Xác Nhận Thanh Toán (Sticky) -->
-          <div class="lg:col-span-5 xl:col-span-4 space-y-5 lg:sticky lg:top-24">
+          <!-- CỘT PHẢI (~40% / lg:col-span-5 xl:col-span-5): Tóm tắt đơn hàng & Nút Xác Nhận Thanh Toán (Sticky) -->
+          <div class="lg:col-span-5 xl:col-span-5 space-y-5 lg:sticky lg:top-24">
             
             <!-- KHỐI MÃ GIẢM GIÁ / VOUCHER -->
             <div class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs space-y-3">
@@ -992,42 +1013,57 @@
 
             <!-- BẢNG TÍNH TIỀN CHI TIẾT -->
             <div class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/80 shadow-card-sleek space-y-4">
-              <h4 class="font-extrabold text-sm sm:text-base text-slate-900 pb-3 border-b border-slate-100">
-                Chi Tiết Thanh Toán
-              </h4>
+              <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                <h4 class="font-extrabold text-sm sm:text-base text-slate-900 flex items-center gap-2">
+                  <span class="w-2 h-4 rounded-full bg-[#0057B7]"></span>
+                  <span>Chi Tiết Thanh Toán</span>
+                </h4>
+                <span class="text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">Giá tốt nhất</span>
+              </div>
 
-              <div class="space-y-2.5 text-xs sm:text-sm text-slate-600">
-                <div class="flex justify-between">
+              <div class="space-y-3 text-xs sm:text-sm text-slate-600">
+                <div class="flex justify-between items-center">
                   <span>Tổng tiền hàng:</span>
-                  <strong id="summary-subtotal" class="text-slate-900">0 ₫</strong>
+                  <strong id="summary-subtotal" class="text-slate-900 tabular-nums font-bold whitespace-nowrap">0₫</strong>
                 </div>
 
-                <div class="flex justify-between text-emerald-600">
-                  <span>Giảm giá Sama Member (1%):</span>
-                  <strong id="summary-member-discount">-0 ₫</strong>
+                <div class="flex justify-between items-center text-emerald-600">
+                  <span class="flex items-center gap-1.5">
+                    <i class="fa-solid fa-crown text-amber-500 text-xs"></i>
+                    <span>Giảm giá Sama Member (1%):</span>
+                  </span>
+                  <strong id="summary-member-discount" class="tabular-nums font-bold whitespace-nowrap">-0₫</strong>
                 </div>
 
-                <div id="summary-voucher-row" class="hidden flex justify-between text-emerald-600">
-                  <span>Voucher giảm giá:</span>
-                  <strong id="summary-voucher-discount">-0 ₫</strong>
+                <div id="summary-voucher-row" class="hidden flex justify-between items-center text-emerald-600">
+                  <span class="flex items-center gap-1.5">
+                    <i class="fa-solid fa-ticket text-emerald-500 text-xs"></i>
+                    <span>Voucher giảm giá:</span>
+                  </span>
+                  <strong id="summary-voucher-discount" class="tabular-nums font-bold whitespace-nowrap">-0₫</strong>
                 </div>
 
-                <div class="flex justify-between">
+                <div class="flex justify-between items-center">
                   <span>Phí vận chuyển:</span>
-                  <span class="text-emerald-600 font-bold">Miễn phí (0 ₫)</span>
+                  <span class="text-emerald-600 font-bold flex items-center gap-1 whitespace-nowrap">
+                    <i class="fa-solid fa-truck-fast text-xs"></i>
+                    <span>Miễn phí (0₫)</span>
+                  </span>
                 </div>
 
-                <div class="pt-3 border-t border-slate-200 flex justify-between items-baseline">
-                  <div>
-                    <div class="font-black text-sm sm:text-base text-slate-900">Tổng thanh toán:</div>
-                    <div class="text-[10px] text-slate-400 font-normal italic">(Đã bao gồm thuế VAT 10%)</div>
+                <div class="pt-3.5 border-t border-slate-200 flex justify-between items-center gap-3">
+                  <div class="min-w-0">
+                    <div class="font-extrabold text-sm sm:text-base text-slate-900 whitespace-nowrap">Tổng thanh toán:</div>
+                    <div class="text-[11px] text-slate-400 font-normal italic whitespace-nowrap">(Đã bao gồm thuế VAT 10%)</div>
                   </div>
-                  <strong id="summary-final-total" class="font-black text-xl sm:text-2xl text-[#E0052B]">0 ₫</strong>
+                  <div class="text-right flex-shrink-0">
+                    <strong id="summary-final-total" class="font-black text-xl sm:text-2xl text-[#E0052B] tabular-nums tracking-tight whitespace-nowrap block">0₫</strong>
+                  </div>
                 </div>
               </div>
 
               <!-- Nút xác nhận đặt hàng -->
-              <button type="button" id="btn-submit-order" onclick="window.submitCheckoutOrder(event)" class="w-full py-4 rounded-2xl bg-[#0057B7] hover:bg-[#00483D] text-white font-black text-sm sm:text-base shadow-xl shadow-blue-900/20 active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer">
+              <button type="button" id="btn-submit-order" onclick="window.submitCheckoutOrder(event)" class="w-full py-4 rounded-2xl bg-[#0057B7] hover:bg-[#004494] text-white font-black text-sm sm:text-base shadow-xl shadow-blue-900/20 active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer">
                 <span>XÁC NHẬN ĐẶT HÀNG</span>
                 <i class="fa-solid fa-arrow-right text-xs"></i>
               </button>
@@ -1374,13 +1410,13 @@
         <!-- Cột 4: Thanh toán & Đối tác -->
         <div class="space-y-3">
           <h5 class="text-sm font-bold text-white uppercase tracking-wider">Đối Tác Thanh Toán</h5>
-          <div class="grid grid-cols-3 gap-2 text-slate-300">
-            <div class="bg-slate-800 p-2 rounded-lg text-center font-bold text-xs">VISA</div>
-            <div class="bg-slate-800 p-2 rounded-lg text-center font-bold text-xs">MASTER</div>
-            <div class="bg-slate-800 p-2 rounded-lg text-center font-bold text-xs">NAPAS</div>
-            <div class="bg-slate-800 p-2 rounded-lg text-center font-bold text-xs">VNPAY</div>
-            <div class="bg-slate-800 p-2 rounded-lg text-center font-bold text-xs">MOMO</div>
-            <div class="bg-slate-800 p-2 rounded-lg text-center font-bold text-xs">ZALO</div>
+          <div class="grid grid-cols-3 gap-2">
+            <div class="bg-white p-1 rounded-lg flex items-center justify-center h-8 shadow-2xs"><img src="../images/payment/visa.svg" alt="Visa" class="h-5 w-auto object-contain"></div>
+            <div class="bg-white p-1 rounded-lg flex items-center justify-center h-8 shadow-2xs"><img src="../images/payment/mastercard.svg" alt="MasterCard" class="h-5 w-auto object-contain"></div>
+            <div class="bg-white p-1 rounded-lg flex items-center justify-center h-8 shadow-2xs"><img src="../images/payment/jcb.svg" alt="JCB" class="h-5 w-auto object-contain"></div>
+            <div class="bg-white p-1 rounded-lg flex items-center justify-center h-8 shadow-2xs"><img src="../images/payment/vnpay.png" alt="VNPAY" class="h-5 w-auto object-contain"></div>
+            <div class="bg-white p-1 rounded-lg flex items-center justify-center h-8 shadow-2xs"><img src="../images/payment/momo.png" alt="MoMo" class="h-5 w-auto object-contain"></div>
+            <div class="bg-white p-1 rounded-lg flex items-center justify-center h-8 shadow-2xs"><img src="../images/payment/zalopay.png" alt="ZaloPay" class="h-5 w-auto object-contain"></div>
           </div>
           <div class="pt-2 text-xs">
             <span class="block text-slate-400 mb-1.5 font-bold">Vận chuyển hỏa tốc:</span>
@@ -1467,7 +1503,7 @@
   <script src="../js/order-signalr.js?v=1.2"></script>
   <script src="../js/auth.js?v=4.0"></script>
   <script src="../js/customer-portal.js?v=4.0"></script>
-  <script src="../js/cart-page.js?v=6.3"></script>
+  <script src="../js/cart-page.js?v=6.4"></script>
   <script src="../js/recently-viewed.js?v=6.5"></script>
   <script src="../js/floating-promo.js?v=1.2"></script>
 

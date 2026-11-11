@@ -458,173 +458,216 @@
   <!-- =========================================================================
        2. BREADCRUMBS
        ========================================================================= -->
-  <nav class="bg-white border-b border-slate-200 text-xs text-slate-500 py-2">
+  <nav class="bg-white border-b border-slate-200 text-xs text-slate-500 py-2.5">
     <div class="max-w-[1200px] mx-auto px-4 sm:px-6 flex items-center gap-2">
-      <a href="../index.html" class="hover:text-[#1D4ED8] font-normal">Trang chủ</a>
-      <i class="fa-solid fa-chevron-right text-[9px] text-slate-300"></i>
-      <a href="category.html" class="hover:text-[#1D4ED8] font-normal">Điện thoại</a>
+      <a href="../index.html" class="hover:text-[#0057B7] font-normal transition-colors">Trang chủ</a>
       <i class="fa-solid fa-chevron-right text-[9px] text-slate-300"></i>
       <span class="text-slate-800 font-semibold">Thu cũ đổi mới</span>
     </div>
   </nav>
 
   <!-- =========================================================================
-       3. HERO BANNER THU CŨ ĐỔI MỚI (BANNER CAO CẤP TỪ SẢN PHẨM JSON)
+       3. PAGE HEADING & HERO BANNER CAROUSEL (DÀI NGANG CHUẨN HOÀNG HÀ MOBILE)
        ========================================================================= -->
-  <section class="bg-[#F5F7FA] py-4 sm:py-6">
+  <div class="max-w-[1460px] mx-auto px-4 sm:px-6 pt-5 pb-2.5">
+    <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">Thu cũ đổi mới lên đời sản phẩm</h1>
+  </div>
+
+    <!-- =========================================================================
+       HERO BANNER: SAMAMOBILE TRADE-IN (BẢN CHUẨN XANH DƯƠNG PANORAMIC)
+       ========================================================================= -->
+    <!-- =========================================================================
+       HERO BANNER CAROUSEL: SAMAMOBILE TRADE-IN (CHUẨN TỶ LỆ 1024:304)
+       ========================================================================= -->
+  <section class="max-w-[1400px] mx-auto px-3 sm:px-6 mb-8">
+    <div id="trade-in-banner-carousel" class="relative overflow-hidden rounded-2xl sm:rounded-[22px] shadow-xl border border-slate-200/80 group bg-slate-100 w-full aspect-[1024/304]">
+      
+      <!-- Slide 1: ĐỊNH GIÁ SIÊU HỜI - SẮM MỚI SIÊU LỜI -->
+      <div class="trade-in-slide absolute inset-0 w-full h-full transition-opacity duration-700 ease-in-out opacity-100 z-10 cursor-pointer" onclick="scrollToCalc()">
+        <img src="../images/banner/trade-in-banner-1.jpg"
+             alt="SamaMobile Thu Cũ Đổi Mới - Định Giá Siêu Hời Sắm Mới Siêu Lời"
+             class="w-full h-full object-cover object-center select-none">
+      </div>
+
+      <!-- Slide 2: THU CŨ LÊN ĐỜI - TIẾT KIỆM TỚI 5 TRIỆU ĐỒNG -->
+      <div class="trade-in-slide absolute inset-0 w-full h-full transition-opacity duration-700 ease-in-out opacity-0 z-0 cursor-pointer pointer-events-none" onclick="scrollToCalc()">
+        <img src="../images/banner/trade-in-banner-2.jpg"
+             alt="SamaMobile Thu Cũ Lên Đời - Tiết Kiệm Tới 5 Triệu Đồng"
+             class="w-full h-full object-cover object-center select-none">
+      </div>
+
+      <!-- Nút Prev (<) -->
+      <button type="button" onclick="prevTradeInBanner(event)" class="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/90 hover:bg-white text-slate-800 shadow-lg flex items-center justify-center text-sm sm:text-base transition-all opacity-80 group-hover:opacity-100 hover:scale-105 cursor-pointer backdrop-blur-md border border-slate-200/60" aria-label="Banner trước">
+        <i class="fa-solid fa-chevron-left text-slate-700"></i>
+      </button>
+
+      <!-- Nút Next (>) -->
+      <button type="button" onclick="nextTradeInBanner(event)" class="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/90 hover:bg-white text-slate-800 shadow-lg flex items-center justify-center text-sm sm:text-base transition-all opacity-80 group-hover:opacity-100 hover:scale-105 cursor-pointer backdrop-blur-md border border-slate-200/60" aria-label="Banner kế tiếp">
+        <i class="fa-solid fa-chevron-right text-slate-700"></i>
+      </button>
+
+      <!-- Pagination Dots -->
+      <div class="absolute bottom-2.5 sm:bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 sm:gap-2 bg-black/25 backdrop-blur-md px-3 py-1 rounded-full border border-white/25">
+        <button type="button" onclick="goToTradeInBanner(0)" id="banner-dot-0" class="banner-dot-pill h-1.5 sm:h-2 w-6 sm:w-8 rounded-full bg-[#0066FF] transition-all cursor-pointer shadow-sm"></button>
+        <button type="button" onclick="goToTradeInBanner(1)" id="banner-dot-1" class="banner-dot-pill h-1.5 sm:h-2 w-2 sm:w-2.5 rounded-full bg-white/80 hover:bg-white transition-all cursor-pointer shadow-sm"></button>
+      </div>
+
+    </div>
+  </section>
+
+<!-- =========================================================================
+       SECTION 1: SẢN PHẨM THU CŨ (CHUẨN HÌNH 2 CỦA HOÀNG HÀ - TONE XANH DƯƠNG #0057B7)
+       ========================================================================= -->
+  <section id="san-pham-thu-cu" class="py-8 bg-white border-b border-slate-200 scroll-mt-28">
     <div class="max-w-[1200px] mx-auto px-4 sm:px-6">
       
-      <!-- Card Banner Lớn Siêu Ấn Tượng -->
-      <div class="relative overflow-hidden rounded-[20px] border border-blue-900/40 shadow-xl"
-           style="background: radial-gradient(circle at 85% 20%, rgba(37, 99, 235, 0.45), transparent 50%), linear-gradient(135deg, #071530 0%, #0B1F4B 50%, #102E6E 100%);">
+      <!-- Filter Bar -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-slate-100">
         
-        <!-- Hiệu ứng ánh sáng nền chìm -->
-        <div class="absolute -top-24 -left-24 w-72 h-72 rounded-full bg-blue-500/15 blur-3xl pointer-events-none"></div>
-        <div class="absolute -bottom-24 -right-24 w-80 h-80 rounded-full bg-indigo-500/20 blur-3xl pointer-events-none"></div>
+        <!-- Sắp xếp theo -->
+        <div class="flex items-center gap-2 flex-wrap">
+          <span class="text-xs sm:text-sm font-medium text-slate-500">Sắp xếp theo:</span>
+          <button type="button" onclick="setUsedSort('featured')" id="btn-sort-featured" class="used-sort-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-[#0057B7] text-white border border-[#0057B7] transition-all cursor-pointer">
+            Nổi bật
+          </button>
+          <button type="button" onclick="setUsedSort('price-asc')" id="btn-sort-price-asc" class="used-sort-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 transition-all cursor-pointer">
+            Giá tăng dần
+          </button>
+          <button type="button" onclick="setUsedSort('price-desc')" id="btn-sort-price-desc" class="used-sort-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 transition-all cursor-pointer">
+            Giá giảm dần
+          </button>
+        </div>
 
-        <div class="relative z-10 p-6 sm:p-8 lg:p-10">
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            
-            <!-- CỘT TRÁI (7 CỘT): TIÊU ĐỀ, TRỢ GIÁ, LỢI ÍCH & NÚT HÀNH ĐỘNG -->
-            <div class="lg:col-span-7 space-y-4 text-white">
-              
-              <!-- Badge chương trình nổi bật -->
-              <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-400/40 text-amber-300 text-xs font-bold tracking-wide">
-                <i class="fa-solid fa-fire text-amber-400 animate-pulse"></i>
-                <span>ĐẠI TIỆC THU CŨ LÊN ĐỜI 2026 • TRỢ GIÁ ĐỘC QUYỀN</span>
+        <!-- Hãng & Tìm kiếm -->
+        <div class="flex items-center gap-2.5 flex-wrap">
+          <div class="flex items-center gap-1.5" id="used-brand-filter-group">
+            <button type="button" onclick="filterUsedBrand('ALL')" class="used-brand-pill px-3 py-1 rounded-lg text-xs font-semibold bg-[#0057B7] text-white transition-all cursor-pointer">Tất cả</button>
+            <button type="button" onclick="filterUsedBrand('Apple')" class="used-brand-pill px-3 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all cursor-pointer">Apple</button>
+            <button type="button" onclick="filterUsedBrand('Samsung')" class="used-brand-pill px-3 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all cursor-pointer">Samsung</button>
+            <button type="button" onclick="filterUsedBrand('Xiaomi')" class="used-brand-pill px-3 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all cursor-pointer">Xiaomi</button>
+            <button type="button" onclick="filterUsedBrand('OPPO')" class="used-brand-pill px-3 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all cursor-pointer">OPPO</button>
+          </div>
+
+          <div class="relative w-full sm:w-56">
+            <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+            <input type="text" id="search-used-input" oninput="onSearchUsedDevices()" placeholder="Tìm dòng máy cần thu..." class="w-full pl-8 pr-3 py-1.5 rounded-lg border border-slate-200 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-[#0057B7]">
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Grid 5 Cột Chuẩn Hình 2 -->
+      <div id="used-devices-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3.5 sm:gap-4 mt-6">
+        <!-- Render động 5 cột bằng JavaScript -->
+      </div>
+
+      <!-- Nút xem thêm sản phẩm thu cũ -->
+      <div class="text-center mt-8" id="load-more-used-container">
+        <button type="button" onclick="toggleLoadMoreUsed()" id="btn-load-more-used" class="px-8 py-3 rounded-full border border-slate-300 hover:border-[#0057B7] hover:text-[#0057B7] bg-white text-slate-700 font-semibold text-xs sm:text-sm shadow-xs transition-all cursor-pointer">
+          Xem thêm <span id="used-count-remaining">15</span> sản phẩm thu cũ <i class="fa-solid fa-chevron-down ml-1 text-xs"></i>
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       SECTION 2: TOP MÁY ĐƯỢC LÊN ĐỜI NHIỀU NHẤT (CHUẨN HÌNH 3)
+       ========================================================================= -->
+  <section id="top-len-doi" class="py-10 bg-[#F5F7FA] border-b border-slate-200 scroll-mt-28">
+    <div class="max-w-[1200px] mx-auto px-4 sm:px-6">
+      
+      <div class="text-center max-w-2xl mx-auto mb-7">
+        <h2 class="text-xl sm:text-2xl font-black text-slate-900 uppercase tracking-tight">
+          TOP MÁY ĐƯỢC LÊN ĐỜI NHIỀU NHẤT
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-500 mt-1 font-normal">
+          Những dòng máy đang được khách hàng chọn để thu cũ đổi mới nhiều nhất hiện nay.
+        </p>
+      </div>
+
+      <!-- Grid 5 Cột máy lên đời -->
+      <div id="top-len-doi-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3.5 sm:gap-4">
+        <!-- Render động từ JS -->
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       SECTION 3: ĐỔI MÁY TRONG 3 BƯỚC (CHUẨN HÌNH 3)
+       ========================================================================= -->
+  <section id="quy-trinh-3-buoc" class="py-12 bg-white border-b border-slate-200 scroll-mt-28">
+    <div class="max-w-[1200px] mx-auto px-4 sm:px-6">
+      
+      <div class="text-center max-w-2xl mx-auto mb-9">
+        <h2 class="text-xl sm:text-2xl font-black text-slate-900 uppercase tracking-tight">
+          ĐỔI MÁY TRONG 3 BƯỚC
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-500 mt-1 font-normal">
+          Quy trình với 3 bước đơn giản, minh bạch và hoàn toàn bảo mật thông tin khách hàng.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <!-- Bước 1 -->
+        <div class="relative p-6 rounded-2xl bg-white border border-slate-200 shadow-sm hover:border-[#0066FF] hover:shadow-lg transition-all group flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-3xl font-black text-[#0066FF]/25 group-hover:text-[#0066FF] transition-colors">01</span>
+              <div class="w-12 h-12 rounded-xl bg-blue-50 text-[#0066FF] flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-mobile-screen-button"></i>
               </div>
-
-              <!-- Tiêu đề H1 lớn -->
-              <h1 class="text-2xl sm:text-3xl lg:text-[38px] font-bold tracking-tight leading-tight text-white">
-                Thu Cũ Đổi Mới — Trợ Giá Đến <span class="text-amber-400 drop-shadow-md tabular-nums">2.500.000₫</span>
-              </h1>
-
-              <p class="text-sm sm:text-[15px] text-blue-100/90 leading-relaxed max-w-xl font-normal">
-                Lên đời các siêu phẩm đỉnh cao <strong class="text-white">iPhone 18 Pro Max</strong>, <strong class="text-white">Galaxy S26 Ultra</strong> và <strong class="text-white">Xiaomi Leica</strong> từ hệ thống SamaMobile. Thẩm định công khai chỉ 10 phút, không ép giá, hỗ trợ trả góp 0% tiền bù!
-              </p>
-
-              <!-- 4 Cam kết dạng Glassmorphism pills -->
-              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
-                <div class="px-2.5 py-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-center">
-                  <div class="text-amber-400 text-xs font-bold mb-0.5"><i class="fa-solid fa-stopwatch mr-1"></i> 10 Phút</div>
-                  <div class="text-[11px] text-blue-100 font-medium">Thẩm định nhanh</div>
-                </div>
-                <div class="px-2.5 py-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-center">
-                  <div class="text-emerald-400 text-xs font-bold mb-0.5"><i class="fa-solid fa-shield-check mr-1"></i> Thu Mọi Máy</div>
-                  <div class="text-[11px] text-blue-100 font-medium">Mọi tình trạng cũ</div>
-                </div>
-                <div class="px-2.5 py-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-center">
-                  <div class="text-rose-400 text-xs font-bold mb-0.5"><i class="fa-solid fa-tags mr-1"></i> +2.5 Triệu</div>
-                  <div class="text-[11px] text-blue-100 font-medium">Trợ giá hóa đơn</div>
-                </div>
-                <div class="px-2.5 py-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-center">
-                  <div class="text-sky-300 text-xs font-bold mb-0.5"><i class="fa-solid fa-credit-card mr-1"></i> 0% Lãi Suất</div>
-                  <div class="text-[11px] text-blue-100 font-medium">Trả góp tiền bù</div>
-                </div>
-              </div>
-
-              <!-- Cụm CTA Nút bấm -->
-              <div class="flex flex-wrap items-center gap-3 pt-2">
-                <a href="#trade-in-calculator" class="h-11 px-6 rounded-[10px] bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-600 text-white font-semibold text-sm inline-flex items-center gap-2 shadow-lg shadow-blue-900/40 hover:scale-[1.02] active:scale-98 transition-all cursor-pointer">
-                  <i class="fa-solid fa-calculator text-xs"></i>
-                  <span>Định giá & Tính tiền bù ngay</span>
-                </a>
-                <button type="button" onclick="openProductSelectorModal()" class="h-11 px-5 rounded-[10px] bg-white/10 hover:bg-white/20 text-white font-semibold text-sm inline-flex items-center gap-2 border border-white/20 transition-all cursor-pointer">
-                  <i class="fa-solid fa-mobile-screen text-xs"></i>
-                  <span>Xem tất cả máy mới</span>
-                </button>
-              </div>
-
             </div>
+            <h3 class="font-bold text-base text-slate-900 mb-2">Chọn máy muốn lên đời & máy cũ</h3>
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+              Tra cứu mức định giá ước tính trên website hoặc mang thiết bị tới bất kỳ showroom nào thuộc hệ thống SamaMobile.
+            </p>
+          </div>
+          <div class="mt-5 pt-3 border-t border-slate-100 text-xs text-[#0066FF] font-semibold flex items-center gap-1">
+            <span>Tra cứu online chỉ mất 1 phút</span>
+            <i class="fa-solid fa-arrow-right text-[10px]"></i>
+          </div>
+        </div>
 
-            <!-- CỘT PHẢI (5 CỘT): SHOWCASE CÁC SẢN PHẨM HOT TRỰC TIẾP TỪ JSON -->
-            <div class="lg:col-span-5 space-y-3">
-              <div class="flex items-center justify-between text-xs text-blue-200">
-                <span class="font-bold uppercase tracking-wider flex items-center gap-1.5 text-amber-300">
-                  <i class="fa-solid fa-crown"></i> TOP SẢN PHẨM LÊN ĐỜI NHIỀU NHẤT
-                </span>
-                <span class="text-[11px] text-slate-300">Dữ liệu từ kho hàng</span>
+        <!-- Bước 2 -->
+        <div class="relative p-6 rounded-2xl bg-white border border-slate-200 shadow-sm hover:border-[#0066FF] hover:shadow-lg transition-all group flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-3xl font-black text-[#0066FF]/25 group-hover:text-[#0066FF] transition-colors">02</span>
+              <div class="w-12 h-12 rounded-xl bg-blue-50 text-[#0066FF] flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-magnifying-glass-chart"></i>
               </div>
-
-              <!-- Danh sách 3 card máy hot từ JSON với ảnh & giá thật -->
-              <div class="space-y-2.5">
-                
-                <!-- Máy 1: iPhone 18 Pro Max 256GB (MH101) -->
-                <div onclick="selectTargetProductFromBanner('MH101')" class="group p-3 rounded-2xl bg-white/10 hover:bg-white/15 backdrop-blur-md border border-white/15 hover:border-blue-400/60 transition-all cursor-pointer flex items-center gap-3.5 shadow-sm">
-                  <div class="w-16 h-16 rounded-xl bg-white p-1 flex items-center justify-center flex-shrink-0 shadow-inner group-hover:scale-105 transition-transform">
-                    <img src="https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png"
-                         alt="iPhone 18 Pro Max"
-                         onerror="this.onerror=null; this.src='../images/banner/iphone-18-cat-082925094.png';"
-                         class="w-full h-full object-contain">
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <div class="flex items-center gap-1.5 mb-0.5">
-                      <span class="px-1.5 py-0.2 rounded text-[10px] font-bold bg-amber-400/20 text-amber-300 border border-amber-300/30">Trợ giá +2.5TR</span>
-                      <span class="text-[10px] text-blue-200 uppercase font-semibold">Apple</span>
-                    </div>
-                    <h3 class="font-semibold text-sm text-white truncate group-hover:text-amber-300 transition-colors">iPhone 18 Pro Max 256GB</h3>
-                    <div class="flex items-baseline gap-2 mt-0.5">
-                      <span class="text-sm font-bold text-rose-400 tabular-nums">41.490.000₫</span>
-                      <span class="text-xs text-slate-300">Chỉ bù từ: <strong class="text-emerald-300 font-bold tabular-nums">~15.7TR</strong></span>
-                    </div>
-                  </div>
-                  <button type="button" class="w-8 h-8 rounded-lg bg-blue-500/20 group-hover:bg-blue-600 text-white flex items-center justify-center text-xs flex-shrink-0 transition-all">
-                    <i class="fa-solid fa-arrow-right"></i>
-                  </button>
-                </div>
-
-                <!-- Máy 2: Samsung Galaxy S26 Ultra (MH113) -->
-                <div onclick="selectTargetProductFromBanner('MH113')" class="group p-3 rounded-2xl bg-white/10 hover:bg-white/15 backdrop-blur-md border border-white/15 hover:border-blue-400/60 transition-all cursor-pointer flex items-center gap-3.5 shadow-sm">
-                  <div class="w-16 h-16 rounded-xl bg-white p-1 flex items-center justify-center flex-shrink-0 shadow-inner group-hover:scale-105 transition-transform">
-                    <img src="https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-tim-1.png"
-                         alt="Samsung Galaxy S26 Ultra"
-                         onerror="this.onerror=null; this.src='https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png';"
-                         class="w-full h-full object-contain">
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <div class="flex items-center gap-1.5 mb-0.5">
-                      <span class="px-1.5 py-0.2 rounded text-[10px] font-bold bg-amber-400/20 text-amber-300 border border-amber-300/30">Trợ giá +2.0TR</span>
-                      <span class="text-[10px] text-blue-200 uppercase font-semibold">Samsung</span>
-                    </div>
-                    <h3 class="font-semibold text-sm text-white truncate group-hover:text-amber-300 transition-colors">Samsung Galaxy S26 Ultra</h3>
-                    <div class="flex items-baseline gap-2 mt-0.5">
-                      <span class="text-sm font-bold text-rose-400 tabular-nums">30.890.000₫</span>
-                      <span class="text-xs text-slate-300">Chỉ bù từ: <strong class="text-emerald-300 font-bold tabular-nums">~7.6TR</strong></span>
-                    </div>
-                  </div>
-                  <button type="button" class="w-8 h-8 rounded-lg bg-blue-500/20 group-hover:bg-blue-600 text-white flex items-center justify-center text-xs flex-shrink-0 transition-all">
-                    <i class="fa-solid fa-arrow-right"></i>
-                  </button>
-                </div>
-
-                <!-- Máy 3: Galaxy Z Fold8 5G (MH114) -->
-                <div onclick="selectTargetProductFromBanner('MH114')" class="group p-3 rounded-2xl bg-white/10 hover:bg-white/15 backdrop-blur-md border border-white/15 hover:border-blue-400/60 transition-all cursor-pointer flex items-center gap-3.5 shadow-sm">
-                  <div class="w-16 h-16 rounded-xl bg-white p-1 flex items-center justify-center flex-shrink-0 shadow-inner group-hover:scale-105 transition-transform">
-                    <img src="https://i.hoanghamobile.vn/Uploads/2026/07/22/samsung-galaxy-z-fold8-tim-8-153436602.png"
-                         alt="Galaxy Z Fold8"
-                         onerror="this.onerror=null; this.src='https://i.hoanghamobile.vn/Uploads/2026/03/17/a57-violet-1.png';"
-                         class="w-full h-full object-contain">
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <div class="flex items-center gap-1.5 mb-0.5">
-                      <span class="px-1.5 py-0.2 rounded text-[10px] font-bold bg-amber-400/20 text-amber-300 border border-amber-300/30">Trợ giá +2.5TR</span>
-                      <span class="text-[10px] text-blue-200 uppercase font-semibold">Flagship Gập</span>
-                    </div>
-                    <h3 class="font-semibold text-sm text-white truncate group-hover:text-amber-300 transition-colors">Samsung Galaxy Z Fold8 5G</h3>
-                    <div class="flex items-baseline gap-2 mt-0.5">
-                      <span class="text-sm font-bold text-rose-400 tabular-nums">39.990.000₫</span>
-                      <span class="text-xs text-slate-300">Chỉ bù từ: <strong class="text-emerald-300 font-bold tabular-nums">~14.2TR</strong></span>
-                    </div>
-                  </div>
-                  <button type="button" class="w-8 h-8 rounded-lg bg-blue-500/20 group-hover:bg-blue-600 text-white flex items-center justify-center text-xs flex-shrink-0 transition-all">
-                    <i class="fa-solid fa-arrow-right"></i>
-                  </button>
-                </div>
-
-              </div>
-
             </div>
+            <h3 class="font-bold text-base text-slate-900 mb-2">Thẩm định máy chỉ trong 10 phút</h3>
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+              Kỹ thuật viên kiểm tra công khai mọi tính năng trước mắt khách hàng. Định giá đúng tình trạng thực tế, cam kết không ép giá.
+            </p>
+          </div>
+          <div class="mt-5 pt-3 border-t border-slate-100 text-xs text-[#0066FF] font-semibold flex items-center gap-1">
+            <span>Minh bạch, không bóc tách máy</span>
+            <i class="fa-solid fa-check text-[10px]"></i>
+          </div>
+        </div>
 
+        <!-- Bước 3 -->
+        <div class="relative p-6 rounded-2xl bg-white border border-slate-200 shadow-sm hover:border-[#0066FF] hover:shadow-lg transition-all group flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-3xl font-black text-[#0066FF]/25 group-hover:text-[#0066FF] transition-colors">03</span>
+              <div class="w-12 h-12 rounded-xl bg-blue-50 text-[#0066FF] flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-gift"></i>
+              </div>
+            </div>
+            <h3 class="font-bold text-base text-slate-900 mb-2">Nhận máy mới & thanh toán chênh lệch</h3>
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+              Bù khoản tiền chênh lệch hoặc trả góp 0% lãi suất. Hỗ trợ chuyển dữ liệu miễn phí và bảo mật tuyệt đối 100%.
+            </p>
+          </div>
+          <div class="mt-5 pt-3 border-t border-slate-100 text-xs text-[#0066FF] font-semibold flex items-center gap-1">
+            <span>Hỗ trợ trả góp 0% lãi suất</span>
+            <i class="fa-solid fa-shield text-[10px]"></i>
           </div>
         </div>
 
@@ -634,124 +677,376 @@
   </section>
 
   <!-- =========================================================================
-       4. BỘ TÍNH TOÁN ĐỊNH GIÁ & TIỀN BÙ (CONTAINER 1200PX, CARD 14PX, FONT 15PX)
+       SECTION 4: MÁY GÌ CŨNG THU – LÊN ĐỜI DỄ DÀNG (CHUẨN HÌNH 4)
        ========================================================================= -->
-  <main id="trade-in-calculator" class="flex-1 py-6 sm:py-8">
+  <section id="thu-may-nat" class="py-12 bg-[#F5F7FA] border-b border-slate-200 scroll-mt-28">
     <div class="max-w-[1200px] mx-auto px-4 sm:px-6">
       
+      <div class="text-center max-w-2xl mx-auto mb-9">
+        <h2 class="text-xl sm:text-2xl font-black text-slate-900 uppercase tracking-tight">
+          MÁY GÌ CŨNG THU – LÊN ĐỜI DỄ DÀNG
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-500 mt-1 font-normal">
+          Máy vỡ, máy hỏng vẫn có giá. Định giá nhanh, nhận tiền ngay hoặc đổi máy mới không cần bù thêm quá nhiều.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-stretch">
+        
+        <!-- Cột Trái: Poster Trợ Giá Bán Cũ Lên Đời Chuẩn Đồ Họa 3D (5 Cột) -->
+        <div class="lg:col-span-5 rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl border border-slate-200/80 bg-white flex items-center justify-center group">
+          <img src="../images/banner/trade-in-policy.jpg"
+               alt="Bán Cũ Lên Đời - Sốc OLA Trợ Giá - Nhanh Tiện Minh Bạch"
+               class="w-full h-full object-cover rounded-2xl sm:rounded-3xl group-hover:scale-[1.02] transition-transform duration-500 select-none">
+        </div>
+
+        <!-- Cột Phải: Form Đăng Ký Tư Vấn (7 Cột) -->
+        <div class="lg:col-span-7 bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-2.5 pb-4 mb-5 border-b border-slate-100">
+              <div class="w-9 h-9 rounded-xl bg-blue-50 text-[#0057B7] flex items-center justify-center text-base">
+                <i class="fa-solid fa-file-signature"></i>
+              </div>
+              <div>
+                <h3 class="text-base sm:text-lg font-bold text-slate-900">Đăng ký tư vấn thu mua máy nát / cũ hỏng</h3>
+                <p class="text-xs text-slate-500 font-normal">Để lại thông tin, chuyên viên thẩm định sẽ liên hệ lại ngay trong 15 phút</p>
+              </div>
+            </div>
+
+            <form id="form-broken-device" onsubmit="submitBrokenDeviceForm(event)" class="space-y-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1.5">Họ và tên <span class="text-red-500">*</span></label>
+                  <input type="text" id="broken-name" required placeholder="Ví dụ: Nguyễn Văn A" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-[#0057B7] focus:ring-1 focus:ring-[#0057B7]">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1.5">Số điện thoại <span class="text-red-500">*</span></label>
+                  <input type="tel" id="broken-phone" required placeholder="Ví dụ: 0901234567" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-[#0057B7] focus:ring-1 focus:ring-[#0057B7]">
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1.5">Email (không bắt buộc)</label>
+                  <input type="email" id="broken-email" placeholder="email@gmail.com" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-[#0057B7]">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1.5">Khu vực bạn ở <span class="text-red-500">*</span></label>
+                  <select id="broken-city" onchange="onCityChange(this.value)" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:border-[#0057B7]">
+                    <option value="TP. Hồ Chí Minh">TP. Hồ Chí Minh</option>
+                    <option value="Hà Nội">Hà Nội</option>
+                    <option value="Đà Nẵng">Đà Nẵng</option>
+                    <option value="Bình Dương">Bình Dương</option>
+                    <option value="Cần Thơ">Cần Thơ</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1.5">Cửa hàng tiếp nhận gần nhất <span class="text-red-500">*</span></label>
+                <select id="broken-store" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:border-[#0057B7]">
+                  <option value="241 Lê Văn Việt, TP. Thủ Đức, TP.HCM">Chi nhánh 1: 241 Lê Văn Việt, Tăng Nhơn Phú B, TP. Thủ Đức, TP.HCM</option>
+                  <option value="55 Trần Quang Khải, Quận 1, TP.HCM">Chi nhánh 2: 55 Trần Quang Khải, Phường Tân Định, Quận 1, TP.HCM</option>
+                  <option value="122 Thái Hà, Đống Đa, Hà Nội">Chi nhánh 3: 122 Thái Hà, Phường Đống Đa, Hà Nội</option>
+                  <option value="153 Hàm Nghi, Thanh Khê, Đà Nẵng">Chi nhánh 4: 153 Hàm Nghi, Quận Thanh Khê, Đà Nẵng</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1.5">Thông tin máy cũ & Tình trạng lỗi <span class="text-red-500">*</span></label>
+                <textarea id="broken-details" rows="3" required placeholder="Nhập tên máy (ví dụ: iPhone 13 128GB, vỡ mặt kính, màn còn lên bình thường, pin 75%, vỏ xước...)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-[#0057B7]"></textarea>
+              </div>
+
+              <div class="pt-2">
+                <button type="submit" class="w-full py-3.5 rounded-xl bg-[#0066FF] hover:bg-[#0052cc] text-white font-bold text-sm tracking-wide shadow-md active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer">
+                  <i class="fa-solid fa-paper-plane text-xs"></i>
+                  <span>ĐĂNG KÝ TƯ VẤN NGAY</span>
+                </button>
+              </div>
+
+              <p class="text-[11px] text-slate-400 text-center flex items-center justify-center gap-1.5">
+                <i class="fa-solid fa-shield-halved text-emerald-600"></i>
+                <span>SamaMobile cam kết bảo mật 100% dữ liệu cá nhân của quý khách.</span>
+              </p>
+            </form>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       SECTION 5: CHÍNH SÁCH THU CŨ & VIDEO HƯỚNG DẪN (CHUẨN HÌNH 5)
+       ========================================================================= -->
+  <section id="chinh-sach-video" class="py-12 bg-white border-b border-slate-200 scroll-mt-28">
+    <div class="max-w-[1200px] mx-auto px-4 sm:px-6">
+      
+      <div class="text-center max-w-2xl mx-auto mb-9">
+        <h2 class="text-xl sm:text-2xl font-black text-slate-900 uppercase tracking-tight">
+          CHÍNH SÁCH THU CŨ & VIDEO HƯỚNG DẪN
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-500 mt-1 font-normal">
+          Quy định phân loại thiết bị rõ ràng, minh bạch quyền lợi khách hàng.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- Cột Trái: Bảng phân loại 4 loại máy & Chính sách -->
+        <div class="lg:col-span-7 space-y-4">
+          <div class="border border-slate-200 rounded-2xl overflow-hidden shadow-xs">
+            <div class="bg-slate-50 px-5 py-3.5 border-b border-slate-200 flex items-center justify-between">
+              <span class="font-bold text-sm text-slate-800 flex items-center gap-2">
+                <i class="fa-solid fa-list-check text-[#0066FF]"></i>
+                <span>Tiêu chuẩn phân loại máy cũ tại SamaMobile</span>
+              </span>
+              <span class="text-[11px] text-[#0066FF] font-semibold bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-200">
+                Minh bạch 100%
+              </span>
+            </div>
+
+            <div class="divide-y divide-slate-100 text-xs sm:text-sm">
+              <!-- Loại 1 -->
+              <div class="p-4 hover:bg-slate-50 transition-colors">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="px-2 py-0.5 rounded bg-blue-50 text-[#0066FF] border border-blue-200 font-bold text-xs">Loại 1</span>
+                  <span class="font-bold text-slate-900">Máy đẹp như mới (99% - Định giá tối đa)</span>
+                </div>
+                <p class="text-slate-600 leading-relaxed text-xs">
+                  Màn hình sáng đẹp không trầy xước, thân vỏ nguyên vẹn không cấn móp, đầy đủ chức năng hoạt động hoàn hảo, pin dung lượng > 85%, linh kiện zin nguyên bản.
+                </p>
+              </div>
+
+              <!-- Loại 2 -->
+              <div class="p-4 hover:bg-slate-50 transition-colors">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="px-2 py-0.5 rounded bg-blue-50 text-[#0066FF] border border-blue-200 font-bold text-xs">Loại 2</span>
+                  <span class="font-bold text-slate-900">Máy xước nhẹ thời gian (95% - Định giá cao)</span>
+                </div>
+                <p class="text-slate-600 leading-relaxed text-xs">
+                  Màn hình đẹp không ám ố, thân vỏ có vết xước dăm li ti khó thấy, chưa từng tháo sửa chữa lớn, pin > 80%, mọi tính năng camera/nghe gọi bình thường.
+                </p>
+              </div>
+
+              <!-- Loại 3 -->
+              <div class="p-4 hover:bg-slate-50 transition-colors">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="px-2 py-0.5 rounded bg-blue-50 text-[#0066FF] border border-blue-200 font-bold text-xs">Loại 3</span>
+                  <span class="font-bold text-slate-900">Máy cấn móp / trầy xước nhiều (85% - 90%)</span>
+                </div>
+                <p class="text-slate-600 leading-relaxed text-xs">
+                  Thân vỏ có vết cấn viền do rơi nhẹ, màn hình có vết xước lông mèo hoặc màn hơi ám nhẹ theo tuổi thọ máy. Các chức năng cơ bản nghe gọi, wifi vẫn hoạt động ổn định.
+                </p>
+              </div>
+
+              <!-- Loại 4 -->
+              <div class="p-4 hover:bg-slate-50 transition-colors">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="px-2 py-0.5 rounded bg-blue-50 text-[#0066FF] border border-blue-200 font-bold text-xs">Loại 4</span>
+                  <span class="font-bold text-slate-900">Máy vỡ kính / hỏng tính năng / mất nguồn</span>
+                </div>
+                <p class="text-slate-600 leading-relaxed text-xs">
+                  Máy vỡ kính lưng, hỏng màn hình, lỗi camera, chai pin nặng hoặc mất nguồn hoàn toàn. Thu mua lấy linh kiện với giá hỗ trợ thu đổi lên đời tốt nhất thị trường.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2 Cam kết cốt lõi -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="p-3.5 rounded-xl bg-blue-50/70 border border-blue-200/80 flex items-start gap-3">
+              <i class="fa-solid fa-lock text-[#0066FF] text-base mt-0.5"></i>
+              <div>
+                <div class="text-xs font-bold text-slate-900">Bảo mật dữ liệu tuyệt đối</div>
+                <div class="text-[11px] text-slate-600 mt-0.5">Kỹ thuật viên hỗ trợ sao lưu và thực hiện reset trắng dữ liệu trước sự chứng kiến của khách.</div>
+              </div>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-blue-50/70 border border-blue-200/80 flex items-start gap-3">
+              <i class="fa-solid fa-tags text-[#0066FF] text-base mt-0.5"></i>
+              <div>
+                <div class="text-xs font-bold text-slate-900">Trợ giá thêm tới 5.000.000đ</div>
+                <div class="text-[11px] text-slate-600 mt-0.5">Khoản trợ giá trực tiếp vào hóa đơn khi bạn mua các mẫu flagship mới tại showroom.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cột Phải: Video Hướng Dẫn -->
+        <div class="lg:col-span-5 space-y-3">
+          <div class="relative rounded-2xl overflow-hidden border border-slate-200 shadow-md group cursor-pointer bg-slate-900" onclick="openTradeInVideoModal()">
+            <img src="https://images.unsplash.com/photo-1592750475338-74b7b21085ab?q=80&w=800&auto=format&fit=crop" alt="Video hướng dẫn thu cũ" class="w-full h-64 sm:h-72 object-cover opacity-85 group-hover:scale-105 group-hover:opacity-95 transition-all duration-300">
+            
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
+
+            <div class="absolute inset-0 flex items-center justify-center">
+              <div class="relative flex items-center justify-center">
+                <span class="absolute w-16 h-16 rounded-full bg-blue-500/40 animate-ping"></span>
+                <div class="w-16 h-16 rounded-full bg-[#0066FF] text-white flex items-center justify-center text-xl shadow-xl group-hover:scale-110 group-hover:bg-blue-700 transition-all">
+                  <i class="fa-solid fa-play ml-1"></i>
+                </div>
+              </div>
+            </div>
+
+            <div class="absolute bottom-4 left-4 right-4 text-white">
+              <div class="flex items-center gap-2 mb-1.5">
+                <span class="px-2 py-0.5 rounded bg-[#0066FF] text-white text-[10px] font-bold uppercase tracking-wider">Video Hướng Dẫn</span>
+                <span class="text-xs text-slate-300"><i class="fa-regular fa-clock mr-1"></i> 2:45</span>
+              </div>
+              <h4 class="font-bold text-sm sm:text-base leading-snug drop-shadow-md">
+                Hướng dẫn chi tiết quy trình Thu Cũ Đổi Mới tại SamaMobile
+              </h4>
+            </div>
+          </div>
+
+          <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-600 flex items-center justify-between">
+            <span class="flex items-center gap-2">
+              <i class="fa-solid fa-circle-info text-[#0057B7]"></i>
+              <span>Quy trình thẩm định thực tế tại cửa hàng</span>
+            </span>
+            <button type="button" onclick="openTradeInVideoModal()" class="text-[#0057B7] font-bold hover:underline cursor-pointer">
+              Xem ngay <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       SECTION 6: BỘ TÍNH TOÁN ĐỊNH GIÁ & TIỀN BÙ TRỰC TIẾP (#dinh-gia-nhanh)
+       ========================================================================= -->
+  <main id="dinh-gia-nhanh" class="flex-1 py-8 sm:py-10 bg-[#F5F7FA] scroll-mt-28">
+    <div class="max-w-[1200px] mx-auto px-4 sm:px-6">
+      
+      <div class="text-center max-w-2xl mx-auto mb-8">
+        <span class="inline-block px-3 py-1 rounded-full bg-blue-100 text-[#0057B7] text-xs font-bold uppercase tracking-wider mb-2">Công cụ trực tuyến</span>
+        <h2 class="text-2xl sm:text-[28px] font-bold text-slate-900 tracking-tight">Bộ Tính Toán Định Giá & Tiền Bù</h2>
+        <p class="text-xs sm:text-sm text-slate-500 mt-1 font-normal">Chọn máy muốn lên đời và nhập thông tin máy cũ để nhận báo giá chênh lệch chính xác trong 3 giây.</p>
+      </div>
+
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         
-        <!-- ==================== CỘT TRÁI (7 CỘT): FORM CHỌN MÁY ==================== -->
+        <!-- CỘT TRÁI (7 CỘT): FORM CHỌN MÁY -->
         <div class="lg:col-span-7 space-y-6">
           
           <!-- BƯỚC 1: MÁY MỚI MUỐN LÊN ĐỜI -->
-          <div class="bg-white rounded-[14px] border border-slate-200 p-6 sm:p-7 shadow-xs">
+          <div class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-7 shadow-xs">
             <div class="flex items-center justify-between pb-3.5 mb-4 border-b border-slate-100">
-              <h2 class="text-lg sm:text-[19px] font-semibold text-[#0F172A] flex items-center gap-2">
-                <span class="w-6 h-6 rounded-full bg-[#1D4ED8] text-white flex items-center justify-center text-xs font-semibold tabular-nums">1</span>
+              <h2 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+                <span class="w-6 h-6 rounded-full bg-[#0057B7] text-white flex items-center justify-center text-xs font-semibold tabular-nums">1</span>
                 <span>Máy mới bạn muốn lên đời:</span>
               </h2>
-              <button type="button" onclick="openProductSelectorModal()" class="px-3 py-1.5 rounded-[10px] bg-blue-50 hover:bg-blue-100 text-[#1D4ED8] font-semibold text-xs border border-blue-200 transition-all cursor-pointer flex items-center gap-1.5">
+              <button type="button" onclick="openProductSelectorModal()" class="px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-[#0057B7] font-semibold text-xs border border-blue-200 transition-all cursor-pointer flex items-center gap-1.5">
                 <i class="fa-solid fa-list-check text-xs"></i>
                 <span>Đổi máy khác từ danh mục</span>
               </button>
             </div>
 
-            <!-- Card hiển thị máy mới đang chọn (Ảnh 96-120px tỉ lệ 1:1, Giá đỏ 20-24px) -->
-            <div class="p-4 rounded-[14px] bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-center gap-5">
+            <!-- Card hiển thị máy mới đang chọn -->
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-center gap-5">
               <div class="w-24 h-24 sm:w-28 sm:h-28 flex-shrink-0 bg-white rounded-xl p-2 border border-slate-200 flex items-center justify-center">
                 <img id="target-img" src="../images/banner/iphone-18-cat-082925094.png" alt="Máy mới" width="112" height="112" class="max-h-full max-w-full object-contain" onerror="this.onerror=null; this.src='../images/categories/dien-thoai.png'">
               </div>
               <div class="flex-1 min-w-0 text-center sm:text-left space-y-1.5">
-                <div class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-blue-100/80 text-[#1D4ED8] text-xs font-semibold">
+                <div class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-blue-100 text-[#0057B7] text-xs font-semibold">
                   <span id="target-brand-badge">Apple</span> • Chính hãng mới 100%
                 </div>
-                <h3 id="target-name" class="font-semibold text-base sm:text-lg text-[#0F172A] leading-snug">
-                  iPhone 16 Pro Max 256GB
+                <h3 id="target-name" class="font-bold text-base sm:text-lg text-slate-900 leading-snug">
+                  iPhone 18 Pro Max 256GB
                 </h3>
                 <div class="flex items-baseline justify-center sm:justify-start gap-2 pt-0.5">
-                  <span id="target-price" class="text-xl sm:text-2xl font-bold text-[#DC2626] tabular-nums">34.990.000₫</span>
-                  <span id="target-old-price" class="text-xs text-[#64748B] line-through tabular-nums">39.990.000₫</span>
-                  <span id="target-discount-badge" class="text-xs font-semibold text-[#DC2626]">-14%</span>
+                  <span id="target-price" class="text-xl sm:text-2xl font-bold text-[#DC2626] tabular-nums">41.490.000₫</span>
+                  <span id="target-old-price" class="text-xs text-slate-400 line-through tabular-nums">44.809.200₫</span>
+                  <span id="target-discount-badge" class="text-xs font-semibold text-[#DC2626]">-8%</span>
                 </div>
 
-                <!-- Tùy chọn dung lượng của máy mới -->
                 <div class="pt-2 border-t border-slate-200/80 flex items-center justify-center sm:justify-start gap-2 flex-wrap" id="target-capacity-options">
                   <!-- Render động -->
                 </div>
               </div>
             </div>
 
-            <!-- Nút mở popup chọn máy to rộng -->
-            <button type="button" onclick="openProductSelectorModal()" class="w-full mt-3 py-2.5 rounded-[10px] border border-dashed border-slate-300 hover:border-[#1D4ED8] hover:bg-blue-50/50 text-[#475569] hover:text-[#1D4ED8] text-xs sm:text-sm font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer">
+            <button type="button" onclick="openProductSelectorModal()" class="w-full mt-3 py-2.5 rounded-xl border border-dashed border-slate-300 hover:border-[#0057B7] hover:bg-blue-50/50 text-slate-600 hover:text-[#0057B7] text-xs sm:text-sm font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer">
               <i class="fa-solid fa-magnifying-glass text-slate-400"></i>
               <span>Xem toàn bộ mẫu mã máy mới trong hệ thống & đổi máy...</span>
             </button>
           </div>
 
-          <!-- BƯỚC 2: CHỌN MÁY CŨ ĐANG DÙNG (ẢNH 48X48PX, KHÔNG CUỘN LỒNG) -->
-          <div class="bg-white rounded-[14px] border border-slate-200 p-6 sm:p-7 shadow-xs space-y-5">
+          <!-- BƯỚC 2: CHỌN MÁY CŨ ĐANG DÙNG -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-7 shadow-xs space-y-5">
             <div class="flex items-center justify-between pb-3.5 border-b border-slate-100">
-              <h2 class="text-lg sm:text-[19px] font-semibold text-[#0F172A] flex items-center gap-2">
-                <span class="w-6 h-6 rounded-full bg-[#0F172A] text-white flex items-center justify-center text-xs font-semibold tabular-nums">2</span>
+              <h2 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+                <span class="w-6 h-6 rounded-full bg-slate-900 text-white flex items-center justify-center text-xs font-semibold tabular-nums">2</span>
                 <span>Thông tin máy cũ bạn đang dùng:</span>
               </h2>
-              <span class="text-xs text-[#64748B] font-medium">Định giá tham chiếu</span>
+              <span class="text-xs text-slate-500 font-medium">Định giá tham chiếu</span>
             </div>
 
             <!-- 1. Chọn Hãng -->
             <div>
-              <label class="block text-sm font-semibold text-[#0F172A] mb-2">1. Hãng sản xuất:</label>
-              <div class="grid grid-cols-3 gap-2.5 sm:gap-3" id="brand-buttons-container">
-                <button type="button" onclick="selectBrand('Apple')" id="btn-brand-Apple" class="brand-btn h-11 px-3 rounded-[10px] border text-sm font-semibold transition-all text-center cursor-pointer bg-[#1D4ED8] text-white border-[#1D4ED8] shadow-xs">
-                  <i class="fa-brands fa-apple mr-1"></i> Apple
+              <label class="block text-sm font-semibold text-slate-900 mb-2">1. Hãng sản xuất:</label>
+              <div class="grid grid-cols-4 gap-2 sm:gap-2.5" id="brand-buttons-container">
+                <button type="button" onclick="selectBrand('Apple')" id="btn-brand-Apple" class="brand-btn h-11 px-2 sm:px-3 rounded-xl border text-xs sm:text-sm font-semibold transition-all text-center cursor-pointer bg-[#0066FF] text-white border-[#0066FF] shadow-xs">
+                  <i class="fa-brands fa-apple mr-0.5 sm:mr-1"></i> Apple
                 </button>
-                <button type="button" onclick="selectBrand('Samsung')" id="btn-brand-Samsung" class="brand-btn h-11 px-3 rounded-[10px] border text-sm font-semibold transition-all text-center cursor-pointer bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100">
+                <button type="button" onclick="selectBrand('Samsung')" id="btn-brand-Samsung" class="brand-btn h-11 px-2 sm:px-3 rounded-xl border text-xs sm:text-sm font-semibold transition-all text-center cursor-pointer bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100">
                   Samsung
                 </button>
-                <button type="button" onclick="selectBrand('Xiaomi')" id="btn-brand-Xiaomi" class="brand-btn h-11 px-3 rounded-[10px] border text-sm font-semibold transition-all text-center cursor-pointer bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100">
+                <button type="button" onclick="selectBrand('Xiaomi')" id="btn-brand-Xiaomi" class="brand-btn h-11 px-2 sm:px-3 rounded-xl border text-xs sm:text-sm font-semibold transition-all text-center cursor-pointer bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100">
                   Xiaomi
+                </button>
+                <button type="button" onclick="selectBrand('OPPO')" id="btn-brand-OPPO" class="brand-btn h-11 px-2 sm:px-3 rounded-xl border text-xs sm:text-sm font-semibold transition-all text-center cursor-pointer bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100">
+                  OPPO
                 </button>
               </div>
             </div>
 
-            <!-- 2. Danh sách máy cũ (Không cuộn lồng, ảnh 48x48px, có tìm kiếm & nút xem thêm) -->
+            <!-- 2. Danh sách máy cũ -->
             <div>
               <div class="flex items-center justify-between mb-2">
-                <label class="text-sm font-semibold text-[#0F172A]">2. Chọn mẫu máy cũ của bạn:</label>
+                <label class="text-sm font-semibold text-slate-900">2. Chọn mẫu máy cũ của bạn:</label>
                 <div class="relative w-44 sm:w-56">
-                  <input type="text" id="used-search-input" oninput="filterUsedModels()" placeholder="Tìm model..." class="w-full pl-7 pr-3 py-1 rounded-[10px] border border-slate-300 text-xs text-slate-800 bg-white focus:outline-none focus:ring-1 focus:ring-[#1D4ED8]">
+                  <input type="text" id="used-search-input" oninput="filterUsedModels()" placeholder="Tìm model..." class="w-full pl-7 pr-3 py-1 rounded-lg border border-slate-300 text-xs text-slate-800 bg-white focus:outline-none focus:ring-1 focus:ring-[#0057B7]">
                   <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 text-[10px]"></i>
                 </div>
               </div>
               
-              <!-- Grid máy cũ: Hiện 6-9 máy trực quan, ảnh 48x48px tỉ lệ 1:1, không thanh cuộn con -->
               <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5" id="used-models-grid">
                 <!-- Render động -->
               </div>
 
-              <!-- Nút Xem thêm / Thu gọn danh sách máy cũ -->
               <div class="text-center mt-3" id="used-models-toggle-wrapper">
-                <button type="button" onclick="toggleMoreUsedModels()" id="btn-toggle-used-models" class="px-4 py-1.5 rounded-[10px] border border-slate-300 hover:border-[#1D4ED8] bg-white text-xs font-semibold text-slate-700 hover:text-[#1D4ED8] transition-colors cursor-pointer">
+                <button type="button" onclick="toggleMoreUsedModels()" id="btn-toggle-used-models" class="px-4 py-1.5 rounded-xl border border-slate-300 hover:border-[#0057B7] bg-white text-xs font-semibold text-slate-700 hover:text-[#0057B7] transition-colors cursor-pointer">
                   <span>Xem thêm các dòng máy khác</span>
                   <i class="fa-solid fa-chevron-down text-[10px] ml-1"></i>
                 </button>
               </div>
             </div>
 
-            <!-- 3. Chọn Dung Lượng của máy cũ -->
+            <!-- 3. Chọn Dung lượng -->
             <div>
-              <label class="block text-sm font-semibold text-[#0F172A] mb-2">3. Phiên bản bộ nhớ (Dung lượng):</label>
-              <div id="capacity-options" class="flex flex-wrap gap-2">
-                <!-- Nạp động -->
+              <label class="block text-sm font-semibold text-slate-900 mb-2">3. Dung lượng máy cũ:</label>
+              <div class="flex flex-wrap gap-2.5" id="capacity-options-container">
+                <!-- Render động -->
               </div>
             </div>
 
-            <!-- 4. Chọn Tình Trạng Ngoại Hình Máy Cũ (Chữ mô tả tối thiểu 13px) -->
+            <!-- 4. Chọn Tình trạng ngoại hình -->
             <div>
-              <label class="block text-sm font-semibold text-[#0F172A] mb-2">4. Tình trạng ngoại hình & hoạt động:</label>
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5" id="condition-options">
-                <!-- Nạp động -->
+              <div class="flex items-center justify-between mb-2">
+                <label class="text-sm font-semibold text-slate-900">4. Tình trạng máy của bạn:</label>
+                <a href="#chinh-sach-video" class="text-xs text-[#0057B7] hover:underline font-semibold flex items-center gap-1">
+                  <i class="fa-regular fa-circle-question"></i>
+                  <span>Xem chi tiết 4 loại máy</span>
+                </a>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5" id="condition-tiers-container">
+                <!-- Render động -->
               </div>
             </div>
 
@@ -759,183 +1054,106 @@
 
         </div>
 
-        <!-- ==================== CỘT PHẢI (5 CỘT): BẢNG DỰ TOÁN TIỀN BÙ ==================== -->
-        <div class="lg:col-span-5 lg:sticky lg:top-24">
-          <div class="bg-white rounded-[14px] border border-slate-300 p-6 sm:p-7 shadow-xs space-y-5">
+        <!-- CỘT PHẢI (5 CỘT): KẾT QUẢ ĐỊNH GIÁ & TIỀN BÙ -->
+        <div class="lg:col-span-5 sticky top-28 space-y-4">
+          
+          <div class="bg-white rounded-2xl border-2 border-[#0057B7] p-6 sm:p-7 shadow-lg space-y-4">
             
-            <!-- Header Bảng Tính -->
-            <div class="flex items-center justify-between pb-3.5 border-b border-slate-200">
-              <div class="flex items-center gap-2">
-                <i class="fa-solid fa-calculator text-[#1D4ED8] text-base"></i>
-                <h3 class="font-semibold text-base sm:text-lg text-[#0F172A]">Bảng Dự Toán Chi Phí Lên Đời</h3>
-              </div>
-              <span class="px-2.5 py-0.5 rounded-full bg-[#FEF3C7] text-amber-900 border border-amber-200 text-xs font-semibold">Trợ giá độc quyền</span>
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+              <h3 class="font-bold text-base sm:text-lg text-slate-900">Chi Tiết Bù Tiền Lên Đời</h3>
+              <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold">Cam kết tốt nhất</span>
             </div>
 
-            <!-- Chi tiết tính toán chi phí (Dùng tabular-nums cho toàn bộ số tiền) -->
             <div class="space-y-3 text-sm">
-              <div class="flex items-center justify-between">
-                <span class="text-[#475569]">Giá máy mới niêm yết:</span>
-                <span id="calc-target-price" class="font-semibold text-[#0F172A] tabular-nums">0₫</span>
+              <div class="flex items-center justify-between text-slate-600">
+                <span>Giá máy mới dự kiến:</span>
+                <span id="calc-target-price" class="font-bold text-slate-900 tabular-nums">0₫</span>
               </div>
 
-              <!-- Tiền máy cũ: Dùng xanh lá #16A34A cho số tiền giảm trừ -->
-              <div class="flex items-center justify-between font-medium">
-                <span class="flex items-center gap-1.5 text-slate-700">
-                  <i class="fa-solid fa-circle-check text-[#16A34A] text-sm"></i>
-                  <span>Giá thu mua máy cũ dự kiến:</span>
-                </span>
-                <span id="calc-used-price" class="font-semibold text-[#16A34A] tabular-nums">- 0₫</span>
+              <div class="flex items-center justify-between text-slate-600">
+                <span>Định giá máy cũ của bạn:</span>
+                <span id="calc-used-value" class="font-bold text-blue-700 tabular-nums text-base">- 0₫</span>
               </div>
 
-              <!-- Trợ giá SamaCare: Nền vàng nhạt #FEF3C7 -->
-              <div class="flex items-center justify-between text-amber-900 font-medium bg-[#FEF3C7] p-2.5 rounded-[10px] border border-amber-200">
+              <div class="flex items-center justify-between text-amber-700 bg-amber-50 p-2.5 rounded-xl border border-amber-200">
                 <span class="flex items-center gap-1.5 font-semibold text-xs sm:text-sm">
-                  <i class="fa-solid fa-gift text-amber-700"></i>
-                  <span>Trợ giá lên đời SamaCare:</span>
+                  <i class="fa-solid fa-gift text-amber-600"></i>
+                  <span>Trợ giá lên đời SamaMobile:</span>
                 </span>
-                <span id="calc-subsidy" class="font-bold text-[#16A34A] tabular-nums text-sm sm:text-base">- 0₫</span>
+                <span id="calc-subsidy" class="font-bold text-red-600 tabular-nums text-sm sm:text-base">- 2.500.000₫</span>
               </div>
 
-              <div class="pt-2 border-t border-slate-200 flex items-center justify-between text-xs sm:text-sm text-[#475569]">
+              <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-slate-700 text-xs">
                 <span>Tổng giá trị được giảm trừ:</span>
-                <span id="calc-total-benefit" class="font-semibold text-[#16A34A] tabular-nums text-sm">Tiết kiệm: 0₫</span>
+                <span id="calc-total-benefit" class="font-bold text-emerald-600 tabular-nums text-sm">Tiết kiệm: 0₫</span>
               </div>
 
-              <!-- KHỐI TIỀN BÙ NỔI BẬT NHẤT: 36-40PX, CHỮ ĐỎ #DC2626, NỀN TRẮNG -->
-              <div class="p-4 rounded-[14px] bg-white border-2 border-[#DC2626] shadow-xs mt-2">
-                <div class="text-xs font-semibold text-[#DC2626] uppercase tracking-wide">
+              <!-- KHỐI TIỀN BÙ NỔI BẬT NHẤT: CHỮ ĐỎ #DC2626 -->
+              <div class="p-4 rounded-xl bg-white border-2 border-[#DC2626] shadow-sm mt-2 text-center sm:text-left">
+                <div class="text-xs font-bold text-[#DC2626] uppercase tracking-wide">
                   Số tiền bạn chỉ cần bù / thanh toán:
                 </div>
-                <div id="calc-final-diff" class="text-3xl sm:text-4xl font-bold text-[#DC2626] tabular-nums leading-none my-2">
+                <div id="calc-final-diff" class="text-3xl sm:text-4xl font-black text-[#DC2626] tabular-nums leading-none my-2.5">
                   0₫
                 </div>
-                <div class="text-xs text-[#475569] flex items-center gap-1.5 font-normal">
-                  <i class="fa-solid fa-credit-card text-[#1D4ED8] text-xs"></i>
-                  <span>Hoặc trả góp 0% chỉ từ <strong id="calc-installment" class="text-[#1D4ED8] font-semibold tabular-nums">0₫</strong> / tháng (6 tháng)</span>
+                <div class="text-xs text-slate-600 flex items-center justify-center sm:justify-start gap-1.5 font-normal">
+                  <i class="fa-solid fa-credit-card text-[#0057B7] text-xs"></i>
+                  <span>Hoặc trả góp 0% chỉ từ <strong id="calc-installment" class="text-[#0057B7] font-bold tabular-nums">0₫</strong> / tháng (6 tháng)</span>
                 </div>
               </div>
             </div>
 
             <!-- Form Đăng Ký Giữ Suất -->
             <div class="pt-3 border-t border-slate-200 space-y-2.5">
-              <div class="text-xs font-semibold text-[#0F172A]">Đăng ký giữ mức trợ giá tốt nhất trong 7 ngày:</div>
-              <input type="text" id="booking-name" placeholder="Họ và tên của bạn" class="w-full px-3.5 py-2.5 rounded-[10px] border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1D4ED8]">
-              <input type="tel" id="booking-phone" placeholder="Số điện thoại nhận tin nhắn xác nhận *" class="w-full px-3.5 py-2.5 rounded-[10px] border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1D4ED8]">
-              <select id="booking-branch" class="w-full px-3.5 py-2.5 rounded-[10px] border border-slate-300 text-xs sm:text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#1D4ED8] bg-white">
+              <div class="text-xs font-bold text-slate-900">Đăng ký giữ mức trợ giá tốt nhất trong 7 ngày:</div>
+              <input type="text" id="booking-name" placeholder="Họ và tên của bạn" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0057B7]">
+              <input type="tel" id="booking-phone" placeholder="Số điện thoại nhận tin nhắn xác nhận *" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0057B7]">
+              <select id="booking-branch" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0057B7] bg-white">
                 <option value="241 Lê Văn Việt">Chi nhánh 1: 241 Lê Văn Việt, TP. Thủ Đức, TP.HCM</option>
-                <option value="124 Cầu Giấy">Chi nhánh 2: 124 Cầu Giấy, Hà Nội</option>
-                <option value="153 Nguyễn Văn Linh">Chi nhánh 3: 153 Nguyễn Văn Linh, Đà Nẵng</option>
+                <option value="55 Trần Quang Khải">Chi nhánh 2: 55 Trần Quang Khải, Quận 1, TP.HCM</option>
+                <option value="122 Thái Hà">Chi nhánh 3: 122 Thái Hà, Đống Đa, Hà Nội</option>
+                <option value="153 Hàm Nghi">Chi nhánh 4: 153 Hàm Nghi, Thanh Khê, Đà Nẵng</option>
               </select>
             </div>
 
-            <!-- Nút Chính: 16px, Chiều cao 48px, font-weight 600, Xanh #1D4ED8 -->
-            <button type="button" onclick="submitTradeInBooking()" class="w-full h-12 rounded-[10px] bg-[#1D4ED8] hover:bg-[#1e40af] text-white font-semibold text-base tracking-wide shadow-xs active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer">
+            <!-- Nút Chính: Xanh #0057B7 -->
+            <button type="button" onclick="submitTradeInBooking()" class="w-full h-12 rounded-xl bg-[#0057B7] hover:bg-[#004494] text-white font-bold text-base tracking-wide shadow-md active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer">
               <i class="fa-solid fa-arrows-rotate text-amber-300 text-sm"></i>
               <span>ĐĂNG KÝ THU CŨ LÊN ĐỜI NGAY</span>
             </button>
 
-            <!-- Chữ mô tả: 13px (không dưới 12px) -->
-            <p class="text-[13px] text-[#475569] text-center font-normal">
+            <p class="text-[12px] text-slate-500 text-center font-normal">
               Nhân viên kỹ thuật sẽ gọi lại tư vấn chi tiết trong 15 phút. Thẩm định công khai tại cửa hàng.
             </p>
 
           </div>
+
         </div>
 
       </div>
 
-      <!-- =========================================================================
-           5. BẢNG GIÁ THU CŨ THAM KHẢO (GỘP CỘT MÁY + DUNG LƯỢNG, DÒNG CAO 64PX, BẤM ĐƯỢC CẢ DÒNG)
-           ========================================================================= -->
-      <section class="mt-16 sm:mt-20 pt-8 border-t border-slate-200">
-        <div class="text-center max-w-2xl mx-auto mb-5">
-          <h2 class="text-2xl sm:text-[26px] font-bold text-[#0F172A]">Bảng Giá Thu Mua Tham Khảo Các Dòng Máy Hot 2026</h2>
-          <p class="text-sm text-[#475569] mt-1 font-normal">Cập nhật định kỳ theo thị trường. Bấm vào bất kỳ dòng nào để đưa máy vào bộ tính toán ngay.</p>
-        </div>
-
-        <!-- Banner thông báo gói trợ giá phía trên bảng thay vì lặp cột -->
-        <div class="mb-4 p-3 rounded-[10px] bg-[#FEF3C7] border border-amber-200 text-amber-900 text-xs sm:text-sm font-medium flex items-center gap-2 max-w-3xl mx-auto justify-center">
-          <i class="fa-solid fa-gift text-amber-700 text-base"></i>
-          <span><strong>Đặc quyền:</strong> Tất cả sản phẩm dưới đây đều được trợ giá thêm từ <strong>1.000.000₫ – 2.500.000₫</strong> khi lên đời tại SamaMobile!</span>
-        </div>
-
-        <div class="bg-white rounded-[14px] border border-slate-200 overflow-hidden shadow-xs">
-          <div class="overflow-x-auto">
-            <table class="w-full text-left text-sm">
-              <thead class="bg-slate-100 text-slate-700 uppercase font-semibold text-xs tracking-wider border-b border-slate-200">
-                <tr>
-                  <th class="py-3.5 px-5">Mẫu máy & Dung lượng</th>
-                  <th class="py-3.5 px-5 text-right">Giá Loại 1 (Máy đẹp 99%)</th>
-                  <th class="py-3.5 px-5 text-right">Giá Loại 2 (Xước nhẹ 95%)</th>
-                  <th class="py-3.5 px-5 text-center">Hành động</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-slate-100 text-[#0F172A]" id="reference-pricing-table">
-                <!-- Render động các dòng cao ~64px, cả dòng click được -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <!-- =========================================================================
-           6. QUY TRÌNH 4 BƯỚC TIMELINE NGANG CÓ ĐƯỜNG NỐI (KHÔNG LẶP SỐ)
-           ========================================================================= -->
-      <section class="mt-16 sm:mt-20 pt-8 border-t border-slate-200">
-        <div class="text-center max-w-xl mx-auto mb-8">
-          <h2 class="text-2xl sm:text-[26px] font-bold text-[#0F172A]">Quy Trình Thu Cũ Đổi Mới</h2>
-          <p class="text-sm text-[#475569] mt-1 font-normal">4 bước nhanh chóng, minh bạch và an toàn tuyệt đối</p>
-        </div>
-
-        <!-- Timeline ngang 4 bước với Icon FontAwesome trực quan -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 relative">
-          
-          <!-- Bước 1: Định giá online -->
-          <div class="p-6 bg-white rounded-[14px] border border-slate-200 text-center space-y-2.5 relative shadow-2xs hover:border-[#1D4ED8] hover:shadow-md transition-all group">
-            <span class="inline-block px-2.5 py-0.5 rounded-full bg-blue-50 text-[#1D4ED8] text-[11px] font-bold uppercase tracking-wider">Bước 1</span>
-            <div class="w-14 h-14 rounded-2xl bg-blue-50 text-[#1D4ED8] flex items-center justify-center mx-auto text-xl border border-blue-200/80 group-hover:scale-110 group-hover:bg-[#1D4ED8] group-hover:text-white transition-all shadow-xs">
-              <i class="fa-solid fa-calculator"></i>
-            </div>
-            <h3 class="font-semibold text-lg text-[#0F172A]">Định giá online</h3>
-            <p class="text-sm text-[#475569] leading-relaxed font-normal">Chọn dòng máy và tình trạng trên web để nhận mức định giá dự kiến trong 10 giây.</p>
-          </div>
-
-          <!-- Bước 2: Đến cửa hàng -->
-          <div class="p-6 bg-white rounded-[14px] border border-slate-200 text-center space-y-2.5 relative shadow-2xs hover:border-[#1D4ED8] hover:shadow-md transition-all group">
-            <span class="inline-block px-2.5 py-0.5 rounded-full bg-blue-50 text-[#1D4ED8] text-[11px] font-bold uppercase tracking-wider">Bước 2</span>
-            <div class="w-14 h-14 rounded-2xl bg-blue-50 text-[#1D4ED8] flex items-center justify-center mx-auto text-xl border border-blue-200/80 group-hover:scale-110 group-hover:bg-[#1D4ED8] group-hover:text-white transition-all shadow-xs">
-              <i class="fa-solid fa-store"></i>
-            </div>
-            <h3 class="font-semibold text-lg text-[#0F172A]">Đến cửa hàng</h3>
-            <p class="text-sm text-[#475569] leading-relaxed font-normal">Mang máy đến chi nhánh gần nhất của SamaMobile hoặc hẹn kỹ thuật viên hỗ trợ.</p>
-          </div>
-
-          <!-- Bước 3: Test máy 10 phút -->
-          <div class="p-6 bg-white rounded-[14px] border border-slate-200 text-center space-y-2.5 relative shadow-2xs hover:border-[#1D4ED8] hover:shadow-md transition-all group">
-            <span class="inline-block px-2.5 py-0.5 rounded-full bg-blue-50 text-[#1D4ED8] text-[11px] font-bold uppercase tracking-wider">Bước 3</span>
-            <div class="w-14 h-14 rounded-2xl bg-blue-50 text-[#1D4ED8] flex items-center justify-center mx-auto text-xl border border-blue-200/80 group-hover:scale-110 group-hover:bg-[#1D4ED8] group-hover:text-white transition-all shadow-xs">
-              <i class="fa-solid fa-clipboard-check"></i>
-            </div>
-            <h3 class="font-semibold text-lg text-[#0F172A]">Test máy 10 phút</h3>
-            <p class="text-sm text-[#475569] leading-relaxed font-normal">Kỹ thuật viên kiểm tra chức năng công khai, xác nhận mức giá chốt không ép giá.</p>
-          </div>
-
-          <!-- Bước 4: Lấy máy mới -->
-          <div class="p-6 bg-white rounded-[14px] border border-slate-200 text-center space-y-2.5 relative shadow-2xs hover:border-[#16A34A] hover:shadow-md transition-all group">
-            <span class="inline-block px-2.5 py-0.5 rounded-full bg-emerald-50 text-[#16A34A] text-[11px] font-bold uppercase tracking-wider">Bước 4</span>
-            <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-[#16A34A] flex items-center justify-center mx-auto text-xl border border-emerald-200/80 group-hover:scale-110 group-hover:bg-[#16A34A] group-hover:text-white transition-all shadow-xs">
-              <i class="fa-solid fa-box-open"></i>
-            </div>
-            <h3 class="font-semibold text-lg text-[#0F172A]">Lấy máy mới</h3>
-            <p class="text-sm text-[#475569] leading-relaxed font-normal">Thanh toán khoản bù còn lại (hoặc quẹt thẻ trả góp 0%) và đem máy mới về dùng.</p>
-          </div>
-
-        </div>
-      </section>
-
     </div>
   </main>
+
+  <!-- =========================================================================
+       MODAL VIDEO HƯỚNG DẪN THU CŨ
+       ========================================================================= -->
+  <div id="trade-in-video-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-150">
+    <div class="bg-black w-full max-w-3xl rounded-2xl overflow-hidden shadow-2xl border border-slate-800 relative">
+      <div class="p-3 bg-slate-900 text-white flex items-center justify-between border-b border-slate-800">
+        <h4 class="font-bold text-sm flex items-center gap-2">
+          <i class="fa-solid fa-circle-play text-red-500"></i>
+          <span>Video Hướng Dẫn Quy Trình Thu Cũ Đổi Mới Tại SamaMobile</span>
+        </h4>
+        <button type="button" onclick="closeTradeInVideoModal()" class="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-sm transition-colors cursor-pointer">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="relative w-full aspect-video bg-black flex items-center justify-center">
+        <iframe id="trade-in-video-frame" class="w-full h-full" src="" title="Video hướng dẫn thu cũ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
 
   <!-- =========================================================================
        MODAL: CHỌN MẪU MÃ MÁY MỚI (RỘNG RÃI, CARD STYLE THẾ GIỚI DI ĐỘNG)
@@ -966,11 +1184,11 @@
       <div class="p-4 bg-slate-50 border-b border-slate-200 flex flex-col md:flex-row items-center justify-between gap-3 flex-shrink-0">
         <div class="relative w-full md:w-96">
           <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-          <input type="text" id="modal-search-input" oninput="filterModalProducts()" placeholder="Tìm theo tên máy (iPhone 16, S25, Xiaomi...)..." class="w-full pl-9 pr-4 py-2 rounded-[10px] border border-slate-300 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#1D4ED8]">
+          <input type="text" id="modal-search-input" oninput="filterModalProducts()" placeholder="Tìm theo tên máy (iPhone 18, S26, Xiaomi...)..." class="w-full pl-9 pr-4 py-2 rounded-[10px] border border-slate-300 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#0057B7]">
         </div>
 
         <div class="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-1 md:pb-0" id="modal-brand-filters">
-          <button type="button" onclick="filterModalBrand('ALL')" class="modal-brand-btn px-4 py-1.5 rounded-[10px] border text-xs font-semibold transition-all bg-[#1D4ED8] text-white border-[#1D4ED8] cursor-pointer">Tất cả</button>
+          <button type="button" onclick="filterModalBrand('ALL')" class="modal-brand-btn px-4 py-1.5 rounded-[10px] border text-xs font-semibold transition-all bg-[#0057B7] text-white border-[#0057B7] cursor-pointer">Tất cả</button>
           <button type="button" onclick="filterModalBrand('Apple')" class="modal-brand-btn px-4 py-1.5 rounded-[10px] border text-xs font-semibold transition-all bg-white text-slate-700 border-slate-200 hover:bg-slate-100 cursor-pointer"><i class="fa-brands fa-apple mr-1"></i> Apple</button>
           <button type="button" onclick="filterModalBrand('Samsung')" class="modal-brand-btn px-4 py-1.5 rounded-[10px] border text-xs font-semibold transition-all bg-white text-slate-700 border-slate-200 hover:bg-slate-100 cursor-pointer">Samsung</button>
           <button type="button" onclick="filterModalBrand('Xiaomi')" class="modal-brand-btn px-4 py-1.5 rounded-[10px] border text-xs font-semibold transition-all bg-white text-slate-700 border-slate-200 hover:bg-slate-100 cursor-pointer">Xiaomi</button>
@@ -978,7 +1196,7 @@
 
         <div class="w-full md:w-auto flex items-center justify-end gap-2 text-xs">
           <span class="text-[#475569] font-medium">Sắp xếp:</span>
-          <select id="modal-sort-select" onchange="filterModalProducts()" class="px-3 py-1.5 rounded-[10px] border border-slate-300 bg-white text-xs font-semibold text-slate-700 focus:outline-none focus:ring-1 focus:ring-[#1D4ED8]">
+          <select id="modal-sort-select" onchange="filterModalProducts()" class="px-3 py-1.5 rounded-[10px] border border-slate-300 bg-white text-xs font-semibold text-slate-700 focus:outline-none focus:ring-1 focus:ring-[#0057B7]">
             <option value="featured">Nổi bật nhất</option>
             <option value="price-asc">Giá từ thấp đến cao</option>
             <option value="price-desc">Giá từ cao đến thấp</option>
@@ -986,7 +1204,7 @@
         </div>
       </div>
 
-      <!-- Product Grid (Cards lớn, tỷ lệ ảnh chuẩn TGDD) -->
+      <!-- Product Grid -->
       <div id="modal-products-grid" class="flex-1 overflow-y-auto p-4 sm:p-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 custom-scrollbar bg-slate-100/60">
         <!-- Render động từ JSON -->
       </div>
@@ -1004,10 +1222,7 @@
     </div>
   </div>
 
-  <!-- =========================================================================
-       7. FOOTER CHUẨN TRANG CHÍNH SAMAMOBILE.COM
-       ========================================================================= -->
-  <footer class="bg-[#0F172A] text-slate-400 text-xs pt-16 pb-12 border-t border-slate-800">
+<footer class="bg-[#0F172A] text-slate-400 text-xs pt-16 pb-12 border-t border-slate-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 mb-12">
@@ -1092,143 +1307,216 @@
   <script src="../js/auth.js?v=6.0"></script>
   <script src="../js/cart.js?v=6.0"></script>
   <script src="../js/store-data.js?v=3.8"></script>
+
   <script>
-    // DỮ LIỆU CÁC DÒNG MÁY CŨ THU MUA (ẢNH CHUẨN 48X48PX)
-    const USED_DEVICES = [
-      // APPLE
-      { brand: 'Apple', model: 'iPhone 15 Pro Max', basePrice: 21500000, capacities: ['256GB', '512GB', '1TB'], image: '../images/banner/iphone-18-cat-082925094.png' },
-      { brand: 'Apple', model: 'iPhone 15 Pro', basePrice: 17800000, capacities: ['128GB', '256GB', '512GB'], image: '../images/banner/iphone-18-cat-082925094.png' },
-      { brand: 'Apple', model: 'iPhone 15 Plus', basePrice: 15200000, capacities: ['128GB', '256GB', '512GB'], image: '../images/banner/iphone-18-cat-082925094.png' },
-      { brand: 'Apple', model: 'iPhone 15', basePrice: 13800000, capacities: ['128GB', '256GB', '512GB'], image: '../images/banner/iphone-18-cat-082925094.png' },
-      { brand: 'Apple', model: 'iPhone 14 Pro Max', basePrice: 17000000, capacities: ['128GB', '256GB', '512GB', '1TB'], image: '../images/banner/iphone-18-cat-082925094.png' },
-      { brand: 'Apple', model: 'iPhone 14 Pro', basePrice: 14500000, capacities: ['128GB', '256GB', '512GB'], image: '../images/banner/iphone-18-cat-082925094.png' },
-      { brand: 'Apple', model: 'iPhone 13 Pro Max', basePrice: 13500000, capacities: ['128GB', '256GB', '512GB', '1TB'], image: '../images/banner/iphone-18-cat-082925094.png' },
-      { brand: 'Apple', model: 'iPhone 13', basePrice: 9800000, capacities: ['128GB', '256GB'], image: '../images/banner/iphone-18-cat-082925094.png' },
-      { brand: 'Apple', model: 'iPhone 12 Pro Max', basePrice: 10500000, capacities: ['128GB', '256GB', '512GB'], image: '../images/banner/iphone-18-cat-082925094.png' },
-      { brand: 'Apple', model: 'iPhone 12', basePrice: 6900000, capacities: ['64GB', '128GB', '256GB'], image: '../images/banner/iphone-18-cat-082925094.png' },
-      { brand: 'Apple', model: 'iPhone 11', basePrice: 5300000, capacities: ['64GB', '128GB'], image: '../images/banner/iphone-18-cat-082925094.png' },
+    // =========================================================================
+    // DỮ LIỆU SẢN PHẨM THU CŨ (CHUẨN HÌNH 2 HOÀNG HÀ) & TOP LÊN ĐỜI (HÌNH 3)
+    // =========================================================================
+    const USED_TRADE_IN_PRODUCTS = [
+      // --- APPLE (28 MÁY) ---
+      { id: 'u1', name: 'iPhone 17 (512GB)', brand: 'Apple', price: 15750000, img: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-glacier-pdp-image-position-1-vi-vn-015213364.jpg', model: 'iPhone 17', capacity: '512GB' },
+      { id: 'u2', name: 'iPhone 17 (256GB)', brand: 'Apple', price: 14200000, img: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-glacier-pdp-image-position-1-vi-vn-015213364.jpg', model: 'iPhone 17', capacity: '256GB' },
+      { id: 'u3', name: 'iPhone 16 Pro Max (512GB)', brand: 'Apple', price: 23500000, img: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-image-position-1-vi-vn-015400123.jpg', model: 'iPhone 16 Pro Max', capacity: '512GB' },
+      { id: 'u4', name: 'iPhone 16 Pro Max (256GB)', brand: 'Apple', price: 21000000, img: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-image-position-1-vi-vn-015400123.jpg', model: 'iPhone 16 Pro Max', capacity: '256GB' },
+      { id: 'u5', name: 'iPhone 16 Pro (256GB)', brand: 'Apple', price: 18500000, img: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-glacier-pdp-images-vi-vn-021533622.png', model: 'iPhone 16 Pro', capacity: '256GB' },
+      { id: 'u6', name: 'iPhone 16 Pro (128GB)', brand: 'Apple', price: 16800000, img: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-glacier-pdp-images-vi-vn-021533622.png', model: 'iPhone 16 Pro', capacity: '128GB' },
+      { id: 'u7', name: 'iPhone 16 Plus (512GB)', brand: 'Apple', price: 13125000, img: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-image-position-1-vi-vn-015400123.jpg', model: 'iPhone 16 Plus', capacity: '512GB' },
+      { id: 'u8', name: 'iPhone 16 Plus (256GB)', brand: 'Apple', price: 12600000, img: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-image-position-1-vi-vn-015400123.jpg', model: 'iPhone 16 Plus', capacity: '256GB' },
+      { id: 'u9', name: 'iPhone 16 Plus (128GB)', brand: 'Apple', price: 12075000, img: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-image-position-1-vi-vn-015400123.jpg', model: 'iPhone 16 Plus', capacity: '128GB' },
+      { id: 'u10', name: 'iPhone 16 (512GB)', brand: 'Apple', price: 12600000, img: '../images/banner/iphone-18-cat-082925094.png', model: 'iPhone 16', capacity: '512GB' },
+      { id: 'u11', name: 'iPhone 16 (256GB)', brand: 'Apple', price: 10990000, img: '../images/banner/iphone-18-cat-082925094.png', model: 'iPhone 16', capacity: '256GB' },
+      { id: 'u12', name: 'iPhone 16 (128GB)', brand: 'Apple', price: 9850000, img: '../images/banner/iphone-18-cat-082925094.png', model: 'iPhone 16', capacity: '128GB' },
+      { id: 'u13', name: 'iPhone 15 Pro Max (512GB)', brand: 'Apple', price: 21800000, img: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-silver-pdp-image-position-1-vi-vn-014755279.jpg', model: 'iPhone 15 Pro Max', capacity: '512GB' },
+      { id: 'u14', name: 'iPhone 15 Pro Max (256GB)', brand: 'Apple', price: 20500000, img: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-silver-pdp-image-position-1-vi-vn-014755279.jpg', model: 'iPhone 15 Pro Max', capacity: '256GB' },
+      { id: 'u15', name: 'iPhone 15 Pro (256GB)', brand: 'Apple', price: 17200000, img: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-glacier-pdp-images-vi-vn-021533622.png', model: 'iPhone 15 Pro', capacity: '256GB' },
+      { id: 'u16', name: 'iPhone 15 Pro (128GB)', brand: 'Apple', price: 15500000, img: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-glacier-pdp-images-vi-vn-021533622.png', model: 'iPhone 15 Pro', capacity: '128GB' },
+      { id: 'u17', name: 'iPhone 15 Plus (128GB)', brand: 'Apple', price: 13500000, img: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-image-position-1-vi-vn-015400123.jpg', model: 'iPhone 15 Plus', capacity: '128GB' },
+      { id: 'u18', name: 'iPhone 15 (128GB)', brand: 'Apple', price: 11500000, img: '../images/banner/iphone-18-cat-082925094.png', model: 'iPhone 15', capacity: '128GB' },
+      { id: 'u19', name: 'iPhone 14 Pro Max (256GB)', brand: 'Apple', price: 16800000, img: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-black-pdp-image-position-1-vi-vn-015036955.jpg', model: 'iPhone 14 Pro Max', capacity: '256GB' },
+      { id: 'u20', name: 'iPhone 14 Pro Max (128GB)', brand: 'Apple', price: 15200000, img: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-black-pdp-image-position-1-vi-vn-015036955.jpg', model: 'iPhone 14 Pro Max', capacity: '128GB' },
+      { id: 'u21', name: 'iPhone 14 Pro (128GB)', brand: 'Apple', price: 12800000, img: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-black-pdp-image-position-1-vi-vn-015036955.jpg', model: 'iPhone 14 Pro', capacity: '128GB' },
+      { id: 'u22', name: 'iPhone 14 (128GB)', brand: 'Apple', price: 9200000, img: '../images/banner/iphone-18-cat-082925094.png', model: 'iPhone 14', capacity: '128GB' },
+      { id: 'u23', name: 'iPhone 13 Pro Max (128GB)', brand: 'Apple', price: 12500000, img: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-silver-pdp-image-position-1-vi-vn-014755279.jpg', model: 'iPhone 13 Pro Max', capacity: '128GB' },
+      { id: 'u24', name: 'iPhone 13 (128GB)', brand: 'Apple', price: 8500000, img: '../images/banner/iphone-18-cat-082925094.png', model: 'iPhone 13', capacity: '128GB' },
+      { id: 'u25', name: 'iPhone 12 Pro Max (128GB)', brand: 'Apple', price: 9500000, img: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-silver-pdp-image-position-1-vi-vn-014755279.jpg', model: 'iPhone 12 Pro Max', capacity: '128GB' },
+      { id: 'u26', name: 'iPhone 11 Pro Max (64GB)', brand: 'Apple', price: 6800000, img: '../images/banner/iphone-18-cat-082925094.png', model: 'iPhone 11 Pro Max', capacity: '64GB' },
+      { id: 'u27', name: 'iPad Air 4 10.9" 4G (256GB)', brand: 'Apple', price: 9200000, img: 'https://i.hoanghamobile.vn/Uploads/2024/05/08/ipad-air-m2-11-inch-wifi-blue-1.png', model: 'iPad Air 4', capacity: '256GB' },
+      { id: 'u28', name: 'iPad Air 4 10.9" 4G (64GB)', brand: 'Apple', price: 7500000, img: 'https://i.hoanghamobile.vn/Uploads/2024/05/08/ipad-air-m2-11-inch-wifi-blue-1.png', model: 'iPad Air 4', capacity: '64GB' },
 
-      // SAMSUNG
-      { brand: 'Samsung', model: 'Galaxy S24 Ultra', basePrice: 18900000, capacities: ['256GB', '512GB', '1TB'], image: 'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png' },
-      { brand: 'Samsung', model: 'Galaxy S24 Plus', basePrice: 13900000, capacities: ['256GB', '512GB'], image: 'https://i.hoanghamobile.vn/Uploads/2026/03/17/a57-violet-1.png' },
-      { brand: 'Samsung', model: 'Galaxy S23 Ultra', basePrice: 14800000, capacities: ['256GB', '512GB'], image: 'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png' },
-      { brand: 'Samsung', model: 'Galaxy Z Fold 5', basePrice: 16900000, capacities: ['256GB', '512GB'], image: 'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png' },
-      { brand: 'Samsung', model: 'Galaxy Z Flip 5', basePrice: 9900000, capacities: ['256GB', '512GB'], image: 'https://i.hoanghamobile.vn/Uploads/2026/03/17/a57-violet-1.png' },
-      { brand: 'Samsung', model: 'Galaxy S22 Ultra', basePrice: 10800000, capacities: ['128GB', '256GB'], image: 'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png' },
+      // --- SAMSUNG (22 MÁY) ---
+      { id: 'u29', name: 'Samsung Galaxy S25 Ultra (512GB)', brand: 'Samsung', price: 23500000, img: 'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png', model: 'Galaxy S25 Ultra', capacity: '512GB' },
+      { id: 'u30', name: 'Samsung Galaxy S25 Ultra (256GB)', brand: 'Samsung', price: 21500000, img: 'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png', model: 'Galaxy S25 Ultra', capacity: '256GB' },
+      { id: 'u31', name: 'Samsung Galaxy S25 Plus (256GB)', brand: 'Samsung', price: 16500000, img: 'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png', model: 'Galaxy S25 Plus', capacity: '256GB' },
+      { id: 'u32', name: 'Samsung Galaxy S25 (256GB)', brand: 'Samsung', price: 13500000, img: 'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png', model: 'Galaxy S25', capacity: '256GB' },
+      { id: 'u33', name: 'Samsung Galaxy S24 Ultra (512GB)', brand: 'Samsung', price: 19800000, img: 'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png', model: 'Galaxy S24 Ultra', capacity: '512GB' },
+      { id: 'u34', name: 'Samsung Galaxy S24 Ultra (256GB)', brand: 'Samsung', price: 18500000, img: 'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png', model: 'Galaxy S24 Ultra', capacity: '256GB' },
+      { id: 'u35', name: 'Samsung Galaxy S24 Plus (256GB)', brand: 'Samsung', price: 13800000, img: 'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png', model: 'Galaxy S24 Plus', capacity: '256GB' },
+      { id: 'u36', name: 'Samsung Galaxy S24 (256GB)', brand: 'Samsung', price: 11200000, img: 'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png', model: 'Galaxy S24', capacity: '256GB' },
+      { id: 'u37', name: 'Samsung Galaxy S23 Ultra (512GB)', brand: 'Samsung', price: 15800000, img: 'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-tim-1.png', model: 'Galaxy S23 Ultra', capacity: '512GB' },
+      { id: 'u38', name: 'Samsung Galaxy S23 Ultra (256GB)', brand: 'Samsung', price: 14500000, img: 'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-tim-1.png', model: 'Galaxy S23 Ultra', capacity: '256GB' },
+      { id: 'u39', name: 'Samsung Galaxy S23 Plus (256GB)', brand: 'Samsung', price: 10800000, img: 'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-tim-1.png', model: 'Galaxy S23 Plus', capacity: '256GB' },
+      { id: 'u40', name: 'Samsung Galaxy S23 (128GB)', brand: 'Samsung', price: 8900000, img: 'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-tim-1.png', model: 'Galaxy S23', capacity: '128GB' },
+      { id: 'u41', name: 'Samsung Galaxy S22 Ultra (128GB)', brand: 'Samsung', price: 10500000, img: 'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png', model: 'Galaxy S22 Ultra', capacity: '128GB' },
+      { id: 'u42', name: 'Samsung Galaxy Z Fold 6 (256GB)', brand: 'Samsung', price: 24500000, img: 'https://i.hoanghamobile.vn/Uploads/2026/07/22/samsung-galaxy-z-fold8-tim-8-153436602.png', model: 'Galaxy Z Fold 6', capacity: '256GB' },
+      { id: 'u43', name: 'Samsung Galaxy Z Fold 5 (256GB)', brand: 'Samsung', price: 16500000, img: 'https://i.hoanghamobile.vn/Uploads/2026/07/22/samsung-galaxy-z-fold8-tim-8-153436602.png', model: 'Galaxy Z Fold 5', capacity: '256GB' },
+      { id: 'u44', name: 'Samsung Galaxy Z Fold 4 (256GB)', brand: 'Samsung', price: 12000000, img: 'https://i.hoanghamobile.vn/Uploads/2026/07/22/samsung-galaxy-z-fold8-tim-8-153436602.png', model: 'Galaxy Z Fold 4', capacity: '256GB' },
+      { id: 'u45', name: 'Samsung Galaxy Z Flip 6 (256GB)', brand: 'Samsung', price: 14200000, img: 'https://i.hoanghamobile.vn/Uploads/2026/03/17/a57-violet-1.png', model: 'Galaxy Z Flip 6', capacity: '256GB' },
+      { id: 'u46', name: 'Samsung Galaxy Z Flip 5 (256GB)', brand: 'Samsung', price: 9800000, img: 'https://i.hoanghamobile.vn/Uploads/2026/03/17/a57-violet-1.png', model: 'Galaxy Z Flip 5', capacity: '256GB' },
+      { id: 'u47', name: 'Samsung Galaxy Z Flip 4 (128GB)', brand: 'Samsung', price: 6500000, img: 'https://i.hoanghamobile.vn/Uploads/2026/03/17/a57-violet-1.png', model: 'Galaxy Z Flip 4', capacity: '128GB' },
+      { id: 'u48', name: 'Samsung Galaxy A55 5G (128GB)', brand: 'Samsung', price: 6200000, img: 'https://i.hoanghamobile.vn/Uploads/2026/03/17/a57-violet-1.png', model: 'Galaxy A55', capacity: '128GB' },
+      { id: 'u49', name: 'Samsung Galaxy A54 5G (128GB)', brand: 'Samsung', price: 4800000, img: 'https://i.hoanghamobile.vn/Uploads/2026/06/24/samsung-a27-xanh-1.png', model: 'Galaxy A54', capacity: '128GB' },
+      { id: 'u50', name: 'Samsung Galaxy A35 5G (128GB)', brand: 'Samsung', price: 4200000, img: 'https://i.hoanghamobile.vn/Uploads/2026/10/05/a18-white-151324306.png', model: 'Galaxy A35', capacity: '128GB' },
 
-      // XIAOMI
-      { brand: 'Xiaomi', model: 'Xiaomi 14 Ultra', basePrice: 16500000, capacities: ['256GB', '512GB'], image: 'https://i.hoanghamobile.vn/Uploads/2026/08/01/q15a-green-back1-091121733.png' },
-      { brand: 'Xiaomi', model: 'Xiaomi 14', basePrice: 11800000, capacities: ['256GB', '512GB'], image: 'https://i.hoanghamobile.vn/Uploads/2026/08/01/q15a-green-back1-091121733.png' },
-      { brand: 'Xiaomi', model: 'Xiaomi 13 Pro', basePrice: 9500000, capacities: ['256GB'], image: 'https://i.hoanghamobile.vn/Uploads/2026/08/01/q15a-green-back1-091121733.png' }
+      // --- XIAOMI (14 MÁY) ---
+      { id: 'u51', name: 'Xiaomi 14 Ultra (512GB)', brand: 'Xiaomi', price: 16000000, img: 'https://i.hoanghamobile.vn/Uploads/2026/08/01/q15a-green-back1-091121733.png', model: 'Xiaomi 14 Ultra', capacity: '512GB' },
+      { id: 'u52', name: 'Xiaomi 14 Pro (256GB)', brand: 'Xiaomi', price: 13500000, img: 'https://i.hoanghamobile.vn/Uploads/2026/08/01/q15a-green-back1-091121733.png', model: 'Xiaomi 14 Pro', capacity: '256GB' },
+      { id: 'u53', name: 'Xiaomi 14 (256GB)', brand: 'Xiaomi', price: 11500000, img: 'https://i.hoanghamobile.vn/Uploads/2026/08/01/q15a-green-back1-091121733.png', model: 'Xiaomi 14', capacity: '256GB' },
+      { id: 'u54', name: 'Xiaomi 13 Ultra (256GB)', brand: 'Xiaomi', price: 12000000, img: 'https://i.hoanghamobile.vn/Uploads/2026/08/01/q15a-green-back1-091121733.png', model: 'Xiaomi 13 Ultra', capacity: '256GB' },
+      { id: 'u55', name: 'Xiaomi 13 Pro (256GB)', brand: 'Xiaomi', price: 9200000, img: 'https://i.hoanghamobile.vn/Uploads/2026/08/01/q15a-green-back1-091121733.png', model: 'Xiaomi 13 Pro', capacity: '256GB' },
+      { id: 'u56', name: 'Xiaomi 13 (256GB)', brand: 'Xiaomi', price: 7800000, img: 'https://i.hoanghamobile.vn/Uploads/2026/08/01/q15a-green-back1-091121733.png', model: 'Xiaomi 13', capacity: '256GB' },
+      { id: 'u57', name: 'Xiaomi 13T Pro (512GB)', brand: 'Xiaomi', price: 8500000, img: 'https://i.hoanghamobile.vn/Uploads/2026/08/17/p19-purple-back11-155153642.png', model: 'Xiaomi 13T Pro', capacity: '512GB' },
+      { id: 'u58', name: 'Xiaomi 13T (256GB)', brand: 'Xiaomi', price: 6200000, img: 'https://i.hoanghamobile.vn/Uploads/2026/08/17/p19-purple-back11-155153642.png', model: 'Xiaomi 13T', capacity: '256GB' },
+      { id: 'u59', name: 'Redmi Note 13 Pro+ 5G (256GB)', brand: 'Xiaomi', price: 5500000, img: 'https://i.hoanghamobile.vn/Uploads/2026/08/17/p19-purple-back11-155153642.png', model: 'Redmi Note 13 Pro+', capacity: '256GB' },
+      { id: 'u60', name: 'Redmi Note 13 Pro 4G (128GB)', brand: 'Xiaomi', price: 4200000, img: 'https://i.hoanghamobile.vn/Uploads/2026/08/17/p19-purple-back11-155153642.png', model: 'Redmi Note 13 Pro', capacity: '128GB' },
+      { id: 'u61', name: 'Redmi Note 13 (128GB)', brand: 'Xiaomi', price: 3200000, img: 'https://i.hoanghamobile.vn/Uploads/2026/08/17/p19-purple-back11-155153642.png', model: 'Redmi Note 13', capacity: '128GB' },
+      { id: 'u62', name: 'POCO F6 Pro (256GB)', brand: 'Xiaomi', price: 7500000, img: 'https://i.hoanghamobile.vn/Uploads/2026/09/30/q15ap-green-front1-170835651.png', model: 'POCO F6 Pro', capacity: '256GB' },
+      { id: 'u63', name: 'POCO X6 Pro (256GB)', brand: 'Xiaomi', price: 5200000, img: 'https://i.hoanghamobile.vn/Uploads/2026/09/30/q15ap-green-front1-170835651.png', model: 'POCO X6 Pro', capacity: '256GB' },
+      { id: 'u64', name: 'Xiaomi 12 Pro (256GB)', brand: 'Xiaomi', price: 5800000, img: 'https://i.hoanghamobile.vn/Uploads/2026/08/01/q15a-green-back1-091121733.png', model: 'Xiaomi 12 Pro', capacity: '256GB' },
+
+      // --- OPPO (12 MÁY) ---
+      { id: 'u65', name: 'OPPO Find N3 (512GB)', brand: 'OPPO', price: 19500000, img: 'https://i.hoanghamobile.vn/Uploads/2026/03/17/a57-violet-1.png', model: 'OPPO Find N3', capacity: '512GB' },
+      { id: 'u66', name: 'OPPO Find N3 Flip (256GB)', brand: 'OPPO', price: 11500000, img: 'https://i.hoanghamobile.vn/Uploads/2026/03/17/a57-violet-1.png', model: 'OPPO Find N3 Flip', capacity: '256GB' },
+      { id: 'u67', name: 'OPPO Find N2 Flip (256GB)', brand: 'OPPO', price: 7800000, img: 'https://i.hoanghamobile.vn/Uploads/2026/03/17/a57-violet-1.png', model: 'OPPO Find N2 Flip', capacity: '256GB' },
+      { id: 'u68', name: 'OPPO Find X7 Ultra (256GB)', brand: 'OPPO', price: 15000000, img: 'https://i.hoanghamobile.vn/Uploads/2026/03/17/a57-violet-1.png', model: 'OPPO Find X7 Ultra', capacity: '256GB' },
+      { id: 'u69', name: 'OPPO Find X6 Pro (256GB)', brand: 'OPPO', price: 10500000, img: 'https://i.hoanghamobile.vn/Uploads/2026/03/17/a57-violet-1.png', model: 'OPPO Find X6 Pro', capacity: '256GB' },
+      { id: 'u70', name: 'OPPO Reno 12 Pro (512GB)', brand: 'OPPO', price: 8900000, img: 'https://i.hoanghamobile.vn/Uploads/2026/03/17/a57-violet-1.png', model: 'OPPO Reno 12 Pro', capacity: '512GB' },
+      { id: 'u71', name: 'OPPO Reno 12 (256GB)', brand: 'OPPO', price: 6800000, img: 'https://i.hoanghamobile.vn/Uploads/2026/03/17/a57-violet-1.png', model: 'OPPO Reno 12', capacity: '256GB' },
+      { id: 'u72', name: 'OPPO Reno 11 Pro (512GB)', brand: 'OPPO', price: 6500000, img: 'https://i.hoanghamobile.vn/Uploads/2026/03/17/a57-violet-1.png', model: 'OPPO Reno 11 Pro', capacity: '512GB' },
+      { id: 'u73', name: 'OPPO Reno 11 (256GB)', brand: 'OPPO', price: 5200000, img: 'https://i.hoanghamobile.vn/Uploads/2026/03/17/a57-violet-1.png', model: 'OPPO Reno 11', capacity: '256GB' },
+      { id: 'u74', name: 'OPPO Reno 10 Pro+ (256GB)', brand: 'OPPO', price: 7200000, img: 'https://i.hoanghamobile.vn/Uploads/2026/03/17/a57-violet-1.png', model: 'OPPO Reno 10 Pro+', capacity: '256GB' },
+      { id: 'u75', name: 'OPPO A79 5G (128GB)', brand: 'OPPO', price: 3800000, img: 'https://i.hoanghamobile.vn/Uploads/2026/03/17/a57-violet-1.png', model: 'OPPO A79 5G', capacity: '128GB' },
+      { id: 'u76', name: 'OPPO A58 (128GB)', brand: 'OPPO', price: 2800000, img: 'https://i.hoanghamobile.vn/Uploads/2026/03/17/a57-violet-1.png', model: 'OPPO A58', capacity: '128GB' }
     ];
 
-    const CONDITIONS = [
-      { id: 1, name: 'Loại 1 (Máy đẹp 99%)', desc: 'Màn hình & thân máy đẹp keng, không trầy xước, pin tốt, mọi chức năng hoàn hảo', rate: 1.0 },
-      { id: 2, name: 'Loại 2 (Xước nhẹ 95%)', desc: 'Màn hình đẹp, thân máy xước dăm nhỏ theo thời gian, pin & chức năng ổn định', rate: 0.88 },
-      { id: 3, name: 'Loại 3 (Cấn viền 90%)', desc: 'Màn hình xước nhẹ, thân máy cấn móp góc nhẹ, hoạt động bình thường', rate: 0.72 },
-      { id: 4, name: 'Loại 4 (Màn ám / Trầy nhiều)', desc: 'Thân máy trầy xước nhiều, màn hình có vết ám nhẹ hoặc ố mờ, tính năng đủ', rate: 0.52 }
+    const TOP_UPGRADE_PRODUCTS = [
+      { maHang: 'MH114', name: 'Samsung Galaxy Z Fold8 5G', brand: 'Samsung', price: 39990000, oldPrice: 43990000, subsidy: '3.000.000₫', img: 'https://i.hoanghamobile.vn/Uploads/2026/07/22/samsung-galaxy-z-fold8-tim-8-153436602.png' },
+      { maHang: 'MH101', name: 'iPhone 18 Pro Max 256GB', brand: 'Apple', price: 41490000, oldPrice: 44809200, subsidy: '3.000.000₫', img: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png' },
+      { maHang: 'MH113', name: 'Samsung Galaxy S26 Ultra', brand: 'Samsung', price: 30890000, oldPrice: 34990000, subsidy: '2.500.000₫', img: 'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-tim-1.png' },
+      { maHang: 'MH117', name: 'Xiaomi 17T Pro Leica 512GB', brand: 'Xiaomi', price: 17490000, oldPrice: 19990000, subsidy: '2.000.000₫', img: 'https://i.hoanghamobile.vn/Uploads/2026/08/01/q15a-green-back1-091121733.png' },
+      { maHang: 'MH123', name: 'OPPO Reno13 F 5G 256GB', brand: 'OPPO', price: 9990000, oldPrice: 11490000, subsidy: '1.500.000₫', img: 'https://i.hoanghamobile.vn/Uploads/2026/03/17/a57-violet-1.png' }
     ];
 
-    // State
-    let currentBrand = 'Apple';
-    let currentModel = USED_DEVICES[0];
-    let currentCapacity = currentModel.capacities[0];
-    let currentConditionId = 1;
+    // ==========================================
+    // KHỞI TẠO BIẾN STATE CỦA BỘ TÍNH TOÁN
+    // ==========================================
+    let allProducts = [];
     let targetProduct = null;
     let targetSelectedCapacity = null;
-    let allProducts = [];
+
+    let selectedBrand = 'Apple';
+    let selectedModel = null;
+    let selectedCapacity = '128GB';
+    let selectedCondition = 1; // 1: Loại 1, 2: Loại 2, 3: Loại 3, 4: Loại 4
+    let isShowingMoreUsed = false;
     let modalBrandFilter = 'ALL';
-    let isShowingAllUsedModels = false;
 
-    function formatMoney(amount) {
-      if (!amount || isNaN(amount)) return '0₫';
-      return Number(amount).toLocaleString('vi-VN') + '₫';
-    }
+    // State của danh sách Sản phẩm thu cũ (Hình 2)
+    let usedSortOrder = 'featured';
+    let usedBrandFilter = 'ALL';
+    let usedSearchQuery = '';
+    let usedVisibleLimit = 20; // Hiện 10 máy (2 hàng 5 cột), bấm xem thêm hiện hết
+
+    // Dữ liệu mẫu máy cũ chi tiết cho bộ tính toán
+    const USED_MODELS_DB = {
+      Apple: [
+        { model: 'iPhone 17', basePrice: 14200000, capacities: ['128GB', '256GB', '512GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-glacier-pdp-image-position-1-vi-vn-015213364.jpg' },
+        { model: 'iPhone 16 Pro Max', basePrice: 21000000, capacities: ['256GB', '512GB', '1TB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-image-position-1-vi-vn-015400123.jpg' },
+        { model: 'iPhone 16 Pro', basePrice: 18500000, capacities: ['128GB', '256GB', '512GB', '1TB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-glacier-pdp-images-vi-vn-021533622.png' },
+        { model: 'iPhone 16 Plus', basePrice: 12600000, capacities: ['128GB', '256GB', '512GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-image-position-1-vi-vn-015400123.jpg' },
+        { model: 'iPhone 16', basePrice: 10990000, capacities: ['128GB', '256GB', '512GB'], img: '../images/banner/iphone-18-cat-082925094.png' },
+        { model: 'iPhone 15 Pro Max', basePrice: 20500000, capacities: ['256GB', '512GB', '1TB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-silver-pdp-image-position-1-vi-vn-014755279.jpg' },
+        { model: 'iPhone 15 Pro', basePrice: 17200000, capacities: ['128GB', '256GB', '512GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-glacier-pdp-images-vi-vn-021533622.png' },
+        { model: 'iPhone 15 Plus', basePrice: 15100000, capacities: ['128GB', '256GB', '512GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-image-position-1-vi-vn-015400123.jpg' },
+        { model: 'iPhone 15', basePrice: 13500000, capacities: ['128GB', '256GB', '512GB'], img: '../images/banner/iphone-18-cat-082925094.png' },
+        { model: 'iPhone 14 Pro Max', basePrice: 16800000, capacities: ['128GB', '256GB', '512GB', '1TB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-black-pdp-image-position-1-vi-vn-015036955.jpg' },
+        { model: 'iPhone 14 Pro', basePrice: 14200000, capacities: ['128GB', '256GB', '512GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-black-pdp-image-position-1-vi-vn-015036955.jpg' },
+        { model: 'iPhone 14 Plus', basePrice: 10500000, capacities: ['128GB', '256GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-image-position-1-vi-vn-015400123.jpg' },
+        { model: 'iPhone 14', basePrice: 11000000, capacities: ['128GB', '256GB', '512GB'], img: '../images/banner/iphone-18-cat-082925094.png' },
+        { model: 'iPhone 13 Pro Max', basePrice: 13200000, capacities: ['128GB', '256GB', '512GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-silver-pdp-image-position-1-vi-vn-014755279.jpg' },
+        { model: 'iPhone 13 Pro', basePrice: 10500000, capacities: ['128GB', '256GB', '512GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-glacier-pdp-images-vi-vn-021533622.png' },
+        { model: 'iPhone 13', basePrice: 9500000, capacities: ['128GB', '256GB'], img: '../images/banner/iphone-18-cat-082925094.png' },
+        { model: 'iPhone 12 Pro Max', basePrice: 10200000, capacities: ['128GB', '256GB', '512GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-silver-pdp-image-position-1-vi-vn-014755279.jpg' },
+        { model: 'iPhone 12', basePrice: 6500000, capacities: ['64GB', '128GB'], img: '../images/banner/iphone-18-cat-082925094.png' },
+        { model: 'iPhone 11 Pro Max', basePrice: 7500000, capacities: ['64GB', '256GB', '512GB'], img: '../images/banner/iphone-18-cat-082925094.png' },
+        { model: 'iPhone 11', basePrice: 4800000, capacities: ['64GB', '128GB'], img: '../images/banner/iphone-18-cat-082925094.png' },
+        { model: 'iPad Air 4', basePrice: 7500000, capacities: ['64GB', '256GB'], img: 'https://i.hoanghamobile.vn/Uploads/2024/05/08/ipad-air-m2-11-inch-wifi-blue-1.png' }
+      ],
+      Samsung: [
+        { model: 'Galaxy S25 Ultra', basePrice: 21500000, capacities: ['256GB', '512GB', '1TB'], img: 'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png' },
+        { model: 'Galaxy S25 Plus', basePrice: 16500000, capacities: ['256GB', '512GB'], img: 'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png' },
+        { model: 'Galaxy S25', basePrice: 13500000, capacities: ['256GB', '512GB'], img: 'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png' },
+        { model: 'Galaxy S24 Ultra', basePrice: 18500000, capacities: ['256GB', '512GB', '1TB'], img: 'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png' },
+        { model: 'Galaxy S24 Plus', basePrice: 13800000, capacities: ['256GB', '512GB'], img: 'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png' },
+        { model: 'Galaxy S24', basePrice: 11200000, capacities: ['256GB', '512GB'], img: 'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png' },
+        { model: 'Galaxy S23 Ultra', basePrice: 14500000, capacities: ['256GB', '512GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-tim-1.png' },
+        { model: 'Galaxy S23 Plus', basePrice: 10800000, capacities: ['256GB', '512GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-tim-1.png' },
+        { model: 'Galaxy S23', basePrice: 8900000, capacities: ['128GB', '256GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-tim-1.png' },
+        { model: 'Galaxy S22 Ultra', basePrice: 10500000, capacities: ['128GB', '256GB', '512GB'], img: 'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png' },
+        { model: 'Galaxy Z Fold 6', basePrice: 24500000, capacities: ['256GB', '512GB', '1TB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/07/22/samsung-galaxy-z-fold8-tim-8-153436602.png' },
+        { model: 'Galaxy Z Fold 5', basePrice: 16500000, capacities: ['256GB', '512GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/07/22/samsung-galaxy-z-fold8-tim-8-153436602.png' },
+        { model: 'Galaxy Z Fold 4', basePrice: 12000000, capacities: ['256GB', '512GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/07/22/samsung-galaxy-z-fold8-tim-8-153436602.png' },
+        { model: 'Galaxy Z Flip 6', basePrice: 14200000, capacities: ['256GB', '512GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/03/17/a57-violet-1.png' },
+        { model: 'Galaxy Z Flip 5', basePrice: 9800000, capacities: ['256GB', '512GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/03/17/a57-violet-1.png' },
+        { model: 'Galaxy Z Flip 4', basePrice: 6500000, capacities: ['128GB', '256GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/03/17/a57-violet-1.png' },
+        { model: 'Galaxy A55 5G', basePrice: 6200000, capacities: ['128GB', '256GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/03/17/a57-violet-1.png' },
+        { model: 'Galaxy A54 5G', basePrice: 4800000, capacities: ['128GB', '256GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/06/24/samsung-a27-xanh-1.png' },
+        { model: 'Galaxy A35 5G', basePrice: 4200000, capacities: ['128GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/10/05/a18-white-151324306.png' }
+      ],
+      Xiaomi: [
+        { model: 'Xiaomi 14 Ultra', basePrice: 16000000, capacities: ['256GB', '512GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/08/01/q15a-green-back1-091121733.png' },
+        { model: 'Xiaomi 14 Pro', basePrice: 13500000, capacities: ['256GB', '512GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/08/01/q15a-green-back1-091121733.png' },
+        { model: 'Xiaomi 14', basePrice: 11500000, capacities: ['256GB', '512GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/08/01/q15a-green-back1-091121733.png' },
+        { model: 'Xiaomi 13 Ultra', basePrice: 12000000, capacities: ['256GB', '512GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/08/01/q15a-green-back1-091121733.png' },
+        { model: 'Xiaomi 13 Pro', basePrice: 9200000, capacities: ['256GB', '512GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/08/01/q15a-green-back1-091121733.png' },
+        { model: 'Xiaomi 13', basePrice: 7800000, capacities: ['128GB', '256GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/08/01/q15a-green-back1-091121733.png' },
+        { model: 'Xiaomi 13T Pro', basePrice: 8500000, capacities: ['256GB', '512GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/08/17/p19-purple-back11-155153642.png' },
+        { model: 'Xiaomi 13T', basePrice: 6200000, capacities: ['128GB', '256GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/08/17/p19-purple-back11-155153642.png' },
+        { model: 'Redmi Note 13 Pro+ 5G', basePrice: 5500000, capacities: ['256GB', '512GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/08/17/p19-purple-back11-155153642.png' },
+        { model: 'Redmi Note 13 Pro', basePrice: 4500000, capacities: ['128GB', '256GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/08/17/p19-purple-back11-155153642.png' },
+        { model: 'Redmi Note 13', basePrice: 3200000, capacities: ['128GB', '256GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/08/17/p19-purple-back11-155153642.png' },
+        { model: 'POCO F6 Pro', basePrice: 7500000, capacities: ['256GB', '512GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/09/30/q15ap-green-front1-170835651.png', model: 'POCO F6 Pro' },
+        { model: 'POCO X6 Pro', basePrice: 5200000, capacities: ['256GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/09/30/q15ap-green-front1-170835651.png' },
+        { model: 'Xiaomi 12 Pro', basePrice: 5800000, capacities: ['256GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/08/01/q15a-green-back1-091121733.png' }
+      ],
+      OPPO: [
+        { model: 'OPPO Find N3', basePrice: 19500000, capacities: ['512GB', '1TB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/03/17/a57-violet-1.png' },
+        { model: 'OPPO Find N3 Flip', basePrice: 11500000, capacities: ['256GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/03/17/a57-violet-1.png' },
+        { model: 'OPPO Find N2 Flip', basePrice: 7800000, capacities: ['256GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/03/17/a57-violet-1.png' },
+        { model: 'OPPO Find X7 Ultra', basePrice: 15000000, capacities: ['256GB', '512GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/03/17/a57-violet-1.png' },
+        { model: 'OPPO Find X6 Pro', basePrice: 10500000, capacities: ['256GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/03/17/a57-violet-1.png' },
+        { model: 'OPPO Reno 12 Pro', basePrice: 8900000, capacities: ['256GB', '512GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/03/17/a57-violet-1.png' },
+        { model: 'OPPO Reno 12', basePrice: 6800000, capacities: ['256GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/03/17/a57-violet-1.png' },
+        { model: 'OPPO Reno 11 Pro', basePrice: 6500000, capacities: ['256GB', '512GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/03/17/a57-violet-1.png' },
+        { model: 'OPPO Reno 11', basePrice: 5200000, capacities: ['128GB', '256GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/03/17/a57-violet-1.png' },
+        { model: 'OPPO Reno 10 Pro+', basePrice: 7200000, capacities: ['256GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/03/17/a57-violet-1.png' },
+        { model: 'OPPO Reno 8 Pro', basePrice: 4500000, capacities: ['256GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/03/17/a57-violet-1.png' },
+        { model: 'OPPO A79 5G', basePrice: 3800000, capacities: ['128GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/03/17/a57-violet-1.png' },
+        { model: 'OPPO A58', basePrice: 2800000, capacities: ['128GB'], img: 'https://i.hoanghamobile.vn/Uploads/2026/03/17/a57-violet-1.png' }
+      ]
+    };
+
+    const CONDITION_DATA = [
+      { id: 1, title: 'Loại 1 (Máy đẹp 99%)', desc: 'Màn hình & thân vỏ không xước, pin > 85%, hoạt động hoàn hảo', rate: 1.0 },
+      { id: 2, title: 'Loại 2 (Xước nhẹ 95%)', desc: 'Thân vỏ xước dăm li ti khó thấy, pin > 80%, linh kiện zin', rate: 0.88 },
+      { id: 3, title: 'Loại 3 (Cấn móp 85%)', desc: 'Cấn viền nhẹ, màn xước lông mèo hoặc hơi ám nhẹ, dùng tốt', rate: 0.72 },
+      { id: 4, title: 'Loại 4 (Vỡ kính / Lỗi)', desc: 'Vỡ kính, lỗi camera, chai pin nặng (thu xác linh kiện giá cao)', rate: 0.52 }
+    ];
 
     // ==========================================
-    // CÁC HÀM TƯƠNG TÁC HEADER (CHUẨN TOÀN TRANG)
+    // DOM READY & KHỞI TẠO
     // ==========================================
-    window.toggleMegaMenu = function() {
-      const flyout = document.getElementById('mega-menu-flyout');
-      if (flyout) flyout.classList.toggle('hidden');
-    };
-
-    window.toggleNotificationPopover = function () {
-      const pop = document.getElementById('notification-popover');
-      if (pop) pop.classList.toggle('hidden');
-    };
-
-    window.toggleCustomerAvatarMenu = function (e) {
-      if (e && e.stopPropagation) e.stopPropagation();
-      const pop = document.getElementById('customer-avatar-popover');
-      const chev = document.getElementById('customer-avatar-chevron');
-      if (!pop) return;
-      const isHidden = pop.classList.contains('hidden');
-      if (isHidden) {
-        pop.classList.remove('hidden');
-        if (chev) chev.style.transform = 'rotate(180deg)';
-      } else {
-        pop.classList.add('hidden');
-        if (chev) chev.style.transform = 'rotate(0deg)';
-      }
-    };
-
-    window.closeCustomerAvatarMenu = function () {
-      const pop = document.getElementById('customer-avatar-popover');
-      const chev = document.getElementById('customer-avatar-chevron');
-      if (pop) pop.classList.add('hidden');
-      if (chev) chev.style.transform = 'rotate(0deg)';
-    };
-
-    window.quickSearchTag = function (tag) {
-      window.location.href = 'category.html?q=' + encodeURIComponent(tag);
-    };
-
-    window.filterPhoneBrand = function (brand) {
-      window.location.href = 'category.html?type=dienthoai&brand=' + encodeURIComponent(brand);
-    };
-
-    window.applySearchFilters = function () {
-      const input = document.getElementById('search-input');
-      const val = input ? input.value.trim() : '';
-      if (val) {
-        window.location.href = 'category.html?q=' + encodeURIComponent(val);
-      }
-    };
-
-    document.addEventListener('click', function (e) {
-      const pop = document.getElementById('customer-avatar-popover');
-      const btn = document.getElementById('btn-customer-avatar-toggle');
-      if (pop && !pop.classList.contains('hidden') && !pop.contains(e.target) && !btn?.contains(e.target)) {
-        window.closeCustomerAvatarMenu();
-      }
-
-      const notiPop = document.getElementById('notification-popover');
-      const notiBtn = document.getElementById('btn-notification-toggle');
-      if (notiPop && !notiPop.classList.contains('hidden') && !notiPop.contains(e.target) && !notiBtn?.contains(e.target)) {
-        notiPop.classList.add('hidden');
-      }
-
-      const megaFlyout = document.getElementById('mega-menu-flyout');
-      const megaBtn = document.getElementById('btn-mega-menu-toggle');
-      if (megaFlyout && !megaFlyout.classList.contains('hidden') && !megaFlyout.contains(e.target) && !megaBtn?.contains(e.target)) {
-        megaFlyout.classList.add('hidden');
-      }
-    });
-
-    // Bắt phím Enter trong ô tìm kiếm header
-    const mainSearchInput = document.getElementById('search-input');
-    if (mainSearchInput) {
-      mainSearchInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          window.applySearchFilters();
-        }
-      });
-    }
-
     document.addEventListener('DOMContentLoaded', async () => {
-      // 1. Tải danh mục sản phẩm từ JSON / StoreData
+      // 1. Tải danh mục sản phẩm từ JSON
       try {
         const metaRes = await fetch('../data/products-meta.json').then(r => r.ok ? r.json() : null).catch(() => null);
         if (metaRes && typeof metaRes === 'object') {
@@ -1238,52 +1526,288 @@
         console.warn('Cannot fetch products-meta.json directly', e);
       }
 
-      if (allProducts.length === 0 && window.CellphoneSData) {
-        if (typeof window.CellphoneSData.init === 'function') {
-          await window.CellphoneSData.init();
-        }
-        allProducts = window.CellphoneSData.products || [];
+      if (allProducts.length === 0 && window.StoreData) {
+        allProducts = window.StoreData.products || [];
       }
 
       // Fallback nếu rỗng
       if (allProducts.length === 0) {
         allProducts = [
-          { maHang: 'IP16PM-256', tenHang: 'iPhone 16 Pro Max 256GB Titan Sa Mạc', donGia: 34990000, nhanHieu: 'Apple', anhChinh: '../images/banner/iphone-18-cat-082925094.png' },
-          { maHang: 'IP16P-128', tenHang: 'iPhone 16 Pro 128GB Titan Tự Nhiên', donGia: 28490000, nhanHieu: 'Apple', anhChinh: '../images/banner/iphone-18-cat-082925094.png' },
-          { maHang: 'SS-S25U', tenHang: 'Samsung Galaxy S25 Ultra 12GB/256GB', donGia: 31990000, nhanHieu: 'Samsung', anhChinh: 'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png' },
-          { maHang: 'XM-14U', tenHang: 'Xiaomi 14 Ultra 16GB/512GB Leica', donGia: 24990000, nhanHieu: 'Xiaomi', anhChinh: 'https://i.hoanghamobile.vn/Uploads/2026/08/01/q15a-green-back1-091121733.png' }
+          { maHang: 'MH101', tenHang: 'iPhone 18 Pro Max 256GB', donGia: 41490000, giaGoc: 44809200, nhanHieu: 'Apple', anhChinh: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png' },
+          { maHang: 'MH114', tenHang: 'Samsung Galaxy Z Fold8 5G', donGia: 39990000, giaGoc: 43990000, nhanHieu: 'Samsung', anhChinh: 'https://i.hoanghamobile.vn/Uploads/2026/07/22/samsung-galaxy-z-fold8-tim-8-153436602.png' },
+          { maHang: 'MH113', tenHang: 'Samsung Galaxy S26 Ultra', donGia: 30890000, giaGoc: 34990000, nhanHieu: 'Samsung', anhChinh: 'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-tim-1.png' },
+          { maHang: 'MH117', tenHang: 'Xiaomi 17T Pro Leica 512GB', donGia: 17490000, giaGoc: 19990000, nhanHieu: 'Xiaomi', anhChinh: 'https://i.hoanghamobile.vn/Uploads/2026/08/01/q15a-green-back1-091121733.png' }
         ];
       }
 
-      // Kiểm tra URL param
+      // Kiểm tra URL param để chọn máy mới
       const urlParams = new URLSearchParams(window.location.search);
       const preselectId = urlParams.get('id');
-
       if (preselectId) {
         targetProduct = allProducts.find(p => String(p.maHang) === String(preselectId)) || allProducts[0];
       } else {
-        targetProduct = allProducts.find(p => p.tenHang && p.tenHang.toLowerCase().includes('iphone 16 pro max')) || allProducts[0];
+        targetProduct = allProducts.find(p => p.tenHang && p.tenHang.toLowerCase().includes('iphone 18')) || allProducts[0];
       }
 
+      // Khởi tạo máy cũ mặc định
+      selectedModel = USED_MODELS_DB.Apple[0];
+      selectedCapacity = selectedModel.capacities[0];
+
+      // Render các component
+      renderUsedDevicesGrid();
+      renderTopUpgradeGrid();
       updateTargetPreview();
+      renderBrandButtons();
       renderUsedModelsGrid();
       renderCapacityOptions();
       renderConditionOptions();
-      renderReferencePricingTable();
       recalculate();
+
+      // Đóng popover khi click ngoài
+      document.addEventListener('click', (e) => {
+        const pop = document.getElementById('customer-avatar-popover');
+        const btn = document.getElementById('btn-customer-avatar-toggle');
+        if (pop && !pop.classList.contains('hidden') && !pop.contains(e.target) && !btn?.contains(e.target)) {
+          window.closeCustomerAvatarMenu && window.closeCustomerAvatarMenu();
+        }
+      });
     });
 
-    // ==========================================
-    // 2. MÁY MỚI (TARGET PRODUCT) & MODAL CHỌN
-    // ==========================================
+    // =========================================================================
+    // SECTION 1: SẢN PHẨM THU CŨ (GRID 5 CỘT, LỌC HÃNG, SẮP XẾP)
+    // =========================================================================
+    function renderUsedDevicesGrid() {
+      const container = document.getElementById('used-devices-grid');
+      if (!container) return;
+
+      let list = [...USED_TRADE_IN_PRODUCTS];
+
+      // Lọc theo hãng
+      if (usedBrandFilter !== 'ALL') {
+        list = list.filter(item => item.brand.toLowerCase() === usedBrandFilter.toLowerCase());
+      }
+
+      // Tìm kiếm
+      if (usedSearchQuery.trim()) {
+        const q = usedSearchQuery.toLowerCase();
+        list = list.filter(item => item.name.toLowerCase().includes(q));
+      }
+
+      // Sắp xếp
+      if (usedSortOrder === 'price-asc') {
+        list.sort((a, b) => a.price - b.price);
+      } else if (usedSortOrder === 'price-desc') {
+        list.sort((a, b) => b.price - a.price);
+      }
+
+      const totalFound = list.length;
+      const visibleList = list.slice(0, usedVisibleLimit);
+
+      // Cập nhật số lượng còn lại cho nút "Xem thêm"
+      const remaining = Math.max(0, totalFound - usedVisibleLimit);
+      const remainEl = document.getElementById('used-count-remaining');
+      if (remainEl) remainEl.textContent = remaining > 0 ? remaining : 'toàn bộ';
+
+      const btnMore = document.getElementById('btn-load-more-used');
+      if (btnMore) {
+        if (remaining === 0 && totalFound <= 10) {
+          btnMore.parentElement.classList.add('hidden');
+        } else {
+          btnMore.parentElement.classList.remove('hidden');
+          btnMore.innerHTML = remaining > 0 
+            ? `Xem thêm ${remaining} sản phẩm thu cũ <i class="fa-solid fa-chevron-down ml-1 text-xs"></i>`
+            : `Thu gọn bớt danh sách <i class="fa-solid fa-chevron-up ml-1 text-xs"></i>`;
+        }
+      }
+
+      if (visibleList.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full py-12 text-center text-slate-400">
+            <i class="fa-solid fa-magnifying-glass text-3xl mb-2 text-slate-300"></i>
+            <p class="text-sm font-semibold text-slate-600">Không tìm thấy dòng máy thu cũ phù hợp</p>
+            <p class="text-xs text-slate-400 mt-1">Vui lòng thử tìm kiếm với từ khóa khác hoặc liên hệ hotline 1800 6868</p>
+          </div>
+        `;
+        return;
+      }
+
+      // Render từng Card (Ảnh, Tên, Giá đỏ bold, Nút 'Chọn thu cũ' màu xanh #0057B7)
+      container.innerHTML = visibleList.map(item => `
+        <div class="bg-white rounded-2xl border border-slate-200 hover:border-[#0057B7] hover:shadow-lg transition-all p-3 sm:p-4 flex flex-col justify-between group">
+          <div>
+            <!-- Khung ảnh sản phẩm -->
+            <div class="relative w-full aspect-square rounded-xl bg-slate-50 p-2 sm:p-3 flex items-center justify-center overflow-hidden mb-3">
+              <img src="${item.img}" alt="${item.name}" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" onerror="this.onerror=null; this.src='../images/categories/dien-thoai.png'">
+            </div>
+
+            <!-- Tên máy -->
+            <h3 class="text-xs sm:text-sm font-semibold text-slate-900 group-hover:text-[#0057B7] line-clamp-2 leading-snug mb-2 transition-colors">
+              ${item.name}
+            </h3>
+          </div>
+
+          <div>
+            <!-- Giá thu cũ: Chữ đỏ đậm chuẩn Hoàng Hà -->
+            <div class="text-sm sm:text-base font-bold text-[#DC2626] tabular-nums mb-3">
+              ${formatMoney(item.price)}
+            </div>
+
+            <!-- Nút Chọn thu cũ: Xanh #0057B7 -->
+            <button type="button" onclick="selectUsedProductForTradeIn('${item.model}', '${item.capacity}', ${item.price}, '${item.brand}')" class="w-full py-2 rounded-xl bg-[#0057B7] hover:bg-[#004494] text-white text-xs sm:text-sm font-semibold text-center shadow-xs transition-colors cursor-pointer flex items-center justify-center gap-1.5 active:scale-98">
+              <span>Chọn thu cũ</span>
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function setUsedSort(type) {
+      usedSortOrder = type;
+      document.querySelectorAll('.used-sort-btn').forEach(btn => {
+        btn.classList.remove('bg-[#0057B7]', 'text-white', 'border-[#0057B7]');
+        btn.classList.add('bg-slate-100', 'text-slate-700', 'border-slate-200');
+      });
+      const activeBtn = document.getElementById(`btn-sort-${type}`);
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-slate-100', 'text-slate-700', 'border-slate-200');
+        activeBtn.classList.add('bg-[#0057B7]', 'text-white', 'border-[#0057B7]');
+      }
+      renderUsedDevicesGrid();
+    }
+
+    function filterUsedBrand(brand) {
+      usedBrandFilter = brand;
+      document.querySelectorAll('.used-brand-pill').forEach(btn => {
+        btn.classList.remove('bg-[#0057B7]', 'text-white');
+        btn.classList.add('bg-slate-100', 'text-slate-700');
+      });
+      event.target.classList.remove('bg-slate-100', 'text-slate-700');
+      event.target.classList.add('bg-[#0057B7]', 'text-white');
+      renderUsedDevicesGrid();
+    }
+
+    function onSearchUsedDevices() {
+      const input = document.getElementById('search-used-input');
+      usedSearchQuery = input ? input.value : '';
+      renderUsedDevicesGrid();
+    }
+
+    function toggleLoadMoreUsed() {
+      if (usedVisibleLimit === 10) {
+        usedVisibleLimit = 100; // Mở rộng hết
+      } else {
+        usedVisibleLimit = 10; // Thu gọn
+      }
+      renderUsedDevicesGrid();
+    }
+
+    // Khi người dùng bấm "Chọn thu cũ", đưa máy đó vào bộ tính toán và cuộn xuống mượt mà
+    function selectUsedProductForTradeIn(modelName, capacity, basePrice, brand) {
+      if (brand && ['Apple', 'Samsung', 'Xiaomi', 'OPPO'].includes(brand)) {
+        selectedBrand = brand;
+        renderBrandButtons();
+      }
+
+      // Tìm trong DB
+      const brandList = USED_MODELS_DB[selectedBrand] || USED_MODELS_DB.Apple;
+      let found = brandList.find(m => m.model.toLowerCase() === modelName.toLowerCase());
+      if (!found) {
+        // Tạo model tạm nếu chưa có
+        found = { model: modelName, basePrice: basePrice, capacities: [capacity, '256GB', '512GB'], img: '../images/banner/iphone-18-cat-082925094.png' };
+        brandList.unshift(found);
+      }
+
+      selectedModel = found;
+      selectedCapacity = capacity;
+      selectedCondition = 1;
+
+      renderUsedModelsGrid();
+      renderCapacityOptions();
+      renderConditionOptions();
+      recalculate();
+
+      // Cuộn xuống bộ tính toán
+      const calcSection = document.getElementById('dinh-gia-nhanh');
+      if (calcSection) {
+        calcSection.scrollIntoView({ behavior: 'smooth' });
+      }
+
+      showToast(`Đã chọn "${modelName} (${capacity})" vào bộ tính toán định giá!`);
+    }
+
+    // =========================================================================
+    // SECTION 2: TOP MÁY ĐƯỢC LÊN ĐỜI NHIỀU NHẤT (GRID 5 CỘT)
+    // =========================================================================
+    function renderTopUpgradeGrid() {
+      const container = document.getElementById('top-len-doi-grid');
+      if (!container) return;
+
+      container.innerHTML = TOP_UPGRADE_PRODUCTS.map(item => `
+        <div class="bg-white rounded-2xl border border-slate-200 hover:border-[#0057B7] hover:shadow-lg transition-all p-3.5 sm:p-4 flex flex-col justify-between group">
+          <div>
+            <!-- Badge trợ giá lên đời -->
+            <div class="mb-2">
+              <span class="inline-block px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-200 text-[10px] sm:text-[11px] font-bold">
+                Trợ giá đến: ${item.subsidy}
+              </span>
+            </div>
+
+            <!-- Khung ảnh -->
+            <div class="relative w-full aspect-square rounded-xl bg-slate-50 p-2 sm:p-3 flex items-center justify-center overflow-hidden mb-3">
+              <img src="${item.img}" alt="${item.name}" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" onerror="this.onerror=null; this.src='../images/categories/dien-thoai.png'">
+            </div>
+
+            <!-- Tên máy -->
+            <h3 class="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-[#0057B7] line-clamp-2 leading-snug mb-2 transition-colors">
+              ${item.name}
+            </h3>
+          </div>
+
+          <div>
+            <!-- Giá bán & Giá gốc -->
+            <div class="flex items-baseline gap-1.5 mb-3">
+              <span class="text-sm sm:text-base font-bold text-[#DC2626] tabular-nums">${formatMoney(item.price)}</span>
+              <span class="text-[11px] text-slate-400 line-through tabular-nums">${formatMoney(item.oldPrice)}</span>
+            </div>
+
+            <!-- Nút Lên đời ngay: Xanh #0057B7 -->
+            <button type="button" onclick="selectTargetProductForUpgrade('${item.maHang}')" class="w-full py-2.5 rounded-xl bg-[#0057B7] hover:bg-[#004494] text-white text-xs sm:text-sm font-bold text-center shadow-xs transition-colors cursor-pointer flex items-center justify-center gap-1.5 active:scale-98">
+              <span>Lên đời ngay</span>
+              <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function selectTargetProductForUpgrade(maHang) {
+      const found = allProducts.find(p => String(p.maHang) === String(maHang));
+      if (found) {
+        targetProduct = found;
+        targetSelectedCapacity = (found.phienBan && found.phienBan[0]) || null;
+        updateTargetPreview();
+        recalculate();
+      }
+
+      const calcSection = document.getElementById('dinh-gia-nhanh');
+      if (calcSection) {
+        calcSection.scrollIntoView({ behavior: 'smooth' });
+      }
+
+      showToast(`Đã chọn máy muốn lên đời: ${targetProduct.tenHang}!`);
+    }
+
+    // =========================================================================
+    // SECTION 6: LOGIC BỘ TÍNH TOÁN ĐỊNH GIÁ & TIỀN BÙ
+    // =========================================================================
     function updateTargetPreview() {
       if (!targetProduct) return;
       document.getElementById('target-name').textContent = targetProduct.tenHang;
       document.getElementById('target-brand-badge').textContent = targetProduct.nhanHieu || 'Chính Hãng';
       
-      const price = targetSelectedCapacity?.gia || targetProduct.donGia || 34990000;
-      const oldPrice = targetSelectedCapacity?.giaGoc || targetProduct.giaGoc || Math.round(price * 1.14);
-      const discount = oldPrice > price ? Math.round(((oldPrice - price) / oldPrice) * 100) : 14;
+      const price = targetSelectedCapacity?.gia || targetProduct.donGia || 41490000;
+      const oldPrice = targetSelectedCapacity?.giaGoc || targetProduct.giaGoc || Math.round(price * 1.08);
+      const discount = oldPrice > price ? Math.round(((oldPrice - price) / oldPrice) * 100) : 8;
 
       document.getElementById('target-price').textContent = formatMoney(price);
       const oldEl = document.getElementById('target-old-price');
@@ -1291,24 +1815,22 @@
       const discEl = document.getElementById('target-discount-badge');
       if (discEl) discEl.textContent = `-${discount}%`;
 
-      // Ảnh máy mới
       const img = document.getElementById('target-img');
       if (img) {
         const src = targetProduct.anhChinh && (targetProduct.anhChinh.startsWith('http') || targetProduct.anhChinh.startsWith('/') ? targetProduct.anhChinh : `../${targetProduct.anhChinh}`);
         img.src = src || '../images/categories/dien-thoai.png';
       }
 
-      // Dung lượng của máy mới
       const capContainer = document.getElementById('target-capacity-options');
       if (targetProduct.phienBan && Array.isArray(targetProduct.phienBan) && targetProduct.phienBan.length > 0) {
         if (!targetSelectedCapacity) targetSelectedCapacity = targetProduct.phienBan[0];
         capContainer.innerHTML = targetProduct.phienBan.map(pb => `
-          <button type="button" onclick="selectTargetCapacity('${pb.id || pb.dungLuong}')" class="px-3 py-1 rounded-[8px] text-xs font-semibold border transition-all cursor-pointer ${pb.id === targetSelectedCapacity.id || pb.dungLuong === targetSelectedCapacity.dungLuong ? 'bg-[#1D4ED8] text-white border-[#1D4ED8] shadow-xs' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'}">
+          <button type="button" onclick="selectTargetCapacity('${pb.id || pb.dungLuong}')" class="px-3 py-1 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${pb.id === targetSelectedCapacity.id || pb.dungLuong === targetSelectedCapacity.dungLuong ? 'bg-[#0057B7] text-white border-[#0057B7] shadow-xs' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'}">
             ${pb.dungLuong}
           </button>
         `).join('');
       } else {
-        capContainer.innerHTML = `<span class="text-xs text-[#64748B] font-normal">Phiên bản tiêu chuẩn</span>`;
+        capContainer.innerHTML = `<span class="text-xs text-slate-500 font-normal">Phiên bản tiêu chuẩn</span>`;
       }
     }
 
@@ -1323,7 +1845,169 @@
       }
     }
 
-    // Modal chọn máy mới từ JSON
+    function renderBrandButtons() {
+      const container = document.getElementById('brand-buttons-container');
+      if (!container) return;
+      const brands = ['Apple', 'Samsung', 'Xiaomi', 'OPPO'];
+      container.innerHTML = brands.map(b => `
+        <button type="button" onclick="selectBrand('${b}')" id="btn-brand-${b}" class="brand-btn h-11 px-2 sm:px-3 rounded-xl border text-xs sm:text-sm font-semibold transition-all text-center cursor-pointer ${selectedBrand === b ? 'bg-[#0066FF] text-white border-[#0066FF] shadow-xs' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'}">
+          ${b === 'Apple' ? '<i class="fa-brands fa-apple mr-0.5 sm:mr-1"></i> Apple' : b}
+        </button>
+      `).join('');
+    }
+
+    function selectBrand(brand) {
+      selectedBrand = brand;
+      renderBrandButtons();
+      const list = USED_MODELS_DB[brand] || [];
+      selectedModel = list[0] || null;
+      if (selectedModel) {
+        selectedCapacity = selectedModel.capacities[0];
+      }
+      renderUsedModelsGrid();
+      renderCapacityOptions();
+      recalculate();
+    }
+
+    function renderUsedModelsGrid() {
+      const container = document.getElementById('used-models-grid');
+      if (!container) return;
+
+      const list = USED_MODELS_DB[selectedBrand] || [];
+      const searchVal = (document.getElementById('used-search-input')?.value || '').toLowerCase().trim();
+
+      let filtered = list;
+      if (searchVal) {
+        filtered = list.filter(m => m.model.toLowerCase().includes(searchVal));
+      }
+
+      const limit = isShowingMoreUsed ? filtered.length : 9;
+      const toShow = filtered.slice(0, limit);
+
+      const toggleWrapper = document.getElementById('used-models-toggle-wrapper');
+      if (toggleWrapper) {
+        toggleWrapper.style.display = filtered.length > 9 ? 'block' : 'none';
+        const btnToggle = document.getElementById('btn-toggle-used-models');
+        if (btnToggle) {
+          btnToggle.innerHTML = isShowingMoreUsed
+            ? `<span>Thu gọn bớt danh sách</span> <i class="fa-solid fa-chevron-up text-[10px] ml-1"></i>`
+            : `<span>Xem thêm các dòng ${selectedBrand} khác (${filtered.length - 9})</span> <i class="fa-solid fa-chevron-down text-[10px] ml-1"></i>`;
+        }
+      }
+
+      container.innerHTML = toShow.map(item => {
+        const isSelected = selectedModel && selectedModel.model === item.model;
+        return `
+          <div onclick="selectUsedModel('${item.model}')" title="${item.model}" class="p-2.5 sm:p-3 rounded-xl border transition-all cursor-pointer flex items-center gap-2.5 sm:gap-3 ${isSelected ? 'border-2 border-[#0066FF] bg-blue-50/80 shadow-xs ring-1 ring-[#0066FF]/20' : 'border-slate-200 bg-white hover:border-blue-300 hover:bg-slate-50'}">
+            <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-white p-0.5 border border-slate-200 flex-shrink-0 flex items-center justify-center">
+              <img src="${item.img || '../images/banner/iphone-18-cat-082925094.png'}" alt="${item.model}" class="max-h-full max-w-full object-contain" onerror="this.onerror=null; this.src='../images/categories/dien-thoai.png'">
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="text-xs sm:text-[13px] font-semibold text-slate-900 line-clamp-2 leading-tight ${isSelected ? 'text-[#0066FF] font-bold' : ''}">${item.model}</div>
+              <div class="text-[11px] sm:text-xs text-[#DC2626] font-bold tabular-nums mt-0.5">Thu tới: ${formatMoney(item.basePrice)}</div>
+            </div>
+            ${isSelected ? '<i class="fa-solid fa-circle-check text-[#0066FF] text-base ml-auto flex-shrink-0"></i>' : ''}
+          </div>
+        `;
+      }).join('');
+    }
+
+    function toggleMoreUsedModels() {
+      isShowingMoreUsed = !isShowingMoreUsed;
+      renderUsedModelsGrid();
+    }
+
+    function filterUsedModels() {
+      renderUsedModelsGrid();
+    }
+
+    function selectUsedModel(modelName) {
+      const list = USED_MODELS_DB[selectedBrand] || [];
+      const found = list.find(m => m.model === modelName);
+      if (found) {
+        selectedModel = found;
+        selectedCapacity = found.capacities[0];
+        renderUsedModelsGrid();
+        renderCapacityOptions();
+        recalculate();
+      }
+    }
+
+    function renderCapacityOptions() {
+      const container = document.getElementById('capacity-options-container');
+      if (!container || !selectedModel) return;
+
+      container.innerHTML = selectedModel.capacities.map(cap => {
+        const isSelected = selectedCapacity === cap;
+        return `
+          <button type="button" onclick="selectCapacity('${cap}')" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold border transition-all cursor-pointer ${isSelected ? 'bg-[#0057B7] text-white border-[#0057B7] shadow-xs' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'}">
+            ${cap}
+          </button>
+        `;
+      }).join('');
+    }
+
+    function selectCapacity(cap) {
+      selectedCapacity = cap;
+      renderCapacityOptions();
+      recalculate();
+    }
+
+    function renderConditionOptions() {
+      const container = document.getElementById('condition-tiers-container');
+      if (!container) return;
+
+      container.innerHTML = CONDITION_DATA.map(item => {
+        const isSelected = selectedCondition === item.id;
+        return `
+          <div onclick="selectCondition(${item.id})" class="p-3.5 rounded-xl border transition-all cursor-pointer flex flex-col justify-between ${isSelected ? 'border-2 border-[#0057B7] bg-blue-50/70 shadow-xs' : 'border-slate-200 bg-white hover:border-blue-300 hover:bg-slate-50'}">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs sm:text-sm font-bold ${isSelected ? 'text-[#0057B7]' : 'text-slate-900'}">${item.title}</span>
+              ${isSelected ? '<i class="fa-solid fa-circle-check text-[#0057B7] text-sm"></i>' : '<span class="w-4 h-4 rounded-full border border-slate-300"></span>'}
+            </div>
+            <p class="text-[11px] text-slate-500 leading-snug font-normal">${item.desc}</p>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function selectCondition(tierId) {
+      selectedCondition = Number(tierId);
+      renderConditionOptions();
+      recalculate();
+    }
+
+    function recalculate() {
+      if (!selectedModel) return;
+
+      let val = selectedModel.basePrice;
+      if (selectedCapacity === '256GB') val *= 1.08;
+      else if (selectedCapacity === '512GB') val *= 1.18;
+      else if (selectedCapacity === '1TB') val *= 1.28;
+
+      const cond = CONDITION_DATA.find(c => c.id === selectedCondition) || CONDITION_DATA[0];
+      val = Math.round((val * cond.rate) / 10000) * 10000;
+
+      // Trợ giá lên đời độc quyền SamaMobile
+      let subsidy = 1000000;
+      if (val >= 15000000) subsidy = 2500000;
+      else if (val >= 10000000) subsidy = 1800000;
+      else if (val >= 6000000) subsidy = 1200000;
+
+      const targetPrice = targetSelectedCapacity?.gia || targetProduct?.donGia || 41490000;
+      const totalBenefit = val + subsidy;
+      const diff = Math.max(0, targetPrice - totalBenefit);
+      const installment = Math.round(diff / 6);
+
+      document.getElementById('calc-target-price').textContent = formatMoney(targetPrice);
+      document.getElementById('calc-used-value').textContent = `- ${formatMoney(val)}`;
+      document.getElementById('calc-subsidy').textContent = `- ${formatMoney(subsidy)}`;
+      document.getElementById('calc-total-benefit').textContent = `Tiết kiệm: ${formatMoney(totalBenefit)}`;
+      document.getElementById('calc-final-diff').textContent = formatMoney(diff);
+      document.getElementById('calc-installment').textContent = formatMoney(installment);
+    }
+
+    // Modal chọn máy mới
     function openProductSelectorModal() {
       renderModalProducts();
       document.getElementById('product-selector-modal')?.classList.remove('hidden');
@@ -1338,10 +2022,10 @@
     function filterModalBrand(brand) {
       modalBrandFilter = brand;
       document.querySelectorAll('.modal-brand-btn').forEach(btn => {
-        btn.classList.remove('bg-[#1D4ED8]', 'text-white', 'border-[#1D4ED8]');
+        btn.classList.remove('bg-[#0057B7]', 'text-white', 'border-[#0057B7]');
         btn.classList.add('bg-white', 'text-slate-700', 'border-slate-200');
       });
-      event.target.classList.add('bg-[#1D4ED8]', 'text-white', 'border-[#1D4ED8]');
+      event.target.classList.add('bg-[#0057B7]', 'text-white', 'border-[#0057B7]');
       event.target.classList.remove('bg-white', 'text-slate-700', 'border-slate-200');
       renderModalProducts();
     }
@@ -1351,328 +2035,62 @@
     }
 
     function renderModalProducts() {
-      const container = document.getElementById('modal-products-grid');
-      if (!container) return;
+      const grid = document.getElementById('modal-products-grid');
+      if (!grid) return;
 
-      const keyword = (document.getElementById('modal-search-input')?.value || '').trim().toLowerCase();
-      
-      let filtered = allProducts.filter(p => {
-        const matchBrand = (modalBrandFilter === 'ALL') || 
-                           (p.nhanHieu && p.nhanHieu.toLowerCase().includes(modalBrandFilter.toLowerCase())) ||
-                           (p.tenHang && p.tenHang.toLowerCase().includes(modalBrandFilter.toLowerCase()));
-        const matchKey = !keyword || (p.tenHang && p.tenHang.toLowerCase().includes(keyword));
-        return matchBrand && matchKey;
-      });
-
-      // Sắp xếp
+      const searchVal = (document.getElementById('modal-search-input')?.value || '').toLowerCase().trim();
       const sortVal = document.getElementById('modal-sort-select')?.value || 'featured';
+
+      let list = [...allProducts];
+
+      if (modalBrandFilter !== 'ALL') {
+        list = list.filter(p => p.nhanHieu && p.nhanHieu.toLowerCase() === modalBrandFilter.toLowerCase());
+      }
+
+      if (searchVal) {
+        list = list.filter(p => p.tenHang && p.tenHang.toLowerCase().includes(searchVal));
+      }
+
       if (sortVal === 'price-asc') {
-        filtered.sort((a, b) => (Number(a.donGia) || 0) - (Number(b.donGia) || 0));
+        list.sort((a, b) => (a.donGia || 0) - (b.donGia || 0));
       } else if (sortVal === 'price-desc') {
-        filtered.sort((a, b) => (Number(b.donGia) || 0) - (Number(a.donGia) || 0));
+        list.sort((a, b) => (b.donGia || 0) - (a.donGia || 0));
       }
 
-      const countBadge = document.getElementById('modal-product-count');
-      if (countBadge) countBadge.textContent = `${filtered.length} sản phẩm`;
+      const countEl = document.getElementById('modal-product-count');
+      if (countEl) countEl.textContent = `${list.length} sản phẩm`;
 
-      if (filtered.length === 0) {
-        container.innerHTML = `
-          <div class="col-span-full py-16 text-center text-slate-400">
-            <i class="fa-solid fa-mobile-screen-button text-4xl mb-3 text-slate-300"></i>
-            <p class="text-sm font-semibold text-slate-700">Không tìm thấy sản phẩm nào phù hợp với từ khóa.</p>
-            <p class="text-xs text-[#64748B] mt-1">Vui lòng thử tìm với từ khóa khác như "iPhone", "Samsung", "Xiaomi"...</p>
-          </div>
-        `;
-        return;
-      }
-
-      container.innerHTML = filtered.map(p => {
-        const imgSrc = p.anhChinh && (p.anhChinh.startsWith('http') || p.anhChinh.startsWith('/') ? p.anhChinh : `../${p.anhChinh}`);
-        const isCurrent = targetProduct && String(targetProduct.maHang) === String(p.maHang);
-        const oldPrice = p.giaGoc || Math.round((Number(p.donGia) || 30000000) * 1.14);
-        const discountPercent = oldPrice > p.donGia ? Math.round(((oldPrice - p.donGia) / oldPrice) * 100) : 14;
-
+      grid.innerHTML = list.map(p => {
+        const isCurrent = targetProduct && targetProduct.maHang === p.maHang;
+        const img = p.anhChinh && (p.anhChinh.startsWith('http') || p.anhChinh.startsWith('/') ? p.anhChinh : `../${p.anhChinh}`);
         return `
-          <div onclick="selectProductFromModal('${p.maHang}')" class="p-3.5 bg-white rounded-[14px] border transition-all duration-200 hover:shadow-lg hover:-translate-y-1 cursor-pointer flex flex-col justify-between group ${isCurrent ? 'border-[#1D4ED8] ring-2 ring-blue-300 shadow-md' : 'border-slate-200 hover:border-[#1D4ED8]'}">
-            
-            <!-- Hình ảnh máy lớn 40-44px, tỉ lệ 1:1, onerror dự phòng -->
-            <div class="w-full h-40 sm:h-44 flex items-center justify-center p-2 mb-2 bg-white rounded-xl relative group-hover:scale-105 transition-transform duration-300">
-              <img src="${imgSrc}" alt="${p.tenHang}" width="160" height="160" class="max-h-full max-w-full object-contain" onerror="this.onerror=null; this.src='../images/categories/dien-thoai.png'">
-              ${isCurrent ? '<span class="absolute top-1 right-1 bg-[#1D4ED8] text-white text-[11px] font-semibold px-2 py-0.5 rounded-full shadow">Đang chọn</span>' : ''}
-            </div>
-
-            <!-- Tên máy & Giá (Không dưới 12px, tabular-nums) -->
-            <div class="space-y-1 flex-1 flex flex-col justify-between">
-              <div>
-                <h4 class="text-sm font-medium text-[#0F172A] leading-snug line-clamp-2 min-h-[38px] group-hover:text-[#1D4ED8] transition-colors">
-                  ${p.tenHang}
-                </h4>
-                
-                <!-- Giá đỏ #DC2626 -->
-                <div class="flex items-baseline gap-1.5 flex-wrap pt-1">
-                  <span class="text-[16px] sm:text-[17px] font-bold text-[#DC2626] leading-tight tabular-nums">
-                    ${formatMoney(p.donGia)}
-                  </span>
-                  <span class="text-xs text-[#64748B] line-through tabular-nums">
-                    ${formatMoney(oldPrice)}
-                  </span>
-                  <span class="text-xs font-semibold text-[#DC2626]">
-                    -${discountPercent}%
-                  </span>
-                </div>
-
-                <!-- Rating & Đã bán -->
-                <div class="text-xs text-[#64748B] flex items-center gap-1 pt-1.5 font-normal">
-                  <span class="text-amber-500 font-semibold">★ 4.9</span>
-                  <span class="text-slate-300">•</span>
-                  <span>Đã bán 7,3k</span>
-                </div>
-
-                <!-- Badge trợ giá vàng nhạt #FEF3C7 -->
-                <div class="mt-2 py-0.5 px-2 rounded-full bg-[#FEF3C7] border border-amber-200 text-amber-900 text-xs font-semibold flex items-center gap-1 w-fit">
-                  <span>🔥 Trợ giá đến 2.500.000₫</span>
-                </div>
-              </div>
-
-              <!-- Nút hành động chuẩn #1D4ED8 cao 38-42px -->
-              <button type="button" class="mt-3.5 w-full py-2 rounded-[10px] text-xs font-semibold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${isCurrent ? 'bg-[#1D4ED8] text-white border border-[#1D4ED8] shadow-sm' : 'border border-[#1D4ED8] text-[#1D4ED8] bg-blue-50/60 hover:bg-[#1D4ED8] hover:text-white'}">
-                ${isCurrent ? '<i class="fa-solid fa-check text-xs"></i> Đang chọn máy này' : 'Chọn máy này'}
-              </button>
-            </div>
-
-          </div>
-        `;
-      }).join('');
-    }
-
-    function selectProductFromModal(maHang) {
-      targetProduct = allProducts.find(p => String(p.maHang) === String(maHang)) || targetProduct;
-      targetSelectedCapacity = targetProduct.phienBan ? targetProduct.phienBan[0] : null;
-      updateTargetPreview();
-      closeProductSelectorModal();
-      recalculate();
-    }
-
-    function selectTargetProductFromBanner(maHang) {
-      selectProductFromModal(maHang);
-      const calcEl = document.getElementById('trade-in-calculator');
-      if (calcEl) {
-        calcEl.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
-
-    // ==========================================
-    // 3. MÁY CŨ (ẢNH 48X48PX, KHÔNG CUỘN LỒNG)
-    // ==========================================
-    function selectBrand(brand) {
-      currentBrand = brand;
-      document.querySelectorAll('.brand-btn').forEach(btn => {
-        btn.classList.remove('bg-[#1D4ED8]', 'text-white', 'border-[#1D4ED8]', 'shadow-xs');
-        btn.classList.add('bg-slate-50', 'text-slate-700', 'border-slate-200');
-      });
-      const activeBtn = document.getElementById(`btn-brand-${brand}`);
-      if (activeBtn) {
-        activeBtn.classList.add('bg-[#1D4ED8]', 'text-white', 'border-[#1D4ED8]', 'shadow-xs');
-        activeBtn.classList.remove('bg-slate-50', 'text-slate-700', 'border-slate-200');
-      }
-
-      const filtered = USED_DEVICES.filter(x => x.brand === brand);
-      currentModel = filtered[0] || USED_DEVICES[0];
-      currentCapacity = currentModel.capacities[0];
-      isShowingAllUsedModels = false;
-
-      renderUsedModelsGrid();
-      renderCapacityOptions();
-      recalculate();
-    }
-
-    function filterUsedModels() {
-      renderUsedModelsGrid();
-    }
-
-    function toggleMoreUsedModels() {
-      isShowingAllUsedModels = !isShowingAllUsedModels;
-      renderUsedModelsGrid();
-    }
-
-    function renderUsedModelsGrid() {
-      const container = document.getElementById('used-models-grid');
-      const keyword = (document.getElementById('used-search-input')?.value || '').trim().toLowerCase();
-      
-      let filtered = USED_DEVICES.filter(x => x.brand === currentBrand);
-      if (keyword) {
-        filtered = filtered.filter(x => x.model.toLowerCase().includes(keyword));
-      }
-
-      // Giới hạn 6 máy nếu chưa bấm Xem thêm
-      const displayList = (!isShowingAllUsedModels && !keyword && filtered.length > 6) ? filtered.slice(0, 6) : filtered;
-      
-      const toggleBtn = document.getElementById('btn-toggle-used-models');
-      const toggleWrapper = document.getElementById('used-models-toggle-wrapper');
-      if (toggleWrapper) {
-        if (filtered.length <= 6 || keyword) {
-          toggleWrapper.classList.add('hidden');
-        } else {
-          toggleWrapper.classList.remove('hidden');
-          if (toggleBtn) {
-            toggleBtn.innerHTML = isShowingAllUsedModels 
-              ? `<span>Thu gọn bớt danh sách</span> <i class="fa-solid fa-chevron-up text-[10px] ml-1"></i>`
-              : `<span>Xem thêm ${filtered.length - 6} dòng máy ${currentBrand} khác</span> <i class="fa-solid fa-chevron-down text-[10px] ml-1"></i>`;
-          }
-        }
-      }
-
-      if (displayList.length === 0) {
-        container.innerHTML = `
-          <div class="col-span-full py-6 text-center text-xs text-[#64748B]">
-            Không tìm thấy dòng máy cũ nào phù hợp với từ khóa "${keyword}".
-          </div>
-        `;
-        return;
-      }
-
-      container.innerHTML = displayList.map(m => {
-        const isSelected = m.model === currentModel.model;
-        const estMin = Math.round(m.basePrice * 0.72);
-        return `
-          <div onclick="selectUsedModel('${m.model}')" class="p-2.5 rounded-[12px] border transition-all cursor-pointer flex items-center gap-3 ${isSelected ? 'bg-blue-50/80 border-[#1D4ED8] ring-2 ring-blue-300' : 'bg-white border-slate-200 hover:border-[#1D4ED8] hover:bg-slate-50'}">
-            <!-- Ảnh 48x48px tỉ lệ 1:1 nền trắng object-fit contain -->
-            <div class="w-12 h-12 bg-white rounded-lg p-1 border border-slate-200 flex-shrink-0 flex items-center justify-center">
-              <img src="${m.image}" alt="${m.model}" width="48" height="48" class="max-h-full max-w-full object-contain" onerror="this.onerror=null; this.src='../images/categories/dien-thoai.png'">
-            </div>
-            <div class="min-w-0 flex-1">
-              <div class="font-semibold text-sm text-[#0F172A] truncate">${m.model}</div>
-              <div class="text-xs sm:text-[13px] font-medium text-[#475569]">Thu từ <strong class="text-[#1D4ED8] font-semibold tabular-nums">${formatMoney(estMin)}</strong></div>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    function selectUsedModel(modelName) {
-      const found = USED_DEVICES.find(x => x.model === modelName);
-      if (found) {
-        currentModel = found;
-        currentCapacity = found.capacities[0];
-        renderUsedModelsGrid();
-        renderCapacityOptions();
-        recalculate();
-      }
-    }
-
-    function renderCapacityOptions() {
-      const container = document.getElementById('capacity-options');
-      container.innerHTML = (currentModel.capacities || []).map(cap => `
-        <button type="button" onclick="selectCapacity('${cap}')" class="cap-btn px-4 py-2 rounded-[10px] border text-xs sm:text-sm font-semibold transition-all cursor-pointer ${cap === currentCapacity ? 'bg-[#0F172A] text-white border-[#0F172A] shadow-xs' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'}">
-          ${cap}
-        </button>
-      `).join('');
-    }
-
-    function selectCapacity(cap) {
-      currentCapacity = cap;
-      renderCapacityOptions();
-      recalculate();
-    }
-
-    function renderConditionOptions() {
-      const container = document.getElementById('condition-options');
-      container.innerHTML = CONDITIONS.map(c => `
-        <label onclick="selectCondition(${c.id})" class="cond-card p-3.5 rounded-[12px] border cursor-pointer transition-all flex flex-col justify-between ${c.id === currentConditionId ? 'bg-blue-50/80 border-[#1D4ED8] ring-2 ring-blue-200' : 'bg-slate-50 border-slate-200 hover:border-slate-300'}">
-          <div class="flex items-center justify-between mb-1.5">
-            <span class="text-sm font-semibold text-[#0F172A]">${c.name}</span>
-            <input type="radio" name="used-cond" value="${c.id}" ${c.id === currentConditionId ? 'checked' : ''} class="text-[#1D4ED8]">
-          </div>
-          <p class="text-[13px] text-[#475569] leading-snug font-normal">${c.desc}</p>
-        </label>
-      `).join('');
-    }
-
-    function selectCondition(id) {
-      currentConditionId = Number(id);
-      renderConditionOptions();
-      recalculate();
-    }
-
-    // ==========================================
-    // 4. BẢNG DỰ TOÁN TÍNH TOÁN TIỀN BÙ
-    // ==========================================
-    function recalculate() {
-      const cond = CONDITIONS.find(c => c.id === currentConditionId) || CONDITIONS[0];
-      
-      // 1. Tính giá máy cũ
-      let usedPrice = currentModel.basePrice;
-      if (currentCapacity === '256GB') usedPrice *= 1.08;
-      else if (currentCapacity === '512GB') usedPrice *= 1.18;
-      else if (currentCapacity === '1TB') usedPrice *= 1.28;
-      usedPrice = Math.round((usedPrice * cond.rate) / 10000) * 10000;
-
-      // 2. Trợ giá SamaCare
-      let subsidy = 1000000;
-      if (usedPrice >= 15000000) subsidy = 2500000;
-      else if (usedPrice >= 10000000) subsidy = 1800000;
-      else if (usedPrice >= 6000000) subsidy = 1200000;
-
-      // 3. Giá máy mới & Tiền bù
-      const targetPrice = Number(targetSelectedCapacity?.gia || targetProduct?.donGia || 34990000);
-      const totalBenefit = usedPrice + subsidy;
-      const finalDiff = Math.max(0, targetPrice - totalBenefit);
-      const monthly = Math.round(finalDiff / 6);
-
-      // Cập nhật giao diện (Màu chuẩn: Đỏ #DC2626 cho giá, Xanh lá #16A34A cho tiền tiết kiệm)
-      document.getElementById('calc-target-price').textContent = formatMoney(targetPrice);
-      document.getElementById('calc-used-price').textContent = '- ' + formatMoney(usedPrice);
-      document.getElementById('calc-subsidy').textContent = '- ' + formatMoney(subsidy);
-      document.getElementById('calc-total-benefit').textContent = 'Tiết kiệm: ' + formatMoney(totalBenefit);
-      document.getElementById('calc-final-diff').textContent = formatMoney(finalDiff);
-      document.getElementById('calc-installment').textContent = formatMoney(monthly);
-    }
-
-    // ==========================================
-    // 5. BẢNG THAM KHẢO GIÁ THU CŨ (HÀNG CAO ~64PX, BẤM ĐƯỢC CẢ DÒNG)
-    // ==========================================
-    function renderReferencePricingTable() {
-      const tbody = document.getElementById('reference-pricing-table');
-      if (!tbody) return;
-
-      const popular = [
-        { model: 'iPhone 15 Pro Max', cap: '256GB', brand: 'Apple', p1: 23220000, p2: 20430000, img: '../images/banner/iphone-18-cat-082925094.png' },
-        { model: 'iPhone 15 Pro', cap: '128GB', brand: 'Apple', p1: 17800000, p2: 15660000, img: '../images/banner/iphone-18-cat-082925094.png' },
-        { model: 'iPhone 14 Pro Max', cap: '128GB', brand: 'Apple', p1: 17000000, p2: 14960000, img: '../images/banner/iphone-18-cat-082925094.png' },
-        { model: 'iPhone 13 Pro Max', cap: '128GB', brand: 'Apple', p1: 13500000, p2: 11880000, img: '../images/banner/iphone-18-cat-082925094.png' },
-        { model: 'Galaxy S24 Ultra', cap: '256GB', brand: 'Samsung', p1: 20410000, p2: 17960000, img: 'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png' },
-        { model: 'Galaxy Z Fold 5', cap: '256GB', brand: 'Samsung', p1: 18250000, p2: 16060000, img: 'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png' },
-        { model: 'Xiaomi 14 Ultra', cap: '256GB', brand: 'Xiaomi', p1: 17820000, p2: 15680000, img: 'https://i.hoanghamobile.vn/Uploads/2026/08/01/q15a-green-back1-091121733.png' }
-      ];
-
-      tbody.innerHTML = popular.map(item => `
-        <tr onclick="selectFromReferenceTable('${item.brand}', '${item.model}', '${item.cap}')" class="h-16 hover:bg-blue-50/60 transition-colors cursor-pointer group border-b border-slate-100">
-          <td class="py-3 px-5 font-semibold flex items-center gap-3">
-            <div class="w-11 h-11 rounded-lg bg-white p-1 border border-slate-200 flex items-center justify-center flex-shrink-0">
-              <img src="${item.img}" alt="${item.model}" width="44" height="44" class="max-h-full max-w-full object-contain" onerror="this.onerror=null; this.src='../images/categories/dien-thoai.png'">
-            </div>
+          <div onclick="selectTargetProductFromModal('${p.maHang}')" class="bg-white rounded-2xl border p-3 flex flex-col justify-between hover:shadow-lg transition-all cursor-pointer ${isCurrent ? 'border-2 border-[#0057B7] bg-blue-50/50 shadow-sm' : 'border-slate-200 hover:border-blue-400'}">
             <div>
-              <div class="text-sm font-semibold text-[#0F172A] group-hover:text-[#1D4ED8] transition-colors">${item.model}</div>
-              <div class="text-xs text-[#64748B] font-normal">${item.cap} • Hãng ${item.brand}</div>
+              <div class="relative w-full aspect-square rounded-xl bg-slate-50 p-2 flex items-center justify-center overflow-hidden mb-2.5">
+                <img src="${img}" alt="${p.tenHang}" class="max-h-full max-w-full object-contain" onerror="this.onerror=null; this.src='../images/categories/dien-thoai.png'">
+              </div>
+              <span class="text-[10px] font-bold text-slate-400 uppercase">${p.nhanHieu || 'Chính Hãng'}</span>
+              <h4 class="text-xs sm:text-sm font-bold text-slate-900 line-clamp-2 leading-snug mt-0.5">${p.tenHang}</h4>
             </div>
-          </td>
-          <td class="py-3 px-5 text-right font-semibold text-[#1D4ED8] tabular-nums text-sm">${formatMoney(item.p1)}</td>
-          <td class="py-3 px-5 text-right text-[#475569] tabular-nums text-sm">${formatMoney(item.p2)}</td>
-          <td class="py-3 px-5 text-center">
-            <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-[8px] bg-blue-50 group-hover:bg-[#1D4ED8] group-hover:text-white text-[#1D4ED8] text-xs font-semibold transition-all border border-blue-200">
-              <span>Định giá</span>
-              <i class="fa-solid fa-arrow-right text-[10px]"></i>
-            </span>
-          </td>
-        </tr>
-      `).join('');
+            <div class="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between">
+              <span class="text-xs sm:text-sm font-bold text-[#DC2626] tabular-nums">${formatMoney(p.donGia)}</span>
+              <span class="text-[11px] font-semibold text-[#0057B7] hover:underline">Chọn máy</span>
+            </div>
+          </div>
+        `;
+      }).join('');
     }
 
-    function selectFromReferenceTable(brand, model, cap) {
-      selectBrand(brand);
-      selectUsedModel(model);
-      selectCapacity(cap);
-      window.scrollTo({ top: 320, behavior: 'smooth' });
+    function selectTargetProductFromModal(maHang) {
+      const found = allProducts.find(p => String(p.maHang) === String(maHang));
+      if (found) {
+        targetProduct = found;
+        targetSelectedCapacity = (found.phienBan && found.phienBan[0]) || null;
+        updateTargetPreview();
+        recalculate();
+        closeProductSelectorModal();
+        showToast(`Đã chọn máy muốn lên đời: ${found.tenHang}!`);
+      }
     }
 
     function submitTradeInBooking() {
@@ -1681,23 +2099,108 @@
       const branch = document.getElementById('booking-branch')?.value;
 
       if (!phone || phone.length < 9) {
-        alert('Vui lòng nhập Số điện thoại hợp lệ để hệ thống gửi mã giữ giá!');
+        alert('Vui lòng nhập số điện thoại hợp lệ để nhận mã xác nhận giữ giá và chi nhánh hỗ trợ!');
         return;
       }
 
+      const diff = document.getElementById('calc-final-diff')?.textContent || '0₫';
       const code = 'TC-' + Math.floor(100000 + Math.random() * 900000);
-      const diff = document.getElementById('calc-final-diff').textContent;
 
       alert(`🎉 ĐĂNG KÝ THU CŨ LÊN ĐỜI THÀNH CÔNG!\n\n` +
-            `• Mã ưu đãi giữ giá: ${code} (Hiệu lực 7 ngày)\n` +
+            `• Mã phiếu giữ giá: ${code} (Hiệu lực 7 ngày)\n` +
             `• Khách hàng: ${name || 'Quý khách'} (${phone})\n` +
-            `• Máy cũ: ${currentModel.model} (${currentCapacity})\n` +
-            `• Lên đời máy mới: ${targetProduct?.tenHang || 'Máy mới'}\n` +
-            `• Số tiền thực tế chỉ cần bù: ${diff}\n` +
-            `• Điểm hẹn: ${branch}\n\n` +
-            `Chuyên viên SamaMobile sẽ gọi xác nhận và chuẩn bị sẵn máy mới cho bạn trong 15 phút!`);
+            `• Máy cũ: ${selectedModel?.model} (${selectedCapacity})\n` +
+            `• Lên đời máy: ${targetProduct?.tenHang}\n` +
+            `• Số tiền bù ước tính: ${diff}\n` +
+            `• Chi nhánh tiếp nhận: ${branch}\n\n` +
+            `Chuyên viên SamaMobile sẽ gọi xác nhận trong 15 phút!`);
+    }
+
+    // =========================================================================
+    // SECTION 4: FORM ĐĂNG KÝ TƯ VẤN MÁY NÁT
+    // =========================================================================
+    function onCityChange(city) {
+      const storeSelect = document.getElementById('broken-store');
+      if (!storeSelect) return;
+      if (city === 'Hà Nội') {
+        storeSelect.innerHTML = `
+          <option value="122 Thái Hà, Đống Đa, Hà Nội">Chi nhánh: 122 Thái Hà, Phường Đống Đa, Hà Nội</option>
+          <option value="392 Cầu Giấy, Hà Nội">Chi nhánh: 392 Cầu Giấy, Quận Cầu Giấy, Hà Nội</option>
+        `;
+      } else if (city === 'Đà Nẵng') {
+        storeSelect.innerHTML = `
+          <option value="153 Hàm Nghi, Thanh Khê, Đà Nẵng">Chi nhánh: 153 Hàm Nghi, Quận Thanh Khê, Đà Nẵng</option>
+        `;
+      } else {
+        storeSelect.innerHTML = `
+          <option value="241 Lê Văn Việt, TP. Thủ Đức, TP.HCM">Chi nhánh 1: 241 Lê Văn Việt, Tăng Nhơn Phú B, TP. Thủ Đức, TP.HCM</option>
+          <option value="55 Trần Quang Khải, Quận 1, TP.HCM">Chi nhánh 2: 55 Trần Quang Khải, Phường Tân Định, Quận 1, TP.HCM</option>
+        `;
+      }
+    }
+
+    function submitBrokenDeviceForm(event) {
+      event.preventDefault();
+      const name = document.getElementById('broken-name')?.value?.trim();
+      const phone = document.getElementById('broken-phone')?.value?.trim();
+      const details = document.getElementById('broken-details')?.value?.trim();
+      const store = document.getElementById('broken-store')?.value;
+
+      if (!phone || phone.length < 9) {
+        alert('Vui lòng nhập số điện thoại chính xác để chuyên viên liên hệ thẩm định!');
+        return;
+      }
+
+      alert(`🎉 TIẾP NHẬN YÊU CẦU THU MUA MÁY CŨ HỎNG THÀNH CÔNG!\n\n` +
+            `• Khách hàng: ${name} (${phone})\n` +
+            `• Chi nhánh tiếp nhận: ${store}\n` +
+            `• Tình trạng máy: ${details}\n\n` +
+            `Kỹ thuật viên chuyên trách thu mua máy cũ hỏng của SamaMobile sẽ gọi tư vấn và định giá trực tiếp cho quý khách trong 15 phút!`);
+
+      document.getElementById('form-broken-device')?.reset();
+    }
+
+    // =========================================================================
+    // SECTION 5: MODAL VIDEO HƯỚNG DẪN
+    // =========================================================================
+    function openTradeInVideoModal() {
+      const modal = document.getElementById('trade-in-video-modal');
+      const frame = document.getElementById('trade-in-video-frame');
+      if (modal && frame) {
+        frame.src = 'https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?autoplay=1';
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeTradeInVideoModal() {
+      const modal = document.getElementById('trade-in-video-modal');
+      const frame = document.getElementById('trade-in-video-frame');
+      if (modal && frame) {
+        frame.src = '';
+        modal.classList.add('hidden');
+        document.body.style.overflow = '';
+      }
+    }
+
+    // =========================================================================
+    // TIỆN ÍCH CHUNG
+    // =========================================================================
+    function formatMoney(val) {
+      if (!val || isNaN(val)) return '0₫';
+      return Number(val).toLocaleString('vi-VN') + '₫';
+    }
+
+    function showToast(msg) {
+      const toast = document.createElement('div');
+      toast.className = 'fixed bottom-6 right-6 z-50 px-4 py-3 rounded-2xl bg-slate-900/95 text-white text-xs sm:text-sm font-semibold shadow-2xl border border-slate-700 flex items-center gap-2 animate-in fade-in slide-in-from-bottom-4 duration-200';
+      toast.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400 text-base"></i><span>${msg}</span>`;
+      document.body.appendChild(toast);
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'transition-opacity', 'duration-300');
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
     }
   </script>
-
 </body>
 </html>
