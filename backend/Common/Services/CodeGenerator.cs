@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using System.Data;
+using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using PhoneStoreAPI.Data;
@@ -26,6 +27,9 @@ public class CodeGenerator : ICodeGenerator
     {
         "KH", "NV", "NCC", "KM", "MH", "NH", "LH", "TT"
     };
+
+    // Charset an toàn: loại bỏ 0, O, 1, I, L để tránh nhầm lẫn khi đọc
+    private const string OrderCodeCharset = "23456789ABCDEFGHJKMNPQRSTUVWXYZ";
 
     public CodeGenerator(AppDbContext context)
     {
@@ -94,5 +98,39 @@ public class CodeGenerator : ICodeGenerator
         }
 
         return code;
+    }
+
+    /// <summary>
+    /// Sinh mã đơn hàng ngẫu nhiên dạng "DH-XXXXXX" (6 ký tự từ charset an toàn, không có 0,O,1,I,L).
+    /// Dùng RandomNumberGenerator để đảm bảo tính ngẫu nhiên mật mã học.
+    /// Kiểm tra trùng lặp qua existsCheck, tối đa 10 lần thử.
+    /// </summary>
+    public async Task<string> GenerateOrderCode(Func<string, Task<bool>> existsCheck)
+    {
+        const int codeLength = 6;
+        const int maxAttempts = 10;
+
+        for (int attempt = 0; attempt < maxAttempts; attempt++)
+        {
+            // Dùng RandomNumberGenerator.GetBytes() — nguồn ngẫu nhiên mật mã học (không dùng Random.Shared)
+            var bytes = RandomNumberGenerator.GetBytes(codeLength);
+            var chars = new char[codeLength];
+            for (int i = 0; i < codeLength; i++)
+            {
+                // Modulo bias giảm thiểu bằng cách charset có 31 phần tử (< 256), sai số chấp nhận được
+                chars[i] = OrderCodeCharset[bytes[i] % OrderCodeCharset.Length];
+            }
+
+            string candidate = "DH-" + new string(chars);
+
+            // Kiểm tra trùng lặp với DB
+            if (!await existsCheck(candidate))
+            {
+                return candidate;
+            }
+        }
+
+        // Fallback cực hiếm: sau 10 lần vẫn trùng → dùng sequence tuần tự
+        return await NextAsync("DH");
     }
 }

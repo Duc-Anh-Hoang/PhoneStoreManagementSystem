@@ -70,6 +70,92 @@
     return Number(amount || 0).toLocaleString('vi-VN') + ' ₫';
   }
 
+  // === Giai đoạn 2: Validate & Normalize SĐT ===
+
+  function normalizePhone(phone) {
+    // Bỏ khoảng trắng, dấu chấm, gạch; đổi +84/84 đầu thành 0
+    let p = phone.replace(/[\s.\-]/g, '');
+    if (p.startsWith('+84')) p = '0' + p.slice(3);
+    else if (p.startsWith('84') && p.length === 11) p = '0' + p.slice(2);
+    return p;
+  }
+
+  function validatePhone(phone) {
+    return /^0[0-9]{9}$/.test(phone);
+  }
+
+  // === Giai đoạn 3: Rate Limit phía client (bảo vệ brute-force, bản thật phải làm ở server) ===
+  const RL_KEY = 'cellphones_lookup_rl';
+  const RL_MAX = 5;                    // sai tối đa 5 lần
+  const RL_WINDOW = 10 * 60 * 1000;   // 10 phút
+
+  function checkRateLimit() {
+    try {
+      const raw = localStorage.getItem(RL_KEY);
+      if (!raw) return { blocked: false };
+      const rl = JSON.parse(raw);
+      if (Date.now() > rl.windowStart + RL_WINDOW) {
+        localStorage.removeItem(RL_KEY);
+        return { blocked: false };
+      }
+      if (rl.count >= RL_MAX) {
+        const remaining = Math.ceil((rl.windowStart + RL_WINDOW - Date.now()) / 60000);
+        return { blocked: true, remainingMinutes: remaining };
+      }
+      return { blocked: false };
+    } catch { return { blocked: false }; }
+  }
+
+  function recordFailedAttempt() {
+    try {
+      const raw = localStorage.getItem(RL_KEY);
+      let rl = raw ? JSON.parse(raw) : { count: 0, windowStart: Date.now() };
+      if (Date.now() > rl.windowStart + RL_WINDOW) { rl = { count: 0, windowStart: Date.now() }; }
+      rl.count++;
+      localStorage.setItem(RL_KEY, JSON.stringify(rl));
+    } catch {}
+  }
+
+  function clearRateLimit() {
+    try { localStorage.removeItem(RL_KEY); } catch {}
+  }
+
+  // === Giai đoạn 4: OTP Flow helpers ===
+  const OTP_TOKEN_KEY = 'cellphones_otp_token';
+
+  async function requestOtp(phone) {
+    const apiBase = window.API_BASE || 'http://localhost:5132/api';
+    const res = await fetch(`${apiBase}/otp/request`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sdt: normalizePhone(phone) })
+    });
+    if (!res.ok) {
+      const json = await res.json().catch(() => ({}));
+      throw new Error(json.message || 'Không thể gửi OTP. Vui lòng thử lại.');
+    }
+    return await res.json(); // { message, code (nếu demo mode) }
+  }
+
+  async function verifyOtp(phone, otp) {
+    const apiBase = window.API_BASE || 'http://localhost:5132/api';
+    const res = await fetch(`${apiBase}/otp/verify`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sdt: normalizePhone(phone), otp })
+    });
+    const json = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(json.message || 'Mã OTP không hợp lệ hoặc đã hết hạn.');
+    return json; // { token, expiresAt }
+  }
+
+  async function fetchOrdersByToken(token) {
+    const apiBase = window.API_BASE || 'http://localhost:5132/api';
+    const res = await fetch(`${apiBase}/orders/by-phone?token=${encodeURIComponent(token)}`);
+    if (!res.ok) return [];
+    return await res.json();
+  }
+
   async function fetchWarrantyByImei(imei) {
     if (window.api && typeof window.api.get === 'function') {
       return await window.api.get(`/baohanh/imei/${encodeURIComponent(imei)}`);
@@ -95,12 +181,16 @@
     const apiBase = window.API_BASE || '/api';
     const res = await fetch(`${apiBase}${path}`);
     if (!res.ok) {
-      let errMsg = 'Không tìm thấy thông tin đơn hàng.';
+      let errMsg = res.status === 429
+        ? 'Bạn thao tác quá nhiều, vui lòng thử lại sau ít phút.'
+        : 'Không tìm thấy đơn hàng phù hợp.';
       try {
         const json = await res.json();
         if (json.message) errMsg = json.message;
       } catch {}
-      throw new Error(errMsg);
+      const err = new Error(errMsg);
+      err.status = res.status;
+      throw err;
     }
     return await res.json();
   }
@@ -159,15 +249,66 @@
     `;
   }
 
+  // Giai đoạn 2: renderOrderCard nâng cấp — hiển thị masked info, timeline, danh sách SP
   function renderOrderCard(order) {
     const statusMap = {
-      cho_xac_nhan: { label: 'Chờ xác nhận', color: 'bg-amber-100 text-amber-800' },
-      da_xac_nhan: { label: 'Đã xác nhận', color: 'bg-blue-100 text-blue-800' },
-      dang_giao: { label: 'Đang giao hàng', color: 'bg-indigo-100 text-indigo-800' },
-      hoan_thanh: { label: 'Hoàn thành', color: 'bg-emerald-100 text-emerald-800' },
-      da_huy: { label: 'Đã hủy', color: 'bg-rose-100 text-rose-800' }
+      cho_xac_nhan: { label: 'Chờ xác nhận', color: 'bg-amber-100 text-amber-800', icon: 'fa-clock' },
+      da_xac_nhan:  { label: 'Đã xác nhận',  color: 'bg-blue-100 text-blue-800',   icon: 'fa-circle-check' },
+      dang_giao:    { label: 'Đang giao hàng', color: 'bg-indigo-100 text-indigo-800', icon: 'fa-truck' },
+      hoan_thanh:   { label: 'Hoàn thành',    color: 'bg-emerald-100 text-emerald-800', icon: 'fa-box-open' },
+      da_huy:       { label: 'Đã hủy',        color: 'bg-rose-100 text-rose-800',   icon: 'fa-ban' }
     };
     const st = statusMap[order.trangThai] || statusMap.cho_xac_nhan;
+
+    // Timeline: dùng statusHistory nếu có, ngược lại chỉ hiển thị trạng thái hiện tại
+    let timelineHtml = '';
+    if (order.statusHistory && order.statusHistory.length > 0) {
+      const steps = order.statusHistory;
+      timelineHtml = `
+        <div class="border-t border-slate-100 pt-2">
+          <div class="font-semibold text-slate-700 mb-2">Lịch sử trạng thái:</div>
+          <ol class="relative border-l border-slate-200 ml-2 space-y-2">
+            ${steps.map(s => {
+              const sInfo = statusMap[s.trangThai] || { label: s.trangThai, color: 'bg-slate-100 text-slate-700', icon: 'fa-circle' };
+              return `
+                <li class="ml-3">
+                  <span class="absolute -left-1.5 flex items-center justify-center w-3 h-3 rounded-full ${sInfo.color} ring-2 ring-white">
+                    <i class="fa-solid ${sInfo.icon} text-[6px]"></i>
+                  </span>
+                  <div class="flex items-center gap-2 text-[11px]">
+                    <span class="font-semibold text-slate-700">${sInfo.label}</span>
+                    <span class="text-slate-400">${s.thoiGian ? new Date(s.thoiGian).toLocaleString('vi-VN') : ''}</span>
+                  </div>
+                  ${s.ghiChu ? `<div class="text-[10px] text-slate-500">${s.ghiChu}</div>` : ''}
+                </li>`;
+            }).join('')}
+          </ol>
+        </div>`;
+    }
+
+    // Thông tin giao hàng (backend đã mask sẵn)
+    const tenMask   = order.tenNguoiNhanMask || order.tenNguoiNhan || 'Khách hàng';
+    const sdtMask   = order.sdtMask   || order.sdtNguoiNhan || '-';
+    const emailMask = order.emailMask || order.email || null;
+    const diaChiMask = order.diaChiMask || order.diaChiGiao || 'Nhận tại cửa hàng';
+
+    // Danh sách sản phẩm: tên, số lượng, giá, thành tiền
+    let itemsHtml = '';
+    if (order.items && order.items.length > 0) {
+      itemsHtml = `
+        <div class="border-t border-slate-100 pt-2 space-y-1">
+          <div class="font-semibold text-slate-700 mb-1">Sản phẩm:</div>
+          ${order.items.map(it => `
+            <div class="flex justify-between items-center text-[11px] text-slate-600">
+              <div class="min-w-0 mr-2">
+                <span class="font-medium text-navy block truncate">${it.tenHang || it.maHang}</span>
+                <span class="text-[10px] text-slate-400">SL: ${it.soLuong} × ${formatMoney(it.donGia)}</span>
+              </div>
+              <span class="font-semibold whitespace-nowrap">${formatMoney(it.thanhTien || (it.donGia * it.soLuong))}</span>
+            </div>
+          `).join('')}
+        </div>`;
+    }
 
     return `
       <div class="p-4 rounded-2xl bg-white border border-[#E5E7EB] shadow-md text-xs space-y-2.5">
@@ -176,27 +317,20 @@
             <span class="font-extrabold text-[#2563EB] font-mono text-sm">#${order.maDH}</span>
             <div class="text-[10px] text-slate-400">Ngày đặt: ${order.ngayDat ? order.ngayDat.substring(0, 16).replace('T', ' ') : 'Gần đây'}</div>
           </div>
-          <span class="px-2.5 py-1 rounded-full font-bold text-xs ${st.color}">${st.label}</span>
+          <span class="px-2.5 py-1 rounded-full font-bold text-xs ${st.color}"><i class="fa-solid ${st.icon} mr-1"></i>${st.label}</span>
         </div>
 
         <div class="grid grid-cols-2 gap-2 text-slate-600">
-          <div>Người nhận: <strong class="text-[#111827] block">${order.tenNguoiNhan || 'Khách hàng'}</strong></div>
-          <div>Số điện thoại: <strong class="text-[#111827] block">${order.sdtNguoiNhan || '-'}</strong></div>
-          <div class="col-span-2">Địa chỉ: <span class="text-[#111827] font-medium block">${order.diaChiGiao || 'Nhận tại cửa hàng'}</span></div>
+          <div>Người nhận: <strong class="text-[#111827] block">${tenMask}</strong></div>
+          <div>Số điện thoại: <strong class="text-[#111827] block">${sdtMask}</strong></div>
+          <div class="col-span-2">Địa chỉ: <span class="text-[#111827] font-medium block">${diaChiMask}</span></div>
+          ${emailMask ? `<div class="col-span-2">Email: <span class="text-[#111827] font-medium block">${emailMask}</span></div>` : ''}
           <div>Phương thức: <span class="text-[#111827] font-medium block uppercase">${order.phuongThucThanhToan || 'COD'}</span></div>
         </div>
 
-        ${order.items && order.items.length > 0 ? `
-          <div class="border-t border-slate-100 pt-2 space-y-1">
-            <div class="font-semibold text-slate-700 mb-1">Sản phẩm:</div>
-            ${order.items.map(it => `
-              <div class="flex justify-between items-center text-[11px] text-slate-600">
-                <span>${it.maHang} (SL: ${it.soLuong})</span>
-                <span class="font-medium">${formatMoney(it.thanhTien || (it.donGia * it.soLuong))}</span>
-              </div>
-            `).join('')}
-          </div>
-        ` : ''}
+        ${itemsHtml}
+
+        ${timelineHtml}
 
         <div class="flex items-center justify-between pt-2 border-t border-slate-100">
           <span class="font-semibold text-slate-600">Tổng thanh toán:</span>
@@ -214,6 +348,15 @@
         document.body.style.overflow = 'hidden';
         this.switchTab(defaultTab);
       }
+
+      // Giai đoạn 5: Tự điền mã đơn gần nhất từ localStorage
+      try {
+        const lastCode = localStorage.getItem('cellphones_last_order_code');
+        const idInput = document.getElementById('lookup-order-id');
+        if (lastCode && idInput && !idInput.value) {
+          idInput.value = lastCode;
+        }
+      } catch(e) {}
     }
 
     closeModal() {
@@ -247,25 +390,47 @@
     }
 
     async lookupOrder() {
-      const idInput = document.getElementById('lookup-order-id');
+      const idInput    = document.getElementById('lookup-order-id');
       const phoneInput = document.getElementById('lookup-order-phone');
-      const resultBox = document.getElementById('lookup-order-result');
-      const btn = document.querySelector('#lookup-tab-order button[type="button"]');
+      const idErr      = document.getElementById('lookup-order-id-err');
+      const phoneErr   = document.getElementById('lookup-order-phone-err');
+      const resultBox  = document.getElementById('lookup-order-result');
+      const btn        = document.getElementById('btn-lookup-order');
 
-      const maDH = (idInput ? idInput.value : '').trim().toUpperCase();
-      const phone = (phoneInput ? phoneInput.value : '').trim().replace(/\s/g, '');
+      // Helper: hiển thị/ẩn lỗi inline
+      const setErr = (el, msg) => {
+        if (!el) return;
+        if (msg) { el.textContent = msg; el.classList.remove('hidden'); }
+        else { el.textContent = ''; el.classList.add('hidden'); }
+      };
+      setErr(idErr, ''); setErr(phoneErr, '');
 
-      if (!maDH && !phone) {
-        showNotification('Vui lòng nhập Mã đơn hàng hoặc Số điện thoại', 'error');
-        if (idInput) idInput.focus();
+      // Giai đoạn 3: Kiểm tra rate limit phía client trước khi gọi API
+      const rl = checkRateLimit();
+      if (rl.blocked) {
+        setErr(idErr, 'Bạn thao tác quá nhiều, vui lòng thử lại sau ít phút.');
         return;
       }
 
-      if (maDH && !phone) {
-        showNotification('Tra cứu theo mã đơn hàng yêu cầu nhập kèm Số điện thoại đặt hàng', 'error');
-        if (phoneInput) phoneInput.focus();
-        return;
+      const maDH  = (idInput  ? idInput.value  : '').trim().toUpperCase();
+      const rawPhone = (phoneInput ? phoneInput.value : '').trim();
+      const phone = normalizePhone(rawPhone);
+
+      // Validate: mã đơn không được rỗng
+      let hasErr = false;
+      if (!maDH) {
+        setErr(idErr, 'Vui lòng nhập mã đơn hàng.');
+        hasErr = true;
       }
+      // Validate SĐT phải hợp lệ 10 số bắt đầu 0
+      if (!rawPhone) {
+        setErr(phoneErr, 'Vui lòng nhập số điện thoại đặt hàng.');
+        hasErr = true;
+      } else if (!validatePhone(phone)) {
+        setErr(phoneErr, 'Số điện thoại phải có 10 chữ số bắt đầu bằng 0.');
+        hasErr = true;
+      }
+      if (hasErr) return;
 
       if (!resultBox) return;
 
@@ -279,34 +444,35 @@
       resultBox.innerHTML = '<div class="text-center py-6 text-slate-400 text-xs"><i class="fa-solid fa-spinner fa-spin mr-2 text-[#2563EB]"></i> Đang tra cứu dữ liệu đơn hàng...</div>';
 
       try {
-        let order = null;
-        if (maDH) {
-          order = await fetchOrderDetails(maDH, phone);
-        } else {
-          const list = await fetchOrdersByPhone(phone);
-          if (Array.isArray(list) && list.length > 0) {
-            order = list[0];
-          }
-        }
+        const order = await fetchOrderDetails(maDH, phone);
 
         if (!order) {
+          // Không tiết lộ mã/SĐT nào sai — thông báo chung
           resultBox.innerHTML = `
             <div class="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs text-center">
               <i class="fa-solid fa-circle-exclamation text-lg mb-1 block"></i>
-              Không tìm thấy thông tin đơn hàng ${maDH ? `<strong>${maDH}</strong>` : ''} ${phone ? `với SĐT <strong>${phone}</strong>` : ''}. Vui lòng kiểm tra lại!
+              Không tìm thấy đơn hàng phù hợp.
             </div>
           `;
+          recordFailedAttempt(); // Giai đoạn 3: ghi nhận thất bại
           return;
         }
 
+        clearRateLimit(); // Giai đoạn 3: thành công → reset rate limit
         resultBox.innerHTML = renderOrderCard(order);
       } catch (err) {
+        const msg = err && err.status === 429
+          ? (err.message || 'Bạn thao tác quá nhiều, vui lòng thử lại sau ít phút.')
+          : 'Không tìm thấy đơn hàng phù hợp.';
         resultBox.innerHTML = `
           <div class="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs text-center">
             <i class="fa-solid fa-circle-exclamation text-lg mb-1 block"></i>
-            ${err.message || 'Lỗi tra cứu đơn hàng. Vui lòng thử lại.'}
+            ${msg}
           </div>
         `;
+        if (!err || err.status !== 429) {
+          recordFailedAttempt(); // Giai đoạn 3: ghi nhận thất bại
+        }
       } finally {
         if (btn) {
           btn.disabled = false;
@@ -354,6 +520,207 @@
           btn.disabled = false;
           btn.innerHTML = originalBtnHtml;
         }
+      }
+    }
+
+    // === Giai đoạn 4: OTP Flow ===
+
+    showOtpFlow() {
+      const orderForm = document.getElementById('lookup-order-form');
+      const otpFlow   = document.getElementById('lookup-otp-flow');
+      if (orderForm) orderForm.classList.add('hidden');
+      if (otpFlow)   otpFlow.classList.remove('hidden');
+      this.showOtpStep('a');
+      // Reset các ô input OTP
+      const phoneInput = document.getElementById('otp-phone-input');
+      const codeInput  = document.getElementById('otp-code-input');
+      if (phoneInput) phoneInput.value = '';
+      if (codeInput)  codeInput.value  = '';
+    }
+
+    hideOtpFlow() {
+      const orderForm = document.getElementById('lookup-order-form');
+      const otpFlow   = document.getElementById('lookup-otp-flow');
+      if (otpFlow)   otpFlow.classList.add('hidden');
+      if (orderForm) orderForm.classList.remove('hidden');
+    }
+
+    showOtpStep(step) {
+      // step: 'a' | 'b' | 'c'
+      ['a', 'b', 'c'].forEach(s => {
+        const el = document.getElementById(`otp-step-${s}`);
+        if (el) el.classList.toggle('hidden', s !== step);
+      });
+    }
+
+    startOtpCountdown() {
+      let seconds = 60;
+      const countdownEl = document.getElementById('otp-countdown');
+      const resendBtn   = document.getElementById('btn-resend-otp');
+      if (resendBtn) resendBtn.disabled = true;
+      if (countdownEl) countdownEl.textContent = seconds;
+
+      if (this._otpCountdownTimer) clearInterval(this._otpCountdownTimer);
+      this._otpCountdownTimer = setInterval(() => {
+        seconds--;
+        if (countdownEl) countdownEl.textContent = seconds;
+        if (seconds <= 0) {
+          clearInterval(this._otpCountdownTimer);
+          if (resendBtn) resendBtn.disabled = false;
+        }
+      }, 1000);
+    }
+
+    async submitOtpPhone() {
+      const phoneInput = document.getElementById('otp-phone-input');
+      const phoneErr   = document.getElementById('otp-phone-err');
+      const btn        = document.getElementById('btn-send-otp');
+      const rawPhone   = (phoneInput ? phoneInput.value : '').trim();
+      const phone      = normalizePhone(rawPhone);
+
+      const setErr = (el, msg) => {
+        if (!el) return;
+        if (msg) { el.textContent = msg; el.classList.remove('hidden'); }
+        else { el.textContent = ''; el.classList.add('hidden'); }
+      };
+      setErr(phoneErr, '');
+
+      if (!validatePhone(phone)) {
+        setErr(phoneErr, 'Số điện thoại phải có 10 chữ số bắt đầu bằng 0.');
+        return;
+      }
+
+      const originalHtml = btn ? btn.innerHTML : '';
+      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1.5"></i> Đang gửi...'; }
+
+      try {
+        const result = await requestOtp(phone);
+        this._otpPhone = phone;
+
+        // Hiển thị số điện thoại đã nhập ở step B
+        const displayEl = document.getElementById('otp-phone-display');
+        if (displayEl) displayEl.textContent = rawPhone;
+
+        // Banner demo nếu backend trả về code (chế độ dev)
+        const demoBanner = document.getElementById('otp-demo-banner');
+        if (demoBanner) {
+          if (result && result.code) {
+            demoBanner.innerHTML = `<i class="fa-solid fa-flask mr-1"></i><strong>Chế độ demo:</strong> Mã OTP của bạn là <strong class="text-lg tracking-widest">${result.code}</strong>. Trong thực tế mã sẽ được gửi qua SMS/Zalo ZNS.`;
+            demoBanner.classList.remove('hidden');
+          } else {
+            demoBanner.classList.add('hidden');
+          }
+        }
+
+        this.showOtpStep('b');
+        this.startOtpCountdown();
+      } catch (err) {
+        setErr(phoneErr, err.message || 'Không thể gửi OTP. Vui lòng thử lại.');
+      } finally {
+        if (btn) { btn.disabled = false; btn.innerHTML = originalHtml; }
+      }
+    }
+
+    async resendOtp() {
+      await this.submitOtpPhone();
+    }
+
+    async submitOtpCode() {
+      const codeInput = document.getElementById('otp-code-input');
+      const codeErr   = document.getElementById('otp-code-err');
+      const btn       = document.getElementById('btn-verify-otp');
+      const otp       = (codeInput ? codeInput.value : '').trim();
+
+      const setErr = (el, msg) => {
+        if (!el) return;
+        if (msg) { el.textContent = msg; el.classList.remove('hidden'); }
+        else { el.textContent = ''; el.classList.add('hidden'); }
+      };
+      setErr(codeErr, '');
+
+      if (!otp || !/^\d{6}$/.test(otp)) {
+        setErr(codeErr, 'Mã OTP phải gồm đúng 6 chữ số.');
+        return;
+      }
+
+      const originalHtml = btn ? btn.innerHTML : '';
+      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1.5"></i> Đang xác nhận...'; }
+
+      try {
+        const result = await verifyOtp(this._otpPhone || '', otp);
+        const token = result.token;
+        // Lưu token OTP an toàn vào sessionStorage (không dùng localStorage tránh persist)
+        try { sessionStorage.setItem(OTP_TOKEN_KEY, token); } catch(e) {}
+
+        // Lấy danh sách đơn hàng theo token
+        const orders = await fetchOrdersByToken(token);
+        this.renderOtpOrderList(orders);
+        this.showOtpStep('c');
+      } catch (err) {
+        setErr(codeErr, err.message || 'Mã OTP không hợp lệ hoặc đã hết hạn.');
+      } finally {
+        if (btn) { btn.disabled = false; btn.innerHTML = originalHtml; }
+      }
+    }
+
+    renderOtpOrderList(orders) {
+      const listEl = document.getElementById('otp-order-list');
+      const detailEl = document.getElementById('otp-order-detail');
+      if (detailEl) detailEl.classList.add('hidden');
+      if (!listEl) return;
+
+      if (!orders || orders.length === 0) {
+        listEl.innerHTML = `
+          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-500 text-xs text-center">
+            <i class="fa-solid fa-box-open text-lg mb-1 block text-slate-300"></i>
+            Không tìm thấy đơn hàng nào cho số điện thoại này.
+          </div>`;
+        return;
+      }
+
+      const statusMap = {
+        cho_xac_nhan: { label: 'Chờ xác nhận', color: 'bg-amber-100 text-amber-800' },
+        da_xac_nhan:  { label: 'Đã xác nhận',  color: 'bg-blue-100 text-blue-800' },
+        dang_giao:    { label: 'Đang giao',     color: 'bg-indigo-100 text-indigo-800' },
+        hoan_thanh:   { label: 'Hoàn thành',    color: 'bg-emerald-100 text-emerald-800' },
+        da_huy:       { label: 'Đã hủy',        color: 'bg-rose-100 text-rose-800' }
+      };
+
+      listEl.innerHTML = orders.map(o => {
+        const st = statusMap[o.trangThai] || statusMap.cho_xac_nhan;
+        return `
+          <button type="button" onclick="window.CellphoneSLookup.selectOtpOrder('${o.maDH}')"
+            class="w-full flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:border-[#2563EB] hover:bg-blue-50/40 transition-colors text-left mb-1.5">
+            <div>
+              <div class="font-bold text-[#2563EB] font-mono text-xs">#${o.maDH}</div>
+              <div class="text-[10px] text-slate-500">${o.ngayDat ? o.ngayDat.substring(0, 10) : ''} · ${formatMoney(o.tongTien)}</div>
+            </div>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${st.color}">${st.label}</span>
+          </button>`;
+      }).join('');
+    }
+
+    async selectOtpOrder(maDH) {
+      const detailEl = document.getElementById('otp-order-detail');
+      if (!detailEl) return;
+
+      detailEl.classList.remove('hidden');
+      detailEl.innerHTML = '<div class="text-center py-4 text-xs text-slate-400"><i class="fa-solid fa-spinner fa-spin mr-2 text-[#2563EB]"></i> Đang tải chi tiết...</div>';
+
+      try {
+        let token = '';
+        try { token = sessionStorage.getItem(OTP_TOKEN_KEY) || ''; } catch(e) {}
+        const apiBase = window.API_BASE || 'http://localhost:5132/api';
+        const res = await fetch(`${apiBase}/orders/${encodeURIComponent(maDH)}?token=${encodeURIComponent(token)}`);
+        if (res.status === 401) throw new Error('Phiên tra cứu OTP đã hết hạn. Vui lòng xác thực lại.');
+        if (!res.ok) throw new Error('Không thể tải chi tiết đơn hàng.');
+        const order = await res.json();
+        detailEl.innerHTML = renderOrderCard(order);
+      } catch (err) {
+        detailEl.innerHTML = `
+          <div class="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs text-center">
+            ${err.message || 'Không thể tải chi tiết đơn hàng.'}
+          </div>`;
       }
     }
 

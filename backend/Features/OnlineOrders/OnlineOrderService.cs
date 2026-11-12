@@ -5,6 +5,7 @@ using PhoneStoreAPI.Common.Constants;
 using PhoneStoreAPI.Common.Exceptions;
 using PhoneStoreAPI.Common.Services;
 using PhoneStoreAPI.Data;
+using PhoneStoreAPI.Features.Customers.Helpers;
 using PhoneStoreAPI.Features.OnlineOrders.DTOs;
 using PhoneStoreAPI.Features.Warranty;
 using PhoneStoreAPI.Models.Entities;
@@ -41,10 +42,11 @@ public class OnlineOrderService : IOnlineOrderService
         using var transaction = await _context.Database.BeginTransactionAsync();
         try
         {
-            // 1. Chuẩn hóa SĐT người nhận
-            var sdtNorm = request.SdtNguoiNhan.Trim().Replace(" ", "").Replace(".", "").Replace("-", "");
+            // 1. Chuáº©n hÃ³a SÄT ngÆ°á»i nháº­n
+            var sdtNorm = PhoneHelper.NormalizeVietnamesePhone(request.SdtNguoiNhan)
+                          ?? request.SdtNguoiNhan.Trim().Replace(" ", "").Replace(".", "").Replace("-", "");
 
-            // 2. Tìm hoặc tạo khách hàng
+            // 2. TÃ¬m hoáº·c táº¡o khÃ¡ch hÃ ng
             KhachHang? khachHang = null;
             if (!string.IsNullOrWhiteSpace(request.MaKH))
             {
@@ -77,7 +79,7 @@ public class OnlineOrderService : IOnlineOrderService
                 await _context.SaveChangesAsync();
             }
 
-            // 3. Kiểm tra sản phẩm và tính tổng tiền từ DonGia DB
+            // 3. Kiá»ƒm tra sáº£n pháº©m vÃ  tÃ­nh tá»•ng tiá»n tá»« DonGia DB
             decimal tongTien = 0m;
             var chiTietList = new List<ChiTietDonHangOnline>();
 
@@ -94,7 +96,7 @@ public class OnlineOrderService : IOnlineOrderService
                         MaHang = item.MaHang,
                         TenHang = tenH,
                         DonGia = gia,
-                        Dvt = "Cái",
+                        Dvt = "CÃ¡i",
                                                 MaLoai = (_context.LoaiHangs.Select(l => l.MaLoai).FirstOrDefault() ?? "APPLE"),
                         MaNhom = (_context.NhomHangs.Select(n => n.MaNhom).FirstOrDefault() ?? "DIENTHOAI"),
                         QuanLyImei = true,
@@ -115,9 +117,12 @@ public class OnlineOrderService : IOnlineOrderService
                 });
             }
 
-            // 4. Tạo DonHangOnline
+            // 4. Táº¡o DonHangOnline
             var reqMaDH = !string.IsNullOrWhiteSpace(request.MaDH) ? request.MaDH.Trim().Substring(0, Math.Min(15, request.MaDH.Trim().Length)) : null;
-            var maDH = (!string.IsNullOrWhiteSpace(reqMaDH) && !await _context.DonHangOnlines.AnyAsync(d => d.MaDH == reqMaDH)) ? reqMaDH : await _codeGenerator.NextAsync("DH");
+            // Giai đoạn 1: Dùng mã ngẫu nhiên an toàn thay cho sequence tuần tự
+            var maDH = (!string.IsNullOrWhiteSpace(reqMaDH) && !await _context.DonHangOnlines.AnyAsync(d => d.MaDH == reqMaDH))
+                ? reqMaDH
+                : await _codeGenerator.GenerateOrderCode(code => _context.DonHangOnlines.AnyAsync(d => d.MaDH == code));
             var donHang = new DonHangOnline
             {
                 MaDH = maDH,
@@ -134,7 +139,7 @@ public class OnlineOrderService : IOnlineOrderService
             _context.DonHangOnlines.Add(donHang);
             await _context.SaveChangesAsync();
 
-            // 5. Gán MaDH cho chi tiết và lưu
+            // 5. GÃ¡n MaDH cho chi tiáº¿t vÃ  lÆ°u
             foreach (var ct in chiTietList)
             {
                 ct.MaDH = maDH;
@@ -165,12 +170,12 @@ public class OnlineOrderService : IOnlineOrderService
                             emailItems
                         );
                     }
-                    catch { /* Không chặn luồng nếu gửi mail gặp sự cố */ }
+                    catch { /* KhÃ´ng cháº·n luá»“ng náº¿u gá»­i mail gáº·p sá»± cá»‘ */ }
                 });
             }
 
             
-            // Phát tín hiệu Realtime qua SignalR đến AdminGroup
+            // PhÃ¡t tÃ­n hiá»‡u Realtime qua SignalR Ä‘áº¿n AdminGroup
             if (_hubContext != null)
             {
                 var hubPayload = new
@@ -183,7 +188,7 @@ public class OnlineOrderService : IOnlineOrderService
                     trangThai = donHang.TrangThai,
                     phuongThucThanhToan = donHang.PhuongThucThanhToan,
                     ngayDat = donHang.NgayDat,
-                    message = $"Khách hàng {donHang.TenNguoiNhan} ({donHang.SdtNguoiNhan}) vừa đặt đơn hàng mới #{donHang.MaDH} trị giá {donHang.TongTien:N0}đ",
+                    message = $"KhÃ¡ch hÃ ng {donHang.TenNguoiNhan} ({donHang.SdtNguoiNhan}) vá»«a Ä‘áº·t Ä‘Æ¡n hÃ ng má»›i #{donHang.MaDH} trá»‹ giÃ¡ {donHang.TongTien:N0}Ä‘",
                     items = chiTietList.Select(ct => new
                     {
                         maHang = ct.MaHang,
@@ -242,7 +247,7 @@ public class OnlineOrderService : IOnlineOrderService
         var order = await query.FirstOrDefaultAsync();
         if (order == null) return null;
 
-        // Nếu client cung cấp SĐT, phải khớp với SdtNguoiNhan. Nếu không khớp trả null để controller ném 404 (chống dò mã đơn P4-06)
+        // Náº¿u client cung cáº¥p SÄT, pháº£i khá»›p vá»›i SdtNguoiNhan. Náº¿u khÃ´ng khá»›p tráº£ null Ä‘á»ƒ controller nÃ©m 404 (chá»‘ng dÃ² mÃ£ Ä‘Æ¡n P4-06)
         if (!string.IsNullOrWhiteSpace(sdt))
         {
             var cleanPhone = sdt.Trim().Replace(" ", "");
@@ -378,13 +383,13 @@ public class OnlineOrderService : IOnlineOrderService
 
             if (donHang == null)
             {
-                throw new NotFoundException($"Không tìm thấy đơn hàng {maDH}");
+                throw new NotFoundException($"KhÃ´ng tÃ¬m tháº¥y Ä‘Æ¡n hÃ ng {maDH}");
             }
 
             var curr = donHang.TrangThai;
 
-            // Kiểm tra máy trạng thái hợp lệ theo P4-07
-            // Chỉ cho: cho_xac_nhan → da_xac_nhan, da_xac_nhan → dang_giao, dang_giao → hoan_thanh, cho_xac_nhan hoặc da_xac_nhan → da_huy. Còn lại 409
+            // Kiá»ƒm tra mÃ¡y tráº¡ng thÃ¡i há»£p lá»‡ theo P4-07
+            // Chá»‰ cho: cho_xac_nhan â†’ da_xac_nhan, da_xac_nhan â†’ dang_giao, dang_giao â†’ hoan_thanh, cho_xac_nhan hoáº·c da_xac_nhan â†’ da_huy. CÃ²n láº¡i 409
             bool validTransition = false;
             if (curr == AppConstants.OrderStatus.ChoXacNhan && newTrangThai == AppConstants.OrderStatus.DaXacNhan) validTransition = true;
             else if (curr == AppConstants.OrderStatus.DaXacNhan && newTrangThai == AppConstants.OrderStatus.DangGiao) validTransition = true;
@@ -393,24 +398,24 @@ public class OnlineOrderService : IOnlineOrderService
 
             if (!validTransition)
             {
-                throw new ConflictException($"Không thể chuyển trạng thái đơn hàng từ '{curr}' sang '{newTrangThai}'.");
+                throw new ConflictException($"KhÃ´ng thá»ƒ chuyá»ƒn tráº¡ng thÃ¡i Ä‘Æ¡n hÃ ng tá»« '{curr}' sang '{newTrangThai}'.");
             }
 
-            // Ghi nhận MaNV khi xác nhận đơn
+            // Ghi nháº­n MaNV khi xÃ¡c nháº­n Ä‘Æ¡n
             if (newTrangThai == AppConstants.OrderStatus.DaXacNhan)
             {
                 donHang.MaNV = maNV;
             }
 
-            // Xử lý khi hoàn thành đơn:
-            // Tự động gán IMEI cũ nhất (theo phiếu nhập), tạo hóa đơn online, tạo bảo hành
+            // Xá»­ lÃ½ khi hoÃ n thÃ nh Ä‘Æ¡n:
+            // Tá»± Ä‘á»™ng gÃ¡n IMEI cÅ© nháº¥t (theo phiáº¿u nháº­p), táº¡o hÃ³a Ä‘Æ¡n online, táº¡o báº£o hÃ nh
             if (newTrangThai == AppConstants.OrderStatus.HoanThanh)
             {
                 string soHD = donHang.SoHD ?? soHDKem ?? string.Empty;
 
                 if (string.IsNullOrEmpty(soHD))
                 {
-                    // Tạo hóa đơn mới kênh online
+                    // Táº¡o hÃ³a Ä‘Æ¡n má»›i kÃªnh online
                     soHD = await _codeGenerator.NextAsync("HD");
                     var ptThanhToan = donHang.PhuongThucThanhToan == "cod" ? "tien_mat" : donHang.PhuongThucThanhToan;
 
@@ -428,7 +433,7 @@ public class OnlineOrderService : IOnlineOrderService
                     _context.HoaDons.Add(hoaDon);
                     await _context.SaveChangesAsync();
 
-                    // Xử lý từng dòng chi tiết đơn
+                    // Xá»­ lÃ½ tá»«ng dÃ²ng chi tiáº¿t Ä‘Æ¡n
                     foreach (var item in donHang.ChiTietDonHangs)
                     {
                         var matHang = item.MatHang ?? await _context.MatHangs.FirstOrDefaultAsync(m => m.MaHang == item.MaHang);
@@ -436,7 +441,7 @@ public class OnlineOrderService : IOnlineOrderService
                         {
                             for (int i = 0; i < item.SoLuong; i++)
                             {
-                                // Chọn IMEI con_hang theo phiếu nhập cũ trước (FIFO dựa vào SoPN hoặc MaIMEI)
+                                // Chá»n IMEI con_hang theo phiáº¿u nháº­p cÅ© trÆ°á»›c (FIFO dá»±a vÃ o SoPN hoáº·c MaIMEI)
                                 var imei = await (from im in _context.IMEIs
                                                   join pn in _context.PhieuNhaps on im.SoPN equals pn.SoPN into pnGroup
                                                   from pn in pnGroup.DefaultIfEmpty()
@@ -446,7 +451,7 @@ public class OnlineOrderService : IOnlineOrderService
 
                                 if (imei == null)
                                 {
-                                    // Tự động sinh phiếu nhập và IMEI nếu sản phẩm chưa có sẵn trong kho
+                                    // Tá»± Ä‘á»™ng sinh phiáº¿u nháº­p vÃ  IMEI náº¿u sáº£n pháº©m chÆ°a cÃ³ sáºµn trong kho
                                     var defaultNCC = await _context.NhaCungCaps.FirstOrDefaultAsync();
                                     string autoSoPN = await _codeGenerator.NextAsync("PN");
                                     var pn = new PhieuNhap
@@ -477,7 +482,7 @@ public class OnlineOrderService : IOnlineOrderService
                                     await _context.SaveChangesAsync();
                                 }
 
-                                // Đối với PostgreSQL, trigger fn_trg_chitiethoadon_imei_ban tự động kiểm tra 'con_hang' và cập nhật 'da_ban'
+                                // Äá»‘i vá»›i PostgreSQL, trigger fn_trg_chitiethoadon_imei_ban tá»± Ä‘á»™ng kiá»ƒm tra 'con_hang' vÃ  cáº­p nháº­t 'da_ban'
                                 if (!_context.Database.IsRelational())
                                 {
                                     imei.TrangThai = "da_ban";
@@ -494,7 +499,7 @@ public class OnlineOrderService : IOnlineOrderService
                                 _context.ChiTietHoaDons.Add(ctHD);
                                 await _context.SaveChangesAsync();
 
-                                // Tạo bảo hành
+                                // Táº¡o báº£o hÃ nh
                                 await _warrantyService.CreateForInvoiceAsync(soHD, imei.MaIMEI, item.MaHang);
                             }
                         }
@@ -525,11 +530,11 @@ public class OnlineOrderService : IOnlineOrderService
             {
                 string msg = newTrangThai switch
                 {
-                    AppConstants.OrderStatus.DaXacNhan => $"Đơn đặt hàng #{donHang.MaDH} đã được Admin xác nhận thành công! Đang chuẩn bị đóng gói.",
-                    AppConstants.OrderStatus.DangGiao => $"Đơn đặt hàng #{donHang.MaDH} đã được xuất kho và đang trên đường giao đến bạn!",
-                    AppConstants.OrderStatus.HoanThanh => $"Đơn đặt hàng #{donHang.MaDH} đã được giao thành công và hoàn tất! Cảm ơn bạn đã mua hàng.",
-                    AppConstants.OrderStatus.DaHuy => $"Đơn đặt hàng #{donHang.MaDH} đã được cập nhật trạng thái: Đã hủy.",
-                    _ => $"Đơn đặt hàng #{donHang.MaDH} đã được cập nhật trạng thái mới."
+                    AppConstants.OrderStatus.DaXacNhan => $"ÄÆ¡n Ä‘áº·t hÃ ng #{donHang.MaDH} Ä‘Ã£ Ä‘Æ°á»£c Admin xÃ¡c nháº­n thÃ nh cÃ´ng! Äang chuáº©n bá»‹ Ä‘Ã³ng gÃ³i.",
+                    AppConstants.OrderStatus.DangGiao => $"ÄÆ¡n Ä‘áº·t hÃ ng #{donHang.MaDH} Ä‘Ã£ Ä‘Æ°á»£c xuáº¥t kho vÃ  Ä‘ang trÃªn Ä‘Æ°á»ng giao Ä‘áº¿n báº¡n!",
+                    AppConstants.OrderStatus.HoanThanh => $"ÄÆ¡n Ä‘áº·t hÃ ng #{donHang.MaDH} Ä‘Ã£ Ä‘Æ°á»£c giao thÃ nh cÃ´ng vÃ  hoÃ n táº¥t! Cáº£m Æ¡n báº¡n Ä‘Ã£ mua hÃ ng.",
+                    AppConstants.OrderStatus.DaHuy => $"ÄÆ¡n Ä‘áº·t hÃ ng #{donHang.MaDH} Ä‘Ã£ Ä‘Æ°á»£c cáº­p nháº­t tráº¡ng thÃ¡i: ÄÃ£ há»§y.",
+                    _ => $"ÄÆ¡n Ä‘áº·t hÃ ng #{donHang.MaDH} Ä‘Ã£ Ä‘Æ°á»£c cáº­p nháº­t tráº¡ng thÃ¡i má»›i."
                 };
 
                 var statusPayload = new
@@ -581,31 +586,31 @@ public class OnlineOrderService : IOnlineOrderService
     {
         if (string.IsNullOrWhiteSpace(maDH))
         {
-            throw new BadRequestException("Mã đơn hàng không hợp lệ.");
+            throw new BadRequestException("MÃ£ Ä‘Æ¡n hÃ ng khÃ´ng há»£p lá»‡.");
         }
 
         var donHang = await _context.DonHangOnlines.FirstOrDefaultAsync(d => d.MaDH == maDH.Trim());
         if (donHang == null)
         {
-            throw new NotFoundException($"Không tìm thấy đơn hàng {maDH}");
+            throw new NotFoundException($"KhÃ´ng tÃ¬m tháº¥y Ä‘Æ¡n hÃ ng {maDH}");
         }
 
-        // Kiểm tra số điện thoại người nhận để xác thực
+        // Kiá»ƒm tra sá»‘ Ä‘iá»‡n thoáº¡i ngÆ°á»i nháº­n Ä‘á»ƒ xÃ¡c thá»±c
         var sdtNorm = (request.Sdt ?? string.Empty).Trim().Replace(" ", "").Replace(".", "").Replace("-", "");
         if (!string.IsNullOrEmpty(sdtNorm) && !donHang.SdtNguoiNhan.Equals(sdtNorm, StringComparison.OrdinalIgnoreCase))
         {
-            throw new BadRequestException("Số điện thoại không khớp với thông tin đơn hàng.");
+            throw new BadRequestException("Sá»‘ Ä‘iá»‡n thoáº¡i khÃ´ng khá»›p vá»›i thÃ´ng tin Ä‘Æ¡n hÃ ng.");
         }
 
-        // Chỉ cho phép hủy khi đơn chưa giao
+        // Chá»‰ cho phÃ©p há»§y khi Ä‘Æ¡n chÆ°a giao
         if (donHang.TrangThai == AppConstants.OrderStatus.DangGiao || donHang.TrangThai == AppConstants.OrderStatus.HoanThanh)
         {
-            throw new BadRequestException("Đơn hàng đang giao hoặc đã hoàn thành, không thể tự hủy trực tuyến. Vui lòng liên hệ hotline.");
+            throw new BadRequestException("ÄÆ¡n hÃ ng Ä‘ang giao hoáº·c Ä‘Ã£ hoÃ n thÃ nh, khÃ´ng thá»ƒ tá»± há»§y trá»±c tuyáº¿n. Vui lÃ²ng liÃªn há»‡ hotline.");
         }
 
         if (donHang.TrangThai == AppConstants.OrderStatus.DaHuy)
         {
-            throw new BadRequestException("Đơn hàng này đã được hủy trước đó.");
+            throw new BadRequestException("ÄÆ¡n hÃ ng nÃ y Ä‘Ã£ Ä‘Æ°á»£c há»§y trÆ°á»›c Ä‘Ã³.");
         }
 
         donHang.TrangThai = AppConstants.OrderStatus.DaHuy;
@@ -614,8 +619,8 @@ public class OnlineOrderService : IOnlineOrderService
 
         if (_hubContext != null)
         {
-            string cancelMsg = $"Khách hàng {donHang.TenNguoiNhan} ({donHang.SdtNguoiNhan}) đã hủy đơn hàng #{donHang.MaDH}" +
-                               (!string.IsNullOrWhiteSpace(request.LyDo) ? $" (Lý do: {request.LyDo})" : "");
+            string cancelMsg = $"KhÃ¡ch hÃ ng {donHang.TenNguoiNhan} ({donHang.SdtNguoiNhan}) Ä‘Ã£ há»§y Ä‘Æ¡n hÃ ng #{donHang.MaDH}" +
+                               (!string.IsNullOrWhiteSpace(request.LyDo) ? $" (LÃ½ do: {request.LyDo})" : "");
             var cancelPayload = new
             {
                 maDH = donHang.MaDH,
@@ -639,7 +644,7 @@ public class OnlineOrderService : IOnlineOrderService
             });
         }
 
-        // Gửi email thông báo hủy nếu có email khách
+        // Gá»­i email thÃ´ng bÃ¡o há»§y náº¿u cÃ³ email khÃ¡ch
         if (_emailService != null)
         {
             var kh = await _context.KhachHangs.FirstOrDefaultAsync(k => k.MaKH == donHang.MaKH);
@@ -649,11 +654,11 @@ public class OnlineOrderService : IOnlineOrderService
                 {
                     try
                     {
-                        string body = $"<p>Xin chào <strong>{donHang.TenNguoiNhan}</strong>,</p>" +
-                                      $"<p>Đơn hàng <strong>#{donHang.MaDH}</strong> đã được hủy thành công theo yêu cầu của bạn.</p>" +
-                                      (!string.IsNullOrEmpty(request.LyDo) ? $"<p>Lý do hủy: {request.LyDo}</p>" : "") +
-                                      $"<p>Cảm ơn bạn đã đồng hành cùng Sama Mobile!</p>";
-                        await _emailService.SendEmailAsync(kh.Email, $"[Sama Mobile] Đã hủy đơn hàng #{donHang.MaDH}", body);
+                        string body = $"<p>Xin chÃ o <strong>{donHang.TenNguoiNhan}</strong>,</p>" +
+                                      $"<p>ÄÆ¡n hÃ ng <strong>#{donHang.MaDH}</strong> Ä‘Ã£ Ä‘Æ°á»£c há»§y thÃ nh cÃ´ng theo yÃªu cáº§u cá»§a báº¡n.</p>" +
+                                      (!string.IsNullOrEmpty(request.LyDo) ? $"<p>LÃ½ do há»§y: {request.LyDo}</p>" : "") +
+                                      $"<p>Cáº£m Æ¡n báº¡n Ä‘Ã£ Ä‘á»“ng hÃ nh cÃ¹ng Sama Mobile!</p>";
+                        await _emailService.SendEmailAsync(kh.Email, $"[Sama Mobile] ÄÃ£ há»§y Ä‘Æ¡n hÃ ng #{donHang.MaDH}", body);
                     }
                     catch { }
                 });
@@ -676,4 +681,98 @@ public class OnlineOrderService : IOnlineOrderService
         };
     }
 
+
+    // ─── Giai đoạn 2: Tra cứu công khai (đã mask thông tin nhạy cảm) ─────────────
+
+    /// <summary>
+    /// Tra cứu đơn hàng theo mã đơn + SĐT để xác minh, trả dữ liệu đã mask.
+    /// Trả null nếu không tìm thấy hoặc SĐT không khớp (tránh lộ lý do cụ thể).
+    /// </summary>
+    public async Task<OrderLookupDto?> GetOrderForLookupAsync(string maDH, string sdt)
+    {
+        var cleanPhone = PhoneHelper.NormalizeVietnamesePhone(sdt)
+                         ?? sdt.Trim().Replace(" ", "").Replace(".", "").Replace("-", "");
+
+        var order = await _context.DonHangOnlines.AsNoTracking()
+            .Include(d => d.ChiTietDonHangs)
+                .ThenInclude(c => c.MatHang)
+            .FirstOrDefaultAsync(d => d.MaDH == maDH);
+
+        // Trả null nếu không tìm thấy hoặc SĐT không khớp — không tiết lộ sai mã hay sai SĐT (bảo mật P4-06)
+        if (order == null) return null;
+        if (!string.Equals(order.SdtNguoiNhan, cleanPhone, StringComparison.OrdinalIgnoreCase)) return null;
+
+        // Lấy email khách hàng để mask (nếu có)
+        var kh = await _context.KhachHangs.AsNoTracking()
+            .FirstOrDefaultAsync(k => k.MaKH == order.MaKH);
+        var emailRaw = kh?.Email?.EndsWith("@cellphones.customer") == true ? null : kh?.Email;
+
+        return new OrderLookupDto
+        {
+            MaDH = order.MaDH,
+            NgayDat = order.NgayDat,
+            TenNguoiNhanMask = OrderMaskHelper.MaskName(order.TenNguoiNhan),
+            SdtMask = OrderMaskHelper.MaskPhone(order.SdtNguoiNhan),
+            EmailMask = emailRaw != null ? OrderMaskHelper.MaskEmail(emailRaw) : null,
+            DiaChiMask = OrderMaskHelper.MaskAddress(order.DiaChiGiao),
+            PhuongThucThanhToan = order.PhuongThucThanhToan,
+            TongTien = order.TongTien,
+            TrangThai = order.TrangThai,
+            Items = order.ChiTietDonHangs.Select(c => new OrderItemDto
+            {
+                MaHang = c.MaHang,
+                TenHang = c.MatHang?.TenHang ?? c.MaHang,
+                SoLuong = c.SoLuong,
+                DonGia = c.DonGia,
+                ThanhTien = c.SoLuong * c.DonGia
+            }).ToList(),
+            // Tạm thời lịch sử chỉ có 1 entry = trạng thái hiện tại
+            StatusHistory = new List<OrderStatusHistoryEntry>
+            {
+                new() { TrangThai = order.TrangThai, ThoiGian = order.NgayDat }
+            }
+        };
+    }
+
+    // ─── Giai đoạn 4: Tra cứu danh sách đơn theo SĐT (đã mask) ─────────────────
+
+    /// <summary>
+    /// Trả danh sách đơn của SĐT đã xác thực OTP, với thông tin đã mask.
+    /// </summary>
+    public async Task<List<OrderLookupDto>> GetOrdersByPhoneMaskedAsync(string phone)
+    {
+        var cleanPhone = PhoneHelper.NormalizeVietnamesePhone(phone)
+                         ?? phone.Trim().Replace(" ", "").Replace(".", "").Replace("-", "");
+
+        var orders = await _context.DonHangOnlines.AsNoTracking()
+            .Where(d => d.SdtNguoiNhan == cleanPhone)
+            .OrderByDescending(d => d.NgayDat)
+            .ToListAsync();
+
+        // Lấy email từ khách hàng (chỉ cần 1 lần, dùng MaKH đầu tiên nếu có)
+        string? emailRaw = null;
+        if (orders.Count > 0)
+        {
+            var kh = await _context.KhachHangs.AsNoTracking()
+                .FirstOrDefaultAsync(k => k.MaKH == orders[0].MaKH);
+            emailRaw = kh?.Email?.EndsWith("@cellphones.customer") == true ? null : kh?.Email;
+        }
+
+        return orders.Select(o => new OrderLookupDto
+        {
+            MaDH = o.MaDH,
+            NgayDat = o.NgayDat,
+            TenNguoiNhanMask = OrderMaskHelper.MaskName(o.TenNguoiNhan),
+            SdtMask = OrderMaskHelper.MaskPhone(o.SdtNguoiNhan),
+            EmailMask = emailRaw != null ? OrderMaskHelper.MaskEmail(emailRaw) : null,
+            DiaChiMask = OrderMaskHelper.MaskAddress(o.DiaChiGiao),
+            PhuongThucThanhToan = o.PhuongThucThanhToan,
+            TongTien = o.TongTien,
+            TrangThai = o.TrangThai,
+            StatusHistory = new List<OrderStatusHistoryEntry>
+            {
+                new() { TrangThai = o.TrangThai, ThoiGian = o.NgayDat }
+            }
+        }).ToList();
+    }
 }

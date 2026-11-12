@@ -58,3 +58,71 @@ public class CancelOrderRequest
     public string Sdt { get; set; } = string.Empty;
     public string? LyDo { get; set; }
 }
+
+// ─── Giai đoạn 2: DTOs tra cứu công khai (đã che thông tin nhạy cảm) ───────────
+
+/// <summary>
+/// Một mốc trong lịch sử trạng thái đơn hàng (dùng cho timeline tra cứu).
+/// </summary>
+public class OrderStatusHistoryEntry
+{
+    public string TrangThai { get; set; } = string.Empty;
+    public DateTime ThoiGian { get; set; }
+    public string? GhiChu { get; set; }
+}
+
+/// <summary>
+/// DTO tra cứu đơn hàng công khai — các trường nhạy cảm đã được che (mask).
+/// </summary>
+public class OrderLookupDto
+{
+    public string MaDH { get; set; } = string.Empty;
+    public DateTime NgayDat { get; set; }
+    public string TenNguoiNhanMask { get; set; } = string.Empty;  // "Nguyễn V*** n"
+    public string SdtMask { get; set; } = string.Empty;           // "0987***321"
+    public string? EmailMask { get; set; }                        // "ab***@gmail.com"
+    public string DiaChiMask { get; set; } = string.Empty;        // "Phường X, Quận Y, Tỉnh Z"
+    public string PhuongThucThanhToan { get; set; } = "cod";
+    public decimal TongTien { get; set; }
+    public string TrangThai { get; set; } = string.Empty;
+    public List<OrderItemDto>? Items { get; set; }
+    /// <summary>Lịch sử trạng thái (timeline). Tạm thời có 1 entry = trạng thái hiện tại.</summary>
+    public List<OrderStatusHistoryEntry> StatusHistory { get; set; } = new();
+}
+
+// ─── Giai đoạn 4: OTP DTOs ───────────────────────────────────────────────────
+
+public class OtpRequestDto
+{
+    public string Sdt { get; set; } = string.Empty;
+}
+
+public class OtpVerifyDto
+{
+    public string Sdt { get; set; } = string.Empty;
+    public string Otp { get; set; } = string.Empty;
+}
+
+/// <summary>Kết quả xác minh OTP nội bộ service.</summary>
+public class OtpVerifyResult
+{
+    public bool Success { get; set; }
+    public string? Token { get; set; }
+    public DateTime? ExpiresAt { get; set; }
+    public string? Error { get; set; }
+}
+
+/// <summary>Response trả về client khi OTP đúng.</summary>
+public class OtpVerifyResponse
+{
+    public string Token { get; set; } = string.Empty;
+    public DateTime ExpiresAt { get; set; }
+}
+
+/// <summary>Kết quả yêu cầu gửi OTP.</summary>
+public class OtpRequestResult
+{
+    public bool Blocked { get; set; }
+    public string Message { get; set; } = string.Empty;
+    public string? Code { get; set; } // Chỉ trả về khi OTP_MODE=demo
+}

@@ -1346,7 +1346,14 @@
     const finalTotal = Math.max(0, subtotal - discount);
 
     const randomCode = Math.floor(1000 + Math.random() * 9000);
-    const maDH = `DH-261106-${randomCode}`;
+    // Giai đoạn 1: Sinh mã đơn hàng ngẫu nhiên dạng DH-XXXXXX (loại bỏ 0,O,1,I,L)
+    const ORDER_CODE_CHARSET = '23456789ABCDEFGHJKMNPQRSTUVWXYZ';
+    const arr = new Uint8Array(6);
+    crypto.getRandomValues(arr);
+    let maDH = 'DH-';
+    for (let i = 0; i < 6; i++) {
+      maDH += ORDER_CODE_CHARSET[arr[i] % ORDER_CODE_CHARSET.length];
+    }
 
     const orderData = {
       maDH: maDH,
@@ -1455,6 +1462,8 @@
       const elItemsList = document.getElementById('success-items-list');
 
       if (elCode) elCode.textContent = order.maDH;
+      // Giai đoạn 5: Lưu mã đơn gần nhất để tự điền vào modal tra cứu
+      try { localStorage.setItem('cellphones_last_order_code', order.maDH); } catch (e) {}
       if (elName) elName.textContent = order.tenNguoiNhan;
       if (elPhone) elPhone.textContent = order.sdtNguoiNhan;
       if (elAddress) elAddress.textContent = order.diaChiGiao;

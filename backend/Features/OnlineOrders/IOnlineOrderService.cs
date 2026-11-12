@@ -10,4 +10,10 @@ public interface IOnlineOrderService
     Task<(List<OrderDto> Items, int Total)> GetAdminOrdersAsync(string? trangThai, DateOnly? tuNgay, DateOnly? denNgay, int page, int pageSize);
     Task<OrderDto> UpdateOrderStatusAsync(string maDH, string newTrangThai, string? soHDKem = null);
     Task<OrderDto> CancelOrderByCustomerAsync(string maDH, CancelOrderRequest request);
+
+    // Giai đoạn 2: Tra cứu công khai (thông tin đã được che)
+    Task<OrderLookupDto?> GetOrderForLookupAsync(string maDH, string sdt);
+
+    // Giai đoạn 4: Tra cứu danh sách đơn theo SĐT với mask (dùng sau khi xác thực OTP token)
+    Task<List<OrderLookupDto>> GetOrdersByPhoneMaskedAsync(string phone);
 }

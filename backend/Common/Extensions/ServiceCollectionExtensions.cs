@@ -1,5 +1,5 @@
 using PhoneStoreAPI.Features.Payment;
-﻿using System.Net;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.RateLimiting;
@@ -109,6 +109,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ISystemSettingService, SystemSettingService>();
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<IPaymentService, PaymentService>();
+        // Giai đoạn 4: Đăng ký OTP Service
+        services.AddScoped<IOtpService, OtpService>();
 
         // FluentValidation tự động đăng ký tất cả validator trong assembly
         services.AddValidatorsFromAssembly(typeof(ServiceCollectionExtensions).Assembly);
@@ -161,7 +163,7 @@ public static class ServiceCollectionExtensions
                 context.HttpContext.Response.ContentType = "application/json";
                 var payload = new
                 {
-                    message = "Bạn đã gửi quá nhiều yêu cầu. Vui lòng thử lại sau.",
+                    message = "Bạn thao tác quá nhiều, vui lòng thử lại sau ít phút.",
                     errors = new[] { "Giới hạn tần suất yêu cầu (Rate limit exceeded)." }
                 };
                 await context.HttpContext.Response.WriteAsync(
@@ -182,15 +184,29 @@ public static class ServiceCollectionExtensions
                 });
             });
 
-            // Public lookup policy: 30 lần/phút/IP
+            // OTP policy: 10 req/phút/IP (kết hợp 3 req/giờ/SĐT trong OtpService)
+            options.AddPolicy("otp", httpContext =>
+            {
+                var forwarded = httpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault();
+                var clientIp = !string.IsNullOrWhiteSpace(forwarded) ? forwarded.Split(",")[0].Trim() : (httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown");
+                return RateLimitPartition.GetFixedWindowLimiter(clientIp, _ => new FixedWindowRateLimiterOptions
+                {
+                    PermitLimit = 10,
+                    Window = TimeSpan.FromMinutes(1),
+                    QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                    QueueLimit = 0
+                });
+            });
+
+            // Public lookup policy: 5 lần/10 phút/IP (Giai đoạn 3)
             options.AddPolicy("public-lookup", httpContext =>
             {
                 var forwarded = httpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault();
                 var clientIp = !string.IsNullOrWhiteSpace(forwarded) ? forwarded.Split(",")[0].Trim() : (httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown");
                 return RateLimitPartition.GetFixedWindowLimiter(clientIp, _ => new FixedWindowRateLimiterOptions
                 {
-                    PermitLimit = 30,
-                    Window = TimeSpan.FromMinutes(1),
+                    PermitLimit = 5,
+                    Window = TimeSpan.FromMinutes(10),
                     QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
                     QueueLimit = 0
                 });

@@ -27,6 +27,20 @@
   const PHONE_REGEX = /^(0)(3[2-9]|5[2689]|7[06-9]|8[1-9]|9[0-9])[0-9]{7}$/;
   const ORDER_PROMO_STORAGE = 'cellphones_order_promotions_v1';
 
+  // Giai đoạn 1: Bộ ký tự an toàn — loại bỏ 0,O,1,I,L để tránh nhầm lẫn khi đọc
+  const ORDER_CODE_CHARSET = '23456789ABCDEFGHJKMNPQRSTUVWXYZ';
+
+  function generateOrderCode() {
+    // Dùng crypto.getRandomValues để đảm bảo ngẫu nhiên an toàn (không dùng Math.random)
+    const arr = new Uint8Array(6);
+    crypto.getRandomValues(arr);
+    let code = 'DH-';
+    for (let i = 0; i < 6; i++) {
+      code += ORDER_CODE_CHARSET[arr[i] % ORDER_CODE_CHARSET.length];
+    }
+    return code;
+  }
+
   class CheckoutManager {
     constructor() {
       this.currentOrder = null;
@@ -271,9 +285,9 @@
         console.warn('API /orders không khả dụng hoặc sản phẩm thuộc kho JSON thực, chuyển sang chế độ lưu trữ thời gian thực:', err);
       }
 
-      // 2. Nếu backend không khả dụng hoặc trả về lỗi, tự sinh mã đơn hàng chuẩn thực tế
+      // 2. Nếu backend không khả dụng hoặc trả về lỗi, tự sinh mã đơn hàng an toàn (Giai đoạn 1)
       if (!orderResult || !orderResult.maDH) {
-        const genId = 'DH' + Math.floor(100000 + Math.random() * 900000);
+        const genId = generateOrderCode(); // Giai đoạn 1: dùng crypto thay Math.random
         orderResult = {
           maDH: genId,
           soHD: null,
@@ -326,7 +340,7 @@
       }
 
       this.closeCheckout();
-      this.showThankYou(orderResult, cartItems, totalAmount);
+      this.showThankYou(realOrder, cartItems, totalAmount);
     }
 
     showThankYou(order, items, total) {
@@ -339,6 +353,30 @@
       const elTotal = document.getElementById('thankyou-total');
 
       if (elMaDH) elMaDH.textContent = order.maDH;
+
+      // Giai đoạn 5: Lưu mã đơn vào localStorage để tự điền vào modal tra cứu
+      try { localStorage.setItem('cellphones_last_order_code', order.maDH); } catch(e) {}
+
+      // Giai đoạn 2: Nút sao chép mã đơn
+      const copyBtn = document.getElementById('thankyou-copy-btn');
+      if (copyBtn) {
+        copyBtn.onclick = async function() {
+          try {
+            await navigator.clipboard.writeText(order.maDH);
+          } catch(e) {
+            // Fallback cho browser cũ không hỗ trợ Clipboard API
+            const ta = document.createElement('textarea');
+            ta.value = order.maDH;
+            ta.style.position = 'fixed'; ta.style.opacity = '0';
+            document.body.appendChild(ta); ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+          }
+          const copied = document.getElementById('thankyou-copied-msg');
+          if (copied) { copied.classList.remove('hidden'); setTimeout(() => copied.classList.add('hidden'), 2000); }
+        };
+      }
+
       if (elName) elName.textContent = order.tenNguoiNhan;
       if (elPhone) elPhone.textContent = order.sdtNguoiNhan;
       if (elAddress) elAddress.textContent = order.diaChiGiao;
