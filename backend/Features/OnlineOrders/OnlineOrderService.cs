@@ -20,6 +20,7 @@ public class OnlineOrderService : IOnlineOrderService
     private readonly IWarrantyService _warrantyService;
     private readonly IEmailService? _emailService;
     private readonly IHubContext<OrderHub>? _hubContext;
+    private readonly IShippingService? _shippingService;
 
     public OnlineOrderService(
         AppDbContext context,
@@ -27,7 +28,8 @@ public class OnlineOrderService : IOnlineOrderService
         ICodeGenerator codeGenerator,
         IWarrantyService warrantyService,
         IEmailService? emailService = null,
-        IHubContext<OrderHub>? hubContext = null)
+        IHubContext<OrderHub>? hubContext = null,
+        IShippingService? shippingService = null)
     {
         _context = context;
         _currentUser = currentUser;
@@ -35,6 +37,7 @@ public class OnlineOrderService : IOnlineOrderService
         _warrantyService = warrantyService;
         _emailService = emailService;
         _hubContext = hubContext;
+        _shippingService = shippingService;
     }
 
     public async Task<OrderDto> CreateOrderAsync(CreateOrderRequest request)
@@ -526,6 +529,16 @@ public class OnlineOrderService : IOnlineOrderService
             await _context.SaveChangesAsync();
             await transaction.CommitAsync();
 
+            // Giai đoạn 6: Khi xác nhận đơn -> tạo vận đơn (lỗi vận chuyển không làm hỏng đơn)
+            if (newTrangThai == AppConstants.OrderStatus.DaXacNhan && _shippingService != null)
+            {
+                try
+                {
+                    await _shippingService.CreateShipmentAsync(donHang, donHang.ChiTietDonHangs.ToList());
+                }
+                catch { /* Không chặn luồng xác nhận đơn nếu API vận chuyển gặp sự cố */ }
+            }
+
             if (_hubContext != null)
             {
                 string msg = newTrangThai switch
@@ -707,6 +720,14 @@ public class OnlineOrderService : IOnlineOrderService
             .FirstOrDefaultAsync(k => k.MaKH == order.MaKH);
         var emailRaw = kh?.Email?.EndsWith("@cellphones.customer") == true ? null : kh?.Email;
 
+        // Lấy thông tin vận chuyển (Giai đoạn 6)
+        OrderShippingDto? shipping = null;
+        if (_shippingService != null)
+        {
+            try { shipping = await _shippingService.GetTrackingAsync(order.MaDH); }
+            catch { /* Giữ lookup hoạt động ngay cả khi dịch vụ vận chuyển lỗi */ }
+        }
+
         return new OrderLookupDto
         {
             MaDH = order.MaDH,
@@ -730,7 +751,8 @@ public class OnlineOrderService : IOnlineOrderService
             StatusHistory = new List<OrderStatusHistoryEntry>
             {
                 new() { TrangThai = order.TrangThai, ThoiGian = order.NgayDat }
-            }
+            },
+            Shipping = shipping
         };
     }
 
@@ -758,21 +780,35 @@ public class OnlineOrderService : IOnlineOrderService
             emailRaw = kh?.Email?.EndsWith("@cellphones.customer") == true ? null : kh?.Email;
         }
 
-        return orders.Select(o => new OrderLookupDto
+        var result = new List<OrderLookupDto>(orders.Count);
+        foreach (var o in orders)
         {
-            MaDH = o.MaDH,
-            NgayDat = o.NgayDat,
-            TenNguoiNhanMask = OrderMaskHelper.MaskName(o.TenNguoiNhan),
-            SdtMask = OrderMaskHelper.MaskPhone(o.SdtNguoiNhan),
-            EmailMask = emailRaw != null ? OrderMaskHelper.MaskEmail(emailRaw) : null,
-            DiaChiMask = OrderMaskHelper.MaskAddress(o.DiaChiGiao),
-            PhuongThucThanhToan = o.PhuongThucThanhToan,
-            TongTien = o.TongTien,
-            TrangThai = o.TrangThai,
-            StatusHistory = new List<OrderStatusHistoryEntry>
+            OrderShippingDto? shipping = null;
+            if (_shippingService != null)
             {
-                new() { TrangThai = o.TrangThai, ThoiGian = o.NgayDat }
+                try { shipping = await _shippingService.GetTrackingAsync(o.MaDH); }
+                catch { }
             }
-        }).ToList();
+
+            result.Add(new OrderLookupDto
+            {
+                MaDH = o.MaDH,
+                NgayDat = o.NgayDat,
+                TenNguoiNhanMask = OrderMaskHelper.MaskName(o.TenNguoiNhan),
+                SdtMask = OrderMaskHelper.MaskPhone(o.SdtNguoiNhan),
+                EmailMask = emailRaw != null ? OrderMaskHelper.MaskEmail(emailRaw) : null,
+                DiaChiMask = OrderMaskHelper.MaskAddress(o.DiaChiGiao),
+                PhuongThucThanhToan = o.PhuongThucThanhToan,
+                TongTien = o.TongTien,
+                TrangThai = o.TrangThai,
+                StatusHistory = new List<OrderStatusHistoryEntry>
+                {
+                    new() { TrangThai = o.TrangThai, ThoiGian = o.NgayDat }
+                },
+                Shipping = shipping
+            });
+        }
+
+        return result;
     }
 }

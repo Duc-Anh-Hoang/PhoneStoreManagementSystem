@@ -35,6 +35,13 @@ services:
       Jwt__Issuer: ${Jwt__Issuer:-PhoneStoreAPI}
       Jwt__Audience: ${Jwt__Audience:-PhoneStoreClient}
       Jwt__ExpireMinutes: ${Jwt__ExpireMinutes:-1440}
+      OTP_MODE: ${OTP_MODE:-demo}
+      SHIPPING_MODE: ${SHIPPING_MODE:-mock}
+      GHN_TOKEN: ${GHN_TOKEN:-}
+      GHN_SHOP_ID: ${GHN_SHOP_ID:-}
+      GHN_BASE_URL: ${GHN_BASE_URL:-https://dev-online-gateway.ghn.vn}
+      GHN_WEBHOOK_SECRET: ${GHN_WEBHOOK_SECRET:-}
+      SPX_TRACKING_URL: ${SPX_TRACKING_URL:-https://spx.vn/track?{tracking_code}}
     ports:
       - "${BACKEND_PORT:-8080}:8080"
     depends_on:

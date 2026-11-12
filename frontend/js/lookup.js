@@ -310,6 +310,68 @@
         </div>`;
     }
 
+    // Thông tin vận chuyển (Giai đoạn 6)
+    let shippingHtml = '';
+    const sp = order.shipping;
+    if (!sp || sp.carrier === 'NONE') {
+      shippingHtml = `
+        <div class="border-t border-slate-100 pt-2">
+          <div class="font-semibold text-slate-700 mb-1">Vận chuyển:</div>
+          <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-[11px] text-slate-500">
+            <i class="fa-solid fa-box mr-1 text-slate-400"></i>Đơn hàng đang được chuẩn bị, chưa bàn giao cho đơn vị vận chuyển.
+          </div>
+        </div>`;
+    } else {
+      const carrierLabel = sp.carrier === 'SPX' ? 'SPX Express' : (sp.carrier === 'GHN' ? 'Giao Hàng Nhanh (GHN)' : sp.carrier);
+      const trackBtnLabel = sp.carrier === 'SPX' ? 'Tra cứu trên SPX' : 'Xem trên trang hãng';
+      const eventsList = (sp.events && sp.events.length > 0)
+        ? `<ol class="relative border-l border-blue-200 ml-2 mt-2 space-y-2">
+            ${sp.events.map(ev => `
+              <li class="ml-3">
+                <span class="absolute -left-1.5 w-3 h-3 rounded-full bg-blue-100 text-[#2563EB] flex items-center justify-center ring-2 ring-white">
+                  <i class="fa-solid fa-circle text-[5px]"></i>
+                </span>
+                <div class="text-[11px] font-semibold text-slate-700">${ev.description || ev.status}</div>
+                <div class="text-[10px] text-slate-400">${ev.time ? new Date(ev.time).toLocaleString('vi-VN') : ''}${ev.location ? ' · ' + ev.location : ''}</div>
+              </li>
+            `).join('')}
+          </ol>`
+        : '';
+
+      shippingHtml = `
+        <div class="border-t border-slate-100 pt-2 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-semibold text-slate-700">Vận chuyển:</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-[#1E3A8A] border border-blue-200">${carrierLabel}</span>
+          </div>
+          <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5 text-[11px]">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-slate-500">Mã vận đơn:</span>
+              <div class="flex items-center gap-1.5">
+                <strong class="font-mono text-[#1E3A8A]">${sp.trackingCode || '-'}</strong>
+                ${sp.trackingCode ? `<button type="button" onclick="window.CellphoneSLookup.copyTracking('${sp.trackingCode}')" class="px-1.5 py-0.5 rounded bg-blue-50 hover:bg-blue-100 text-[#2563EB] text-[10px] font-bold border border-blue-200 cursor-pointer"><i class="fa-regular fa-copy"></i></button>` : ''}
+              </div>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-slate-500">Trạng thái giao:</span>
+              <strong class="text-[#111827]">${sp.shippingStatus || 'Đang xử lý'}</strong>
+            </div>
+            ${sp.expectedDelivery ? `
+              <div class="flex items-center justify-between">
+                <span class="text-slate-500">Dự kiến giao:</span>
+                <span class="font-medium text-slate-700">${formatDate(sp.expectedDelivery)}</span>
+              </div>` : ''}
+            ${sp.trackingUrl ? `
+              <div class="pt-1">
+                <a href="${sp.trackingUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold text-[10px]">
+                  <i class="fa-solid fa-arrow-up-right-from-square"></i>${trackBtnLabel}
+                </a>
+              </div>` : ''}
+          </div>
+          ${eventsList}
+        </div>`;
+    }
+
     return `
       <div class="p-4 rounded-2xl bg-white border border-[#E5E7EB] shadow-md text-xs space-y-2.5">
         <div class="flex items-center justify-between border-b border-slate-100 pb-2">
@@ -329,6 +391,8 @@
         </div>
 
         ${itemsHtml}
+
+        ${shippingHtml}
 
         ${timelineHtml}
 
@@ -722,6 +786,21 @@
             ${err.message || 'Không thể tải chi tiết đơn hàng.'}
           </div>`;
       }
+    }
+
+    async copyTracking(code) {
+      if (!code) return;
+      try {
+        await navigator.clipboard.writeText(code);
+      } catch {
+        const ta = document.createElement('textarea');
+        ta.value = code;
+        ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+      showNotification('Đã sao chép mã vận đơn', 'success');
     }
 
     openTradeInModal() {

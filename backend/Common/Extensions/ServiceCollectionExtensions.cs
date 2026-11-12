@@ -83,6 +83,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddMemoryCache();
         services.AddHttpContextAccessor();
+        services.AddHttpClient();
 
         // Common Shared Services
         services.AddScoped<ICurrentUser, CurrentUser>();
@@ -111,6 +112,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IPaymentService, PaymentService>();
         // Giai đoạn 4: Đăng ký OTP Service
         services.AddScoped<IOtpService, OtpService>();
+        // Giai đoạn 6: Đăng ký Shipping Service
+        services.AddScoped<IShippingService, ShippingService>();
 
         // FluentValidation tự động đăng ký tất cả validator trong assembly
         services.AddValidatorsFromAssembly(typeof(ServiceCollectionExtensions).Assembly);

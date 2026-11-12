@@ -88,6 +88,44 @@ public class OrderLookupDto
     public List<OrderItemDto>? Items { get; set; }
     /// <summary>Lịch sử trạng thái (timeline). Tạm thời có 1 entry = trạng thái hiện tại.</summary>
     public List<OrderStatusHistoryEntry> StatusHistory { get; set; } = new();
+    /// <summary>Thông tin vận chuyển (Giai đoạn 6).</summary>
+    public OrderShippingDto? Shipping { get; set; }
+}
+
+// ─── Giai đoạn 6: Shipping DTOs ──────────────────────────────────────────────
+
+public class ShippingEventDto
+{
+    public DateTime Time { get; set; }
+    public string Status { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
+    public string? Location { get; set; }
+}
+
+public class OrderShippingDto
+{
+    public string Carrier { get; set; } = "NONE"; // GHN | SPX | NONE
+    public string? TrackingCode { get; set; }
+    public string ShippingStatus { get; set; } = string.Empty;
+    public DateTime? ExpectedDelivery { get; set; }
+    public string? TrackingUrl { get; set; }
+    public bool IsDemo { get; set; }
+    public List<ShippingEventDto> Events { get; set; } = new();
+}
+
+public class SetSpxTrackingRequest
+{
+    public string TrackingCode { get; set; } = string.Empty;
+}
+
+public class GhnWebhookPayload
+{
+    public string? OrderCode { get; set; }
+    public string? ClientOrderCode { get; set; }
+    public string? Status { get; set; }
+    public string? Description { get; set; }
+    public long? ShopID { get; set; }
+    public DateTime? Time { get; set; }
 }
 
 // ─── Giai đoạn 4: OTP DTOs ───────────────────────────────────────────────────
