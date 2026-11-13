@@ -52,6 +52,17 @@ public class DonHangOnlineController : ControllerBase
     }
 
     /// <summary>
+    /// Giai đoạn 6: Lấy thông tin vận chuyển của đơn hàng
+    /// </summary>
+    [HttpGet("{maDH}/shipping")]
+    public async Task<IActionResult> GetShipping(string maDH)
+    {
+        var shipping = await _shippingService.GetTrackingAsync(maDH);
+        if (shipping == null) return NotFound(new { message = "Chưa có thông tin vận chuyển cho đơn hàng này." });
+        return Ok(shipping);
+    }
+
+    /// <summary>
     /// Giai đoạn 6: Tạo lại vận đơn (retry khi carrier=NONE)
     /// </summary>
     [HttpPost("{maDH}/shipping/retry")]

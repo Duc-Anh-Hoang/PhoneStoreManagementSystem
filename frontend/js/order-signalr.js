@@ -10,7 +10,7 @@
 
   const USER_NOTIF_KEY = 'samamobile_user_notifications';
   const ADMIN_NOTIF_KEY = 'samamobile_admin_notifications';
-  const isAdminPage = window.location.pathname.includes('admin.html');
+  const isAdminPage = window.location.pathname.includes('admin.html') || window.location.pathname.endsWith('/admin') || window.location.pathname.endsWith('/admin/');
 
   // Âm chuông thông báo Web Audio API
   function playChime(type) {
@@ -193,11 +193,17 @@
     if (pop) pop.classList.add('hidden');
 
     if (isAdminPage) {
-      if (typeof window.switchSection === 'function') {
-        window.switchSection('view-donhang');
-      }
-      if (typeof window.renderDonHangTable === 'function') {
-        window.renderDonHangTable();
+      if (maDH && typeof window.showAdminOrderDetail === 'function') {
+        window.showAdminOrderDetail(maDH);
+      } else {
+        if (typeof window.switchSection === 'function') {
+          window.switchSection('view-donhang');
+        } else if (typeof window.renderSection === 'function') {
+          window.renderSection('view-donhang');
+        }
+        if (typeof window.renderDonHangTable === 'function') {
+          window.renderDonHangTable();
+        }
       }
     } else {
       if (window.location.pathname.includes('cart.html')) {
@@ -382,8 +388,13 @@
     const gotoBtn = toast.querySelector('.btn-goto-order');
     if (gotoBtn) {
       gotoBtn.onclick = () => {
-        if (typeof window.switchSection === 'function') window.switchSection('view-donhang');
-        if (typeof window.renderDonHangTable === 'function') window.renderDonHangTable();
+        if (typeof window.showAdminOrderDetail === 'function') {
+          window.showAdminOrderDetail(order.maDH);
+        } else {
+          if (typeof window.switchSection === 'function') window.switchSection('view-donhang');
+          else if (typeof window.renderSection === 'function') window.renderSection('view-donhang');
+          if (typeof window.renderDonHangTable === 'function') window.renderDonHangTable();
+        }
         toast.remove();
       };
     }

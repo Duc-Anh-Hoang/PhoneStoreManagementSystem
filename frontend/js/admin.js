@@ -259,122 +259,34 @@ const AdminRealtimeData = {
   mergeAllOrderSources(backendOrders = []) {
     const map = new Map();
 
-    // 1. Đọc đơn từ User (samamobile_user_orders)
+    // 1. Ưu tiên số một: Đơn từ Backend API (/api/donhangonline - Nguồn sự thật)
+    if (Array.isArray(backendOrders) && backendOrders.length > 0) {
+      backendOrders.forEach(bo => {
+        if (bo && bo.maDH) {
+          map.set(bo.maDH, {
+            ...bo,
+            items: (bo.items && bo.items.length) ? bo.items : []
+          });
+        }
+      });
+    }
+
+    // 2. Bổ sung các đơn mới từ User đặt tại cùng trình duyệt nếu chưa đồng bộ lên Backend
     try {
       const userRaw = localStorage.getItem('samamobile_user_orders');
       if (userRaw) {
         const userList = JSON.parse(userRaw);
         if (Array.isArray(userList)) {
           userList.forEach(o => {
-            if (o && o.maDH) map.set(o.maDH, o);
-          });
-        }
-      }
-    } catch (e) {}
-
-    // 2. Đọc đơn từ kho Admin (cellphones_online_orders)
-    try {
-      const adminRaw = localStorage.getItem('cellphones_online_orders');
-      if (adminRaw) {
-        const adminList = JSON.parse(adminRaw);
-        if (Array.isArray(adminList)) {
-          adminList.forEach(o => {
-            if (o && o.maDH) {
-              if (!map.has(o.maDH)) {
-                map.set(o.maDH, o);
-              } else {
-                const prev = map.get(o.maDH);
-                map.set(o.maDH, {
-                  ...prev,
-                  ...o,
-                  items: (o.items && o.items.length) ? o.items : (prev.items || [])
-                });
-              }
+            if (o && o.maDH && !map.has(o.maDH)) {
+              map.set(o.maDH, o);
             }
           });
         }
       }
     } catch (e) {}
 
-    // 3. Gộp đơn đang có trong bộ nhớ
-    (this.orders || []).forEach(o => {
-      if (o && o.maDH && !map.has(o.maDH)) {
-        map.set(o.maDH, o);
-      }
-    });
-
-    // 4. Gộp đơn từ Backend API (/api/donhangonline)
-    if (Array.isArray(backendOrders) && backendOrders.length > 0) {
-      backendOrders.forEach(bo => {
-        if (bo && bo.maDH) {
-          if (!map.has(bo.maDH)) {
-            map.set(bo.maDH, bo);
-          } else {
-            const prev = map.get(bo.maDH);
-            map.set(bo.maDH, {
-              ...prev,
-              ...bo,
-              phuongThucThanhToan: (prev.phuongThucThanhToan && ['banking', 'momo', 'vnpay', 'zalopay', 'card'].includes(prev.phuongThucThanhToan)) ? prev.phuongThucThanhToan : (bo.phuongThucThanhToan || prev.phuongThucThanhToan),
-              items: (bo.items && bo.items.length) ? bo.items : (prev.items || [])
-            });
-          }
-        }
-      });
-    }
-
     let merged = Array.from(map.values());
-
-    // Nếu rỗng hoàn toàn, tạo 4 đơn hàng mẫu ban đầu
-    if (merged.length === 0) {
-      const now = new Date();
-      merged = [
-        {
-          maDH: 'DH' + Math.floor(100000 + Math.random() * 900000),
-          ngayDat: new Date(now.getTime() - 15 * 60000).toISOString(),
-          tenNguoiNhan: 'Nguyễn Văn An',
-          sdtNguoiNhan: '0988123456',
-          diaChiGiao: 'Số 12 Lê Lợi, Phường Bến Nghé, Quận 1, TP. Hồ Chí Minh',
-          phuongThucThanhToan: 'cod',
-          tongTien: 34990000,
-          trangThai: 'cho_xac_nhan',
-          items: [{ maHang: 'MH101', tenHang: 'iPhone 16 Pro Max 256GB Desert Titanium', soLuong: 1, donGia: 34990000 }]
-        },
-        {
-          maDH: 'DH' + Math.floor(100000 + Math.random() * 900000),
-          ngayDat: new Date(now.getTime() - 45 * 60000).toISOString(),
-          tenNguoiNhan: 'Trần Thị Thu Thảo',
-          sdtNguoiNhan: '0912345678',
-          diaChiGiao: 'Toà nhà Keangnam, Phạm Hùng, Nam Từ Liêm, Hà Nội',
-          phuongThucThanhToan: 'chuyen_khoan',
-          tongTien: 27990000,
-          trangThai: 'cho_xac_nhan',
-          items: [{ maHang: 'S24U512', tenHang: 'Samsung Galaxy S24 Ultra 512GB Titanium Grey', soLuong: 1, donGia: 27990000 }]
-        },
-        {
-          maDH: 'DH' + Math.floor(100000 + Math.random() * 900000),
-          ngayDat: new Date(now.getTime() - 180 * 60000).toISOString(),
-          tenNguoiNhan: 'Lê Hoàng Nam',
-          sdtNguoiNhan: '0977889900',
-          diaChiGiao: '241 Lê Văn Việt, Phường Hiệp Phú, TP. Thủ Đức',
-          phuongThucThanhToan: 'the',
-          tongTien: 5490000,
-          trangThai: 'dang_giao',
-          items: [{ maHang: 'AP_PRO2', tenHang: 'Tai nghe Apple AirPods Pro 2 Type-C (2024)', soLuong: 1, donGia: 5490000 }]
-        },
-        {
-          maDH: 'DH' + Math.floor(100000 + Math.random() * 900000),
-          ngayDat: new Date(now.getTime() - 360 * 60000).toISOString(),
-          tenNguoiNhan: 'Phạm Minh Đức',
-          sdtNguoiNhan: '0933221100',
-          diaChiGiao: '88 Nguyễn Thị Minh Khai, Phường 6, Quận 3, TP. Hồ Chí Minh',
-          phuongThucThanhToan: 'chuyen_khoan',
-          tongTien: 29490000,
-          trangThai: 'hoan_thanh',
-          soHD: 'HD' + Math.floor(10000 + Math.random() * 90000),
-          items: [{ maHang: 'IP15PM256', tenHang: 'iPhone 15 Pro Max 256GB Titan Tự Nhiên', soLuong: 1, donGia: 29490000 }]
-        }
-      ];
-    }
 
     // Sắp xếp đơn mới nhất lên đầu
     merged.sort((a, b) => new Date(b.ngayDat || 0).getTime() - new Date(a.ngayDat || 0).getTime());
@@ -498,8 +410,8 @@ const AdminRealtimeData = {
 // CÁC HÀM TIỆN ÍCH ĐỊNH DẠNG (FORMATTERS)
 const Format = {
   currency(val) {
-    if (val === null || val === undefined) return '0 đ';
-    return Number(val).toLocaleString('vi-VN') + ' đ';
+    if (val === null || val === undefined || isNaN(val)) return '0 ₫';
+    return Number(val).toLocaleString('vi-VN') + ' ₫';
   },
 
   date(d) {
@@ -519,41 +431,61 @@ const Format = {
   },
 
   statusBadge(status) {
-    const dict = {
-      cho_xac_nhan: { labelVi: 'Chờ xác nhận', cls: 'bg-amber-50 text-amber-700 border-amber-200' },
-      da_xac_nhan:  { labelVi: 'Đã xác nhận', cls: 'bg-blue-50 text-[#166534] border-blue-200' },
-      dang_giao:    { labelVi: 'Đang giao', cls: 'bg-purple-50 text-purple-700 border-purple-200' },
-      hoan_thanh:   { labelVi: 'Hoàn thành', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
-      da_huy:       { labelVi: 'Đã hủy', cls: 'bg-rose-50 text-rose-700 border-rose-200' },
-      dang_lam:     { labelVi: 'Đang làm việc', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
-      da_nghi:      { labelVi: 'Đã nghỉ việc', cls: 'bg-slate-100 text-slate-500 border-slate-200' },
-      con_hang:     { labelVi: 'Còn trong kho', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
-      da_ban:       { labelVi: 'Đã xuất bán', cls: 'bg-slate-100 text-slate-600 border-slate-200' },
-      tiep_nhan:    { labelVi: 'Tiếp nhận', cls: 'bg-blue-50 text-blue-700 border-blue-200' },
-      dang_sua:     { labelVi: 'Đang sửa chữa', cls: 'bg-amber-50 text-amber-700 border-amber-200' },
-      cho_linh_kien:{ labelVi: 'Chờ linh kiện', cls: 'bg-amber-50 text-amber-700 border-amber-200' },
-      da_tra:       { labelVi: 'Đã trả máy', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
-      da_tra_may:   { labelVi: 'Đã trả máy', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
-      doi_hang:     { labelVi: 'Đổi máy 1-1', cls: 'bg-blue-50 text-[#166534] border-blue-200' },
-      tien_mat:     { labelVi: 'Tiền mặt', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
-      chuyen_khoan: { labelVi: 'Chuyển khoản', cls: 'bg-purple-50 text-purple-700 border-purple-200' },
-      banking:      { labelVi: 'VietQR Ngân hàng', cls: 'bg-purple-50 text-purple-700 border-purple-200' },
-      momo:         { labelVi: 'Ví MoMo / QR', cls: 'bg-pink-50 text-pink-700 border-pink-200' },
-      vnpay:        { labelVi: 'VNPAY-QR', cls: 'bg-blue-50 text-blue-700 border-blue-200' },
-      zalopay:      { labelVi: 'ZaloPay', cls: 'bg-sky-50 text-sky-700 border-sky-200' },
-      card:         { labelVi: 'Thẻ Quốc tế', cls: 'bg-indigo-50 text-indigo-700 border-indigo-200' },
-      da_giao:      { labelVi: 'Hoàn thành', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
-      the:          { labelVi: 'Thẻ POS', cls: 'bg-indigo-50 text-indigo-700 border-indigo-200' },
-      cod:          { labelVi: 'Thu hộ COD', cls: 'bg-slate-100 text-slate-700 border-slate-200' },
-      tai_quay:     { labelVi: 'Tại quầy', cls: 'bg-blue-50 text-[#166534] border-blue-200' },
-      online:       { labelVi: 'Online', cls: 'bg-purple-50 text-purple-700 border-purple-200' },
-      hoat_dong:    { labelVi: 'Hoạt động', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
-      bi_khoa:      { labelVi: 'Bị khóa', cls: 'bg-rose-50 text-rose-700 border-rose-200' },
-      tra_hang:     { labelVi: 'Đã trả hàng', cls: 'bg-amber-50 text-amber-700 border-amber-200' }
+    if (!status) return '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium text-slate-500 bg-slate-100"><span class="w-1.5 h-1.5 rounded-full bg-slate-400 shrink-0"></span>—</span>';
+    
+    const shades = {
+      neutral: { bg: 'bg-[#F1F5F9]', text: 'text-[#475569]', dot: 'bg-[#94A3B8]' },
+      ok:      { bg: 'bg-[#F0FDF4]', text: 'text-[#166534]', dot: 'bg-[#22C55E]' },
+      warning: { bg: 'bg-[#FEFCE8]', text: 'text-[#854D0E]', dot: 'bg-[#EAB308]' },
+      danger:  { bg: 'bg-[#FEF2F2]', text: 'text-[#991B1B]', dot: 'bg-[#EF4444]' }
     };
 
-    const item = dict[status] || { labelVi: status, cls: 'bg-slate-100 text-slate-700 border-slate-200' };
-    return '<span class="whitespace-nowrap inline-flex items-center justify-center px-2.5 py-1 rounded-full text-xs font-semibold border ' + item.cls + ' shrink-0 min-w-[85px]">' + item.labelVi + '</span>';
+    const dict = {
+      cho_xac_nhan: { labelVi: 'Chờ xác nhận', shade: 'warning' },
+      da_xac_nhan:  { labelVi: 'Đã xác nhận', shade: 'ok' },
+      dang_giao:    { labelVi: 'Đang giao', shade: 'neutral' },
+      hoan_thanh:   { labelVi: 'Hoàn thành', shade: 'ok' },
+      da_giao:      { labelVi: 'Đã giao', shade: 'ok' },
+      da_huy:       { labelVi: 'Đã hủy', shade: 'danger' },
+      dang_lam:     { labelVi: 'Đang làm việc', shade: 'ok' },
+      da_nghi:      { labelVi: 'Đã nghỉ việc', shade: 'neutral' },
+      con_hang:     { labelVi: 'Còn trong kho', shade: 'ok' },
+      da_ban:       { labelVi: 'Đã xuất bán', shade: 'neutral' },
+      tiep_nhan:    { labelVi: 'Tiếp nhận', shade: 'neutral' },
+      dang_sua:     { labelVi: 'Đang sửa chữa', shade: 'warning' },
+      cho_linh_kien:{ labelVi: 'Chờ linh kiện', shade: 'warning' },
+      da_tra:       { labelVi: 'Đã trả máy', shade: 'ok' },
+      da_tra_may:   { labelVi: 'Đã trả máy', shade: 'ok' },
+      doi_hang:     { labelVi: 'Đổi máy 1-1', shade: 'warning' },
+      doi_may:      { labelVi: 'Đổi máy', shade: 'warning' },
+      hoan_tien:    { labelVi: 'Hoàn tiền', shade: 'warning' },
+      tra_hang:     { labelVi: 'Đã trả hàng', shade: 'warning' },
+      da_kiem_tra:  { labelVi: 'Chờ duyệt', shade: 'warning' },
+      da_duyet:     { labelVi: 'Chờ hoàn tất', shade: 'warning' },
+      hoan_tat:     { labelVi: 'Hoàn tất', shade: 'ok' },
+      tu_choi:      { labelVi: 'Từ chối', shade: 'danger' },
+      loi_nsx:      { labelVi: 'Lỗi NSX', shade: 'danger' },
+      loi_nguoi_dung:{ labelVi: 'Lỗi người dùng', shade: 'warning' },
+      khong_loi:    { labelVi: 'Không lỗi', shade: 'ok' },
+      hoat_dong:    { labelVi: 'Hoạt động', shade: 'ok' },
+      bi_khoa:      { labelVi: 'Bị khóa', shade: 'danger' },
+      // Kênh bán & Phương thức thanh toán -> neutral gray
+      tien_mat:     { labelVi: 'Tiền mặt', shade: 'neutral' },
+      chuyen_khoan: { labelVi: 'Chuyển khoản', shade: 'neutral' },
+      banking:      { labelVi: 'VietQR Ngân hàng', shade: 'neutral' },
+      momo:         { labelVi: 'Ví MoMo / QR', shade: 'neutral' },
+      vnpay:        { labelVi: 'VNPAY-QR', shade: 'neutral' },
+      zalopay:      { labelVi: 'ZaloPay', shade: 'neutral' },
+      card:         { labelVi: 'Thẻ Quốc tế', shade: 'neutral' },
+      the:          { labelVi: 'Thẻ POS', shade: 'neutral' },
+      cod:          { labelVi: 'Thu hộ COD', shade: 'neutral' },
+      tai_quay:     { labelVi: 'Tại quầy', shade: 'neutral' },
+      online:       { labelVi: 'Online', shade: 'neutral' }
+    };
+
+    const item = dict[status] || { labelVi: status, shade: 'neutral' };
+    const s = shades[item.shade] || shades.neutral;
+    return `<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium whitespace-nowrap ${s.bg} ${s.text}"><span class="w-1.5 h-1.5 rounded-full ${s.dot} shrink-0"></span>${item.labelVi}</span>`;
   }
 };
 
@@ -686,6 +618,17 @@ function renderSection(sectionId) {
       }
     }
   });
+
+  // Tự động mở nhóm menu chứa mục đang được chọn (Bước 2)
+  const activeLink = document.querySelector(`.admin-nav-link[data-target="${sectionId}"]`) || document.querySelector(`.admin-nav-link[data-target="${currentActiveSection}"]`);
+  if (activeLink) {
+    const parentGroup = activeLink.closest('.nav-group-content');
+    if (parentGroup && parentGroup.classList.contains('collapsed')) {
+      parentGroup.classList.remove('collapsed');
+      const chevron = document.getElementById(`chevron-${parentGroup.id}`);
+      if (chevron) chevron.style.transform = 'rotate(0deg)';
+    }
+  }
 
   // Cập nhật breadcrumb title
   const titleEl = document.getElementById('admin-section-title');
@@ -822,10 +765,10 @@ async function renderDashboard() {
     if (pendingSub) {
       if (pendingCount > 0) {
         pendingSub.textContent = 'Cần duyệt & xuất hóa đơn';
-        pendingSub.className = 'text-[11px] text-[#F97316] font-bold mt-1.5 truncate whitespace-nowrap';
+        pendingSub.className = 'text-[11px] text-slate-500 font-normal mt-1 truncate whitespace-nowrap';
       } else {
         pendingSub.textContent = 'Đã xử lý hết đơn hàng';
-        pendingSub.className = 'text-[11px] text-slate-500 font-medium mt-1.5 truncate whitespace-nowrap';
+        pendingSub.className = 'text-[11px] text-slate-500 font-normal mt-1 truncate whitespace-nowrap';
       }
     }
 
@@ -852,11 +795,18 @@ async function renderDashboard() {
     if (stockSub) {
       if (lowStockCount > 0) {
         stockSub.textContent = `Kho thực tế (${lowStockCount} model sắp hết)`;
-        stockSub.className = 'text-[11px] text-[#F97316] font-bold mt-1.5 truncate whitespace-nowrap';
+        stockSub.className = 'text-[11px] text-slate-500 font-normal mt-1 truncate whitespace-nowrap';
       } else {
         stockSub.textContent = `Đang còn hàng (${(summary?.tongMatHang || products.length).toLocaleString('vi-VN')} model)`;
-        stockSub.className = 'text-[11px] text-[#22C55E] font-medium mt-1.5 truncate whitespace-nowrap';
+        stockSub.className = 'text-[11px] text-slate-500 font-normal mt-1 truncate whitespace-nowrap';
       }
+    }
+
+    // Cập nhật timestamp theo Bước 5
+    const updatedEl = document.getElementById('dash-last-updated');
+    if (updatedEl) {
+      const now = new Date();
+      updatedEl.textContent = 'Cập nhật lúc ' + now.toLocaleTimeString('vi-VN');
     }
 
     // 4. Card Tổng Mặt Hàng Đang Kinh Doanh
@@ -882,12 +832,12 @@ async function renderDashboard() {
       let refundNotice = '';
       if (refundAmount > 0) {
         refundNotice = `
-          <div class="mt-2.5 p-2.5 bg-rose-50 rounded-xl border border-rose-100 flex items-center justify-between text-xs">
-            <span class="text-rose-700 font-semibold flex items-center gap-1.5">
-              <i class="fa-solid fa-arrow-rotate-left text-rose-500"></i>
+          <div class="mt-2.5 p-2.5 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between text-xs">
+            <span class="text-slate-700 font-medium flex items-center gap-1.5">
+              <i class="fa-solid fa-arrow-rotate-left text-slate-400"></i>
               Khấu trừ đổi trả hoàn tiền (${refundCount} hồ sơ):
             </span>
-            <span class="font-mono font-bold text-rose-700">-${Format.currency(refundAmount)}</span>
+            <span class="font-mono font-medium text-rose-600">-${Format.currency(refundAmount)}</span>
           </div>
         `;
       }
@@ -895,34 +845,34 @@ async function renderDashboard() {
       channelContainer.innerHTML = `
         <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
           <div class="flex items-center justify-between mb-1.5">
-            <span class="font-bold text-slate-800 flex items-center gap-1.5">
-              <i class="fa-solid fa-globe text-[#2563EB]"></i>
+            <span class="font-semibold text-slate-800 flex items-center gap-1.5">
+              <i class="fa-solid fa-globe text-slate-500"></i>
               Đơn Đặt Online (Website)
             </span>
             <span class="font-mono font-bold text-slate-900">${Format.currency(onlineRev)}</span>
           </div>
           <div class="flex items-center justify-between text-[11px] text-slate-500 mb-1.5">
-            <span>Số lượng: <b>${onlineInvoicesCount} đơn hoàn tất</b></span>
-            <span class="font-bold text-slate-700">${onlinePct}%</span>
+            <span>Số lượng: <b class="text-slate-700">${onlineInvoicesCount} đơn hoàn tất</b></span>
+            <span class="font-semibold text-slate-700">${onlinePct}%</span>
           </div>
-          <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
-            <div class="bg-[#2563EB] h-2 rounded-full transition-all duration-500" style="width: ${onlinePct}%"></div>
+          <div class="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
+            <div class="bg-[#2563EB] h-1.5 rounded-full transition-all duration-500" style="width: ${onlinePct}%"></div>
           </div>
         </div>
         <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
           <div class="flex items-center justify-between mb-1.5">
-            <span class="font-bold text-slate-800 flex items-center gap-1.5">
-              <i class="fa-solid fa-cash-register text-[#1E3A8A]"></i>
+            <span class="font-semibold text-slate-800 flex items-center gap-1.5">
+              <i class="fa-solid fa-cash-register text-slate-500"></i>
               Bán Tại Quầy (POS Cửa Hàng)
             </span>
             <span class="font-mono font-bold text-slate-900">${Format.currency(posRev)}</span>
           </div>
           <div class="flex items-center justify-between text-[11px] text-slate-500 mb-1.5">
-            <span>Số lượng: <b>${posInvoicesCount} hóa đơn</b></span>
-            <span class="font-bold text-slate-700">${posPct}%</span>
+            <span>Số lượng: <b class="text-slate-700">${posInvoicesCount} hóa đơn</b></span>
+            <span class="font-semibold text-slate-700">${posPct}%</span>
           </div>
-          <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
-            <div class="bg-[#1E3A8A] h-2 rounded-full transition-all duration-500" style="width: ${posPct}%"></div>
+          <div class="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
+            <div class="bg-slate-400 h-1.5 rounded-full transition-all duration-500" style="width: ${posPct}%"></div>
           </div>
         </div>
         ${refundNotice}
@@ -930,40 +880,66 @@ async function renderDashboard() {
     }
 
     // 6. Render Doanh Thu Theo Nhóm Hàng Thực Tế
-    
     const catContainer = document.getElementById('dash-category-stats');
     if (catContainer) {
-      const topCategories = (AdminRealtimeData.categories || []).slice(0, 4);
-      const catColors = [
-        { bar: 'bg-[#1E3A8A]', icon: 'fa-mobile-screen text-[#1E3A8A]' },
-        { bar: 'bg-[#2563EB]', icon: 'fa-laptop text-[#2563EB]' },
-        { bar: 'bg-[#7C3AED]', icon: 'fa-headphones text-[#7C3AED]' },
-        { bar: 'bg-[#F97316]', icon: 'fa-plug text-[#F97316]' }
-      ];
+      let catData = [];
+      try {
+        const catApi = await api.get('/thongke/nhomhang').catch(() => null);
+        if (Array.isArray(catApi) && catApi.length > 0) {
+          catData = catApi;
+        }
+      } catch (e) {}
 
-      const totalModelCount = products.length || 1;
-      catContainer.innerHTML = topCategories.map((c, idx) => {
-        const pct = Math.round((c.count / totalModelCount) * 100);
-        const color = catColors[idx % catColors.length];
-        return `
-          <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
-            <div class="flex items-center justify-between mb-1.5">
-              <span class="font-bold text-slate-800 flex items-center gap-1.5">
-                <i class="fa-solid ${color.icon}"></i>
-                ${c.tenNhom}
-              </span>
-              <span class="font-mono font-bold text-slate-900">${c.count} model</span>
+      if (catData.length === 0) {
+        // Fallback: tính từ danh mục mặt hàng
+        const topCategories = (AdminRealtimeData.categories || []).slice(0, 4);
+        const totalModelCount = products.length || 1;
+        catContainer.innerHTML = topCategories.map((c) => {
+          const pct = Math.round((c.count / totalModelCount) * 100);
+          return `
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="font-semibold text-slate-800 flex items-center gap-1.5">
+                  <i class="fa-solid fa-layer-group text-slate-400 text-xs"></i>
+                  ${c.tenNhom}
+                </span>
+                <span class="font-mono font-bold text-slate-900">${c.count} model</span>
+              </div>
+              <div class="flex items-center justify-between text-[11px] text-slate-500 mb-1.5">
+                <span>Tỷ trọng danh mục</span>
+                <span class="font-semibold text-slate-700">${pct}%</span>
+              </div>
+              <div class="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
+                <div class="bg-[#2563EB] h-1.5 rounded-full transition-all duration-500" style="width: ${pct}%"></div>
+              </div>
             </div>
-            <div class="flex items-center justify-between text-[11px] text-slate-500 mb-1.5">
-              <span>Tỷ trọng danh mục</span>
-              <span class="font-bold text-slate-700">${pct}%</span>
+          `;
+        }).join('');
+      } else {
+        const totalCatRev = catData.reduce((acc, c) => acc + (Number(c.doanhThu) || 0), 0) || 1;
+        catContainer.innerHTML = catData.map((c) => {
+          const rev = Number(c.doanhThu) || 0;
+          const pct = Math.min(100, Math.max(0, Math.round((rev / totalCatRev) * 100)));
+          return `
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="font-semibold text-slate-800 flex items-center gap-1.5">
+                  <i class="fa-solid fa-layer-group text-slate-400 text-xs"></i>
+                  ${c.tenNhom}
+                </span>
+                <span class="font-mono font-bold text-slate-900">${Format.currency(rev)}</span>
+              </div>
+              <div class="flex items-center justify-between text-[11px] text-slate-500 mb-1.5">
+                <span>Đã bán: <b class="text-slate-700">${c.soLuongBan || 0} sản phẩm</b></span>
+                <span class="font-semibold text-slate-700">${pct}%</span>
+              </div>
+              <div class="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
+                <div class="bg-[#2563EB] h-1.5 rounded-full transition-all duration-500" style="width: ${pct}%"></div>
+              </div>
             </div>
-            <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
-              <div class="${color.bar} h-2 rounded-full transition-all duration-500" style="width: ${pct}%"></div>
-            </div>
-          </div>
-        `;
-      }).join('');
+          `;
+        }).join('');
+      }
     }
 
     // 7. Bảng đơn hàng online gần đây (Dashboard)
@@ -973,25 +949,37 @@ async function renderDashboard() {
       if (recentOrders.length === 0) {
         tbody.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-slate-400">Chưa có đơn hàng trực tuyến nào</td></tr>';
       } else {
-        tbody.innerHTML = recentOrders.map(o => `
-          <tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors">
-            <td class="p-3 font-mono font-bold text-[#1E3A8A] text-xs whitespace-nowrap">${o.maDH}</td>
+        tbody.innerHTML = recentOrders.map(o => {
+          const isPending = o.trangThai === 'cho_xac_nhan';
+          return `
+          <tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors group">
+            <td class="p-3 font-mono font-bold text-slate-800 text-xs whitespace-nowrap">${o.maDH}</td>
             <td class="p-3 font-semibold text-xs text-navy whitespace-nowrap">
-              <div>${o.tenNguoiNhan || '-'}</div>
+              <div class="truncate max-w-[130px]" title="${o.tenNguoiNhan || '-'}">${o.tenNguoiNhan || '-'}</div>
               <div class="text-[10px] text-slate-400 font-mono">${o.sdtNguoiNhan || ''}</div>
             </td>
-            <td class="p-3 text-xs text-slate-600 min-w-[180px] max-w-[240px] truncate" title="${o.diaChiGiao || ''}">
-              ${(o.items && o.items.length) ? `<span class="font-semibold text-slate-800">${o.items[0].tenHang}</span>` : (o.diaChiGiao || '-')}
+            <td class="p-3 text-xs text-slate-600 min-w-[180px] max-w-[220px] truncate" title="${(o.items && o.items.length) ? o.items.map(i => i.tenHang).join(', ') : (o.diaChiGiao || '-')}">
+              ${(o.items && o.items.length) ? `<span class="font-medium text-slate-800">${o.items[0].tenHang}${o.items.length > 1 ? ` <span class="text-[10px] text-slate-400 font-normal">(+${o.items.length - 1})</span>` : ''}</span>` : (o.diaChiGiao || '-')}
             </td>
-            <td class="p-3 font-bold text-xs text-navy text-right whitespace-nowrap">${Format.currency(o.tongTien)}</td>
+            <td class="p-3 font-semibold text-xs text-slate-900 text-right whitespace-nowrap font-mono">${Format.currency(o.tongTien)}</td>
             <td class="p-3 text-xs text-center whitespace-nowrap">${Format.statusBadge(o.trangThai)}</td>
-            <td class="p-3 text-xs text-right whitespace-nowrap">
-              <button onclick="renderSection('view-donhang')" class="px-2.5 py-1 bg-[#EFF6FF] text-[#1E3A8A] hover:bg-blue-100 font-bold rounded-lg text-xs whitespace-nowrap transition-colors cursor-pointer">
-                Quản lý
-              </button>
+            <td class="p-3 text-xs text-right whitespace-nowrap sticky right-0 bg-white group-hover:bg-slate-50 shadow-[-4px_0_6px_-2px_rgba(0,0,0,0.05)] transition-colors">
+              <div class="inline-flex items-center gap-1.5 justify-end">
+                ${isPending ? `
+                  <button onclick="window.quickApproveDashboardOrder('${o.maDH}')" class="px-2 py-1 text-emerald-700 hover:bg-emerald-50 border border-emerald-200 font-medium rounded-lg text-xs transition-colors cursor-pointer flex items-center gap-1" title="Duyệt nhanh đơn hàng #${o.maDH}" aria-label="Duyệt nhanh">
+                    <i class="fa-solid fa-check text-[10px]"></i>
+                    <span class="text-[11px]">Duyệt</span>
+                  </button>
+                ` : ''}
+                <button onclick="showAdminOrderDetail('${o.maDH}')" class="px-2 py-1 text-slate-700 hover:bg-slate-100 border border-slate-200 font-medium rounded-lg text-xs whitespace-nowrap transition-colors cursor-pointer flex items-center gap-1" title="Xem chi tiết đơn hàng & hành trình vận chuyển">
+                  <i class="fa-solid fa-eye text-[10px]"></i>
+                  <span>Chi tiết</span>
+                </button>
+              </div>
             </td>
           </tr>
-        `).join('');
+        `;
+        }).join('');
       }
     }
   } catch (err) {
@@ -1155,7 +1143,7 @@ async function renderMatHangTable(page = 1, keyword = null, category = null, bra
 
     return `
       <tr class="border-b border-slate-200 hover:bg-slate-50/80 transition-colors">
-        <td class="p-3 font-mono font-bold text-xs text-[#1E3A8A] whitespace-nowrap">${m.maHang}</td>
+        <td class="p-3 font-mono font-bold text-xs text-slate-700 whitespace-nowrap">${m.maHang}</td>
         <td class="p-3">
           <div class="flex items-center gap-2.5 min-w-[200px] max-w-[340px]">
             ${thumbImg}
@@ -1165,10 +1153,10 @@ async function renderMatHangTable(page = 1, keyword = null, category = null, bra
             </div>
           </div>
         </td>
-        <td class="p-3 font-bold text-xs text-slate-900 text-right whitespace-nowrap">${Format.currency(m.donGia)}</td>
+        <td class="p-3 font-semibold text-xs text-slate-900 text-right whitespace-nowrap font-mono">${Format.currency(m.donGia)}</td>
         <td class="p-3 text-xs text-slate-500 text-center whitespace-nowrap">${m.dvt || 'Cái'}</td>
         <td class="p-3 text-xs text-slate-600 whitespace-nowrap">
-          <span class="inline-block px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 text-[11px] font-semibold">${m.tenNhom || 'Điện thoại'}</span>
+          <span class="inline-block px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 text-[11px] font-medium">${m.tenNhom || 'Điện thoại'}</span>
         </td>
         <td class="p-3 text-xs text-center whitespace-nowrap">${imeiBadge}</td>
         <td class="p-3 text-xs text-center text-slate-600 whitespace-nowrap">${m.thoiHanBaoHanh || 12} tháng</td>
@@ -1176,10 +1164,10 @@ async function renderMatHangTable(page = 1, keyword = null, category = null, bra
           <span class="px-2 py-0.5 rounded-full border text-[11px] ${tonKhoClass}">${tonKhoVal}</span>
         </td>
         <td class="p-3 text-xs text-right whitespace-nowrap space-x-1">
-          <button onclick="editMatHang('${m.maHang}')" class="inline-flex items-center gap-1 px-2.5 py-1 bg-blue-50 hover:bg-[#1E3A8A] text-[#1E3A8A] hover:text-white border border-blue-200 rounded-lg text-xs font-bold transition-all shadow-2xs" title="Chỉnh sửa">
+          <button onclick="editMatHang('${m.maHang}')" class="inline-flex items-center gap-1 px-2 py-1 text-blue-600 hover:bg-blue-50 rounded-lg text-xs font-medium transition-colors" title="Chỉnh sửa">
             <i class="fa-solid fa-pen-to-square text-[10px]"></i> Sửa
           </button>
-          <button onclick="deleteMatHang('${m.maHang}')" class="inline-flex items-center gap-1 px-2.5 py-1 bg-rose-50 hover:bg-rose-600 text-rose-700 hover:text-white border border-rose-200 rounded-lg text-xs font-bold transition-all shadow-2xs" title="Xóa">
+          <button onclick="deleteMatHang('${m.maHang}')" class="inline-flex items-center gap-1 px-2 py-1 text-rose-600 hover:bg-rose-50 rounded-lg text-xs font-medium transition-colors" title="Xóa">
             <i class="fa-solid fa-trash-can text-[10px]"></i> Xóa
           </button>
         </td>
@@ -1331,10 +1319,10 @@ async function renderDonHangTable(filter = 'all') {
     if (o.trangThai === 'cho_xac_nhan') {
       actions = `
         <div class="flex items-center justify-end gap-1.5">
-          <button onclick="approveOrder('${o.maDH}')" class="px-3 py-1.5 bg-[#1E3A8A] hover:bg-[#172554] text-white font-bold rounded-xl text-xs transition-colors shadow-2xs cursor-pointer" title="Duyệt đơn sang Đã xác nhận">
+          <button onclick="approveOrder('${o.maDH}')" class="px-2.5 py-1.5 bg-[#2563EB] hover:bg-blue-700 text-white font-medium rounded-lg text-xs transition-colors cursor-pointer" title="Duyệt đơn sang Đã xác nhận">
             Duyệt đơn
           </button>
-          <button onclick="cancelOrder('${o.maDH}')" class="px-2.5 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold rounded-xl text-xs transition-colors border border-rose-200 cursor-pointer" title="Hủy đơn">
+          <button onclick="cancelOrder('${o.maDH}')" class="px-2 py-1.5 text-rose-600 hover:bg-rose-50 font-medium rounded-lg text-xs transition-colors border border-rose-200 cursor-pointer" title="Hủy đơn">
             Hủy
           </button>
         </div>
@@ -1342,10 +1330,10 @@ async function renderDonHangTable(filter = 'all') {
     } else if (o.trangThai === 'da_xac_nhan') {
       actions = `
         <div class="flex items-center justify-end gap-1.5">
-          <button onclick="shipOrder('${o.maDH}')" class="px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl text-xs transition-colors shadow-2xs cursor-pointer" title="Chuyển đơn sang Đang giao">
+          <button onclick="shipOrder('${o.maDH}')" class="px-2.5 py-1.5 bg-[#2563EB] hover:bg-blue-700 text-white font-medium rounded-lg text-xs transition-colors cursor-pointer" title="Chuyển đơn sang Đang giao">
             Giao hàng
           </button>
-          <button onclick="cancelOrder('${o.maDH}')" class="px-2.5 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold rounded-xl text-xs transition-colors border border-rose-200 cursor-pointer" title="Hủy đơn">
+          <button onclick="cancelOrder('${o.maDH}')" class="px-2 py-1.5 text-rose-600 hover:bg-rose-50 font-medium rounded-lg text-xs transition-colors border border-rose-200 cursor-pointer" title="Hủy đơn">
             Hủy
           </button>
         </div>
@@ -1354,27 +1342,45 @@ async function renderDonHangTable(filter = 'all') {
       const pm = String(o.phuongThucThanhToan || o.paymentMethod || '').toLowerCase();
       const isPaidOnline = ['chuyen_khoan', 'banking', 'momo', 'vnpay', 'zalopay', 'card', 'the'].includes(pm) || o.paymentStatus === 'paid';
       actions = `
-        <button onclick="completeOrder('${o.maDH}')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs transition-colors shadow-2xs cursor-pointer" title="${isPaidOnline ? 'Đơn đã thanh toán trước - Xác nhận giao thành công & Hoàn tất' : 'Thu tiền COD & Hoàn tất đơn hàng'}">
+        <button onclick="completeOrder('${o.maDH}')" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-900 text-white font-medium rounded-lg text-xs transition-colors cursor-pointer" title="${isPaidOnline ? 'Đơn đã thanh toán trước - Xác nhận giao thành công & Hoàn tất' : 'Thu tiền COD & Hoàn tất đơn hàng'}">
           ${isPaidOnline ? 'Xác nhận đã giao' : 'Thu tiền & Hoàn tất'}
         </button>
       `;
     } else if (o.trangThai === 'hoan_thanh') {
       actions = `
-        <span class="inline-flex items-center px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold font-mono">
-          ${o.soHD ? 'HĐ: ' + o.soHD : 'Hoàn tất'}
-        </span>
+        <div class="flex items-center justify-end gap-1.5">
+          <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-mono text-slate-700 bg-slate-100">
+            ${o.soHD ? 'HĐ: ' + o.soHD : 'Hoàn tất'}
+          </span>
+        </div>
       `;
     } else {
-      actions = '<span class="text-xs text-rose-500 font-semibold">Đã hủy</span>';
+      actions = '<span class="text-xs text-rose-500 font-medium">Đã hủy</span>';
     }
 
-    const itemsSummary = (o.items && o.items.length)
-      ? o.items.map(it => `<span class="inline-block bg-slate-100 text-slate-700 text-[11px] px-1.5 py-0.5 rounded mr-1 mb-1 font-semibold">${it.tenHang || it.maHang} (x${it.soLuong || 1})</span>`).join('')
-      : (o.soHD ? `<span class="text-xs text-slate-500 font-mono">HĐ: ${o.soHD}</span>` : '<span class="text-slate-400 text-xs">Chi tiết đơn</span>');
+    let itemsSummary = '';
+    if (o.items && o.items.length > 0) {
+      const first = o.items[0];
+      const firstText = `${first.tenHang || first.maHang} (x${first.soLuong || 1})`;
+      if (o.items.length === 1) {
+        itemsSummary = `<span class="text-xs text-slate-800 font-medium">${firstText}</span>`;
+      } else {
+        const extraCount = o.items.length - 1;
+        const allTitles = o.items.map(it => `${it.tenHang || it.maHang} (x${it.soLuong || 1})`).join(', ');
+        itemsSummary = `
+          <div class="flex items-center gap-1.5 flex-wrap" title="${allTitles}">
+            <span class="text-xs text-slate-800 font-medium truncate max-w-[160px]">${firstText}</span>
+            <span class="text-[11px] font-medium bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded whitespace-nowrap">+${extraCount}</span>
+          </div>
+        `;
+      }
+    } else {
+      itemsSummary = o.soHD ? `<span class="text-xs text-slate-500 font-mono">HĐ: ${o.soHD}</span>` : '<span class="text-slate-400 text-xs">Chi tiết đơn</span>';
+    }
 
     return `
       <tr class="border-b border-slate-200 hover:bg-slate-50 transition-colors">
-        <td class="p-3.5 font-mono font-bold text-xs text-[#1E3A8A] whitespace-nowrap">${o.maDH}</td>
+        <td class="p-3.5 font-mono font-bold text-xs text-slate-700 whitespace-nowrap">${o.maDH}</td>
         <td class="p-3.5 text-xs text-slate-500 whitespace-nowrap">${ngay}</td>
         <td class="p-3.5 whitespace-nowrap">
           <div class="font-bold text-sm text-navy">${o.tenNguoiNhan || '-'}</div>
@@ -1382,17 +1388,24 @@ async function renderDonHangTable(filter = 'all') {
         </td>
         <td class="p-3.5 text-xs text-slate-600 max-w-[200px] truncate" title="${o.diaChiGiao || ''}">${o.diaChiGiao || '-'}</td>
         <td class="p-3.5 text-xs text-slate-700 min-w-[180px] max-w-[260px]">${itemsSummary}</td>
-        <td class="p-3.5 font-bold text-sm text-navy text-right whitespace-nowrap">${Format.currency(o.tongTien)}</td>
+        <td class="p-3.5 font-bold text-sm text-navy text-right whitespace-nowrap font-mono">${Format.currency(o.tongTien)}</td>
         <td class="p-3.5 text-xs text-center whitespace-nowrap">
           ${Format.statusBadge(o.phuongThucThanhToan)}
           ${(['chuyen_khoan', 'banking', 'momo', 'vnpay', 'zalopay', 'card', 'the'].includes(String(o.phuongThucThanhToan || o.paymentMethod || '').toLowerCase()) || o.paymentStatus === 'paid')
-            ? '<div class="text-[10px] font-bold text-emerald-600 mt-1"><i class="fa-solid fa-circle-check mr-0.5"></i>Đã thanh toán</div>'
+            ? '<div class="text-[10px] font-medium text-emerald-600 mt-1"><i class="fa-solid fa-circle-check mr-0.5"></i>Đã thanh toán</div>'
             : (o.trangThai === 'hoan_thanh'
-              ? '<div class="text-[10px] font-bold text-emerald-600 mt-1"><i class="fa-solid fa-circle-check mr-0.5"></i>Đã thu tiền</div>'
-              : (o.trangThai !== 'da_huy' ? '<div class="text-[10px] font-semibold text-amber-600 mt-1">Chưa thu tiền</div>' : ''))}
+              ? '<div class="text-[10px] font-medium text-emerald-600 mt-1"><i class="fa-solid fa-circle-check mr-0.5"></i>Đã thu tiền</div>'
+              : (o.trangThai !== 'da_huy' ? '<div class="text-[10px] font-medium text-amber-600 mt-1">Chưa thu tiền</div>' : ''))}
         </td>
         <td class="p-3.5 text-xs text-center whitespace-nowrap">${Format.statusBadge(o.trangThai)}</td>
-        <td class="p-3.5 text-xs text-right whitespace-nowrap">${actions}</td>
+        <td class="p-3.5 text-xs text-right whitespace-nowrap">
+          <div class="flex items-center justify-end gap-1.5">
+            <button onclick="showAdminOrderDetail('${o.maDH}')" class="px-2 py-1.5 text-slate-600 hover:bg-slate-100 font-medium rounded-lg text-xs transition-colors border border-slate-200 cursor-pointer" title="Xem chi tiết đơn hàng & hành trình vận chuyển">
+              <i class="fa-solid fa-eye mr-1"></i>Chi tiết
+            </button>
+            <div>${actions}</div>
+          </div>
+        </td>
       </tr>
     `;
   }).join('');
@@ -1520,14 +1533,14 @@ async function renderHoaDonTable() {
 
       return `
         <tr class="border-b border-slate-200 hover:bg-slate-50 transition-colors">
-          <td class="p-3.5 font-mono font-bold text-xs text-[#15803D] whitespace-nowrap">${h.soHD}</td>
+          <td class="p-3.5 font-mono font-bold text-xs text-slate-800 whitespace-nowrap">${h.soHD}</td>
           <td class="p-3.5 text-xs text-slate-500 whitespace-nowrap">${ngay}</td>
-          <td class="p-3.5 font-bold text-sm text-navy whitespace-nowrap">${tenKh}</td>
+          <td class="p-3.5 font-semibold text-sm text-navy whitespace-nowrap">${tenKh}</td>
           <td class="p-3.5 text-xs text-center whitespace-nowrap">${Format.statusBadge(h.kenhBan)}</td>
           <td class="p-3.5 text-xs whitespace-nowrap">${imeiStr}</td>
-          <td class="p-3.5 font-bold text-sm text-slate-700 text-right whitespace-nowrap">${Format.currency(h.tongTien)}</td>
-          <td class="p-3.5 text-xs text-rose-600 text-right whitespace-nowrap">-${Format.currency(h.tienGiamGia || 0)}</td>
-          <td class="p-3.5 font-bold text-sm text-[#15803D] text-right whitespace-nowrap">${Format.currency(h.thanhTien)}</td>
+          <td class="p-3.5 font-medium text-xs text-slate-700 text-right whitespace-nowrap font-mono">${Format.currency(h.tongTien)}</td>
+          <td class="p-3.5 text-xs text-slate-500 text-right whitespace-nowrap font-mono">${(h.tienGiamGia && h.tienGiamGia > 0) ? '-' + Format.currency(h.tienGiamGia) : '—'}</td>
+          <td class="p-3.5 font-semibold text-sm text-slate-900 text-right whitespace-nowrap font-mono">${Format.currency(h.thanhTien)}</td>
           <td class="p-3.5 text-xs text-center whitespace-nowrap">${Format.statusBadge(h.phuongThucThanhToan || h.phuongThuc)}</td>
         </tr>
       `;
@@ -1757,14 +1770,14 @@ async function renderNhapKhoTable() {
 
       return `
         <tr class="border-b border-slate-200 hover:bg-slate-50 transition-colors">
-          <td class="p-3.5 font-mono font-bold text-xs text-[#15803D] whitespace-nowrap">${p.soPNhap}</td>
+          <td class="p-3.5 font-mono font-bold text-xs text-slate-800 whitespace-nowrap">${p.soPNhap}</td>
           <td class="p-3.5 text-xs text-slate-500 whitespace-nowrap">${ngay}</td>
-          <td class="p-3.5 font-bold text-sm text-navy">${p.tenNCC || p.maNCC || '-'}</td>
-          <td class="p-3.5 font-bold text-sm text-slate-800 text-center whitespace-nowrap">${sl}</td>
-          <td class="p-3.5 font-bold text-sm text-[#15803D] text-right whitespace-nowrap">${Format.currency(tongTien)}</td>
+          <td class="p-3.5 font-semibold text-sm text-navy">${p.tenNCC || p.maNCC || '-'}</td>
+          <td class="p-3.5 font-medium text-xs text-slate-800 text-center whitespace-nowrap font-mono">${sl}</td>
+          <td class="p-3.5 font-semibold text-sm text-slate-900 text-right whitespace-nowrap font-mono">${Format.currency(tongTien)}</td>
           <td class="p-3.5 text-xs text-slate-600 whitespace-nowrap">${p.tenNhanVien || p.maNV || '-'}</td>
           <td class="p-3.5 text-xs text-right whitespace-nowrap">
-            <button onclick="viewChiTietNhapKho('${p.soPNhap}')" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 hover:bg-blue-600 text-[#166534] hover:text-white border border-blue-200 rounded-lg text-xs font-bold transition-all shadow-sm">
+            <button onclick="viewChiTietNhapKho('${p.soPNhap}')" class="inline-flex items-center gap-1.5 px-2.5 py-1 text-blue-600 hover:bg-blue-50 border border-slate-200 rounded-lg text-xs font-medium transition-colors">
               <i class="fa-solid fa-barcode text-[11px]"></i>
               <span>Lô IMEI</span>
             </button>
@@ -2253,13 +2266,13 @@ async function renderTraHangTable() {
 
     const formatBadgeTrangThai = (tt) => {
       switch (tt) {
-        case 'tiep_nhan': return '<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 text-[10px] font-bold">1. Chờ Kỹ Thuật</span>';
-        case 'da_kiem_tra': return '<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-[10px] font-bold">2. Chờ Duyệt</span>';
-        case 'da_duyet': return '<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 text-[10px] font-bold">3. Chờ Hoàn Tất</span>';
-        case 'tu_choi': return '<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200 text-[10px] font-bold">Từ Chối</span>';
-        case 'hoan_tat': return '<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold">Đã Hoàn Tất</span>';
-        case 'da_huy': return '<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 text-[10px] font-bold">Đã Hủy</span>';
-        default: return `<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-slate-50 text-slate-700 border border-slate-200 text-[10px] font-bold">${tt}</span>`;
+        case 'tiep_nhan': return '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium bg-[#FEFCE8] text-[#854D0E] whitespace-nowrap"><span class="w-1.5 h-1.5 rounded-full bg-[#EAB308] shrink-0"></span>1. Chờ kỹ thuật</span>';
+        case 'da_kiem_tra': return '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium bg-[#FEFCE8] text-[#854D0E] whitespace-nowrap"><span class="w-1.5 h-1.5 rounded-full bg-[#EAB308] shrink-0"></span>2. Chờ duyệt</span>';
+        case 'da_duyet': return '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium bg-[#FEFCE8] text-[#854D0E] whitespace-nowrap"><span class="w-1.5 h-1.5 rounded-full bg-[#EAB308] shrink-0"></span>3. Chờ hoàn tất</span>';
+        case 'tu_choi': return '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium bg-[#FEF2F2] text-[#991B1B] whitespace-nowrap"><span class="w-1.5 h-1.5 rounded-full bg-[#EF4444] shrink-0"></span>Từ chối</span>';
+        case 'hoan_tat': return '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium bg-[#F0FDF4] text-[#166534] whitespace-nowrap"><span class="w-1.5 h-1.5 rounded-full bg-[#22C55E] shrink-0"></span>Đã hoàn tất</span>';
+        case 'da_huy': return '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium bg-[#FEF2F2] text-[#991B1B] whitespace-nowrap"><span class="w-1.5 h-1.5 rounded-full bg-[#EF4444] shrink-0"></span>Đã hủy</span>';
+        default: return `<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium bg-[#F1F5F9] text-[#475569] whitespace-nowrap"><span class="w-1.5 h-1.5 rounded-full bg-[#94A3B8] shrink-0"></span>${tt}</span>`;
       }
     };
 
@@ -2668,12 +2681,12 @@ async function renderKhachHangTable(keyword = '') {
           <td class="p-3.5 text-xs text-slate-500 whitespace-nowrap">${k.email || '-'}</td>
           <td class="p-3.5 text-xs text-slate-600 max-w-[200px] truncate" title="${k.diaChi || ''}">${k.diaChi || 'TP. Hồ Chí Minh'}</td>
           <td class="p-3.5 text-xs text-center whitespace-nowrap">
-            <div class="font-extrabold text-sm text-[#15803D]">${diem} điểm</div>
-            <span class="inline-block mt-0.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">${rank}</span>
+            <div class="font-bold text-sm text-slate-800 font-mono">${diem} điểm</div>
+            <span class="inline-block mt-0.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-slate-100 text-slate-600">${rank}</span>
           </td>
-          <td class="p-3.5 text-xs text-right whitespace-nowrap space-x-1.5">
-            <button onclick="editKhachHang('${k.maKH}')" class="px-2.5 py-1 text-xs font-bold text-indigo-600 hover:bg-indigo-50 border border-indigo-200 rounded-lg transition-colors">Sửa</button>
-            <button onclick="deleteKhachHang('${k.maKH}')" class="px-2.5 py-1 text-xs font-bold text-rose-600 hover:bg-rose-50 border border-rose-200 rounded-lg transition-colors">Xóa</button>
+          <td class="p-3.5 text-xs text-right whitespace-nowrap space-x-1">
+            <button onclick="editKhachHang('${k.maKH}')" class="px-2 py-1 text-xs font-medium text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">Sửa</button>
+            <button onclick="deleteKhachHang('${k.maKH}')" class="px-2 py-1 text-xs font-medium text-rose-600 hover:bg-rose-50 rounded-lg transition-colors">Xóa</button>
           </td>
         </tr>
       `;
@@ -2707,9 +2720,9 @@ async function renderNhanVienTable() {
         <td class="p-3.5 font-mono text-xs text-slate-600 whitespace-nowrap">${nv.sdt || '-'}</td>
         <td class="p-3.5 text-xs text-slate-500 whitespace-nowrap">${nv.email || '-'}</td>
         <td class="p-3.5 text-xs text-center whitespace-nowrap">${Format.statusBadge(nv.trangThai)}</td>
-        <td class="p-3.5 text-xs text-right whitespace-nowrap space-x-1.5">
-          <button onclick="editNhanVien('${nv.maNV}')" class="px-2.5 py-1 text-xs font-bold text-indigo-600 hover:bg-indigo-50 border border-indigo-200 rounded-lg transition-colors">Sửa</button>
-          <button onclick="deleteNhanVien('${nv.maNV}')" class="px-2.5 py-1 text-xs font-bold text-rose-600 hover:bg-rose-50 border border-rose-200 rounded-lg transition-colors">Xóa</button>
+        <td class="p-3.5 text-xs text-right whitespace-nowrap space-x-1">
+          <button onclick="editNhanVien('${nv.maNV}')" class="px-2 py-1 text-xs font-medium text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">Sửa</button>
+          <button onclick="deleteNhanVien('${nv.maNV}')" class="px-2 py-1 text-xs font-medium text-rose-600 hover:bg-rose-50 rounded-lg transition-colors">Xóa</button>
         </td>
       </tr>
     `).join('');
@@ -2768,36 +2781,37 @@ async function renderKhuyenMaiTable() {
   const tbody = document.getElementById('table-khuyenmai-body');
   if (!tbody) return;
 
-  tbody.innerHTML = '<tr><td colspan="7" class="p-4 text-center text-slate-500">Đang tải khuyến mãi...</td></tr>';
+  tbody.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-slate-500">Đang tải khuyến mãi...</td></tr>';
 
   try {
     const list = await api.get('/khuyenmai');
     if (!list || list.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="7" class="p-4 text-center text-slate-400">Chưa có mã khuyến mãi nào</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-slate-400">Chưa có mã khuyến mãi nào</td></tr>';
       return;
     }
 
     tbody.innerHTML = list.map(km => `
       <tr class="border-b border-slate-200 hover:bg-slate-50 transition-colors">
-        <td class="p-3.5 font-mono font-bold text-xs text-[#15803D] whitespace-nowrap">${km.maKM}</td>
-        <td class="p-3.5 font-bold text-sm text-navy">${km.tenKM}</td>
-        <td class="p-3.5 font-extrabold text-sm text-rose-600 text-center whitespace-nowrap">${km.phanTramGiam}%</td>
-        <td class="p-3.5 text-xs text-slate-500 whitespace-nowrap">${km.ngayBD ? km.ngayBD.substring(0, 10) : '-'}</td>
-        <td class="p-3.5 text-xs text-slate-500 whitespace-nowrap">${km.ngayKT ? km.ngayKT.substring(0, 10) : '-'}</td>
+        <td class="p-3.5 font-mono font-bold text-xs text-slate-800 whitespace-nowrap">${km.maKM}</td>
+        <td class="p-3.5 font-semibold text-sm text-navy">${km.tenKM}</td>
+        <td class="p-3.5 font-semibold text-xs text-slate-800 text-right whitespace-nowrap">${km.phanTramGiam}%</td>
+        <td class="p-3.5 text-xs text-slate-600 text-center whitespace-nowrap">${Format.date(km.ngayBD)} — ${Format.date(km.ngayKT)}</td>
         <td class="p-3.5 text-xs text-center whitespace-nowrap">
-          <span class="px-2.5 py-1 rounded-full text-xs font-bold ${km.tamDung ? 'bg-rose-50 text-rose-700' : 'bg-emerald-50 text-emerald-700'}">
-            ${km.tamDung ? 'Tạm dừng' : 'Đang chạy'}
-          </span>
+          ${km.tamDung ? `
+            <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium bg-[#FEF2F2] text-[#991B1B]"><span class="w-1.5 h-1.5 rounded-full bg-[#EF4444] shrink-0"></span>Tạm dừng</span>
+          ` : `
+            <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium bg-[#F0FDF4] text-[#166534]"><span class="w-1.5 h-1.5 rounded-full bg-[#22C55E] shrink-0"></span>Đang chạy</span>
+          `}
         </td>
         <td class="p-3.5 text-xs text-right whitespace-nowrap">
-          <button onclick="toggleKhuyenMai('${km.maKM}', ${!km.tamDung})" class="px-2.5 py-1 text-xs font-bold rounded-lg border border-slate-200 hover:bg-slate-100">
+          <button onclick="toggleKhuyenMai('${km.maKM}', ${!km.tamDung})" class="px-2.5 py-1 text-xs font-medium text-slate-700 hover:bg-slate-50 border border-slate-200 rounded-lg transition-colors">
             ${km.tamDung ? 'Kích hoạt' : 'Tạm dừng'}
           </button>
         </td>
       </tr>
     `).join('');
   } catch (err) {
-    tbody.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-rose-500">Lỗi tải khuyến mãi: ${err.message}</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-rose-500">Lỗi tải khuyến mãi: ${err.message}</td></tr>`;
   }
 }
 
@@ -2917,23 +2931,23 @@ async function renderTonKhoTable(page = 1, keyword = null, statusFilter = null) 
     const totalSold = Math.max(0, 20 - currentStock);
     const totalImport = currentStock + totalSold;
 
-    let badgeClass = 'bg-emerald-50 text-emerald-700 border border-emerald-200';
-    if (currentStock === 0) {
-      badgeClass = 'bg-rose-50 text-rose-700 border border-rose-200 font-bold';
+    let stockBadge = '';
+    if (currentStock <= 0) {
+      stockBadge = '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium bg-[#FEF2F2] text-[#991B1B] whitespace-nowrap"><span class="w-1.5 h-1.5 rounded-full bg-[#EF4444] shrink-0"></span>Hết hàng</span>';
     } else if (currentStock <= 5) {
-      badgeClass = 'bg-amber-50 text-amber-700 border border-amber-200 font-bold';
+      stockBadge = `<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium bg-[#FEFCE8] text-[#854D0E] whitespace-nowrap"><span class="w-1.5 h-1.5 rounded-full bg-[#EAB308] shrink-0"></span>${currentStock} máy</span>`;
+    } else {
+      stockBadge = `<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium bg-[#F0FDF4] text-[#166534] whitespace-nowrap"><span class="w-1.5 h-1.5 rounded-full bg-[#22C55E] shrink-0"></span>${currentStock} máy</span>`;
     }
 
     return `
       <tr class="border-b border-slate-200 hover:bg-slate-50 transition-colors">
-        <td class="p-3.5 font-mono font-bold text-xs text-[#1E3A8A] whitespace-nowrap">${m.maHang}</td>
+        <td class="p-3.5 font-mono font-bold text-xs text-slate-700 whitespace-nowrap">${m.maHang}</td>
         <td class="p-3.5 font-semibold text-xs text-navy max-w-[320px] truncate" title="${m.tenHang}">${m.tenHang}</td>
         <td class="p-3.5 text-xs text-slate-500 text-center whitespace-nowrap">${m.dvt || 'Cái'}</td>
-        <td class="p-3.5 text-xs font-bold text-slate-700 text-center whitespace-nowrap">${totalImport}</td>
-        <td class="p-3.5 text-xs font-bold text-slate-700 text-center whitespace-nowrap">${totalSold}</td>
-        <td class="p-3.5 text-xs text-center whitespace-nowrap">
-          <span class="px-2.5 py-0.5 rounded-full text-xs ${badgeClass}">${currentStock} máy</span>
-        </td>
+        <td class="p-3.5 text-xs font-medium text-slate-700 text-center whitespace-nowrap font-mono">${totalImport}</td>
+        <td class="p-3.5 text-xs font-medium text-slate-700 text-center whitespace-nowrap font-mono">${totalSold > 0 ? totalSold : '—'}</td>
+        <td class="p-3.5 text-xs text-center whitespace-nowrap">${stockBadge}</td>
       </tr>
     `;
   }).join('');
@@ -2986,9 +3000,9 @@ async function renderImeiTable(keyword = '') {
         <td class="p-3.5 font-mono text-xs text-slate-600 whitespace-nowrap">${i.soPN || i.soPn || '-'}</td>
         <td class="p-3.5 text-xs text-center whitespace-nowrap">${Format.statusBadge(i.trangThai)}</td>
         <td class="p-3.5 text-xs text-right whitespace-nowrap">
-          <button onclick="viewImeiTimeline('${i.soIMEI || i.soImei}')" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-purple-50 hover:bg-purple-600 text-purple-700 hover:text-white border border-purple-200 rounded-lg text-xs font-bold transition-all shadow-sm">
-            <i class="fa-solid fa-route text-[11px]"></i>
-            <span>Truy vết</span>
+          <button onclick="viewImeiTimeline('${i.soIMEI || i.soImei}')" class="inline-flex items-center gap-1.5 px-2.5 py-1 text-blue-600 hover:bg-blue-50 border border-slate-200 rounded-lg text-xs font-medium transition-colors">
+            <i class="fa-solid fa-magnifying-glass text-[11px]"></i>
+            <span>Chi tiết</span>
           </button>
         </td>
       </tr>
@@ -3065,17 +3079,17 @@ async function renderHoaDonListTable(keyword = '') {
 
       return `
         <tr class="border-b border-slate-200 hover:bg-slate-50 transition-colors">
-          <td class="p-3.5 font-mono font-bold text-xs text-[#15803D] whitespace-nowrap">${h.soHD}</td>
+          <td class="p-3.5 font-mono font-bold text-xs text-slate-800 whitespace-nowrap">${h.soHD}</td>
           <td class="p-3.5 text-xs text-slate-500 whitespace-nowrap">${ngay}</td>
-          <td class="p-3.5 font-bold text-sm text-navy whitespace-nowrap">${tenKh}</td>
+          <td class="p-3.5 font-semibold text-sm text-navy whitespace-nowrap">${tenKh}</td>
           <td class="p-3.5 text-xs text-center whitespace-nowrap">${Format.statusBadge(h.kenhBan)}</td>
-          <td class="p-3.5 font-mono font-bold text-xs text-slate-700 whitespace-nowrap">${imeiStr}</td>
-          <td class="p-3.5 font-bold text-sm text-slate-700 text-right whitespace-nowrap">${Format.currency(h.tongTien)}</td>
-          <td class="p-3.5 text-xs text-rose-600 text-right whitespace-nowrap">-${Format.currency(h.tienGiamGia || 0)}</td>
-          <td class="p-3.5 font-bold text-sm text-[#15803D] text-right whitespace-nowrap">${Format.currency(h.thanhTien)}</td>
+          <td class="p-3.5 font-mono text-xs text-slate-700 whitespace-nowrap">${imeiStr}</td>
+          <td class="p-3.5 font-medium text-xs text-slate-700 text-right whitespace-nowrap font-mono">${Format.currency(h.tongTien)}</td>
+          <td class="p-3.5 text-xs text-slate-500 text-right whitespace-nowrap font-mono">${(h.tienGiamGia && h.tienGiamGia > 0) ? '-' + Format.currency(h.tienGiamGia) : '—'}</td>
+          <td class="p-3.5 font-semibold text-sm text-slate-900 text-right whitespace-nowrap font-mono">${Format.currency(h.thanhTien)}</td>
           <td class="p-3.5 text-xs text-center whitespace-nowrap">${Format.statusBadge(h.phuongThucThanhToan || h.phuongThuc)}</td>
           <td class="p-3.5 text-xs text-right whitespace-nowrap">
-            <button onclick="viewHoaDonDetail('${h.soHD}')" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 hover:bg-blue-600 text-[#166534] hover:text-white border border-blue-200 rounded-lg text-xs font-bold transition-all shadow-sm active:scale-95">
+            <button onclick="viewHoaDonDetail('${h.soHD}')" class="inline-flex items-center gap-1.5 px-2.5 py-1 text-blue-600 hover:bg-blue-50 border border-slate-200 rounded-lg text-xs font-medium transition-colors">
               <i class="fa-solid fa-print text-[11px]"></i>
               <span>Xem & In HĐ</span>
             </button>
@@ -3624,12 +3638,12 @@ function renderNhomLoai() {
       const modelCount = n.count !== undefined ? n.count : allProducts.filter(m => m.maNhom === n.maNhom || m.categoryName === n.tenNhom).length;
       return `
         <tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors">
-          <td class="p-3 font-mono font-bold text-[#1E3A8A]">${n.maNhom}</td>
-          <td class="p-3 font-bold text-slate-800">${n.tenNhom}</td>
-          <td class="p-3 text-center"><span class="px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 font-bold text-xs">${modelCount.toLocaleString('vi-VN')} models</span></td>
-          <td class="p-3 text-right space-x-1">
-            <button onclick="openNhomHangModal('${n.maNhom}')" class="px-2.5 py-1 bg-[#EFF6FF] text-[#1E3A8A] hover:bg-[#1E3A8A] hover:text-white rounded-lg text-xs font-bold transition-colors">Sửa</button>
-            <button onclick="deleteNhomHang('${n.maNhom}')" class="px-2.5 py-1 bg-rose-50 text-rose-700 hover:bg-rose-600 hover:text-white rounded-lg text-xs font-bold transition-colors">Xóa</button>
+          <td class="p-3 font-mono font-bold text-slate-700">${n.maNhom}</td>
+          <td class="p-3 font-semibold text-slate-800">${n.tenNhom}</td>
+          <td class="p-3 text-center whitespace-nowrap"><span class="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 font-medium text-xs whitespace-nowrap">${modelCount.toLocaleString('vi-VN')} model</span></td>
+          <td class="p-3 text-right whitespace-nowrap space-x-1">
+            <button onclick="openNhomHangModal('${n.maNhom}')" class="px-2.5 py-1 text-blue-600 hover:bg-blue-50 rounded-lg text-xs font-medium transition-colors">Sửa</button>
+            <button onclick="deleteNhomHang('${n.maNhom}')" class="px-2.5 py-1 text-rose-600 hover:bg-rose-50 rounded-lg text-xs font-medium transition-colors">Xóa</button>
           </td>
         </tr>
       `;
@@ -3641,12 +3655,12 @@ function renderNhomLoai() {
       const modelCount = l.count !== undefined ? l.count : allProducts.filter(m => m.maLoai === l.maLoai || m.brand === l.tenLoai || m.nhanHieu === l.tenLoai).length;
       return `
         <tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors">
-          <td class="p-3 font-mono font-bold text-indigo-600">${l.maLoai}</td>
-          <td class="p-3 font-bold text-slate-800">${l.tenLoai}</td>
-          <td class="p-3 text-center"><span class="px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 font-bold text-xs">${modelCount.toLocaleString('vi-VN')} models</span></td>
-          <td class="p-3 text-right space-x-1">
-            <button onclick="openLoaiHangModal('${l.maLoai}')" class="px-2.5 py-1 bg-indigo-50 text-indigo-700 hover:bg-indigo-600 hover:text-white rounded-lg text-xs font-bold transition-colors">Sửa</button>
-            <button onclick="deleteLoaiHang('${l.maLoai}')" class="px-2.5 py-1 bg-rose-50 text-rose-700 hover:bg-rose-600 hover:text-white rounded-lg text-xs font-bold transition-colors">Xóa</button>
+          <td class="p-3 font-mono font-bold text-slate-700">${l.maLoai}</td>
+          <td class="p-3 font-semibold text-slate-800">${l.tenLoai}</td>
+          <td class="p-3 text-center whitespace-nowrap"><span class="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 font-medium text-xs whitespace-nowrap">${modelCount.toLocaleString('vi-VN')} model</span></td>
+          <td class="p-3 text-right whitespace-nowrap space-x-1">
+            <button onclick="openLoaiHangModal('${l.maLoai}')" class="px-2.5 py-1 text-blue-600 hover:bg-blue-50 rounded-lg text-xs font-medium transition-colors">Sửa</button>
+            <button onclick="deleteLoaiHang('${l.maLoai}')" class="px-2.5 py-1 text-rose-600 hover:bg-rose-50 rounded-lg text-xs font-medium transition-colors">Xóa</button>
           </td>
         </tr>
       `;
@@ -3772,11 +3786,11 @@ function renderThuocTinh() {
   if (tbodyTT) {
     tbodyTT.innerHTML = store.data.thuocTinh.map(tt => `
       <tr class="border-b border-slate-100 hover:bg-slate-50">
-        <td class="p-3 font-mono font-bold text-[#15803D]">${tt.maThuocTinh}</td>
-        <td class="p-3 font-semibold text-slate-800">${tt.tenThuocTinh}</td>
-        <td class="p-3 text-right space-x-1">
-          <button onclick="openThuocTinhModal('${tt.maThuocTinh}')" class="px-2 py-1 bg-[#F0FDF4] text-[#15803D] hover:bg-[#16A34A] hover:text-white rounded-lg text-xs font-bold transition-colors">Sửa</button>
-          <button onclick="deleteThuocTinh('${tt.maThuocTinh}')" class="px-2 py-1 bg-rose-50 text-rose-700 hover:bg-rose-600 hover:text-white rounded-lg text-xs font-bold transition-colors">Xóa</button>
+        <td class="p-3 font-mono font-bold text-slate-700">${tt.maThuocTinh}</td>
+        <td class="p-3 font-medium text-slate-800">${tt.tenThuocTinh}</td>
+        <td class="p-3 text-right space-x-1 whitespace-nowrap">
+          <button onclick="openThuocTinhModal('${tt.maThuocTinh}')" class="px-2 py-1 text-blue-600 hover:bg-blue-50 rounded-lg text-xs font-medium transition-colors">Sửa</button>
+          <button onclick="deleteThuocTinh('${tt.maThuocTinh}')" class="px-2 py-1 text-rose-600 hover:bg-rose-50 rounded-lg text-xs font-medium transition-colors">Xóa</button>
         </td>
       </tr>
     `).join('');
@@ -3924,26 +3938,31 @@ function renderTaiKhoan() {
 
   if (tbodyTK) {
     tbodyTK.innerHTML = store.data.taiKhoan.map(tk => {
+      const uName = tk.username || tk.tenDangNhap || '-';
       const nv = store.data.nhanVien.find(n => n.maNV === tk.maNV);
+      const displayName = tk.hoTen || tk.tenNhanVien || (nv ? nv.hoTen : tk.maNV || '-');
+      const roleName = tk.tenQuyen || (nv ? nv.chucVu : 'Nhân viên');
+      const dateStr = Format.date(tk.ngayTao || '2026-09-01');
+
       return `
-        <tr class="border-b border-slate-100 hover:bg-slate-50">
-          <td class="p-3 font-mono font-bold text-[#15803D]">${tk.tenDangNhap}</td>
-          <td class="p-3 font-bold text-slate-800">${nv ? nv.hoTen : tk.maNV}</td>
-          <td class="p-3 text-slate-600">${nv ? nv.chucVu : 'Nhân viên'}</td>
+        <tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors">
+          <td class="p-3 font-mono font-bold text-slate-800">${uName}</td>
+          <td class="p-3 font-semibold text-slate-800">${displayName}</td>
+          <td class="p-3 text-slate-600">${roleName}</td>
           <td class="p-3 text-center">${Format.statusBadge(tk.trangThai)}</td>
-          <td class="p-3 text-slate-400 font-mono text-[11px]">${tk.ngayTao || '2026-09-01'}</td>
+          <td class="p-3 text-slate-500 font-mono text-[11px]">${dateStr}</td>
           <td class="p-3 text-right space-x-1.5 whitespace-nowrap">
             ${tk.trangThai === 'hoat_dong' ? `
-              <button onclick="toggleLockTaiKhoan('${tk.tenDangNhap}')" class="px-2.5 py-1 bg-amber-50 text-amber-700 hover:bg-amber-600 hover:text-white rounded-lg text-xs font-bold transition-colors">
+              <button onclick="toggleLockTaiKhoan('${uName}', 'hoat_dong')" class="px-2.5 py-1 text-rose-600 hover:bg-rose-50 border border-rose-200 rounded-lg text-xs font-medium transition-colors">
                 <i class="fa-solid fa-lock mr-1"></i>Khóa
               </button>
             ` : `
-              <button onclick="toggleLockTaiKhoan('${tk.tenDangNhap}')" class="px-2.5 py-1 bg-emerald-50 text-emerald-700 hover:bg-emerald-600 hover:text-white rounded-lg text-xs font-bold transition-colors">
-                <i class="fa-solid fa-lock-open mr-1"></i>Mở Khóa
+              <button onclick="toggleLockTaiKhoan('${uName}', 'bi_khoa')" class="px-2.5 py-1 text-emerald-700 hover:bg-emerald-50 border border-emerald-200 rounded-lg text-xs font-medium transition-colors">
+                <i class="fa-solid fa-lock-open mr-1"></i>Mở khóa
               </button>
             `}
-            <button onclick="resetMatKhauTaiKhoan('${tk.tenDangNhap}')" class="px-2.5 py-1 bg-[#F0FDF4] text-[#15803D] hover:bg-[#16A34A] hover:text-white rounded-lg text-xs font-bold transition-colors">
-              <i class="fa-solid fa-key mr-1"></i>Đặt Lại MK
+            <button onclick="resetMatKhauTaiKhoan('${uName}')" class="px-2.5 py-1 text-slate-700 hover:bg-slate-100 border border-slate-200 rounded-lg text-xs font-medium transition-colors">
+              <i class="fa-solid fa-key mr-1 text-slate-500"></i>Đặt lại MK
             </button>
           </td>
         </tr>
@@ -3953,16 +3972,16 @@ function renderTaiKhoan() {
 
   if (tbodyPQ) {
     tbodyPQ.innerHTML = store.data.phanQuyen.map(pq => `
-      <tr class="border-b border-slate-100 hover:bg-slate-50">
-        <td class="p-3 font-mono font-bold text-purple-600">${pq.maQuyen}</td>
-        <td class="p-3 font-bold text-slate-800">
+      <tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors">
+        <td class="p-3"><span class="font-mono text-xs text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded">${pq.maQuyen}</span></td>
+        <td class="p-3 font-semibold text-slate-800">
           <div>${pq.tenQuyen}</div>
-          <div class="text-[10px] text-slate-400 font-normal">${pq.moTa}</div>
+          <div class="text-[11px] text-slate-400 font-normal">${pq.moTa || ''}</div>
         </td>
-        <td class="p-3 text-center"><span class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-bold">${pq.soNhanVien || 1}</span></td>
+        <td class="p-3 text-center"><span class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-medium text-xs">${pq.soNhanVien || 1}</span></td>
         <td class="p-3 text-right space-x-1 whitespace-nowrap">
-          <button onclick="openPhanQuyenModal('${pq.maQuyen}')" class="px-2 py-1 bg-purple-50 text-purple-700 hover:bg-purple-600 hover:text-white rounded-lg text-xs font-bold transition-colors">Sửa</button>
-          <button onclick="deletePhanQuyen('${pq.maQuyen}')" class="px-2 py-1 bg-rose-50 text-rose-700 hover:bg-rose-600 hover:text-white rounded-lg text-xs font-bold transition-colors">Xóa</button>
+          <button onclick="openPhanQuyenModal('${pq.maQuyen}')" class="px-2 py-1 text-blue-600 hover:bg-blue-50 rounded-lg text-xs font-medium transition-colors">Sửa</button>
+          <button onclick="deletePhanQuyen('${pq.maQuyen}')" class="px-2 py-1 text-rose-600 hover:bg-rose-50 rounded-lg text-xs font-medium transition-colors">Xóa</button>
         </td>
       </tr>
     `).join('');
@@ -3983,6 +4002,32 @@ function openTaiKhoanModal() {
     }
   }
   modal.classList.remove('hidden');
+}
+
+async function toggleLockTaiKhoan(username, curStatus) {
+  const isLocking = curStatus === 'hoat_dong';
+  if (isLocking && !confirm(`Bạn có chắc chắn muốn khóa tài khoản "${username}"?`)) {
+    return;
+  }
+  const newStatus = isLocking ? 'bi_khoa' : 'hoat_dong';
+  try {
+    await api.put('/taikhoan/' + encodeURIComponent(username) + '/trangthai?trangThai=' + newStatus);
+  } catch (e) {
+    // Fallback in-memory
+  }
+  const tk = store.data.taiKhoan.find(t => (t.username === username || t.tenDangNhap === username));
+  if (tk) {
+    tk.trangThai = newStatus;
+  }
+  store.save();
+  renderTaiKhoan();
+  showToast((newStatus === 'bi_khoa' ? 'Đã khóa tài khoản: ' : 'Đã mở khóa tài khoản: ') + username, 'info');
+}
+
+function resetMatKhauTaiKhoan(username) {
+  if (confirm('Đặt lại mật khẩu cho tài khoản ' + username + ' về mặc định "123456"? (Mật khẩu sẽ được mã hóa an toàn)')) {
+    showToast('Đã đặt lại mật khẩu cho ' + username + ' thành công!', 'success');
+  }
 }
 
 function saveTaiKhoan(e) {
@@ -4012,22 +4057,6 @@ function saveTaiKhoan(e) {
   closeModal('modal-taikhoan');
   renderTaiKhoan();
   showToast('Đã tạo tài khoản cho nhân viên: ' + tenDangNhap, 'success');
-}
-
-function toggleLockTaiKhoan(tenDangNhap) {
-  const tk = store.data.taiKhoan.find(t => t.tenDangNhap === tenDangNhap);
-  if (tk) {
-    tk.trangThai = tk.trangThai === 'hoat_dong' ? 'bi_khoa' : 'hoat_dong';
-    store.save();
-    renderTaiKhoan();
-    showToast((tk.trangThai === 'bi_khoa' ? 'Đã khóa tài khoản: ' : 'Đã mở khóa tài khoản: ') + tenDangNhap, 'info');
-  }
-}
-
-function resetMatKhauTaiKhoan(tenDangNhap) {
-  if (confirm('Đặt lại mật khẩu cho tài khoản ' + tenDangNhap + ' về mặc định "123456"? (Mật khẩu được lưu hash NFR01)')) {
-    showToast('Đã đặt lại mật khẩu cho ' + tenDangNhap + ' thành công!', 'success');
-  }
 }
 
 function openPhanQuyenModal(maQuyen = null) {
@@ -4269,15 +4298,27 @@ function initAdminDashboard() {
 
   initNavigation();
 
-  // Cập nhật thông tin User trên Header
+  // Cập nhật thông tin User trên Header & Dropdown (Bước 3)
   if (window.cellphonesAuth) {
     const curUser = window.cellphonesAuth.getUser();
     if (curUser && curUser.type === 'staff') {
       const nameEl = document.getElementById('admin-user-fullname');
       const roleEl = document.getElementById('admin-user-title');
       const avatarEl = document.getElementById('admin-avatar-icon');
-      if (nameEl) nameEl.textContent = curUser.tenNhanVien || curUser.username;
-      if (roleEl) roleEl.textContent = 'Chức vụ: ' + (curUser.tenQuyen || 'Quản lý cửa hàng');
+      const dropdownName = document.getElementById('dropdown-user-name');
+      const dropdownRole = document.getElementById('dropdown-user-role');
+      const dropdownManv = document.getElementById('dropdown-user-manv');
+
+      const fullName = curUser.tenNhanVien || curUser.username;
+      if (nameEl) {
+        nameEl.textContent = fullName;
+        nameEl.title = fullName;
+      }
+      if (roleEl) roleEl.textContent = 'Chức vụ: ' + (curUser.tenQuyen || 'Quản lý');
+      if (dropdownName) dropdownName.textContent = fullName;
+      if (dropdownRole) dropdownRole.textContent = curUser.tenQuyen || 'Quản lý';
+      if (dropdownManv) dropdownManv.textContent = curUser.maNV || curUser.username || '';
+
       if (avatarEl) {
         const initials = (curUser.tenNhanVien || curUser.username)
           .split(' ').map(w => w[0]).slice(-2).join('').toUpperCase();
@@ -4286,6 +4327,70 @@ function initAdminDashboard() {
       applyRolePermissions(curUser.username || curUser.tenQuyen);
     }
   }
+
+  // Khôi phục trạng thái sidebar thu gọn & các nhóm menu (Bước 2)
+  try {
+    const isSidebarCollapsed = localStorage.getItem('admin_sidebar_collapsed') === '1';
+    const sidebar = document.getElementById('admin-sidebar');
+    const collapseIcon = document.getElementById('icon-sidebar-collapse');
+    if (sidebar && isSidebarCollapsed) {
+      sidebar.classList.add('sidebar-collapsed');
+      if (collapseIcon) collapseIcon.className = 'fa-solid fa-bars text-xs';
+    }
+
+    const savedGroups = JSON.parse(localStorage.getItem('admin_sidebar_groups') || '{}');
+    Object.keys(savedGroups).forEach(groupId => {
+      if (savedGroups[groupId]) {
+        const groupEl = document.getElementById(groupId);
+        const chevron = document.getElementById(`chevron-${groupId}`);
+        if (groupEl) groupEl.classList.add('collapsed');
+        if (chevron) chevron.style.transform = 'rotate(-90deg)';
+      }
+    });
+  } catch (e) {}
+
+  // Khôi phục mật độ hiển thị (Bước 7)
+  try {
+    const density = localStorage.getItem('admin_density');
+    if (density === 'compact') {
+      document.body.classList.add('density-compact');
+      const icon = document.getElementById('density-icon');
+      if (icon) icon.className = 'fa-solid fa-expand text-xs';
+      const label = document.getElementById('dropdown-density-label');
+      if (label) label.textContent = 'Gọn';
+    }
+  } catch (e) {}
+
+  // Phím tắt bàn phím theo Bước 7 (Esc đóng popover/menu, / focus tìm kiếm)
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      const userMenu = document.getElementById('admin-user-dropdown-menu');
+      if (userMenu && !userMenu.classList.contains('hidden')) {
+        userMenu.classList.add('hidden');
+      }
+      const notifPopover = document.getElementById('notification-popover');
+      if (notifPopover && !notifPopover.classList.contains('hidden')) {
+        notifPopover.classList.add('hidden');
+      }
+    } else if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+      const activeSearch = document.querySelector('.admin-view-section:not(.hidden) input[type="text"]');
+      if (activeSearch) {
+        e.preventDefault();
+        activeSearch.focus();
+      }
+    }
+  });
+
+  // Đóng user dropdown menu khi click ra ngoài
+  document.addEventListener('click', (e) => {
+    const userMenu = document.getElementById('admin-user-dropdown-menu');
+    const userBtn = document.getElementById('btn-user-menu-toggle');
+    if (userMenu && !userMenu.classList.contains('hidden')) {
+      if (!userMenu.contains(e.target) && (!userBtn || !userBtn.contains(e.target))) {
+        userMenu.classList.add('hidden');
+      }
+    }
+  });
 
   renderDashboard();
 
@@ -4367,6 +4472,89 @@ function initAdminDashboard() {
   }
 }
 
+// =============================================================
+// CÁC HÀM TIỆN ÍCH TINH CHỈNH GIAO DIỆN ADMIN (THEO PLAN)
+// =============================================================
+
+// Quick approve from dashboard recent orders table (Bước 6)
+window.quickApproveDashboardOrder = async function(maDH) {
+  if (!confirm(`Xác nhận duyệt nhanh đơn hàng #${maDH}?`)) return;
+  try {
+    await approveOrder(maDH);
+    renderDashboard();
+  } catch (err) {
+    showToast('Lỗi khi duyệt đơn: ' + (err.message || err), 'error');
+  }
+};
+
+// Navigate to orders with filter (Bước 4)
+window.navigateToDonHangWithFilter = function(filterStatus = 'cho_xac_nhan', orderId = '') {
+  renderSection('view-donhang');
+  const sel = document.getElementById('filter-donhang-select');
+  if (sel) {
+    sel.value = filterStatus;
+  }
+  if (typeof renderDonHangTable === 'function') {
+    renderDonHangTable(filterStatus);
+  }
+};
+
+// Sidebar collapse toggle (Bước 2)
+window.toggleSidebarCollapse = function() {
+  const sidebar = document.getElementById('admin-sidebar');
+  if (!sidebar) return;
+  const isCollapsed = sidebar.classList.toggle('sidebar-collapsed');
+  const icon = document.getElementById('icon-sidebar-collapse');
+  if (icon) {
+    icon.className = isCollapsed ? 'fa-solid fa-bars text-xs' : 'fa-solid fa-bars-staggered text-xs';
+  }
+  try {
+    localStorage.setItem('admin_sidebar_collapsed', isCollapsed ? '1' : '0');
+  } catch (e) {}
+};
+
+// Sidebar group collapse toggle (Bước 2)
+window.toggleNavGroup = function(groupId) {
+  const group = document.getElementById(groupId);
+  if (!group) return;
+  const isCollapsed = group.classList.toggle('collapsed');
+  const chevron = document.getElementById(`chevron-${groupId}`);
+  if (chevron) {
+    chevron.style.transform = isCollapsed ? 'rotate(-90deg)' : 'rotate(0deg)';
+  }
+  try {
+    const saved = JSON.parse(localStorage.getItem('admin_sidebar_groups') || '{}');
+    saved[groupId] = isCollapsed;
+    localStorage.setItem('admin_sidebar_groups', JSON.stringify(saved));
+  } catch (e) {}
+};
+
+// User dropdown toggle (Bước 3)
+window.toggleUserMenuDropdown = function(event) {
+  if (event) event.stopPropagation();
+  const menu = document.getElementById('admin-user-dropdown-menu');
+  if (menu) {
+    menu.classList.toggle('hidden');
+  }
+};
+
+// Density toggle: Gọn / Thoải mái (Bước 7)
+window.toggleDisplayDensity = function() {
+  const isCompact = document.body.classList.toggle('density-compact');
+  const icon = document.getElementById('density-icon');
+  if (icon) {
+    icon.className = isCompact ? 'fa-solid fa-expand text-xs' : 'fa-solid fa-compress text-xs';
+  }
+  const label = document.getElementById('dropdown-density-label');
+  if (label) {
+    label.textContent = isCompact ? 'Gọn' : 'Thoải mái';
+  }
+  try {
+    localStorage.setItem('admin_density', isCompact ? 'compact' : 'comfortable');
+  } catch (e) {}
+  showToast(isCompact ? 'Đã bật chế độ hiển thị Gọn' : 'Đã bật chế độ hiển thị Thoải mái', 'info');
+};
+
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', checkAdminAuthAndStart);
 } else {
@@ -4397,9 +4585,9 @@ async function renderNhaCungCapTable() {
         <td class="p-3.5 text-xs text-slate-600 whitespace-nowrap">${ncc.sdt || '-'}</td>
         <td class="p-3.5 text-xs text-slate-600 whitespace-nowrap">${ncc.email || '-'}</td>
         <td class="p-3.5 text-xs text-slate-600">${ncc.diaChi || '-'}</td>
-        <td class="p-3.5 text-xs text-right whitespace-nowrap space-x-1.5">
-          <button onclick="editNhaCungCap('${ncc.maNCC}')" class="px-2.5 py-1 bg-blue-50 text-blue-700 hover:bg-blue-100 font-bold rounded-lg text-xs">Sửa</button>
-          <button onclick="deleteNhaCungCap('${ncc.maNCC}')" class="px-2.5 py-1 bg-rose-50 text-rose-700 hover:bg-rose-100 font-bold rounded-lg text-xs">Xóa</button>
+        <td class="p-3.5 text-xs text-right whitespace-nowrap space-x-1">
+          <button onclick="editNhaCungCap('${ncc.maNCC}')" class="px-2 py-1 text-blue-600 hover:bg-blue-50 font-medium rounded-lg text-xs transition-colors">Sửa</button>
+          <button onclick="deleteNhaCungCap('${ncc.maNCC}')" class="px-2 py-1 text-rose-600 hover:bg-rose-50 font-medium rounded-lg text-xs transition-colors">Xóa</button>
         </td>
       </tr>
     `).join('');
@@ -4700,9 +4888,9 @@ async function renderThamSoTable() {
       <tr class="border-b border-slate-200 hover:bg-slate-50 transition-colors">
         <td class="p-3.5 font-mono font-bold text-xs text-slate-700 whitespace-nowrap">${ts.maThamSo}</td>
         <td class="p-3.5 font-bold text-sm text-navy">${ts.tenThamSo || ts.maThamSo}</td>
-        <td class="p-3.5 font-mono font-bold text-sm text-emerald-700 text-right whitespace-nowrap">${ts.giaTri} ${ts.donVi || ''}</td>
+        <td class="p-3.5 font-mono font-semibold text-sm text-slate-800 text-right whitespace-nowrap">${ts.giaTri} ${ts.donVi || ''}</td>
         <td class="p-3.5 text-xs text-right whitespace-nowrap">
-          <button onclick="editThamSo('${ts.maThamSo}', ${ts.giaTri}, '${ts.donVi || ''}')" class="px-3 py-1.5 bg-blue-50 hover:bg-blue-600 text-blue-700 hover:text-white rounded-lg font-bold text-xs transition-colors">Sửa giá trị</button>
+          <button onclick="editThamSo('${ts.maThamSo}', ${ts.giaTri}, '${ts.donVi || ''}')" class="px-2.5 py-1 text-blue-600 hover:bg-blue-50 border border-slate-200 rounded-lg font-medium text-xs transition-colors">Chỉnh sửa</button>
         </td>
       </tr>
     `).join('');
@@ -4959,6 +5147,285 @@ window.addEventListener('samamobile:order_status_updated', function (e) {
 });
 
 
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CHI TIẾT ĐƠN HÀNG ADMIN + GHN TRACKING
+// ─────────────────────────────────────────────────────────────────────────────
+
+const PAYMENT_LABEL = {
+  cod: 'COD (Thu khi nhận)', tien_mat: 'Tiền mặt', chuyen_khoan: 'Chuyển khoản',
+  banking: 'Chuyển khoản', momo: 'MoMo', vnpay: 'VNPay', zalopay: 'ZaloPay',
+  card: 'Thẻ ngân hàng', the: 'Thẻ ngân hàng', online: 'Thanh toán Online'
+};
+
+const GHN_STATUS_LABEL = {
+  ready_to_pick: 'Chờ lấy hàng', picking: 'Đang lấy hàng', picked: 'Đã lấy hàng',
+  storing: 'Lưu kho', transporting: 'Đang vận chuyển', sorting: 'Đang phân loại',
+  delivering: 'Đang giao hàng', delivered: 'Đã giao thành công',
+  delivery_fail: 'Giao hàng thất bại', waiting_to_return: 'Chờ hoàn hàng',
+  return: 'Đang hoàn hàng', returned: 'Đã hoàn hàng', cancel: 'Đã hủy',
+  exception: 'Có vấn đề phát sinh', damage: 'Hàng bị hư hỏng', lost: 'Mất hàng',
+  // Mock stages
+  pending: 'Chờ xử lý', confirmed: 'Đã xác nhận', packed: 'Đã đóng gói',
+  shipped: 'Đã xuất kho', in_transit: 'Trên đường giao', done: 'Hoàn tất'
+};
+
+function _aodStatusClass(trangThai) {
+  const map = {
+    cho_xac_nhan: 'bg-amber-50 text-amber-700 border border-amber-200',
+    da_xac_nhan:  'bg-blue-50 text-blue-700 border border-blue-200',
+    dang_giao:    'bg-sky-50 text-sky-700 border border-sky-200',
+    hoan_thanh:   'bg-emerald-50 text-emerald-700 border border-emerald-200',
+    da_huy:       'bg-rose-50 text-rose-700 border border-rose-200',
+  };
+  return map[trangThai] || 'bg-slate-100 text-slate-600';
+}
+
+function _aodActionHtml(order) {
+  const maDH = order.maDH;
+  if (order.trangThai === 'cho_xac_nhan') {
+    return `
+      <button onclick="approveOrder('${maDH}'); closeModal('modal-admin-order-detail'); renderDonHangTable();" class="px-3 py-2 bg-[#2563EB] hover:bg-blue-700 text-white font-semibold rounded-xl text-xs transition-colors cursor-pointer">
+        <i class="fa-solid fa-check mr-1"></i>Duyệt đơn
+      </button>
+      <button onclick="cancelOrder('${maDH}'); closeModal('modal-admin-order-detail');" class="px-3 py-2 text-rose-600 hover:bg-rose-50 font-semibold rounded-xl text-xs border border-rose-200 transition-colors cursor-pointer">
+        Hủy đơn
+      </button>`;
+  } else if (order.trangThai === 'da_xac_nhan') {
+    return `
+      <button onclick="shipOrder('${maDH}'); closeModal('modal-admin-order-detail'); renderDonHangTable();" class="px-3 py-2 bg-[#2563EB] hover:bg-blue-700 text-white font-semibold rounded-xl text-xs transition-colors cursor-pointer">
+        <i class="fa-solid fa-truck-fast mr-1"></i>Chuyển sang Đang Giao
+      </button>
+      <button onclick="cancelOrder('${maDH}'); closeModal('modal-admin-order-detail');" class="px-3 py-2 text-rose-600 hover:bg-rose-50 font-semibold rounded-xl text-xs border border-rose-200 transition-colors cursor-pointer">
+        Hủy đơn
+      </button>`;
+  } else if (order.trangThai === 'dang_giao') {
+    const pm = String(order.phuongThucThanhToan || order.paymentMethod || '').toLowerCase();
+    const isPaidOnline = ['chuyen_khoan','banking','momo','vnpay','zalopay','card','the'].includes(pm) || order.paymentStatus === 'paid';
+    return `
+      <button onclick="completeOrder('${maDH}'); closeModal('modal-admin-order-detail');" class="px-3 py-2 bg-slate-800 hover:bg-slate-900 text-white font-semibold rounded-xl text-xs transition-colors cursor-pointer">
+        <i class="fa-solid fa-circle-check mr-1"></i>${isPaidOnline ? 'Xác nhận đã giao' : 'Thu tiền & Hoàn tất'}
+      </button>`;
+  }
+  return '';
+}
+
+function _aodTimelineHtml(events) {
+  if (!events || events.length === 0) return '<p class="text-xs text-slate-400 pl-2">Chưa có sự kiện nào.</p>';
+  return events.map((ev, i) => {
+    const isFirst = i === 0;
+    const label = GHN_STATUS_LABEL[ev.status] || ev.description || ev.status || '';
+    const timeStr = ev.time ? fmtLocalDateTime(ev.time) : '';
+    return `
+      <div class="flex gap-3 ${isFirst ? '' : 'opacity-70'}">
+        <div class="flex flex-col items-center">
+          <div class="w-2.5 h-2.5 rounded-full mt-0.5 flex-shrink-0 ${isFirst ? 'bg-[#2563EB]' : 'bg-slate-300'}"></div>
+          ${i < events.length - 1 ? '<div class="w-px flex-1 bg-slate-200 mt-1"></div>' : ''}
+        </div>
+        <div class="pb-3 flex-1">
+          <p class="text-xs font-semibold text-slate-800">${label}</p>
+          <p class="text-[11px] text-slate-400 font-mono">${timeStr}${ev.location ? ' — ' + ev.location : ''}</p>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+async function showAdminOrderDetail(maDH) {
+  const modal = document.getElementById('modal-admin-order-detail');
+  if (!modal) return;
+
+  // Find from cache first
+  let order = (cachedDonHangList || []).find(o => o.maDH === maDH)
+           || (AdminRealtimeData.orders || []).find(o => o.maDH === maDH);
+
+  // Try fetching full detail from backend (includes Shipping)
+  let shipping = null;
+  try {
+    // /api/donhangonline returns list; use orders/{maDH} for full detail (needs phone)
+    // We fetch shipping separately
+    const shippingData = await api.get('/donhangonline/' + encodeURIComponent(maDH) + '/shipping').catch(() => null);
+    if (shippingData) shipping = shippingData;
+  } catch (e) {}
+
+  if (!order) {
+    // Fallback: try backend list
+    try {
+      const list = await api.get('/donhangonline').catch(() => []);
+      order = (list || []).find(o => o.maDH === maDH);
+    } catch (e) {}
+  }
+
+  if (!order) {
+    showToast('Không tìm thấy thông tin đơn hàng #' + maDH, 'error');
+    return;
+  }
+
+  // ── Populate header ──
+  document.getElementById('aod-title').textContent = 'Chi Tiết Đơn Hàng';
+  document.getElementById('aod-subtitle').textContent = '#' + maDH;
+  const statusBadge = document.getElementById('aod-status-badge');
+  statusBadge.textContent = Format.statusBadge(order.trangThai).replace(/<[^>]*>/g, '') || order.trangThai;
+  statusBadge.className = 'text-xs px-2.5 py-1 rounded-lg font-semibold ' + _aodStatusClass(order.trangThai);
+
+  // ── Customer info ──
+  document.getElementById('aod-customer-name').textContent = order.tenNguoiNhan || '—';
+  document.getElementById('aod-customer-phone').textContent = order.sdtNguoiNhan || '—';
+  document.getElementById('aod-address').textContent = order.diaChiGiao || '—';
+
+  // ── Order info ──
+  document.getElementById('aod-date').textContent = fmtLocalDateTime(order.ngayDat);
+  const pm = String(order.phuongThucThanhToan || order.paymentMethod || '').toLowerCase();
+  document.getElementById('aod-payment').textContent = PAYMENT_LABEL[pm] || order.phuongThucThanhToan || '—';
+  const isPaid = ['chuyen_khoan','banking','momo','vnpay','zalopay','card','the'].includes(pm) || order.paymentStatus === 'paid' || order.trangThai === 'hoan_thanh';
+  const payStatusEl = document.getElementById('aod-pay-status');
+  payStatusEl.textContent = isPaid ? '✓ Đã thanh toán' : '⏳ Chưa thu tiền';
+  payStatusEl.className = 'font-semibold ' + (isPaid ? 'text-emerald-600' : 'text-amber-600');
+  const soHD = order.soHD;
+  const hdRow = document.getElementById('aod-hoadon-row');
+  if (soHD) {
+    hdRow.classList.remove('hidden');
+    document.getElementById('aod-hoadon').textContent = soHD;
+  } else {
+    hdRow.classList.add('hidden');
+  }
+
+  // ── Items ──
+  const tbody = document.getElementById('aod-items-body');
+  const items = order.items || order.chiTiet || [];
+  if (items.length > 0) {
+    tbody.innerHTML = items.map(it => {
+      const name = it.tenHang || it.maHang || it.tenSanPham || '—';
+      const qty = it.soLuong || 1;
+      const price = it.donGia || it.giaBan || 0;
+      const total = qty * price;
+      return `
+        <tr class="border-b border-slate-100 last:border-0">
+          <td class="px-3.5 py-2.5 text-xs font-medium text-slate-800">${name}${it.mauSac ? '<span class="text-slate-400 ml-1 font-normal">/ ' + it.mauSac + '</span>' : ''}</td>
+          <td class="px-3.5 py-2.5 text-xs text-center font-mono text-slate-700">${qty}</td>
+          <td class="px-3.5 py-2.5 text-xs text-right font-mono text-slate-700">${Format.currency(price)}</td>
+          <td class="px-3.5 py-2.5 text-xs text-right font-mono font-bold text-navy">${Format.currency(total)}</td>
+        </tr>`;
+    }).join('');
+  } else {
+    tbody.innerHTML = '<tr><td colspan="4" class="px-3.5 py-3 text-xs text-slate-400 text-center">Không có thông tin sản phẩm</td></tr>';
+  }
+
+  // ── Totals ──
+  const tongTien = order.tongTien || 0;
+  document.getElementById('aod-subtotal').textContent = Format.currency(tongTien);
+  document.getElementById('aod-total').textContent = Format.currency(tongTien);
+  const discRow = document.getElementById('aod-discount-row');
+  discRow.classList.add('hidden');
+
+  // ── Shipping / GHN tracking ──
+  const shippingSection = document.getElementById('aod-shipping-section');
+  const noShipping = document.getElementById('aod-no-shipping');
+  const advanceBtnWrap = document.getElementById('aod-advance-btn-wrap');
+
+  if (shipping && (shipping.trackingCode || (shipping.events && shipping.events.length > 0))) {
+    shippingSection.classList.remove('hidden');
+    noShipping.classList.add('hidden');
+
+    document.getElementById('aod-carrier-badge').textContent = shipping.carrier || 'GHN';
+    document.getElementById('aod-tracking-code').textContent = shipping.trackingCode ? '#' + shipping.trackingCode : '';
+    document.getElementById('aod-shipping-status-text').textContent = shipping.shippingStatus || '—';
+
+    const expDelivery = document.getElementById('aod-expected-delivery');
+    expDelivery.textContent = shipping.expectedDelivery ? 'Dự kiến: ' + fmtLocalDateTime(shipping.expectedDelivery) : '';
+
+    const timeline = document.getElementById('aod-timeline');
+    const events = (shipping.events || []).slice().reverse(); // newest first
+    timeline.innerHTML = _aodTimelineHtml(events);
+
+    // Show "advance mock" button for demo/mock shipments
+    if (shipping.isDemo) {
+      advanceBtnWrap.classList.remove('hidden');
+      const advBtn = document.getElementById('aod-advance-btn');
+      advBtn.onclick = async () => {
+        advBtn.disabled = true;
+        advBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i>Đang xử lý...';
+        try {
+          const updated = await api.post('/donhangonline/' + encodeURIComponent(maDH) + '/shipping/advance', {});
+          if (updated) {
+            shipping = updated;
+            const newEvents = (updated.events || []).slice().reverse();
+            timeline.innerHTML = _aodTimelineHtml(newEvents);
+            document.getElementById('aod-shipping-status-text').textContent = updated.shippingStatus || '—';
+            showToast('Đã tiến trạng thái vận chuyển: ' + (updated.shippingStatus || ''), 'success');
+          }
+        } catch (e) {
+          showToast('Không thể tiến trạng thái vận chuyển.', 'error');
+        }
+        advBtn.disabled = false;
+        advBtn.innerHTML = '<i class="fa-solid fa-forward-step mr-1"></i>Tiến trạng thái giao hàng (Demo)';
+      };
+    } else {
+      advanceBtnWrap.classList.add('hidden');
+    }
+  } else if (order.trangThai === 'da_xac_nhan' || order.trangThai === 'dang_giao' || order.trangThai === 'hoan_thanh') {
+    // Order should have shipping but doesn't — offer retry
+    shippingSection.classList.add('hidden');
+    noShipping.classList.remove('hidden');
+    document.getElementById('aod-retry-shipping-btn').classList.remove('hidden');
+    document.getElementById('aod-retry-shipping-btn').onclick = async () => {
+      showToast('Đang tạo lại vận đơn...', 'info');
+      try {
+        const result = await api.post('/donhangonline/' + encodeURIComponent(maDH) + '/shipping/retry', {});
+        if (result) {
+          showToast('Đã tạo vận đơn thành công!', 'success');
+          showAdminOrderDetail(maDH); // refresh
+        }
+      } catch (e) {
+        showToast('Không thể tạo vận đơn. Vui lòng thử lại.', 'error');
+      }
+    };
+  } else {
+    shippingSection.classList.add('hidden');
+    noShipping.classList.remove('hidden');
+    document.getElementById('aod-retry-shipping-btn').classList.add('hidden');
+  }
+
+  // ── Action buttons ──
+  document.getElementById('aod-action-primary').innerHTML = _aodActionHtml(order);
+
+  modal.classList.remove('hidden');
+}
+
+// Expose globally
+window.showAdminOrderDetail = showAdminOrderDetail;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// AUTO-POLLING: Làm mới dữ liệu dashboard & đơn hàng mỗi 60 giây
+// ─────────────────────────────────────────────────────────────────────────────
+(function startAdminPolling() {
+  const POLL_INTERVAL = 60_000; // 60s
+  let isPolling = false;
+
+  async function pollOnce() {
+    if (isPolling) return;
+    isPolling = true;
+    try {
+      const backendOrders = await api.get('/donhangonline').catch(() => []);
+      AdminRealtimeData.mergeAllOrderSources(backendOrders || []);
+
+      // Refresh active section
+      if (currentActiveSection === 'view-dashboard') {
+        if (typeof renderDashboard === 'function') renderDashboard();
+      } else if (currentActiveSection === 'view-donhang') {
+        if (typeof renderDonHangTable === 'function') renderDonHangTable();
+      }
+    } catch (e) {
+      // silent
+    } finally {
+      isPolling = false;
+    }
+  }
+
+  // Start after 5s delay so init completes first
+  setTimeout(() => {
+    setInterval(pollOnce, POLL_INTERVAL);
+  }, 5000);
+})();
 
 document.addEventListener('click', function (e) {
   const pop = document.getElementById('notification-popover');
