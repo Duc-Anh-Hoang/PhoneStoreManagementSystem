@@ -27,3 +27,14 @@ public class PaymentWebhookPayload
     public string? Gateway { get; set; }
     public string? ReferenceCode { get; set; }
 }
+
+public class PaymentStatusResponse
+{
+    public string MaDH { get; set; } = string.Empty;
+    public string TrangThai { get; set; } = string.Empty;
+    public bool DaThanhToan { get; set; }
+    public bool IsPaid { get; set; }
+    public decimal TongTien { get; set; }
+    public string PhuongThucThanhToan { get; set; } = string.Empty;
+    public DateTime? NgayDat { get; set; }
+}

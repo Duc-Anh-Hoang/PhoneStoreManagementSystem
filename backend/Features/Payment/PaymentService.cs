@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -5,6 +6,7 @@ using PhoneStoreAPI.Common.Constants;
 using PhoneStoreAPI.Common.Exceptions;
 using PhoneStoreAPI.Common.Services;
 using PhoneStoreAPI.Data;
+using PhoneStoreAPI.Features.OnlineOrders.Hubs;
 using PhoneStoreAPI.Features.Payment.DTOs;
 using QRCoder;
 using System.Text.RegularExpressions;
@@ -16,18 +18,21 @@ public class PaymentService : IPaymentService
     private readonly AppDbContext _context;
     private readonly IConfiguration _configuration;
     private readonly IEmailService? _emailService;
+    private readonly IHubContext<OrderHub>? _hubContext;
     private readonly ILogger<PaymentService> _logger;
 
     public PaymentService(
         AppDbContext context,
         IConfiguration configuration,
         ILogger<PaymentService> logger,
-        IEmailService? emailService = null)
+        IEmailService? emailService = null,
+        IHubContext<OrderHub>? hubContext = null)
     {
         _context = context;
         _configuration = configuration;
         _logger = logger;
         _emailService = emailService;
+        _hubContext = hubContext;
     }
 
     public async Task<VietQrResponse> GenerateVietQrForOrderAsync(string maDH)
@@ -107,14 +112,41 @@ public class PaymentService : IPaymentService
             throw new BadRequestException("Đơn hàng đã bị hủy, không thể xác nhận thanh toán.");
         }
 
-        // Đã thanh toán chuyển khoản thành công
-
-        if (donHang.TrangThai == AppConstants.OrderStatus.ChoXacNhan)
+        // Đã thanh toán chuyển khoản thành công -> Chuyển về Chờ xác nhận để chờ Admin duyệt
+        if (donHang.TrangThai == AppConstants.OrderStatus.ChoThanhToan)
         {
-            donHang.TrangThai = AppConstants.OrderStatus.DaXacNhan;
+            donHang.TrangThai = AppConstants.OrderStatus.ChoXacNhan;
         }
 
         await _context.SaveChangesAsync();
+
+        // Gửi thông báo Realtime qua SignalR tới cả trang khách hàng đang mở mã QR và Dashboard Admin
+        if (_hubContext != null)
+        {
+            var paymentPayload = new
+            {
+                maDH = donHang.MaDH,
+                trangThai = donHang.TrangThai,
+                isPaid = true,
+                daThanhToan = true,
+                amount = donHang.TongTien,
+                transactionId = request.TransactionId ?? $"PAY-{DateTime.UtcNow:yyyyMMddHHmmss}",
+                message = $"Đơn hàng #{donHang.MaDH} đã thanh toán thành công {donHang.TongTien:N0}đ qua VietQR/Ngân hàng!",
+                sdt = donHang.SdtNguoiNhan,
+                updatedAt = DateTime.UtcNow
+            };
+
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await _hubContext.Clients.Group($"Order_{donHang.MaDH.Trim()}").SendAsync("PaymentSuccess", paymentPayload);
+                    await _hubContext.Clients.Group(OrderHub.AdminGroup).SendAsync("ReceiveOrderPaid", paymentPayload);
+                    await _hubContext.Clients.All.SendAsync("OrderStatusUpdated", paymentPayload);
+                }
+                catch { }
+            });
+        }
 
         // Gửi email xác nhận thanh toán nếu có email khách
         if (_emailService != null)
@@ -146,15 +178,32 @@ public class PaymentService : IPaymentService
             return false;
         }
 
-        // Tự động tìm mã đơn hàng dạng DHxxxxx trong nội dung chuyển khoản
-        var match = Regex.Match(payload.Content, @"DH\d+", RegexOptions.IgnoreCase);
-        if (!match.Success)
+        // Tự động tìm mã đơn hàng dạng DH-xxxxxx, DHxxxx hoặc SAMAxxxx trong nội dung chuyển khoản
+        string? matchedCode = null;
+        var matchDH = Regex.Match(payload.Content, @"DH-?[A-Z0-9]+", RegexOptions.IgnoreCase);
+        if (matchDH.Success)
+        {
+            matchedCode = matchDH.Value.ToUpper();
+        }
+        else
+        {
+            var matchSama = Regex.Match(payload.Content, @"SAMA\s*([0-9]+)", RegexOptions.IgnoreCase);
+            if (matchSama.Success)
+            {
+                matchedCode = matchSama.Groups[1].Value;
+            }
+        }
+
+        if (string.IsNullOrWhiteSpace(matchedCode))
         {
             return false;
         }
 
-        string maDH = match.Value.ToUpper();
-        var donHang = await _context.DonHangOnlines.FirstOrDefaultAsync(d => d.MaDH == maDH);
+        var donHang = await _context.DonHangOnlines.FirstOrDefaultAsync(d =>
+            d.MaDH == matchedCode ||
+            d.MaDH.Replace("-", "") == matchedCode ||
+            (matchedCode.Length >= 4 && d.MaDH.Contains(matchedCode)));
+
         if (donHang == null)
         {
             return false;
@@ -166,5 +215,37 @@ public class PaymentService : IPaymentService
             Amount = payload.TransferAmount,
             Note = $"Tự động xác thực qua Webhook {payload.Gateway}"
         });
+    }
+
+    public async Task<PaymentStatusResponse> GetPaymentStatusAsync(string maDH)
+    {
+        if (string.IsNullOrWhiteSpace(maDH))
+        {
+            throw new BadRequestException("Mã đơn hàng không hợp lệ.");
+        }
+
+        var clean = maDH.Trim();
+        var donHang = await _context.DonHangOnlines.FirstOrDefaultAsync(d => d.MaDH == clean);
+        if (donHang == null)
+        {
+            throw new NotFoundException($"Không tìm thấy đơn hàng '{maDH}'.");
+        }
+
+        // Với đơn online: khi thoát khỏi "cho_thanh_toan" và không bị "da_huy", nghĩa là đã thanh toán
+        bool isOnline = donHang.PhuongThucThanhToan == "chuyen_khoan" || donHang.PhuongThucThanhToan == "the";
+        bool isPaid = isOnline
+            ? (donHang.TrangThai != AppConstants.OrderStatus.ChoThanhToan && donHang.TrangThai != AppConstants.OrderStatus.DaHuy)
+            : (donHang.TrangThai == AppConstants.OrderStatus.HoanThanh);
+
+        return new PaymentStatusResponse
+        {
+            MaDH = donHang.MaDH,
+            TrangThai = donHang.TrangThai,
+            DaThanhToan = isPaid,
+            IsPaid = isPaid,
+            TongTien = donHang.TongTien,
+            PhuongThucThanhToan = donHang.PhuongThucThanhToan,
+            NgayDat = donHang.NgayDat
+        };
     }
 }

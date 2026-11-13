@@ -27,6 +27,7 @@ public static class AppConstants
 
     public static class OrderStatus
     {
+        public const string ChoThanhToan = "cho_thanh_toan";
         public const string ChoXacNhan = "cho_xac_nhan";
         public const string DaXacNhan = "da_xac_nhan";
         public const string DangGiao = "dang_giao";

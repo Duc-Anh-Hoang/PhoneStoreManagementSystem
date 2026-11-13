@@ -6,7 +6,6 @@ using PhoneStoreAPI.Features.SystemSettings.DTOs;
 namespace PhoneStoreAPI.Features.SystemSettings;
 
 [ApiController]
-[Route("api/thamso")]
 [Route("api/settings")]
 public class SystemSettingsController : ControllerBase
 {

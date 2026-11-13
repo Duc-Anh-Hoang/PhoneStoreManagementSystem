@@ -6,7 +6,6 @@ using PhoneStoreAPI.Features.Customers.DTOs;
 namespace PhoneStoreAPI.Features.Customers;
 
 [ApiController]
-[Route("api/khachhang")]
 [Route("api/customers")]
 public class CustomersController : ControllerBase
 {

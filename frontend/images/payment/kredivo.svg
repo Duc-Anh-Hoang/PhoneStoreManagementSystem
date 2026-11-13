@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 48" fill="none">
+  <!-- Kredivo Brand Icon -->
+  <g transform="translate(4, 4)">
+    <rect width="40" height="40" rx="10" fill="#FF5E00"/>
+    <path d="M14 10 L14 30 L18.5 30 L18.5 21.5 L25 30 L31 30 L23 19.5 L30 10 L24 10 L18.5 17.5 L18.5 10 Z" fill="#FFFFFF"/>
+    <circle cx="28.5" cy="11.5" r="2.5" fill="#FFE500"/>
+  </g>
+  <!-- Kredivo Wordmark -->
+  <text x="52" y="30" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="22" font-weight="900" fill="#F47321" letter-spacing="-0.5">kredivo</text>
+</svg>

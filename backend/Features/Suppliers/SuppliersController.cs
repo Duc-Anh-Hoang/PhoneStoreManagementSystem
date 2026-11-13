@@ -6,7 +6,6 @@ using PhoneStoreAPI.Features.Suppliers.DTOs;
 namespace PhoneStoreAPI.Features.Suppliers;
 
 [ApiController]
-[Route("api/nhacungcap")]
 [Route("api/suppliers")]
 [AllowAnonymous]
 public class SuppliersController : ControllerBase

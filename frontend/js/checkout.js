@@ -286,15 +286,18 @@
       }
 
       // 2. Nếu backend không khả dụng hoặc trả về lỗi, tự sinh mã đơn hàng an toàn (Giai đoạn 1)
+      const isOnline = paymentMethod === 'banking' || paymentMethod === 'momo' || paymentMethod === 'card';
+      const initialStatus = isOnline ? 'cho_thanh_toan' : 'cho_xac_nhan';
+
       if (!orderResult || !orderResult.maDH) {
         const genId = generateOrderCode(); // Giai đoạn 1: dùng crypto thay Math.random
         orderResult = {
           maDH: genId,
           soHD: null,
           tongTien: totalAmount,
-          trangThai: 'cho_xac_nhan',
+          trangThai: initialStatus,
           ngayDat: new Date().toISOString(),
-          message: 'Đặt hàng thành công!'
+          message: isOnline ? 'Đơn hàng đã khởi tạo, vui lòng quét mã thanh toán!' : 'Đặt hàng thành công!'
         };
       }
 
@@ -307,7 +310,7 @@
         diaChiGiao: fullAddress,
         phuongThucThanhToan: paymentMethod,
         tongTien: totalAmount,
-        trangThai: 'cho_xac_nhan',
+        trangThai: orderResult.trangThai || initialStatus,
         ghiChu: note || '',
         items: cartItems.map(it => ({
           maHang: it.maHang,

@@ -6,7 +6,6 @@ using PhoneStoreAPI.Features.Promotions.DTOs;
 namespace PhoneStoreAPI.Features.Promotions;
 
 [ApiController]
-[Route("api/khuyenmai")]
 [Route("api/promotions")]
 public class PromotionsController : ControllerBase
 {
@@ -17,7 +16,6 @@ public class PromotionsController : ControllerBase
         _promotionService = promotionService;
     }
 
-    [HttpGet("hoatdong")]
     [HttpGet("active")]
     [AllowAnonymous]
     public async Task<IActionResult> GetActive()

@@ -240,7 +240,7 @@ CREATE TABLE IF NOT EXISTS DonHangOnline (
     DIACHIGIAO          VARCHAR(255)  NOT NULL,
     PHUONGTHUCTHANHTOAN VARCHAR(20)   NOT NULL CHECK (PHUONGTHUCTHANHTOAN IN ('cod', 'chuyen_khoan', 'the')),
     TONGTIEN            DECIMAL(18,2) NOT NULL DEFAULT 0 CHECK (TONGTIEN >= 0),
-    TRANGTHAI           VARCHAR(20)   NOT NULL DEFAULT 'cho_xac_nhan' CHECK (TRANGTHAI IN ('cho_xac_nhan', 'da_xac_nhan', 'dang_giao', 'hoan_thanh', 'da_huy')),
+    TRANGTHAI           VARCHAR(20)   NOT NULL DEFAULT 'cho_xac_nhan' CHECK (TRANGTHAI IN ('cho_thanh_toan', 'cho_xac_nhan', 'da_xac_nhan', 'dang_giao', 'hoan_thanh', 'da_huy')),
     MANV                VARCHAR(10)   NULL REFERENCES NhanVien(MANV),
     SOHD                VARCHAR(15)   NULL REFERENCES HoaDon(SOHD)
 );
@@ -408,3 +408,30 @@ CREATE SEQUENCE IF NOT EXISTS seq_khachhang START WITH 100;
 CREATE SEQUENCE IF NOT EXISTS seq_nhanvien START WITH 100;
 CREATE SEQUENCE IF NOT EXISTS seq_mathang START WITH 100;
 CREATE SEQUENCE IF NOT EXISTS seq_nhacungcap START WITH 100;
+
+-- =============================================================================
+-- BẢNG PHIÊN CHAT VÀ TIN NHẮN (LIVE CHAT TƯ VẤN KHÁCH HÀNG & ADMIN)
+-- =============================================================================
+CREATE TABLE IF NOT EXISTS phienchat (
+    maphienchat VARCHAR(36) PRIMARY KEY,
+    makh VARCHAR(10) REFERENCES khachhang(makh) ON DELETE SET NULL,
+    khachhang_ten VARCHAR(100) DEFAULT 'Khách vãng lai',
+    khachhang_sdt VARCHAR(15),
+    manv VARCHAR(10) REFERENCES nhanvien(manv) ON DELETE SET NULL,
+    trang_thai VARCHAR(20) DEFAULT 'WAITING',
+    ngay_tao TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    ngay_ket_thuc TIMESTAMP WITH TIME ZONE
+);
+CREATE INDEX IF NOT EXISTS ix_phienchat_trang_thai ON phienchat(trang_thai);
+CREATE INDEX IF NOT EXISTS ix_phienchat_ngay_tao ON phienchat(ngay_tao);
+
+CREATE TABLE IF NOT EXISTS tinnhan (
+    matinnhan BIGSERIAL PRIMARY KEY,
+    maphienchat VARCHAR(36) NOT NULL REFERENCES phienchat(maphienchat) ON DELETE CASCADE,
+    nguoi_gui VARCHAR(20) NOT NULL,
+    nguoi_gui_id VARCHAR(36),
+    noi_dung TEXT NOT NULL,
+    da_doc BOOLEAN DEFAULT FALSE,
+    thoi_gian TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS ix_tinnhan_phien_thoi_gian ON tinnhan(maphienchat, thoi_gian);

@@ -400,57 +400,66 @@
   };
 
   // Quản lý thông báo Realtime (sẵn sàng kết nối WebSocket / SSE / API)
-  window.NotificationCenter = {
-    toggle: function() {
-      const pop = document.getElementById('notification-popover');
-      if (pop) pop.classList.toggle('hidden');
-    },
-    setBadge: function(count) {
-      const badge = document.getElementById('notification-badge');
-      const countBadge = document.getElementById('notification-count-badge');
-      if (count && count > 0) {
-        if (badge) badge.classList.remove('hidden');
-        if (countBadge) {
-          countBadge.textContent = `${count} tin mới`;
-          countBadge.classList.remove('hidden');
+  if (!window.NotificationCenter) {
+    window.NotificationCenter = {
+      toggle: function() {
+        const pop = document.getElementById('notification-popover');
+        if (pop) pop.classList.toggle('hidden');
+      },
+      setBadge: function(count) {
+        const badge = document.getElementById('notification-badge');
+        const countBadge = document.getElementById('notification-count-badge');
+        if (count && count > 0) {
+          if (badge) badge.classList.remove('hidden');
+          if (countBadge) {
+            countBadge.textContent = `${count} tin mới`;
+            countBadge.classList.remove('hidden');
+          }
+        } else {
+          if (badge) badge.classList.add('hidden');
+          if (countBadge) countBadge.classList.add('hidden');
         }
-      } else {
-        if (badge) badge.classList.add('hidden');
-        if (countBadge) countBadge.classList.add('hidden');
-      }
-    },
-    render: function(notifications) {
-      const listEl = document.getElementById('notification-list');
-      if (!listEl) return;
-      if (!Array.isArray(notifications) || notifications.length === 0) {
-        listEl.innerHTML = `
-          <div id="notification-empty" class="py-8 px-4 text-center text-slate-400 space-y-2">
-            <i class="fa-regular fa-bell-slash text-2xl text-slate-300"></i>
-            <p class="text-xs">Hiện chưa có thông báo mới</p>
+      },
+      render: function(notifications) {
+        const listEl = document.getElementById('notification-list');
+        if (!listEl) return;
+        if (!Array.isArray(notifications) || notifications.length === 0) {
+          listEl.innerHTML = `
+            <div id="notification-empty" class="py-8 px-4 text-center text-slate-400 space-y-2">
+              <i class="fa-regular fa-bell-slash text-2xl text-slate-300"></i>
+              <p class="text-xs">Hiện chưa có thông báo mới</p>
+            </div>
+          `;
+          this.setBadge(0);
+          return;
+        }
+        this.setBadge(notifications.length);
+        listEl.innerHTML = notifications.map(item => `
+          <div class="p-3.5 hover:bg-slate-50 transition-colors cursor-pointer flex gap-3 items-start" onclick="${item.onClick || ''}">
+            <div class="w-8 h-8 rounded-lg ${item.bgClass || 'bg-blue-100'} ${item.colorClass || 'text-[#2563EB]'} flex items-center justify-center flex-shrink-0 text-xs">
+              <i class="${item.icon || 'fa-solid fa-bell'}"></i>
+            </div>
+            <div class="space-y-0.5 min-w-0">
+              <p class="font-bold text-slate-900 text-xs truncate">${item.title || ''}</p>
+              <p class="text-[11px] text-slate-500 line-clamp-2">${item.message || ''}</p>
+              <span class="text-[10px] text-slate-400">${item.time || 'Vừa xong'}</span>
+            </div>
           </div>
-        `;
-        this.setBadge(0);
+        `).join('');
+      }
+    };
+  }
+
+  if (typeof window.toggleNotificationPopover !== 'function') {
+    window.toggleNotificationPopover = function(e) {
+      if (window.NotificationCenter && typeof window.NotificationCenter.toggle === 'function') {
+        window.NotificationCenter.toggle(e);
         return;
       }
-      this.setBadge(notifications.length);
-      listEl.innerHTML = notifications.map(item => `
-        <div class="p-3.5 hover:bg-slate-50 transition-colors cursor-pointer flex gap-3 items-start" onclick="${item.onClick || ''}">
-          <div class="w-8 h-8 rounded-lg ${item.bgClass || 'bg-blue-100'} ${item.colorClass || 'text-[#2563EB]'} flex items-center justify-center flex-shrink-0 text-xs">
-            <i class="${item.icon || 'fa-solid fa-bell'}"></i>
-          </div>
-          <div class="space-y-0.5 min-w-0">
-            <p class="font-bold text-slate-900 text-xs truncate">${item.title || ''}</p>
-            <p class="text-[11px] text-slate-500 line-clamp-2">${item.message || ''}</p>
-            <span class="text-[10px] text-slate-400">${item.time || 'Vừa xong'}</span>
-          </div>
-        </div>
-      `).join('');
-    }
-  };
-
-  window.toggleNotificationPopover = function() {
-    window.NotificationCenter.toggle();
-  };
+      const pop = document.getElementById('notification-popover');
+      if (pop) pop.classList.toggle('hidden');
+    };
+  }
 
   document.addEventListener('click', (e) => {
     const pop = document.getElementById('notification-popover');
@@ -791,7 +800,7 @@
             <span>Thu cũ trợ giá</span>
           </button>
           <div class="flex items-center gap-1.5">
-            <button type="button" onclick="window.quickAddToCart('${p.maHang}', event)" class="w-8 h-8 rounded-xl bg-blue-50 hover:bg-[#0057B7] text-[#0057B7] hover:text-white border border-blue-200 flex items-center justify-center transition-all cursor-pointer shadow-xs active:scale-95" title="Thêm vào giỏ hàng">
+            <button type="button" onclick="window.quickAddToCart('${p.maHang}', event)" class="w-8 h-8 rounded-xl bg-blue-50 hover:bg-[#0066FF] text-[#0066FF] hover:text-white border border-blue-200 flex items-center justify-center transition-all cursor-pointer shadow-xs active:scale-95" title="Thêm vào giỏ hàng">
               <i class="fa-solid fa-cart-shopping text-xs"></i>
             </button>
           </div>
@@ -1999,7 +2008,7 @@
               <i class="fa-regular fa-circle-check text-xs"></i>
               <span>Sẵn hàng</span>
             </div>
-            <button type="button" onclick="window.addDealToCart('${item.id}', event)" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-blue-50 hover:bg-[#0057B7] text-[#0057B7] hover:text-white border border-blue-200 flex items-center justify-center transition-all active:scale-90 cursor-pointer shadow-2xs" title="Thêm vào giỏ hàng">
+            <button type="button" onclick="window.addDealToCart('${item.id}', event)" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-blue-50 hover:bg-[#0066FF] text-[#0066FF] hover:text-white border border-blue-200 flex items-center justify-center transition-all active:scale-90 cursor-pointer shadow-2xs" title="Thêm vào giỏ hàng">
               <i class="fa-solid fa-cart-shopping text-xs"></i>
             </button>
           </div>
@@ -2432,7 +2441,7 @@
             <span class="inline-flex items-center gap-1.5 text-xs text-emerald-600 font-semibold">
               <i class="fa-regular fa-circle-check text-xs"></i> Sẵn hàng
             </span>
-            <button type="button" onclick="event.stopPropagation(); window.onDualCartClick('${item.id}')" class="w-8 h-8 rounded-lg bg-blue-50 hover:bg-[#0057B7] text-[#0057B7] hover:text-white border border-blue-200 flex items-center justify-center transition-all active:scale-90 cursor-pointer shadow-2xs" title="Thêm vào giỏ hàng">
+            <button type="button" onclick="event.stopPropagation(); window.onDualCartClick('${item.id}')" class="w-8 h-8 rounded-lg bg-blue-50 hover:bg-[#0066FF] text-[#0066FF] hover:text-white border border-blue-200 flex items-center justify-center transition-all active:scale-90 cursor-pointer shadow-2xs" title="Thêm vào giỏ hàng">
               <i class="fa-solid fa-cart-shopping text-xs"></i>
             </button>
           </div>
@@ -2549,11 +2558,11 @@
     const dot1 = document.getElementById('accessory-dot-1');
     if (dot0 && dot1) {
       if (currentAccessorySlide === 0) {
-        dot0.className = 'h-1 w-8 rounded-full bg-[#0057B7] transition-all cursor-pointer';
+        dot0.className = 'h-1 w-8 rounded-full bg-[#0066FF] transition-all cursor-pointer';
         dot1.className = 'h-1 w-8 rounded-full bg-slate-200 hover:bg-slate-300 transition-all cursor-pointer';
       } else {
         dot0.className = 'h-1 w-8 rounded-full bg-slate-200 hover:bg-slate-300 transition-all cursor-pointer';
-        dot1.className = 'h-1 w-8 rounded-full bg-[#0057B7] transition-all cursor-pointer';
+        dot1.className = 'h-1 w-8 rounded-full bg-[#0066FF] transition-all cursor-pointer';
       }
     }
   }
@@ -2863,7 +2872,7 @@
             <span class="inline-flex items-center gap-1.5 text-xs text-emerald-600 font-semibold">
               <i class="fa-regular fa-circle-check text-xs"></i> Sẵn hàng
             </span>
-            <button type="button" onclick="event.stopPropagation(); window.onLaptopPcCartClick('${item.id}')" class="w-8 h-8 rounded-lg bg-blue-50 hover:bg-[#0057B7] text-[#0057B7] hover:text-white border border-blue-200 flex items-center justify-center transition-all active:scale-90 cursor-pointer shadow-2xs" title="Thêm vào giỏ hàng">
+            <button type="button" onclick="event.stopPropagation(); window.onLaptopPcCartClick('${item.id}')" class="w-8 h-8 rounded-lg bg-blue-50 hover:bg-[#0066FF] text-[#0066FF] hover:text-white border border-blue-200 flex items-center justify-center transition-all active:scale-90 cursor-pointer shadow-2xs" title="Thêm vào giỏ hàng">
               <i class="fa-solid fa-cart-shopping text-xs"></i>
             </button>
           </div>
@@ -2970,7 +2979,7 @@
         <!-- Stock status & cart button -->
         <div class="pt-2 mt-2 border-t border-slate-100 flex items-center justify-between">
           ${statusHtml}
-          <button type="button" onclick="event.stopPropagation(); ${cartFnName}('${item.id}')" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-blue-50 hover:bg-[#0057B7] text-[#0057B7] hover:text-white border border-blue-200 flex items-center justify-center transition-all active:scale-90 cursor-pointer shadow-2xs" title="Thêm vào giỏ hàng">
+          <button type="button" onclick="event.stopPropagation(); ${cartFnName}('${item.id}')" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-blue-50 hover:bg-[#0066FF] text-[#0066FF] hover:text-white border border-blue-200 flex items-center justify-center transition-all active:scale-90 cursor-pointer shadow-2xs" title="Thêm vào giỏ hàng">
             <i class="fa-solid fa-cart-shopping text-xs"></i>
           </button>
         </div>
@@ -3027,7 +3036,7 @@
     container.innerHTML = brands.map(item => {
       const isActive = currentMouseBrand === item.brand;
       const activeClass = isActive
-        ? 'active-brand-pill bg-[#0057B7] text-white border-blue-600 shadow-xs'
+        ? 'active-brand-pill bg-[#0066FF] text-white border-blue-600 shadow-xs'
         : 'bg-white text-slate-800 border border-slate-200 hover:border-blue-400 hover:text-blue-600';
 
       if (item.brand === 'all') {
@@ -3078,7 +3087,7 @@
     const pills = document.querySelectorAll('#mouse-brand-pills-container .dual-brand-pill');
     pills.forEach(p => {
       if (p.dataset.brand === brand) {
-        p.className = 'dual-brand-pill active-brand-pill bg-[#0057B7] text-white border-blue-600 shadow-xs flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9';
+        p.className = 'dual-brand-pill active-brand-pill bg-[#0066FF] text-white border-blue-600 shadow-xs flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9';
       } else {
         p.className = 'dual-brand-pill bg-white text-slate-800 border border-slate-200 hover:border-blue-400 hover:text-blue-600 flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9';
       }
@@ -3209,7 +3218,7 @@
     container.innerHTML = brands.map(item => {
       const isActive = currentAudioBrand === item.brand;
       const activeClass = isActive
-        ? 'active-brand-pill bg-[#0057B7] text-white border-blue-600 shadow-xs'
+        ? 'active-brand-pill bg-[#0066FF] text-white border-blue-600 shadow-xs'
         : 'bg-white text-slate-800 border border-slate-200 hover:border-blue-400 hover:text-blue-600';
 
       if (item.brand === 'all') {
@@ -3260,7 +3269,7 @@
     const pills = document.querySelectorAll('#audio-brand-pills-container .dual-brand-pill');
     pills.forEach(p => {
       if (p.dataset.brand === brand) {
-        p.className = 'dual-brand-pill active-brand-pill bg-[#0057B7] text-white border-blue-600 shadow-xs flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9';
+        p.className = 'dual-brand-pill active-brand-pill bg-[#0066FF] text-white border-blue-600 shadow-xs flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9';
       } else {
         p.className = 'dual-brand-pill bg-white text-slate-800 border border-slate-200 hover:border-blue-400 hover:text-blue-600 flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9';
       }
@@ -3389,7 +3398,7 @@
     container.innerHTML = brands.map(item => {
       const isActive = currentWatchBrand === item.brand;
       const activeClass = isActive
-        ? 'active-brand-pill bg-[#0057B7] text-white border-blue-600 shadow-xs'
+        ? 'active-brand-pill bg-[#0066FF] text-white border-blue-600 shadow-xs'
         : 'bg-white text-slate-800 border border-slate-200 hover:border-blue-400 hover:text-blue-600';
 
       if (item.brand === 'all') {
@@ -3440,7 +3449,7 @@
     const pills = document.querySelectorAll('#watch-brand-pills-container .dual-brand-pill');
     pills.forEach(p => {
       if (p.dataset.brand === brand) {
-        p.className = 'dual-brand-pill active-brand-pill bg-[#0057B7] text-white border-blue-600 shadow-xs flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9';
+        p.className = 'dual-brand-pill active-brand-pill bg-[#0066FF] text-white border-blue-600 shadow-xs flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9';
       } else {
         p.className = 'dual-brand-pill bg-white text-slate-800 border border-slate-200 hover:border-blue-400 hover:text-blue-600 flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9';
       }
@@ -3571,7 +3580,7 @@
     container.innerHTML = brands.map(item => {
       const isActive = currentTiviBrand === item.brand;
       const activeClass = isActive
-        ? 'active-brand-pill bg-[#0057B7] text-white border-blue-600 shadow-xs'
+        ? 'active-brand-pill bg-[#0066FF] text-white border-blue-600 shadow-xs'
         : 'bg-white text-slate-800 border border-slate-200 hover:border-blue-400 hover:text-blue-600';
 
       if (item.brand === 'all') {
@@ -3622,7 +3631,7 @@
     const pills = document.querySelectorAll('#tivi-brand-pills-container .dual-brand-pill');
     pills.forEach(p => {
       if (p.dataset.brand === brand) {
-        p.className = 'dual-brand-pill active-brand-pill bg-[#0057B7] text-white border-blue-600 shadow-xs flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9';
+        p.className = 'dual-brand-pill active-brand-pill bg-[#0066FF] text-white border-blue-600 shadow-xs flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9';
       } else {
         p.className = 'dual-brand-pill bg-white text-slate-800 border border-slate-200 hover:border-blue-400 hover:text-blue-600 flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9';
       }
@@ -3752,7 +3761,7 @@
     container.innerHTML = brands.map(item => {
       const isActive = currentAirBrand === item.brand;
       const activeClass = isActive
-        ? 'active-brand-pill bg-[#0057B7] text-white border-blue-600 shadow-xs'
+        ? 'active-brand-pill bg-[#0066FF] text-white border-blue-600 shadow-xs'
         : 'bg-white text-slate-800 border border-slate-200 hover:border-blue-400 hover:text-blue-600';
 
       if (item.brand === 'all') {
@@ -3803,7 +3812,7 @@
     const pills = document.querySelectorAll('#air-brand-pills-container .dual-brand-pill');
     pills.forEach(p => {
       if (p.dataset.brand === brand) {
-        p.className = 'dual-brand-pill active-brand-pill bg-[#0057B7] text-white border-blue-600 shadow-xs flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9';
+        p.className = 'dual-brand-pill active-brand-pill bg-[#0066FF] text-white border-blue-600 shadow-xs flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9';
       } else {
         p.className = 'dual-brand-pill bg-white text-slate-800 border border-slate-200 hover:border-blue-400 hover:text-blue-600 flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9';
       }
@@ -3927,7 +3936,7 @@
     container.innerHTML = brands.map(item => {
       const isActive = currentPurifierBrand === item.brand;
       const activeClass = isActive
-        ? 'active-brand-pill bg-[#0057B7] text-white border-blue-600 shadow-xs'
+        ? 'active-brand-pill bg-[#0066FF] text-white border-blue-600 shadow-xs'
         : 'bg-white text-slate-800 border border-slate-200 hover:border-blue-400 hover:text-blue-600';
 
       if (item.brand === 'all') {
@@ -3978,7 +3987,7 @@
     const pills = document.querySelectorAll('#purifier-brand-pills-container .dual-brand-pill');
     pills.forEach(p => {
       if (p.dataset.brand === brand) {
-        p.className = 'dual-brand-pill active-brand-pill bg-[#0057B7] text-white border-blue-600 shadow-xs flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9';
+        p.className = 'dual-brand-pill active-brand-pill bg-[#0066FF] text-white border-blue-600 shadow-xs flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9';
       } else {
         p.className = 'dual-brand-pill bg-white text-slate-800 border border-slate-200 hover:border-blue-400 hover:text-blue-600 flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center justify-center h-8 sm:h-9';
       }

@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <!-- Cute Smember Mascot with Gift Box -->
+  <g transform="translate(2, 2)">
+    <!-- Shadow -->
+    <ellipse cx="22" cy="42" rx="14" ry="2.5" fill="#E2E8F0"/>
+    <!-- Body -->
+    <circle cx="22" cy="24" r="15" fill="#FFFFFF" stroke="#EF4444" stroke-width="2"/>
+    <!-- Ears / Antennas -->
+    <path d="M14 12 Q12 6 8 8" stroke="#EF4444" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="8" cy="8" r="2.5" fill="#EF4444"/>
+    <path d="M30 12 Q32 6 36 8" stroke="#EF4444" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="36" cy="8" r="2.5" fill="#EF4444"/>
+    <!-- Blush -->
+    <ellipse cx="12" cy="26" rx="2.5" ry="1.5" fill="#FECACA"/>
+    <ellipse cx="32" cy="26" rx="2.5" ry="1.5" fill="#FECACA"/>
+    <!-- Happy Eyes (Winking / smiling) -->
+    <path d="M14 22 Q17 19 20 22" stroke="#1E293B" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+    <circle cx="28" cy="21" r="2.2" fill="#1E293B"/>
+    <circle cx="29" cy="20" r="0.8" fill="#FFFFFF"/>
+    <!-- Smile -->
+    <path d="M20 27 Q22 30 24 27" stroke="#EF4444" stroke-width="2" stroke-linecap="round" fill="none"/>
+    <!-- Gift Box (Hộp quà có nơ) -->
+    <g transform="translate(24, 25)">
+      <rect x="0" y="4" width="16" height="13" rx="2.5" fill="#F59E0B" stroke="#D97706" stroke-width="1"/>
+      <rect x="-1" y="2" width="18" height="3.5" rx="1.5" fill="#EF4444"/>
+      <!-- Ribbon vertical -->
+      <rect x="6.5" y="2" width="3" height="15" fill="#EF4444"/>
+      <!-- Bow -->
+      <ellipse cx="6" cy="1" rx="2" ry="1.2" fill="#EF4444"/>
+      <ellipse cx="10" cy="1" rx="2" ry="1.2" fill="#EF4444"/>
+      <circle cx="8" cy="1.5" r="1.2" fill="#B91C1C"/>
+    </g>
+  </g>
+</svg>

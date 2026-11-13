@@ -268,6 +268,13 @@
             </div>
             <span id="nav-badge-donhang" class="hidden px-2 py-0.5 text-[10px] font-extrabold rounded-full bg-rose-500 text-white animate-pulse">0</span>
           </a>
+          <a href="#" data-target="view-chat" onclick="renderSection('view-chat'); return false;" class="admin-nav-link flex items-center justify-between gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#F9FAFB] hover:text-slate-900 transition-colors">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <i class="fa-solid fa-comments text-xs w-4 text-slate-400"></i>
+              <span class="whitespace-nowrap">Tư vấn trực tuyến</span>
+            </div>
+            <span id="nav-badge-chat" class="hidden px-2 py-0.5 text-[10px] font-extrabold rounded-full bg-blue-600 text-white animate-pulse">0</span>
+          </a>
           <a href="#" data-target="view-trahang" onclick="renderSection('view-trahang'); return false;" class="admin-nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#F9FAFB] hover:text-slate-900 transition-colors">
             <i class="fa-solid fa-rotate-left text-xs w-4 text-slate-400"></i>
             <span class="whitespace-nowrap">Đổi trả hàng</span>
@@ -689,7 +696,8 @@
           <div class="flex items-center gap-3">
             <select id="filter-donhang-select" class="px-3.5 py-2 bg-white border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-[#16A34A] shadow-sm">
               <option value="all">Tất cả trạng thái</option>
-              <option value="cho_xac_nhan">Chờ xác nhận</option>
+              <option value="cho_thanh_toan">Chờ thanh toán (Online)</option>
+              <option value="cho_xac_nhan">Chờ xác nhận (COD)</option>
               <option value="da_xac_nhan">Đã xác nhận</option>
               <option value="dang_giao">Đang giao</option>
               <option value="hoan_thanh">Hoàn thành</option>
@@ -722,6 +730,189 @@
       <!-- =====================================================================
            SECTION 4: XỬ LÝ DỮ LIỆU: BÁN HÀNG TẠI QUẦY & HÓA ĐƠN
            ===================================================================== -->
+      <!-- =====================================================================
+           SECTION: TƯ VẤN & CSKH TRỰC TUYẾN (LIVE CHAT USER & ADMIN)
+           ===================================================================== -->
+      <section id="view-chat" class="admin-view-section hidden !mt-0 -mt-2 sm:-mt-4 lg:-mt-6 space-y-2.5">
+        <!-- Header Section -->
+        <div class="flex items-center justify-between gap-3 bg-white px-4 py-2 sm:py-2.5 rounded-xl border border-slate-200/80 shadow-2xs">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <div class="w-7 h-7 rounded-lg bg-blue-50 text-[#0066FF] flex items-center justify-center text-xs flex-shrink-0">
+              <i class="fa-solid fa-headset"></i>
+            </div>
+            <div class="min-w-0">
+              <h2 class="text-xs sm:text-sm font-bold text-slate-800 truncate">Tư Vấn & CSKH Trực Tuyến</h2>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 flex-shrink-0">
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 text-[11px] font-semibold border border-emerald-200 shadow-2xs">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span class="hidden sm:inline">Đang trực tuyến (Sẵn sàng)</span>
+              <span class="sm:hidden">Online</span>
+            </span>
+            <button type="button" onclick="loadAdminChatSessions(true)" class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-slate-100 hover:bg-[#0066FF] text-slate-700 hover:text-white rounded-lg text-[11px] font-semibold transition-all shadow-2xs cursor-pointer" title="Làm mới danh sách">
+              <i class="fa-solid fa-rotate"></i>
+              <span class="hidden sm:inline">Làm mới</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Khung Workspace Chat 3 Cột (Left: Sessions List, Center: Chat Stream, Right: Customer Info) -->
+        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-card-sleek h-[calc(100vh-140px)] min-h-[520px] flex overflow-hidden">
+          
+          <!-- CỘT 1: DANH SÁCH PHIÊN CHAT (~340px) -->
+          <div class="w-80 sm:w-88 border-r border-slate-200 flex flex-col flex-shrink-0 bg-slate-50/50">
+            <!-- Search & Filters -->
+            <div class="p-3 border-b border-slate-200 space-y-2.5 bg-white">
+              <div class="relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+                <input type="text" id="admin-chat-search" oninput="filterAdminChatList()" placeholder="Tìm theo tên, SĐT, mã chat..." class="w-full pl-8 pr-3 py-1.5 rounded-xl border border-slate-200 text-xs text-slate-800 focus:outline-none focus:border-[#0066FF] font-medium placeholder:text-slate-400 bg-slate-50 focus:bg-white transition-all">
+              </div>
+
+              <!-- Filter Tabs: Đang chờ, Đang chat, Đã đóng -->
+              <div class="grid grid-cols-3 gap-1 p-1 bg-slate-100 rounded-xl text-xs font-semibold">
+                <button type="button" onclick="setAdminChatTab('all')" id="btn-chat-tab-all" class="admin-chat-tab-btn py-1 px-2 rounded-lg bg-white text-[#0066FF] shadow-2xs cursor-pointer text-center truncate">
+                  Tất cả (<span id="chat-count-all">0</span>)
+                </button>
+                <button type="button" onclick="setAdminChatTab('waiting')" id="btn-chat-tab-waiting" class="admin-chat-tab-btn py-1 px-2 rounded-lg text-slate-600 hover:text-slate-900 cursor-pointer text-center truncate">
+                  Chờ (<span id="chat-count-waiting">0</span>)
+                </button>
+                <button type="button" onclick="setAdminChatTab('active')" id="btn-chat-tab-active" class="admin-chat-tab-btn py-1 px-2 rounded-lg text-slate-600 hover:text-slate-900 cursor-pointer text-center truncate">
+                  Đang chat (<span id="chat-count-active">0</span>)
+                </button>
+              </div>
+            </div>
+
+            <!-- Sessions List Container (Scrollable) -->
+            <div id="admin-chat-sessions-list" class="flex-1 overflow-y-auto divide-y divide-slate-100">
+              <!-- Render động bởi admin.js -->
+              <div class="p-8 text-center text-slate-400 space-y-2">
+                <i class="fa-solid fa-spinner fa-spin text-xl text-blue-500"></i>
+                <p class="text-xs">Đang tải danh sách phiên chat...</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- CỘT 2: KHUNG HỘI THOẠI TRÒ CHUYỆN (FLEX-1) -->
+          <div class="flex-1 flex flex-col min-w-0 bg-white">
+            
+            <!-- Trạng thái khi chưa chọn phiên chat nào -->
+            <div id="admin-chat-empty-state" class="flex-1 flex flex-col items-center justify-center p-8 text-center space-y-3 bg-slate-50/30">
+              <div class="w-16 h-16 rounded-3xl bg-blue-50 text-[#0066FF] flex items-center justify-center text-2xl shadow-inner border border-blue-100">
+                <i class="fa-solid fa-comments"></i>
+              </div>
+              <h4 class="font-bold text-sm text-slate-800">Chọn cuộc trò chuyện để bắt đầu tư vấn</h4>
+              <p class="text-xs text-slate-500 max-w-sm">Chọn một khách hàng từ danh sách bên trái để xem tin nhắn, tiếp nhận phiên hoặc giải đáp thắc mắc mua hàng.</p>
+            </div>
+
+            <!-- Khung Chat Chính (Active Chat Room) -->
+            <div id="admin-chat-room-container" class="hidden flex-1 flex flex-col min-w-0 h-full overflow-hidden">
+              
+              <!-- Chat Room Header -->
+              <div class="p-3.5 px-5 border-b border-slate-200 flex items-center justify-between gap-3 bg-white shadow-2xs flex-shrink-0">
+                <div class="flex items-center gap-3 min-w-0">
+                  <div id="room-customer-avatar" class="w-10 h-10 rounded-2xl bg-blue-50 text-[#0066FF] flex items-center justify-center font-bold text-sm border border-blue-200 flex-shrink-0">
+                    KH
+                  </div>
+                  <div class="min-w-0">
+                    <div class="flex items-center gap-2">
+                      <h4 id="room-customer-name" class="font-bold text-sm text-slate-900 truncate">Khách hàng</h4>
+                      <span id="room-session-status-badge" class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-50 text-amber-700 border border-amber-200">Chờ tiếp nhận</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-[11px] text-slate-400 mt-0.5">
+                      <span id="room-customer-phone" class="font-mono">-</span>
+                      <span>•</span>
+                      <span id="room-session-id" class="font-mono text-slate-500 font-medium truncate">-</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Action Buttons: Tiếp nhận / Kết thúc / Ẩn hiện thông tin khách -->
+                <div class="flex items-center gap-2 flex-shrink-0">
+                  <button type="button" id="btn-room-assign" onclick="assignActiveChatSession()" class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs shadow-2xs transition-colors flex items-center gap-1.5 cursor-pointer">
+                    <i class="fa-solid fa-user-check"></i>
+                    <span>Tiếp nhận tư vấn</span>
+                  </button>
+                  <button type="button" id="btn-room-close" onclick="closeActiveChatSession()" class="px-3 py-1.5 rounded-xl border border-rose-200 text-rose-600 hover:bg-rose-50 font-semibold text-xs transition-colors flex items-center gap-1.5 cursor-pointer">
+                    <i class="fa-solid fa-power-off"></i>
+                    <span>Đóng phiên</span>
+                  </button>
+                  <button type="button" onclick="toggleCustomerInfoPane()" class="p-2 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-slate-100 text-xs transition-colors cursor-pointer" title="Ẩn/Hiện thông tin khách">
+                    <i class="fa-solid fa-circle-info text-sm"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Message Stream Feed (Scrollable) -->
+              <div id="admin-chat-messages-stream" class="flex-1 p-4 overflow-y-auto space-y-3 bg-slate-50/70 scroll-smooth">
+                <!-- Tin nhắn được append tại đây -->
+              </div>
+
+
+
+              <!-- Message Input Box -->
+              <div class="p-3 bg-white border-t border-slate-200 flex-shrink-0">
+                <form id="admin-chat-send-form" onsubmit="sendAdminChatMessage(event)" class="flex items-center gap-2">
+                  <input type="text" id="admin-chat-input" placeholder="Nhập tin nhắn phản hồi (Enter để gửi)..." autocomplete="off" class="flex-1 px-4 py-2.5 rounded-2xl bg-slate-100 focus:bg-white border border-transparent focus:border-[#0066FF] focus:outline-none text-xs text-slate-800 placeholder:text-slate-400 font-medium transition-all">
+                  
+                  <button type="submit" id="btn-admin-send" class="px-4 py-2.5 rounded-2xl bg-[#0066FF] hover:bg-[#0052cc] text-white text-xs font-semibold shadow-md transition-all active:scale-95 cursor-pointer flex items-center gap-1.5 flex-shrink-0">
+                    <span>Gửi</span>
+                    <i class="fa-solid fa-paper-plane text-[11px]"></i>
+                  </button>
+                </form>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- CỘT 3: THÔNG TIN KHÁCH HÀNG & TRA CỨU ĐƠN HÀNG (~290px) -->
+          <div id="admin-chat-customer-pane" class="w-72 sm:w-80 border-l border-slate-200 p-4 overflow-y-auto space-y-4 bg-slate-50/40 flex-shrink-0 hidden xl:block">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-200">
+              <h5 class="font-bold text-xs text-slate-800 flex items-center gap-1.5">
+                <i class="fa-solid fa-user-tag text-blue-600"></i>
+                <span>Hồ Sơ Khách Hàng</span>
+              </h5>
+              <span id="cust-pane-type-badge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800">Khách vãng lai</span>
+            </div>
+
+            <!-- Thông tin chi tiết khách -->
+            <div class="bg-white p-3.5 rounded-2xl border border-slate-200 space-y-2 text-xs">
+              <div>
+                <span class="text-slate-400 text-[11px] block">Họ và tên:</span>
+                <strong id="cust-pane-name" class="text-slate-800 font-bold">-</strong>
+              </div>
+              <div>
+                <span class="text-slate-400 text-[11px] block">Số điện thoại:</span>
+                <strong id="cust-pane-phone" class="text-blue-700 font-mono font-bold">-</strong>
+              </div>
+              <div>
+                <span class="text-slate-400 text-[11px] block">Mã khách hàng:</span>
+                <span id="cust-pane-makh" class="text-slate-600 font-mono">-</span>
+              </div>
+            </div>
+
+            <!-- Tra cứu đơn hàng gần nhất của khách -->
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <h5 class="font-bold text-xs text-slate-800 flex items-center gap-1.5">
+                  <i class="fa-solid fa-box-open text-purple-600"></i>
+                  <span>Đơn Hàng Gần Đây</span>
+                </h5>
+                <span id="cust-pane-orders-count" class="text-[10px] font-bold text-slate-500">0 đơn</span>
+              </div>
+
+              <div id="cust-pane-orders-list" class="space-y-2">
+                <div class="p-3 text-center text-slate-400 text-xs bg-white rounded-xl border border-slate-200">
+                  Chưa có đơn hàng online nào
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
       <section id="view-hoadon" class="admin-view-section hidden space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
@@ -2390,7 +2581,7 @@
   <!-- SCRIPT LOGIC ADMIN & i18n -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.7/signalr.min.js"></script>
   <script src="../js/api.js?v=3.6"></script>
-  <script src="../js/order-signalr.js?v=1.2"></script>
+  <script src="../js/order-signalr.js?v=1.3"></script>
   <script src="../js/auth.js?v=3.6"></script>
   <script src="../js/admin.js?v=3.7"></script>
 

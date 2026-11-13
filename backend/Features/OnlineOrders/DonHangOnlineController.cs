@@ -66,31 +66,4 @@ public class DonHangOnlineController : ControllerBase
         var shipping = await _shippingService.CreateShipmentAsync(order, order.ChiTietDonHangs.ToList());
         return Ok(shipping);
     }
-
-    /// <summary>
-    /// Giai đoạn 6: Gắn mã vận đơn SPX thủ công (chỉ lưu tracking_code + link tra cứu SPX)
-    /// </summary>
-    [HttpPost("{maDH}/shipping/spx")]
-    public async Task<IActionResult> SetSpxTracking(string maDH, [FromBody] SetSpxTrackingRequest request)
-    {
-        if (string.IsNullOrWhiteSpace(request.TrackingCode))
-            return BadRequest(new { message = "Vui lòng nhập mã vận đơn SPX." });
-
-        var orderExists = await _context.DonHangOnlines.AnyAsync(d => d.MaDH == maDH);
-        if (!orderExists) return NotFound(new { message = "Không tìm thấy đơn hàng." });
-
-        var shipping = await _shippingService.SetSpxTrackingAsync(maDH, request.TrackingCode);
-        return Ok(shipping);
-    }
-
-    /// <summary>
-    /// Giai đoạn 6 (Demo/Mock): Tiến trạng thái vận chuyển giả lập sang bước tiếp theo
-    /// </summary>
-    [HttpPost("{maDH}/shipping/advance")]
-    public async Task<IActionResult> AdvanceMockShipment(string maDH)
-    {
-        var shipping = await _shippingService.AdvanceMockShipmentAsync(maDH);
-        if (shipping == null) return NotFound(new { message = "Đơn hàng chưa có vận đơn giả lập." });
-        return Ok(shipping);
-    }
 }

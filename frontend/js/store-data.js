@@ -35,7 +35,7 @@
           fetch(`${API_BASE}/mathang`).then(r => r.ok ? r.json() : []).catch(() => []),
           fetch(`${API_BASE}/nhomhang`).then(r => r.ok ? r.json() : []).catch(() => []),
           fetch(`${API_BASE}/loaihang`).then(r => r.ok ? r.json() : []).catch(() => []),
-          fetch(`${API_BASE}/khuyenmai/hoatdong`).then(r => r.ok ? r.json() : []).catch(() => []),
+          fetch(`${API_BASE}/promotions/active`).then(r => r.ok ? r.json() : []).catch(() => []),
           fetch('data/products-meta.json').then(r => r.ok ? r.json() : fetch('products-meta.json').then(r2 => r2.ok ? r2.json() : {})).catch(() => ({}))
         ]);
 

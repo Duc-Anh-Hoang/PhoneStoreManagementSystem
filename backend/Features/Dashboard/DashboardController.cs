@@ -5,7 +5,6 @@ using PhoneStoreAPI.Features.Dashboard.DTOs;
 namespace PhoneStoreAPI.Features.Dashboard;
 
 [ApiController]
-[Route("api/thongke")]
 [Route("api/dashboard")]
 [Authorize]
 public class DashboardController : ControllerBase
@@ -17,7 +16,6 @@ public class DashboardController : ControllerBase
         _dashboardService = dashboardService;
     }
 
-    [HttpGet("tonghop")]
     [HttpGet("summary")]
     public async Task<IActionResult> GetSummary()
     {
@@ -25,7 +23,6 @@ public class DashboardController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("kenhban")]
     [HttpGet("channels")]
     public async Task<IActionResult> GetRevenueByChannel(
         [FromQuery] DateTime? tuNgay,
@@ -35,7 +32,6 @@ public class DashboardController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("nhomhang")]
     [HttpGet("categories")]
     public async Task<IActionResult> GetRevenueByCategory(
         [FromQuery] DateTime? tuNgay,

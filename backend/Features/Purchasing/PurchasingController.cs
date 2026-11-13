@@ -6,7 +6,6 @@ using PhoneStoreAPI.Features.Purchasing.DTOs;
 namespace PhoneStoreAPI.Features.Purchasing;
 
 [ApiController]
-[Route("api/phieunhap")]
 [Route("api/purchasing")]
 [AllowAnonymous]
 public class PurchasingController : ControllerBase

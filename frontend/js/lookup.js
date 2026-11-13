@@ -252,6 +252,7 @@
   // Giai đoạn 2: renderOrderCard nâng cấp — hiển thị masked info, timeline, danh sách SP
   function renderOrderCard(order) {
     const statusMap = {
+      cho_thanh_toan: { label: 'Chờ thanh toán', color: 'bg-orange-100 text-orange-800', icon: 'fa-qrcode' },
       cho_xac_nhan: { label: 'Chờ xác nhận', color: 'bg-amber-100 text-amber-800', icon: 'fa-clock' },
       da_xac_nhan:  { label: 'Đã xác nhận',  color: 'bg-blue-100 text-blue-800',   icon: 'fa-circle-check' },
       dang_giao:    { label: 'Đang giao hàng', color: 'bg-indigo-100 text-indigo-800', icon: 'fa-truck' },
@@ -743,6 +744,7 @@
       }
 
       const statusMap = {
+        cho_thanh_toan: { label: 'Chờ thanh toán', color: 'bg-orange-100 text-orange-800' },
         cho_xac_nhan: { label: 'Chờ xác nhận', color: 'bg-amber-100 text-amber-800' },
         da_xac_nhan:  { label: 'Đã xác nhận',  color: 'bg-blue-100 text-blue-800' },
         dang_giao:    { label: 'Đang giao',     color: 'bg-indigo-100 text-indigo-800' },

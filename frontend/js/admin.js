@@ -65,12 +65,12 @@ class AdminStore {
         api.get('/nhomhang').catch(() => []),
         api.get('/loaihang').catch(() => []),
         api.get('/thuoctinh').catch(() => []),
-        api.get('/khachhang').catch(() => []),
+        api.get('/customers').catch(() => []),
         api.get('/nhanvien').catch(() => []),
         api.get('/phanquyen').catch(() => []),
-        api.get('/nhacungcap').catch(() => []),
+        api.get('/suppliers').catch(() => []),
         api.get('/taikhoan').catch(() => []),
-        api.get('/phieunhap').catch(() => []),
+        api.get('/purchasing').catch(() => []),
         api.get('/hoadon').catch(() => []),
         api.get('/imei').catch(() => [])
       ]);
@@ -520,6 +520,7 @@ const Format = {
 
   statusBadge(status) {
     const dict = {
+      cho_thanh_toan: { labelVi: 'Chờ thanh toán', cls: 'bg-orange-50 text-orange-700 border-orange-200' },
       cho_xac_nhan: { labelVi: 'Chờ xác nhận', cls: 'bg-amber-50 text-amber-700 border-amber-200' },
       da_xac_nhan:  { labelVi: 'Đã xác nhận', cls: 'bg-blue-50 text-[#166534] border-blue-200' },
       dang_giao:    { labelVi: 'Đang giao', cls: 'bg-purple-50 text-purple-700 border-purple-200' },
@@ -584,11 +585,11 @@ let currentActiveSection = 'view-dashboard';
 // PHÂN QUYỀN MÀN HÌNH THEO VAI TRÒ (A3 - plan.md)
 // -------------------------------------------------------------
 const ROLE_PERMISSIONS = {
-  'ADMIN': ['view-dashboard', 'view-mathang', 'view-nhomloai', 'view-thuoctinh', 'view-khuyenmai', 'view-thamso', 'view-nhanvien', 'view-taikhoan', 'view-donhang', 'view-tonkho', 'view-imei', 'view-hoadon', 'view-hoadon-list', 'view-trahang', 'view-baohanh', 'view-tracuu-baohanh', 'view-nhacungcap', 'view-nhapkho', 'view-khachhang'],
-  'QUANLY': ['view-dashboard', 'view-mathang', 'view-nhomloai', 'view-thuoctinh', 'view-khuyenmai', 'view-thamso', 'view-nhanvien', 'view-taikhoan', 'view-donhang', 'view-tonkho', 'view-imei', 'view-hoadon', 'view-hoadon-list', 'view-trahang', 'view-baohanh', 'view-tracuu-baohanh', 'view-nhacungcap', 'view-nhapkho', 'view-khachhang'],
-  'MANAGER': ['view-dashboard', 'view-mathang', 'view-nhomloai', 'view-thuoctinh', 'view-khuyenmai', 'view-thamso', 'view-nhanvien', 'view-taikhoan', 'view-donhang', 'view-tonkho', 'view-imei', 'view-hoadon', 'view-hoadon-list', 'view-trahang', 'view-baohanh', 'view-tracuu-baohanh', 'view-nhacungcap', 'view-nhapkho', 'view-khachhang'],
-  'BANHANG': ['view-donhang', 'view-tonkho', 'view-imei', 'view-hoadon', 'view-hoadon-list', 'view-trahang', 'view-khachhang'],
-  'SALES': ['view-donhang', 'view-tonkho', 'view-imei', 'view-hoadon', 'view-hoadon-list', 'view-trahang', 'view-khachhang'],
+  'ADMIN': ['view-dashboard', 'view-mathang', 'view-nhomloai', 'view-thuoctinh', 'view-khuyenmai', 'view-thamso', 'view-nhanvien', 'view-taikhoan', 'view-donhang', 'view-chat', 'view-tonkho', 'view-imei', 'view-hoadon', 'view-hoadon-list', 'view-trahang', 'view-baohanh', 'view-tracuu-baohanh', 'view-nhacungcap', 'view-nhapkho', 'view-khachhang'],
+  'QUANLY': ['view-dashboard', 'view-mathang', 'view-nhomloai', 'view-thuoctinh', 'view-khuyenmai', 'view-thamso', 'view-nhanvien', 'view-taikhoan', 'view-donhang', 'view-chat', 'view-tonkho', 'view-imei', 'view-hoadon', 'view-hoadon-list', 'view-trahang', 'view-baohanh', 'view-tracuu-baohanh', 'view-nhacungcap', 'view-nhapkho', 'view-khachhang'],
+  'MANAGER': ['view-dashboard', 'view-mathang', 'view-nhomloai', 'view-thuoctinh', 'view-khuyenmai', 'view-thamso', 'view-nhanvien', 'view-taikhoan', 'view-donhang', 'view-chat', 'view-tonkho', 'view-imei', 'view-hoadon', 'view-hoadon-list', 'view-trahang', 'view-baohanh', 'view-tracuu-baohanh', 'view-nhacungcap', 'view-nhapkho', 'view-khachhang'],
+  'BANHANG': ['view-donhang', 'view-chat', 'view-tonkho', 'view-imei', 'view-hoadon', 'view-hoadon-list', 'view-trahang', 'view-khachhang'],
+  'SALES': ['view-donhang', 'view-chat', 'view-tonkho', 'view-imei', 'view-hoadon', 'view-hoadon-list', 'view-trahang', 'view-khachhang'],
   'THUNGAN': ['view-hoadon', 'view-hoadon-list', 'view-trahang', 'view-khachhang'],
   'CASHIER': ['view-hoadon', 'view-hoadon-list', 'view-trahang', 'view-khachhang'],
   'KHO': ['view-nhacungcap', 'view-nhapkho', 'view-imei', 'view-tonkho'],
@@ -710,6 +711,7 @@ function renderSection(sectionId) {
       'view-tracuu-baohanh': isEn ? 'Warranty Lookup' : 'Tra cứu thông tin bảo hành',
       'view-nhomloai': isEn ? 'Brands & Categories' : 'Hãng & Loại hàng',
       'view-thuoctinh': isEn ? 'Technical Specs' : 'Thông số kỹ thuật sản phẩm',
+      'view-chat': isEn ? 'Live Chat Customer Support' : 'Tư vấn & CSKH trực tuyến',
       'view-taikhoan': isEn ? 'Accounts & Roles' : 'Tài khoản & Phân quyền hệ thống'
     };
     titleEl.textContent = titles[currentActiveSection] || 'CellphoneS Admin';
@@ -737,6 +739,7 @@ function renderSection(sectionId) {
     case 'view-nhomloai': renderNhomLoai(); break;
     case 'view-thuoctinh': renderThuocTinh(); break;
     case 'view-taikhoan': renderTaiKhoan(); break;
+    case 'view-chat': renderAdminChatSection(); break;
     }
   } catch (renderErr) {
     console.warn('Lỗi render section:', currentActiveSection, renderErr);
@@ -763,7 +766,7 @@ async function renderDashboard() {
     // Lấy số liệu thống kê realtime từ backend API (Nguồn sự thật duy nhất)
     let summary = null;
     try {
-      summary = await api.get('/thongke/tonghop');
+      summary = await api.get('/dashboard/summary');
     } catch (e) {
       try {
         summary = await api.get('/dashboard/summary');
@@ -1328,7 +1331,18 @@ async function renderDonHangTable(filter = 'all') {
   tbody.innerHTML = orders.map(o => {
     const ngay = fmtLocalDateTime(o.ngayDat);
     let actions = '';
-    if (o.trangThai === 'cho_xac_nhan') {
+    if (o.trangThai === 'cho_thanh_toan') {
+      actions = `
+        <div class="flex items-center justify-end gap-1.5">
+          <button onclick="confirmPaymentAdmin('${o.maDH}')" class="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs transition-colors shadow-2xs cursor-pointer flex items-center gap-1" title="Xác nhận khách đã chuyển khoản thành công">
+            <i class="fa-solid fa-check"></i> Đã nhận tiền
+          </button>
+          <button onclick="cancelOrder('${o.maDH}')" class="px-2.5 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold rounded-xl text-xs transition-colors border border-rose-200 cursor-pointer" title="Hủy đơn">
+            Hủy
+          </button>
+        </div>
+      `;
+    } else if (o.trangThai === 'cho_xac_nhan') {
       actions = `
         <div class="flex items-center justify-end gap-1.5">
           <button onclick="approveOrder('${o.maDH}')" class="px-3 py-1.5 bg-[#1E3A8A] hover:bg-[#172554] text-white font-bold rounded-xl text-xs transition-colors shadow-2xs cursor-pointer" title="Duyệt đơn sang Đã xác nhận">
@@ -1400,6 +1414,29 @@ async function renderDonHangTable(filter = 'all') {
 
 function quickApproveOrder(maDH) {
   approveOrder(maDH);
+}
+
+async function confirmPaymentAdmin(maDH) {
+  if (!confirm('Xác nhận đã nhận được tiền thanh toán cho đơn hàng ' + maDH + '?')) return;
+  AdminRealtimeData.updateOrderStatus(maDH, 'cho_xac_nhan');
+  const o = (AdminRealtimeData.orders || []).find(x => x.maDH === maDH);
+  if (o) o.daThanhToan = true;
+  showToast('Đã ghi nhận thanh toán đơn ' + maDH + '! Trạng thái: Chờ duyệt đơn.', 'success');
+  if (window.OrderSignalR && typeof window.OrderSignalR.notifyOrderStatusChanged === 'function') {
+    window.OrderSignalR.notifyOrderStatusChanged(
+      maDH,
+      'cho_xac_nhan',
+      'Đơn đặt hàng #' + maDH + ' đã nhận tiền thanh toán thành công! Đang chờ Admin duyệt.',
+      o ? o.sdtNguoiNhan : ''
+    );
+  }
+  try {
+    await api.post('/payment/confirm/' + encodeURIComponent(maDH), { transactionId: 'ADMIN_MANUAL', note: 'Admin duyệt tay tiền đã về' });
+  } catch (err) {
+    try {
+      await api.put('/donhangonline/' + encodeURIComponent(maDH) + '/trangthai', { trangThai: 'cho_xac_nhan' });
+    } catch (e) {}
+  }
 }
 
 async function approveOrder(maDH) {
@@ -1744,7 +1781,7 @@ async function renderNhapKhoTable() {
   tbody.innerHTML = '<tr><td colspan="7" class="p-4 text-center text-slate-500">Đang tải phiếu nhập kho...</td></tr>';
 
   try {
-    const list = await api.get('/phieunhap');
+    const list = await api.get('/purchasing');
     if (!list || list.length === 0) {
       tbody.innerHTML = '<tr><td colspan="7" class="p-4 text-center text-slate-400">Chưa có phiếu nhập kho nào</td></tr>';
       return;
@@ -1783,7 +1820,7 @@ async function openNhapKhoModal() {
 
   try {
     const [nccList, mhList] = await Promise.all([
-      api.get('/nhacungcap').catch(() => []),
+      api.get('/suppliers').catch(() => []),
       api.get('/mathang').catch(() => [])
     ]);
 
@@ -1855,7 +1892,7 @@ async function saveNhapKho(e) {
   };
 
   try {
-    const createdPn = await api.post('/phieunhap', payload);
+    const createdPn = await api.post('/purchasing', payload);
     showToast('Lập phiếu nhập ' + createdPn.soPNhap + ' thành công!', 'success');
     closeModal('modal-nhapkho');
     form.reset();
@@ -1877,7 +1914,7 @@ async function viewChiTietNhapKho(soPN) {
   modal.classList.remove('hidden');
 
   try {
-    const pn = await api.get('/phieunhap/' + encodeURIComponent(soPN));
+    const pn = await api.get('/purchasing/' + encodeURIComponent(soPN));
     const allImeis = await api.get('/imei').catch(() => []);
     const imeisInPn = allImeis.filter(i => (i.soPN === soPN || i.soPn === soPN));
 
@@ -2642,7 +2679,7 @@ async function renderKhachHangTable(keyword = '') {
   tbody.innerHTML = '<tr><td colspan="7" class="p-4 text-center text-slate-500">Đang tải khách hàng...</td></tr>';
 
   try {
-    let list = await api.get('/khachhang');
+    let list = await api.get('/customers');
     const kw = (keyword || '').toLowerCase().trim();
     if (kw) {
       list = list.filter(k => (k.maKH && k.maKH.toLowerCase().includes(kw)) || (k.hoTen && k.hoTen.toLowerCase().includes(kw)) || (k.sdt && k.sdt.includes(kw)));
@@ -2771,7 +2808,7 @@ async function renderKhuyenMaiTable() {
   tbody.innerHTML = '<tr><td colspan="7" class="p-4 text-center text-slate-500">Đang tải khuyến mãi...</td></tr>';
 
   try {
-    const list = await api.get('/khuyenmai');
+    const list = await api.get('/promotions');
     if (!list || list.length === 0) {
       tbody.innerHTML = '<tr><td colspan="7" class="p-4 text-center text-slate-400">Chưa có mã khuyến mãi nào</td></tr>';
       return;
@@ -2803,7 +2840,7 @@ async function renderKhuyenMaiTable() {
 
 async function toggleKhuyenMai(maKM, tamDung) {
   try {
-    await api.put('/khuyenmai/' + encodeURIComponent(maKM) + '/tamdung?tamDung=' + tamDung);
+    await api.put('/promotions/' + encodeURIComponent(maKM) + '/tamdung?tamDung=' + tamDung);
     showToast('Cập nhật trạng thái khuyến mãi thành công', 'success');
     await renderKhuyenMaiTable();
   } catch (err) {
@@ -2818,7 +2855,7 @@ async function renderThamSo() {
   container.innerHTML = '<div class="text-center p-4 text-slate-400">Đang tải tham số hệ thống...</div>';
 
   try {
-    const list = await api.get('/thamso');
+    const list = await api.get('/settings');
     container.innerHTML = list.map(ts => `
       <div class="flex items-center justify-between p-3.5 bg-slate-50 rounded-xl border border-slate-200">
         <div>
@@ -4358,6 +4395,11 @@ function initAdminDashboard() {
     });
   }
 
+  // Khởi động kết nối SignalR CSKH Tư vấn trực tuyến
+  if (typeof initAdminChatSignalR === 'function') {
+    initAdminChatSignalR();
+  }
+
   // Lắng nghe bộ lọc đơn hàng
   const filterDonHang = document.getElementById('filter-donhang-select');
   if (filterDonHang) {
@@ -4384,7 +4426,7 @@ async function renderNhaCungCapTable() {
   if (!tbody) return;
   tbody.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-slate-500">Đang tải nhà cung cấp...</td></tr>';
   try {
-    const list = await api.get('/nhacungcap');
+    const list = await api.get('/suppliers');
     cachedNhaCungCapList = Array.isArray(list) ? list : [];
     if (cachedNhaCungCapList.length === 0) {
       tbody.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-slate-400">Chưa có nhà cung cấp nào</td></tr>';
@@ -4447,10 +4489,10 @@ async function saveNhaCungCap(e) {
   };
   try {
     if (isEdit) {
-      await api.put('/nhacungcap/' + encodeURIComponent(payload.maNCC), payload);
+      await api.put('/suppliers/' + encodeURIComponent(payload.maNCC), payload);
       showToast('Đã cập nhật nhà cung cấp ' + payload.maNCC, 'success');
     } else {
-      await api.post('/nhacungcap', payload);
+      await api.post('/suppliers', payload);
       showToast('Đã thêm nhà cung cấp mới ' + payload.maNCC, 'success');
     }
     closeModal('modal-nhacungcap');
@@ -4463,7 +4505,7 @@ async function saveNhaCungCap(e) {
 async function deleteNhaCungCap(maNCC) {
   if (!confirm('Bạn có chắc muốn xóa nhà cung cấp ' + maNCC + '?')) return;
   try {
-    await api.delete('/nhacungcap/' + encodeURIComponent(maNCC));
+    await api.delete('/suppliers/' + encodeURIComponent(maNCC));
     showToast('Đã xóa nhà cung cấp ' + maNCC, 'success');
     renderNhaCungCapTable();
   } catch (err) {
@@ -4496,7 +4538,7 @@ function openKhachHangModal(item = null) {
 
 async function editKhachHang(maKH) {
   try {
-    const kh = await api.get('/khachhang/' + encodeURIComponent(maKH));
+    const kh = await api.get('/customers/' + encodeURIComponent(maKH));
     openKhachHangModal(kh);
   } catch (e) {
     alert('Không thể tải thông tin khách hàng: ' + e.message);
@@ -4516,10 +4558,10 @@ async function saveKhachHang(e) {
   };
   try {
     if (isEdit) {
-      await api.put('/khachhang/' + encodeURIComponent(payload.maKH), payload);
+      await api.put('/customers/' + encodeURIComponent(payload.maKH), payload);
       showToast('Đã cập nhật khách hàng ' + payload.maKH, 'success');
     } else {
-      await api.post('/khachhang', payload);
+      await api.post('/customers', payload);
       showToast('Đã thêm khách hàng mới', 'success');
     }
     closeModal('modal-khachhang');
@@ -4532,7 +4574,7 @@ async function saveKhachHang(e) {
 async function deleteKhachHang(maKH) {
   if (!confirm('Bạn có chắc muốn xóa khách hàng ' + maKH + '?')) return;
   try {
-    await api.delete('/khachhang/' + encodeURIComponent(maKH));
+    await api.delete('/customers/' + encodeURIComponent(maKH));
     showToast('Đã xóa khách hàng ' + maKH, 'success');
     renderKhachHangTable();
   } catch (err) {
@@ -4640,7 +4682,7 @@ function openKhuyenMaiModal(item = null) {
 
 async function editKhuyenMai(maKM) {
   try {
-    const km = await api.get('/khuyenmai/' + encodeURIComponent(maKM));
+    const km = await api.get('/promotions/' + encodeURIComponent(maKM));
     openKhuyenMaiModal(km);
   } catch (e) {
     alert('Không thể tải khuyến mãi: ' + e.message);
@@ -4661,10 +4703,10 @@ async function saveKhuyenMai(e) {
   };
   try {
     if (isEdit) {
-      await api.put('/khuyenmai/' + encodeURIComponent(payload.maKM), payload);
+      await api.put('/promotions/' + encodeURIComponent(payload.maKM), payload);
       showToast('Đã cập nhật khuyến mãi ' + payload.maKM, 'success');
     } else {
-      await api.post('/khuyenmai', payload);
+      await api.post('/promotions', payload);
       showToast('Đã thêm khuyến mãi mới', 'success');
     }
     closeModal('modal-khuyenmai');
@@ -4677,7 +4719,7 @@ async function saveKhuyenMai(e) {
 async function deleteKhuyenMai(maKM) {
   if (!confirm('Bạn có chắc muốn xóa khuyến mãi ' + maKM + '?')) return;
   try {
-    await api.delete('/khuyenmai/' + encodeURIComponent(maKM));
+    await api.delete('/promotions/' + encodeURIComponent(maKM));
     showToast('Đã xóa khuyến mãi ' + maKM, 'success');
     renderKhuyenMaiTable();
   } catch (err) {
@@ -4691,7 +4733,7 @@ async function renderThamSoTable() {
   if (!tbody) return;
   tbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-slate-500">Đang tải tham số hệ thống...</td></tr>';
   try {
-    const list = await api.get('/thamso');
+    const list = await api.get('/settings');
     if (!list || list.length === 0) {
       tbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-slate-400">Không có tham số nào</td></tr>';
       return;
@@ -4720,7 +4762,7 @@ async function editThamSo(maTS, currentValue, donVi) {
     return;
   }
   try {
-    await api.put('/thamso/' + encodeURIComponent(maTS), { maThamSo: maTS, giaTri: num, donVi: donVi });
+    await api.put('/settings/' + encodeURIComponent(maTS), { maThamSo: maTS, giaTri: num, donVi: donVi });
     showToast(`Đã cập nhật tham số ${maTS} thành công`, 'success');
     renderThamSoTable();
   } catch (e) {
@@ -4969,3 +5011,710 @@ document.addEventListener('click', function (e) {
     }
   }
 });
+
+
+// =============================================================================
+// SAMAMOBILE - ADMIN / CSKH LIVE CHAT SYSTEM (SIGNALR REALTIME)
+// Module hỗ trợ tư vấn trực tuyến, tiếp nhận & xử lý yêu cầu khách hàng qua ChatHub
+// =============================================================================
+
+let adminChatConnection = null;
+let adminChatSessions = [];
+let adminChatActiveSessionId = null;
+let adminChatActiveSession = null;
+let adminChatCurrentFilter = 'all'; // 'all' | 'waiting' | 'active'
+let adminChatJoinedRoom = null;
+let adminChatSoundMuted = false;
+
+function escapeAdminChatHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function playAdminChatChime() {
+  if (adminChatSoundMuted) return;
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    const ctx = new AudioCtx();
+    if (ctx.state === 'suspended') ctx.resume().catch(() => {});
+    const now = ctx.currentTime;
+    const osc1 = ctx.createOscillator();
+    const osc2 = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc1.type = 'sine';
+    osc2.type = 'triangle';
+    osc1.frequency.setValueAtTime(523.25, now); // C5
+    osc1.frequency.exponentialRampToValueAtTime(783.99, now + 0.12); // G5
+
+    osc2.frequency.setValueAtTime(659.25, now + 0.05); // E5
+    osc2.frequency.exponentialRampToValueAtTime(1046.50, now + 0.22); // C6
+
+    gain.gain.setValueAtTime(0.15, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+
+    osc1.connect(gain);
+    osc2.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc1.start(now);
+    osc2.start(now + 0.05);
+    osc1.stop(now + 0.35);
+    osc2.stop(now + 0.35);
+  } catch (e) {}
+}
+
+function getAdminStaffInfo() {
+  const curUser = (window.cellphonesAuth || window.Auth) ? (window.cellphonesAuth || window.Auth).getUser() : null;
+  const staffId = curUser?.maNV || curUser?.maNhanVien || (window.AdminRealtimeData?.data?.nhanVien?.[0]?.maNV) || 'NV001';
+  const staffName = curUser?.tenNhanVien || curUser?.username || 'Nhân viên CSKH';
+  return { staffId, staffName };
+}
+
+async function initAdminChatSignalR() {
+  if (adminChatConnection && adminChatConnection.state === 'Connected') {
+    return adminChatConnection;
+  }
+  if (typeof signalR === 'undefined') {
+    console.warn('[AdminChat] Thư viện SignalR chưa sẵn sàng');
+    return null;
+  }
+
+  const chatApiBase = (window.API_BASE || 'http://localhost:5132/api').replace(/\/api\/?$/, '');
+  const hubUrl = `${chatApiBase}/hubs/chat`;
+
+  try {
+    adminChatConnection = new signalR.HubConnectionBuilder()
+      .withUrl(hubUrl, {
+        skipNegotiation: false,
+        transport: signalR.HttpTransportType.WebSockets | signalR.HttpTransportType.LongPolling
+      })
+      .withAutomaticReconnect([0, 2000, 5000, 10000, 20000])
+      .configureLogging(signalR.LogLevel.Warning)
+      .build();
+
+    // 1. Lắng nghe tin nhắn mới trong phòng chat đang mở
+    adminChatConnection.on('ReceiveMessage', (msg) => {
+      handleAdminIncomingReceiveMessage(msg);
+    });
+
+    // 2. Lắng nghe khi có khách hàng mở phiên chat mới (bắn qua AgentPool)
+    adminChatConnection.on('NewWaitingSession', (data) => {
+      handleAdminNewWaitingSession(data);
+    });
+
+    // 3. Lắng nghe khi khách hàng gửi tin nhắn (bắn qua AgentPool)
+    adminChatConnection.on('NewIncomingMessage', (data) => {
+      handleAdminNewIncomingMessage(data);
+    });
+
+    // 4. Lắng nghe khi phiên chat được gán cho nhân viên
+    adminChatConnection.on('SessionAssigned', (data) => {
+      handleAdminSessionAssigned(data);
+    });
+
+    // 5. Lắng nghe cập nhật trạng thái phiên
+    adminChatConnection.on('SessionStatusChanged', (data) => {
+      handleAdminSessionStatusChanged(data);
+    });
+
+    // 6. Lắng nghe khi phiên chat kết thúc
+    adminChatConnection.on('SessionClosed', (data) => {
+      handleAdminSessionClosed(data);
+    });
+
+    // Bắt đầu kết nối
+    await adminChatConnection.start();
+    console.log('[AdminChat] Kết nối thành công tới ChatHub:', hubUrl);
+
+    // Tham gia phòng tổng đài viên CSKH
+    await adminChatConnection.invoke('JoinAgentPool');
+    console.log('[AdminChat] Đã tham gia AgentPool');
+
+    // Tải danh sách phiên chat ban đầu
+    loadAdminChatSessions(false);
+
+    // Xử lý reconnect
+    adminChatConnection.onreconnected(async () => {
+      console.log('[AdminChat] Đã khôi phục kết nối ChatHub');
+      try {
+        await adminChatConnection.invoke('JoinAgentPool');
+        if (adminChatActiveSessionId) {
+          await adminChatConnection.invoke('JoinSession', adminChatActiveSessionId);
+        }
+        loadAdminChatSessions(true);
+      } catch (err) {
+        console.warn('[AdminChat] Lỗi join lại nhóm sau reconnect:', err);
+      }
+    });
+
+  } catch (err) {
+    console.warn('[AdminChat] Không thể kết nối SignalR ChatHub:', err);
+  }
+
+  return adminChatConnection;
+}
+
+function handleAdminNewWaitingSession(data) {
+  playAdminChatChime();
+  if (typeof showToast === 'function') {
+    showToast(`🔔 KHÁCH HÀNG MỚI: ${data.khachHangTen || 'Khách hàng'} vừa yêu cầu tư vấn!`, 'info');
+  }
+  loadAdminChatSessions(true);
+}
+
+function handleAdminNewIncomingMessage(data) {
+  if (data.maPhienChat !== adminChatActiveSessionId) {
+    playAdminChatChime();
+    if (typeof showToast === 'function') {
+      showToast(`💬 ${data.khachHangTen || 'Khách hàng'}: "${data.tinNhanMoi}"`, 'info');
+    }
+  }
+  loadAdminChatSessions(false);
+}
+
+function handleAdminIncomingReceiveMessage(msg) {
+  if (msg.maPhienChat === adminChatActiveSessionId) {
+    appendAdminChatMessageBubble(msg);
+    scrollAdminChatToBottom();
+    if (msg.nguoiGui === 'CUSTOMER') {
+      if (adminChatConnection && adminChatConnection.state === 'Connected') {
+        adminChatConnection.invoke('MarkAsRead', adminChatActiveSessionId, 'AGENT').catch(() => {});
+      }
+    }
+  }
+}
+
+function handleAdminSessionAssigned(data) {
+  if (data.maPhienChat === adminChatActiveSessionId) {
+    const badge = document.getElementById('room-session-status-badge');
+    if (badge) {
+      badge.className = 'px-2 py-0.5 rounded-full text-[10px] font-semibold bg-blue-50 text-[#0066FF] border border-blue-200';
+      badge.textContent = `Đang chat (${data.hoTenNV || data.maNV || 'CSKH'})`;
+    }
+    const btnAssign = document.getElementById('btn-room-assign');
+    if (btnAssign) btnAssign.classList.add('hidden');
+  }
+  loadAdminChatSessions(false);
+}
+
+function handleAdminSessionStatusChanged(data) {
+  loadAdminChatSessions(false);
+}
+
+function handleAdminSessionClosed(data) {
+  if (data.maPhienChat === adminChatActiveSessionId) {
+    const badge = document.getElementById('room-session-status-badge');
+    if (badge) {
+      badge.className = 'px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-100 text-slate-600 border border-slate-200';
+      badge.textContent = 'Đã kết thúc';
+    }
+    const btnAssign = document.getElementById('btn-room-assign');
+    if (btnAssign) btnAssign.classList.add('hidden');
+    const btnClose = document.getElementById('btn-room-close');
+    if (btnClose) btnClose.classList.add('hidden');
+    if (typeof showToast === 'function') {
+      showToast('Phiên tư vấn này đã kết thúc.', 'warning');
+    }
+  }
+  loadAdminChatSessions(false);
+}
+
+async function loadAdminChatSessions(forceRefresh = false) {
+  const container = document.getElementById('admin-chat-sessions-list');
+  try {
+    const res = await fetch(`${API_BASE}/chat/admin/waiting-sessions`);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const json = await res.json();
+    if (json.success && Array.isArray(json.data)) {
+      adminChatSessions = json.data;
+      updateAdminChatBadgesAndCounts();
+      renderAdminChatSessionsList();
+    }
+  } catch (err) {
+    console.warn('[AdminChat] loadAdminChatSessions error:', err);
+    if (container && forceRefresh) {
+      container.innerHTML = `<div class="p-6 text-center text-rose-500 text-xs">Lỗi tải danh sách phiên chat: ${err.message}</div>`;
+    }
+  }
+}
+
+function updateAdminChatBadgesAndCounts() {
+  const allCount = adminChatSessions.length;
+  const waitingCount = adminChatSessions.filter(s => s.trangThai === 'WAITING').length;
+  const activeCount = adminChatSessions.filter(s => s.trangThai === 'ACTIVE').length;
+
+  const countAllEl = document.getElementById('chat-count-all');
+  const countWaitEl = document.getElementById('chat-count-waiting');
+  const countActEl = document.getElementById('chat-count-active');
+  const navBadgeEl = document.getElementById('nav-badge-chat');
+
+  if (countAllEl) countAllEl.textContent = allCount;
+  if (countWaitEl) countWaitEl.textContent = waitingCount;
+  if (countActEl) countActEl.textContent = activeCount;
+
+  if (navBadgeEl) {
+    if (waitingCount > 0) {
+      navBadgeEl.textContent = waitingCount;
+      navBadgeEl.classList.remove('hidden');
+    } else {
+      navBadgeEl.classList.add('hidden');
+    }
+  }
+}
+
+function renderAdminChatSessionsList() {
+  const container = document.getElementById('admin-chat-sessions-list');
+  if (!container) return;
+
+  const searchTerm = (document.getElementById('admin-chat-search')?.value || '').trim().toLowerCase();
+
+  let filtered = adminChatSessions.slice();
+  if (adminChatCurrentFilter === 'waiting') {
+    filtered = filtered.filter(s => s.trangThai === 'WAITING');
+  } else if (adminChatCurrentFilter === 'active') {
+    filtered = filtered.filter(s => s.trangThai === 'ACTIVE');
+  }
+
+  if (searchTerm) {
+    filtered = filtered.filter(s => 
+      (s.khachHangTen && s.khachHangTen.toLowerCase().includes(searchTerm)) ||
+      (s.khachHangSdt && s.khachHangSdt.includes(searchTerm)) ||
+      (s.maPhienChat && s.maPhienChat.toLowerCase().includes(searchTerm))
+    );
+  }
+
+  if (filtered.length === 0) {
+    container.innerHTML = `
+      <div class="p-8 text-center text-slate-400 space-y-2">
+        <i class="fa-regular fa-comment-dots text-3xl text-slate-300"></i>
+        <p class="text-xs font-medium">Không có phiên tư vấn nào</p>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = filtered.map(s => {
+    const isSelected = s.maPhienChat === adminChatActiveSessionId;
+    const isWaiting = s.trangThai === 'WAITING';
+    const isActive = s.trangThai === 'ACTIVE';
+
+    let statusBadge = '';
+    if (isWaiting) {
+      statusBadge = '<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200">Chờ nhận</span>';
+    } else if (isActive) {
+      statusBadge = '<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-800 border border-blue-200">Đang chat</span>';
+    } else {
+      statusBadge = '<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200">Đã đóng</span>';
+    }
+
+    const timeStr = s.ngayTao ? fmtLocalDateTime(s.ngayTao) : '';
+    const lastMsg = s.tinNhanCuoi || 'Chưa có tin nhắn...';
+    const unread = s.soTinChuaDoc || 0;
+    const initial = (s.khachHangTen || 'KH').substring(0, 2).toUpperCase();
+
+    return `
+      <div onclick="selectAdminChatSession('${s.maPhienChat}')" 
+           class="p-3.5 flex items-start gap-3 cursor-pointer transition-colors border-l-4 ${
+             isSelected 
+               ? 'bg-blue-50/80 border-[#0066FF]' 
+               : 'hover:bg-slate-100/70 border-transparent bg-white'
+           }">
+        <div class="relative w-10 h-10 rounded-2xl ${isSelected ? 'bg-[#0066FF] text-white' : 'bg-slate-100 text-slate-700'} font-bold text-xs flex items-center justify-center flex-shrink-0 shadow-2xs">
+          ${initial}
+          ${isWaiting ? '<span class="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-amber-500 border-2 border-white animate-ping"></span><span class="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-amber-500 border-2 border-white"></span>' : ''}
+          ${isActive ? '<span class="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-emerald-500 border-2 border-white"></span>' : ''}
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between gap-1 mb-0.5">
+            <h5 class="text-xs font-bold text-slate-900 truncate">${escapeAdminChatHtml(s.khachHangTen || 'Khách hàng')}</h5>
+            <span class="text-[10px] text-slate-400 font-normal whitespace-nowrap">${timeStr ? (timeStr.split(' ')[1] || timeStr) : ''}</span>
+          </div>
+          <div class="flex items-center gap-1.5 mb-1">
+            <span class="text-[11px] font-mono text-slate-500">${s.khachHangSdt || 'Không có SĐT'}</span>
+            ${statusBadge}
+          </div>
+          <p class="text-[11px] text-slate-500 truncate font-normal">${escapeAdminChatHtml(lastMsg)}</p>
+        </div>
+        ${unread > 0 ? `<span class="px-2 py-0.5 rounded-full bg-rose-500 text-white text-[10px] font-extrabold flex-shrink-0 animate-pulse">${unread}</span>` : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+async function selectAdminChatSession(sessionId) {
+  adminChatActiveSessionId = sessionId;
+  adminChatActiveSession = adminChatSessions.find(s => s.maPhienChat === sessionId) || null;
+
+  // Hiển thị khung chat chính, ẩn empty state
+  const emptyState = document.getElementById('admin-chat-empty-state');
+  const roomContainer = document.getElementById('admin-chat-room-container');
+  if (emptyState) emptyState.classList.add('hidden');
+  if (roomContainer) roomContainer.classList.remove('hidden');
+
+  // Render lại danh sách để highlight phiên được chọn
+  renderAdminChatSessionsList();
+
+  // Tham gia phòng SignalR của phiên chat
+  if (adminChatConnection && adminChatConnection.state === 'Connected') {
+    adminChatJoinedRoom = sessionId;
+    await adminChatConnection.invoke('JoinSession', sessionId).catch(() => {});
+    await adminChatConnection.invoke('MarkAsRead', sessionId, 'AGENT').catch(() => {});
+  }
+
+  // Cập nhật thông tin Header phòng chat
+  const nameEl = document.getElementById('room-customer-name');
+  const phoneEl = document.getElementById('room-customer-phone');
+  const idEl = document.getElementById('room-session-id');
+  const avatarEl = document.getElementById('room-customer-avatar');
+  const badgeEl = document.getElementById('room-session-status-badge');
+  const btnAssign = document.getElementById('btn-room-assign');
+  const btnClose = document.getElementById('btn-room-close');
+
+  const name = adminChatActiveSession?.khachHangTen || 'Khách hàng';
+  const phone = adminChatActiveSession?.khachHangSdt || '-';
+  const status = adminChatActiveSession?.trangThai || 'WAITING';
+
+  if (nameEl) nameEl.textContent = name;
+  if (phoneEl) phoneEl.textContent = phone;
+  if (idEl) idEl.textContent = sessionId;
+  if (avatarEl) avatarEl.textContent = (name || 'KH').substring(0, 2).toUpperCase();
+
+  if (badgeEl) {
+    if (status === 'WAITING') {
+      badgeEl.className = 'px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-50 text-amber-700 border border-amber-200';
+      badgeEl.textContent = 'Chờ tiếp nhận';
+      if (btnAssign) btnAssign.classList.remove('hidden');
+      if (btnClose) btnClose.classList.remove('hidden');
+    } else if (status === 'ACTIVE') {
+      badgeEl.className = 'px-2 py-0.5 rounded-full text-[10px] font-semibold bg-blue-50 text-[#0066FF] border border-blue-200';
+      badgeEl.textContent = 'Đang hỗ trợ';
+      if (btnAssign) btnAssign.classList.add('hidden');
+      if (btnClose) btnClose.classList.remove('hidden');
+    } else {
+      badgeEl.className = 'px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-100 text-slate-600 border border-slate-200';
+      badgeEl.textContent = 'Đã kết thúc';
+      if (btnAssign) btnAssign.classList.add('hidden');
+      if (btnClose) btnClose.classList.add('hidden');
+    }
+  }
+
+  // Render Cột 3: Customer Info & Tra cứu Đơn Hàng Gần Nhất
+  renderAdminCustomerPane(adminChatActiveSession);
+
+  // Tải lịch sử tin nhắn của phiên
+  const streamEl = document.getElementById('admin-chat-messages-stream');
+  if (streamEl) {
+    streamEl.innerHTML = `
+      <div class="p-8 text-center text-slate-400 space-y-2">
+        <i class="fa-solid fa-spinner fa-spin text-xl text-blue-500"></i>
+        <p class="text-xs">Đang tải cuộc trò chuyện...</p>
+      </div>`;
+  }
+
+  try {
+    const res = await fetch(`${API_BASE}/chat/sessions/${sessionId}/messages`);
+    const json = await res.json();
+    if (json.success && Array.isArray(json.data)) {
+      if (streamEl) {
+        if (json.data.length === 0) {
+          streamEl.innerHTML = '<div class="p-6 text-center text-slate-400 text-xs">Chưa có tin nhắn nào trong phiên này.</div>';
+        } else {
+          streamEl.innerHTML = '';
+          json.data.forEach(m => appendAdminChatMessageBubble(m));
+          scrollAdminChatToBottom();
+        }
+      }
+    }
+  } catch (err) {
+    console.warn('[AdminChat] Lỗi tải tin nhắn phiên:', err);
+    if (streamEl) {
+      streamEl.innerHTML = `<div class="p-4 text-center text-rose-500 text-xs">Lỗi tải tin nhắn: ${err.message}</div>`;
+    }
+  }
+
+  setTimeout(() => {
+    document.getElementById('admin-chat-input')?.focus();
+  }, 100);
+}
+
+function appendAdminChatMessageBubble(msg) {
+  const stream = document.getElementById('admin-chat-messages-stream');
+  if (!stream) return;
+
+  if (stream.children.length === 1 && stream.children[0].classList.contains('text-center')) {
+    stream.innerHTML = '';
+  }
+
+  const isAgent = msg.nguoiGui === 'AGENT';
+  const isBot = msg.nguoiGui === 'BOT';
+  const timeStr = msg.thoiGian ? fmtLocalDateTime(msg.thoiGian) : '';
+
+  let bubbleHtml = '';
+  if (isAgent) {
+    bubbleHtml = `
+      <div class="flex justify-end gap-2 group animate-in fade-in duration-150">
+        <div class="max-w-[75%] sm:max-w-[65%] space-y-1 text-right">
+          <div class="bg-[#0066FF] text-white p-3 rounded-2xl rounded-tr-xs shadow-2xs text-xs leading-relaxed text-left inline-block">
+            ${escapeAdminChatHtml(msg.noiDung)}
+          </div>
+          <div class="text-[10px] text-slate-400 flex items-center justify-end gap-1 px-1">
+            <span>${timeStr}</span>
+            <i class="fa-solid fa-check-double text-[9px] text-blue-500"></i>
+          </div>
+        </div>
+      </div>
+    `;
+  } else if (isBot) {
+    bubbleHtml = `
+      <div class="flex justify-start gap-2 animate-in fade-in duration-150">
+        <div class="w-7 h-7 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0 border border-blue-200 overflow-hidden p-0.5">
+          <img src="../images/chat-mascot-head.png" alt="SamaBot" class="w-full h-full object-contain">
+        </div>
+        <div class="max-w-[75%] sm:max-w-[65%] space-y-1">
+          <div class="flex items-center gap-1.5 text-[11px] text-slate-500 font-semibold">
+            <span>SamaBot Tự Động</span>
+            <span class="text-[9px] bg-purple-100 text-purple-700 px-1 rounded">BOT</span>
+          </div>
+          <div class="bg-white border border-purple-200 text-slate-800 p-3 rounded-2xl rounded-tl-xs shadow-2xs text-xs leading-relaxed">
+            ${escapeAdminChatHtml(msg.noiDung)}
+          </div>
+          <div class="text-[10px] text-slate-400 px-1">${timeStr}</div>
+        </div>
+      </div>
+    `;
+  } else {
+    bubbleHtml = `
+      <div class="flex justify-start gap-2 group animate-in fade-in duration-150">
+        <div class="w-7 h-7 rounded-xl bg-slate-200 text-slate-700 flex items-center justify-center text-xs font-bold flex-shrink-0">
+          ${(adminChatActiveSession?.khachHangTen || 'KH').substring(0, 2).toUpperCase()}
+        </div>
+        <div class="max-w-[75%] sm:max-w-[65%] space-y-1">
+          <div class="flex items-center gap-1.5 text-[11px] text-slate-600 font-semibold">
+            <span>${escapeAdminChatHtml(adminChatActiveSession?.khachHangTen || 'Khách hàng')}</span>
+          </div>
+          <div class="bg-white border border-slate-200 text-slate-800 p-3 rounded-2xl rounded-tl-xs shadow-2xs text-xs leading-relaxed">
+            ${escapeAdminChatHtml(msg.noiDung)}
+          </div>
+          <div class="text-[10px] text-slate-400 px-1">${timeStr}</div>
+        </div>
+      </div>
+    `;
+  }
+
+  stream.insertAdjacentHTML('beforeend', bubbleHtml);
+}
+
+function scrollAdminChatToBottom() {
+  const stream = document.getElementById('admin-chat-messages-stream');
+  if (stream) {
+    stream.scrollTop = stream.scrollHeight;
+  }
+}
+
+async function sendAdminChatMessage(e) {
+  if (e && e.preventDefault) e.preventDefault();
+  const input = document.getElementById('admin-chat-input');
+  if (!input) return;
+  const text = input.value.trim();
+  if (!text) return;
+  if (!adminChatActiveSessionId) {
+    if (typeof showToast === 'function') showToast('Vui lòng chọn một phiên chat trước khi gửi', 'warning');
+    return;
+  }
+
+  const { staffId } = getAdminStaffInfo();
+
+  try {
+    input.value = '';
+    if (adminChatConnection && adminChatConnection.state === 'Connected') {
+      await adminChatConnection.invoke('SendMessage', adminChatActiveSessionId, 'AGENT', text, staffId);
+    } else {
+      if (typeof showToast === 'function') showToast('Đang kết nối lại với máy chủ chat...', 'warning');
+      await initAdminChatSignalR();
+      if (adminChatConnection && adminChatConnection.state === 'Connected') {
+        await adminChatConnection.invoke('SendMessage', adminChatActiveSessionId, 'AGENT', text, staffId);
+      }
+    }
+  } catch (err) {
+    console.warn('[AdminChat] Gửi tin nhắn thất bại:', err);
+    if (typeof showToast === 'function') showToast('Lỗi gửi tin nhắn: ' + err.message, 'error');
+    input.value = text;
+  }
+}
+
+async function assignActiveChatSession() {
+  if (!adminChatActiveSessionId) return;
+  const { staffId } = getAdminStaffInfo();
+
+  try {
+    const res = await fetch(`${API_BASE}/chat/admin/sessions/${adminChatActiveSessionId}/assign`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ maNV: staffId })
+    });
+    const json = await res.json();
+    if (json.success) {
+      if (typeof showToast === 'function') showToast('Đã tiếp nhận phiên tư vấn thành công!', 'success');
+      if (adminChatActiveSession) adminChatActiveSession.trangThai = 'ACTIVE';
+      selectAdminChatSession(adminChatActiveSessionId);
+    } else {
+      if (typeof showToast === 'function') showToast(json.message || 'Lỗi tiếp nhận phiên', 'error');
+    }
+  } catch (err) {
+    if (typeof showToast === 'function') showToast('Lỗi: ' + err.message, 'error');
+  }
+}
+
+async function closeActiveChatSession() {
+  if (!adminChatActiveSessionId) return;
+  if (!confirm('Bạn có chắc chắn muốn đóng và kết thúc phiên tư vấn này?')) return;
+
+  try {
+    const res = await fetch(`${API_BASE}/chat/sessions/${adminChatActiveSessionId}/close`, {
+      method: 'POST'
+    });
+    const json = await res.json();
+    if (json.success) {
+      if (typeof showToast === 'function') showToast('Đã đóng phiên tư vấn thành công', 'success');
+      if (adminChatActiveSession) adminChatActiveSession.trangThai = 'CLOSED';
+      selectAdminChatSession(adminChatActiveSessionId);
+    } else {
+      if (typeof showToast === 'function') showToast(json.message || 'Lỗi đóng phiên', 'error');
+    }
+  } catch (err) {
+    if (typeof showToast === 'function') showToast('Lỗi: ' + err.message, 'error');
+  }
+}
+
+function fillAdminReply(text) {
+  const input = document.getElementById('admin-chat-input');
+  if (input) {
+    input.value = text;
+    input.focus();
+  }
+}
+
+function setAdminChatTab(tab) {
+  adminChatCurrentFilter = tab;
+  ['all', 'waiting', 'active'].forEach(t => {
+    const btn = document.getElementById(`btn-chat-tab-${t}`);
+    if (btn) {
+      if (t === tab) {
+        btn.className = 'admin-chat-tab-btn py-1 px-2 rounded-lg bg-white text-[#0066FF] shadow-2xs cursor-pointer text-center truncate';
+      } else {
+        btn.className = 'admin-chat-tab-btn py-1 px-2 rounded-lg text-slate-600 hover:text-slate-900 cursor-pointer text-center truncate';
+      }
+    }
+  });
+  renderAdminChatSessionsList();
+}
+
+function filterAdminChatList() {
+  renderAdminChatSessionsList();
+}
+
+function toggleCustomerInfoPane() {
+  const pane = document.getElementById('admin-chat-customer-pane');
+  if (pane) {
+    pane.classList.toggle('hidden');
+  }
+}
+
+function renderAdminCustomerPane(session) {
+  const typeBadge = document.getElementById('cust-pane-type-badge');
+  const nameEl = document.getElementById('cust-pane-name');
+  const phoneEl = document.getElementById('cust-pane-phone');
+  const makhEl = document.getElementById('cust-pane-makh');
+  const countEl = document.getElementById('cust-pane-orders-count');
+  const listEl = document.getElementById('cust-pane-orders-list');
+
+  if (!session) return;
+
+  if (nameEl) nameEl.textContent = session.khachHangTen || 'Khách hàng vãng lai';
+  if (phoneEl) phoneEl.textContent = session.khachHangSdt || 'Chưa cung cấp';
+  if (makhEl) makhEl.textContent = session.maKH || 'KHACH_LE';
+
+  if (typeBadge) {
+    if (session.maKH) {
+      typeBadge.className = 'px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-800';
+      typeBadge.textContent = 'Khách thành viên';
+    } else {
+      typeBadge.className = 'px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800';
+      typeBadge.textContent = 'Khách vãng lai';
+    }
+  }
+
+  // Tra cứu các đơn hàng online gần nhất của khách
+  let matchedOrders = [];
+  try {
+    const ordersStr = localStorage.getItem('cellphones_online_orders');
+    const localOrders = ordersStr ? JSON.parse(ordersStr) : [];
+    const allOrders = (window.AdminRealtimeData && window.AdminRealtimeData.orders) || localOrders || [];
+
+    if (session.khachHangSdt) {
+      const cleanPhone = session.khachHangSdt.trim();
+      matchedOrders = allOrders.filter(o => 
+        (o.sdt && o.sdt.trim() === cleanPhone) || 
+        (o.khachHangSdt && o.khachHangSdt.trim() === cleanPhone) ||
+        (session.maKH && o.maKH === session.maKH)
+      );
+    }
+  } catch (e) {
+    console.warn('Lỗi tra cứu đơn khách:', e);
+  }
+
+  if (countEl) countEl.textContent = `${matchedOrders.length} đơn`;
+
+  if (listEl) {
+    if (matchedOrders.length === 0) {
+      listEl.innerHTML = `
+        <div class="p-3 text-center text-slate-400 text-xs bg-white rounded-xl border border-slate-200">
+          Chưa tìm thấy đơn hàng online nào với SĐT này.
+        </div>`;
+    } else {
+      listEl.innerHTML = matchedOrders.slice(0, 5).map(o => {
+        const maDH = o.maDH || 'DH-???';
+        const tongTien = o.tongTien ? (o.tongTien.toLocaleString('vi-VN') + 'đ') : '0đ';
+        const trangThai = o.trangThai || 'Chờ xác nhận';
+        const ngay = o.ngayTao ? fmtLocalDateTime(o.ngayTao, true) : 'Gần đây';
+
+        return `
+          <div class="p-2.5 bg-white rounded-xl border border-slate-200/80 hover:border-blue-300 transition-colors text-xs space-y-1">
+            <div class="flex items-center justify-between font-bold">
+              <span class="text-blue-700 font-mono">${maDH}</span>
+              <span class="text-rose-600">${tongTien}</span>
+            </div>
+            <div class="flex items-center justify-between text-[11px] text-slate-500">
+              <span>${ngay}</span>
+              <span class="px-1.5 py-0.2 rounded text-[10px] bg-slate-100 text-slate-700 font-medium">${trangThai}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+  }
+}
+
+function renderAdminChatSection() {
+  initAdminChatSignalR();
+  loadAdminChatSessions(true);
+}
+
+// Gán toàn cục cho giao diện HTML
+window.renderAdminChatSection = renderAdminChatSection;
+window.loadAdminChatSessions = loadAdminChatSessions;
+window.selectAdminChatSession = selectAdminChatSession;
+window.sendAdminChatMessage = sendAdminChatMessage;
+window.assignActiveChatSession = assignActiveChatSession;
+window.closeActiveChatSession = closeActiveChatSession;
+window.fillAdminReply = fillAdminReply;
+window.setAdminChatTab = setAdminChatTab;
+window.filterAdminChatList = filterAdminChatList;
+window.toggleCustomerInfoPane = toggleCustomerInfoPane;
+window.initAdminChatSignalR = initAdminChatSignalR;

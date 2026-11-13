@@ -344,7 +344,11 @@
       }
     };
 
-    window.toggleNotificationPopover = function () {
+    window.toggleNotificationPopover = function (e) {
+      if (window.NotificationCenter && typeof window.NotificationCenter.toggle === 'function') {
+        window.NotificationCenter.toggle(e);
+        return;
+      }
       const pop = document.getElementById('notification-popover');
       if (pop) pop.classList.toggle('hidden');
     };

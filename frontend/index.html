@@ -224,8 +224,8 @@
           <div class="relative">
             <button id="btn-notification-toggle" type="button" onclick="window.toggleNotificationPopover()" class="btn-header-glossy w-11 h-11 sm:w-12 sm:h-12 rounded-full text-[#1E3A8A] flex items-center justify-center active:scale-95 cursor-pointer flex-shrink-0 relative" title="Thông báo">
               <i class="fa-solid fa-bell text-[#2563EB] text-sm sm:text-base"></i>
-              <!-- Badge chấm đỏ báo tin mới (mặc định ẩn, bật lên khi có sự kiện realtime) -->
-              <span id="notification-badge" class="hidden absolute top-2.5 right-2.5 w-2.5 h-2.5 rounded-full bg-rose-500 ring-2 ring-white"></span>
+              <!-- Badge số thông báo mới -->
+              <span id="notification-badge" class="hidden absolute -top-1.5 -right-1.5 bg-[#EF4444] text-white font-extrabold text-[10px] sm:text-[11px] px-1.5 py-0.5 rounded-full shadow-md min-w-[20px] h-[20px] flex items-center justify-center ring-2 ring-white animate-pulse">0</span>
             </button>
 
             <!-- Dropdown Thông Báo Popover -->
@@ -264,7 +264,7 @@
             </button>
 
             <!-- Popup Menu Dropdown: Hồ sơ cá nhân - Đơn hàng của tôi - Cài đặt tài khoản - Đăng xuất -->
-            <div id="customer-avatar-popover" class="hidden absolute right-0 top-full mt-2 w-72 sm:w-80 bg-white rounded-2xl border border-slate-200 shadow-2xl z-50 overflow-hidden divide-y divide-slate-100 animate-in fade-in zoom-in-95 duration-150">
+            <div id="customer-avatar-popover" class="hidden absolute right-0 top-full mt-2 w-80 sm:w-[350px] bg-white rounded-2xl border border-slate-200 shadow-2xl z-50 overflow-hidden divide-y divide-slate-100 animate-in fade-in zoom-in-95 duration-150">
               <!-- Header Thông tin người dùng -->
               <div class="p-4 bg-gradient-to-br from-blue-50 via-indigo-50/40 to-white">
                 <div class="flex items-center gap-3">
@@ -285,48 +285,48 @@
                 </div>
               </div>
 
-              <!-- Danh sách tiện ích: Hồ sơ - Đơn hàng - Cài đặt -->
-              <div class="py-1.5 text-xs font-semibold text-slate-700">
+              <!-- Danh sách tiện ích: Hồ sơ - Đơn hàng - Cài đặt (Đồng bộ nhận diện xanh dương, kích thước rộng rãi) -->
+              <div class="py-2 font-semibold text-slate-700">
                 <!-- 1. Hồ sơ cá nhân -->
-                <a href="javascript:void(0)" onclick="window.handleOpenProfile()" class="flex items-center justify-between px-4 py-2.5 hover:bg-blue-50/70 hover:text-blue-600 transition-colors group cursor-pointer">
-                  <div class="flex items-center gap-3">
-                    <span class="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors shadow-sm"><i class="fa-solid fa-id-badge text-sm"></i></span>
-                    <div>
-                      <span class="block text-slate-800 font-bold group-hover:text-blue-600 text-xs">Hồ sơ cá nhân</span>
-                      <span class="block text-[11px] font-normal text-slate-400">Xem & chỉnh sửa thông tin</span>
+                <a href="javascript:void(0)" onclick="window.handleOpenProfile()" class="flex items-center justify-between gap-3 px-4 sm:px-5 py-3 hover:bg-blue-50/70 hover:text-[#0066FF] transition-colors group cursor-pointer">
+                  <div class="flex items-center gap-3.5 min-w-0 flex-1">
+                    <span class="w-10 h-10 rounded-xl bg-blue-50 text-[#0066FF] flex items-center justify-center group-hover:bg-[#0066FF] group-hover:text-white transition-all shadow-sm flex-shrink-0"><i class="fa-solid fa-id-badge text-base"></i></span>
+                    <div class="min-w-0 flex-1">
+                      <span class="block text-slate-800 font-bold group-hover:text-[#0066FF] text-sm whitespace-nowrap">Hồ sơ cá nhân</span>
+                      <span class="block text-xs font-normal text-slate-500 truncate mt-0.5">Xem & chỉnh sửa thông tin</span>
                     </div>
                   </div>
-                  <i class="fa-solid fa-chevron-right text-[10px] text-slate-300 group-hover:text-blue-500 transition-colors"></i>
+                  <i class="fa-solid fa-chevron-right text-xs text-slate-300 group-hover:text-[#0066FF] transition-colors flex-shrink-0"></i>
                 </a>
 
                 <!-- 2. Đơn hàng của tôi -->
-                <a href="pages/cart.html#orders" onclick="window.closeCustomerAvatarMenu()" class="flex items-center justify-between px-4 py-2.5 hover:bg-emerald-50/70 hover:text-emerald-600 transition-colors group cursor-pointer">
-                  <div class="flex items-center gap-3">
-                    <span class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-colors shadow-sm"><i class="fa-solid fa-box-archive text-sm"></i></span>
-                    <div>
-                      <span class="block text-slate-800 font-bold group-hover:text-emerald-600 text-xs">Đơn hàng của tôi</span>
-                      <span class="block text-[11px] font-normal text-slate-400">Theo dõi giao hàng & đơn hủy</span>
+                <a href="pages/cart.html#orders" onclick="window.closeCustomerAvatarMenu()" class="flex items-center justify-between gap-3 px-4 sm:px-5 py-3 hover:bg-blue-50/70 hover:text-[#0066FF] transition-colors group cursor-pointer">
+                  <div class="flex items-center gap-3.5 min-w-0 flex-1">
+                    <span class="w-10 h-10 rounded-xl bg-blue-50 text-[#0066FF] flex items-center justify-center group-hover:bg-[#0066FF] group-hover:text-white transition-all shadow-sm flex-shrink-0"><i class="fa-solid fa-box-archive text-base"></i></span>
+                    <div class="min-w-0 flex-1">
+                      <span class="block text-slate-800 font-bold group-hover:text-[#0066FF] text-sm whitespace-nowrap">Đơn hàng của tôi</span>
+                      <span class="block text-xs font-normal text-slate-500 truncate mt-0.5">Theo dõi giao hàng & đơn hủy</span>
                     </div>
                   </div>
-                  <span class="text-[10px] bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold px-2 py-0.5 rounded-full">Tra cứu</span>
+                  <span class="text-xs bg-blue-50 text-[#0066FF] border border-blue-200 font-bold px-2.5 py-1 rounded-full whitespace-nowrap flex-shrink-0 group-hover:bg-[#0066FF] group-hover:text-white group-hover:border-[#0066FF] transition-colors">Tra cứu</span>
                 </a>
 
                 <!-- 3. Cài đặt tài khoản -->
-                <a href="javascript:void(0)" onclick="window.handleOpenSettings()" class="flex items-center justify-between px-4 py-2.5 hover:bg-indigo-50/70 hover:text-indigo-600 transition-colors group cursor-pointer">
-                  <div class="flex items-center gap-3">
-                    <span class="w-8 h-8 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center group-hover:bg-purple-600 group-hover:text-white transition-colors shadow-sm"><i class="fa-solid fa-gear text-sm"></i></span>
-                    <div>
-                      <span class="block text-slate-800 font-bold group-hover:text-indigo-600 text-xs">Cài đặt tài khoản</span>
-                      <span class="block text-[11px] font-normal text-slate-400">Mật khẩu, bảo mật & thông báo</span>
+                <a href="javascript:void(0)" onclick="window.handleOpenSettings()" class="flex items-center justify-between gap-3 px-4 sm:px-5 py-3 hover:bg-blue-50/70 hover:text-[#0066FF] transition-colors group cursor-pointer">
+                  <div class="flex items-center gap-3.5 min-w-0 flex-1">
+                    <span class="w-10 h-10 rounded-xl bg-blue-50 text-[#0066FF] flex items-center justify-center group-hover:bg-[#0066FF] group-hover:text-white transition-all shadow-sm flex-shrink-0"><i class="fa-solid fa-gear text-base"></i></span>
+                    <div class="min-w-0 flex-1">
+                      <span class="block text-slate-800 font-bold group-hover:text-[#0066FF] text-sm whitespace-nowrap">Cài đặt tài khoản</span>
+                      <span class="block text-xs font-normal text-slate-500 truncate mt-0.5">Mật khẩu, bảo mật & thông báo</span>
                     </div>
                   </div>
-                  <i class="fa-solid fa-chevron-right text-[10px] text-slate-300 group-hover:text-indigo-500 transition-colors"></i>
+                  <i class="fa-solid fa-chevron-right text-xs text-slate-300 group-hover:text-[#0066FF] transition-colors flex-shrink-0"></i>
                 </a>
               </div>
 
               <!-- 4. Nút Đăng xuất -->
-              <div class="p-2 bg-slate-50/80">
-                <button type="button" onclick="window.closeCustomerAvatarMenu(); if(window.CellphoneSAuth) window.CellphoneSAuth.logout();" class="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-rose-600 hover:bg-rose-50 text-xs font-bold transition-all active:scale-98 cursor-pointer">
+              <div class="p-2.5 bg-slate-50/80">
+                <button type="button" onclick="window.closeCustomerAvatarMenu(); if(window.CellphoneSAuth) window.CellphoneSAuth.logout();" class="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-rose-600 hover:bg-rose-50 text-sm font-bold transition-all active:scale-98 cursor-pointer">
                   <i class="fa-solid fa-arrow-right-from-bracket"></i>
                   <span>Đăng xuất tài khoản</span>
                 </button>
@@ -757,9 +757,155 @@
     </section>
 
     <!-- =========================================================================
-         VUNG NOI DUNG SAN SANG SETUP CAC MUC MOI
+         KHỐI SIÊU SALE 20/11 - TRI ÂN THẦY CÔ (NỀN ĐỎ FLASH SALE ĐIỆN THOẠI & LAPTOP)
          ========================================================================= -->
-        <!-- =========================================================================
+    <section id="section-sieu-sale-20-11" class="pt-6 sm:pt-8 pb-4 bg-[#F8FAFC]">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Banner Chiến Dịch 20/11: Nền trong suốt 100% hòa hợp hoàn toàn với nền trang web, đã xóa bỏ hoàn toàn nền trắng -->
+        <div class="relative w-full select-none z-20 -mb-2 sm:-mb-5 lg:-mb-8">
+          <picture>
+            <source srcset="images/sieu-sale-20-11-transparent.webp?v=3.0" type="image/webp">
+            <img src="images/sieu-sale-20-11-transparent.png?v=3.0" alt="Siêu Sale 20/11 Tri Ân Thầy Cô - Đặc Quyền Học Sinh Sinh Viên Giáo Viên" class="w-full h-auto block select-none drop-shadow-sm" style="image-rendering: -webkit-optimize-contrast; transform: translateZ(0);" />
+          </picture>
+        </div>
+
+        <!-- Khung Nền Đỏ Flash Sale Nối Liền Bục Sân Khấu 3D (Đã xóa viền và hòa hợp nền ngoài) -->
+        <div class="relative w-full rounded-2xl sm:rounded-3xl shadow-xl overflow-hidden border-0 z-10" style="background: linear-gradient(180deg, #9C0E1A 0%, #BA0B1B 15%, #C21321 50%, #9C0E1A 85%, #7A0610 100%);">
+
+          <!-- Header Flash Sale Giờ Vàng + Countdown Timer -->
+          <div class="px-4 sm:px-6 pt-3 sm:pt-4 pb-3 flex flex-wrap items-center justify-between gap-3 border-b border-red-500/30">
+            <div class="flex items-center gap-3 sm:gap-4 flex-wrap sm:flex-nowrap">
+              <!-- 3D Badge: FLASH SALE - GIỜ VÀNG GIÁ SỐC (Khớp 100% ảnh mẫu của User) -->
+              <div class="relative shrink-0 select-none">
+                <picture>
+                  <source srcset="images/flash-sale-badge-transparent.webp?v=1.0" type="image/webp">
+                  <img src="images/flash-sale-badge-transparent.png?v=1.0" alt="Flash Sale - Giờ Vàng Giá Sốc" class="h-14 sm:h-16 lg:h-18 w-auto object-contain drop-shadow-[0_4px_12px_rgba(0,0,0,0.35)] hover:scale-105 transition-transform duration-300" style="image-rendering: -webkit-optimize-contrast;" />
+                </picture>
+              </div>
+
+              <div>
+                <p class="text-amber-200/90 text-xs sm:text-sm font-semibold flex items-center gap-1.5 flex-wrap">
+                  <span class="bg-gradient-to-r from-amber-400 to-yellow-300 text-red-950 px-2 py-0.5 rounded-full text-[10px] sm:text-[11px] font-black uppercase shadow-xs">SIÊU DEAL 20/11</span>
+                  <span>Đặc quyền Học sinh, Sinh viên & Giáo viên • Giảm thêm đến 6.000.000đ khi thu cũ</span>
+                </p>
+              </div>
+            </div>
+
+            <!-- Đồng hồ đếm ngược -->
+            <div class="flex items-center gap-2 bg-black/40 backdrop-blur-xs px-3.5 py-2 rounded-2xl border border-amber-400/40 shadow-inner">
+              <span class="text-amber-300 font-extrabold text-[11px] sm:text-xs uppercase tracking-wider flex items-center gap-1 whitespace-nowrap">
+                <i class="fa-regular fa-clock"></i> Kết thúc sau:
+              </span>
+              <div class="flex items-center gap-1 font-mono font-black text-white text-sm sm:text-base">
+                <span id="sale2011-hours" class="bg-red-950/80 text-amber-300 px-2 py-0.5 rounded-lg border border-amber-400/30 shadow-xs">02</span>
+                <span class="text-amber-300">:</span>
+                <span id="sale2011-minutes" class="bg-red-950/80 text-amber-300 px-2 py-0.5 rounded-lg border border-amber-400/30 shadow-xs">45</span>
+                <span class="text-amber-300">:</span>
+                <span id="sale2011-seconds" class="bg-red-950/80 text-amber-300 px-2 py-0.5 rounded-lg border border-amber-400/30 shadow-xs">30</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Các Tab Danh Mục: 4 Logo 3D Siêu Sale 20/11 Nổi Bật (Điện Thoại, Laptop, Apple, Top Deal) -->
+          <div class="px-2 sm:px-6 py-2 sm:py-3.5 grid grid-cols-4 gap-1.5 sm:gap-3 lg:gap-4 max-w-5xl mx-auto items-center">
+            <!-- 1. Điện Thoại Giảm Sốc -->
+            <button type="button" 
+                    onclick="window.switchSale2011Category('dienthoai')" 
+                    data-sale-cat="dienthoai" 
+                    class="sale2011-tab-btn active relative group flex flex-col items-center justify-center p-1 sm:p-2.5 rounded-2xl cursor-pointer select-none transition-all duration-300 bg-gradient-to-b from-amber-400/25 to-yellow-500/10 border-2 border-amber-300 shadow-[0_4px_20px_rgba(251,191,36,0.35)] scale-102"
+                    aria-label="Điện Thoại Giảm Sốc" title="Điện Thoại Giảm Sốc">
+              <div class="relative w-full flex items-center justify-center py-0.5 sm:py-1">
+                <picture>
+                  <source srcset="images/tab-dienthoai.webp?v=1.0" type="image/webp">
+                  <img src="images/tab-dienthoai.png?v=1.0" alt="Điện Thoại Giảm Sốc" class="h-12 sm:h-20 lg:h-24 w-auto object-contain filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.35)] group-hover:scale-105 transition-transform duration-300" style="image-rendering: -webkit-optimize-contrast;" />
+                </picture>
+              </div>
+              <div class="sale2011-tab-indicator w-8 sm:w-14 h-1 sm:h-1.5 bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-400 rounded-full mt-0.5 sm:mt-1 shadow-[0_0_8px_#fde047] transition-all"></div>
+            </button>
+
+            <!-- 2. Laptop Sinh Viên & GV -->
+            <button type="button" 
+                    onclick="window.switchSale2011Category('laptop')" 
+                    data-sale-cat="laptop" 
+                    class="sale2011-tab-btn relative group flex flex-col items-center justify-center p-1 sm:p-2.5 rounded-2xl cursor-pointer select-none transition-all duration-300 bg-black/25 hover:bg-black/40 border border-white/10 opacity-75 hover:opacity-100 hover:scale-102"
+                    aria-label="Laptop Sinh Viên & GV" title="Laptop Sinh Viên & GV">
+              <div class="relative w-full flex items-center justify-center py-0.5 sm:py-1">
+                <picture>
+                  <source srcset="images/tab-laptop.webp?v=1.0" type="image/webp">
+                  <img src="images/tab-laptop.png?v=1.0" alt="Laptop Sinh Viên & GV" class="h-12 sm:h-20 lg:h-24 w-auto object-contain filter drop-shadow-[0_2px_6px_rgba(0,0,0,0.25)] group-hover:scale-105 transition-transform duration-300" style="image-rendering: -webkit-optimize-contrast;" />
+                </picture>
+              </div>
+              <div class="sale2011-tab-indicator opacity-0 w-8 sm:w-14 h-1 sm:h-1.5 bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-400 rounded-full mt-0.5 sm:mt-1 shadow-[0_0_8px_#fde047] transition-all"></div>
+            </button>
+
+            <!-- 3. Siêu Phẩm Apple -->
+            <button type="button" 
+                    onclick="window.switchSale2011Category('apple')" 
+                    data-sale-cat="apple" 
+                    class="sale2011-tab-btn relative group flex flex-col items-center justify-center p-1 sm:p-2.5 rounded-2xl cursor-pointer select-none transition-all duration-300 bg-black/25 hover:bg-black/40 border border-white/10 opacity-75 hover:opacity-100 hover:scale-102"
+                    aria-label="Siêu Phẩm Apple" title="Siêu Phẩm Apple">
+              <div class="relative w-full flex items-center justify-center py-0.5 sm:py-1">
+                <picture>
+                  <source srcset="images/tab-apple.webp?v=1.0" type="image/webp">
+                  <img src="images/tab-apple.png?v=1.0" alt="Siêu Phẩm Apple" class="h-12 sm:h-20 lg:h-24 w-auto object-contain filter drop-shadow-[0_2px_6px_rgba(0,0,0,0.25)] group-hover:scale-105 transition-transform duration-300" style="image-rendering: -webkit-optimize-contrast;" />
+                </picture>
+              </div>
+              <div class="sale2011-tab-indicator opacity-0 w-8 sm:w-14 h-1 sm:h-1.5 bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-400 rounded-full mt-0.5 sm:mt-1 shadow-[0_0_8px_#fde047] transition-all"></div>
+            </button>
+
+            <!-- 4. Top Deal 20/11 -->
+            <button type="button" 
+                    onclick="window.switchSale2011Category('all')" 
+                    data-sale-cat="all" 
+                    class="sale2011-tab-btn relative group flex flex-col items-center justify-center p-1 sm:p-2.5 rounded-2xl cursor-pointer select-none transition-all duration-300 bg-black/25 hover:bg-black/40 border border-white/10 opacity-75 hover:opacity-100 hover:scale-102"
+                    aria-label="Top Deal 20/11" title="Top Deal 20/11">
+              <div class="relative w-full flex items-center justify-center py-0.5 sm:py-1">
+                <picture>
+                  <source srcset="images/tab-topdeal.webp?v=1.0" type="image/webp">
+                  <img src="images/tab-topdeal.png?v=1.0" alt="Top Deal 20/11" class="h-12 sm:h-20 lg:h-24 w-auto object-contain filter drop-shadow-[0_2px_6px_rgba(0,0,0,0.25)] group-hover:scale-105 transition-transform duration-300" style="image-rendering: -webkit-optimize-contrast;" />
+                </picture>
+              </div>
+              <div class="sale2011-tab-indicator opacity-0 w-8 sm:w-14 h-1 sm:h-1.5 bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-400 rounded-full mt-0.5 sm:mt-1 shadow-[0_0_8px_#fde047] transition-all"></div>
+            </button>
+          </div>
+
+          <!-- Carousel Sản Phẩm Flash Sale (Nền Đỏ Lễ Hội Rực Rỡ) -->
+          <div class="relative group/sale2011 px-2 sm:px-4 py-2 sm:py-3">
+            <div id="sale2011-viewport" class="overflow-hidden w-full">
+              <div id="sale2011-track" class="flex transition-transform duration-500 ease-out">
+                <!-- Render động qua sieu-sale-20-11.js -->
+              </div>
+            </div>
+
+            <!-- Nút Next & Prev Lướt Sản Phẩm -->
+            <button type="button" onclick="window.prevSale2011()" class="absolute left-1 sm:left-2 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white text-red-600 shadow-xl border border-red-100 flex items-center justify-center hover:bg-amber-400 hover:text-red-950 hover:scale-110 active:scale-95 transition-all z-20 cursor-pointer" aria-label="Trước">
+              <i class="fa-solid fa-chevron-left text-sm sm:text-base"></i>
+            </button>
+            <button type="button" onclick="window.nextSale2011()" class="absolute right-1 sm:right-2 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white text-red-600 shadow-xl border border-red-100 flex items-center justify-center hover:bg-amber-400 hover:text-red-950 hover:scale-110 active:scale-95 transition-all z-20 cursor-pointer" aria-label="Tiếp">
+              <i class="fa-solid fa-chevron-right text-sm sm:text-base"></i>
+            </button>
+          </div>
+
+          <!-- Footer Dải Cam Kết & Nút Xem Thêm Deal -->
+          <div class="px-4 sm:px-6 pb-4 sm:pb-5 pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-amber-100/90 border-t border-red-500/30">
+            <div class="flex items-center gap-3 sm:gap-5 flex-wrap justify-center sm:justify-start">
+              <span class="flex items-center gap-1.5"><i class="fa-solid fa-shield-halved text-amber-300"></i> Bảo hành chính hãng 12 - 24 tháng</span>
+              <span class="flex items-center gap-1.5"><i class="fa-solid fa-arrows-rotate text-amber-300"></i> Bán cũ lên đời trợ giá đến 6 Triệu</span>
+              <span class="flex items-center gap-1.5"><i class="fa-solid fa-graduation-cap text-amber-300"></i> HSSV & Giáo viên giảm thêm 500k</span>
+            </div>
+            <a href="pages/category.html?cat=dienthoai" class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-amber-400 to-yellow-300 hover:from-amber-300 hover:to-yellow-200 text-red-950 font-extrabold text-xs shadow-lg transition-transform hover:scale-105 active:scale-95 whitespace-nowrap">
+              <span>Xem tất cả Deal 20/11</span>
+              <i class="fa-solid fa-arrow-right text-[11px]"></i>
+            </a>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================================================================
          KHỐI TRẠM TIẾP SỨC ONLINE - GIÁ TỐT MỖI NGÀY (Chuẩn 100% mẫu người dùng gửi)
          ========================================================================= -->
     <section id="section-tram-tiep-suc" class="pt-20 sm:pt-28 lg:pt-36 pb-10 bg-[#F8FAFC]">
@@ -808,10 +954,10 @@
               </div>
 
               <!-- Nút Next & Prev Lướt Sản Phẩm (Nút tròn đầy đặn, không bị cắt viền) -->
-              <button type="button" onclick="window.prevDealProduct()" class="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 rounded-full bg-white text-[#0057B7] shadow-[0_4px_14px_rgba(0,0,0,0.18)] border border-slate-200/90 flex items-center justify-center hover:bg-[#0057B7] hover:text-white hover:border-[#0057B7] hover:scale-110 active:scale-95 transition-all z-30 cursor-pointer" aria-label="Sản phẩm trước">
+              <button type="button" onclick="window.prevDealProduct()" class="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 rounded-full bg-white text-[#0066FF] shadow-[0_4px_14px_rgba(0,0,0,0.18)] border border-slate-200/90 flex items-center justify-center hover:bg-[#0066FF] hover:text-white hover:border-[#0066FF] hover:scale-110 active:scale-95 transition-all z-30 cursor-pointer" aria-label="Sản phẩm trước">
                 <i class="fa-solid fa-chevron-left text-xs sm:text-sm"></i>
               </button>
-              <button type="button" onclick="window.nextDealProduct()" class="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 rounded-full bg-white text-[#0057B7] shadow-[0_4px_14px_rgba(0,0,0,0.18)] border border-slate-200/90 flex items-center justify-center hover:bg-[#0057B7] hover:text-white hover:border-[#0057B7] hover:scale-110 active:scale-95 transition-all z-30 cursor-pointer" aria-label="Sản phẩm tiếp theo">
+              <button type="button" onclick="window.nextDealProduct()" class="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 rounded-full bg-white text-[#0066FF] shadow-[0_4px_14px_rgba(0,0,0,0.18)] border border-slate-200/90 flex items-center justify-center hover:bg-[#0066FF] hover:text-white hover:border-[#0066FF] hover:scale-110 active:scale-95 transition-all z-30 cursor-pointer" aria-label="Sản phẩm tiếp theo">
                 <i class="fa-solid fa-chevron-right text-xs sm:text-sm"></i>
               </button>
             </div>
@@ -930,7 +1076,7 @@
 
         <!-- 4. Nút Xem Thêm Sản Phẩm (Nằm cân đối ngay dưới đáy của khối) -->
         <div id="dual-tab-more-container" class="mt-7 text-center">
-          <button id="btn-dual-tab-load-more" type="button" onclick="window.loadMoreDualProducts()" class="px-8 py-2.5 rounded-xl bg-[#0057B7] hover:bg-[#004494] shadow-md shadow-blue-500/20 text-white font-bold text-xs sm:text-sm inline-flex items-center gap-2 transition-all cursor-pointer shadow-md active:scale-95">
+          <button id="btn-dual-tab-load-more" type="button" onclick="window.loadMoreDualProducts()" class="px-8 py-2.5 rounded-xl bg-[#0066FF] hover:bg-[#0052cc] shadow-md shadow-blue-500/20 text-white font-bold text-xs sm:text-sm inline-flex items-center gap-2 transition-all cursor-pointer shadow-md active:scale-95">
             <span>Xem thêm sản phẩm</span>
             <i class="fa-solid fa-chevron-down text-xs"></i>
           </button>
@@ -973,7 +1119,7 @@
 
           <!-- Thanh Phân Trang 2 Vạch (Pagination Indicators: 2 Pills Dài) -->
           <div class="mt-4 flex items-center justify-center gap-2">
-            <button type="button" onclick="window.goToAccessorySlide(0)" id="accessory-dot-0" class="h-1 w-8 rounded-full bg-[#0057B7] transition-all cursor-pointer" aria-label="Trang 1"></button>
+            <button type="button" onclick="window.goToAccessorySlide(0)" id="accessory-dot-0" class="h-1 w-8 rounded-full bg-[#0066FF] transition-all cursor-pointer" aria-label="Trang 1"></button>
             <button type="button" onclick="window.goToAccessorySlide(1)" id="accessory-dot-1" class="h-1 w-8 rounded-full bg-slate-200 hover:bg-slate-300 transition-all cursor-pointer" aria-label="Trang 2"></button>
           </div>
 
@@ -1046,7 +1192,7 @@
 
         <!-- 4. Nút Xem Thêm Sản Phẩm (Nằm cân đối ngay dưới đáy của khối) -->
         <div id="laptop-pc-more-container" class="mt-7 text-center">
-          <button id="btn-laptop-pc-load-more" type="button" onclick="window.loadMoreLaptopPcProducts()" class="px-8 py-2.5 rounded-xl bg-[#0057B7] hover:bg-[#004494] shadow-md shadow-blue-500/20 text-white font-bold text-xs sm:text-sm inline-flex items-center gap-2 transition-all cursor-pointer shadow-md active:scale-95">
+          <button id="btn-laptop-pc-load-more" type="button" onclick="window.loadMoreLaptopPcProducts()" class="px-8 py-2.5 rounded-xl bg-[#0066FF] hover:bg-[#0052cc] shadow-md shadow-blue-500/20 text-white font-bold text-xs sm:text-sm inline-flex items-center gap-2 transition-all cursor-pointer shadow-md active:scale-95">
             <span>Xem thêm sản phẩm Laptop</span>
             <i class="fa-solid fa-chevron-down text-xs"></i>
           </button>
@@ -1094,7 +1240,7 @@
 
           <!-- 4. Nút Xem Thêm Sản Phẩm -->
           <div id="mouse-more-container" class="mt-6 text-center">
-            <button id="btn-mouse-load-more" type="button" onclick="window.loadMoreMouseProducts()" class="px-8 py-2.5 rounded-xl bg-[#0057B7] hover:bg-[#004494] shadow-md shadow-blue-500/20 text-white font-bold text-xs sm:text-sm inline-flex items-center gap-2 transition-all cursor-pointer shadow-md active:scale-95">
+            <button id="btn-mouse-load-more" type="button" onclick="window.loadMoreMouseProducts()" class="px-8 py-2.5 rounded-xl bg-[#0066FF] hover:bg-[#0052cc] shadow-md shadow-blue-500/20 text-white font-bold text-xs sm:text-sm inline-flex items-center gap-2 transition-all cursor-pointer shadow-md active:scale-95">
               <span>Xem thêm sản phẩm</span>
               <i class="fa-solid fa-chevron-down text-xs"></i>
             </button>
@@ -1152,7 +1298,7 @@
 
           <!-- 4. Nút Xem Thêm Sản Phẩm -->
           <div id="audio-more-container" class="mt-6 text-center">
-            <button id="btn-audio-load-more" type="button" onclick="window.loadMoreAudioProducts()" class="px-8 py-2.5 rounded-xl bg-[#0057B7] hover:bg-[#004494] shadow-md shadow-blue-500/20 text-white font-bold text-xs sm:text-sm inline-flex items-center gap-2 transition-all cursor-pointer shadow-md active:scale-95">
+            <button id="btn-audio-load-more" type="button" onclick="window.loadMoreAudioProducts()" class="px-8 py-2.5 rounded-xl bg-[#0066FF] hover:bg-[#0052cc] shadow-md shadow-blue-500/20 text-white font-bold text-xs sm:text-sm inline-flex items-center gap-2 transition-all cursor-pointer shadow-md active:scale-95">
               <span>Xem thêm sản phẩm</span>
               <i class="fa-solid fa-chevron-down text-xs"></i>
             </button>
@@ -1211,7 +1357,7 @@
           <!-- 4. Thanh Điều Hướng Đáy: Nút Xem Thêm & Link Xem Tất Cả -->
           <div id="watch-more-container" class="mt-6 flex items-center justify-between">
             <div class="flex-1 text-center">
-              <button id="btn-watch-load-more" type="button" onclick="window.loadMoreWatchProducts()" class="px-8 py-2.5 rounded-xl bg-[#0057B7] hover:bg-[#004494] shadow-md shadow-blue-500/20 text-white font-bold text-xs sm:text-sm inline-flex items-center gap-2 transition-all cursor-pointer shadow-md active:scale-95">
+              <button id="btn-watch-load-more" type="button" onclick="window.loadMoreWatchProducts()" class="px-8 py-2.5 rounded-xl bg-[#0066FF] hover:bg-[#0052cc] shadow-md shadow-blue-500/20 text-white font-bold text-xs sm:text-sm inline-flex items-center gap-2 transition-all cursor-pointer shadow-md active:scale-95">
                 <span>Xem thêm 115 sản phẩm</span>
                 <i class="fa-solid fa-chevron-down text-xs"></i>
               </button>
@@ -1274,7 +1420,7 @@
 
           <!-- 4. Nút Xem Thêm Sản Phẩm (Màu xanh dương) -->
           <div id="tivi-more-container" class="mt-6 text-center">
-            <button id="btn-tivi-load-more" type="button" onclick="window.loadMoreTiviProducts()" class="px-8 py-2.5 rounded-xl bg-[#0057B7] hover:bg-[#004494] text-white font-bold text-xs sm:text-sm inline-flex items-center gap-2 transition-all cursor-pointer shadow-md shadow-blue-500/20 active:scale-95">
+            <button id="btn-tivi-load-more" type="button" onclick="window.loadMoreTiviProducts()" class="px-8 py-2.5 rounded-xl bg-[#0066FF] hover:bg-[#0052cc] text-white font-bold text-xs sm:text-sm inline-flex items-center gap-2 transition-all cursor-pointer shadow-md shadow-blue-500/20 active:scale-95">
               <span>Xem thêm sản phẩm</span>
               <i class="fa-solid fa-chevron-down text-xs"></i>
             </button>
@@ -1322,7 +1468,7 @@
 
           <!-- 4. Nút Xem Thêm Sản Phẩm (Màu xanh dương) -->
           <div id="air-more-container" class="mt-6 text-center">
-            <button id="btn-air-load-more" type="button" onclick="window.loadMoreAirProducts()" class="px-8 py-2.5 rounded-xl bg-[#0057B7] hover:bg-[#004494] text-white font-bold text-xs sm:text-sm inline-flex items-center gap-2 transition-all cursor-pointer shadow-md shadow-blue-500/20 active:scale-95">
+            <button id="btn-air-load-more" type="button" onclick="window.loadMoreAirProducts()" class="px-8 py-2.5 rounded-xl bg-[#0066FF] hover:bg-[#0052cc] text-white font-bold text-xs sm:text-sm inline-flex items-center gap-2 transition-all cursor-pointer shadow-md shadow-blue-500/20 active:scale-95">
               <span>Xem thêm sản phẩm</span>
               <i class="fa-solid fa-chevron-down text-xs"></i>
             </button>
@@ -1370,7 +1516,7 @@
 
           <!-- 4. Nút Xem Thêm Sản Phẩm (Màu xanh dương) -->
           <div id="purifier-more-container" class="mt-6 text-center">
-            <button id="btn-purifier-load-more" type="button" onclick="window.loadMorePurifierProducts()" class="px-8 py-2.5 rounded-xl bg-[#0057B7] hover:bg-[#004494] text-white font-bold text-xs sm:text-sm inline-flex items-center gap-2 transition-all cursor-pointer shadow-md shadow-blue-500/20 active:scale-95">
+            <button id="btn-purifier-load-more" type="button" onclick="window.loadMorePurifierProducts()" class="px-8 py-2.5 rounded-xl bg-[#0066FF] hover:bg-[#0052cc] text-white font-bold text-xs sm:text-sm inline-flex items-center gap-2 transition-all cursor-pointer shadow-md shadow-blue-500/20 active:scale-95">
               <span>Xem thêm sản phẩm</span>
               <i class="fa-solid fa-chevron-down text-xs"></i>
             </button>
@@ -1564,8 +1710,14 @@
 
       <!-- Bản quyền & Lưu ý -->
       <div class="pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-slate-500">
-        <div>
-          © 2026 SAMAMOBILE.COM - 241 Lê Văn Việt. Hệ thống bán lẻ thiết bị công nghệ chính hãng.
+        <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
+          <span>© 2026 SAMAMOBILE.COM - 241 Lê Văn Việt. Hệ thống bán lẻ thiết bị công nghệ chính hãng.</span>
+          <button type="button" onclick="window.CookieConsent.reopenCookieSettings()" class="hover:text-blue-400 underline transition-colors cursor-pointer text-xs flex items-center gap-1">
+            <i class="fa-solid fa-cookie-bite text-amber-400"></i>Cài đặt Cookies
+          </button>
+          <button type="button" onclick="window.CookieConsent.reopenCampaignModal()" class="hover:text-amber-400 underline transition-colors cursor-pointer text-xs flex items-center gap-1">
+            <i class="fa-solid fa-gift text-amber-400"></i>Siêu Sale 20/11
+          </button>
         </div>
         <div class="flex items-center gap-4 text-base text-slate-400">
           <a href="#" class="hover:text-[#60A5FA] transition-colors" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
@@ -1727,7 +1879,7 @@
 
           <!-- Nút Submit trong Modal -->
           <div class="pt-4">
-            <button type="submit" class="w-full py-4 rounded-xl bg-[#0057B7] hover:bg-[#004494] text-white font-extrabold text-base shadow-xl shadow-blue-600/30 active:scale-95 transition-all">
+            <button type="submit" class="w-full py-4 rounded-xl bg-[#0066FF] hover:bg-[#0052cc] text-white font-extrabold text-base shadow-xl shadow-blue-600/30 active:scale-95 transition-all">
               <i class="fa-solid fa-check mr-2"></i> Xác Nhận Đặt Hàng Ngay
             </button>
             <p class="text-[11px] text-slate-400 text-center mt-2">
@@ -1795,7 +1947,7 @@
       </div>
 
       <div>
-        <button type="button" class="btn-close-success w-full py-3.5 rounded-xl bg-[#0057B7] hover:bg-[#004494] text-white font-bold text-sm shadow-md transition-all">
+        <button type="button" class="btn-close-success w-full py-3.5 rounded-xl bg-[#0066FF] hover:bg-[#0052cc] text-white font-bold text-sm shadow-md transition-all">
           Hoàn Tất & Tiếp Tục Xem Trang
         </button>
       </div>
@@ -1832,7 +1984,7 @@
       <button type="button" data-installment="true" class="btn-open-order px-3 py-2 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold border border-slate-300">
         Trả góp 0%
       </button>
-      <button type="button" class="btn-open-order px-5 py-2.5 rounded-xl bg-[#0057B7] text-white text-xs font-extrabold shadow-md shadow-blue-600/25 active:scale-95">
+      <button type="button" class="btn-open-order px-5 py-2.5 rounded-xl bg-[#0066FF] hover:bg-[#0052cc] text-white text-xs font-extrabold shadow-md shadow-blue-500/25 active:scale-95 transition-all">
         <i class="fa-solid fa-cart-shopping mr-1"></i> Mua Ngay
       </button>
     </div>
@@ -1886,7 +2038,7 @@
             </div>
           </div>
 
-          <button type="submit" class="w-full py-3 rounded-xl bg-[#0057B7] hover:bg-[#004494] text-white font-bold text-sm shadow-md shadow-blue-600/25 active:scale-95 transition-all">
+          <button type="submit" class="w-full py-3 rounded-xl bg-[#0066FF] hover:bg-[#0052cc] text-white font-bold text-sm shadow-md shadow-blue-600/25 active:scale-95 transition-all">
             <i class="fa-solid fa-right-to-bracket mr-2"></i> <span>Đăng Nhập</span>
           </button>
         </form>
@@ -1972,7 +2124,7 @@
         </div>
         <h4 class="font-bold text-sm text-navy">Giỏ hàng của bạn đang trống</h4>
         <p class="text-xs text-slate-400 max-w-xs mx-auto">Hãy dạo xem các siêu phẩm điện thoại & phụ kiện chính hãng tại CellphoneS - 241 Lê Văn Việt nhé!</p>
-        <button type="button" onclick="window.CellphoneSCart.closeDrawer()" class="mt-2 px-5 py-2.5 rounded-xl bg-[#0057B7] hover:bg-[#004494] text-white font-bold text-xs shadow-md transition-all">
+        <button type="button" onclick="window.CellphoneSCart.closeDrawer()" class="mt-2 px-5 py-2.5 rounded-xl bg-[#0066FF] hover:bg-[#0052cc] text-white font-bold text-xs shadow-md transition-all">
           Khám Phá Sản Phẩm Ngay
         </button>
       </div>
@@ -2261,7 +2413,7 @@
       </div>
 
       <div class="flex items-center gap-2">
-        <button type="button" onclick="window.CellphoneSCheckout.closeThankYou()" class="flex-1 py-3 rounded-xl bg-[#0057B7] hover:bg-[#004494] text-white font-bold text-xs shadow-md transition-all">
+        <button type="button" onclick="window.CellphoneSCheckout.closeThankYou()" class="flex-1 py-3 rounded-xl bg-[#0066FF] hover:bg-[#0052cc] text-white font-bold text-xs shadow-md transition-all">
           Tiếp Tục Mua Sắm
         </button>
         <button type="button" onclick="window.CellphoneSCheckout.closeThankYou(); window.CellphoneSLookup.openModal('order');" class="py-3 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-colors">
@@ -2570,7 +2722,7 @@
           </div>
 
           <!-- Nút Submit Tiếp Tục -->
-          <button id="btn-customer-do-login" type="button" onclick="window.handleMainLoginSubmit()" class="w-full py-3 rounded-xl bg-[#0057B7] hover:bg-[#0b45a6] text-white font-extrabold text-sm shadow-md shadow-blue-900/20 active:scale-[0.98] transition-all cursor-pointer">
+          <button id="btn-customer-do-login" type="button" onclick="window.handleMainLoginSubmit()" class="w-full py-3 rounded-xl bg-[#0066FF] hover:bg-[#0052cc] text-white font-extrabold text-sm shadow-md shadow-blue-500/25 active:scale-[0.98] transition-all cursor-pointer">
             Tiếp tục
           </button>
 
@@ -2753,22 +2905,10 @@
   <!-- =========================================================================
        FLOATING ACTION BUTTONS (ZALO, HOTLINE, BACK TO TOP)
        ========================================================================= -->
-  <div class="fixed right-4 bottom-20 md:bottom-8 z-40 flex flex-col gap-2.5 items-center">
-    <!-- Nút Gọi Hotline (Điện thoại màu xanh lá cây) -->
-    <a href="tel:18006868" class="w-12 h-12 rounded-full bg-[#22c55e] hover:bg-[#16a34a] text-white flex items-center justify-center shadow-xl shadow-green-500/40 hover:scale-110 active:scale-95 transition-all" title="Gọi Hotline: 1800 6868">
-      <i class="fa-solid fa-phone text-lg animate-pulse"></i>
-    </a>
-
-    <!-- Nút Zalo Chat (Zalo màu xanh nước biển #0068ff) -->
-    <a href="https://zalo.me" target="_blank" rel="noopener noreferrer" class="w-12 h-12 rounded-full bg-[#0068ff] hover:bg-[#0054d1] text-white flex items-center justify-center shadow-xl shadow-blue-600/40 hover:scale-110 active:scale-95 transition-all text-sm font-black" title="Chat Zalo Tư Vấn">
-      Zalo
-    </a>
-
-    <!-- Nút Cuộn về đầu trang (Back to Top) -->
-    <button id="btn-back-to-top" type="button" class="hidden w-10 h-10 rounded-full bg-slate-800/80 hover:bg-slate-900 text-white flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-all cursor-pointer" aria-label="Lên đầu trang">
-      <i class="fa-solid fa-chevron-up text-xs"></i>
-    </button>
-  </div>
+  <!-- Nút Cuộn về đầu trang (Back to Top) -->
+  <button id="btn-back-to-top" type="button" class="hidden fixed right-4 sm:right-6 bottom-20 md:bottom-24 z-40 w-10 h-10 rounded-full bg-slate-800/80 hover:bg-slate-900 text-white flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-all cursor-pointer" aria-label="Lên đầu trang">
+    <i class="fa-solid fa-chevron-up text-xs"></i>
+  </button>
 
   <!-- =========================================================================
        THANH ĐIỀU HƯỚNG ĐÁY MOBILE (MOBILE BOTTOM BAR - CELLPHONES STYLE)
@@ -2804,18 +2944,21 @@
   <!-- GOOGLE IDENTITY SERVICES SDK (Xác thực Google OAuth thật) -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.7/signalr.min.js"></script>
-  <script src="js/order-signalr.js?v=1.2"></script>
+  <script src="js/order-signalr.js?v=1.3"></script>
+  <script src="js/chat-widget.js?v=1.0"></script>
   <script src="js/api.js?v=3.2"></script>
   <script src="js/store-data.js?v=3.8"></script>
   <script src="js/cart.js?v=3.7"></script>
   <script src="js/checkout.js?v=3.3"></script>
   <script src="js/customer-portal.js?v=3.4"></script>
   <script src="js/lookup.js?v=3.4"></script>
-  <script src="js/compare.js?v=1.0"></script>
+  <script src="js/compare.js?v=2.0"></script>
   <script src="js/trade-in.js?v=1.0"></script>
   <script src="js/product-modal.js?v=3.7"></script>
   <script src="js/auth.js?v=3.3"></script>
   <script src="js/customer-store.js?v=6.5"></script>
+  <script src="js/sieu-sale-20-11.js?v=2.0"></script>
+  <script src="js/cookie-consent.js?v=2.0"></script>
   <script src="js/recently-viewed.js?v=6.5"></script>
   <script src="js/floating-promo.js?v=1.2"></script>
   <script src="js/main.js?v=3.2"></script>
@@ -2884,6 +3027,95 @@
         <!-- Render động bằng compare.js -->
       </div>
     </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL: CHIẾN DỊCH CHÀO MỪNG SIÊU SALE 20/11 (BLUE 3D BANNER)
+       - Không nền mờ trắng (Trang web phía sau hiển thị tự nhiên, không bị mờ đục)
+       - Banner nổi bật sắc nét kèm nút Exit
+       ========================================================================= -->
+  <div id="welcome-campaign-modal" 
+       class="hidden fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-6 bg-transparent overflow-y-auto" 
+       onclick="if(event.target===this) window.CookieConsent.closeCampaignModal(true)">
+    
+    <div class="relative w-full max-w-3xl lg:max-w-[820px] select-none animate-in zoom-in-95 duration-300">
+      
+      <!-- Nút Exit đóng popup nổi bật góc trên bên phải -->
+      <button type="button" 
+              onclick="window.CookieConsent.closeCampaignModal(true)" 
+              class="absolute -top-3.5 -right-3.5 sm:-top-4 sm:-right-4 z-30 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-slate-900/90 hover:bg-rose-600 text-white flex items-center justify-center text-sm sm:text-lg shadow-2xl border-2 border-white transition-all cursor-pointer hover:scale-110 active:scale-90" 
+              aria-label="Đóng popup (Exit)" 
+              title="Đóng popup">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Ảnh banner 20/11 nguyên bản sắc nét, bấm vào cuộn ngay đến khu vực sale -->
+      <div class="relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_25px_60px_-15px_rgba(0,0,0,0.5)] cursor-pointer group" 
+           onclick="window.CookieConsent.goToSale2011()" 
+           title="Khám phá ngay Siêu Sale 20/11">
+        <img src="images/6ac19e8a-e5dc-486e-a50b-0093f34babf2.webp" 
+             alt="Siêu Sale 20/11 - Tri Ân Thầy Cô" 
+             class="w-full h-auto object-cover block rounded-2xl sm:rounded-3xl transform group-hover:scale-[1.015] transition-transform duration-300">
+        
+        <!-- Hiệu ứng sáng nhẹ khi rê chuột -->
+        <div class="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none rounded-2xl sm:rounded-3xl"></div>
+      </div>
+
+      <!-- Thanh điều khiển chân banner: Tùy chọn Không hiện lại & Đóng -->
+      <div class="mt-3 flex items-center justify-between px-1 text-white">
+        <label class="inline-flex items-center gap-2 cursor-pointer select-none text-xs sm:text-sm font-medium text-white/90 hover:text-white transition-colors bg-slate-900/80 hover:bg-slate-900 px-3.5 py-1.5 rounded-full backdrop-blur-md border border-white/20 shadow-lg" onclick="event.stopPropagation()">
+          <input type="checkbox" id="chk-dont-show-campaign-again" class="w-4 h-4 rounded text-[#0066FF] focus:ring-0 cursor-pointer accent-[#0066FF]">
+          <span>Không hiển thị lại nữa</span>
+        </label>
+
+        <button type="button" 
+                onclick="window.CookieConsent.closeCampaignModal(true)" 
+                class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-medium text-white/90 hover:text-white bg-slate-900/80 hover:bg-rose-600 px-4 py-1.5 rounded-full backdrop-blur-md border border-white/20 shadow-lg transition-all cursor-pointer">
+          <i class="fa-solid fa-xmark text-xs"></i>
+          <span>Đóng</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       COOKIE CONSENT POPUP (KIỂU SÁNG TRẮNG - TIẾNG VIỆT - BO GÓC NHẸ 4PX - GÓC PHẢI)
+       ========================================================================= -->
+  <div id="cookie-consent-bar" 
+       class="hidden fixed bottom-20 right-4 left-4 sm:left-auto sm:right-6 sm:bottom-6 z-[9990] w-auto sm:w-[380px] bg-white text-slate-800 rounded-[4px] p-5 sm:p-6 shadow-[0_20px_50px_rgba(0,0,0,0.18)] border border-slate-300 flex flex-col animate-in fade-in slide-in-from-bottom-6 duration-300">
+    
+    <!-- Header: Tiêu đề Tiếng Việt + Nút đóng (X) bo góc nhẹ 4px -->
+    <div class="flex items-center justify-between">
+      <h3 class="font-black text-slate-900 text-lg sm:text-xl tracking-tight">Cài đặt Cookies</h3>
+      <button type="button" 
+              onclick="window.CookieConsent.hideCookieBar()" 
+              class="w-8 h-8 rounded-[4px] hover:bg-slate-100 text-slate-400 hover:text-slate-800 flex items-center justify-center transition-colors cursor-pointer text-base" 
+              aria-label="Đóng cài đặt Cookies"
+              title="Đóng">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <!-- Nội dung mô tả chuẩn tiếng Việt -->
+    <p class="text-xs sm:text-[13px] text-slate-600 leading-relaxed mt-2.5 mb-5 font-normal">
+      Chúng tôi sử dụng cookies và công nghệ tương tự để cá nhân hóa nội dung, tối ưu ưu đãi và mang lại trải nghiệm mua sắm tốt hơn. Bằng việc nhấn Chấp nhận, bạn đồng ý với Chính sách Cookies của chúng tôi.
+    </p>
+
+    <!-- 2 Nút hành động Tiếng Việt (Bo góc nhẹ 4px): Chấp nhận (Xanh dương) & Tùy chọn (Xám) -->
+    <div class="grid grid-cols-2 gap-3 items-center">
+      <button type="button" 
+              onclick="window.CookieConsent.acceptAllCookies()" 
+              class="w-full py-2.5 sm:py-3 px-4 rounded-[4px] bg-blue-600 hover:bg-blue-700 text-white font-black text-xs sm:text-sm shadow-md shadow-blue-600/30 active:scale-95 transition-all text-center cursor-pointer">
+        Chấp nhận
+      </button>
+      <button type="button" 
+              onclick="window.CookieConsent.acceptEssentialCookies()" 
+              class="w-full py-2.5 sm:py-3 px-4 rounded-[4px] bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold text-xs sm:text-sm active:scale-95 transition-all text-center cursor-pointer">
+        Tùy chọn
+      </button>
+    </div>
+
   </div>
 
 

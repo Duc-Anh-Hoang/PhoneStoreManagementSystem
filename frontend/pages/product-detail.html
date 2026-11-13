@@ -59,24 +59,49 @@
 
     /* Selected Badge Checkmark (Chuẩn Hoàng Hà Mobile & Screenshot) */
     .variant-card.selected, .color-card.selected {
-      border-color: #008774 !important;
-      background-color: #ffffff !important;
+      border-color: #0066FF !important;
+      background-color: #F0F6FE !important;
     }
     .variant-card.selected .check-badge, .color-card.selected .check-badge {
       display: flex !important;
+      background-color: #0066FF !important;
     }
 
     /* Thumbnail Tab Active State (Chuẩn Hoàng Hà Mobile Screenshot 1 & 2) */
+    .thumb-tab-item .thumb-label {
+      font-size: 11px !important;
+      font-weight: 400 !important;
+      line-height: 1.25 !important;
+      color: #475569 !important;
+    }
     .thumb-tab-item.active .thumb-box {
-      border-color: #0057B7 !important;
+      border-color: #0066FF !important;
       border-width: 2px !important;
       background-color: #F0F6FF !important;
-      box-shadow: 0 2px 6px rgba(0, 87, 183, 0.18);
+      box-shadow: 0 2px 6px rgba(0, 102, 255, 0.18);
       transform: translateY(-1px);
     }
     .thumb-tab-item.active .thumb-label {
-      font-weight: 700 !important;
-      color: #0057B7 !important;
+      font-weight: 500 !important;
+      color: #0066FF !important;
+    }
+
+    /* Comment & Review Card Typography (Bỏ in đậm, font chữ thanh lịch nhẹ nhàng) */
+    .comment-item-card,
+    .comment-item-card p,
+    .comment-item-card span,
+    .comment-item-card button,
+    .comment-item-card .comment-body-text,
+    .comment-item-card .reply-body-text {
+      font-weight: 400 !important;
+    }
+    .comment-item-card .comment-author,
+    .comment-item-card .reply-author {
+      font-weight: 500 !important;
+      color: #1e293b !important;
+    }
+    .comment-item-card .qtv-role-badge {
+      font-weight: 600 !important;
     }
 
     /* =========================================================================
@@ -126,12 +151,204 @@
       line-height: 1.15 !important;
     }
 
-    /* Table Specs Styling (Chuẩn Giữa Trang Rộng Rãi To Rõ) */
+    /* Table Specs Styling (Gọn gàng, font chữ nhỏ vừa phải không in đậm thô) */
     .specs-table tr:nth-child(even) { background-color: #f8fafc; }
     .specs-table tr:hover { background-color: #eff6ff; }
-    .specs-table td { padding: 14px 22px !important; font-size: 16.5px !important; line-height: 1.7 !important; border-bottom: 1px solid #e2e8f0; }
-    .specs-table td:first-child { width: 30% !important; font-weight: 700 !important; color: #1e293b !important; background-color: #f8fafc; border-right: 1px solid #e2e8f0; }
-    .specs-table td:last-child { color: #334155 !important; }
+    .specs-table td {
+      padding: 9px 16px !important;
+      font-size: 13px !important;
+      line-height: 1.55 !important;
+      border-bottom: 1px solid #e2e8f0;
+      font-weight: 400 !important;
+    }
+    .specs-table td:first-child {
+      width: 32% !important;
+      font-weight: 500 !important;
+      color: #334155 !important;
+      background-color: #f8fafc;
+      border-right: 1px solid #e2e8f0;
+    }
+    .specs-table td:last-child {
+      color: #1e293b !important;
+      font-weight: 400 !important;
+    }
+
+    /* Khối Thông Số Kỹ Thuật (65%) & Video Trải Nghiệm + SamaCare (35%) */
+    @media (min-width: 1024px) {
+      .specs-video-split {
+        grid-template-columns: 65fr 35fr !important;
+      }
+    }
+
+    /* Khối Sản Phẩm Mua Kèm (To rõ, dễ nhìn, thu hút khách hàng) */
+    #cross-sell-section .cross-sell-title {
+      font-size: 16px !important;
+      font-weight: 700 !important;
+    }
+    #cross-sell-section .cross-sell-discount {
+      font-size: 12px !important;
+      font-weight: 600 !important;
+    }
+    #cross-sell-section .addon-tab {
+      font-size: 12.5px !important;
+      padding: 6px 14px !important;
+      font-weight: 600 !important;
+    }
+    #addons-container .addon-item-name {
+      font-size: 13.5px !important;
+      line-height: 1.4 !important;
+      font-weight: 600 !important;
+      color: #0F172A !important;
+    }
+    #addons-container .addon-item-price {
+      font-size: 15px !important;
+      line-height: 1.3 !important;
+      font-weight: 700 !important;
+      color: #E11B22 !important;
+    }
+    #addons-container .addon-btn-add {
+      font-size: 13px !important;
+      padding: 6px 14px !important;
+      font-weight: 700 !important;
+    }
+
+    /* Khối Ưu Đãi Thanh Toán Ngân Hàng & Ví Điện Tử (Font chữ nhỏ gọn, tinh tế) */
+    #bank-promo-box .bank-promo-main-title {
+      font-size: 13px !important;
+      font-weight: 600 !important;
+    }
+    #bank-promo-box .bank-promo-top-badge {
+      font-size: 10.5px !important;
+      font-weight: 500 !important;
+    }
+    #bank-promo-detail-card .bank-detail-title {
+      font-size: 12.5px !important;
+      font-weight: 500 !important;
+      line-height: 1.35 !important;
+    }
+    #bank-promo-detail-card .bank-detail-badge {
+      font-size: 10px !important;
+      padding: 1px 7px !important;
+      font-weight: 400 !important;
+    }
+    #bank-promo-detail-card .bank-detail-highlight {
+      font-size: 11px !important;
+      font-weight: 400 !important;
+      color: #64748b !important;
+    }
+    #bank-promo-detail-card .bank-detail-code-box,
+    #bank-promo-detail-card .bank-detail-code-box * {
+      font-size: 11px !important;
+    }
+    #bank-promo-detail-card .bank-detail-bullets li {
+      font-size: 11.5px !important;
+      line-height: 1.45 !important;
+      font-weight: 400 !important;
+      color: #475569 !important;
+    }
+    #bank-promo-detail-card .bank-detail-bullets i {
+      font-size: 10px !important;
+    }
+    #bank-promo-detail-card .bank-detail-footer,
+    #bank-promo-detail-card .bank-detail-footer * {
+      font-size: 10.5px !important;
+      font-weight: 400 !important;
+    }
+
+    /* Khối Bài Viết Đánh Giá Chi Tiết & Gói Bảo Hành SamaCare (Font chữ nhỏ gọn đồng bộ với phần trên) */
+    #article-main-heading {
+      font-size: 15.5px !important;
+      line-height: 1.45 !important;
+      font-weight: 600 !important;
+      color: #0f172a !important;
+    }
+    #article-toc-box {
+      padding: 12px 16px !important;
+    }
+    #article-toc-box .toc-title {
+      font-size: 12.5px !important;
+      font-weight: 600 !important;
+      color: #1e293b !important;
+    }
+    #article-toc-list li {
+      font-size: 12.5px !important;
+      line-height: 1.5 !important;
+      font-weight: 400 !important;
+      color: #334155 !important;
+    }
+    #article-toc-list a {
+      font-size: 12.5px !important;
+      font-weight: 400 !important;
+      color: #0066FF !important;
+    }
+    #article-toc-list a:hover {
+      text-decoration: underline;
+    }
+    #review-article-content h3 {
+      font-size: 13.5px !important;
+      line-height: 1.45 !important;
+      font-weight: 600 !important;
+      color: #0f172a !important;
+      margin-top: 14px !important;
+      margin-bottom: 6px !important;
+    }
+    #review-article-content p {
+      font-size: 13px !important;
+      line-height: 1.65 !important;
+      font-weight: 400 !important;
+      color: #334155 !important;
+    }
+    #review-article-content strong {
+      font-weight: 500 !important;
+      color: #0f172a !important;
+    }
+    #review-article-content .article-caption {
+      font-size: 11.5px !important;
+      font-weight: 400 !important;
+      color: #64748b !important;
+    }
+    #btn-toggle-article {
+      font-size: 12px !important;
+      font-weight: 500 !important;
+      padding: 6px 20px !important;
+    }
+
+    /* Video Review & Gói Bảo Hành SamaCare */
+    #video-review-box .video-box-title,
+    #samacare-box .samacare-box-title {
+      font-size: 14px !important;
+      font-weight: 600 !important;
+      color: #0f172a !important;
+    }
+    #video-review-box .video-desc-badge {
+      font-size: 12px !important;
+      font-weight: 400 !important;
+    }
+    #samacare-box .samacare-badge-official {
+      font-size: 12px !important;
+      font-weight: 500 !important;
+      color: #0066FF !important;
+    }
+    #samacare-box .samacare-card-name {
+      font-size: 12.5px !important;
+      font-weight: 500 !important;
+      color: #334155 !important;
+    }
+    #samacare-box .samacare-card-price {
+      font-size: 13px !important;
+      font-weight: 600 !important;
+      color: #e11d48 !important;
+    }
+    #samacare-box .samacare-card-detail {
+      font-size: 11.5px !important;
+      font-weight: 400 !important;
+      color: #0066FF !important;
+    }
+    #samacare-box .samacare-card.active {
+      border-color: #0066FF !important;
+      background-color: #ffffff !important;
+      box-shadow: 0 0 0 1px #0066FF !important;
+    }
 
     /* CTA Buttons Fix Typography & Spacing */
     .cta-btn-title {
@@ -147,33 +364,51 @@
       margin-top: 2px !important;
     }
 
-    /* Khung Giá Bán & Trả Góp Cân Đối Trên Cùng 1 Hàng (Không Bị Rớt Dòng Ký Hiệu Tiền Tệ) */
+    /* Khung Giá Bán & Trả Góp Chuẩn Screenshot 1 */
     #product-sale-price {
-      font-size: 23px !important;
+      font-size: 22px !important;
       line-height: 1.25 !important;
+      color: #0F172A !important;
+      font-weight: 800 !important;
       white-space: nowrap !important;
-      letter-spacing: -0.5px !important;
+      letter-spacing: -0.3px !important;
     }
     #product-original-price {
       font-size: 13px !important;
+      color: #94A3B8 !important;
       white-space: nowrap !important;
     }
-    #product-installment-text {
-      font-size: 13px !important;
-      line-height: 1.45 !important;
+    #product-monthly-install {
+      font-size: 17px !important;
+      line-height: 1.25 !important;
+      color: #0F172A !important;
+      font-weight: 800 !important;
+      white-space: nowrap !important;
+    }
+    #sticky-bar-price {
+      font-size: 16px !important;
+      color: #E11B22 !important;
+      font-weight: 800 !important;
+      white-space: nowrap !important;
     }
     .color-card .color-name-text {
-      font-size: 12.5px !important;
+      font-size: 14.5px !important;
+      font-weight: 700 !important;
+      color: #0F172A !important;
       white-space: nowrap !important;
       overflow: hidden !important;
       text-overflow: ellipsis !important;
     }
     .variant-card .variant-name-text {
-      font-size: 13.5px !important;
+      font-size: 14.5px !important;
+      font-weight: 700 !important;
+      color: #0F172A !important;
       white-space: nowrap !important;
     }
     .variant-card .variant-price-text {
-      font-size: 12px !important;
+      font-size: 13px !important;
+      font-weight: 700 !important;
+      color: #E11B22 !important;
       white-space: nowrap !important;
     }
 
@@ -250,8 +485,8 @@
           <div class="relative">
             <button id="btn-notification-toggle" type="button" onclick="window.toggleNotificationPopover()" class="btn-header-glossy w-12 h-12 rounded-full text-[#1E3A8A] flex items-center justify-center active:scale-95 cursor-pointer flex-shrink-0 relative" title="Thông báo">
               <i class="fa-solid fa-bell text-[#2563EB] text-base"></i>
-              <!-- Badge chấm đỏ báo tin mới (mặc định ẩn, bật lên khi có sự kiện realtime) -->
-              <span id="notification-badge" class="hidden absolute top-2.5 right-2.5 w-2.5 h-2.5 rounded-full bg-rose-500 ring-2 ring-white"></span>
+              <!-- Badge số thông báo mới -->
+              <span id="notification-badge" class="hidden absolute -top-1.5 -right-1.5 bg-[#EF4444] text-white font-extrabold text-[10px] sm:text-[11px] px-1.5 py-0.5 rounded-full shadow-md min-w-[20px] h-[20px] flex items-center justify-center ring-2 ring-white animate-pulse">0</span>
             </button>
 
             <!-- Dropdown Thông Báo Popover -->
@@ -290,7 +525,7 @@
             </button>
 
             <!-- Popup Menu Dropdown -->
-            <div id="customer-avatar-popover" class="hidden absolute right-0 top-full mt-2 w-72 sm:w-80 bg-white rounded-2xl border border-slate-200 shadow-2xl z-50 overflow-hidden divide-y divide-slate-100 animate-in fade-in zoom-in-95 duration-150">
+            <div id="customer-avatar-popover" class="hidden absolute right-0 top-full mt-2 w-80 sm:w-[340px] bg-white rounded-2xl border border-slate-200 shadow-2xl z-50 overflow-hidden divide-y divide-slate-100 animate-in fade-in zoom-in-95 duration-150">
               <div class="p-4 bg-gradient-to-br from-blue-50 via-indigo-50/40 to-white">
                 <div class="flex items-center gap-3">
                   <div id="customer-popover-avatar" class="w-12 h-12 rounded-full bg-teal-600 text-white flex items-center justify-center text-base font-black shadow-md flex-shrink-0 overflow-hidden ring-2 ring-white">
@@ -310,43 +545,47 @@
                 </div>
               </div>
 
-              <div class="py-1.5 text-xs font-semibold text-slate-700">
-                <a href="profile.html?tab=profile" class="flex items-center justify-between px-4 py-2.5 hover:bg-blue-50/70 hover:text-blue-600 transition-colors group cursor-pointer">
-                  <div class="flex items-center gap-3">
-                    <span class="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors shadow-sm"><i class="fa-solid fa-id-badge text-sm"></i></span>
-                    <div>
-                      <span class="block text-slate-800 font-bold group-hover:text-blue-600 text-xs">Hồ sơ cá nhân</span>
-                      <span class="block text-[11px] font-normal text-slate-400">Xem & chỉnh sửa thông tin</span>
+              <!-- Danh sách tiện ích: Hồ sơ - Đơn hàng - Cài đặt (Đồng bộ nhận diện xanh dương, kích thước rộng rãi) -->
+              <div class="py-2 font-semibold text-slate-700">
+                <!-- 1. Hồ sơ cá nhân -->
+                <a href="profile.html?tab=profile" class="flex items-center justify-between gap-3 px-4 sm:px-5 py-3 hover:bg-blue-50/70 hover:text-[#0066FF] transition-colors group cursor-pointer">
+                  <div class="flex items-center gap-3.5 min-w-0 flex-1">
+                    <span class="w-10 h-10 rounded-xl bg-blue-50 text-[#0066FF] flex items-center justify-center group-hover:bg-[#0066FF] group-hover:text-white transition-all shadow-sm flex-shrink-0"><i class="fa-solid fa-id-badge text-base"></i></span>
+                    <div class="min-w-0 flex-1">
+                      <span class="block text-slate-800 font-bold group-hover:text-[#0066FF] text-sm whitespace-nowrap">Hồ sơ cá nhân</span>
+                      <span class="block text-xs font-normal text-slate-500 truncate mt-0.5">Xem & chỉnh sửa thông tin</span>
                     </div>
                   </div>
-                  <i class="fa-solid fa-chevron-right text-[10px] text-slate-300 group-hover:text-blue-500 transition-colors"></i>
+                  <i class="fa-solid fa-chevron-right text-xs text-slate-300 group-hover:text-[#0066FF] transition-colors flex-shrink-0"></i>
                 </a>
 
-                <a href="cart.html#orders" class="flex items-center justify-between px-4 py-2.5 hover:bg-emerald-50/70 hover:text-emerald-600 transition-colors group cursor-pointer">
-                  <div class="flex items-center gap-3">
-                    <span class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-colors shadow-sm"><i class="fa-solid fa-box-archive text-sm"></i></span>
-                    <div>
-                      <span class="block text-slate-800 font-bold group-hover:text-emerald-600 text-xs">Đơn hàng của tôi</span>
-                      <span class="block text-[11px] font-normal text-slate-400">Theo dõi giao hàng & đơn hủy</span>
+                <!-- 2. Đơn hàng của tôi -->
+                <a href="cart.html#orders" class="flex items-center justify-between gap-3 px-4 sm:px-5 py-3 hover:bg-blue-50/70 hover:text-[#0066FF] transition-colors group cursor-pointer">
+                  <div class="flex items-center gap-3.5 min-w-0 flex-1">
+                    <span class="w-10 h-10 rounded-xl bg-blue-50 text-[#0066FF] flex items-center justify-center group-hover:bg-[#0066FF] group-hover:text-white transition-all shadow-sm flex-shrink-0"><i class="fa-solid fa-box-archive text-base"></i></span>
+                    <div class="min-w-0 flex-1">
+                      <span class="block text-slate-800 font-bold group-hover:text-[#0066FF] text-sm whitespace-nowrap">Đơn hàng của tôi</span>
+                      <span class="block text-xs font-normal text-slate-500 truncate mt-0.5">Theo dõi giao hàng & đơn hủy</span>
                     </div>
                   </div>
-                  <span class="text-[10px] bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold px-2 py-0.5 rounded-full">Tra cứu</span>
+                  <span class="text-xs bg-blue-50 text-[#0066FF] border border-blue-200 font-bold px-2.5 py-1 rounded-full whitespace-nowrap flex-shrink-0 group-hover:bg-[#0066FF] group-hover:text-white group-hover:border-[#0066FF] transition-colors">Tra cứu</span>
                 </a>
 
-                <a href="profile.html?tab=settings" class="flex items-center justify-between px-4 py-2.5 hover:bg-indigo-50/70 hover:text-indigo-600 transition-colors group cursor-pointer">
-                  <div class="flex items-center gap-3">
-                    <span class="w-8 h-8 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center group-hover:bg-purple-600 group-hover:text-white transition-colors shadow-sm"><i class="fa-solid fa-gear text-sm"></i></span>
-                    <div>
-                      <span class="block text-slate-800 font-bold group-hover:text-indigo-600 text-xs">Cài đặt tài khoản</span>
-                      <span class="block text-[11px] font-normal text-slate-400">Mật khẩu, bảo mật & thông báo</span>
+                <!-- 3. Cài đặt tài khoản -->
+                <a href="profile.html?tab=settings" class="flex items-center justify-between gap-3 px-4 sm:px-5 py-3 hover:bg-blue-50/70 hover:text-[#0066FF] transition-colors group cursor-pointer">
+                  <div class="flex items-center gap-3.5 min-w-0 flex-1">
+                    <span class="w-10 h-10 rounded-xl bg-blue-50 text-[#0066FF] flex items-center justify-center group-hover:bg-[#0066FF] group-hover:text-white transition-all shadow-sm flex-shrink-0"><i class="fa-solid fa-gear text-base"></i></span>
+                    <div class="min-w-0 flex-1">
+                      <span class="block text-slate-800 font-bold group-hover:text-[#0066FF] text-sm whitespace-nowrap">Cài đặt tài khoản</span>
+                      <span class="block text-xs font-normal text-slate-500 truncate mt-0.5">Mật khẩu, bảo mật & thông báo</span>
                     </div>
                   </div>
-                  <i class="fa-solid fa-chevron-right text-[10px] text-slate-300 group-hover:text-indigo-500 transition-colors"></i>
+                  <i class="fa-solid fa-chevron-right text-xs text-slate-300 group-hover:text-[#0066FF] transition-colors flex-shrink-0"></i>
                 </a>
               </div>
 
-              <div class="p-2 bg-slate-50/80">
-                <button type="button" onclick="window.closeCustomerAvatarMenu(); if(window.CellphoneSAuth) window.CellphoneSAuth.logout();" class="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-rose-600 hover:bg-rose-50 text-xs font-bold transition-all active:scale-98 cursor-pointer">
+              <div class="p-2.5 bg-slate-50/80">
+                <button type="button" onclick="window.closeCustomerAvatarMenu(); if(window.CellphoneSAuth) window.CellphoneSAuth.logout();" class="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-rose-600 hover:bg-rose-50 text-sm font-bold transition-all active:scale-98 cursor-pointer">
                   <i class="fa-solid fa-arrow-right-from-bracket"></i>
                   <span>Đăng xuất tài khoản</span>
                 </button>
@@ -587,25 +826,25 @@
           <button type="button" onclick="document.getElementById('detailed-specs-section').scrollIntoView({behavior: 'smooth'})" class="inline-flex items-center gap-1.5 text-[#0057B7] hover:text-blue-800 px-3 py-1.5 rounded-lg bg-blue-50/80 border border-blue-200 transition-colors cursor-pointer">
             <i class="fa-solid fa-sliders text-xs"></i> <span>Thông số kỹ thuật</span>
           </button>
-          <button type="button" onclick="const id = new URLSearchParams(window.location.search).get('id'); if(window.ProductCompare){ window.ProductCompare.toggleCompare(id); window.ProductCompare.openModal(); }" class="inline-flex items-center gap-1.5 text-[#0057B7] hover:text-blue-800 px-3 py-1.5 rounded-lg bg-blue-50/80 border border-blue-200 transition-colors cursor-pointer">
+          <button type="button" onclick="const id = new URLSearchParams(window.location.search).get('id') || (window.currentProduct && window.currentProduct.maHang); if(window.ProductCompare){ window.ProductCompare.startCompareWithCurrent(id); }" class="inline-flex items-center gap-1.5 text-[#0057B7] hover:text-blue-800 px-3 py-1.5 rounded-lg bg-blue-50/80 border border-blue-200 transition-colors cursor-pointer">
             <i class="fa-solid fa-circle-plus text-xs"></i> <span>So sánh</span>
           </button>
-          <button type="button" onclick="const id = new URLSearchParams(window.location.search).get('id'); window.location.href = 'trade-in.html' + (id ? '?id=' + encodeURIComponent(id) : '');" class="inline-flex items-center gap-1.5 text-[#008774] hover:text-teal-800 px-3 py-1.5 rounded-lg bg-teal-50/80 border border-teal-200 transition-colors cursor-pointer">
+          <button type="button" onclick="const id = new URLSearchParams(window.location.search).get('id'); window.location.href = 'trade-in.html' + (id ? '?id=' + encodeURIComponent(id) : '');" class="inline-flex items-center gap-1.5 text-[#0066FF] hover:text-blue-800 px-3 py-1.5 rounded-lg bg-blue-50/80 border border-blue-200 transition-colors cursor-pointer">
             <i class="fa-solid fa-arrows-rotate text-xs"></i> <span>Thu cũ lên đời</span>
           </button>
         </div>
       </div>
     </div>
 
-    <!-- Layout 2 Cột Showcase (7 cột / 5 cột) (Chuẩn Screenshot 1) -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    <!-- Layout 2 Cột Showcase (Cân Bằng 6 Cột / 6 Cột Chuẩn Tỉ Lệ Đẹp) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-7 items-start">
       
-      <!-- CỘT TRÁI (GALLERY ẢNH LỚN + THUMBNAILS + THÔNG SỐ NỔI BẬT + CAM KẾT) -->
-      <div class="lg:col-span-7 space-y-6">
+      <!-- CỘT TRÁI (6 CỘT): GALLERY ẢNH LỚN + THUMBNAILS + THÔNG SỐ NỔI BẬT + CAM KẾT -->
+      <div class="lg:col-span-6 space-y-6">
         
         <!-- Khung Ảnh Lớn (Carousel có Prev / Next & Counter Badge 1/19) -->
-        <div class="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-7 shadow-xs relative group">
-          <div class="relative w-full aspect-square max-h-[460px] sm:max-h-[500px] flex items-center justify-center overflow-hidden bg-white">
+        <div class="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-6 shadow-xs relative group">
+          <div class="relative w-full aspect-square max-h-[400px] sm:max-h-[430px] flex items-center justify-center overflow-hidden bg-white">
             <img id="main-product-image" src="https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-tim-1.png" alt="Sản phẩm" onerror="this.onerror=null;this.src='https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png';" class="max-w-full max-h-full object-contain transition-transform duration-300 group-hover:scale-105" />
             
             <!-- Sparkles decor chuẩn Hoàng Hà Mobile (Screenshot 1) -->
@@ -634,55 +873,55 @@
         </div>
 
         <!-- Khối Thông Số Nổi Bật (4 Ô Ngang Có Icon Chuẩn Screenshot 1) -->
-        <div class="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-xs">
-          <div class="flex items-center justify-between mb-3.5">
-            <h3 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+        <div class="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-4.5 shadow-xs">
+          <div class="flex items-center justify-between mb-2.5">
+            <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
               <span>Thông số nổi bật</span>
             </h3>
-            <button type="button" onclick="document.getElementById('detailed-specs-section').scrollIntoView({behavior: 'smooth'})" class="text-xs sm:text-sm font-semibold text-blue-600 hover:text-blue-800 cursor-pointer flex items-center gap-1">
+            <button type="button" onclick="document.getElementById('detailed-specs-section').scrollIntoView({behavior: 'smooth'})" class="text-xs font-semibold text-blue-600 hover:text-blue-800 cursor-pointer flex items-center gap-1">
               Xem tất cả <i class="fa-solid fa-chevron-right text-[10px]"></i>
             </button>
           </div>
           
-          <div id="key-specs-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
+          <div id="key-specs-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
             <!-- Render động bằng product-detail.js theo danh mục sản phẩm -->
           </div>
         </div>
 
         <!-- Khối Cam Kết Sản Phẩm (Chuẩn Screenshot 1) -->
-        <div class="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-xs">
-          <div class="flex items-center justify-between mb-3.5">
-            <h3 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+        <div class="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-4.5 shadow-xs">
+          <div class="flex items-center justify-between mb-2.5">
+            <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
               <span>Cam kết sản phẩm</span>
             </h3>
-            <button type="button" onclick="alert('Chính sách bảo hành và cam kết chính hãng 100% tại SamaMobile.')" class="text-xs sm:text-sm font-semibold text-blue-600 hover:text-blue-800 cursor-pointer">
+            <button type="button" onclick="window.showCopyNotification ? window.showCopyNotification('Chính sách bảo hành 12 tháng chính hãng 1 đổi 1 trong 30 ngày') : null" class="text-xs font-semibold text-blue-600 hover:text-blue-800 cursor-pointer">
               Tìm hiểu thêm
             </button>
           </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-[13px] text-slate-700">
-            <div class="flex items-start gap-2.5">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs text-slate-700 leading-relaxed">
+            <div class="flex items-start gap-2">
               <i class="fa-solid fa-circle-check text-emerald-500 text-sm mt-0.5 flex-shrink-0"></i>
-              <span>Hư gì đổi nấy <strong>12 tháng</strong> tại hệ thống trên toàn quốc (miễn phí tháng đầu).</span>
+              <span>Hư gì đổi nấy <strong>12 tháng</strong> toàn quốc (miễn phí tháng đầu).</span>
             </div>
-            <div class="flex items-start gap-2.5">
+            <div class="flex items-start gap-2">
               <i class="fa-solid fa-circle-check text-emerald-500 text-sm mt-0.5 flex-shrink-0"></i>
-              <span>Bảo hành chính hãng <strong>1 năm</strong> tại các trung tâm bảo hành hãng uy tín.</span>
+              <span>Bảo hành chính hãng <strong>1 năm</strong> tại các TTBH uy tín.</span>
             </div>
-            <div class="flex items-start gap-2.5">
+            <div class="flex items-start gap-2">
               <i class="fa-solid fa-circle-check text-emerald-500 text-sm mt-0.5 flex-shrink-0"></i>
-              <span>Bộ sản phẩm gồm: <strong>Hộp, Sách hướng dẫn, Cáp sạc Type-C, Cây lấy sim chính hãng</strong>.</span>
+              <span>Bộ sản phẩm gồm: <strong>Hộp, Sách HD, Cáp C, Cây lấy sim</strong>.</span>
             </div>
-            <div class="flex items-start gap-2.5">
+            <div class="flex items-start gap-2">
               <i class="fa-solid fa-circle-check text-emerald-500 text-sm mt-0.5 flex-shrink-0"></i>
-              <span>Giao hàng nhanh toàn quốc, kiểm tra hàng kỹ trước khi thanh toán.</span>
+              <span>Giao hàng nhanh toàn quốc, kiểm tra hàng kỹ khi nhận.</span>
             </div>
           </div>
         </div>
 
       </div>
 
-      <!-- CỘT PHẢI (BANNER PROMO + PHIÊN BẢN + MÀU SẮC + KHUNG GIÁ TRẢ GÓP + CỤM 3 NÚT MUA) -->
-      <div class="lg:col-span-5 space-y-6">
+      <!-- CỘT PHẢI (6 CỘT): BANNER PROMO + PHIÊN BẢN + MÀU SẮC + KHUNG GIÁ TRẢ GÓP + CỤM 3 NÚT MUA -->
+      <div class="lg:col-span-6 space-y-6">
         
         <div class="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-xs space-y-5">
           
@@ -693,73 +932,187 @@
 
           <!-- 1. Chọn Phiên Bản (Dung Lượng) (Chuẩn Screenshot 1 có Checkmark góc phải) -->
           <div>
-            <label class="block text-xs sm:text-sm font-bold text-slate-800 mb-2">
+            <label class="block text-sm sm:text-base font-extrabold text-slate-900 mb-2.5">
               Phiên bản
             </label>
-            <div id="product-versions-list" class="grid grid-cols-3 gap-2.5">
+            <div id="product-versions-list" class="grid grid-cols-3 gap-3">
               <!-- Render động -->
             </div>
           </div>
 
           <!-- 2. Chọn Màu Sắc (Chuẩn Screenshot 1) -->
           <div>
-            <label class="block text-xs sm:text-sm font-bold text-slate-800 mb-2">
+            <label class="block text-sm sm:text-base font-extrabold text-slate-900 mb-2.5">
               Màu sắc
             </label>
-            <div id="product-colors-list" class="grid grid-cols-3 gap-2.5">
+            <div id="product-colors-list" class="grid grid-cols-3 gap-3">
               <!-- Render động -->
             </div>
           </div>
 
-          <!-- 3. Khung Giá Bán & Trả Góp (Nền Xanh Nhạt Chia Đôi Nét Đứt Chuẩn Screenshot 1) -->
-          <div class="bg-[#F0F6FE] border border-blue-200/90 rounded-2xl p-3.5 sm:p-4">
-            <div class="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-dashed divide-blue-300 gap-3 sm:gap-4 items-center">
+          <!-- 3. Khung Giá Bán, Trả Góp & Ưu Đãi Thành Viên / HSSV (Chuẩn 100% Screenshot Mới) -->
+          <div id="product-price-box" class="bg-[#F0F6FE] border border-blue-300/90 rounded-2xl p-4 sm:p-5 space-y-3.5">
+            <!-- Hàng 1: Giá Bán (Trái) | Hoặc | Trả Góp 0% (Phải) -->
+            <div class="flex items-center justify-between gap-4">
               <!-- Trái: Giá bán -->
-              <div class="min-w-0">
-                <div class="text-xs text-slate-500 font-semibold mb-1">Giá bán</div>
+              <div class="min-w-0 flex-1">
                 <div class="flex items-baseline whitespace-nowrap">
-                  <span id="product-sale-price" class="text-xl sm:text-2xl font-extrabold text-[#0057B7] tabular-nums tracking-tight whitespace-nowrap">
+                  <span id="product-sale-price" class="text-2xl sm:text-[26px] font-extrabold text-slate-900 tabular-nums tracking-tight whitespace-nowrap leading-none">
                     30.490.000₫
                   </span>
                 </div>
-                <div class="flex items-center gap-2 mt-1 whitespace-nowrap">
-                  <span id="product-original-price" class="text-xs sm:text-sm text-slate-400 line-through font-medium tabular-nums whitespace-nowrap">
+                <div class="flex items-center gap-2 mt-1.5 whitespace-nowrap">
+                  <span id="product-original-price" class="text-xs sm:text-sm text-slate-400 line-through font-normal tabular-nums whitespace-nowrap">
                     40.990.000₫
                   </span>
-                  <span id="product-discount-badge" class="px-1.5 py-0.5 rounded bg-rose-100 text-rose-700 font-bold text-[11px] whitespace-nowrap">
+                  <span id="product-discount-badge" class="px-1.5 py-0.5 rounded bg-rose-50 text-rose-600 font-semibold text-[11px] whitespace-nowrap border border-rose-200">
                     -26%
                   </span>
                 </div>
               </div>
 
+              <!-- Giữa: Divider chữ Hoặc -->
+              <div class="relative flex items-center justify-center self-stretch px-2 flex-shrink-0">
+                <div class="w-px h-full bg-blue-200/90"></div>
+                <span class="absolute bg-[#F0F6FE] px-1.5 text-xs text-slate-500 font-normal">Hoặc</span>
+              </div>
+
               <!-- Phải: Trả góp -->
-              <div class="pt-2 sm:pt-0 sm:pl-3 flex flex-col justify-center min-w-0">
-                <div class="text-xs text-slate-500 font-semibold mb-1">Trả góp</div>
-                <div id="product-installment-text" class="text-xs sm:text-[13px] text-slate-800 font-medium leading-snug">
-                  Hoặc Trả góp 0% chỉ từ <strong class="text-[#0057B7] tabular-nums font-bold whitespace-nowrap">3.557.000₫</strong>
+              <div class="min-w-0 flex-1 sm:pl-2">
+                <div class="flex items-baseline gap-1 text-slate-900 font-bold whitespace-nowrap leading-none">
+                  <span id="product-monthly-install" class="text-lg sm:text-xl font-extrabold tabular-nums">2.540.000₫</span>
+                  <span class="text-xs text-slate-600 font-normal">/tháng</span>
+                </div>
+                <div class="mt-1.5 whitespace-nowrap">
+                  <a href="#bank-promo-box" class="text-[#0066FF] hover:underline text-xs font-medium inline-flex items-center gap-1 whitespace-nowrap">
+                    <span>12 tháng, lãi suất 0%</span>
+                    <i class="fa-solid fa-angles-right text-[10px]"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Đường kẻ nét đứt ngăn giữa 2 hàng -->
+            <div class="border-t border-dashed border-blue-200/90 pt-3">
+              <!-- Hàng 2: HSSV, Giáo Viên & Smember -->
+              <div class="grid grid-cols-2 gap-2 sm:gap-3 items-center">
+                <!-- Cột 1: HSSV, Giáo viên -->
+                <div class="flex items-center gap-2 min-w-0">
+                  <img src="../images/mascot-student-clean.png?v=2" alt="HSSV Mascot" class="w-8 h-8 sm:w-9 sm:h-9 object-contain flex-shrink-0 drop-shadow-xs" />
+                  <div class="min-w-0 flex-1 leading-snug">
+                    <div class="text-xs font-bold text-slate-800 whitespace-nowrap truncate">HSSV, Giáo viên</div>
+                    <div class="text-[11px] text-slate-600 mt-0.5 whitespace-nowrap">
+                      đến <strong class="text-[#0066FF] font-semibold" id="member-hssv-val">300.000₫</strong>
+                      <button type="button" onclick="alert('Chương trình ưu đãi HSSV & Giáo viên: Giảm thêm khi xuất trình thẻ HSSV/Giáo viên!')" class="text-rose-600 font-medium hover:underline ml-1 cursor-pointer">Xác thực</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Cột 2: Smember -->
+                <div class="flex items-center gap-2 min-w-0">
+                  <img src="../images/mascot-smember-clean.png?v=2" alt="Smember Mascot" class="w-8 h-8 sm:w-9 sm:h-9 object-contain flex-shrink-0 drop-shadow-xs" />
+                  <div class="min-w-0 flex-1 leading-snug">
+                    <div class="text-xs font-bold text-slate-800 whitespace-nowrap truncate">Smember</div>
+                    <div class="text-[11px] text-slate-600 mt-0.5 whitespace-nowrap">
+                      đến <strong class="text-[#0066FF] font-semibold" id="member-discount-val">155.000₫</strong>
+                      <button type="button" onclick="alert('Đặc quyền Smember: Tích lũy điểm và giảm thêm trực tiếp trên mỗi đơn hàng tại SamaMobile!')" class="text-rose-600 font-medium hover:underline ml-1 cursor-pointer">Kiểm tra</button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- 4. Cụm 3 Nút Mua Hàng & Trả Góp (Chuẩn Screenshot 1) -->
-          <div class="flex items-center gap-2.5 pt-1">
-            <!-- Nút Giỏ Hàng (Icon đỏ viền đỏ) -->
-            <button type="button" onclick="window.handleAddToCart(false)" class="w-14 h-14 rounded-2xl border-2 border-rose-500 text-rose-600 hover:bg-rose-50 flex items-center justify-center transition-all cursor-pointer flex-shrink-0 active:scale-95" title="Thêm vào giỏ hàng">
-              <i class="fa-solid fa-cart-shopping text-xl text-rose-600"></i>
+          <!-- 4. Cụm 3 Nút Mua Hàng & Trả Góp (Gọn gàng, nhỏ lại xíu chuẩn Screenshot 2) -->
+          <div class="flex items-center gap-2 sm:gap-2.5 pt-1">
+            <!-- Nút Giỏ Hàng (Icon đỏ viền đỏ gọn gàng) -->
+            <button type="button" onclick="window.handleAddToCart(false)" class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl border-2 border-rose-500 text-rose-600 hover:bg-rose-50 flex items-center justify-center transition-all cursor-pointer flex-shrink-0 active:scale-95 shadow-2xs" title="Thêm vào giỏ hàng">
+              <i class="fa-solid fa-cart-shopping text-base sm:text-lg text-rose-600"></i>
             </button>
 
-            <!-- Nút MUA NGAY Lớn Màu Đỏ (Chuẩn Screenshot 1) -->
-            <button type="button" onclick="window.handleMainBuyNow()" class="flex-[1.4] min-w-0 h-14 rounded-2xl bg-[#E11B1E] hover:bg-red-700 text-white shadow-md hover:shadow-lg transition-all cursor-pointer active:scale-98 flex flex-col items-center justify-center px-3 py-1.5 leading-tight">
-              <span class="cta-btn-title uppercase tracking-wide">MUA NGAY</span>
-              <span class="cta-btn-sub text-white/90 whitespace-nowrap overflow-hidden text-ellipsis max-w-full">Giao tận nhà hoặc nhận tại cửa hàng</span>
+            <!-- Nút MUA NGAY Màu Đỏ -->
+            <button type="button" onclick="window.handleMainBuyNow()" class="flex-[1.3] min-w-0 h-11 sm:h-12 rounded-xl bg-[#E11B1E] hover:bg-red-700 text-white shadow-xs hover:shadow-md transition-all cursor-pointer active:scale-98 flex items-center justify-center px-4 font-bold text-sm sm:text-base uppercase tracking-wider">
+              <span>MUA NGAY</span>
             </button>
 
-            <!-- Nút TRẢ GÓP (Viền xanh chữ xanh chuẩn Screenshot 1) -->
-            <button type="button" onclick="alert('Đang mở cổng đăng ký xét duyệt hồ sơ trả góp 0% qua thẻ hoặc CCCD...');" class="flex-1 min-w-0 h-14 rounded-2xl border-2 border-[#0057B7] bg-white text-[#0057B7] hover:bg-blue-50 transition-all cursor-pointer active:scale-95 flex flex-col items-center justify-center px-3 py-1.5 leading-tight">
-              <span class="cta-btn-title uppercase tracking-wide">TRẢ GÓP</span>
-              <span id="cta-installment-subtext" class="cta-btn-sub text-slate-500 whitespace-nowrap overflow-hidden text-ellipsis max-w-full">Trả góp 0% chỉ từ 3.557.000đ</span>
+            <!-- Nút TRẢ GÓP (Viền xanh chữ xanh) -->
+            <button type="button" onclick="if(window.selectBankPromo){window.selectBankPromo('tpbank');} document.getElementById('bank-promo-pill-container')?.scrollIntoView({behavior:'smooth', block:'center'});" class="flex-1 min-w-0 h-11 sm:h-12 rounded-xl border-2 border-[#0066FF] bg-white text-[#0066FF] hover:bg-blue-50 transition-all cursor-pointer active:scale-95 flex items-center justify-center px-4 font-bold text-sm sm:text-base uppercase tracking-wider">
+              <span>TRẢ GÓP</span>
             </button>
+          </div>
+
+          <!-- 5. KHỐI ƯU ĐÃI, MEMBER, THU CŨ & PHỤ KIỆN (CHUYỂN LÊN ĐÂY LẤP ĐẦY KHOẢNG TRỐNG CỘT PHẢI) -->
+          <div id="product-detail-right-col" class="space-y-4 pt-2">
+            
+            <!-- 1. Sama Member Card (Có Mascot sóc/mèo chuẩn) -->
+            <div class="relative overflow-hidden rounded-2xl border border-blue-200/90 bg-gradient-to-r from-blue-50/90 via-sky-50/50 to-white p-4 sm:p-4.5 shadow-2xs">
+              <div class="flex items-center justify-between gap-3">
+                <div class="space-y-1 z-10 max-w-[72%]">
+                  <div class="text-xs text-slate-700 font-normal">
+                    Sama Member giảm thêm đến <span id="member-card-discount-val" class="text-[#0066FF] font-medium member-discount-val">366.000₫</span>
+                  </div>
+                  <div class="text-xs text-slate-700 font-normal">
+                    Sama EDU giảm thêm đến <span id="member-edu-val" class="text-[#0066FF] font-medium">200.000₫</span>
+                  </div>
+                  <div class="pt-0.5">
+                    <a href="../index.html#auth" class="text-[11px] font-normal text-rose-600 hover:text-rose-700 underline">
+                      Đăng nhập để áp dụng ưu đãi hạng thành viên
+                    </a>
+                  </div>
+                </div>
+
+                <!-- Mascot illustration -->
+                <div class="flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center">
+                  <img src="../images/pet/pet-2.png" onerror="this.onerror=null; this.src='../images/pet/pet1.png';" alt="Sama Mascot" class="max-w-full max-h-full object-contain drop-shadow transform hover:scale-105 transition-transform" />
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. Khối Thu Cũ Lên Đời -->
+            <div class="bg-white rounded-2xl border border-slate-200/90 p-3.5 sm:p-4 shadow-xs space-y-2">
+              <div class="text-xs sm:text-sm font-semibold text-slate-800">Thu cũ lên đời</div>
+              <div class="flex items-center justify-between gap-3 p-2.5 sm:p-3 rounded-xl bg-blue-50/60 border border-blue-200/80">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-8 h-8 rounded-full bg-[#0066FF] text-white flex items-center justify-center text-xs flex-shrink-0 shadow-xs">
+                    <i class="fa-solid fa-arrows-rotate"></i>
+                  </div>
+                  <div>
+                    <div class="text-[11px] text-slate-500 font-normal">Thu cũ lên đời chỉ từ</div>
+                    <div id="trade-in-estimate-price" class="text-sm sm:text-base font-semibold text-[#0066FF] tabular-nums">
+                      26.124.000₫
+                    </div>
+                    <div class="text-[10px] sm:text-[11px] text-rose-600 font-normal">Trợ giá đến 4.000.000₫</div>
+                  </div>
+                </div>
+                <button type="button" onclick="const id = new URLSearchParams(window.location.search).get('id'); window.location.href = 'trade-in.html' + (id ? '?id=' + encodeURIComponent(id) : '');" class="px-3 py-1.5 rounded-xl bg-[#0066FF] hover:bg-[#0052cc] text-white font-medium text-xs whitespace-nowrap shadow-xs transition-all active:scale-95 cursor-pointer">
+                  Kiểm tra ngay &gt;
+                </button>
+              </div>
+            </div>
+
+            <!-- 3. Khối Ưu Đãi Thanh Toán (Đối tác ngân hàng & Ví điện tử chính hãng) -->
+            <div id="bank-promo-box" class="bg-white rounded-2xl border border-slate-200/90 p-3.5 sm:p-4 shadow-xs space-y-3">
+              <div class="flex items-center justify-between">
+                <div class="bank-promo-main-title text-xs sm:text-sm font-semibold text-slate-800 flex items-center gap-2">
+                  <i class="fa-solid fa-credit-card text-[#0066FF]"></i>
+                  <span>Ưu đãi thanh toán</span>
+                </div>
+                <span class="bank-promo-top-badge text-[10px] sm:text-[11px] text-rose-600 font-normal bg-rose-50 px-2 py-0.5 rounded-full border border-rose-200">
+                  Giảm thêm đến 1.000.000₫
+                </span>
+              </div>
+
+              <!-- Dải 4 Logo Đối tác Ngân hàng trên cùng 1 hàng (Chuẩn ô vuông bo tròn nhẹ pastel) -->
+              <div id="bank-promo-pill-container" class="grid grid-cols-4 gap-1.5 sm:gap-2 pb-1">
+                <!-- Render động bởi product-detail.js -->
+              </div>
+
+              <!-- Khung Chi Tiết Ưu Đãi -->
+              <div id="bank-promo-detail-card" class="bg-gradient-to-r from-blue-50/40 via-sky-50/20 to-white rounded-2xl border border-blue-100 p-3 sm:p-3.5 space-y-2 transition-all duration-300">
+                <!-- Render động bởi product-detail.js -->
+              </div>
+            </div>
+
           </div>
 
         </div>
@@ -769,260 +1122,158 @@
     </div>
 
     <!-- =========================================================================
-         4. KHỐI 2: ĐỊA CHỈ CÒN HÀNG (TRÁI) & S-MEMBER + THU CŨ + ƯU ĐÃI + PHỤ KIỆN (PHẢI)
-         (CHUẨN SCREENSHOT 2 & 3 - ĐÁY 2 BÊN BẰNG NHAU HOÀN TOÀN)
+         KHỐI: ĐỊA CHỈ CÒN HÀNG (TRÁI 50%) & SẢN PHẨM MUA KÈM (PHẢI 50%)
          ========================================================================= -->
-    <div id="section-stores-and-promos" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    <div id="section-stores-and-addons" class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-7 items-stretch">
       
-      <!-- CỘT TRÁI (7 CỘT): ĐỊA CHỈ CÒN HÀNG (ĐÁY BẰNG HOÀN TOÀN ĐÁY CỘT PHẢI) -->
-      <div id="store-locations-card" class="lg:col-span-7 bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-xs flex flex-col min-h-0">
-        
-        <div class="store-card-header">
-          <h3 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
-            <i class="fa-solid fa-location-dot text-rose-600"></i> <span>Địa chỉ còn hàng</span>
-          </h3>
-          <p class="text-xs text-slate-500 mt-1">Sản phẩm hiện đang có tại <strong id="store-count-number" class="text-blue-600 font-bold">114</strong> cửa hàng</p>
-        </div>
-
-        <!-- Bộ Lọc Tìm Kiếm & Khu Vực (Chuẩn Screenshot 2) -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 my-4 store-card-filters">
-          <div class="relative">
-            <input type="text" id="store-filter-search" oninput="window.filterStoreLocations()" placeholder="Tìm kiếm..." class="w-full pl-9 pr-3 py-2 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-none focus:border-blue-500 bg-white" />
-            <i class="fa-solid fa-magnifying-glass text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 text-xs"></i>
-          </div>
-          <select id="store-filter-city" onchange="window.filterStoreLocations()" class="w-full px-3 py-2 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-none focus:border-blue-500 bg-white font-medium text-slate-700">
-            <option value="all">Tất cả khu vực</option>
-            <option value="hanoi">Hà Nội</option>
-            <option value="hcm">Hồ Chí Minh</option>
-            <option value="danang">Đà Nẵng</option>
-            <option value="haiphong">Hải Phòng</option>
-            <option value="thanhhoa">Thanh Hóa</option>
-            <option value="cantho">Cần Thơ</option>
-          </select>
-        </div>
-
-        <!-- Danh Sách Cửa Hàng Cuộn (Chiều cao đồng bộ chuẩn xác với đáy cột phải) -->
-        <div id="store-list-container" class="overflow-y-auto space-y-2.5 pr-1.5 custom-scrollbar rounded-xl">
-          <!-- Render động bằng product-detail.js -->
-        </div>
-
-      </div>
-
-      <!-- CỘT PHẢI (5 CỘT): SAMA MEMBER + THU CŨ LÊN ĐỜI + ƯU ĐÃI THANH TOÁN + SẢN PHẨM MUA KÈM (SCREENSHOT 2 & 3) -->
-      <div id="product-detail-right-col" class="lg:col-span-5 space-y-5">
-        
-        <!-- 1. Sama Member Card (Có Mascot sóc/mèo chuẩn Screenshot 2) -->
-        <div class="relative overflow-hidden rounded-2xl border border-blue-200/90 bg-gradient-to-r from-blue-50/90 via-sky-50/50 to-white p-4 sm:p-5 shadow-2xs">
-          <div class="flex items-center justify-between gap-3">
-            <div class="space-y-1.5 z-10 max-w-[72%]">
-              <div class="text-xs sm:text-sm text-slate-800 font-medium">
-                Sama Member giảm thêm đến <strong id="member-discount-val" class="text-[#0057B7] font-bold">366.000₫</strong>
-              </div>
-              <div class="text-xs sm:text-sm text-slate-800 font-medium">
-                Sama EDU giảm thêm đến <strong id="member-edu-val" class="text-[#0057B7] font-bold">200.000₫</strong>
-              </div>
-              <div class="pt-1">
-                <a href="../index.html#auth" class="text-xs font-semibold text-rose-600 hover:text-rose-700 underline">
-                  Đăng nhập để áp dụng ưu đãi hạng thành viên
-                </a>
-              </div>
+      <!-- CỘT TRÁI (50%): ĐỊA CHỈ CÒN HÀNG -->
+      <div id="store-locations-card" class="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-xs flex flex-col justify-between">
+        <div>
+          <div class="store-card-header flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-100 pb-3.5">
+            <div>
+              <h3 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-location-dot text-rose-600"></i> <span>Địa chỉ còn hàng</span>
+              </h3>
+              <p class="text-xs text-slate-500 mt-1">Sản phẩm hiện đang có tại <strong id="store-count-number" class="text-blue-600 font-bold">114</strong> cửa hàng</p>
             </div>
-
-            <!-- Mascot illustration -->
-            <div class="flex-shrink-0 w-20 h-20 sm:w-24 sm:h-24 flex items-center justify-center">
-              <img src="../images/pet/pet-2.png" onerror="this.onerror=null; this.src='../images/pet/pet1.png';" alt="Sama Mascot" class="max-w-full max-h-full object-contain drop-shadow transform hover:scale-105 transition-transform" />
+            
+            <!-- Bộ Lọc Tìm Kiếm & Khu Vực -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 store-card-filters sm:w-auto">
+              <div class="relative">
+                <input type="text" id="store-filter-search" oninput="window.filterStoreLocations()" placeholder="Tìm kiếm chi nhánh..." class="w-full pl-7 pr-2.5 py-1.5 text-xs rounded-xl border border-slate-300 focus:outline-none focus:border-blue-500 bg-white" />
+                <i class="fa-solid fa-magnifying-glass text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2 text-[10px]"></i>
+              </div>
+              <select id="store-filter-city" onchange="window.filterStoreLocations()" class="w-full px-2.5 py-1.5 text-xs rounded-xl border border-slate-300 focus:outline-none focus:border-blue-500 bg-white font-medium text-slate-700">
+                <option value="all">Tất cả khu vực</option>
+                <option value="hanoi">Hà Nội</option>
+                <option value="hcm">Hồ Chí Minh</option>
+                <option value="danang">Đà Nẵng</option>
+                <option value="haiphong">Hải Phòng</option>
+                <option value="thanhhoa">Thanh Hóa</option>
+                <option value="cantho">Cần Thơ</option>
+              </select>
             </div>
           </div>
-        </div>
 
-        <!-- 2. Khối Thu Cũ Lên Đời (Chuẩn Screenshot 2) -->
-        <div class="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-xs space-y-3">
-          <div class="text-sm font-bold text-slate-900">Thu cũ lên đời</div>
-          <div class="flex items-center justify-between gap-3 p-3 rounded-xl bg-emerald-50/60 border border-emerald-200/80">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full bg-[#008774] text-white flex items-center justify-center text-sm flex-shrink-0 shadow-xs">
-                <i class="fa-solid fa-arrows-rotate"></i>
-              </div>
-              <div>
-                <div class="text-[11px] text-slate-500">Thu cũ lên đời chỉ từ</div>
-                <div id="trade-in-estimate-price" class="text-base sm:text-lg font-bold text-[#008774] tabular-nums">
-                  26.124.000₫
-                </div>
-                <div class="text-[11px] text-rose-600 font-semibold">Trợ giá đến 4.000.000₫</div>
-              </div>
-            </div>
-            <button type="button" onclick="const id = new URLSearchParams(window.location.search).get('id'); window.location.href = 'trade-in.html' + (id ? '?id=' + encodeURIComponent(id) : '');" class="px-3.5 py-2 rounded-xl bg-[#0057B7] hover:bg-blue-800 text-white font-bold text-xs whitespace-nowrap shadow-xs transition-all active:scale-95 cursor-pointer">
-              Kiểm tra ngay &gt;
-            </button>
-          </div>
-        </div>
-
-        <!-- 3. Khối Ưu Đãi Thanh Toán (Đối tác ngân hàng chuẩn Screenshot 2) -->
-        <div class="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-xs space-y-3">
-          <div class="text-sm font-bold text-slate-900">Ưu đãi thanh toán</div>
-          <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 text-xs font-bold text-slate-700">
-            <span class="px-2.5 py-1.5 rounded-lg border border-blue-400 bg-blue-50 text-blue-700 flex-shrink-0">TPBank</span>
-            <span class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white hover:border-slate-300 flex-shrink-0">VPBank</span>
-            <span class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white hover:border-slate-300 flex-shrink-0">VIB</span>
-            <span class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white hover:border-slate-300 flex-shrink-0">ZaloPay</span>
-            <span class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white hover:border-slate-300 flex-shrink-0">Kredivo</span>
-          </div>
-          <p class="text-xs text-slate-600 leading-relaxed">
-            • <strong>TPBank Evo</strong> - Giảm đến 500.000đ, trả góp 0%, 0 phí lên đến 6 tháng (<a href="#" class="text-blue-600 hover:underline">Xem chi tiết</a>)
-          </p>
-        </div>
-
-        <!-- 4. Khối Sản Phẩm Mua Kèm (Filter Tabs + Addons chuẩn Screenshot 2) -->
-        <div class="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-xs space-y-3">
-          <div class="flex items-center justify-between">
-            <div class="text-sm font-bold text-slate-900">Sản phẩm mua kèm</div>
-            <span class="text-xs text-rose-600 font-bold">Giảm đến 20%</span>
-          </div>
-          
-          <!-- Filter Tabs -->
-          <div id="addon-filter-tabs" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1 text-[11px] font-semibold">
-            <button type="button" onclick="window.filterAddons('all')" class="addon-tab px-3 py-1 rounded-full bg-slate-900 text-white flex-shrink-0">Tất cả</button>
-            <button type="button" onclick="window.filterAddons('case')" class="addon-tab px-3 py-1 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 flex-shrink-0">Ốp lưng</button>
-            <button type="button" onclick="window.filterAddons('glass')" class="addon-tab px-3 py-1 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 flex-shrink-0">Dán màn hình</button>
-            <button type="button" onclick="window.filterAddons('charger')" class="addon-tab px-3 py-1 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 flex-shrink-0">Củ sạc</button>
-            <button type="button" onclick="window.filterAddons('battery')" class="addon-tab px-3 py-1 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 flex-shrink-0">Sạc dự phòng</button>
-          </div>
-
-          <div id="addons-container" class="space-y-2.5 pt-1">
+          <!-- Danh Sách Cửa Hàng Cuộn (Single-column mượt mà) -->
+          <div id="store-list-container" class="mt-4 overflow-y-auto space-y-2.5 pr-1.5 custom-scrollbar rounded-xl max-h-[420px]">
             <!-- Render động bằng product-detail.js -->
           </div>
         </div>
-
       </div>
 
-    </div>
-
-    <!-- =========================================================================
-         BẢNG THÔNG SỐ KỸ THUẬT CHI TIẾT (CHO VÀO GIỮA TRANG RỘNG RÃI TO RÕ)
-         ========================================================================= -->
-    <div id="detailed-specs-section" class="max-w-5xl mx-auto bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-8 shadow-xs scroll-mt-24 space-y-4">
-      <div class="flex items-center justify-between border-b border-slate-200 pb-4">
-        <h3 class="text-xl sm:text-2xl font-bold text-[#0F172A] flex items-center gap-2.5">
-          <i class="fa-solid fa-table-list text-[#0057B7]"></i> <span>Thông số kỹ thuật chi tiết</span>
-        </h3>
-        <span class="text-xs sm:text-sm text-slate-500 font-medium">Công bố chính hãng từ nhà sản xuất</span>
-      </div>
-
-      <div class="overflow-hidden rounded-xl border border-slate-200 shadow-2xs">
-        <table class="w-full text-left border-collapse specs-table">
-          <tbody id="detailed-specs-tbody">
-            <!-- Render động bằng product-detail.js theo từng dòng sản phẩm -->
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- =========================================================================
-         5. KHỐI 3: BÀI VIẾT ĐÁNH GIÁ CHUYÊN SÂU & VIDEO REVIEW (CHUẨN SCREENSHOT 4)
-         ========================================================================= -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-      
-      <!-- CỘT TRÁI (8 CỘT): BÀI VIẾT ĐÁNH GIÁ CHI TIẾT (CÓ MỤC LỤC + NÚT XEM THÊM THU GỌN) -->
-      <div class="lg:col-span-8 bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-8 shadow-xs space-y-6">
-        
-        <h2 id="article-main-heading" class="text-lg sm:text-2xl font-bold text-[#0F172A] leading-snug">
-          Đặc điểm nổi bật: Trải nghiệm công nghệ vượt trội
-        </h2>
-
-        <!-- Khung Nội Dung Chính (Table of Contents Chuẩn Screenshot 4) -->
-        <div class="bg-slate-50/90 border border-slate-200/90 rounded-2xl p-4 sm:p-5 text-xs sm:text-sm space-y-2.5">
-          <div class="font-bold text-slate-800 uppercase tracking-wide flex items-center gap-2">
-            <i class="fa-solid fa-list-ol text-blue-600"></i> <span>Nội dung chính</span>
-          </div>
-          <ol id="article-toc-list" class="list-decimal list-inside space-y-1.5 text-blue-700 font-medium">
-            <li><a href="#toc-specs" class="hover:underline">1. Thông số kỹ thuật chi tiết của sản phẩm có gì nổi bật?</a></li>
-            <li><a href="#toc-release" class="hover:underline">2. Sản phẩm ra mắt khi nào và phân khúc hướng tới?</a></li>
-            <li><a href="#toc-price" class="hover:underline">3. Sản phẩm có giá bao nhiêu và chính sách bảo hành?</a></li>
-            <li><a href="#toc-design" class="hover:underline">4. Thiết kế ngoại quan và trải nghiệm màn hình hiển thị</a></li>
-            <li><a href="#toc-performance" class="hover:underline">5. Hiệu năng xử lý và thời lượng sử dụng pin thực tế</a></li>
-          </ol>
-        </div>
-
-        <!-- Khung Bài Viết Có Toggle Thu Gọn / Xem Thêm (Gradient Fade) -->
-        <div class="relative">
-          <div id="review-article-wrapper" class="collapsed relative transition-all duration-300">
-            <div id="review-article-content" class="text-slate-700 text-sm leading-relaxed space-y-4">
-              <!-- Render động bằng product-detail.js -->
+      <!-- CỘT PHẢI (50%): SẢN PHẨM MUA KÈM -->
+      <div id="cross-sell-section" class="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-xs flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3.5">
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-bag-shopping text-[#0066FF] text-base sm:text-lg"></i>
+              <h3 class="text-base sm:text-lg font-bold text-slate-900">Sản phẩm mua kèm</h3>
             </div>
-            <!-- Gradient fade che mờ khi đang ở trạng thái thu gọn -->
-            <div id="article-fade-overlay" class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white via-white/80 to-transparent pointer-events-none"></div>
+            <span class="cross-sell-discount text-xs text-rose-600 font-semibold bg-rose-50 px-2.5 py-1 rounded-full border border-rose-200">Giảm đến 20%</span>
+          </div>
+          
+          <!-- Filter Tabs -->
+          <div id="addon-filter-tabs" class="flex items-center gap-2 overflow-x-auto no-scrollbar py-3 text-xs sm:text-[13px] font-bold border-b border-slate-100">
+            <button type="button" onclick="window.filterAddons('all')" class="addon-tab px-3.5 py-1.5 rounded-full bg-slate-900 text-white flex-shrink-0 cursor-pointer shadow-xs">Tất cả</button>
+            <button type="button" onclick="window.filterAddons('case')" class="addon-tab px-3.5 py-1.5 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 flex-shrink-0 cursor-pointer transition-colors">Ốp lưng</button>
+            <button type="button" onclick="window.filterAddons('glass')" class="addon-tab px-3.5 py-1.5 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 flex-shrink-0 cursor-pointer transition-colors">Dán màn hình</button>
+            <button type="button" onclick="window.filterAddons('charger')" class="addon-tab px-3.5 py-1.5 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 flex-shrink-0 cursor-pointer transition-colors">Củ sạc</button>
+            <button type="button" onclick="window.filterAddons('battery')" class="addon-tab px-3.5 py-1.5 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 flex-shrink-0 cursor-pointer transition-colors">Sạc dự phòng</button>
           </div>
 
-          <!-- Nút Xem Thêm / Thu Gọn (Chuẩn Screenshot 4) -->
-          <div class="text-center pt-3">
-            <button id="btn-toggle-article" type="button" onclick="window.toggleReviewArticle()" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-blue-500 bg-white hover:bg-blue-50 text-blue-700 font-bold text-xs sm:text-sm shadow-xs transition-all cursor-pointer">
-              <span id="btn-toggle-article-text">Xem thêm</span>
-              <i id="btn-toggle-article-icon" class="fa-solid fa-chevron-down text-xs"></i>
-            </button>
+          <!-- Addon list container -->
+          <div id="addons-container" class="mt-4 overflow-y-auto space-y-2.5 pr-1.5 custom-scrollbar rounded-xl max-h-[420px]">
+            <!-- Render động bằng product-detail.js -->
           </div>
         </div>
-
       </div>
 
-      <!-- CỘT PHẢI (4 CỘT): VIDEO REVIEW & GÓI BẢO HÀNH MỞ RỘNG (SCREENSHOT 4) -->
-      <div class="lg:col-span-4 space-y-6">
+    </div>
+
+    <!-- =========================================================================
+         KHỐI 3: THÔNG SỐ KỸ THUẬT CHI TIẾT (65%) & VIDEO REVIEW + BẢO HÀNH SAMACARE (35%)
+         (TỶ LỆ 65% / 35% RỘNG RÃI TO RÕ THÔNG SỐ, VIDEO GỌN GÀNG)
+         ========================================================================= -->
+    <div class="specs-video-split grid grid-cols-1 lg:grid-cols-[65fr_35fr] gap-6 items-start">
+      
+      <!-- CỘT TRÁI (65%): BẢNG THÔNG SỐ KỸ THUẬT CHI TIẾT -->
+      <div id="detailed-specs-section" class="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-xs scroll-mt-24 space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-3.5 gap-3">
+          <h3 class="text-lg sm:text-xl font-bold text-[#0F172A] flex items-center gap-2.5 whitespace-nowrap">
+            <i class="fa-solid fa-table-list text-[#0057B7]"></i> <span>Thông số kỹ thuật chi tiết</span>
+          </h3>
+          <span class="text-xs text-slate-500 font-medium whitespace-nowrap hidden sm:inline">Công bố chính hãng từ nhà sản xuất</span>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-slate-200 shadow-2xs">
+          <table class="w-full text-left border-collapse specs-table">
+            <tbody id="detailed-specs-tbody">
+              <!-- Render động bằng product-detail.js theo từng dòng sản phẩm -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- CỘT PHẢI (35%): VIDEO TRẢI NGHIỆM THỰC TẾ & GÓI BẢO HÀNH SAMACARE -->
+      <div class="space-y-5">
         
         <!-- Video Đánh Giá Trên Tay -->
-        <div class="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs space-y-3">
-          <h4 class="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-2">
+        <div id="video-review-box" class="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-xs space-y-3">
+          <h4 class="video-box-title font-semibold text-slate-900 flex items-center gap-2 whitespace-nowrap">
             <i class="fa-solid fa-circle-play text-rose-600"></i> <span>Video trải nghiệm thực tế</span>
           </h4>
-          <div class="relative w-full aspect-video rounded-xl overflow-hidden bg-slate-900 shadow-inner group cursor-pointer" onclick="alert('Đang phát video đánh giá trải nghiệm sản phẩm tại kênh SamaMobile Media...')">
+          <div class="relative w-full aspect-video rounded-xl overflow-hidden bg-slate-900 shadow-inner group cursor-pointer" onclick="if(window.openVideoModal){window.openVideoModal();}">
             <img src="../images/banner/471331_S26-Series-1200x375.jpg" alt="Video Review" class="w-full h-full object-cover group-hover:scale-105 transition-transform opacity-80" />
             <div class="absolute inset-0 flex items-center justify-center">
               <div class="w-12 h-12 rounded-full bg-rose-600 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
                 <i class="fa-solid fa-play text-sm ml-0.5"></i>
               </div>
             </div>
-            <div class="absolute bottom-2 left-2 right-2 px-2 py-1 bg-black/60 text-white text-[11px] font-semibold rounded backdrop-blur-xs truncate">
+            <div class="video-desc-badge absolute bottom-2 left-2 right-2 px-2.5 py-1.5 bg-black/60 text-white text-xs font-normal rounded-lg backdrop-blur-xs truncate">
               Đánh giá chi tiết hiệu năng & camera thực tế
             </div>
           </div>
         </div>
 
         <!-- Khối Bảo Hành Mở Rộng SamaCare (6 ô grid) -->
-        <div class="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs">
-          <div class="flex items-center justify-between mb-3.5">
-            <h4 class="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-2">
+        <div id="samacare-box" class="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-xs">
+          <div class="flex items-center justify-between mb-3.5 gap-2">
+            <h4 class="samacare-box-title font-semibold text-slate-900 flex items-center gap-2 whitespace-nowrap">
               <i class="fa-solid fa-shield text-blue-600"></i> <span>Gói bảo hành SamaCare</span>
             </h4>
-            <span class="text-xs text-blue-600 font-bold">Chính hãng</span>
+            <span class="samacare-badge-official text-xs text-blue-600 font-semibold bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-200 whitespace-nowrap">Chính hãng</span>
           </div>
-          <div class="grid grid-cols-3 gap-2 text-center text-xs">
-            <div class="p-2.5 rounded-xl border border-slate-200 bg-slate-50/70 hover:border-blue-400 transition-colors cursor-pointer">
-              <div class="text-[11px] font-bold text-slate-700">1+1</div>
-              <div class="text-rose-600 font-extrabold mt-0.5">180.000 đ</div>
-              <div class="text-[10px] text-blue-600 mt-0.5">Chi tiết</div>
+          <div class="grid grid-cols-3 gap-2 sm:gap-2.5 text-center">
+            <div onclick="window.selectSamaCare(this)" class="samacare-card p-2 sm:p-2.5 rounded-xl border border-slate-200 bg-slate-50/70 hover:border-blue-400 hover:bg-blue-50/40 transition-all cursor-pointer">
+              <div class="samacare-card-name text-xs sm:text-sm font-semibold text-slate-700">1+1</div>
+              <div class="samacare-card-price text-xs sm:text-sm font-bold text-rose-600 mt-0.5">180.000 đ</div>
+              <div class="samacare-card-detail text-[11px] text-blue-600 hover:underline mt-0.5">Chi tiết</div>
             </div>
-            <div class="p-2.5 rounded-xl border border-slate-200 bg-slate-50/70 hover:border-blue-400 transition-colors cursor-pointer">
-              <div class="text-[11px] font-bold text-slate-700">1+2</div>
-              <div class="text-rose-600 font-extrabold mt-0.5">250.000 đ</div>
-              <div class="text-[10px] text-blue-600 mt-0.5">Chi tiết</div>
+            <div onclick="window.selectSamaCare(this)" class="samacare-card p-2 sm:p-2.5 rounded-xl border border-slate-200 bg-slate-50/70 hover:border-blue-400 hover:bg-blue-50/40 transition-all cursor-pointer">
+              <div class="samacare-card-name text-xs sm:text-sm font-semibold text-slate-700">1+2</div>
+              <div class="samacare-card-price text-xs sm:text-sm font-bold text-rose-600 mt-0.5">250.000 đ</div>
+              <div class="samacare-card-detail text-[11px] text-blue-600 hover:underline mt-0.5">Chi tiết</div>
             </div>
-            <div class="p-2.5 rounded-xl border border-slate-200 bg-slate-50/70 hover:border-blue-400 transition-colors cursor-pointer">
-              <div class="text-[11px] font-bold text-slate-700">SCare 18+12</div>
-              <div class="text-rose-600 font-extrabold mt-0.5">180.000 đ</div>
-              <div class="text-[10px] text-blue-600 mt-0.5">Chi tiết</div>
+            <div onclick="window.selectSamaCare(this)" class="samacare-card p-2 sm:p-2.5 rounded-xl border border-slate-200 bg-slate-50/70 hover:border-blue-400 hover:bg-blue-50/40 transition-all cursor-pointer">
+              <div class="samacare-card-name text-xs sm:text-sm font-semibold text-slate-700">SCare 18+12</div>
+              <div class="samacare-card-price text-xs sm:text-sm font-bold text-rose-600 mt-0.5">180.000 đ</div>
+              <div class="samacare-card-detail text-[11px] text-blue-600 hover:underline mt-0.5">Chi tiết</div>
             </div>
-            <div class="p-2.5 rounded-xl border border-slate-200 bg-slate-50/70 hover:border-blue-400 transition-colors cursor-pointer">
-              <div class="text-[11px] font-bold text-slate-700">SCare 18+24</div>
-              <div class="text-rose-600 font-extrabold mt-0.5">250.000 đ</div>
-              <div class="text-[10px] text-blue-600 mt-0.5">Chi tiết</div>
+            <div onclick="window.selectSamaCare(this)" class="samacare-card p-2 sm:p-2.5 rounded-xl border border-slate-200 bg-slate-50/70 hover:border-blue-400 hover:bg-blue-50/40 transition-all cursor-pointer">
+              <div class="samacare-card-name text-xs sm:text-sm font-semibold text-slate-700">SCare 18+24</div>
+              <div class="samacare-card-price text-xs sm:text-sm font-bold text-rose-600 mt-0.5">250.000 đ</div>
+              <div class="samacare-card-detail text-[11px] text-blue-600 hover:underline mt-0.5">Chi tiết</div>
             </div>
-            <div class="p-2.5 rounded-xl border border-slate-200 bg-slate-50/70 hover:border-blue-400 transition-colors cursor-pointer">
-              <div class="text-[11px] font-bold text-slate-700">SCare 2+1</div>
-              <div class="text-rose-600 font-extrabold mt-0.5">400.000 đ</div>
-              <div class="text-[10px] text-blue-600 mt-0.5">Chi tiết</div>
+            <div onclick="window.selectSamaCare(this)" class="samacare-card active p-2 sm:p-2.5 rounded-xl border border-slate-200 bg-slate-50/70 hover:border-blue-400 hover:bg-blue-50/40 transition-all cursor-pointer">
+              <div class="samacare-card-name text-xs sm:text-sm font-semibold text-slate-700">SCare 2+1</div>
+              <div class="samacare-card-price text-xs sm:text-sm font-bold text-rose-600 mt-0.5">400.000 đ</div>
+              <div class="samacare-card-detail text-[11px] text-blue-600 hover:underline mt-0.5">Chi tiết</div>
             </div>
-            <div class="p-2.5 rounded-xl border border-slate-200 bg-slate-50/70 hover:border-blue-400 transition-colors cursor-pointer">
-              <div class="text-[11px] font-bold text-slate-700">VIP 1 đổi 1</div>
-              <div class="text-rose-600 font-extrabold mt-0.5">230.000 đ</div>
-              <div class="text-[10px] text-blue-600 mt-0.5">Chi tiết</div>
+            <div onclick="window.selectSamaCare(this)" class="samacare-card p-2 sm:p-2.5 rounded-xl border border-slate-200 bg-slate-50/70 hover:border-blue-400 hover:bg-blue-50/40 transition-all cursor-pointer">
+              <div class="samacare-card-name text-xs sm:text-sm font-semibold text-slate-700">VIP 1 đổi 1</div>
+              <div class="samacare-card-price text-xs sm:text-sm font-bold text-rose-600 mt-0.5">230.000 đ</div>
+              <div class="samacare-card-detail text-[11px] text-blue-600 hover:underline mt-0.5">Chi tiết</div>
             </div>
           </div>
         </div>
@@ -1032,6 +1283,52 @@
           <img src="../images/banner/banner-samamobilecare.png" alt="Trung tâm dịch vụ SamaCare" class="w-full h-auto object-cover" />
         </div>
 
+      </div>
+
+    </div>
+
+    <!-- =========================================================================
+         KHỐI 4: BÀI VIẾT ĐÁNH GIÁ CHUYÊN SÂU (ĐẶC ĐIỂM NỔI BẬT)
+         ========================================================================= -->
+    <div id="review-article-section" class="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-8 shadow-xs scroll-mt-24 space-y-6">
+      
+      <div class="border-b border-slate-200 pb-4">
+        <h2 id="article-main-heading" class="text-xl sm:text-2xl font-bold text-slate-900 leading-snug flex items-center gap-2.5">
+          <i class="fa-solid fa-newspaper text-[#0066FF]"></i> <span>Đặc điểm nổi bật: Trải nghiệm công nghệ vượt trội</span>
+        </h2>
+      </div>
+
+      <!-- Khung Nội Dung Chính (Table of Contents) -->
+      <div id="article-toc-box" class="bg-slate-50/90 border border-slate-200/90 rounded-2xl p-4 sm:p-5 space-y-2.5 max-w-2xl">
+        <div class="toc-title font-bold text-slate-800 uppercase tracking-wide flex items-center gap-2 text-xs sm:text-sm">
+          <i class="fa-solid fa-list-ol text-blue-600"></i> <span>Mục lục nội dung</span>
+        </div>
+        <ol id="article-toc-list" class="list-decimal list-inside space-y-1.5 text-blue-700 text-xs sm:text-sm font-normal">
+          <li><a href="#toc-specs" class="hover:underline">Thông số kỹ thuật chi tiết của sản phẩm có gì nổi bật?</a></li>
+          <li><a href="#toc-release" class="hover:underline">Sản phẩm ra mắt khi nào và phân khúc hướng tới?</a></li>
+          <li><a href="#toc-price" class="hover:underline">Sản phẩm có giá bao nhiêu và chính sách bảo hành?</a></li>
+          <li><a href="#toc-design" class="hover:underline">Thiết kế ngoại quan và trải nghiệm màn hình hiển thị</a></li>
+          <li><a href="#toc-performance" class="hover:underline">Hiệu năng xử lý và thời lượng sử dụng pin thực tế</a></li>
+        </ol>
+      </div>
+
+      <!-- Khung Bài Viết Có Toggle Thu Gọn / Xem Thêm (Gradient Fade) -->
+      <div class="relative">
+        <div id="review-article-wrapper" class="collapsed relative transition-all duration-300">
+          <div id="review-article-content" class="text-slate-700 leading-relaxed space-y-4">
+            <!-- Render động bằng product-detail.js -->
+          </div>
+          <!-- Gradient fade che mờ khi đang ở trạng thái thu gọn -->
+          <div id="article-fade-overlay" class="absolute bottom-0 left-0 right-0 h-28 bg-gradient-to-t from-white via-white/80 to-transparent pointer-events-none"></div>
+        </div>
+
+        <!-- Nút Xem Thêm / Thu Gọn -->
+        <div class="text-center pt-3">
+          <button id="btn-toggle-article" type="button" onclick="window.toggleReviewArticle()" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-blue-500 bg-white hover:bg-blue-50 text-blue-700 font-semibold text-xs sm:text-sm shadow-xs transition-all cursor-pointer">
+            <span id="btn-toggle-article-text">Xem thêm</span>
+            <i id="btn-toggle-article-icon" class="fa-solid fa-chevron-down text-xs"></i>
+          </button>
+        </div>
       </div>
 
     </div>
@@ -1065,7 +1362,7 @@
               <i class="fa-solid fa-star-half-stroke"></i>
             </div>
             <div class="text-xs text-slate-500 font-medium mb-3">10 người đã đánh giá</div>
-            <button type="button" onclick="document.getElementById('comment-input').focus()" class="px-5 py-2 rounded-xl bg-[#0057B7] hover:bg-blue-800 text-white font-bold text-xs shadow-md transition-all active:scale-95 cursor-pointer">
+            <button type="button" onclick="document.getElementById('comment-input').focus()" class="px-5 py-2 rounded-xl bg-[#0066FF] hover:bg-[#0052cc] text-white font-bold text-xs shadow-md transition-all active:scale-95 cursor-pointer">
               Đánh giá sản phẩm
             </button>
           </div>
@@ -1122,25 +1419,84 @@
         </div>
       </div>
 
-      <!-- Form Gửi Bình Luận Nhanh (3 Input: Họ tên, SĐT, Email + Textarea + Button chuẩn Screenshot 5) -->
-      <div class="space-y-3 bg-slate-50/70 p-4 sm:p-5 rounded-2xl border border-slate-200/90">
-        <div class="text-xs font-bold text-slate-800 uppercase tracking-wide">Mời bạn gửi bình luận hoặc câu hỏi:</div>
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <input type="text" id="comment-author-name" placeholder="Họ và tên *" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm bg-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-300 transition-all font-medium" />
-          <input type="tel" id="comment-author-phone" placeholder="Số điện thoại *" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm bg-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-300 transition-all font-medium" />
-          <input type="email" id="comment-author-email" placeholder="Email (không bắt buộc)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm bg-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-300 transition-all font-medium" />
+      <!-- Form Gửi Bình Luận Nhanh & Chọn Đánh Giá (Tự động duyệt 100%, chọn số sao, gợi ý nhanh & không alert) -->
+      <div class="space-y-4 bg-slate-50/80 p-4 sm:p-5 rounded-2xl border border-slate-200/90 shadow-2xs">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2 border-b border-slate-200/80">
+          <div class="text-xs sm:text-sm font-extrabold text-slate-800 uppercase tracking-wide flex items-center gap-2">
+            <i class="fa-solid fa-pen-to-square text-[#0066FF]"></i>
+            <span>Mời bạn gửi bình luận hoặc đánh giá:</span>
+          </div>
+          <!-- Chọn Số Sao Đánh Giá -->
+          <div class="flex items-center gap-2.5 bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-2xs">
+            <span class="text-xs font-semibold text-slate-600">Đánh giá:</span>
+            <div id="comment-star-picker" class="flex items-center gap-1">
+              <!-- Render động bởi product-detail.js -->
+            </div>
+            <span id="comment-star-badge" class="text-[11px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200">
+              5/5 - Cực kỳ hài lòng
+            </span>
+          </div>
         </div>
-        <textarea id="comment-input" rows="3" placeholder="Mời bạn bình luận hoặc đặt câu hỏi về sản phẩm..." class="w-full p-3.5 rounded-xl border border-slate-300 text-xs sm:text-sm bg-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-300 transition-all"></textarea>
+
+        <!-- Tiêu chí gợi ý chọn nhanh -->
+        <div class="space-y-1.5">
+          <div class="text-[11px] text-slate-500 font-medium flex items-center gap-1.5">
+            <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i>
+            <span>Gợi ý chọn nhanh (bấm để thêm vào nội dung):</span>
+          </div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <button type="button" onclick="window.selectQuickCommentTag('Màn hình hiển thị sắc nét, tần số quét mượt mà')" class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 hover:border-[#0066FF] hover:bg-blue-50/50 text-[11px] text-slate-700 font-medium transition-all cursor-pointer shadow-2xs">
+              📱 Màn hình đẹp, mượt
+            </button>
+            <button type="button" onclick="window.selectQuickCommentTag('Pin rất trâu, dùng cả ngày thoải mái không lo hết pin')" class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 hover:border-[#0066FF] hover:bg-blue-50/50 text-[11px] text-slate-700 font-medium transition-all cursor-pointer shadow-2xs">
+              🔋 Pin trâu cả ngày
+            </button>
+            <button type="button" onclick="window.selectQuickCommentTag('Camera chụp ảnh cực nét, góc rộng và zoom xuất sắc')" class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 hover:border-[#0066FF] hover:bg-blue-50/50 text-[11px] text-slate-700 font-medium transition-all cursor-pointer shadow-2xs">
+              📸 Camera chụp siêu nét
+            </button>
+            <button type="button" onclick="window.selectQuickCommentTag('Giao hàng cực nhanh, đóng gói nguyên seal cẩn thận')" class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 hover:border-[#0066FF] hover:bg-blue-50/50 text-[11px] text-slate-700 font-medium transition-all cursor-pointer shadow-2xs">
+              ⚡ Giao hàng hỏa tốc
+            </button>
+            <button type="button" onclick="window.selectQuickCommentTag('Nhân viên tư vấn nhiệt tình, chế độ bảo hành chu đáo')" class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 hover:border-[#0066FF] hover:bg-blue-50/50 text-[11px] text-slate-700 font-medium transition-all cursor-pointer shadow-2xs">
+              👍 Dịch vụ tuyệt vời
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <input type="text" id="comment-author-name" placeholder="Họ và tên *" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm bg-white focus:outline-none focus:border-[#0066FF] focus:ring-2 focus:ring-[#0066FF]/20 transition-all font-medium" />
+          <input type="tel" id="comment-author-phone" placeholder="Số điện thoại *" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm bg-white focus:outline-none focus:border-[#0066FF] focus:ring-2 focus:ring-[#0066FF]/20 transition-all font-medium" />
+          <input type="email" id="comment-author-email" placeholder="Email (không bắt buộc)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm bg-white focus:outline-none focus:border-[#0066FF] focus:ring-2 focus:ring-[#0066FF]/20 transition-all font-medium" />
+        </div>
+        
+        <textarea id="comment-input" rows="3" placeholder="Mời bạn chia sẻ cảm nhận về sản phẩm hoặc đặt câu hỏi..." class="w-full p-3.5 rounded-xl border border-slate-300 text-xs sm:text-sm bg-white focus:outline-none focus:border-[#0066FF] focus:ring-2 focus:ring-[#0066FF]/20 transition-all font-normal text-slate-700"></textarea>
+        
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-          <span class="text-[11px] text-slate-500">Đăng nhập để nhận thông báo trả lời nhanh nhất từ Quản trị viên</span>
-          <button id="btn-submit-comment" type="button" class="px-6 py-2.5 rounded-xl bg-[#0057B7] hover:bg-[#004494] text-white text-xs sm:text-sm font-bold shadow-md transition-all active:scale-95 cursor-pointer">
-            Gửi bình luận <i class="fa-solid fa-paper-plane ml-1 text-xs"></i>
+          <div class="flex items-center gap-2 text-[11px] text-slate-500 font-normal bg-slate-100 px-2.5 py-1 rounded-lg border border-slate-200">
+            <i class="fa-regular fa-comment-dots text-[#0066FF]"></i>
+            <span>Đóng góp ý kiến & đánh giá trải nghiệm sản phẩm</span>
+          </div>
+          <button id="btn-submit-comment" type="button" class="px-6 py-2.5 rounded-xl bg-[#0066FF] hover:bg-[#0052cc] text-white text-xs sm:text-sm font-semibold shadow-md transition-all active:scale-95 cursor-pointer flex items-center gap-2">
+            <span>Gửi bình luận</span>
+            <i class="fa-solid fa-paper-plane text-xs"></i>
           </button>
         </div>
       </div>
 
+      <!-- Thanh chọn lọc bình luận (Filter Pills) -->
+      <div class="flex items-center justify-between gap-3 pt-1 flex-wrap">
+        <div class="text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-2">
+          <span>Lọc xem bình luận:</span>
+        </div>
+        <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-0.5">
+          <button type="button" onclick="window.filterCommentsThread('all')" class="comment-filter-tab px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-[#0066FF] text-white shadow-xs cursor-pointer" data-filter="all">Tất cả</button>
+          <button type="button" onclick="window.filterCommentsThread('5star')" class="comment-filter-tab px-3 py-1.5 rounded-xl text-xs font-semibold transition-all bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer" data-filter="5star">5 sao (★★★★★)</button>
+          <button type="button" onclick="window.filterCommentsThread('purchased')" class="comment-filter-tab px-3 py-1.5 rounded-xl text-xs font-semibold transition-all bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer" data-filter="purchased">Đã mua tại cửa hàng</button>
+        </div>
+      </div>
+
       <!-- Danh sách bình luận & phản hồi QTV -->
-      <div id="comments-thread-container" class="space-y-4 pt-2">
+      <div id="comments-thread-container" class="space-y-4 pt-1">
         <!-- Render động bằng product-detail.js -->
       </div>
     </div>
@@ -1191,42 +1547,55 @@
   </main>
 
   <!-- =========================================================================
-       7. STICKY BOTTOM PURCHASE BAR (CHUẨN SCREENSHOT 3, 4, 5)
+       7. STICKY BOTTOM PURCHASE BAR (TO RÕ, RỘNG RÃI & DỄ THẤY CHUẨN SCREENSHOT 3)
        ========================================================================= -->
-  <aside id="sticky-purchase-bar" class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-2xl z-40 py-2.5 px-4 sm:px-8 transition-transform duration-300 translate-y-full">
-    <div class="max-w-7xl mx-auto flex items-center justify-between gap-3 sm:gap-6">
+  <aside id="sticky-purchase-bar" class="fixed bottom-4 left-1/2 -translate-x-1/2 w-[96%] max-w-6xl bg-white/98 backdrop-blur-lg rounded-2xl shadow-[0_12px_40px_rgba(0,0,0,0.18)] border border-slate-200/90 z-40 px-4 sm:px-6 py-3 sm:py-3.5 transition-all duration-300 translate-y-32 opacity-0 pointer-events-none">
+    <div class="flex items-center justify-between gap-3 sm:gap-6">
       
-      <!-- Trái: Mini Info -->
-      <div class="flex items-center gap-3 min-w-0">
-        <img id="sticky-bar-thumb" src="https://i.hoanghamobile.vn/Uploads/2026/01/08/nubia-v80-max-bac.png" alt="Thumb" class="w-11 h-11 object-contain rounded-lg border border-slate-200 flex-shrink-0 bg-white p-1" />
+      <!-- Trái: Thumbnail To Rõ & Tên Sản Phẩm -->
+      <div class="flex items-center gap-3 sm:gap-3.5 min-w-0 flex-1">
+        <img id="sticky-bar-thumb" src="../images/default-phone.png" alt="Thumb" class="w-12 h-12 sm:w-14 sm:h-14 object-contain rounded-xl border border-slate-200 flex-shrink-0 bg-white p-1 shadow-2xs" />
         <div class="min-w-0">
-          <div id="sticky-bar-title" class="font-bold text-slate-900 text-xs sm:text-sm truncate">
-            Nubia V80 Max 6GB/128GB
+          <div id="sticky-bar-title" class="font-extrabold text-sm sm:text-base text-slate-900 truncate tracking-tight">
+            Sản phẩm đang chọn
           </div>
-          <div id="sticky-bar-variant" class="text-[11px] text-slate-500 font-medium truncate">
-            Phân loại: Bạc - 6GB/128GB
+          <div class="text-xs text-slate-500 font-medium hidden sm:block mt-0.5">
+            Miễn phí giao hàng toàn quốc • Hỗ trợ trả góp 0%
           </div>
         </div>
       </div>
 
-      <!-- Phải: Giá & Cụm Nút Mua -->
+      <!-- Phải: Cụm Giá To Rõ + Trả Góp 0% + Mua Ngay + Giỏ Hàng (Chuẩn Screenshot 3) -->
       <div class="flex items-center gap-2.5 sm:gap-4 flex-shrink-0">
-        <div class="text-right">
-          <div id="sticky-bar-price" class="text-base sm:text-xl font-black text-[#0057B7]">
-            3.890.000 ₫
+        <!-- Cụm Giá To Rõ: Giá đỏ bên trên, giá gốc bên dưới -->
+        <div class="text-right leading-tight flex flex-col justify-center">
+          <div id="sticky-bar-price" class="text-base sm:text-xl font-black text-rose-600 tabular-nums whitespace-nowrap">
+            15.500.000₫
+          </div>
+          <div id="sticky-bar-old-price" class="text-xs text-slate-400 line-through tabular-nums whitespace-nowrap mt-0.5">
+            15.990.000₫
           </div>
         </div>
-        
-        <button type="button" onclick="window.handleAddToCart(false)" class="w-10 h-10 rounded-xl border border-rose-500 text-rose-600 hover:bg-rose-50 flex items-center justify-center transition-all cursor-pointer" title="Thêm giỏ hàng">
-          <i class="fa-solid fa-cart-plus text-sm"></i>
+
+        <!-- Nút Trả Góp 0% Có Badge 12 Tháng Trên Góc Phải (To rõ, dễ bấm) -->
+        <div class="relative hidden sm:block">
+          <span class="absolute -top-2.5 right-2 bg-[#0066FF] text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-xs z-10 whitespace-nowrap leading-tight">
+            12 tháng
+          </span>
+          <button type="button" onclick="if(window.selectBankPromo){window.selectBankPromo('tpbank');} document.getElementById('bank-promo-pill-container')?.scrollIntoView({behavior:'smooth', block:'center'});" class="border-2 border-[#0066FF] hover:bg-blue-50 text-[#0066FF] rounded-xl px-3.5 py-1.5 text-center transition-colors cursor-pointer min-w-[115px]">
+            <div class="text-xs sm:text-sm font-extrabold leading-tight">Trả góp 0%</div>
+            <div id="sticky-bar-installment" class="text-[11px] leading-tight text-[#0066FF] font-medium mt-0.5">1.162.500đ/tháng</div>
+          </button>
+        </div>
+
+        <!-- Nút Mua Ngay Màu Đỏ To Rõ -->
+        <button type="button" onclick="window.handleMainBuyNow()" class="h-11 sm:h-12 px-6 sm:px-8 rounded-xl bg-[#E11B22] hover:bg-red-700 text-white font-extrabold text-sm sm:text-base shadow-md hover:shadow-lg transition-all active:scale-95 cursor-pointer whitespace-nowrap flex items-center justify-center tracking-wide">
+          Mua Ngay
         </button>
 
-        <button type="button" onclick="window.handleMainBuyNow()" class="px-5 sm:px-7 py-2.5 rounded-xl bg-[#E11B1E] hover:bg-red-700 text-white font-black text-xs sm:text-sm shadow-md transition-all active:scale-95 cursor-pointer uppercase tracking-wider">
-          MUA NGAY
-        </button>
-
-        <button type="button" onclick="alert('Đang mở cổng trả góp 0%...')" class="hidden sm:inline-flex px-4 py-2.5 rounded-xl border-2 border-[#008774] text-[#008774] hover:bg-teal-50 font-black text-xs uppercase cursor-pointer">
-          TRẢ GÓP 0%
+        <!-- Nút Giỏ Hàng Viền Đỏ To Rõ -->
+        <button type="button" onclick="window.handleAddToCart(false)" class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl border-2 border-rose-500 hover:bg-rose-50 text-rose-600 flex items-center justify-center transition-all cursor-pointer flex-shrink-0 shadow-2xs active:scale-95" title="Thêm vào giỏ hàng">
+          <i class="fa-solid fa-cart-plus text-base sm:text-lg"></i>
         </button>
       </div>
 
@@ -1255,7 +1624,7 @@
         <span>Tổng tiền tạm tính:</span>
         <span id="cart-drawer-total" class="text-rose-600 font-black">0 ₫</span>
       </div>
-      <button type="button" onclick="window.location.href='cart.html';" class="w-full py-3.5 rounded-xl bg-[#0057B7] hover:bg-[#004494] text-white font-extrabold text-sm shadow-md transition-all active:scale-98 cursor-pointer">
+      <button type="button" onclick="window.location.href='cart.html';" class="w-full py-3.5 rounded-xl bg-[#0066FF] hover:bg-[#0052cc] text-white font-extrabold text-sm shadow-md transition-all active:scale-98 cursor-pointer">
         Tiến Hành Đặt Hàng <i class="fa-solid fa-arrow-right ml-1"></i>
       </button>
     </div>
@@ -1347,11 +1716,12 @@
 
   <!-- Scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.7/signalr.min.js"></script>
-  <script src="../js/order-signalr.js?v=1.2"></script>
-  <script src="../js/compare.js?v=1.0"></script>
+  <script src="../js/order-signalr.js?v=1.3"></script>
+  <script src="../js/chat-widget.js?v=1.0"></script>
+  <script src="../js/compare.js?v=2.0"></script>
   <script src="../js/trade-in.js?v=1.0"></script>
   <script src="../js/cart.js?v=6.0"></script>
-  <script src="../js/product-detail.js?v=6.8"></script>
+  <script src="../js/product-detail.js?v=9.7"></script>
   <script src="../js/recently-viewed.js?v=6.5"></script>
   <script src="../js/floating-promo.js?v=1.2"></script>
 
@@ -1420,11 +1790,43 @@
         </div>
       </div>
       <div class="p-3.5 bg-slate-50 border-t border-slate-200">
-        <button type="button" onclick="window.closeQrModal()" class="w-full py-2.5 rounded-xl bg-[#0057B7] hover:bg-blue-700 text-white font-bold text-xs cursor-pointer shadow-md transition-colors">Đóng cửa sổ</button>
+        <button type="button" onclick="window.closeQrModal()" class="w-full py-2.5 rounded-xl bg-[#0066FF] hover:bg-[#0052cc] text-white font-bold text-xs cursor-pointer shadow-md transition-colors">Đóng cửa sổ</button>
       </div>
     </div>
   </div>
 
+
+  <!-- =========================================================================
+       MODAL: CHI TIẾT THỂ LỆ & ĐIỀU KIỆN ƯU ĐÃI NGÂN HÀNG
+       ========================================================================= -->
+  <div id="bank-promo-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-xs overflow-y-auto">
+    <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-slate-200 overflow-hidden relative p-5 sm:p-6 space-y-4 animate-in fade-in zoom-in-95 duration-200 my-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div class="flex items-center gap-2.5">
+          <div id="modal-bank-logo-wrap" class="w-10 h-10 rounded-xl bg-white border border-slate-200 p-1.5 flex items-center justify-center shadow-2xs">
+            <img id="modal-bank-logo" src="" alt="Bank" class="w-full h-full object-contain">
+          </div>
+          <div>
+            <h3 id="modal-bank-title" class="font-extrabold text-slate-900 text-sm sm:text-base">Thể lệ ưu đãi</h3>
+            <p id="modal-bank-subtitle" class="text-xs text-slate-500">Chương trình liên kết đối tác tài chính</p>
+          </div>
+        </div>
+        <button type="button" onclick="window.closeBankPromoModal()" class="w-8 h-8 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-600 flex items-center justify-center cursor-pointer">
+          <i class="fa-solid fa-xmark text-base"></i>
+        </button>
+      </div>
+
+      <div id="modal-bank-content" class="space-y-3 text-xs sm:text-sm text-slate-600 leading-relaxed max-h-[60vh] overflow-y-auto pr-1">
+        <!-- Render động qua JavaScript -->
+      </div>
+
+      <div class="pt-2">
+        <button type="button" onclick="window.closeBankPromoModal()" class="w-full py-3 rounded-xl bg-[#0066FF] hover:bg-[#0052cc] text-white font-bold text-xs sm:text-sm shadow-md transition-all active:scale-98 cursor-pointer">
+          Đã hiểu & Quay lại mua sắm
+        </button>
+      </div>
+    </div>
+  </div>
 
 </body>
 </html>

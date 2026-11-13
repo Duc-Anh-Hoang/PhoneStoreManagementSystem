@@ -25,6 +25,8 @@
       const now = ctx.currentTime;
       const freqs = type === 'new_order'
         ? [523.25, 659.25, 783.99, 1046.50] // C5 -> E5 -> G5 -> C6 (Chuông đơn mới Admin)
+        : type === 'payment_success'
+        ? [523.25, 659.25, 783.99, 1046.50, 1318.51] // C5 -> E5 -> G5 -> C6 -> E6 (Ting ting thanh toán thành công!)
         : [587.33, 783.99, 1174.66]; // D5 -> G5 -> D6 (Chuông cập nhật đơn User)
 
       freqs.forEach((freq, idx) => {
@@ -90,10 +92,53 @@
     } catch (e) {}
   }
 
+  function resolveImagePath(img) {
+    if (!img) return '';
+    if (img.startsWith('http://') || img.startsWith('https://') || img.startsWith('data:')) {
+      return img;
+    }
+    const isPagesDir = window.location.pathname.includes('/pages/');
+    let clean = img.replace(/^(\.\.\/)+/, '').replace(/^\/+/, '');
+    return isPagesDir ? '../' + clean : clean;
+  }
+
+  function findOrderImage(maDH) {
+    if (!maDH) return '';
+    try {
+      const uRaw = localStorage.getItem('samamobile_user_orders');
+      if (uRaw) {
+        const uOrders = JSON.parse(uRaw);
+        if (Array.isArray(uOrders)) {
+          const found = uOrders.find(o => o && o.maDH === maDH);
+          if (found && Array.isArray(found.items) && found.items.length > 0) {
+            const it = found.items[0];
+            const img = it.image || it.hinhAnh || it.anhChinh;
+            if (img) return img;
+          }
+        }
+      }
+      const aRaw = localStorage.getItem('cellphones_online_orders');
+      if (aRaw) {
+        const aOrders = JSON.parse(aRaw);
+        if (Array.isArray(aOrders)) {
+          const found = aOrders.find(o => o && o.maDH === maDH);
+          if (found && Array.isArray(found.items) && found.items.length > 0) {
+            const it = found.items[0];
+            const img = it.image || it.hinhAnh || it.anhChinh;
+            if (img) return img;
+          }
+        }
+      }
+    } catch (e) {}
+    const isPagesDir = window.location.pathname.includes('/pages/');
+    return isPagesDir ? '../images/default-phone.png' : 'images/default-phone.png';
+  }
+
   function addNotificationItem(item, forAdmin) {
     const list = getStoredNotifications(forAdmin);
     const id = item.id || `${item.maDH || 'notif'}_${item.trangThai || item.type || Date.now()}`;
     const existingIdx = list.findIndex(x => x.id === id);
+    const productImg = item.image || item.hinhAnh || findOrderImage(item.maDH);
     const newItem = {
       id,
       maDH: item.maDH || '',
@@ -103,6 +148,7 @@
       icon: item.icon || 'fa-solid fa-bell',
       bgClass: item.bgClass || 'bg-blue-100',
       colorClass: item.colorClass || 'text-[#2563EB]',
+      image: productImg || '',
       unread: true,
       createdAt: Date.now()
     };
@@ -125,20 +171,25 @@
     const notifications = getStoredNotifications(isAdminPage);
     const unreadCount = notifications.filter(n => n.unread !== false).length;
 
-    if (unreadCount > 0) {
-      if (badge) {
+    if (badge) {
+      if (unreadCount > 0) {
         badge.classList.remove('hidden');
-        if (badge.tagName === 'SPAN' && badge.classList.contains('min-w-[18px]')) {
-          badge.textContent = unreadCount > 9 ? '9+' : String(unreadCount);
-        }
+        badge.textContent = unreadCount > 99 ? '99+' : String(unreadCount);
+        badge.className = 'absolute -top-1.5 -right-1.5 bg-[#EF4444] text-white font-extrabold text-[10px] sm:text-[11px] px-1.5 py-0.5 rounded-full shadow-md min-w-[20px] h-[20px] flex items-center justify-center ring-2 ring-white animate-pulse';
+      } else {
+        badge.classList.add('hidden');
+        badge.textContent = '0';
       }
-      if (countBadge) {
+    }
+
+    if (countBadge) {
+      if (unreadCount > 0) {
         countBadge.textContent = `${unreadCount} tin mới`;
         countBadge.classList.remove('hidden');
+      } else {
+        countBadge.textContent = 'Đã đọc tất cả';
+        countBadge.classList.remove('hidden');
       }
-    } else {
-      if (badge) badge.classList.add('hidden');
-      if (countBadge) countBadge.classList.add('hidden');
     }
 
     if (notifications.length === 0) {
@@ -152,25 +203,45 @@
     }
 
     listEl.innerHTML = `
-      <div class="px-3.5 py-2 bg-slate-50/80 flex items-center justify-between text-[11px] border-b border-slate-100">
-        <button type="button" onclick="window.markAllNotificationsRead && window.markAllNotificationsRead()" class="text-[#0057B7] hover:underline font-semibold cursor-pointer">Đánh dấu đã đọc</button>
-        <button type="button" onclick="window.clearAllNotifications && window.clearAllNotifications()" class="text-slate-400 hover:text-rose-600 font-medium cursor-pointer">Xóa tất cả</button>
+      <div class="px-3.5 py-2.5 bg-slate-50/90 flex items-center justify-between text-xs border-b border-slate-100">
+        <span class="text-slate-500 font-semibold flex items-center gap-1.5">
+          <i class="fa-solid fa-bell text-[#2563EB]"></i>
+          <span>Thông báo gần đây</span>
+        </span>
+        <button type="button" onclick="window.clearAllNotifications && window.clearAllNotifications()" class="text-slate-400 hover:text-rose-600 font-semibold cursor-pointer transition-colors">
+          <i class="fa-regular fa-trash-can mr-1"></i>Xóa tất cả
+        </button>
       </div>
-    ` + notifications.map(item => `
-      <div class="p-3.5 hover:bg-blue-50/50 transition-colors cursor-pointer flex gap-3 items-start ${item.unread !== false ? 'bg-blue-50/25' : ''}" onclick="window.onHeaderNotificationClick && window.onHeaderNotificationClick('${item.id}', '${item.maDH || ''}')">
-        <div class="w-8 h-8 rounded-lg ${item.bgClass || 'bg-blue-100'} ${item.colorClass || 'text-[#2563EB]'} flex items-center justify-center flex-shrink-0 text-xs shadow-2xs">
-          <i class="${item.icon || 'fa-solid fa-bell'}"></i>
-        </div>
-        <div class="space-y-0.5 min-w-0 flex-1">
-          <div class="flex items-center justify-between gap-2">
-            <p class="font-bold text-slate-900 text-xs truncate">${item.title || ''}</p>
-            ${item.unread !== false ? '<span class="w-2 h-2 rounded-full bg-rose-500 flex-shrink-0"></span>' : ''}
+    ` + notifications.map(item => {
+      const productImg = resolveImagePath(item.image || findOrderImage(item.maDH));
+      return `
+        <div class="p-3 sm:p-3.5 hover:bg-blue-50/50 transition-colors cursor-pointer flex gap-3 sm:gap-3.5 items-start ${item.unread !== false ? 'bg-blue-50/25' : ''}" onclick="window.onHeaderNotificationClick && window.onHeaderNotificationClick('${item.id}', '${item.maDH || ''}')">
+          <div class="relative w-12 h-12 rounded-2xl bg-white p-1 border border-slate-200/90 flex-shrink-0 flex items-center justify-center overflow-hidden shadow-2xs">
+            ${productImg ? `
+              <img src="${productImg}" alt="${item.title || 'Sản phẩm'}" class="w-full h-full object-contain" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');">
+              <div class="hidden w-full h-full rounded-xl ${item.bgClass || 'bg-blue-100'} ${item.colorClass || 'text-[#2563EB]'} flex items-center justify-center text-xs">
+                <i class="${item.icon || 'fa-solid fa-bell'}"></i>
+              </div>
+              <span class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full ${item.bgClass || 'bg-blue-100'} ${item.colorClass || 'text-[#2563EB]'} flex items-center justify-center text-[10px] ring-2 ring-white shadow-2xs">
+                <i class="${item.icon || 'fa-solid fa-bell'}"></i>
+              </span>
+            ` : `
+              <div class="w-full h-full rounded-xl ${item.bgClass || 'bg-blue-100'} ${item.colorClass || 'text-[#2563EB]'} flex items-center justify-center text-sm">
+                <i class="${item.icon || 'fa-solid fa-bell'}"></i>
+              </div>
+            `}
           </div>
-          <p class="text-[11px] text-slate-600 leading-snug line-clamp-2">${item.message || ''}</p>
-          <span class="text-[10px] text-slate-400 block">${item.time || 'Vừa xong'}</span>
+          <div class="space-y-1 min-w-0 flex-1">
+            <div class="flex items-center justify-between gap-2">
+              <p class="font-bold text-slate-900 text-xs sm:text-[13px] truncate">${item.title || ''}</p>
+              ${item.unread !== false ? '<span class="w-2.5 h-2.5 rounded-full bg-rose-500 flex-shrink-0"></span>' : ''}
+            </div>
+            <p class="text-xs text-slate-600 leading-snug line-clamp-2">${item.message || ''}</p>
+            <span class="text-[11px] text-slate-400 block">${item.time || 'Vừa xong'}</span>
+          </div>
         </div>
-      </div>
-    `).join('');
+      `;
+    }).join('');
   }
 
   window.markAllNotificationsRead = function () {
@@ -212,11 +283,30 @@
   };
 
   window.toggleNotificationPopover = function (e) {
-    if (e && e.stopPropagation) e.stopPropagation();
+    if (e && e.stopPropagation) {
+      e.stopPropagation();
+    } else if (window.event && window.event.stopPropagation) {
+      window.event.stopPropagation();
+    }
     const pop = document.getElementById('notification-popover');
     if (!pop) return;
+
+    const isOpening = pop.classList.contains('hidden');
     pop.classList.toggle('hidden');
-    if (!pop.classList.contains('hidden')) {
+
+    if (isOpening) {
+      // Tự động đánh dấu tất cả thông báo là ĐÃ ĐỌC ngay khi bấm vào chuông
+      const list = getStoredNotifications(isAdminPage);
+      let changed = false;
+      list.forEach(n => {
+        if (n.unread !== false) {
+          n.unread = false;
+          changed = true;
+        }
+      });
+      if (changed) {
+        saveStoredNotifications(list, isAdminPage);
+      }
       renderHeaderNotifications();
     }
   };
@@ -494,6 +584,13 @@
     }
 
     const statusMeta = {
+      'cho_thanh_toan': {
+        title: `Đơn #${data.maDH} đang chờ thanh toán!`,
+        defaultMsg: `Đơn đặt hàng #${data.maDH} đã được khởi tạo và đang chờ quét mã VietQR thanh toán.`,
+        icon: 'fa-solid fa-qrcode',
+        bgClass: 'bg-amber-100',
+        colorClass: 'text-amber-700'
+      },
       'da_xac_nhan': {
         title: `Đơn #${data.maDH} đã được duyệt!`,
         defaultMsg: `Đơn đặt hàng #${data.maDH} đã được Admin xác nhận và đang chuẩn bị đóng gói.`,
@@ -650,6 +747,43 @@
 
     connection.on('OrderStatusUpdated', function (data) {
       handleIncomingOrderStatusEvent(data);
+    });
+
+    connection.on('PaymentSuccess', function (data) {
+      if (!data || !data.maDH) return;
+      playChime('payment_success');
+      try {
+        const rawUser = localStorage.getItem('samamobile_user_orders');
+        if (rawUser) {
+          const userList = JSON.parse(rawUser);
+          if (Array.isArray(userList)) {
+            const found = userList.find(o => o && o.maDH === data.maDH);
+            if (found) {
+              found.daThanhToan = true;
+              found.trangThai = data.trangThai || 'cho_xac_nhan';
+              localStorage.setItem('samamobile_user_orders', JSON.stringify(userList));
+            }
+          }
+        }
+      } catch (e) {}
+
+      window.dispatchEvent(new CustomEvent('samamobile:payment_success', { detail: data }));
+      handleIncomingOrderStatusEvent({
+        maDH: data.maDH,
+        trangThai: data.trangThai || 'cho_xac_nhan',
+        message: data.message || `Đơn hàng #${data.maDH} đã thanh toán thành công qua VietQR! Đang chờ Admin xác nhận.`,
+        sdt: data.sdt
+      });
+    });
+
+    connection.on('ReceiveOrderPaid', function (data) {
+      if (isAdminPage && data && data.maDH) {
+        playChime('payment_success');
+        if (typeof showToast === 'function') {
+          showToast(`Đơn hàng #${data.maDH} vừa được thanh toán thành công!`, 'success');
+        }
+        window.dispatchEvent(new CustomEvent('samamobile:order_paid', { detail: data }));
+      }
     });
 
     connection.on('ReceiveOrderCancelled', function (data) {

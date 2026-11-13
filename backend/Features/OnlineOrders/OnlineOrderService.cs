@@ -126,6 +126,19 @@ public class OnlineOrderService : IOnlineOrderService
             var maDH = (!string.IsNullOrWhiteSpace(reqMaDH) && !await _context.DonHangOnlines.AnyAsync(d => d.MaDH == reqMaDH))
                 ? reqMaDH
                 : await _codeGenerator.GenerateOrderCode(code => _context.DonHangOnlines.AnyAsync(d => d.MaDH == code));
+            var phuongThuc = (request.PhuongThucThanhToan ?? "cod").Trim().ToLowerInvariant() switch
+            {
+                "banking" or "momo" or "vnpay" or "zalopay" or "chuyen_khoan" => "chuyen_khoan",
+                "card" or "the" => "the",
+                _ => "cod"
+            };
+
+            // Nghiệp vụ Phương án 1: Nếu thanh toán online (chuyển khoản, ví QR, thẻ) thì khởi tạo ở trạng thái Chờ thanh toán
+            // Nếu là COD (thanh toán khi nhận hàng) thì vào thẳng Chờ xác nhận
+            var initialStatus = (phuongThuc == "chuyen_khoan" || phuongThuc == "the")
+                ? AppConstants.OrderStatus.ChoThanhToan
+                : AppConstants.OrderStatus.ChoXacNhan;
+
             var donHang = new DonHangOnline
             {
                 MaDH = maDH,
@@ -134,9 +147,9 @@ public class OnlineOrderService : IOnlineOrderService
                 TenNguoiNhan = request.TenNguoiNhan.Trim(),
                 SdtNguoiNhan = sdtNorm,
                 DiaChiGiao = request.DiaChiGiao.Trim(),
-                PhuongThucThanhToan = (request.PhuongThucThanhToan ?? "cod").Trim().ToLowerInvariant() switch { "banking" or "momo" or "vnpay" or "zalopay" or "chuyen_khoan" => "chuyen_khoan", "card" or "the" => "the", _ => "cod" },
+                PhuongThucThanhToan = phuongThuc,
                 TongTien = tongTien,
-                TrangThai = AppConstants.OrderStatus.ChoXacNhan
+                TrangThai = initialStatus
             };
 
             _context.DonHangOnlines.Add(donHang);
@@ -191,7 +204,9 @@ public class OnlineOrderService : IOnlineOrderService
                     trangThai = donHang.TrangThai,
                     phuongThucThanhToan = donHang.PhuongThucThanhToan,
                     ngayDat = donHang.NgayDat,
-                    message = $"KhÃ¡ch hÃ ng {donHang.TenNguoiNhan} ({donHang.SdtNguoiNhan}) vá»«a Ä‘áº·t Ä‘Æ¡n hÃ ng má»›i #{donHang.MaDH} trá»‹ giÃ¡ {donHang.TongTien:N0}Ä‘",
+                    message = donHang.TrangThai == AppConstants.OrderStatus.ChoThanhToan
+                        ? $"Khách hàng {donHang.TenNguoiNhan} vừa tạo đơn hàng #{donHang.MaDH} (Chờ quét mã thanh toán online {donHang.TongTien:N0}đ)"
+                        : $"Khách hàng {donHang.TenNguoiNhan} ({donHang.SdtNguoiNhan}) vừa đặt đơn hàng COD mới #{donHang.MaDH} trị giá {donHang.TongTien:N0}đ",
                     items = chiTietList.Select(ct => new
                     {
                         maHang = ct.MaHang,
@@ -392,12 +407,13 @@ public class OnlineOrderService : IOnlineOrderService
             var curr = donHang.TrangThai;
 
             // Kiá»ƒm tra mÃ¡y tráº¡ng thÃ¡i há»£p lá»‡ theo P4-07
-            // Chá»‰ cho: cho_xac_nhan â†’ da_xac_nhan, da_xac_nhan â†’ dang_giao, dang_giao â†’ hoan_thanh, cho_xac_nhan hoáº·c da_xac_nhan â†’ da_huy. CÃ²n láº¡i 409
+            // Hỗ trợ luồng Chờ thanh toán -> Đã xác nhận / Chờ xác nhận / Đã hủy
             bool validTransition = false;
-            if (curr == AppConstants.OrderStatus.ChoXacNhan && newTrangThai == AppConstants.OrderStatus.DaXacNhan) validTransition = true;
+            if (curr == AppConstants.OrderStatus.ChoThanhToan && (newTrangThai == AppConstants.OrderStatus.DaXacNhan || newTrangThai == AppConstants.OrderStatus.ChoXacNhan || newTrangThai == AppConstants.OrderStatus.DaHuy)) validTransition = true;
+            else if (curr == AppConstants.OrderStatus.ChoXacNhan && newTrangThai == AppConstants.OrderStatus.DaXacNhan) validTransition = true;
             else if (curr == AppConstants.OrderStatus.DaXacNhan && newTrangThai == AppConstants.OrderStatus.DangGiao) validTransition = true;
             else if (curr == AppConstants.OrderStatus.DangGiao && newTrangThai == AppConstants.OrderStatus.HoanThanh) validTransition = true;
-            else if ((curr == AppConstants.OrderStatus.ChoXacNhan || curr == AppConstants.OrderStatus.DaXacNhan) && newTrangThai == AppConstants.OrderStatus.DaHuy) validTransition = true;
+            else if ((curr == AppConstants.OrderStatus.ChoThanhToan || curr == AppConstants.OrderStatus.ChoXacNhan || curr == AppConstants.OrderStatus.DaXacNhan) && newTrangThai == AppConstants.OrderStatus.DaHuy) validTransition = true;
 
             if (!validTransition)
             {
@@ -543,6 +559,7 @@ public class OnlineOrderService : IOnlineOrderService
             {
                 string msg = newTrangThai switch
                 {
+                    AppConstants.OrderStatus.ChoThanhToan => $"Đơn đặt hàng #{donHang.MaDH} đang chờ quét mã thanh toán online.",
                     AppConstants.OrderStatus.DaXacNhan => $"ÄÆ¡n Ä‘áº·t hÃ ng #{donHang.MaDH} Ä‘Ã£ Ä‘Æ°á»£c Admin xÃ¡c nháº­n thÃ nh cÃ´ng! Äang chuáº©n bá»‹ Ä‘Ã³ng gÃ³i.",
                     AppConstants.OrderStatus.DangGiao => $"ÄÆ¡n Ä‘áº·t hÃ ng #{donHang.MaDH} Ä‘Ã£ Ä‘Æ°á»£c xuáº¥t kho vÃ  Ä‘ang trÃªn Ä‘Æ°á»ng giao Ä‘áº¿n báº¡n!",
                     AppConstants.OrderStatus.HoanThanh => $"ÄÆ¡n Ä‘áº·t hÃ ng #{donHang.MaDH} Ä‘Ã£ Ä‘Æ°á»£c giao thÃ nh cÃ´ng vÃ  hoÃ n táº¥t! Cáº£m Æ¡n báº¡n Ä‘Ã£ mua hÃ ng.",

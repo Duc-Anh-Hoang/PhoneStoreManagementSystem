@@ -6,7 +6,6 @@ namespace PhoneStoreAPI.Features.Payment;
 
 [ApiController]
 [Route("api/payment")]
-[Route("api/thanhtoan")]
 public class PaymentController : ControllerBase
 {
     private readonly IPaymentService _paymentService;
@@ -36,6 +35,17 @@ public class PaymentController : ControllerBase
     {
         var success = await _paymentService.ConfirmOrderPaymentAsync(maDH, request);
         return Ok(new { success, message = $"Đã xác nhận thanh toán cho đơn hàng {maDH} thành công." });
+    }
+
+    /// <summary>
+    /// Kiểm tra trạng thái thanh toán đơn hàng (phục vụ Realtime polling phía Client)
+    /// </summary>
+    [HttpGet("status/{maDH}")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetStatus(string maDH)
+    {
+        var status = await _paymentService.GetPaymentStatusAsync(maDH);
+        return Ok(status);
     }
 
     /// <summary>

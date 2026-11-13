@@ -202,7 +202,11 @@
       }
     };
 
-    window.toggleNotificationPopover = function () {
+    window.toggleNotificationPopover = function (e) {
+      if (window.NotificationCenter && typeof window.NotificationCenter.toggle === 'function') {
+        window.NotificationCenter.toggle(e);
+        return;
+      }
       const pop = document.getElementById('notification-popover');
       if (pop) pop.classList.toggle('hidden');
     };
@@ -904,7 +908,7 @@
       <div class="flex items-center gap-2.5 w-full">
         <span class="text-xs sm:text-sm font-semibold text-[#0F172A] whitespace-nowrap px-1.5 flex-shrink-0">Hot Search:</span>
         <div id="quick-chips-scroll" class="flex-1 flex items-center gap-2.5 overflow-x-auto no-scrollbar py-1">
-          <button type="button" onclick="window.onBrandFilterClick('all')" class="chip-btn flex-shrink-0 px-5 py-2 rounded-full text-xs sm:text-sm font-black transition-all cursor-pointer flex items-center justify-center h-9 sm:h-10 shadow-xs ${selectedBrand === 'all' ? 'bg-[#0057B7] text-white' : 'bg-white border border-slate-200 text-slate-700 hover:border-slate-300'}">
+          <button type="button" onclick="window.onBrandFilterClick('all')" class="chip-btn flex-shrink-0 px-5 py-2 rounded-full text-xs sm:text-sm font-black transition-all cursor-pointer flex items-center justify-center h-9 sm:h-10 shadow-xs ${selectedBrand === 'all' ? 'bg-[#0066FF] text-white' : 'bg-white border border-slate-200 text-slate-700 hover:border-slate-300'}">
             Tất cả
           </button>
     `;
@@ -916,7 +920,7 @@
       const rawLogo = BRAND_LOGOS[bKey] || getFallbackBrandLogo(bKey); const logoUrl = rawLogo ? resolveAssetPath(rawLogo) : '';
 
       return `
-        <button type="button" onclick="window.onBrandFilterClick('${bKey}')" title="${bName}" class="chip-btn flex-shrink-0 px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-bold transition-all cursor-pointer flex items-center justify-center h-9 sm:h-10 shadow-2xs ${isSel ? 'bg-[#0057B7] text-white border border-[#0057B7]' : 'bg-white border border-slate-200 text-slate-700 hover:border-slate-300'}">
+        <button type="button" onclick="window.onBrandFilterClick('${bKey}')" title="${bName}" class="chip-btn flex-shrink-0 px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-bold transition-all cursor-pointer flex items-center justify-center h-9 sm:h-10 shadow-2xs ${isSel ? 'bg-[#0066FF] text-white border border-[#0066FF]' : 'bg-white border border-slate-200 text-slate-700 hover:border-slate-300'}">
           ${logoUrl ? `<img src="${logoUrl}" alt="${bName}" class="h-4.5 sm:h-5 max-w-[70px] sm:max-w-[85px] object-contain filter ${isSel ? 'brightness-0 invert' : ''}" onerror="this.style.display='none'" />` : ''}
           ${logoUrl ? '' : `<span>${bName}</span>`}
         </button>

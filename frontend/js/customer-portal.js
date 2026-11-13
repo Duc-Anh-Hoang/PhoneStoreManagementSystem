@@ -327,7 +327,7 @@
       try {
         const token = localStorage.getItem('customer_token') || user.token;
         const headers = token ? { 'Authorization': 'Bearer ' + token, 'X-Auth-Token': token } : {};
-        const khResp = await fetch(`${API_BASE}/khachhang/sdt/${user.sdt}`, { headers });
+        const khResp = await fetch(`${API_BASE}/customers/sdt/${user.sdt}`, { headers });
         if (khResp.ok) {
           const kh = await khResp.json();
           if (kh && kh.diemTichLuy !== undefined) {
@@ -384,6 +384,7 @@
       }
 
       const statusMap = {
+        cho_thanh_toan: { label: 'Chờ thanh toán', color: 'bg-orange-50 text-orange-700 border-orange-200' },
         cho_xac_nhan: { label: 'Chờ xác nhận', color: 'bg-amber-50 text-amber-700 border-amber-200' },
         da_xac_nhan: { label: 'Đã xác nhận', color: 'bg-blue-50 text-blue-700 border-blue-200' },
         dang_giao: { label: 'Đang giao hàng', color: 'bg-indigo-50 text-indigo-700 border-indigo-200' },

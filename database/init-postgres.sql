@@ -229,7 +229,7 @@ CREATE TABLE IF NOT EXISTS DonHangOnline (
     DIACHIGIAO          VARCHAR(255)  NOT NULL,
     PHUONGTHUCTHANHTOAN VARCHAR(20)   NOT NULL CHECK (PHUONGTHUCTHANHTOAN IN ('cod', 'chuyen_khoan', 'the')),
     TONGTIEN            DECIMAL(18,2) NOT NULL DEFAULT 0 CHECK (TONGTIEN >= 0),
-    TRANGTHAI           VARCHAR(20)   NOT NULL DEFAULT 'cho_xac_nhan' CHECK (TRANGTHAI IN ('cho_xac_nhan', 'da_xac_nhan', 'dang_giao', 'hoan_thanh', 'da_huy')),
+    TRANGTHAI           VARCHAR(20)   NOT NULL DEFAULT 'cho_xac_nhan' CHECK (TRANGTHAI IN ('cho_thanh_toan', 'cho_xac_nhan', 'da_xac_nhan', 'dang_giao', 'hoan_thanh', 'da_huy')),
     MANV                VARCHAR(10)   NULL REFERENCES NhanVien(MANV),
     SOHD                VARCHAR(15)   NULL REFERENCES HoaDon(SOHD)
 );

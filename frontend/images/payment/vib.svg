@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 44" fill="none">
+  <!-- VIB 3 Gold Petals Symbol -->
+  <g transform="translate(6, 6)">
+    <!-- Left curved petal -->
+    <path d="M5 28 C3 20 6 10 14 3 C12 11 12 19 8 27 Z" fill="#FFA500"/>
+    <!-- Center petal -->
+    <path d="M12 29 C14 18 18 8 23 2 C21 11 20 20 16 29 Z" fill="#FF8C00"/>
+    <!-- Right curved petal -->
+    <path d="M21 28 C26 21 29 13 32 5 C28 14 26 21 23 28 Z" fill="#FFA500"/>
+  </g>
+  <!-- VIB Wordmark -->
+  <text x="46" y="30" font-family="'Be Vietnam Pro', sans-serif" font-size="24" font-weight="900" fill="#004B87" letter-spacing="1">VIB</text>
+</svg>

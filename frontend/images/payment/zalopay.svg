@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 48" fill="none">
+  <!-- ZaloPay Rounded Badge -->
+  <g transform="translate(6, 6)">
+    <rect width="36" height="36" rx="9" fill="#0068FF"/>
+    <path d="M11 12 L25 12 L14 24 L25 24" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <circle cx="23" cy="14" r="2" fill="#00C25E"/>
+  </g>
+  <!-- ZaloPay Wordmark -->
+  <text x="48" y="30" font-family="'Be Vietnam Pro', system-ui, sans-serif" font-size="21" font-weight="900" fill="#0068FF" letter-spacing="-0.5">Zalo<tspan font-weight="900" fill="#00C25E">Pay</tspan></text>
+</svg>
