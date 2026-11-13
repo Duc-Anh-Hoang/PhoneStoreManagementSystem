@@ -182,8 +182,14 @@
     }
     #admin-sidebar.sidebar-collapsed .nav-group-header,
     #admin-sidebar.sidebar-collapsed .nav-link-text,
-    #admin-sidebar.sidebar-collapsed .sidebar-brand-text {
+    #admin-sidebar.sidebar-collapsed .sidebar-brand-text,
+    #admin-sidebar.sidebar-collapsed .sidebar-brand-full {
       display: none !important;
+    }
+    #admin-sidebar.sidebar-collapsed .sidebar-header-box {
+      justify-content: center !important;
+      padding-left: 0.5rem !important;
+      padding-right: 0.5rem !important;
     }
     #admin-sidebar.sidebar-collapsed .admin-nav-link {
       justify-content: center !important;
@@ -344,8 +350,8 @@
   <aside id="admin-sidebar" class="bg-white text-slate-600 flex flex-col flex-shrink-0 z-30 shadow-sm select-none border-r border-slate-200">
     
     <!-- Logo & Thương hiệu -->
-    <div class="h-16 px-3.5 flex items-center justify-between border-b border-slate-200 bg-white">
-      <a href="admin.html" class="flex items-center gap-2 group min-w-0">
+    <div class="sidebar-header-box h-16 px-3.5 flex items-center justify-between border-b border-slate-200 bg-white">
+      <a href="admin.html" class="sidebar-brand-full flex items-center gap-2 group min-w-0">
         <div class="h-9 px-2.5 rounded-lg bg-slate-900 flex items-center gap-1.5 shadow-sm flex-shrink-0">
           <i class="fa-solid fa-mobile-screen text-blue-400 text-xs"></i>
           <span class="font-black text-white text-[11px] tracking-wider">PHONESTORE</span>
