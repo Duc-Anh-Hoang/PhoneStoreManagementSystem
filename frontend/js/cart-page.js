@@ -322,6 +322,7 @@
     renderCart();
     updateHeaderBadge();
     updateOrderCounts();
+    initGhnAddressSelector();
 
     const urlParams = new URLSearchParams(window.location.search);
     const tabParam = urlParams.get('tab');
@@ -1047,8 +1048,9 @@
       }
     }
 
-    const finalTotal = Math.max(0, subtotal - memberDiscount - pointsDiscount - voucherDiscount);
+    const finalTotal = Math.max(0, subtotal - memberDiscount - pointsDiscount - voucherDiscount) + (currentShippingFee || 0);
     updateTotals(subtotal, memberDiscount, voucherDiscount, finalTotal, pointsDiscount);
+    if (typeof debounceShippingQuote === 'function') debounceShippingQuote();
   }
 
   function updateTotals(subtotal, memberDiscount, voucherDiscount, finalTotal, pointsDiscount) {
@@ -1093,7 +1095,7 @@
     updateEWalletQR(finalTotal);
   }
 
-  // Cập nhật thanh tiến trình Freeship
+  // Cập nhật thanh tiến trình Freeship thông minh theo khu vực (TP.HCM 5TR, Toàn quốc 20TR)
   function updateFreeshipProgress(subtotal) {
     const container = document.getElementById('freeship-progress-bar-container');
     const msgText = document.getElementById('freeship-message-text');
@@ -1101,13 +1103,18 @@
     const badge = document.getElementById('freeship-badge');
     if (!container || !msgText || !fill) return;
 
-    const threshold = 500000; // 500.000 ₫
+    const elProvince = document.getElementById('order-province');
+    const provinceId = elProvince ? Number(elProvince.value || 0) : 202;
+    const isHcm = provinceId === 202;
+    const threshold = isHcm ? 5000000 : 20000000;
+    const areaName = isHcm ? 'nội thành TP.HCM' : 'toàn quốc';
+
     if (subtotal >= threshold) {
       msgText.innerHTML = `
         <span class="w-6 h-6 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs">
           <i class="fa-solid fa-circle-check"></i>
         </span>
-        <span>Chúc mừng! Bạn đã đủ điều kiện <strong class="text-emerald-600 font-bold">Miễn phí vận chuyển toàn quốc</strong>!</span>
+        <span>Chúc mừng! Bạn đã đủ điều kiện <strong class="text-emerald-600 font-bold">Miễn phí vận chuyển (${areaName})</strong>!</span>
       `;
       fill.style.width = '100%';
       fill.className = 'h-full bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full transition-all duration-300';
@@ -1122,12 +1129,12 @@
         <span class="w-6 h-6 rounded-lg bg-blue-100 text-[#0057B7] flex items-center justify-center text-xs">
           <i class="fa-solid fa-truck-fast"></i>
         </span>
-        <span>Mua thêm <strong id="freeship-amount-needed" class="text-rose-600 font-bold">${formatVND(needed)}</strong> để được <strong>Miễn phí vận chuyển toàn quốc</strong>!</span>
+        <span>Mua thêm <strong id="freeship-amount-needed" class="text-rose-600 font-bold">${formatVND(needed)}</strong> để được <strong>Miễn phí vận chuyển (${areaName})</strong>!</span>
       `;
       fill.style.width = pct + '%';
       fill.className = 'h-full bg-gradient-to-r from-blue-500 to-[#0057B7] rounded-full transition-all duration-300';
       if (badge) {
-        badge.textContent = 'Freeship 500K';
+        badge.textContent = isHcm ? 'Freeship 5TR' : 'Freeship 20TR';
         badge.className = 'text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-blue-100 text-[#0057B7]';
       }
     }
@@ -1197,6 +1204,7 @@
       if (addressBox) addressBox.classList.add('hidden');
       if (storeBox) storeBox.classList.remove('hidden');
     }
+    if (typeof updateShippingQuote === 'function') updateShippingQuote();
   };
 
   // Cập nhật VietQR Code động
@@ -1369,7 +1377,16 @@
         document.getElementById('order-address')?.focus();
         return;
       }
-      fullAddress = `${street}, ${ward ? ward + ', ' : ''}${district ? district + ', ' : ''}${province}`;
+      const elP = document.getElementById('order-province');
+      const elD = document.getElementById('order-district');
+      const elW = document.getElementById('order-ward');
+      const provinceName = elP ? (elP.options[elP.selectedIndex]?.getAttribute('data-name') || elP.options[elP.selectedIndex]?.text || '') : '';
+      const districtName = elD ? (elD.options[elD.selectedIndex]?.getAttribute('data-name') || elD.options[elD.selectedIndex]?.text || '') : '';
+      const wardName = elW ? (elW.options[elW.selectedIndex]?.getAttribute('data-name') || elW.options[elW.selectedIndex]?.text || '') : '';
+      const toDistrictId = elD ? Number(elD.value || 0) : 0;
+      const toWardCode = elW ? (elW.value || '') : '';
+      const ghnTag = (toDistrictId > 0 && toWardCode) ? `[GHN:${toDistrictId}:${toWardCode}] ` : '';
+      fullAddress = `${ghnTag}${street}, ${wardName ? wardName + ', ' : ''}${districtName ? districtName + ', ' : ''}${provinceName}`;
     }
 
     const subtotal = selectedItems.reduce((s, it) => s + ((Number(it.price || it.donGia || 0)) * (Number(it.qty || it.soLuong || 1))), 0);
@@ -2276,11 +2293,13 @@
     showToast('Đã khôi phục tài khoản mặc định SamaMobile!');
   };
 
-})();
 
   // =========================================================================
   // BƯỚC 2 & 3: TÍCH HỢP ĐỊA CHỈ 3 CẤP GHN & TÍNH PHÍ VẬN CHUYỂN DỰ KIẾN (QUOTE)
   // =========================================================================
+  // Expose and auto-trigger
+  window.initGhnAddressSelector = initGhnAddressSelector;
+
   async function initGhnAddressSelector() {
     const elProvince = document.getElementById('order-province');
     const elDistrict = document.getElementById('order-district');
@@ -2292,7 +2311,12 @@
       const res = await (window.api && typeof window.api.get === 'function' 
         ? window.api.get('/ghn/provinces') 
         : fetch('/api/ghn/provinces').then(r => r.json()));
-      const provinces = Array.isArray(res) ? res : (res?.data || []);
+      const rawProvinces = Array.isArray(res) ? res : (res?.data || []);
+      const provinces = rawProvinces.filter(p => {
+        const name = (p.ProvinceName || '').trim();
+        const code = (p.Code || '').trim().toUpperCase();
+        return !name.toLowerCase().includes('test') && !name.toLowerCase().includes('alert') && !code.includes('TEST') && name !== 'Hà Nội 02';
+      });
 
       provinces.sort((a, b) => {
         const nameA = a.ProvinceName || '';
@@ -2364,7 +2388,11 @@
       const res = await (window.api && typeof window.api.get === 'function'
         ? window.api.get('/ghn/districts?provinceId=' + provinceId)
         : fetch('/api/ghn/districts?provinceId=' + provinceId).then(r => r.json()));
-      const districts = Array.isArray(res) ? res : (res?.data || []);
+      const rawDistricts = Array.isArray(res) ? res : (res?.data || []);
+      const districts = rawDistricts.filter(d => {
+        const name = (d.DistrictName || '').trim();
+        return !name.toLowerCase().includes('test') && !name.toLowerCase().includes('alert');
+      });
       districts.sort((a, b) => (a.DistrictName || '').localeCompare(b.DistrictName || '', 'vi'));
 
       elDistrict.innerHTML = '<option value="">-- Chọn Quận / Huyện --</option>' +
@@ -2396,7 +2424,11 @@
       const res = await (window.api && typeof window.api.get === 'function'
         ? window.api.get('/ghn/wards?districtId=' + districtId)
         : fetch('/api/ghn/wards?districtId=' + districtId).then(r => r.json()));
-      const wards = Array.isArray(res) ? res : (res?.data || []);
+      const rawWards = Array.isArray(res) ? res : (res?.data || []);
+      const wards = rawWards.filter(w => {
+        const name = (w.WardName || '').trim();
+        return !name.toLowerCase().includes('test') && !name.toLowerCase().includes('alert');
+      });
       wards.sort((a, b) => (a.WardName || '').localeCompare(b.WardName || '', 'vi'));
 
       elWard.innerHTML = '<option value="">-- Chọn Phường / Xã --</option>' +
@@ -2538,3 +2570,10 @@
     const finalTotal = Math.max(0, subtotal - memberDiscount - pointsDiscount - voucherDiscount) + (currentShippingFee || 0);
     updateTotals(subtotal, memberDiscount, voucherDiscount, finalTotal, pointsDiscount);
   }
+
+  // Tự động kích hoạt tải danh mục hành chính GHN nếu trang đã sẵn sàng
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    setTimeout(initGhnAddressSelector, 10);
+  }
+
+})();

@@ -315,8 +315,10 @@ public class GhnController : ControllerBase
             }
         }
 
-        // Chính sách freeship: Đơn có tiền hàng sau giảm giá >= 1.000.000đ thì khách không trả phí ship
-        const decimal freeShipThreshold = 1_000_000m;
+        // Chính sách Freeship thông minh theo khu vực (tránh bù lỗ cước vận chuyển khi giao xa):
+        // - Nội thành TP.HCM (gần kho Thủ Đức): Đơn từ 5.000.000đ trở lên được Freeship.
+        // - Các tỉnh thành khác (toàn quốc): Đơn từ 20.000.000đ trở lên mới được Freeship.
+        decimal freeShipThreshold = isHcm ? 5_000_000m : 20_000_000m;
         bool isFreeShip = request.SubtotalAfterDiscount >= freeShipThreshold;
         int customerFee = isFreeShip ? 0 : actualFee;
         int freeShipSaved = isFreeShip ? actualFee : 0;
