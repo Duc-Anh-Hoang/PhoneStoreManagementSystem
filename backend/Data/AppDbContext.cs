@@ -31,6 +31,8 @@ public class AppDbContext : DbContext
     public DbSet<DonHangOnline> DonHangOnlines => Set<DonHangOnline>();
     public DbSet<ChiTietDonHangOnline> ChiTietDonHangOnlines => Set<ChiTietDonHangOnline>();
     public DbSet<ThamSo> ThamSos => Set<ThamSo>();
+    public DbSet<PhienChat> PhienChats => Set<PhienChat>();
+    public DbSet<TinNhan> TinNhans => Set<TinNhan>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -61,6 +61,30 @@ CREATE TABLE IF NOT EXISTS TraHangLichSu (
 );
 CREATE INDEX IF NOT EXISTS IX_TraHangLichSu_MaTR ON TraHangLichSu(MATR);
 
+CREATE TABLE IF NOT EXISTS phienchat (
+    maphienchat VARCHAR(36) PRIMARY KEY,
+    makh VARCHAR(10) NULL REFERENCES KhachHang(MAKH) ON DELETE SET NULL,
+    khachhang_ten VARCHAR(100) NOT NULL DEFAULT 'Khách hàng',
+    khachhang_sdt VARCHAR(15) NULL,
+    manv VARCHAR(10) NULL REFERENCES NhanVien(MANV) ON DELETE SET NULL,
+    trang_thai VARCHAR(20) NOT NULL DEFAULT 'WAITING',
+    ngay_tao TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    ngay_ket_thuc TIMESTAMPTZ NULL
+);
+CREATE INDEX IF NOT EXISTS IX_phienchat_trang_thai ON phienchat(trang_thai);
+CREATE INDEX IF NOT EXISTS IX_phienchat_ngay_tao ON phienchat(ngay_tao);
+
+CREATE TABLE IF NOT EXISTS tinnhan (
+    matinnhan BIGSERIAL PRIMARY KEY,
+    maphienchat VARCHAR(36) NOT NULL REFERENCES phienchat(maphienchat) ON DELETE CASCADE,
+    nguoi_gui VARCHAR(20) NOT NULL,
+    nguoi_gui_id VARCHAR(36) NULL,
+    noi_dung TEXT NOT NULL,
+    da_doc BOOLEAN NOT NULL DEFAULT FALSE,
+    thoi_gian TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS IX_tinnhan_phienchat_thoigian ON tinnhan(maphienchat, thoi_gian);
+
 INSERT INTO ThamSo (MATHAMSO, TENTHAMSO, GIATRI, DONVI) VALUES
     ('HAN_DOI_Y_NGAY', 'Hạn đổi trả đối với lý do đổi ý (nguyên seal)', 7, 'ngày')
 ON CONFLICT (MATHAMSO) DO NOTHING;

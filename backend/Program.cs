@@ -165,6 +165,7 @@ app.MapGet("/api/health", () => Results.Ok(new
 
 app.MapControllers();
 app.MapHub<OrderHub>("/hubs/order");
+app.MapHub<PhoneStoreAPI.Features.Chat.Hubs.ChatHub>("/hubs/chat");
 
 try
 {
