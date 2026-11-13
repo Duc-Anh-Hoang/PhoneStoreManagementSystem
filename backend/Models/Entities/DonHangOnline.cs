@@ -52,5 +52,33 @@ public class DonHangOnline
     [MaxLength(15)]
     public string? SoHD { get; set; }
 
+    [Column("payment_status")]
+    [MaxLength(20)]
+    public string PaymentStatus { get; set; } = "unpaid";
+
+    [Column("risk_flag")]
+    public bool RiskFlag { get; set; } = false;
+
+    [Column("risk_reasons")]
+    public string? RiskReasons { get; set; }
+
+    [Column("auto_approve_at")]
+    public DateTime? AutoApproveAt { get; set; }
+
+    [Column("ghn_order_code")]
+    [MaxLength(50)]
+    public string? GhnOrderCode { get; set; }
+
+    [Column("ghn_error")]
+    public string? GhnError { get; set; }
+
+    [Column("client_ip")]
+    [MaxLength(50)]
+    public string? ClientIp { get; set; }
+
+    [Column("address_hash")]
+    [MaxLength(64)]
+    public string? AddressHash { get; set; }
+
     public ICollection<ChiTietDonHangOnline> ChiTietDonHangs { get; set; } = new List<ChiTietDonHangOnline>();
 }

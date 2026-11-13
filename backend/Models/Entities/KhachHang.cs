@@ -26,4 +26,22 @@ public class KhachHang
     [Column("email")]
     [MaxLength(100)]
     public string? Email { get; set; }
+
+    [Column("completed_orders")]
+    public int CompletedOrders { get; set; } = 0;
+
+    [Column("qualified_orders")]
+    public int QualifiedOrders { get; set; } = 0;
+
+    [Column("max_completed_value")]
+    public decimal MaxCompletedValue { get; set; } = 0;
+
+    [Column("failed_orders")]
+    public int FailedOrders { get; set; } = 0;
+
+    [Column("is_blacklisted")]
+    public bool IsBlacklisted { get; set; } = false;
+
+    [Column("updated_at")]
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 }

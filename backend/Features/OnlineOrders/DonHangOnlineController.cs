@@ -2,7 +2,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PhoneStoreAPI.Data;
+using PhoneStoreAPI.Features.Customers.Helpers;
 using PhoneStoreAPI.Features.OnlineOrders.DTOs;
+using PhoneStoreAPI.Features.OnlineOrders.Services;
 
 namespace PhoneStoreAPI.Features.OnlineOrders;
 
@@ -13,15 +15,18 @@ public class DonHangOnlineController : ControllerBase
 {
     private readonly IOnlineOrderService _onlineOrderService;
     private readonly IShippingService _shippingService;
+    private readonly IOrderSettingsService _settings;
     private readonly AppDbContext _context;
 
     public DonHangOnlineController(
         IOnlineOrderService onlineOrderService,
         IShippingService shippingService,
+        IOrderSettingsService settings,
         AppDbContext context)
     {
         _onlineOrderService = onlineOrderService;
         _shippingService = shippingService;
+        _settings = settings;
         _context = context;
     }
 
@@ -87,4 +92,57 @@ public class DonHangOnlineController : ControllerBase
         var result = await _onlineOrderService.BulkApproveOrdersAsync(request?.OrderCodes);
         return Ok(result);
     }
+
+    /// <summary>
+    /// Lấy toàn bộ settings của hệ thống duyệt đơn (plan (8).md)
+    /// </summary>
+    [HttpGet("settings")]
+    public async Task<IActionResult> GetSettings()
+    {
+        var dict = await _settings.GetAllSettingsAsync();
+        return Ok(dict);
+    }
+
+    /// <summary>
+    /// Cập nhật setting theo key (plan (8).md)
+    /// </summary>
+    [HttpPut("settings/{key}")]
+    public async Task<IActionResult> UpdateSetting(string key, [FromBody] UpdateSettingDto request)
+    {
+        var ok = await _settings.UpdateSettingAsync(key, request.Value);
+        return Ok(new { success = ok, key, value = request.Value });
+    }
+
+    /// <summary>
+    /// Thêm hoặc gỡ SĐT khỏi Blacklist
+    /// </summary>
+    [HttpPost("blacklist/{phone}/toggle")]
+    public async Task<IActionResult> ToggleBlacklist(string phone)
+    {
+        var norm = PhoneHelper.NormalizeVietnamesePhone(phone) ?? phone.Trim();
+        var kh = await _context.KhachHangs.FirstOrDefaultAsync(k => k.Sdt == norm);
+        if (kh == null) return NotFound(new { message = "Không tìm thấy khách hàng với SĐT này." });
+        kh.IsBlacklisted = !kh.IsBlacklisted;
+        kh.UpdatedAt = DateTime.UtcNow;
+        await _context.SaveChangesAsync();
+        return Ok(new { phone = norm, isBlacklisted = kh.IsBlacklisted });
+    }
+
+    /// <summary>
+    /// Lấy lịch sử biến động trạng thái của đơn hàng (order_status_logs)
+    /// </summary>
+    [HttpGet("{maDH}/logs")]
+    public async Task<IActionResult> GetOrderLogs(string maDH)
+    {
+        var logs = await _context.OrderStatusLogs
+            .Where(l => l.OrderId == maDH)
+            .OrderByDescending(l => l.CreatedAt)
+            .ToListAsync();
+        return Ok(logs);
+    }
+}
+
+public class UpdateSettingDto
+{
+    public string Value { get; set; } = string.Empty;
 }

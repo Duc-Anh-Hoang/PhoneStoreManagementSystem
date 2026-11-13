@@ -114,6 +114,10 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IOtpService, OtpService>();
         // Giai đoạn 6: Đăng ký Shipping Service
         services.AddScoped<IShippingService, ShippingService>();
+        // plan (8).md: Đăng ký OrderSettingsService & OrderDecisionEngine
+        services.AddScoped<PhoneStoreAPI.Features.OnlineOrders.Services.IOrderSettingsService, PhoneStoreAPI.Features.OnlineOrders.Services.OrderSettingsService>();
+        services.AddScoped<PhoneStoreAPI.Features.OnlineOrders.Services.IOrderDecisionEngine, PhoneStoreAPI.Features.OnlineOrders.Services.OrderDecisionEngine>();
+        services.AddHostedService<PhoneStoreAPI.Features.OnlineOrders.Background.AutoApproveBackgroundService>();
 
         // FluentValidation tự động đăng ký tất cả validator trong assembly
         services.AddValidatorsFromAssembly(typeof(ServiceCollectionExtensions).Assembly);

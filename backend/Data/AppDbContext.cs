@@ -34,6 +34,12 @@ public class AppDbContext : DbContext
     public DbSet<PhienChat> PhienChats => Set<PhienChat>();
     public DbSet<TinNhan> TinNhans => Set<TinNhan>();
 
+    // Bảng phục vụ tự động duyệt đơn (plan (8).md)
+    public DbSet<CustomerAddress> CustomerAddresses => Set<CustomerAddress>();
+    public DbSet<OrderStatusLog> OrderStatusLogs => Set<OrderStatusLog>();
+    public DbSet<WebhookEvent> WebhookEvents => Set<WebhookEvent>();
+    public DbSet<OrderSetting> OrderSettings => Set<OrderSetting>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

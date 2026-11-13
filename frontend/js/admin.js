@@ -1411,7 +1411,11 @@ async function renderDonHangTable(filter = 'all') {
               ? '<div class="text-[10px] font-medium text-emerald-600 mt-1"><i class="fa-solid fa-circle-check mr-0.5"></i>Đã thu tiền</div>'
               : (o.trangThai !== 'da_huy' ? '<div class="text-[10px] font-medium text-amber-600 mt-1">Chưa thu tiền</div>' : ''))}
         </td>
-        <td class="p-3.5 text-xs text-center whitespace-nowrap">${Format.statusBadge(o.trangThai)}</td>
+        <td class="p-3.5 text-xs text-center whitespace-nowrap">
+          ${Format.statusBadge(o.trangThai)}
+          ${o.riskFlag ? `<div class="mt-1"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-700 border border-rose-300 inline-flex items-center gap-1" title="${(o.riskReasons || '').replace(/"/g, '&quot;')}"><i class="fa-solid fa-triangle-exclamation"></i> Cần kiểm tra</span></div>` : ''}
+          ${o.ghnOrderCode ? `<div class="mt-1 font-mono text-[10px] text-blue-600 font-bold">GHN: #${o.ghnOrderCode}</div>` : ''}
+        </td>
         <td class="p-3.5 text-xs text-right whitespace-nowrap">
           <div class="flex items-center justify-end gap-1.5">
             <button onclick="showAdminOrderDetail('${o.maDH}')" class="px-2 py-1.5 text-slate-600 hover:bg-slate-100 font-medium rounded-lg text-xs transition-colors border border-slate-200 cursor-pointer" title="Xem chi tiết đơn hàng & hành trình vận chuyển">
@@ -6469,3 +6473,68 @@ window.setAdminChatTab = setAdminChatTab;
 window.filterAdminChatList = filterAdminChatList;
 window.toggleCustomerInfoPane = toggleCustomerInfoPane;
 window.initAdminChatSignalR = initAdminChatSignalR;
+
+// =============================================================================
+// CẤU HÌNH TỰ ĐỘNG DUYỆT ĐƠN HÀNG (plan (8).md)
+// =============================================================================
+window.openOrderSettingsModal = async function () {
+  const modal = document.getElementById('modal-order-settings');
+  if (!modal) return;
+  modal.classList.remove('hidden');
+
+  try {
+    const s = await api.get('/donhangonline/settings');
+    if (s) {
+      document.getElementById('setting-auto-enabled').checked = s.auto_approve_enabled !== 'false';
+      document.getElementById('setting-delay-minutes').value = s.auto_approve_delay_minutes || '15';
+      document.getElementById('setting-cod-hold').value = s.cod_hold_threshold || '5000000';
+      document.getElementById('setting-cod-max').value = s.cod_max_value || '30000000';
+      document.getElementById('setting-min-completed').value = s.trusted_min_completed || '2';
+      document.getElementById('setting-min-value').value = s.trust_min_order_value || '1000000';
+      document.getElementById('setting-multiplier').value = s.trust_value_multiplier || '2';
+      document.getElementById('setting-blacklist-failed').value = s.blacklist_after_failed || '2';
+    }
+  } catch (err) {
+    showToast('Lỗi tải cấu hình: ' + (err.message || err), 'error');
+  }
+};
+
+window.closeOrderSettingsModal = function () {
+  const modal = document.getElementById('modal-order-settings');
+  if (modal) modal.classList.add('hidden');
+};
+
+window.saveOrderSettings = async function () {
+  const payload = [
+    { key: 'auto_approve_enabled', value: document.getElementById('setting-auto-enabled').checked ? 'true' : 'false' },
+    { key: 'auto_approve_delay_minutes', value: document.getElementById('setting-delay-minutes').value.trim() },
+    { key: 'cod_hold_threshold', value: document.getElementById('setting-cod-hold').value.trim() },
+    { key: 'cod_max_value', value: document.getElementById('setting-cod-max').value.trim() },
+    { key: 'trusted_min_completed', value: document.getElementById('setting-min-completed').value.trim() },
+    { key: 'trust_min_order_value', value: document.getElementById('setting-min-value').value.trim() },
+    { key: 'trust_value_multiplier', value: document.getElementById('setting-multiplier').value.trim() },
+    { key: 'blacklist_after_failed', value: document.getElementById('setting-blacklist-failed').value.trim() }
+  ];
+
+  showToast('Đang lưu cấu hình...', 'info');
+  try {
+    for (const item of payload) {
+      await api.put('/donhangonline/settings/' + encodeURIComponent(item.key), { value: item.value });
+    }
+    showToast('Đã lưu cấu hình tự duyệt đơn thành công!', 'success');
+    closeOrderSettingsModal();
+  } catch (err) {
+    showToast('Lỗi lưu cấu hình: ' + (err.message || err), 'error');
+  }
+};
+
+window.retryShipmentAdmin = async function (maDH) {
+  showToast('Đang thử lại tạo vận đơn GHN cho ' + maDH + '...', 'info');
+  try {
+    const res = await api.post('/donhangonline/' + encodeURIComponent(maDH) + '/shipping/retry', {});
+    showToast('Đã tạo lại vận đơn GHN thành công: #' + (res.trackingCode || ''), 'success');
+    await renderDonHang();
+  } catch (err) {
+    showToast('Thử lại thất bại: ' + (err.message || err), 'error');
+  }
+};

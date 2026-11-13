@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Microsoft.AspNetCore.SignalR;
 using PhoneStoreAPI.Features.OnlineOrders.Hubs;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,8 @@ using PhoneStoreAPI.Common.Services;
 using PhoneStoreAPI.Data;
 using PhoneStoreAPI.Features.Customers.Helpers;
 using PhoneStoreAPI.Features.OnlineOrders.DTOs;
+using PhoneStoreAPI.Features.OnlineOrders.Helpers;
+using PhoneStoreAPI.Features.OnlineOrders.Services;
 using PhoneStoreAPI.Features.Warranty;
 using PhoneStoreAPI.Models.Entities;
 
@@ -21,6 +24,8 @@ public class OnlineOrderService : IOnlineOrderService
     private readonly IEmailService? _emailService;
     private readonly IHubContext<OrderHub>? _hubContext;
     private readonly IShippingService? _shippingService;
+    private readonly IOrderDecisionEngine? _decisionEngine;
+    private readonly IOrderSettingsService? _settings;
 
     public OnlineOrderService(
         AppDbContext context,
@@ -29,7 +34,9 @@ public class OnlineOrderService : IOnlineOrderService
         IWarrantyService warrantyService,
         IEmailService? emailService = null,
         IHubContext<OrderHub>? hubContext = null,
-        IShippingService? shippingService = null)
+        IShippingService? shippingService = null,
+        IOrderDecisionEngine? decisionEngine = null,
+        IOrderSettingsService? settings = null)
     {
         _context = context;
         _currentUser = currentUser;
@@ -38,6 +45,8 @@ public class OnlineOrderService : IOnlineOrderService
         _emailService = emailService;
         _hubContext = hubContext;
         _shippingService = shippingService;
+        _decisionEngine = decisionEngine;
+        _settings = settings;
     }
 
     public async Task<OrderDto> CreateOrderAsync(CreateOrderRequest request)
@@ -133,11 +142,20 @@ public class OnlineOrderService : IOnlineOrderService
                 _ => "cod"
             };
 
-            // Nghiệp vụ Phương án 1: Nếu thanh toán online (chuyển khoản, ví QR, thẻ) thì khởi tạo ở trạng thái Chờ thanh toán
-            // Nếu là COD (thanh toán khi nhận hàng) thì vào thẳng Chờ xác nhận
-            var initialStatus = (phuongThuc == "chuyen_khoan" || phuongThuc == "the")
-                ? AppConstants.OrderStatus.ChoThanhToan
-                : AppConstants.OrderStatus.ChoXacNhan;
+            // plan (8).md: Quyết định trạng thái ban đầu bằng Engine
+            var addressHash = AddressHashHelper.ComputeAddressHash(request.DiaChiGiao);
+            var decisionContext = new OrderDecisionContext
+            {
+                Phone = sdtNorm,
+                AddressHash = addressHash,
+                OrderAmount = tongTien,
+                PaymentMethod = phuongThuc,
+                IsOnlinePaid = false
+            };
+
+            var decision = _decisionEngine != null
+                ? await _decisionEngine.DecideInitialStatusAsync(decisionContext)
+                : new OrderDecisionResult { InitialStatus = (phuongThuc == "chuyen_khoan" || phuongThuc == "the") ? AppConstants.OrderStatus.ChoThanhToan : AppConstants.OrderStatus.ChoXacNhan };
 
             var donHang = new DonHangOnline
             {
@@ -149,10 +167,28 @@ public class OnlineOrderService : IOnlineOrderService
                 DiaChiGiao = request.DiaChiGiao.Trim(),
                 PhuongThucThanhToan = phuongThuc,
                 TongTien = tongTien,
-                TrangThai = initialStatus
+                TrangThai = decision.InitialStatus,
+                RiskFlag = decision.RiskFlag,
+                RiskReasons = decision.RiskReasons.Count > 0 ? JsonSerializer.Serialize(decision.RiskReasons) : null,
+                AutoApproveAt = decision.AutoApproveAt,
+                AddressHash = addressHash,
+                PaymentStatus = (phuongThuc == "chuyen_khoan" || phuongThuc == "the") ? "unpaid" : "cod"
             };
 
             _context.DonHangOnlines.Add(donHang);
+            await _context.SaveChangesAsync();
+
+            // Ghi log trạng thái khởi tạo
+            _context.OrderStatusLogs.Add(new OrderStatusLog
+            {
+                OrderId = maDH,
+                FromStatus = null,
+                ToStatus = decision.InitialStatus,
+                Actor = "customer",
+                Reason = decision.RiskFlag
+                    ? $"Đơn được tạo kèm cờ rủi ro: {string.Join(", ", decision.RiskReasons)}"
+                    : (decision.InitialStatus == "cho_tu_duyet" ? $"Khách tin cậy, hẹn tự duyệt sau 15 phút ({decision.AutoApproveAt:HH:mm})" : "Đơn hàng mới tạo")
+            });
             await _context.SaveChangesAsync();
 
             // 5. GÃ¡n MaDH cho chi tiáº¿t vÃ  lÆ°u
@@ -370,6 +406,11 @@ public class OnlineOrderService : IOnlineOrderService
             TrangThai = o.TrangThai,
             MaNV = o.MaNV,
             SoHD = o.SoHD,
+            RiskFlag = o.RiskFlag,
+            RiskReasons = o.RiskReasons,
+            AutoApproveAt = o.AutoApproveAt,
+            GhnOrderCode = o.GhnOrderCode,
+            GhnError = o.GhnError,
             Items = o.ChiTietDonHangs.Select(c => new OrderItemDto
             {
                 MaHang = c.MaHang,
@@ -406,15 +447,8 @@ public class OnlineOrderService : IOnlineOrderService
 
             var curr = donHang.TrangThai;
 
-            // Kiá»ƒm tra mÃ¡y tráº¡ng thÃ¡i há»£p lá»‡ theo P4-07
-            // Hỗ trợ luồng Chờ thanh toán -> Đã xác nhận / Chờ xác nhận / Đã hủy
-            bool validTransition = false;
-            if (curr == AppConstants.OrderStatus.ChoThanhToan && (newTrangThai == AppConstants.OrderStatus.DaXacNhan || newTrangThai == AppConstants.OrderStatus.ChoXacNhan || newTrangThai == AppConstants.OrderStatus.DaHuy)) validTransition = true;
-            else if (curr == AppConstants.OrderStatus.ChoXacNhan && newTrangThai == AppConstants.OrderStatus.DaXacNhan) validTransition = true;
-            else if (curr == AppConstants.OrderStatus.DaXacNhan && newTrangThai == AppConstants.OrderStatus.DangGiao) validTransition = true;
-            else if (curr == AppConstants.OrderStatus.DangGiao && newTrangThai == AppConstants.OrderStatus.HoanThanh) validTransition = true;
-            else if ((curr == AppConstants.OrderStatus.ChoThanhToan || curr == AppConstants.OrderStatus.ChoXacNhan || curr == AppConstants.OrderStatus.DaXacNhan) && newTrangThai == AppConstants.OrderStatus.DaHuy) validTransition = true;
-
+            // Kiểm tra máy trạng thái hợp lệ theo mục 4 plan (8).md
+            bool validTransition = IsValidTransition(curr, newTrangThai);
             if (!validTransition)
             {
                 throw new ConflictException($"Không thể chuyển trạng thái đơn hàng từ '{curr}' sang '{newTrangThai}'.");
@@ -555,14 +589,119 @@ public class OnlineOrderService : IOnlineOrderService
             await _context.SaveChangesAsync();
             await transaction.CommitAsync();
 
-            // Giai đoạn 6: Khi xác nhận đơn -> tạo vận đơn (lỗi vận chuyển không làm hỏng đơn)
+            // Ghi log chuyển trạng thái
+            _context.OrderStatusLogs.Add(new OrderStatusLog
+            {
+                OrderId = donHang.MaDH,
+                FromStatus = curr,
+                ToStatus = newTrangThai,
+                Actor = string.IsNullOrWhiteSpace(maNV) ? "system" : "staff",
+                Reason = $"Cập nhật trạng thái sang {newTrangThai}"
+            });
+            await _context.SaveChangesAsync();
+
+            // Giai đoạn 6 & Phase 5: Khi xác nhận đơn -> tạo vận đơn GHN
             if (newTrangThai == AppConstants.OrderStatus.DaXacNhan && _shippingService != null)
             {
                 try
                 {
-                    await _shippingService.CreateShipmentAsync(donHang, donHang.ChiTietDonHangs.ToList());
+                    var shipment = await _shippingService.CreateShipmentAsync(donHang, donHang.ChiTietDonHangs.ToList());
+                    if (!string.IsNullOrWhiteSpace(shipment?.TrackingCode))
+                    {
+                        donHang.GhnOrderCode = shipment.TrackingCode;
+                        donHang.GhnError = null;
+                        donHang.TrangThai = "cho_lay_hang";
+                        await _context.SaveChangesAsync();
+
+                        _context.OrderStatusLogs.Add(new OrderStatusLog
+                        {
+                            OrderId = donHang.MaDH,
+                            FromStatus = AppConstants.OrderStatus.DaXacNhan,
+                            ToStatus = "cho_lay_hang",
+                            Actor = "ghn",
+                            Reason = $"Tạo vận đơn GHN thành công: #{shipment.TrackingCode}"
+                        });
+                        await _context.SaveChangesAsync();
+                    }
                 }
-                catch { /* Không chặn luồng xác nhận đơn nếu API vận chuyển gặp sự cố */ }
+                catch (Exception ex)
+                {
+                    donHang.GhnError = ex.Message;
+                    donHang.TrangThai = "loi_van_don";
+                    await _context.SaveChangesAsync();
+
+                    _context.OrderStatusLogs.Add(new OrderStatusLog
+                    {
+                        OrderId = donHang.MaDH,
+                        FromStatus = AppConstants.OrderStatus.DaXacNhan,
+                        ToStatus = "loi_van_don",
+                        Actor = "ghn",
+                        Reason = $"Lỗi tạo vận đơn GHN: {ex.Message}"
+                    });
+                    await _context.SaveChangesAsync();
+                }
+            }
+
+            // Phase 6 & Mục 3.7: Cập nhật độ tin cậy khách hàng khi HOAN_THANH
+            if (newTrangThai == AppConstants.OrderStatus.HoanThanh)
+            {
+                var kh = await _context.KhachHangs.FirstOrDefaultAsync(k => k.MaKH == donHang.MaKH);
+                if (kh != null)
+                {
+                    kh.CompletedOrders += 1;
+                    var trustMinVal = _settings != null ? await _settings.GetTrustMinOrderValueAsync() : 1_000_000m;
+                    if (donHang.TongTien >= trustMinVal)
+                    {
+                        kh.QualifiedOrders += 1;
+                    }
+                    kh.MaxCompletedValue = Math.Max(kh.MaxCompletedValue, donHang.TongTien);
+                    kh.UpdatedAt = DateTime.UtcNow;
+
+                    if (!string.IsNullOrWhiteSpace(donHang.AddressHash))
+                    {
+                        var hasAddr = await _context.CustomerAddresses.AnyAsync(a => a.Phone == donHang.SdtNguoiNhan && a.AddressHash == donHang.AddressHash);
+                        if (!hasAddr)
+                        {
+                            _context.CustomerAddresses.Add(new CustomerAddress
+                            {
+                                Phone = donHang.SdtNguoiNhan,
+                                AddressHash = donHang.AddressHash,
+                                FullAddress = donHang.DiaChiGiao,
+                                LastDeliveredAt = DateTime.UtcNow
+                            });
+                        }
+                    }
+                    await _context.SaveChangesAsync();
+                }
+            }
+
+            // Phase 6 & Mục 3.7: Cập nhật vi phạm khi BOOM / HOAN_HANG
+            if (newTrangThai == "boom" || newTrangThai == "hoan_hang")
+            {
+                var kh = await _context.KhachHangs.FirstOrDefaultAsync(k => k.MaKH == donHang.MaKH);
+                if (kh != null)
+                {
+                    kh.FailedOrders += 1;
+                    var blacklistThreshold = _settings != null ? await _settings.GetBlacklistAfterFailedAsync() : 2;
+                    if (kh.FailedOrders >= blacklistThreshold)
+                    {
+                        kh.IsBlacklisted = true;
+                    }
+                    kh.UpdatedAt = DateTime.UtcNow;
+                    await _context.SaveChangesAsync();
+                }
+            }
+
+            // Mục 3.6: Trả tồn kho khi hủy đơn đã tạo hóa đơn
+            if (newTrangThai == AppConstants.OrderStatus.DaHuy && !string.IsNullOrEmpty(donHang.SoHD))
+            {
+                var ctHds = await _context.ChiTietHoaDons.Where(c => c.SoHD == donHang.SoHD && c.MaIMEI != null).ToListAsync();
+                foreach (var ct in ctHds)
+                {
+                    var imei = await _context.IMEIs.FirstOrDefaultAsync(i => i.MaIMEI == ct.MaIMEI);
+                    if (imei != null) imei.TrangThai = "con_hang";
+                }
+                await _context.SaveChangesAsync();
             }
 
             if (_hubContext != null)
@@ -837,6 +976,48 @@ public class OnlineOrderService : IOnlineOrderService
         }
 
         return result;
+    }
+
+    private static bool IsValidTransition(string from, string to)
+    {
+        if (string.Equals(from, to, StringComparison.OrdinalIgnoreCase)) return true;
+
+        if (to == AppConstants.OrderStatus.DaHuy &&
+            from != AppConstants.OrderStatus.DangGiao &&
+            from != AppConstants.OrderStatus.HoanThanh &&
+            from != "boom" &&
+            from != "hoan_hang")
+        {
+            return true;
+        }
+
+        return (from.ToLowerInvariant(), to.ToLowerInvariant()) switch
+        {
+            ("cho_thanh_toan", "da_xac_nhan") => true,
+            ("cho_thanh_toan", "cho_xac_nhan") => true,
+            ("cho_thanh_toan", "can_kiem_tra") => true,
+
+            ("cho_tu_duyet", "da_xac_nhan") => true,
+            ("cho_tu_duyet", "cho_xac_nhan") => true,
+            ("cho_tu_duyet", "can_kiem_tra") => true,
+
+            ("cho_xac_nhan", "da_xac_nhan") => true,
+            ("can_kiem_tra", "da_xac_nhan") => true,
+
+            ("da_xac_nhan", "cho_lay_hang") => true,
+            ("da_xac_nhan", "loi_van_don") => true,
+            ("da_xac_nhan", "dang_giao") => true,
+
+            ("loi_van_don", "da_xac_nhan") => true,
+            ("loi_van_don", "cho_lay_hang") => true,
+
+            ("cho_lay_hang", "dang_giao") => true,
+            ("dang_giao", "hoan_thanh") => true,
+            ("dang_giao", "boom") => true,
+            ("dang_giao", "hoan_hang") => true,
+
+            _ => false
+        };
     }
 
     public async Task<BulkApproveResultDto> BulkApproveOrdersAsync(List<string>? orderCodes = null)

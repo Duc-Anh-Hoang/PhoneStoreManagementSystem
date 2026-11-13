@@ -34,6 +34,11 @@ public class OrderDto
     public string TrangThai { get; set; } = "cho_xac_nhan";
     public string? MaNV { get; set; }
     public string? SoHD { get; set; }
+    public bool RiskFlag { get; set; } = false;
+    public string? RiskReasons { get; set; }
+    public DateTime? AutoApproveAt { get; set; }
+    public string? GhnOrderCode { get; set; }
+    public string? GhnError { get; set; }
     public List<OrderItemDto>? Items { get; set; }
 }
 
