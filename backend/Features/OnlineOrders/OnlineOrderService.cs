@@ -417,10 +417,20 @@ public class OnlineOrderService : IOnlineOrderService
 
             if (!validTransition)
             {
-                throw new ConflictException($"KhÃ´ng thá»ƒ chuyá»ƒn tráº¡ng thÃ¡i Ä‘Æ¡n hÃ ng tá»« '{curr}' sang '{newTrangThai}'.");
+                throw new ConflictException($"Không thể chuyển trạng thái đơn hàng từ '{curr}' sang '{newTrangThai}'.");
             }
 
-            // Ghi nháº­n MaNV khi xÃ¡c nháº­n Ä‘Æ¡n
+            // Bước 7: Hủy đơn đồng bộ với GHN
+            if (newTrangThai == AppConstants.OrderStatus.DaHuy && _shippingService != null)
+            {
+                var (canCancel, cancelErr) = await _shippingService.CancelShipmentAsync(maDH);
+                if (!canCancel)
+                {
+                    throw new ConflictException(cancelErr ?? "Không thể hủy đơn hàng do hệ thống vận chuyển từ chối.");
+                }
+            }
+
+            // Ghi nhận MaNV khi xác nhận đơn
             if (newTrangThai == AppConstants.OrderStatus.DaXacNhan)
             {
                 donHang.MaNV = maNV;

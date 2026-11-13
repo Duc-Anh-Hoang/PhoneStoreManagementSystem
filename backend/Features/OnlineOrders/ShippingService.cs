@@ -92,6 +92,14 @@ public class ShippingService : IShippingService
 
     public async Task<OrderShippingDto> CreateShipmentAsync(DonHangOnline order, IReadOnlyList<ChiTietDonHangOnline> items)
     {
+        // Chống tạo trùng vận đơn cho cùng một mã đơn
+        var existingShipment = await LoadShipmentAsync(order.MaDH);
+        if (existingShipment != null && !string.IsNullOrWhiteSpace(existingShipment.TrackingCode) && existingShipment.Carrier == "GHN")
+        {
+            _logger.LogInformation("[Shipping] Đơn {MaDH} đã có vận đơn GHN ({TrackingCode}), bỏ qua tạo mới.", order.MaDH, existingShipment.TrackingCode);
+            return existingShipment;
+        }
+
         var mode = GetShippingMode();
 
         if (string.Equals(mode, "ghn_production", StringComparison.OrdinalIgnoreCase))
@@ -123,30 +131,48 @@ public class ShippingService : IShippingService
             try
             {
                 var client = _httpClientFactory.CreateClient("ghn");
-                client.Timeout = TimeSpan.FromSeconds(5);
+                client.Timeout = TimeSpan.FromSeconds(8);
 
-                var addressParts = (order.DiaChiGiao ?? string.Empty).Split(',', StringSplitOptions.RemoveEmptyEntries);
-                var wardName = addressParts.Length >= 3 ? addressParts[^3].Trim() : "Phường Bến Nghé";
-                var districtName = addressParts.Length >= 2 ? addressParts[^2].Trim() : "Quận 1";
+                // Trích xuất mã quận và mã phường nếu có trong địa chỉ (dạng [GHN:{districtId}:{wardCode}])
+                int toDistrictId = 3695; // Mặc định TP. Thủ Đức
+                string toWardCode = "90754"; // Mặc định P. Hiệp Phú
+                string rawAddress = order.DiaChiGiao ?? string.Empty;
+                var ghnTagMatch = System.Text.RegularExpressions.Regex.Match(rawAddress, @"\[GHN:(\d+):([0-9a-zA-Z]+)\]");
+                if (ghnTagMatch.Success)
+                {
+                    if (int.TryParse(ghnTagMatch.Groups[1].Value, out var parsedDist)) toDistrictId = parsedDist;
+                    toWardCode = ghnTagMatch.Groups[2].Value;
+                    rawAddress = rawAddress.Replace(ghnTagMatch.Value, "").Trim();
+                }
+
+                var addressParts = rawAddress.Split(',', StringSplitOptions.RemoveEmptyEntries);
+                var wardName = addressParts.Length >= 3 ? addressParts[^3].Trim() : "Phường Hiệp Phú";
+                var districtName = addressParts.Length >= 2 ? addressParts[^2].Trim() : "TP. Thủ Đức";
                 var provinceName = addressParts.Length >= 1 ? addressParts[^1].Trim() : "TP. Hồ Chí Minh";
 
                 var payload = new
                 {
-                    payment_type_id = order.PhuongThucThanhToan == "cod" ? 2 : 1,
+                    payment_type_id = 1, // Shop trả cước vận chuyển theo cấu hình
+                    note = "Tạo từ hệ thống SamaMobile",
                     required_note = "CHOXEMHANGKHONGTHU",
                     client_order_code = order.MaDH,
                     to_name = order.TenNguoiNhan,
                     to_phone = order.SdtNguoiNhan,
-                    to_address = order.DiaChiGiao,
+                    to_address = string.IsNullOrWhiteSpace(rawAddress) ? "241 Lê Văn Việt" : rawAddress,
+                    to_ward_code = toWardCode,
+                    to_district_id = toDistrictId,
                     to_ward_name = wardName,
                     to_district_name = districtName,
                     to_province_name = provinceName,
                     cod_amount = order.PhuongThucThanhToan == "cod" ? (int)Math.Min(50_000_000m, order.TongTien) : 0,
+                    insurance_value = Math.Min(5_000_000, (int)order.TongTien),
+                    content = $"Đơn hàng {order.MaDH} SamaMobile",
                     weight = Math.Max(200, items.Sum(i => i.SoLuong) * 300),
                     length = 20,
                     width = 15,
                     height = 10,
                     service_type_id = 2,
+                    service_id = 0,
                     items = items.Select(i => new
                     {
                         name = i.MatHang?.TenHang ?? i.MaHang,
@@ -165,7 +191,8 @@ public class ShippingService : IShippingService
                 using var res = await client.SendAsync(req);
                 if (!res.IsSuccessStatusCode)
                 {
-                    _logger.LogWarning("[Shipping] GHN staging tạo đơn thất bại (HTTP {Status}) cho {MaDH}", (int)res.StatusCode, order.MaDH);
+                    var errBody = await res.Content.ReadAsStringAsync();
+                    _logger.LogWarning("[Shipping] GHN staging tạo đơn thất bại (HTTP {Status}): {ErrBody} cho {MaDH}", (int)res.StatusCode, errBody, order.MaDH);
                     var failDto = new OrderShippingDto { Carrier = "NONE", ShippingStatus = "Đang xử lý", IsDemo = false };
                     await SaveShipmentAsync(order.MaDH, failDto);
                     return failDto;
@@ -197,7 +224,7 @@ public class ShippingService : IShippingService
                             Time = DateTime.UtcNow,
                             Status = "ready_to_pick",
                             Description = "Đã tạo vận đơn trên GHN Staging",
-                            Location = "Kho SamaMobile"
+                            Location = "Kho SamaMobile - 241 Lê Văn Việt"
                         }
                     }
                 };
@@ -350,18 +377,145 @@ public class ShippingService : IShippingService
             return false;
         }
 
+        var eventTime = (payload.Time ?? DateTime.UtcNow).ToUniversalTime();
+
+        // Idempotency: Cùng OrderCode + Status + thời gian gần nhau (< 1 phút) thì bỏ qua ghi trùng
+        if (shipment.Events.Any(e => e.Status == payload.Status && Math.Abs((e.Time - eventTime).TotalSeconds) < 60))
+        {
+            _logger.LogInformation("[Shipping] Bỏ qua webhook trùng cho đơn {MaDH}, status: {Status}", maDH, payload.Status);
+            return true;
+        }
+
         var mappedStatus = MapGhnStatus(payload.Status, _logger);
         shipment.ShippingStatus = mappedStatus;
         shipment.Events.Insert(0, new ShippingEventDto
         {
-            Time = (payload.Time ?? DateTime.UtcNow).ToUniversalTime(),
+            Time = eventTime,
             Status = payload.Status ?? "unknown",
             Description = string.IsNullOrWhiteSpace(payload.Description) ? mappedStatus : payload.Description.Trim(),
             Location = "GHN"
         });
 
         await SaveShipmentAsync(maDH, shipment);
+
+        // Đồng bộ ngược lại trạng thái đơn hàng trong DB nếu có thay đổi
+        try
+        {
+            var order = await _context.DonHangOnlines.FirstOrDefaultAsync(d => d.MaDH == maDH);
+            if (order != null)
+            {
+                var st = (payload.Status ?? string.Empty).ToLowerInvariant();
+                if (st == "delivered" && order.TrangThai != "hoan_thanh")
+                {
+                    order.TrangThai = "da_giao";
+                    await _context.SaveChangesAsync();
+                }
+                else if ((st == "picked" || st == "delivering" || st == "transporting") && order.TrangThai == "da_xac_nhan")
+                {
+                    order.TrangThai = "dang_giao";
+                    await _context.SaveChangesAsync();
+                }
+                else if (st == "cancel" && order.TrangThai != "da_huy")
+                {
+                    order.TrangThai = "da_huy";
+                    await _context.SaveChangesAsync();
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "[Shipping] Không thể cập nhật trạng thái đơn trong DB từ webhook GHN cho {MaDH}", maDH);
+        }
+
         return true;
+    }
+
+    /// <summary>
+    /// Bước 7: Hủy đơn hàng đồng bộ với GHN.
+    /// Nếu chưa lấy hàng: gọi API hủy GHN thành công rồi mới cho phép hủy nội bộ.
+    /// Nếu đã lấy hàng / đang giao: chặn hủy và trả về lý do.
+    /// </summary>
+    public async Task<(bool Success, string? Error)> CancelShipmentAsync(string maDH)
+    {
+        var shipment = await LoadShipmentAsync(maDH);
+        if (shipment == null || string.IsNullOrWhiteSpace(shipment.TrackingCode) || shipment.Carrier != "GHN")
+        {
+            return (true, null); // Không có vận đơn GHN, hủy tự do
+        }
+
+        var st = (shipment.ShippingStatus ?? string.Empty).Trim().ToLowerInvariant();
+        if (st.Contains("giao") || st.Contains("vận chuyển") || st.Contains("picked") || st.Contains("delivering"))
+        {
+            return (false, "Đơn hàng đã được bưu tá GHN lấy và đang trong hành trình giao hàng, không thể hủy.");
+        }
+
+        var mode = GetShippingMode();
+        if (string.Equals(mode, "ghn_staging", StringComparison.OrdinalIgnoreCase) ||
+            string.Equals(mode, "ghn_production", StringComparison.OrdinalIgnoreCase))
+        {
+            var token = GetGhnToken();
+            var shopId = GetGhnShopId();
+            if (!string.IsNullOrWhiteSpace(token) && !string.IsNullOrWhiteSpace(shopId))
+            {
+                try
+                {
+                    var client = _httpClientFactory.CreateClient("ghn");
+                    client.Timeout = TimeSpan.FromSeconds(8);
+
+                    using var req = new HttpRequestMessage(HttpMethod.Post, $"{GetGhnBaseUrl()}/shiip/public-api/v2/switch-status/cancel");
+                    req.Headers.TryAddWithoutValidation("Token", token);
+                    req.Headers.TryAddWithoutValidation("ShopId", shopId);
+                    req.Content = JsonContent.Create(new { order_codes = new[] { shipment.TrackingCode } });
+
+                    using var res = await client.SendAsync(req);
+                    if (!res.IsSuccessStatusCode)
+                    {
+                        return (false, "Không thể kết nối đến hệ thống GHN để hủy vận đơn.");
+                    }
+
+                    using var doc = await JsonDocument.ParseAsync(await res.Content.ReadAsStreamAsync());
+                    if (doc.RootElement.TryGetProperty("data", out var dataArr) && dataArr.ValueKind == JsonValueKind.Array && dataArr.GetArrayLength() > 0)
+                    {
+                        var firstItem = dataArr[0];
+                        if (firstItem.TryGetProperty("result", out var r) && r.GetBoolean())
+                        {
+                            shipment.ShippingStatus = "Đã hủy";
+                            shipment.Events.Insert(0, new ShippingEventDto
+                            {
+                                Time = DateTime.UtcNow,
+                                Status = "cancel",
+                                Description = "Đã hủy vận đơn thành công trên hệ thống GHN",
+                                Location = "SamaMobile - 241 Lê Văn Việt"
+                            });
+                            await SaveShipmentAsync(maDH, shipment);
+                            return (true, null);
+                        }
+                        else
+                        {
+                            var msg = firstItem.TryGetProperty("message", out var m) ? m.GetString() : "GHN từ chối yêu cầu hủy vận đơn.";
+                            return (false, msg);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "[Shipping] Lỗi gọi API hủy GHN cho đơn {MaDH}", maDH);
+                    return (false, "Lỗi kết nối GHN khi hủy vận đơn.");
+                }
+            }
+        }
+
+        // Chế độ mock: đánh dấu đã hủy
+        shipment.ShippingStatus = "Đã hủy";
+        shipment.Events.Insert(0, new ShippingEventDto
+        {
+            Time = DateTime.UtcNow,
+            Status = "cancel",
+            Description = "Đã hủy vận đơn (Chế độ giả lập)",
+            Location = "SamaMobile"
+        });
+        await SaveShipmentAsync(maDH, shipment);
+        return (true, null);
     }
 
     private async Task RefreshFromGhnStagingAsync(string maDH, OrderShippingDto shipment)

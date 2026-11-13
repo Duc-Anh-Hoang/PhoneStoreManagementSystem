@@ -16,16 +16,19 @@ public class ShippingWebhookController : ControllerBase
     }
 
     /// <summary>
-    /// Giai đoạn 6: Webhook nhận cập nhật trạng thái từ GHN.
-    /// Xác thực nguồn gọi qua header X-Webhook-Secret (nếu cấu hình) và ShopID.
+    /// Giai đoạn 6 & Bước 5: Webhook nhận cập nhật trạng thái từ GHN.
+    /// Hỗ trợ cả query param ?secret= và header X-Webhook-Secret.
     /// </summary>
     [HttpPost("ghn/webhook")]
+    [HttpPost("/api/ghn/webhook")]
     [AllowAnonymous]
     public async Task<IActionResult> GhnWebhook(
         [FromBody] GhnWebhookPayload payload,
+        [FromQuery] string? secret = null,
         [FromHeader(Name = "X-Webhook-Secret")] string? webhookSecret = null)
     {
-        var ok = await _shippingService.HandleGhnWebhookAsync(payload, webhookSecret);
+        var effectiveSecret = !string.IsNullOrWhiteSpace(secret) ? secret : webhookSecret;
+        var ok = await _shippingService.HandleGhnWebhookAsync(payload, effectiveSecret);
         if (!ok)
         {
             return Unauthorized(new { message = "Webhook không hợp lệ." });

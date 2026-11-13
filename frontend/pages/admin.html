@@ -2836,7 +2836,13 @@
             <p class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400">Hành Trình Vận Chuyển</p>
             <div class="flex items-center gap-2">
               <span id="aod-carrier-badge" class="text-[11px] font-bold bg-slate-100 text-slate-600 px-2 py-0.5 rounded-lg"></span>
-              <span id="aod-tracking-code" class="text-[11px] font-mono text-slate-500"></span>
+              <span id="aod-tracking-code" class="text-[11px] font-mono text-slate-500 font-bold"></span>
+              <button id="aod-copy-tracking-btn" type="button" class="text-slate-400 hover:text-blue-600 transition-colors p-1 cursor-pointer" title="Sao chép mã vận đơn">
+                <i class="fa-solid fa-copy text-xs"></i>
+              </button>
+              <a id="aod-tracking-link" target="_blank" rel="noopener noreferrer" class="hidden text-[11px] text-[#0057B7] hover:underline flex items-center gap-1 font-semibold ml-1">
+                <i class="fa-solid fa-up-right-from-square text-[10px]"></i><span>Tra cứu GHN</span>
+              </a>
             </div>
           </div>
           <div id="aod-shipping-status-bar" class="bg-slate-50 rounded-xl px-4 py-2.5 flex items-center gap-2 mb-3 text-xs">
@@ -2846,11 +2852,16 @@
           </div>
           <!-- Timeline -->
           <div id="aod-timeline" class="space-y-0 pl-2"></div>
-          <!-- Advance mock button (demo only) -->
-          <div id="aod-advance-btn-wrap" class="hidden mt-3">
-            <button id="aod-advance-btn" class="text-xs px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-lg transition-colors cursor-pointer">
-              <i class="fa-solid fa-forward-step mr-1"></i>Tiến trạng thái giao hàng (Demo)
+          <!-- Buttons: In vận đơn & advance mock -->
+          <div class="flex items-center gap-2 mt-3">
+            <button id="aod-print-ghn-btn" type="button" class="hidden text-xs px-3 py-1.5 bg-blue-50 text-blue-700 hover:bg-blue-100 font-semibold rounded-lg transition-colors cursor-pointer border border-blue-200">
+              <i class="fa-solid fa-print mr-1"></i>In vận đơn GHN (A5)
             </button>
+            <div id="aod-advance-btn-wrap" class="hidden">
+              <button id="aod-advance-btn" class="text-xs px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-lg transition-colors cursor-pointer">
+                <i class="fa-solid fa-forward-step mr-1"></i>Tiến trạng thái giao hàng (Demo)
+              </button>
+            </div>
           </div>
         </div>
 

@@ -767,22 +767,22 @@
                 <div id="delivery-address-box" class="space-y-3 pt-1">
                   <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
                     <div>
-                      <label class="block text-[11px] font-bold text-slate-600 mb-1">Tỉnh / Thành phố</label>
-                      <select id="order-province" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-semibold focus:outline-none focus:border-[#0057B7]">
-                        <option value="TP. Hồ Chí Minh">TP. Hồ Chí Minh</option>
-                        <option value="Hà Nội">Hà Nội</option>
-                        <option value="Đà Nẵng">Đà Nẵng</option>
-                        <option value="Bình Dương">Bình Dương</option>
-                        <option value="Đồng Nai">Đồng Nai</option>
+                      <label class="block text-[11px] font-bold text-slate-600 mb-1">Tỉnh / Thành phố <span class="text-rose-500">*</span></label>
+                      <select id="order-province" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-semibold focus:outline-none focus:border-[#0057B7] bg-white cursor-pointer transition-colors">
+                        <option value="">-- Đang tải tỉnh thành... --</option>
                       </select>
                     </div>
                     <div>
-                      <label class="block text-[11px] font-bold text-slate-600 mb-1">Quận / Huyện</label>
-                      <input type="text" id="order-district" placeholder="TP. Thủ Đức, Q.1..." value="TP. Thủ Đức" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs focus:outline-none focus:border-[#0057B7]">
+                      <label class="block text-[11px] font-bold text-slate-600 mb-1">Quận / Huyện <span class="text-rose-500">*</span></label>
+                      <select id="order-district" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-semibold focus:outline-none focus:border-[#0057B7] bg-white cursor-pointer transition-colors" disabled>
+                        <option value="">-- Chọn quận/huyện --</option>
+                      </select>
                     </div>
                     <div>
-                      <label class="block text-[11px] font-bold text-slate-600 mb-1">Phường / Xã</label>
-                      <input type="text" id="order-ward" placeholder="P. Hiệp Phú, P. Bến Nghé..." value="P. Hiệp Phú" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs focus:outline-none focus:border-[#0057B7]">
+                      <label class="block text-[11px] font-bold text-slate-600 mb-1">Phường / Xã <span class="text-rose-500">*</span></label>
+                      <select id="order-ward" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-semibold focus:outline-none focus:border-[#0057B7] bg-white cursor-pointer transition-colors" disabled>
+                        <option value="">-- Chọn phường/xã --</option>
+                      </select>
                     </div>
                   </div>
 
@@ -973,12 +973,16 @@
                   <strong id="summary-voucher-discount" class="tabular-nums font-bold whitespace-nowrap">-0₫</strong>
                 </div>
 
-                <div class="flex justify-between items-center">
-                  <span>Phí vận chuyển:</span>
-                  <span class="text-emerald-600 font-bold flex items-center gap-1 whitespace-nowrap">
-                    <i class="fa-solid fa-truck-fast text-xs"></i>
-                    <span>Miễn phí (0₫)</span>
+                <div class="flex justify-between items-center" id="summary-shipping-row">
+                  <span class="flex items-center gap-1.5">
+                    <i class="fa-solid fa-truck-fast text-[#0057B7] text-xs"></i>
+                    <span>Phí vận chuyển (GHN):</span>
                   </span>
+                  <div class="text-right">
+                    <span id="summary-shipping-fee" class="text-emerald-600 font-bold whitespace-nowrap">Miễn phí (0₫)</span>
+                    <span id="summary-shipping-saved" class="block text-[10px] text-slate-400 font-normal"></span>
+                    <span id="summary-shipping-leadtime" class="block text-[10px] text-blue-600 font-medium"></span>
+                  </div>
                 </div>
 
                 <div class="pt-3.5 border-t border-slate-200 flex justify-between items-center gap-3">

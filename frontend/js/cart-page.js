@@ -123,6 +123,13 @@
 
   const SAMPLE_ORDERS = [];
 
+  // Quản lý phí vận chuyển GHN & Quote
+  let currentShippingFee = 0;
+  let currentShippingActual = 0;
+  let currentShippingSaved = 0;
+  let currentExpectedDelivery = null;
+  let quoteDebounceTimer = null;
+
 
   function formatProductVariantTitle(baseTitle, variantName) {
     if (!baseTitle) return 'Sản phẩm';
@@ -1046,7 +1053,7 @@
 
   function updateTotals(subtotal, memberDiscount, voucherDiscount, finalTotal, pointsDiscount) {
     if (pointsDiscount === undefined) pointsDiscount = useMemberPoints ? Math.min(200000, subtotal) : 0;
-    if (finalTotal === undefined) finalTotal = Math.max(0, subtotal - memberDiscount - pointsDiscount - voucherDiscount);
+    if (finalTotal === undefined) finalTotal = Math.max(0, subtotal - memberDiscount - pointsDiscount - voucherDiscount) + (currentShippingFee || 0);
 
     const elSubtotal = document.getElementById('summary-subtotal');
     const elMember = document.getElementById('summary-member-discount');
@@ -1372,7 +1379,7 @@
     if (appliedVoucher) {
       discount += appliedVoucher.type === 'percent' ? Math.round((subtotal * appliedVoucher.discount) / 100) : appliedVoucher.discount;
     }
-    const finalTotal = Math.max(0, subtotal - discount);
+    const finalTotal = Math.max(0, subtotal - discount) + (currentShippingFee || 0);
 
     const randomCode = Math.floor(1000 + Math.random() * 9000);
     // Giai đoạn 1: Sinh mã đơn hàng ngẫu nhiên dạng DH-XXXXXX (loại bỏ 0,O,1,I,L)
@@ -1858,7 +1865,13 @@
                 <div class="flex flex-wrap items-center gap-2">
                   <h4 class="font-bold text-sm sm:text-base text-slate-900 font-mono tracking-tight">${order.maDH}</h4>
                   <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold border ${badge.color}">${badge.label}</span>
+                  ${(order.trackingCode || order.shipping?.trackingCode) ? `
+                    <a href="https://donhang.ghn.vn/?order_code=${encodeURIComponent(order.trackingCode || order.shipping?.trackingCode)}" target="_blank" rel="noopener noreferrer" class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 flex items-center gap-1" title="Theo dõi bưu phẩm trên GHN">
+                      <i class="fa-solid fa-truck text-[10px]"></i> GHN: #${order.trackingCode || order.shipping?.trackingCode}
+                    </a>
+                  ` : ''}
                   ${order.daThanhToan ? '<span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 inline-flex items-center gap-1"><i class="fa-solid fa-check text-[10px]"></i> Đã thanh toán</span>' : ''}
+                </div>
                 </div>
                 <div class="text-[11px] text-slate-400 mt-0.5">Đặt ngày: ${dateStr}</div>
               </div>
@@ -2264,3 +2277,264 @@
   };
 
 })();
+
+  // =========================================================================
+  // BƯỚC 2 & 3: TÍCH HỢP ĐỊA CHỈ 3 CẤP GHN & TÍNH PHÍ VẬN CHUYỂN DỰ KIẾN (QUOTE)
+  // =========================================================================
+  async function initGhnAddressSelector() {
+    const elProvince = document.getElementById('order-province');
+    const elDistrict = document.getElementById('order-district');
+    const elWard = document.getElementById('order-ward');
+    if (!elProvince || !elDistrict || !elWard) return;
+
+    try {
+      elProvince.innerHTML = '<option value="">-- Đang tải danh sách tỉnh/thành... --</option>';
+      const res = await (window.api && typeof window.api.get === 'function' 
+        ? window.api.get('/ghn/provinces') 
+        : fetch('/api/ghn/provinces').then(r => r.json()));
+      const provinces = Array.isArray(res) ? res : (res?.data || []);
+
+      provinces.sort((a, b) => {
+        const nameA = a.ProvinceName || '';
+        const nameB = b.ProvinceName || '';
+        if (nameA.includes('Hồ Chí Minh')) return -1;
+        if (nameB.includes('Hồ Chí Minh')) return 1;
+        if (nameA.includes('Hà Nội')) return -1;
+        if (nameB.includes('Hà Nội')) return 1;
+        return nameA.localeCompare(nameB, 'vi');
+      });
+
+      elProvince.innerHTML = '<option value="">-- Chọn Tỉnh / Thành phố --</option>' +
+        provinces.map(p => `<option value="${p.ProvinceID}" data-name="${p.ProvinceName}">${p.ProvinceName}</option>`).join('');
+
+      // Mặc định chọn TP. Hồ Chí Minh (ID: 202) -> TP. Thủ Đức (ID: 3695) -> Phường Hiệp Phú (90754)
+      const hcm = provinces.find(p => p.ProvinceID === 202 || (p.ProvinceName || '').includes('Hồ Chí Minh'));
+      if (hcm) {
+        elProvince.value = hcm.ProvinceID;
+        await loadDistricts(hcm.ProvinceID, 3695);
+      }
+    } catch (err) {
+      console.warn('Lỗi tải tỉnh thành GHN:', err);
+      elProvince.innerHTML = '<option value="202" data-name="TP. Hồ Chí Minh" selected>TP. Hồ Chí Minh</option>';
+      await loadDistricts(202, 3695);
+    }
+
+    elProvince.addEventListener('change', async () => {
+      const pid = elProvince.value;
+      if (pid) {
+        await loadDistricts(pid);
+      } else {
+        elDistrict.innerHTML = '<option value="">-- Chọn quận/huyện --</option>';
+        elDistrict.disabled = true;
+        elWard.innerHTML = '<option value="">-- Chọn phường/xã --</option>';
+        elWard.disabled = true;
+        updateShippingQuote();
+      }
+    });
+
+    elDistrict.addEventListener('change', async () => {
+      const did = elDistrict.value;
+      if (did) {
+        await loadWards(did);
+      } else {
+        elWard.innerHTML = '<option value="">-- Chọn phường/xã --</option>';
+        elWard.disabled = true;
+        updateShippingQuote();
+      }
+    });
+
+    elWard.addEventListener('change', () => {
+      updateShippingQuote();
+    });
+  }
+
+  async function loadDistricts(provinceId, defaultDistrictId = null) {
+    const elDistrict = document.getElementById('order-district');
+    const elWard = document.getElementById('order-ward');
+    if (!elDistrict) return;
+
+    elDistrict.disabled = true;
+    elDistrict.innerHTML = '<option value="">-- Đang tải quận/huyện... --</option>';
+    if (elWard) {
+      elWard.innerHTML = '<option value="">-- Chọn phường/xã --</option>';
+      elWard.disabled = true;
+    }
+
+    try {
+      const res = await (window.api && typeof window.api.get === 'function'
+        ? window.api.get('/ghn/districts?provinceId=' + provinceId)
+        : fetch('/api/ghn/districts?provinceId=' + provinceId).then(r => r.json()));
+      const districts = Array.isArray(res) ? res : (res?.data || []);
+      districts.sort((a, b) => (a.DistrictName || '').localeCompare(b.DistrictName || '', 'vi'));
+
+      elDistrict.innerHTML = '<option value="">-- Chọn Quận / Huyện --</option>' +
+        districts.map(d => `<option value="${d.DistrictID}" data-name="${d.DistrictName}">${d.DistrictName}</option>`).join('');
+      elDistrict.disabled = false;
+
+      if (defaultDistrictId && districts.some(d => d.DistrictID === defaultDistrictId)) {
+        elDistrict.value = defaultDistrictId;
+        await loadWards(defaultDistrictId, "90754");
+      } else {
+        updateShippingQuote();
+      }
+    } catch (err) {
+      console.warn('Lỗi tải quận huyện GHN:', err);
+      elDistrict.innerHTML = '<option value="3695" data-name="TP. Thủ Đức" selected>TP. Thủ Đức</option>';
+      elDistrict.disabled = false;
+      await loadWards(3695, "90754");
+    }
+  }
+
+  async function loadWards(districtId, defaultWardCode = null) {
+    const elWard = document.getElementById('order-ward');
+    if (!elWard) return;
+
+    elWard.disabled = true;
+    elWard.innerHTML = '<option value="">-- Đang tải phường/xã... --</option>';
+
+    try {
+      const res = await (window.api && typeof window.api.get === 'function'
+        ? window.api.get('/ghn/wards?districtId=' + districtId)
+        : fetch('/api/ghn/wards?districtId=' + districtId).then(r => r.json()));
+      const wards = Array.isArray(res) ? res : (res?.data || []);
+      wards.sort((a, b) => (a.WardName || '').localeCompare(b.WardName || '', 'vi'));
+
+      elWard.innerHTML = '<option value="">-- Chọn Phường / Xã --</option>' +
+        wards.map(w => `<option value="${w.WardCode}" data-name="${w.WardName}">${w.WardName}</option>`).join('');
+      elWard.disabled = false;
+
+      if (defaultWardCode && wards.some(w => String(w.WardCode) === String(defaultWardCode))) {
+        elWard.value = defaultWardCode;
+      }
+      updateShippingQuote();
+    } catch (err) {
+      console.warn('Lỗi tải phường xã GHN:', err);
+      elWard.innerHTML = '<option value="90754" data-name="Phường Hiệp Phú" selected>Phường Hiệp Phú</option>';
+      elWard.disabled = false;
+      updateShippingQuote();
+    }
+  }
+
+  function debounceShippingQuote() {
+    clearTimeout(quoteDebounceTimer);
+    quoteDebounceTimer = setTimeout(updateShippingQuote, 350);
+  }
+
+  async function updateShippingQuote() {
+    const elFee = document.getElementById('summary-shipping-fee');
+    const elSaved = document.getElementById('summary-shipping-saved');
+    const elLead = document.getElementById('summary-shipping-leadtime');
+
+    if (deliveryMethod === 'store') {
+      currentShippingFee = 0;
+      currentShippingActual = 0;
+      currentShippingSaved = 0;
+      currentExpectedDelivery = null;
+      if (elFee) elFee.innerHTML = '<span class="text-emerald-600 font-bold">Miễn phí (0₫)</span>';
+      if (elSaved) elSaved.textContent = '';
+      if (elLead) elLead.textContent = '';
+      calculateTotalsSilent();
+      return;
+    }
+
+    const elDistrict = document.getElementById('order-district');
+    const elWard = document.getElementById('order-ward');
+    const toDistrictId = elDistrict ? Number(elDistrict.value || 0) : 0;
+    const toWardCode = elWard ? (elWard.value || '') : '';
+
+    const items = getCart();
+    const selectedItems = items.filter((it, idx) => {
+      const id = String(it.id || `${it.maHang}_${idx}`);
+      return selectedItemIds.size === 0 || selectedItemIds.has(id);
+    });
+    const subtotal = selectedItems.reduce((s, it) => s + ((Number(it.price || it.donGia || 0)) * (Number(it.qty || it.soLuong || 1))), 0);
+    let discount = 0;
+    if (subtotal >= 1000000) discount += Math.round(subtotal * 0.01);
+    if (useMemberPoints && subtotal > 0) discount += Math.min(200000, subtotal);
+    if (appliedVoucher && subtotal > 0) {
+      discount += appliedVoucher.type === 'percent' ? Math.round((subtotal * appliedVoucher.discount) / 100) : appliedVoucher.discount;
+    }
+    const subtotalAfterDiscount = Math.max(0, subtotal - discount);
+
+    if (toDistrictId <= 0) {
+      currentShippingFee = 0;
+      if (elFee) elFee.textContent = 'Chưa chọn địa chỉ';
+      if (elSaved) elSaved.textContent = '';
+      if (elLead) elLead.textContent = '';
+      calculateTotalsSilent();
+      return;
+    }
+
+    if (elFee) elFee.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-xs mr-1"></i>Đang tính phí...';
+
+    try {
+      const quoteReq = {
+        toDistrictId: toDistrictId,
+        toWardCode: toWardCode,
+        subtotalAfterDiscount: subtotalAfterDiscount,
+        fulfillment: 'delivery',
+        items: selectedItems.map(it => ({
+          productId: String(it.maHang || it.id || 'MH001'),
+          quantity: Number(it.qty || it.soLuong || 1)
+        }))
+      };
+
+      const quote = await (window.api && typeof window.api.post === 'function'
+        ? window.api.post('/shipping/quote', quoteReq)
+        : fetch('/api/shipping/quote', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(quoteReq)
+          }).then(r => r.json()));
+
+      currentShippingActual = quote.actualFee || 0;
+      currentShippingFee = quote.customerFee || 0;
+      currentShippingSaved = quote.freeShipSaved || 0;
+      currentExpectedDelivery = quote.expectedDeliveryAt;
+
+      if (quote.isFreeShip || currentShippingFee === 0) {
+        if (elFee) elFee.innerHTML = '<span class="text-emerald-600 font-bold">Miễn phí (0₫)</span>';
+        if (elSaved) elSaved.textContent = currentShippingSaved > 0 ? `(Đã tiết kiệm ${formatVND(currentShippingSaved)})` : '';
+      } else {
+        if (elFee) elFee.innerHTML = `<span class="text-slate-800 font-bold font-mono">${formatVND(currentShippingFee)}</span>`;
+        if (elSaved) elSaved.textContent = '';
+      }
+
+      if (elLead && quote.expectedDeliveryAt) {
+        const dt = new Date(quote.expectedDeliveryAt);
+        if (!isNaN(dt.getTime())) {
+          const pad = n => String(n).padStart(2, '0');
+          elLead.textContent = `Dự kiến giao: ${pad(dt.getDate())}/${pad(dt.getMonth() + 1)}/${dt.getFullYear()}`;
+        } else {
+          elLead.textContent = '';
+        }
+      } else if (elLead) {
+        elLead.textContent = '';
+      }
+    } catch (err) {
+      console.warn('Lỗi tính phí quote GHN:', err);
+      currentShippingFee = subtotalAfterDiscount >= 1000000 ? 0 : 25000;
+      if (elFee) elFee.innerHTML = currentShippingFee === 0 ? '<span class="text-emerald-600 font-bold">Miễn phí (0₫)</span>' : `<span class="text-slate-800 font-bold font-mono">${formatVND(currentShippingFee)}</span>`;
+    }
+
+    calculateTotalsSilent();
+  }
+
+  function calculateTotalsSilent() {
+    const items = getCart();
+    const selectedItems = items.filter((it, idx) => {
+      const id = String(it.id || `${it.maHang}_${idx}`);
+      return selectedItemIds.size === 0 || selectedItemIds.has(id);
+    });
+    const subtotal = selectedItems.reduce((s, it) => s + ((Number(it.price || it.donGia || 0)) * (Number(it.qty || it.soLuong || 1))), 0);
+    let memberDiscount = 0;
+    if (subtotal >= 1000000) memberDiscount += Math.round(subtotal * 0.01);
+    let pointsDiscount = 0;
+    if (useMemberPoints && subtotal > 0) pointsDiscount = Math.min(200000, subtotal);
+    let voucherDiscount = 0;
+    if (appliedVoucher && subtotal > 0) {
+      voucherDiscount = appliedVoucher.type === 'percent' ? Math.round((subtotal * appliedVoucher.discount) / 100) : appliedVoucher.discount;
+    }
+    const finalTotal = Math.max(0, subtotal - memberDiscount - pointsDiscount - voucherDiscount) + (currentShippingFee || 0);
+    updateTotals(subtotal, memberDiscount, voucherDiscount, finalTotal, pointsDiscount);
+  }

@@ -5375,6 +5375,54 @@ async function showAdminOrderDetail(maDH) {
     const expDelivery = document.getElementById('aod-expected-delivery');
     expDelivery.textContent = shipping.expectedDelivery ? 'Dự kiến: ' + fmtLocalDateTime(shipping.expectedDelivery) : '';
 
+    // Copy mã vận đơn GHN
+    const copyBtn = document.getElementById('aod-copy-tracking-btn');
+    if (copyBtn) {
+      copyBtn.onclick = () => {
+        if (shipping.trackingCode) {
+          navigator.clipboard.writeText(shipping.trackingCode);
+          showToast('Đã sao chép mã vận đơn: ' + shipping.trackingCode, 'success');
+        }
+      };
+    }
+
+    // Link tra cứu GHN
+    const trackLink = document.getElementById('aod-tracking-link');
+    if (trackLink) {
+      if (shipping.carrier === 'GHN' && shipping.trackingCode) {
+        trackLink.href = 'https://donhang.ghn.vn/?order_code=' + encodeURIComponent(shipping.trackingCode);
+        trackLink.classList.remove('hidden');
+      } else {
+        trackLink.classList.add('hidden');
+      }
+    }
+
+    // In vận đơn GHN (A5)
+    const printBtn = document.getElementById('aod-print-ghn-btn');
+    if (printBtn) {
+      if (shipping.carrier === 'GHN' && shipping.trackingCode) {
+        printBtn.classList.remove('hidden');
+        printBtn.onclick = async () => {
+          printBtn.disabled = true;
+          printBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i>Đang lấy mã in...';
+          try {
+            const res = await api.post('/ghn/orders/' + encodeURIComponent(shipping.trackingCode) + '/print-url', {});
+            if (res && res.url) {
+              window.open(res.url, '_blank');
+            } else {
+              showToast('Không lấy được link in vận đơn GHN.', 'error');
+            }
+          } catch (e) {
+            showToast('Lỗi khi sinh mã in vận đơn GHN.', 'error');
+          }
+          printBtn.disabled = false;
+          printBtn.innerHTML = '<i class="fa-solid fa-print mr-1"></i>In vận đơn GHN (A5)';
+        };
+      } else {
+        printBtn.classList.add('hidden');
+      }
+    }
+
     const timeline = document.getElementById('aod-timeline');
     const events = (shipping.events || []).slice().reverse(); // newest first
     timeline.innerHTML = _aodTimelineHtml(events);

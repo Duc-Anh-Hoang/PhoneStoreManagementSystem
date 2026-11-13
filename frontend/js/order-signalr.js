@@ -10,7 +10,7 @@
 
   const USER_NOTIF_KEY = 'samamobile_user_notifications';
   const ADMIN_NOTIF_KEY = 'samamobile_admin_notifications';
-  const isAdminPage = window.location.pathname.includes('admin.html') || window.location.pathname.endsWith('/admin') || window.location.pathname.endsWith('/admin/');
+  const isAdminPage = window.location.pathname.toLowerCase().includes('admin');
 
   // Âm chuông thông báo Web Audio API
   function playChime(type) {
@@ -398,7 +398,11 @@
         <p class="text-xs sm:text-[13px] text-slate-700 leading-snug font-medium mb-1.5">${data.message || data.statusText || 'Đơn hàng của bạn đã được Admin cập nhật trạng thái!'}</p>
         <div class="flex items-center justify-between text-[11px] text-slate-400">
           <span>Thời gian: ${formatVNTime(new Date())}</span>
-          <a href="${ordersHref}" onclick="if(window.switchCartTab){window.switchCartTab('orders');}" class="text-[#0057B7] hover:underline font-bold">Xem đơn hàng &rarr;</a>
+          ${isAdminPage ? `
+            <button type="button" onclick="if(window.showAdminOrderDetail) window.showAdminOrderDetail('${data.maDH || ''}');" class="text-[#0057B7] hover:underline font-bold cursor-pointer bg-transparent border-0 p-0 text-[11px]">Xem đơn hàng &rarr;</button>
+          ` : `
+            <a href="${ordersHref}" onclick="if(window.switchCartTab){window.switchCartTab('orders');}" class="text-[#0057B7] hover:underline font-bold">Xem đơn hàng &rarr;</a>
+          `}
         </div>
       </div>
       <button type="button" class="text-slate-400 hover:text-slate-600 p-1 -mr-1 -mt-1 cursor-pointer">

@@ -10,4 +10,5 @@ public interface IShippingService
     Task<OrderShippingDto?> AdvanceMockShipmentAsync(string maDH);
     Task<OrderShippingDto> SetSpxTrackingAsync(string maDH, string trackingCode);
     Task<bool> HandleGhnWebhookAsync(GhnWebhookPayload payload, string? webhookSecretHeader);
+    Task<(bool Success, string? Error)> CancelShipmentAsync(string maDH);
 }
