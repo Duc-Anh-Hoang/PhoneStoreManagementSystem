@@ -615,6 +615,24 @@ body {
   transform: scaleX(1);
 }
 
+/* Header Layout Alignment Fix */
+.header-blue-banner .max-w-7xl > div {
+  align-items: center !important;
+}
+
+#btn-mega-menu-toggle {
+  align-self: center !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  flex-shrink: 0 !important;
+}
+
+.header-blue-banner .flex-1.relative {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+}
+
 /* Glossy White Buttons & Inputs (Hoàng Hà Mobile style with 3D shine) */
 .btn-header-glossy {
   background: linear-gradient(180deg, #FFFFFF 0%, #F5F9FE 55%, #E3EFFF 100%) !important;

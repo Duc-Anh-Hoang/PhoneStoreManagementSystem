@@ -77,11 +77,13 @@
           }
           this.setUser(userObj);
           return { success: true, redirect: data.redirect || (window.location.pathname.includes('/pages/') ? 'admin.html' : 'pages/admin.html'), user: userObj };
-        } else if (resp.status === 400 || resp.status === 401 || resp.status === 403) {
-          throw new Error(data.message || data.error || 'Tên đăng nhập hoặc mật khẩu không chính xác');
+        } else {
+          const errDetail = data.message || data.error || (resp.status === 401 || resp.status === 400 ? 'Tên đăng nhập hoặc mật khẩu không chính xác' : `Đăng nhập không thành công (HTTP ${resp.status})`);
+          throw new Error(errDetail);
         }
       } catch (err) {
-        if (err.message && (err.message.includes('mật khẩu') || err.message.includes('Tên đăng nhập') || err.message.includes('khóa'))) {
+        // Nếu backend đã phản hồi (kể cả lỗi mật khẩu hay lỗi server), hiển thị lỗi cho người dùng, không tạo token giả
+        if (err.name !== 'TypeError' && !err.message.includes('Failed to fetch') && !err.message.includes('NetworkError')) {
           throw err;
         }
         console.warn('Backend chưa online hoặc không kết nối được cổng 8080. Kiểm tra tài khoản mẫu seed hệ thống...');
