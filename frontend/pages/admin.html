@@ -865,7 +865,10 @@
             <h2 class="text-xl font-extrabold text-navy tracking-tight">Đơn Hàng Online</h2>
             <p class="text-xs text-slate-500 mt-0.5">Xác nhận đơn hàng, kiểm tra tồn kho, gán số IMEI và xuất kho tự động</p>
           </div>
-          <div class="flex items-center gap-3">
+          <div class="flex items-center gap-2.5">
+            <button onclick="bulkApproveOrders()" class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold shadow-xs transition-colors cursor-pointer" title="Tự động duyệt tất cả đơn hàng đang chờ xác nhận và đẩy sang GHN">
+              <i class="fa-solid fa-bolt text-xs text-amber-300"></i> <span>Duyệt tất cả đơn chờ</span>
+            </button>
             <button onclick="exportDonHangExcel()" class="inline-flex items-center gap-2 px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold shadow-xs transition-colors cursor-pointer" title="Xuất dữ liệu đơn hàng ra file Excel">
               <i class="fa-solid fa-file-excel text-xs"></i> <span>Xuất Excel</span>
             </button>

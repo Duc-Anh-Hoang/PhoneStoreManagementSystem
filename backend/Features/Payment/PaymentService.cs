@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PhoneStoreAPI.Common.Constants;
 using PhoneStoreAPI.Common.Exceptions;
 using PhoneStoreAPI.Common.Services;
 using PhoneStoreAPI.Data;
+using PhoneStoreAPI.Features.OnlineOrders;
 using PhoneStoreAPI.Features.OnlineOrders.Hubs;
 using PhoneStoreAPI.Features.Payment.DTOs;
 using QRCoder;
@@ -20,17 +22,20 @@ public class PaymentService : IPaymentService
     private readonly IEmailService? _emailService;
     private readonly IHubContext<OrderHub>? _hubContext;
     private readonly ILogger<PaymentService> _logger;
+    private readonly IServiceProvider _serviceProvider;
 
     public PaymentService(
         AppDbContext context,
         IConfiguration configuration,
         ILogger<PaymentService> logger,
+        IServiceProvider serviceProvider,
         IEmailService? emailService = null,
         IHubContext<OrderHub>? hubContext = null)
     {
         _context = context;
         _configuration = configuration;
         _logger = logger;
+        _serviceProvider = serviceProvider;
         _emailService = emailService;
         _hubContext = hubContext;
     }
@@ -112,13 +117,29 @@ public class PaymentService : IPaymentService
             throw new BadRequestException("Đơn hàng đã bị hủy, không thể xác nhận thanh toán.");
         }
 
-        // Đã thanh toán chuyển khoản thành công -> Chuyển về Chờ xác nhận để chờ Admin duyệt
-        if (donHang.TrangThai == AppConstants.OrderStatus.ChoThanhToan)
+        // TỰ ĐỘNG DUYỆT ĐƠN THÔNG MINH (Auto-Approval Pipeline - Giải pháp 1):
+        // Đã thanh toán chuyển khoản thành công -> Chuyển thẳng sang Đã xác nhận, xuất hóa đơn & đẩy vận đơn GHN ngay lập tức!
+        try
         {
-            donHang.TrangThai = AppConstants.OrderStatus.ChoXacNhan;
+            using var scope = _serviceProvider.CreateScope();
+            var onlineOrderService = scope.ServiceProvider.GetService<IOnlineOrderService>();
+            if (onlineOrderService != null)
+            {
+                await onlineOrderService.UpdateOrderStatusAsync(donHang.MaDH, AppConstants.OrderStatus.DaXacNhan);
+                donHang.TrangThai = AppConstants.OrderStatus.DaXacNhan;
+            }
+            else
+            {
+                donHang.TrangThai = AppConstants.OrderStatus.DaXacNhan;
+                await _context.SaveChangesAsync();
+            }
         }
-
-        await _context.SaveChangesAsync();
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Lỗi khi tự động duyệt đơn hàng #{MaDH} sau thanh toán", donHang.MaDH);
+            donHang.TrangThai = AppConstants.OrderStatus.DaXacNhan;
+            await _context.SaveChangesAsync();
+        }
 
         // Gửi thông báo Realtime qua SignalR tới cả trang khách hàng đang mở mã QR và Dashboard Admin
         if (_hubContext != null)

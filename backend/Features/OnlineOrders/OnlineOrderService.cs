@@ -838,4 +838,40 @@ public class OnlineOrderService : IOnlineOrderService
 
         return result;
     }
+
+    public async Task<BulkApproveResultDto> BulkApproveOrdersAsync(List<string>? orderCodes = null)
+    {
+        var query = _context.DonHangOnlines.AsQueryable();
+        if (orderCodes != null && orderCodes.Count > 0)
+        {
+            var set = orderCodes.Select(c => c.Trim().ToUpperInvariant()).ToHashSet();
+            query = query.Where(d => set.Contains(d.MaDH.ToUpper()) &&
+                                     (d.TrangThai == AppConstants.OrderStatus.ChoXacNhan || d.TrangThai == AppConstants.OrderStatus.ChoThanhToan));
+        }
+        else
+        {
+            // Mặc định duyệt toàn bộ đơn đang ở trạng thái chờ xác nhận
+            query = query.Where(d => d.TrangThai == AppConstants.OrderStatus.ChoXacNhan);
+        }
+
+        var candidateOrders = await query.OrderBy(d => d.NgayDat).Take(100).ToListAsync();
+        var result = new BulkApproveResultDto();
+
+        foreach (var ord in candidateOrders)
+        {
+            try
+            {
+                await UpdateOrderStatusAsync(ord.MaDH, AppConstants.OrderStatus.DaXacNhan);
+                result.ApprovedCount++;
+                result.ApprovedCodes.Add(ord.MaDH);
+            }
+            catch (Exception ex)
+            {
+                result.FailedCount++;
+                result.ErrorMessages.Add($"Đơn #{ord.MaDH}: {ex.Message}");
+            }
+        }
+
+        return result;
+    }
 }

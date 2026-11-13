@@ -16,4 +16,7 @@ public interface IOnlineOrderService
 
     // Giai đoạn 4: Tra cứu danh sách đơn theo SĐT với mask (dùng sau khi xác thực OTP token)
     Task<List<OrderLookupDto>> GetOrdersByPhoneMaskedAsync(string phone);
+
+    // Auto-approval & Bulk approval cho đợt cao điểm
+    Task<BulkApproveResultDto> BulkApproveOrdersAsync(List<string>? orderCodes = null);
 }

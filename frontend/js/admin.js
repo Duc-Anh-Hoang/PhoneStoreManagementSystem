@@ -5532,6 +5532,32 @@ function downloadWorkbook(workbook, defaultFileName) {
   showToast(`Đã xuất file ${fileName} thành công!`, 'success');
 }
 
+async function bulkApproveOrders() {
+  const pendingOrders = (AdminRealtimeData.orders || cachedDonHangList || []).filter(o => o.trangThai === 'cho_xac_nhan' || o.trangThai === 'cho_thanh_toan');
+  const count = pendingOrders.length;
+  const msg = count > 0
+    ? `Hệ thống tìm thấy ${count} đơn hàng đang chờ duyệt.\nBạn có chắc chắn muốn TỰ ĐỘNG DUYỆT toàn bộ và tạo mã vận đơn GHN ngay lập tức không?`
+    : `Bạn có chắc muốn chạy pipeline tự động duyệt toàn bộ đơn hàng đang chờ trên hệ thống không?`;
+
+  if (!confirm(msg)) return;
+
+  showToast('Đang tự động duyệt đơn hàng & tạo mã vận đơn GHN...', 'info');
+  try {
+    const res = await api.post('/donhangonline/bulk-approve', {});
+    if (res && res.approvedCount > 0) {
+      showToast(`Đã tự động duyệt thành công ${res.approvedCount} đơn hàng và đẩy mã GHN!`, 'success');
+    } else if (res && res.approvedCount === 0 && (!res.failedCount || res.failedCount === 0)) {
+      showToast('Hiện không có đơn hàng nào đang chờ duyệt.', 'info');
+    } else {
+      showToast(`Đã xử lý: ${res.approvedCount || 0} thành công, ${res.failedCount || 0} lỗi.`, 'warning');
+    }
+    if (typeof renderDonHang === 'function') await renderDonHang();
+  } catch (err) {
+    showToast('Lỗi khi duyệt hàng loạt: ' + (err.message || err), 'error');
+  }
+}
+window.bulkApproveOrders = bulkApproveOrders;
+
 function exportDonHangExcel() {
   const list = AdminRealtimeData.orders || cachedDonHangList || [];
   if (!list || list.length === 0) {

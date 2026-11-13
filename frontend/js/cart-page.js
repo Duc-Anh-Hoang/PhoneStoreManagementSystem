@@ -1515,7 +1515,7 @@
       const idx = orders.findIndex(o => o.maDH === maDH);
       if (idx > -1) {
         orders[idx].daThanhToan = true;
-        orders[idx].trangThai = 'cho_xac_nhan';
+        orders[idx].trangThai = 'da_xac_nhan';
         saveOrders(orders);
       }
     } catch (e) {}
@@ -1531,12 +1531,12 @@
       iconEl.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
     }
     if (titleEl) titleEl.textContent = 'Đã Nhận Thanh Toán Chuyển Khoản!';
-    if (subEl) subEl.textContent = 'SamaMobile đã nhận được tiền thanh toán. Đơn hàng đang ở trạng thái Chờ xác nhận từ Admin để đóng gói xuất kho.';
+    if (subEl) subEl.textContent = 'SamaMobile đã nhận được tiền thanh toán. Hệ thống đã TỰ ĐỘNG XÁC NHẬN đơn hàng & đẩy sang GHN đóng gói bưu phẩm!';
     if (badgeContainer) {
       badgeContainer.innerHTML = `
         <div class="flex flex-wrap items-center justify-center gap-2">
-          <span class="px-3 py-1 rounded-full bg-amber-50 text-amber-800 border border-amber-300 text-xs font-bold inline-flex items-center gap-1.5 shadow-2xs">
-            <i class="fa-regular fa-clock text-amber-600"></i> Chờ Admin xác nhận
+          <span class="px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-300 text-xs font-bold inline-flex items-center gap-1.5 shadow-2xs">
+            <i class="fa-solid fa-bolt text-emerald-600"></i> ⚡ Tự động xác nhận (Auto-Approved)
           </span>
           <span class="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-300 text-xs font-bold inline-flex items-center gap-1.5 shadow-2xs">
             <i class="fa-solid fa-check text-emerald-600"></i> Đã thanh toán VietQR
@@ -1554,7 +1554,7 @@
       const celebTitle = celebBox.querySelector('h3');
       const celebDesc = celebBox.querySelector('p');
       if (celebTitle) celebTitle.textContent = 'Giao Dịch Thanh Toán Thành Công!';
-      if (celebDesc) celebDesc.textContent = 'Hệ thống đã tự động ghi nhận chuyển khoản. Đơn hàng của bạn đang được chuyển đến Admin để duyệt đơn và xuất kho.';
+      if (celebDesc) celebDesc.textContent = 'Hệ thống đã tự động ghi nhận chuyển khoản, duyệt đơn và tạo vận đơn GHN thành công! Đang tiến hành đóng gói bưu phẩm.';
     }
 
     // 4. Phát âm thanh Ting ting & Toast
@@ -1751,14 +1751,17 @@
     }
 
     try {
-      const res = await fetch(`http://localhost:5132/api/payment/confirm/${encodeURIComponent(orderCode)}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          transactionId: `CLIENT_MANUAL_${Date.now()}`,
-          note: 'Khách hàng bấm kiểm tra thanh toán ngay trên web'
-        })
-      });
+      const payPayload = {
+        transactionId: `CLIENT_MANUAL_${Date.now()}`,
+        note: 'Khách hàng bấm kiểm tra thanh toán ngay trên web'
+      };
+      const res = await (window.api && typeof window.api.post === 'function'
+        ? window.api.post('/payment/confirm/' + encodeURIComponent(orderCode), payPayload)
+        : fetch('/api/payment/confirm/' + encodeURIComponent(orderCode), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payPayload)
+          }).then(r => r.json()));
 
       if (res.ok) {
         handlePaymentSuccessUI(orderCode);
@@ -2085,19 +2088,24 @@
     const idx = orders.findIndex(o => o.maDH === code);
     if (idx > -1) {
       orders[idx].daThanhToan = true;
-      orders[idx].trangThai = 'cho_xac_nhan';
+      orders[idx].trangThai = 'da_xac_nhan';
       saveOrders(orders);
       window.renderOrders();
-      showToast(`Đã ghi nhận chuyển khoản cho đơn ${code}! Đang chờ Admin xác nhận.`, 'success');
+      showToast(`Thanh toán thành công! Hệ thống đã TỰ ĐỘNG XÁC NHẬN đơn ${code} và đẩy sang GHN.`, 'success');
     }
     window.closeOrderQrModal();
 
     try {
-      await fetch(`http://localhost:5132/api/payment/confirm/${encodeURIComponent(code)}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ transactionId: `MODAL_CONFIRM_${Date.now()}`, note: 'Khách xác nhận thanh toán qua modal' })
-      });
+      const modalPayload = { transactionId: `MODAL_CONFIRM_${Date.now()}`, note: 'Khách xác nhận thanh toán qua modal' };
+      if (window.api && typeof window.api.post === 'function') {
+        await window.api.post('/payment/confirm/' + encodeURIComponent(code), modalPayload);
+      } else {
+        await fetch('/api/payment/confirm/' + encodeURIComponent(code), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(modalPayload)
+        });
+      }
     } catch (e) {}
   };
 

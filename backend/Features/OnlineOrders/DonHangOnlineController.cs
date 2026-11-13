@@ -77,4 +77,14 @@ public class DonHangOnlineController : ControllerBase
         var shipping = await _shippingService.CreateShipmentAsync(order, order.ChiTietDonHangs.ToList());
         return Ok(shipping);
     }
+
+    /// <summary>
+    /// Pipeline Auto-Approval & Bulk Approval: Duyệt hàng loạt đơn hàng online khi lượng user đặt cao điểm
+    /// </summary>
+    [HttpPost("bulk-approve")]
+    public async Task<IActionResult> BulkApproveOrders([FromBody] BulkApproveRequest? request)
+    {
+        var result = await _onlineOrderService.BulkApproveOrdersAsync(request?.OrderCodes);
+        return Ok(result);
+    }
 }

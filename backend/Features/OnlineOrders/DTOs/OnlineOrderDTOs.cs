@@ -59,6 +59,19 @@ public class CancelOrderRequest
     public string? LyDo { get; set; }
 }
 
+public class BulkApproveRequest
+{
+    public List<string>? OrderCodes { get; set; }
+}
+
+public class BulkApproveResultDto
+{
+    public int ApprovedCount { get; set; }
+    public int FailedCount { get; set; }
+    public List<string> ApprovedCodes { get; set; } = new();
+    public List<string> ErrorMessages { get; set; } = new();
+}
+
 // ─── Giai đoạn 2: DTOs tra cứu công khai (đã che thông tin nhạy cảm) ───────────
 
 /// <summary>
