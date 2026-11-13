@@ -1871,7 +1871,7 @@
       const isQrPayment = (order.phuongThucThanhToan === 'banking' || order.phuongThucThanhToan === 'momo') && !order.daThanhToan && (order.trangThai === 'cho_thanh_toan' || order.trangThai === 'cho_xac_nhan');
 
       return `
-        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs space-y-3.5 hover:border-blue-300 transition-all text-xs sm:text-sm">
+        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-xs space-y-4 hover:shadow-md hover:border-blue-300 transition-all text-xs sm:text-sm">
           <!-- Hàng tiêu đề đơn hàng -->
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-3 border-b border-slate-100">
             <div class="flex items-center gap-2.5">
@@ -1888,7 +1888,6 @@
                     </a>
                   ` : ''}
                   ${order.daThanhToan ? '<span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 inline-flex items-center gap-1"><i class="fa-solid fa-check text-[10px]"></i> Đã thanh toán</span>' : ''}
-                </div>
                 </div>
                 <div class="text-[11px] text-slate-400 mt-0.5">Đặt ngày: ${dateStr}</div>
               </div>
@@ -1914,8 +1913,8 @@
             `).join('')}
           </div>
 
-          <!-- Hàng Footer: Địa chỉ giao & Các nút thao tác (không bị rớt lệch hàng) -->
-          <div class="pt-3 border-t border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs text-slate-500">
+          <!-- Hàng Footer: Địa chỉ giao & Các nút thao tác (phân cách chuyên nghiệp) -->
+          <div class="pt-3 border-t border-slate-100/90 bg-slate-50/70 -mx-4 -mb-4 sm:-mx-5 sm:-mb-5 px-4 py-3 sm:px-5 sm:py-3.5 rounded-b-2xl flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs text-slate-500">
             <div class="flex items-center gap-1.5 min-w-0 flex-1">
               <i class="fa-solid fa-location-dot text-rose-500 flex-shrink-0 text-xs"></i>
               <span class="truncate">Giao đến: <strong class="text-slate-700 font-medium">${order.diaChiGiao}</strong></span>
