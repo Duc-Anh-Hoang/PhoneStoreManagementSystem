@@ -407,6 +407,10 @@
             </div>
             <span id="nav-badge-donhang" class="hidden px-2 py-0.5 text-[10px] font-extrabold rounded-full bg-rose-500 text-white animate-pulse">0</span>
           </a>
+          <a href="#" onclick="openOrderSettingsModal(); return false;" class="admin-nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#F9FAFB] hover:text-purple-700 transition-colors" title="Cấu hình tự động duyệt">
+            <i class="fa-solid fa-sliders text-xs w-4 text-purple-600"></i>
+            <span class="nav-link-text whitespace-nowrap font-medium">Cấu hình tự duyệt</span>
+          </a>
           <a href="#" data-target="view-chat" onclick="renderSection('view-chat'); return false;" class="admin-nav-link flex items-center justify-between gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#F9FAFB] hover:text-slate-900 transition-colors" title="Tư vấn trực tuyến">
             <div class="flex items-center gap-2.5 min-w-0">
               <i class="fa-solid fa-comments text-xs w-4 text-slate-400"></i>
@@ -866,6 +870,9 @@
             <p class="text-xs text-slate-500 mt-0.5">Xác nhận đơn hàng, kiểm tra tồn kho, gán số IMEI và xuất kho tự động</p>
           </div>
           <div class="flex items-center gap-2.5">
+            <button onclick="openOrderSettingsModal()" class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-purple-50 text-purple-700 border border-purple-200 hover:bg-purple-100 rounded-xl text-xs font-semibold shadow-xs transition-colors cursor-pointer" title="Cấu hình quy tắc tự động duyệt đơn hàng (plan 8)">
+              <i class="fa-solid fa-sliders text-xs text-purple-600"></i> <span>Cấu hình tự duyệt</span>
+            </button>
             <button onclick="bulkApproveOrders()" class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold shadow-xs transition-colors cursor-pointer" title="Tự động duyệt tất cả đơn hàng đang chờ xác nhận và đẩy sang GHN">
               <i class="fa-solid fa-bolt text-xs text-amber-300"></i> <span>Duyệt tất cả đơn chờ</span>
             </button>
@@ -2899,7 +2906,7 @@
   <script src="../js/api.js?v=3.6"></script>
   <script src="../js/order-signalr.js?v=1.3"></script>
   <script src="../js/auth.js?v=3.6"></script>
-  <script src="../js/admin.js?v=3.7"></script>
+  <script src="../js/admin.js?v=4.0"></script>
 
   <script>
     // Mobile sidebar toggle handler

@@ -443,6 +443,7 @@ const Format = {
     const dict = {
       cho_thanh_toan: { labelVi: 'Chờ thanh toán', shade: 'warning' },
       cho_xac_nhan: { labelVi: 'Chờ xác nhận', shade: 'warning' },
+      can_kiem_tra: { labelVi: 'Chờ xác nhận', shade: 'warning' },
       da_xac_nhan:  { labelVi: 'Đã xác nhận', shade: 'ok' },
       dang_giao:    { labelVi: 'Đang giao', shade: 'neutral' },
       hoan_thanh:   { labelVi: 'Hoàn thành', shade: 'ok' },
@@ -1413,7 +1414,6 @@ async function renderDonHangTable(filter = 'all') {
         </td>
         <td class="p-3.5 text-xs text-center whitespace-nowrap">
           ${Format.statusBadge(o.trangThai)}
-          ${o.riskFlag ? `<div class="mt-1"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-700 border border-rose-300 inline-flex items-center gap-1" title="${(o.riskReasons || '').replace(/"/g, '&quot;')}"><i class="fa-solid fa-triangle-exclamation"></i> Cần kiểm tra</span></div>` : ''}
           ${o.ghnOrderCode ? `<div class="mt-1 font-mono text-[10px] text-blue-600 font-bold">GHN: #${o.ghnOrderCode}</div>` : ''}
         </td>
         <td class="p-3.5 text-xs text-right whitespace-nowrap">

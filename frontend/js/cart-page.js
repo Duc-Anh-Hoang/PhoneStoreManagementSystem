@@ -498,21 +498,83 @@
   }
 
   // Setup Bộ Chọn Phương Thức Thanh Toán (Gọn gàng, chỉ chọn hình thức - Không bung mã QR trước khi đặt hàng)
+  const COD_MAX_LIMIT = 30000000;
+
+  function updateCodAvailability(currentTotal) {
+    const codWrapper = document.querySelector('.payment-method-wrapper[data-method="cod"]');
+    if (!codWrapper) return;
+    const codRadio = codWrapper.querySelector('input[name="payment_method"]');
+    let codWarning = codWrapper.querySelector('.cod-limit-warning');
+    const isExceeded = (Number(currentTotal) || 0) > COD_MAX_LIMIT;
+
+    if (isExceeded) {
+      codWrapper.setAttribute('data-disabled', 'true');
+      codWrapper.style.opacity = '0.55';
+      codWrapper.style.cursor = 'not-allowed';
+      if (codRadio) {
+        codRadio.disabled = true;
+        if (codRadio.checked || paymentMethod === 'cod') {
+          codRadio.checked = false;
+          paymentMethod = 'banking';
+          const bankingWrapper = document.querySelector('.payment-method-wrapper[data-method="banking"]');
+          const bankingRadio = bankingWrapper ? bankingWrapper.querySelector('input[name="payment_method"]') : null;
+          if (bankingRadio) bankingRadio.checked = true;
+          if (bankingWrapper) {
+            bankingWrapper.className = 'payment-method-wrapper rounded-2xl border-2 border-[#0057B7] bg-blue-50/25 transition-all shadow-2xs';
+          }
+          if (typeof showToast === 'function') {
+            showToast('Đơn hàng trên 30 triệu không hỗ trợ COD. Đã chuyển sang Chuyển khoản QR.', 'warning');
+          }
+        }
+      }
+      codWrapper.className = 'payment-method-wrapper rounded-2xl border border-slate-200 bg-slate-50 transition-all cursor-not-allowed';
+      if (!codWarning) {
+        codWarning = document.createElement('div');
+        codWarning.className = 'cod-limit-warning text-[11px] text-rose-600 font-semibold px-4 pb-2.5 flex items-center gap-1.5';
+        codWarning.innerHTML = '<i class="fa-solid fa-circle-exclamation text-rose-500"></i> Đơn hàng vượt hạn mức 30.000.000₫ không hỗ trợ ship COD. Vui lòng thanh toán trực tuyến.';
+        codWrapper.appendChild(codWarning);
+      } else {
+        codWarning.classList.remove('hidden');
+      }
+    } else {
+      codWrapper.removeAttribute('data-disabled');
+      codWrapper.style.opacity = '';
+      codWrapper.style.cursor = '';
+      if (codRadio) codRadio.disabled = false;
+      if (codWarning) codWarning.classList.add('hidden');
+      if (paymentMethod !== 'cod') {
+        codWrapper.className = 'payment-method-wrapper rounded-2xl border border-slate-200 bg-white transition-all hover:border-slate-300';
+      }
+    }
+  }
+
+  // Setup Bộ Chọn Phương Thức Thanh Toán (Gọn gàng, chỉ chọn hình thức - Không bung mã QR trước khi đặt hàng)
   function setupPaymentMethods() {
     const wrappers = document.querySelectorAll('.payment-method-wrapper');
 
     wrappers.forEach(w => {
-      w.addEventListener('click', function () {
+      w.addEventListener('click', function (e) {
+        if (this.getAttribute('data-disabled') === 'true') {
+          e.preventDefault();
+          e.stopPropagation();
+          if (typeof showToast === 'function') {
+            showToast('Đơn hàng trên 30 triệu không hỗ trợ ship COD. Vui lòng chọn thanh toán trực tuyến!', 'warning');
+          }
+          return;
+        }
         const method = this.getAttribute('data-method');
         if (!method) return;
         paymentMethod = method;
 
         const radio = this.querySelector('input[name="payment_method"]');
-        if (radio) radio.checked = true;
+        if (radio && !radio.disabled) radio.checked = true;
 
         wrappers.forEach(item => {
+          const itemDisabled = item.getAttribute('data-disabled') === 'true';
           if (item === w) {
             item.className = 'payment-method-wrapper rounded-2xl border-2 border-[#0057B7] bg-blue-50/25 transition-all shadow-2xs';
+          } else if (itemDisabled) {
+            item.className = 'payment-method-wrapper rounded-2xl border border-slate-200 bg-slate-50 transition-all cursor-not-allowed';
           } else {
             item.className = 'payment-method-wrapper rounded-2xl border border-slate-200 bg-white transition-all hover:border-slate-300';
           }
@@ -1093,6 +1155,7 @@
     updateFreeshipProgress(subtotal);
     updateVietQR(finalTotal);
     updateEWalletQR(finalTotal);
+    updateCodAvailability(finalTotal);
   }
 
   // Cập nhật thanh tiến trình Freeship thông minh theo khu vực (TP.HCM 5TR, Toàn quốc 20TR)
@@ -1406,6 +1469,13 @@
     let maDH = 'DH-';
     for (let i = 0; i < 6; i++) {
       maDH += ORDER_CODE_CHARSET[arr[i] % ORDER_CODE_CHARSET.length];
+    }
+
+    if (paymentMethod === 'cod' && finalTotal > COD_MAX_LIMIT) {
+      if (typeof showToast === 'function') {
+        showToast('Đơn hàng trên 30.000.000₫ vượt quá ngân sách COD cho phép. Vui lòng chọn hình thức thanh toán online (Chuyển khoản QR)!', 'warning');
+      }
+      return;
     }
 
     const orderData = {
@@ -2322,7 +2392,7 @@
       const provinces = rawProvinces.filter(p => {
         const name = (p.ProvinceName || '').trim();
         const code = (p.Code || '').trim().toUpperCase();
-        return !name.toLowerCase().includes('test') && !name.toLowerCase().includes('alert') && !code.includes('TEST') && name !== 'Hà Nội 02';
+        return !name.toLowerCase().includes('test') && !name.toLowerCase().includes('alert') && !code.includes('TEST') && name !== 'Hà Nội 02' && !name.includes(' - 001');
       });
 
       provinces.sort((a, b) => {
