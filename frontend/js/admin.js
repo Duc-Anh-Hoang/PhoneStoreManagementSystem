@@ -1290,7 +1290,7 @@ async function deleteMatHang(maHang) {
 // -------------------------------------------------------------
 let cachedDonHangList = [];
 
-async function renderDonHangTable(filter = 'all') {
+async function renderDonHangTable(filter = 'all', keyword = '') {
   const tbody = document.getElementById('table-donhang-body');
   if (!tbody) return;
 
@@ -1298,7 +1298,7 @@ async function renderDonHangTable(filter = 'all') {
     await AdminRealtimeData.init();
   }
 
-  // Đảm bảo đồng bộ ngay lập tức đơn hàng mới đặt từ index/cart (samamobile_user_orders + cellphones_online_orders + API backend)
+  // Đảm bảo đồng bộ ngay lập tức đơn hàng mới đặt từ index/cart
   try {
     const backendOrders = await api.get('/donhangonline').catch(() => []);
     AdminRealtimeData.mergeAllOrderSources(backendOrders);
@@ -1312,6 +1312,16 @@ async function renderDonHangTable(filter = 'all') {
     orders = cachedDonHangList.filter(o => o.trangThai === filter);
   }
 
+  if (keyword) {
+    const kw = keyword.toLowerCase().trim();
+    orders = orders.filter(o =>
+      (o.maDH || '').toLowerCase().includes(kw) ||
+      (o.tenNguoiNhan || '').toLowerCase().includes(kw) ||
+      (o.sdtNguoiNhan || '').toLowerCase().includes(kw) ||
+      (o.diaChiGiao || '').toLowerCase().includes(kw)
+    );
+  }
+
   if (!orders || orders.length === 0) {
     tbody.innerHTML = '<tr><td colspan="9" class="p-6 text-center text-slate-400">Không có đơn hàng nào trong mục này</td></tr>';
     return;
@@ -1322,55 +1332,47 @@ async function renderDonHangTable(filter = 'all') {
     let actions = '';
     if (o.trangThai === 'cho_thanh_toan') {
       actions = `
-        <div class="flex items-center justify-end gap-1.5">
-          <button onclick="confirmPaymentAdmin('${o.maDH}')" class="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs transition-colors shadow-2xs cursor-pointer flex items-center gap-1" title="Xác nhận khách đã chuyển khoản thành công">
-            <i class="fa-solid fa-check"></i> Đã nhận tiền
-          </button>
-          <button onclick="cancelOrder('${o.maDH}')" class="px-2.5 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold rounded-xl text-xs transition-colors border border-rose-200 cursor-pointer" title="Hủy đơn">
-            Hủy
-          </button>
-        </div>
+        <button onclick="confirmPaymentAdmin('${o.maDH}')" class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-slate-800 hover:bg-slate-900 text-white font-medium rounded-lg text-xs transition-colors cursor-pointer" title="Xác nhận khách đã chuyển khoản thành công">
+          <i class="fa-solid fa-check text-[10px]"></i> Xác nhận tiền
+        </button>
+        <button onclick="cancelOrder('${o.maDH}')" class="inline-flex items-center px-2 py-1.5 text-slate-500 hover:text-rose-600 hover:bg-rose-50 border border-slate-200 font-medium rounded-lg text-xs transition-colors cursor-pointer" title="Hủy đơn">
+          Hủy
+        </button>
       `;
     } else if (o.trangThai === 'cho_xac_nhan') {
       actions = `
-        <div class="flex items-center justify-end gap-1.5">
-          <button onclick="approveOrder('${o.maDH}')" class="px-2.5 py-1.5 bg-[#2563EB] hover:bg-blue-700 text-white font-medium rounded-lg text-xs transition-colors cursor-pointer" title="Duyệt đơn sang Đã xác nhận">
-            Duyệt đơn
-          </button>
-          <button onclick="cancelOrder('${o.maDH}')" class="px-2 py-1.5 text-rose-600 hover:bg-rose-50 font-medium rounded-lg text-xs transition-colors border border-rose-200 cursor-pointer" title="Hủy đơn">
-            Hủy
-          </button>
-        </div>
+        <button onclick="approveOrder('${o.maDH}')" class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-slate-800 hover:bg-slate-900 text-white font-medium rounded-lg text-xs transition-colors cursor-pointer" title="Duyệt đơn và đẩy sang giao hàng GHN">
+          <i class="fa-solid fa-check text-[10px]"></i> Duyệt đơn
+        </button>
+        <button onclick="cancelOrder('${o.maDH}')" class="inline-flex items-center px-2 py-1.5 text-slate-500 hover:text-rose-600 hover:bg-rose-50 border border-slate-200 font-medium rounded-lg text-xs transition-colors cursor-pointer" title="Hủy đơn">
+          Hủy
+        </button>
       `;
     } else if (o.trangThai === 'da_xac_nhan') {
       actions = `
-        <div class="flex items-center justify-end gap-1.5">
-          <button onclick="shipOrder('${o.maDH}')" class="px-2.5 py-1.5 bg-[#2563EB] hover:bg-blue-700 text-white font-medium rounded-lg text-xs transition-colors cursor-pointer" title="Chuyển đơn sang Đang giao">
-            Giao hàng
-          </button>
-          <button onclick="cancelOrder('${o.maDH}')" class="px-2 py-1.5 text-rose-600 hover:bg-rose-50 font-medium rounded-lg text-xs transition-colors border border-rose-200 cursor-pointer" title="Hủy đơn">
-            Hủy
-          </button>
-        </div>
+        <button onclick="shipOrder('${o.maDH}')" class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-slate-800 hover:bg-slate-900 text-white font-medium rounded-lg text-xs transition-colors cursor-pointer" title="Chuyển đơn sang Đang giao">
+          <i class="fa-solid fa-truck-fast text-[10px]"></i> Giao hàng
+        </button>
+        <button onclick="cancelOrder('${o.maDH}')" class="inline-flex items-center px-2 py-1.5 text-slate-500 hover:text-rose-600 hover:bg-rose-50 border border-slate-200 font-medium rounded-lg text-xs transition-colors cursor-pointer" title="Hủy đơn">
+          Hủy
+        </button>
       `;
     } else if (o.trangThai === 'dang_giao') {
       const pm = String(o.phuongThucThanhToan || o.paymentMethod || '').toLowerCase();
       const isPaidOnline = ['chuyen_khoan', 'banking', 'momo', 'vnpay', 'zalopay', 'card', 'the'].includes(pm) || o.paymentStatus === 'paid';
       actions = `
-        <button onclick="completeOrder('${o.maDH}')" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-900 text-white font-medium rounded-lg text-xs transition-colors cursor-pointer" title="${isPaidOnline ? 'Đơn đã thanh toán trước - Xác nhận giao thành công & Hoàn tất' : 'Thu tiền COD & Hoàn tất đơn hàng'}">
-          ${isPaidOnline ? 'Xác nhận đã giao' : 'Thu tiền & Hoàn tất'}
+        <button onclick="completeOrder('${o.maDH}')" class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-slate-800 hover:bg-slate-900 text-white font-medium rounded-lg text-xs transition-colors cursor-pointer" title="${isPaidOnline ? 'Đơn đã thanh toán trước - Xác nhận giao thành công' : 'Thu tiền COD & hoàn tất đơn'}">
+          ${isPaidOnline ? 'Đã giao' : 'Thu tiền & giao'}
         </button>
       `;
     } else if (o.trangThai === 'hoan_thanh') {
       actions = `
-        <div class="flex items-center justify-end gap-1.5">
-          <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-mono text-slate-700 bg-slate-100">
-            ${o.soHD ? 'HĐ: ' + o.soHD : 'Hoàn tất'}
-          </span>
-        </div>
+        <span class="inline-flex items-center px-2 py-1 rounded-lg text-xs font-mono text-slate-500 bg-slate-100 border border-slate-200">
+          ${o.soHD ? 'HĐ: ' + o.soHD : 'Hoàn tất'}
+        </span>
       `;
     } else {
-      actions = '<span class="text-xs text-rose-500 font-medium">Đã hủy</span>';
+      actions = '<span class="text-xs text-slate-400 font-medium">Đã hủy</span>';
     }
 
     let itemsSummary = '';
@@ -1395,33 +1397,28 @@ async function renderDonHangTable(filter = 'all') {
 
     return `
       <tr class="border-b border-slate-200 hover:bg-slate-50 transition-colors">
-        <td class="p-3.5 font-mono font-bold text-xs text-slate-700 whitespace-nowrap">${o.maDH}</td>
+        <td class="p-3.5 font-mono font-bold text-xs text-slate-800 whitespace-nowrap">${o.maDH}</td>
         <td class="p-3.5 text-xs text-slate-500 whitespace-nowrap">${ngay}</td>
         <td class="p-3.5 whitespace-nowrap">
-          <div class="font-bold text-sm text-navy">${o.tenNguoiNhan || '-'}</div>
-          <div class="text-[11px] text-slate-500 font-mono">${o.sdtNguoiNhan || '-'}</div>
+          <div class="font-semibold text-xs text-slate-800">${o.tenNguoiNhan || '-'}</div>
+          <div class="text-[10px] text-slate-400 font-mono mt-0.5">${o.sdtNguoiNhan || '-'}</div>
         </td>
         <td class="p-3.5 text-xs text-slate-600 max-w-[200px] truncate" title="${o.diaChiGiao || ''}">${o.diaChiGiao || '-'}</td>
         <td class="p-3.5 text-xs text-slate-700 min-w-[180px] max-w-[260px]">${itemsSummary}</td>
-        <td class="p-3.5 font-bold text-sm text-navy text-right whitespace-nowrap font-mono">${Format.currency(o.tongTien)}</td>
+        <td class="p-3.5 font-bold text-xs text-slate-900 text-right whitespace-nowrap font-mono">${Format.currency(o.tongTien)}</td>
         <td class="p-3.5 text-xs text-center whitespace-nowrap">
           ${Format.statusBadge(o.phuongThucThanhToan)}
-          ${(['chuyen_khoan', 'banking', 'momo', 'vnpay', 'zalopay', 'card', 'the'].includes(String(o.phuongThucThanhToan || o.paymentMethod || '').toLowerCase()) || o.paymentStatus === 'paid')
-            ? '<div class="text-[10px] font-medium text-emerald-600 mt-1"><i class="fa-solid fa-circle-check mr-0.5"></i>Đã thanh toán</div>'
-            : (o.trangThai === 'hoan_thanh'
-              ? '<div class="text-[10px] font-medium text-emerald-600 mt-1"><i class="fa-solid fa-circle-check mr-0.5"></i>Đã thu tiền</div>'
-              : (o.trangThai !== 'da_huy' ? '<div class="text-[10px] font-medium text-amber-600 mt-1">Chưa thu tiền</div>' : ''))}
         </td>
         <td class="p-3.5 text-xs text-center whitespace-nowrap">
           ${Format.statusBadge(o.trangThai)}
-          ${o.ghnOrderCode ? `<div class="mt-1 font-mono text-[10px] text-blue-600 font-bold">GHN: #${o.ghnOrderCode}</div>` : ''}
+          ${o.ghnOrderCode ? `<div class="mt-0.5 font-mono text-[10px] text-slate-400">#${o.ghnOrderCode}</div>` : ''}
         </td>
         <td class="p-3.5 text-xs text-right whitespace-nowrap">
           <div class="flex items-center justify-end gap-1.5">
-            <button onclick="showAdminOrderDetail('${o.maDH}')" class="px-2 py-1.5 text-slate-600 hover:bg-slate-100 font-medium rounded-lg text-xs transition-colors border border-slate-200 cursor-pointer" title="Xem chi tiết đơn hàng & hành trình vận chuyển">
-              <i class="fa-solid fa-eye mr-1"></i>Chi tiết
+            <button onclick="showAdminOrderDetail('${o.maDH}')" class="inline-flex items-center gap-1 px-2.5 py-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-100 font-medium rounded-lg text-xs transition-colors border border-slate-200 cursor-pointer" title="Xem chi tiết đơn hàng & hành trình vận chuyển">
+              <i class="fa-regular fa-eye text-[11px] text-slate-400"></i><span>Chi tiết</span>
             </button>
-            <div>${actions}</div>
+            <div class="inline-flex items-center gap-1.5">${actions}</div>
           </div>
         </td>
       </tr>
@@ -4509,12 +4506,21 @@ function initAdminDashboard() {
     initAdminChatSignalR();
   }
 
-  // Lắng nghe bộ lọc đơn hàng
+  // Lắng nghe bộ lọc và tìm kiếm đơn hàng
   const filterDonHang = document.getElementById('filter-donhang-select');
+  const searchDonHang = document.getElementById('search-donhang-input');
+
+  function triggerDonHangFilter() {
+    const f = filterDonHang ? filterDonHang.value : 'all';
+    const kw = searchDonHang ? searchDonHang.value : '';
+    renderDonHangTable(f, kw);
+  }
+
   if (filterDonHang) {
-    filterDonHang.addEventListener('change', (e) => {
-      renderDonHangTable(e.target.value);
-    });
+    filterDonHang.addEventListener('change', triggerDonHangFilter);
+  }
+  if (searchDonHang) {
+    searchDonHang.addEventListener('input', triggerDonHangFilter);
   }
 }
 

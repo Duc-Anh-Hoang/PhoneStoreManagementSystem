@@ -407,9 +407,9 @@
             </div>
             <span id="nav-badge-donhang" class="hidden px-2 py-0.5 text-[10px] font-extrabold rounded-full bg-rose-500 text-white animate-pulse">0</span>
           </a>
-          <a href="#" onclick="openOrderSettingsModal(); return false;" class="admin-nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#F9FAFB] hover:text-purple-700 transition-colors" title="Cấu hình tự động duyệt">
-            <i class="fa-solid fa-sliders text-xs w-4 text-purple-600"></i>
-            <span class="nav-link-text whitespace-nowrap font-medium">Cấu hình tự duyệt</span>
+          <a href="#" onclick="openOrderSettingsModal(); return false;" class="admin-nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#F9FAFB] hover:text-slate-900 transition-colors" title="Cấu hình tự động duyệt">
+            <i class="fa-solid fa-sliders text-xs w-4 text-slate-400"></i>
+            <span class="nav-link-text whitespace-nowrap">Cấu hình tự duyệt</span>
           </a>
           <a href="#" data-target="view-chat" onclick="renderSection('view-chat'); return false;" class="admin-nav-link flex items-center justify-between gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#F9FAFB] hover:text-slate-900 transition-colors" title="Tư vấn trực tuyến">
             <div class="flex items-center gap-2.5 min-w-0">
@@ -869,28 +869,36 @@
             <h2 class="text-xl font-extrabold text-navy tracking-tight">Đơn Hàng Online</h2>
             <p class="text-xs text-slate-500 mt-0.5">Xác nhận đơn hàng, kiểm tra tồn kho, gán số IMEI và xuất kho tự động</p>
           </div>
-          <div class="flex items-center gap-2.5">
-            <button onclick="openOrderSettingsModal()" class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-purple-50 text-purple-700 border border-purple-200 hover:bg-purple-100 rounded-xl text-xs font-semibold shadow-xs transition-colors cursor-pointer" title="Cấu hình quy tắc tự động duyệt đơn hàng (plan 8)">
-              <i class="fa-solid fa-sliders text-xs text-purple-600"></i> <span>Cấu hình tự duyệt</span>
+          <div class="flex items-center gap-2">
+            <button onclick="openOrderSettingsModal()" class="inline-flex items-center gap-1.5 px-3.5 py-2 border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50 text-slate-700 rounded-xl text-xs font-medium shadow-2xs transition-colors cursor-pointer" title="Cấu hình quy tắc tự động duyệt đơn hàng">
+              <i class="fa-solid fa-sliders text-xs text-slate-500"></i> <span>Cấu hình tự duyệt</span>
             </button>
-            <button onclick="bulkApproveOrders()" class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold shadow-xs transition-colors cursor-pointer" title="Tự động duyệt tất cả đơn hàng đang chờ xác nhận và đẩy sang GHN">
-              <i class="fa-solid fa-bolt text-xs text-amber-300"></i> <span>Duyệt tất cả đơn chờ</span>
+            <button onclick="exportDonHangExcel()" class="inline-flex items-center gap-1.5 px-3.5 py-2 border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50 text-slate-700 rounded-xl text-xs font-medium shadow-2xs transition-colors cursor-pointer" title="Xuất dữ liệu đơn hàng ra file Excel">
+              <i class="fa-solid fa-file-excel text-xs text-emerald-600"></i> <span>Xuất Excel</span>
             </button>
-            <button onclick="exportDonHangExcel()" class="inline-flex items-center gap-2 px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold shadow-xs transition-colors cursor-pointer" title="Xuất dữ liệu đơn hàng ra file Excel">
-              <i class="fa-solid fa-file-excel text-xs"></i> <span>Xuất Excel</span>
+            <button onclick="bulkApproveOrders()" class="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-semibold shadow-xs transition-colors cursor-pointer" title="Tự động duyệt tất cả đơn hàng đang chờ xác nhận và đẩy sang GHN">
+              <i class="fa-solid fa-bolt text-xs text-slate-300"></i> <span>Duyệt tất cả đơn chờ</span>
             </button>
-            <select id="filter-donhang-select" class="px-3.5 py-2 bg-white border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-[#16A34A] shadow-sm">
-              <option value="all">Tất cả trạng thái</option>
-              <option value="cho_thanh_toan">Chờ thanh toán (Online)</option>
-              <option value="cho_xac_nhan">Chờ xác nhận (COD)</option>
-              <option value="da_xac_nhan">Đã xác nhận</option>
-              <option value="dang_giao">Đang giao</option>
-              <option value="hoan_thanh">Hoàn thành</option>
-            </select>
           </div>
         </div>
 
-        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-card-sleek p-5">
+        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-card-sleek p-5 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="relative flex-1 max-w-sm">
+              <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-xs"></i>
+              <input type="text" id="search-donhang-input" placeholder="Tìm theo mã ĐH, người nhận hoặc SĐT..." class="w-full pl-9 pr-4 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-200 focus:border-slate-400 focus:outline-none bg-white">
+            </div>
+            <div class="flex items-center gap-2">
+              <select id="filter-donhang-select" class="px-3.5 py-2 bg-white border border-slate-200 rounded-xl text-xs font-medium text-slate-700 focus:outline-none focus:border-slate-400 shadow-2xs">
+                <option value="all">Tất cả trạng thái</option>
+                <option value="cho_thanh_toan">Chờ thanh toán (Online)</option>
+                <option value="cho_xac_nhan">Chờ xác nhận (COD)</option>
+                <option value="da_xac_nhan">Đã xác nhận</option>
+                <option value="dang_giao">Đang giao</option>
+                <option value="hoan_thanh">Hoàn thành</option>
+              </select>
+            </div>
+          </div>
           <div class="overflow-x-auto rounded-xl border border-slate-200/80">
             <table class="w-full text-left border-collapse min-w-[1050px]">
               <thead>
@@ -2906,7 +2914,7 @@
   <script src="../js/api.js?v=3.6"></script>
   <script src="../js/order-signalr.js?v=1.3"></script>
   <script src="../js/auth.js?v=3.6"></script>
-  <script src="../js/admin.js?v=4.0"></script>
+  <script src="../js/admin.js?v=4.1"></script>
 
   <script>
     // Mobile sidebar toggle handler
