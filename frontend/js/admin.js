@@ -5427,6 +5427,216 @@ window.showAdminOrderDetail = showAdminOrderDetail;
   }, 5000);
 })();
 
+// ─────────────────────────────────────────────────────────────────────────────
+// XUẤT DỮ LIỆU EXCEL (XLSX)
+// ─────────────────────────────────────────────────────────────────────────────
+
+function downloadWorkbook(workbook, defaultFileName) {
+  if (typeof XLSX === 'undefined') {
+    showToast('Thư viện Excel đang tải, vui lòng thử lại sau giây lát!', 'warning');
+    return;
+  }
+  const dateStr = new Date().toISOString().slice(0, 10);
+  const fileName = `${defaultFileName}_${dateStr}.xlsx`;
+  XLSX.writeFile(workbook, fileName);
+  showToast(`Đã xuất file ${fileName} thành công!`, 'success');
+}
+
+function exportDonHangExcel() {
+  const list = AdminRealtimeData.orders || cachedDonHangList || [];
+  if (!list || list.length === 0) {
+    showToast('Không có dữ liệu đơn hàng để xuất!', 'info');
+    return;
+  }
+
+  const rows = list.map((o, idx) => {
+    const productsStr = (o.items && o.items.length)
+      ? o.items.map(i => `${i.tenHang || i.maHang} (x${i.soLuong || 1})`).join('; ')
+      : (o.soHD ? `HĐ: ${o.soHD}` : '');
+
+    let statusText = o.trangThai;
+    if (o.trangThai === 'cho_xac_nhan') statusText = 'Chờ xác nhận';
+    else if (o.trangThai === 'da_xac_nhan') statusText = 'Đã xác nhận';
+    else if (o.trangThai === 'dang_giao') statusText = 'Đang giao hàng';
+    else if (o.trangThai === 'hoan_thanh') statusText = 'Hoàn thành';
+    else if (o.trangThai === 'da_huy') statusText = 'Đã hủy';
+
+    let paymentText = o.phuongThucThanhToan || '';
+    if (paymentText === 'cod') paymentText = 'COD (Thu khi nhận)';
+    else if (paymentText === 'chuyen_khoan') paymentText = 'Chuyển khoản';
+    else if (paymentText === 'the') paymentText = 'Thẻ ngân hàng';
+
+    return {
+      'STT': idx + 1,
+      'Mã Đơn Hàng': o.maDH || '',
+      'Ngày Đặt': o.ngayDat ? fmtLocalDateTime(o.ngayDat) : '',
+      'Người Nhận': o.tenNguoiNhan || '',
+      'Số Điện Thoại': o.sdtNguoiNhan || '',
+      'Địa Chỉ Giao Hàng': o.diaChiGiao || '',
+      'Sản Phẩm Đặt Mua': productsStr,
+      'Tổng Tiền (VNĐ)': Number(o.tongTien) || 0,
+      'Phương Thức TT': paymentText,
+      'Trạng Thái': statusText,
+      'Số Hóa Đơn': o.soHD || ''
+    };
+  });
+
+  const worksheet = XLSX.utils.json_to_sheet(rows);
+  worksheet['!cols'] = [
+    { wch: 6 },
+    { wch: 16 },
+    { wch: 20 },
+    { wch: 22 },
+    { wch: 14 },
+    { wch: 35 },
+    { wch: 40 },
+    { wch: 18 },
+    { wch: 20 },
+    { wch: 16 },
+    { wch: 15 }
+  ];
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'DonHangOnline');
+  downloadWorkbook(workbook, 'Danh_Sach_Don_Hang');
+}
+
+function exportMatHangExcel() {
+  const list = AdminRealtimeData.products || store.data.matHang || [];
+  if (!list || list.length === 0) {
+    showToast('Không có dữ liệu mặt hàng để xuất!', 'info');
+    return;
+  }
+
+  const rows = list.map((m, idx) => ({
+    'STT': idx + 1,
+    'Mã Hàng': m.maHang || '',
+    'Tên Sản Phẩm': m.tenHang || '',
+    'Nhóm Ngành': m.tenNhom || m.maNhom || '',
+    'Hãng / Thương Hiệu': m.tenLoai || m.nhanHieu || '',
+    'Đơn Vị Tính': m.dvt || 'Cái',
+    'Giá Bán (VNĐ)': Number(m.donGia) || 0,
+    'Giá Gốc (VNĐ)': Number(m.giaGoc) || 0,
+    'Tồn Kho Tức Thời': Number(m.tonKho) || 0,
+    'Bảo Hành (Tháng)': m.thoiHanBaoHanh || 12,
+    'Quản Lý IMEI': m.quanLyImei ? 'Có' : 'Không'
+  }));
+
+  const worksheet = XLSX.utils.json_to_sheet(rows);
+  worksheet['!cols'] = [
+    { wch: 6 },
+    { wch: 14 },
+    { wch: 35 },
+    { wch: 20 },
+    { wch: 20 },
+    { wch: 12 },
+    { wch: 18 },
+    { wch: 18 },
+    { wch: 16 },
+    { wch: 16 },
+    { wch: 14 }
+  ];
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'MatHang');
+  downloadWorkbook(workbook, 'Danh_Muc_Mat_Hang');
+}
+
+async function exportHoaDonExcel() {
+  let list = [];
+  try {
+    const res = await api.get('/hoadon').catch(() => []);
+    if (Array.isArray(res) && res.length > 0) list = res;
+  } catch (e) {}
+
+  if (list.length === 0) {
+    list = store.data.hoaDon || [];
+  }
+
+  if (list.length === 0) {
+    showToast('Không có dữ liệu hóa đơn để xuất!', 'info');
+    return;
+  }
+
+  const rows = list.map((h, idx) => ({
+    'STT': idx + 1,
+    'Số Hóa Đơn': h.soHD || '',
+    'Ngày Lập': h.ngayLap ? fmtLocalDateTime(h.ngayLap) : '',
+    'Mã Khách Hàng': h.maKH || '',
+    'Khách Hàng': h.tenKH || h.hoTen || '',
+    'Nhân Viên Lập': h.tenNV || h.maNV || '',
+    'Kênh Bán': h.kenhBan === 'online' ? 'Online (Web)' : 'Tại quầy (POS)',
+    'Tổng Tiền (VNĐ)': Number(h.tongTien) || 0,
+    'Giảm Giá (VNĐ)': Number(h.tienGiamGia) || 0,
+    'Thành Tiền (VNĐ)': Number(h.thanhTien) || (Number(h.tongTien) - Number(h.tienGiamGia || 0)),
+    'Phương Thức TT': h.phuongThucThanhToan || ''
+  }));
+
+  const worksheet = XLSX.utils.json_to_sheet(rows);
+  worksheet['!cols'] = [
+    { wch: 6 },
+    { wch: 16 },
+    { wch: 20 },
+    { wch: 15 },
+    { wch: 25 },
+    { wch: 20 },
+    { wch: 18 },
+    { wch: 18 },
+    { wch: 16 },
+    { wch: 18 },
+    { wch: 16 }
+  ];
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'HoaDon');
+  downloadWorkbook(workbook, 'So_Hoa_Don_Ban_Hang');
+}
+
+function exportTonKhoExcel() {
+  const list = AdminRealtimeData.products || store.data.matHang || [];
+  if (!list || list.length === 0) {
+    showToast('Không có dữ liệu tồn kho để xuất!', 'info');
+    return;
+  }
+
+  const rows = list.map((p, idx) => {
+    const stock = Number(p.tonKho) || 0;
+    let status = 'Còn hàng';
+    if (stock <= 0) status = 'Hết hàng';
+    else if (stock <= 10) status = 'Cảnh báo sắp hết';
+
+    return {
+      'STT': idx + 1,
+      'Mã Hàng': p.maHang || '',
+      'Tên Sản Phẩm': p.tenHang || '',
+      'Ngành Hàng': p.tenNhom || p.maNhom || '',
+      'Thương Hiệu': p.nhanHieu || p.tenLoai || '',
+      'Đơn Giá (VNĐ)': Number(p.donGia) || 0,
+      'Số Lượng Tồn Kho': stock,
+      'Tình Trạng Kho': status,
+      'Quản Lý IMEI': p.quanLyImei ? 'IMEI từng máy' : 'Số lượng thông thường'
+    };
+  });
+
+  const worksheet = XLSX.utils.json_to_sheet(rows);
+  worksheet['!cols'] = [
+    { wch: 6 },
+    { wch: 14 },
+    { wch: 35 },
+    { wch: 20 },
+    { wch: 20 },
+    { wch: 18 },
+    { wch: 18 },
+    { wch: 20 },
+    { wch: 24 }
+  ];
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'TonKho');
+  downloadWorkbook(workbook, 'Bao_Cao_Ton_Kho');
+}
+
+window.exportDonHangExcel = exportDonHangExcel;
+window.exportMatHangExcel = exportMatHangExcel;
+window.exportHoaDonExcel = exportHoaDonExcel;
+window.exportTonKhoExcel = exportTonKhoExcel;
+
 document.addEventListener('click', function (e) {
   const pop = document.getElementById('notification-popover');
   const btn = document.getElementById('btn-notification-toggle');
