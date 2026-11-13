@@ -891,11 +891,13 @@
             <div class="flex items-center gap-2">
               <select id="filter-donhang-select" class="px-3.5 py-2 bg-white border border-slate-200 rounded-xl text-xs font-medium text-slate-700 focus:outline-none focus:border-slate-400 shadow-2xs">
                 <option value="all">Tất cả trạng thái</option>
-                <option value="cho_thanh_toan">Chờ thanh toán (Online)</option>
-                <option value="cho_xac_nhan">Chờ xác nhận (COD)</option>
+                <option value="cho_thanh_toan">Chờ thanh toán</option>
+                <option value="cho_xac_nhan">Chờ xác nhận</option>
                 <option value="da_xac_nhan">Đã xác nhận</option>
-                <option value="dang_giao">Đang giao</option>
+                <option value="cho_lay_hang">Chờ lấy hàng</option>
+                <option value="dang_giao">Đang giao hàng</option>
                 <option value="hoan_thanh">Hoàn thành</option>
+                <option value="da_huy">Đã hủy</option>
               </select>
             </div>
           </div>
@@ -2914,7 +2916,7 @@
   <script src="../js/api.js?v=3.6"></script>
   <script src="../js/order-signalr.js?v=1.3"></script>
   <script src="../js/auth.js?v=3.6"></script>
-  <script src="../js/admin.js?v=4.1"></script>
+  <script src="../js/admin.js?v=4.2"></script>
 
   <script>
     // Mobile sidebar toggle handler
