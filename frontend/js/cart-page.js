@@ -1928,13 +1928,19 @@
     if (emptyState) emptyState.classList.add('hidden');
 
     const statusBadgeMap = {
-      'cho_thanh_toan': { label: 'Chờ thanh toán', color: 'bg-amber-100 text-amber-900 border-amber-300' },
-      'cho_xac_nhan': { label: 'Chờ xác nhận', color: 'bg-blue-100 text-blue-800 border-blue-200' },
-      'da_xac_nhan': { label: 'Đã xác nhận', color: 'bg-sky-100 text-sky-800 border-sky-200' },
-      'dang_giao': { label: 'Đang giao hàng', color: 'bg-purple-100 text-purple-800 border-purple-200' },
-      'da_giao': { label: 'Giao thành công', color: 'bg-emerald-100 text-emerald-800 border-emerald-200' },
-      'hoan_thanh': { label: 'Hoàn thành', color: 'bg-emerald-100 text-emerald-800 border-emerald-200' },
-      'da_huy': { label: 'Đã hủy', color: 'bg-slate-100 text-slate-600 border-slate-200' }
+      'cho_thanh_toan': { label: 'Chờ thanh toán', color: 'bg-amber-50 text-amber-800 border-amber-200' },
+      'cho_xac_nhan':   { label: 'Chờ xác nhận', color: 'bg-blue-50 text-blue-800 border-blue-200' },
+      'cho_tu_duyet':   { label: 'Chờ xác nhận', color: 'bg-blue-50 text-blue-800 border-blue-200' },
+      'can_kiem_tra':   { label: 'Chờ xác nhận', color: 'bg-blue-50 text-blue-800 border-blue-200' },
+      'da_xac_nhan':    { label: 'Đã xác nhận', color: 'bg-slate-100 text-slate-800 border-slate-200' },
+      'cho_lay_hang':   { label: 'Chờ lấy hàng', color: 'bg-slate-100 text-slate-800 border-slate-200' },
+      'dang_giao':      { label: 'Đang giao hàng', color: 'bg-indigo-50 text-indigo-800 border-indigo-200' },
+      'da_giao':        { label: 'Đã giao hàng', color: 'bg-emerald-50 text-emerald-800 border-emerald-200' },
+      'hoan_thanh':     { label: 'Hoàn thành', color: 'bg-emerald-50 text-emerald-800 border-emerald-200' },
+      'loi_van_don':    { label: 'Lỗi vận chuyển', color: 'bg-rose-50 text-rose-800 border-rose-200' },
+      'da_huy':         { label: 'Đã hủy', color: 'bg-slate-100 text-slate-600 border-slate-200' },
+      'boom':           { label: 'Giao thất bại', color: 'bg-rose-50 text-rose-800 border-rose-200' },
+      'hoan_hang':      { label: 'Hoàn hàng', color: 'bg-rose-50 text-rose-800 border-rose-200' }
     };
 
     container.innerHTML = filtered.map(order => {

@@ -441,14 +441,35 @@ const Format = {
     };
 
     const dict = {
-      cho_thanh_toan: { labelVi: 'Chờ thanh toán', shade: 'warning' },
-      cho_xac_nhan: { labelVi: 'Chờ xác nhận', shade: 'warning' },
-      can_kiem_tra: { labelVi: 'Chờ xác nhận', shade: 'warning' },
-      da_xac_nhan:  { labelVi: 'Đã xác nhận', shade: 'ok' },
-      dang_giao:    { labelVi: 'Đang giao', shade: 'neutral' },
-      hoan_thanh:   { labelVi: 'Hoàn thành', shade: 'ok' },
-      da_giao:      { labelVi: 'Đã giao', shade: 'ok' },
-      da_huy:       { labelVi: 'Đã hủy', shade: 'danger' },
+      cho_thanh_toan:   { labelVi: 'Chờ thanh toán', shade: 'warning' },
+      cho_xac_nhan:     { labelVi: 'Chờ xác nhận', shade: 'warning' },
+      can_kiem_tra:     { labelVi: 'Chờ xác nhận', shade: 'warning' },
+      cho_tu_duyet:     { labelVi: 'Chờ xác nhận', shade: 'warning' },
+      da_xac_nhan:      { labelVi: 'Đã xác nhận', shade: 'ok' },
+      cho_lay_hang:     { labelVi: 'Chờ lấy hàng', shade: 'neutral' },
+      dang_lay_hang:    { labelVi: 'Đang lấy hàng', shade: 'neutral' },
+      da_lay_hang:      { labelVi: 'Đã lấy hàng', shade: 'neutral' },
+      ready_to_pick:    { labelVi: 'Chờ lấy hàng', shade: 'neutral' },
+      picking:          { labelVi: 'Đang lấy hàng', shade: 'neutral' },
+      picked:           { labelVi: 'Đã lấy hàng', shade: 'neutral' },
+      storing:          { labelVi: 'Lưu kho', shade: 'neutral' },
+      transporting:     { labelVi: 'Đang trung chuyển', shade: 'neutral' },
+      sorting:          { labelVi: 'Đang phân loại', shade: 'neutral' },
+      loi_van_don:      { labelVi: 'Lỗi vận đơn', shade: 'danger' },
+      dang_giao:        { labelVi: 'Đang giao hàng', shade: 'neutral' },
+      dang_van_chuyen:  { labelVi: 'Đang giao hàng', shade: 'neutral' },
+      delivering:       { labelVi: 'Đang giao hàng', shade: 'neutral' },
+      hoan_thanh:       { labelVi: 'Hoàn thành', shade: 'ok' },
+      da_giao:          { labelVi: 'Đã giao hàng', shade: 'ok' },
+      delivered:        { labelVi: 'Đã giao hàng', shade: 'ok' },
+      da_huy:           { labelVi: 'Đã hủy', shade: 'danger' },
+      cancel:           { labelVi: 'Đã hủy', shade: 'danger' },
+      boom:             { labelVi: 'Giao thất bại', shade: 'danger' },
+      delivery_fail:    { labelVi: 'Giao thất bại', shade: 'danger' },
+      hoan_hang:        { labelVi: 'Hoàn hàng', shade: 'danger' },
+      waiting_to_return:{ labelVi: 'Chờ hoàn hàng', shade: 'warning' },
+      return:           { labelVi: 'Đang hoàn hàng', shade: 'warning' },
+      returned:         { labelVi: 'Đã hoàn hàng', shade: 'danger' },
       dang_lam:     { labelVi: 'Đang làm việc', shade: 'ok' },
       da_nghi:      { labelVi: 'Đã nghỉ việc', shade: 'neutral' },
       con_hang:     { labelVi: 'Còn trong kho', shade: 'ok' },
@@ -485,7 +506,11 @@ const Format = {
       online:       { labelVi: 'Online', shade: 'neutral' }
     };
 
-    const item = dict[status] || { labelVi: status, shade: 'neutral' };
+    const cleanKey = String(status || '').toLowerCase().trim();
+    const item = dict[cleanKey] || {
+      labelVi: cleanKey.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+      shade: 'neutral'
+    };
     const s = shades[item.shade] || shades.neutral;
     return `<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium whitespace-nowrap ${s.bg} ${s.text}"><span class="w-1.5 h-1.5 rounded-full ${s.dot} shrink-0"></span>${item.labelVi}</span>`;
   }
@@ -888,7 +913,7 @@ async function renderDashboard() {
     if (catContainer) {
       let catData = [];
       try {
-        const catApi = await api.get('/thongke/nhomhang').catch(() => null);
+        const catApi = await api.get('/dashboard/categories').catch(() => null);
         if (Array.isArray(catApi) && catApi.length > 0) {
           catData = catApi;
         }
@@ -5224,31 +5249,37 @@ const GHN_STATUS_LABEL = {
 
 function _aodStatusClass(trangThai) {
   const map = {
-    cho_xac_nhan: 'bg-amber-50 text-amber-700 border border-amber-200',
-    da_xac_nhan:  'bg-blue-50 text-blue-700 border border-blue-200',
-    dang_giao:    'bg-sky-50 text-sky-700 border border-sky-200',
-    hoan_thanh:   'bg-emerald-50 text-emerald-700 border border-emerald-200',
-    da_huy:       'bg-rose-50 text-rose-700 border border-rose-200',
+    cho_thanh_toan: 'bg-amber-50 text-amber-700 border border-amber-200',
+    cho_xac_nhan:   'bg-amber-50 text-amber-700 border border-amber-200',
+    cho_tu_duyet:   'bg-amber-50 text-amber-700 border border-amber-200',
+    can_kiem_tra:   'bg-amber-50 text-amber-700 border border-amber-200',
+    da_xac_nhan:    'bg-slate-100 text-slate-700 border border-slate-300',
+    cho_lay_hang:   'bg-slate-100 text-slate-700 border border-slate-300',
+    dang_giao:      'bg-slate-100 text-slate-700 border border-slate-300',
+    hoan_thanh:     'bg-emerald-50 text-emerald-700 border border-emerald-200',
+    da_giao:        'bg-emerald-50 text-emerald-700 border border-emerald-200',
+    da_huy:         'bg-rose-50 text-rose-700 border border-rose-200',
+    loi_van_don:    'bg-rose-50 text-rose-700 border border-rose-200',
   };
   return map[trangThai] || 'bg-slate-100 text-slate-600';
 }
 
 function _aodActionHtml(order) {
   const maDH = order.maDH;
-  if (order.trangThai === 'cho_xac_nhan') {
+  if (order.trangThai === 'cho_xac_nhan' || order.trangThai === 'cho_tu_duyet' || order.trangThai === 'can_kiem_tra') {
     return `
-      <button onclick="approveOrder('${maDH}'); closeModal('modal-admin-order-detail'); renderDonHangTable();" class="px-3 py-2 bg-[#2563EB] hover:bg-blue-700 text-white font-semibold rounded-xl text-xs transition-colors cursor-pointer">
+      <button onclick="approveOrder('${maDH}'); closeModal('modal-admin-order-detail'); renderDonHangTable();" class="px-3 py-2 bg-slate-800 hover:bg-slate-900 text-white font-medium rounded-xl text-xs transition-colors cursor-pointer">
         <i class="fa-solid fa-check mr-1"></i>Duyệt đơn
       </button>
-      <button onclick="cancelOrder('${maDH}'); closeModal('modal-admin-order-detail');" class="px-3 py-2 text-rose-600 hover:bg-rose-50 font-semibold rounded-xl text-xs border border-rose-200 transition-colors cursor-pointer">
+      <button onclick="cancelOrder('${maDH}'); closeModal('modal-admin-order-detail');" class="px-3 py-2 text-slate-500 hover:text-rose-600 hover:bg-rose-50 font-medium rounded-xl text-xs border border-slate-200 transition-colors cursor-pointer">
         Hủy đơn
       </button>`;
-  } else if (order.trangThai === 'da_xac_nhan') {
+  } else if (order.trangThai === 'da_xac_nhan' || order.trangThai === 'cho_lay_hang') {
     return `
-      <button onclick="shipOrder('${maDH}'); closeModal('modal-admin-order-detail'); renderDonHangTable();" class="px-3 py-2 bg-[#2563EB] hover:bg-blue-700 text-white font-semibold rounded-xl text-xs transition-colors cursor-pointer">
+      <button onclick="shipOrder('${maDH}'); closeModal('modal-admin-order-detail'); renderDonHangTable();" class="px-3 py-2 bg-slate-800 hover:bg-slate-900 text-white font-medium rounded-xl text-xs transition-colors cursor-pointer">
         <i class="fa-solid fa-truck-fast mr-1"></i>Chuyển sang Đang Giao
       </button>
-      <button onclick="cancelOrder('${maDH}'); closeModal('modal-admin-order-detail');" class="px-3 py-2 text-rose-600 hover:bg-rose-50 font-semibold rounded-xl text-xs border border-rose-200 transition-colors cursor-pointer">
+      <button onclick="cancelOrder('${maDH}'); closeModal('modal-admin-order-detail');" class="px-3 py-2 text-slate-500 hover:text-rose-600 hover:bg-rose-50 font-medium rounded-xl text-xs border border-slate-200 transition-colors cursor-pointer">
         Hủy đơn
       </button>`;
   } else if (order.trangThai === 'dang_giao') {

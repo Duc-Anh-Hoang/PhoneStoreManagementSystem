@@ -254,10 +254,15 @@
     const statusMap = {
       cho_thanh_toan: { label: 'Chờ thanh toán', color: 'bg-orange-100 text-orange-800', icon: 'fa-qrcode' },
       cho_xac_nhan: { label: 'Chờ xác nhận', color: 'bg-amber-100 text-amber-800', icon: 'fa-clock' },
-      da_xac_nhan:  { label: 'Đã xác nhận',  color: 'bg-blue-100 text-blue-800',   icon: 'fa-circle-check' },
+      cho_tu_duyet: { label: 'Chờ xác nhận', color: 'bg-amber-100 text-amber-800', icon: 'fa-clock' },
+      can_kiem_tra: { label: 'Chờ xác nhận', color: 'bg-amber-100 text-amber-800', icon: 'fa-clock' },
+      da_xac_nhan:  { label: 'Đã xác nhận',  color: 'bg-slate-100 text-slate-800', icon: 'fa-circle-check' },
+      cho_lay_hang: { label: 'Chờ lấy hàng', color: 'bg-slate-100 text-slate-800', icon: 'fa-boxes-packing' },
       dang_giao:    { label: 'Đang giao hàng', color: 'bg-indigo-100 text-indigo-800', icon: 'fa-truck' },
+      da_giao:      { label: 'Đã giao hàng',  color: 'bg-emerald-100 text-emerald-800', icon: 'fa-box-open' },
       hoan_thanh:   { label: 'Hoàn thành',    color: 'bg-emerald-100 text-emerald-800', icon: 'fa-box-open' },
-      da_huy:       { label: 'Đã hủy',        color: 'bg-rose-100 text-rose-800',   icon: 'fa-ban' }
+      da_huy:       { label: 'Đã hủy',        color: 'bg-rose-100 text-rose-800',   icon: 'fa-ban' },
+      loi_van_don:  { label: 'Lỗi vận chuyển', color: 'bg-rose-100 text-rose-800', icon: 'fa-triangle-exclamation' }
     };
     const st = statusMap[order.trangThai] || statusMap.cho_xac_nhan;
 
