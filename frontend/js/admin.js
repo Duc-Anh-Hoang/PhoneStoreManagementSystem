@@ -1537,15 +1537,34 @@ async function completeOrder(maDH) {
   const oComp = (AdminRealtimeData.orders || []).find(x => x.maDH === maDH);
   const pm = String(oComp?.phuongThucThanhToan || oComp?.paymentMethod || '').toLowerCase();
   const isPaidOnline = ['chuyen_khoan', 'banking', 'momo', 'vnpay', 'zalopay', 'card', 'the'].includes(pm) || oComp?.paymentStatus === 'paid';
-  const genHD = 'HD' + Math.floor(10000 + Math.random() * 90000);
-  AdminRealtimeData.updateOrderStatus(maDH, 'hoan_thanh', genHD);
-  if (typeof renderDashboard === 'function') renderDashboard();
+
+  let realSoHD = oComp?.soHD || null;
+
+  try {
+    // Không gửi soHD ngẫu nhiên để tránh lỗi ràng buộc khóa ngoại CSDL (donhangonline_sohd_fkey)
+    const res = await api.put('/donhangonline/' + encodeURIComponent(maDH) + '/trangthai', {
+      trangThai: 'hoan_thanh'
+    });
+    if (res && res.soHD) realSoHD = res.soHD;
+  } catch (err) {
+    console.warn('API hoàn tất đơn hàng:', err);
+  }
+
+  if (!realSoHD) realSoHD = 'HD' + Math.floor(10000 + Math.random() * 90000);
+
+  AdminRealtimeData.updateOrderStatus(maDH, 'hoan_thanh', realSoHD);
+  if (oComp) {
+    oComp.trangThai = 'hoan_thanh';
+    oComp.soHD = realSoHD;
+  }
+
   showToast(
     isPaidOnline
-      ? ('Đã xác nhận giao thành công & hoàn tất đơn ' + maDH + ' (Đã thanh toán - Mã HĐ: ' + genHD + ')!')
-      : ('Đã thu tiền COD & hoàn tất đơn hàng ' + maDH + ' (Mã hóa đơn: ' + genHD + ')!'),
+      ? ('Đã xác nhận giao thành công & hoàn tất đơn ' + maDH + ' (Mã HĐ: ' + realSoHD + ')!')
+      : ('Đã thu tiền COD & hoàn tất đơn hàng ' + maDH + ' (Mã HĐ: ' + realSoHD + ')!'),
     'success'
   );
+
   // Realtime notification qua SignalR
   if (window.OrderSignalR && typeof window.OrderSignalR.notifyOrderStatusChanged === 'function') {
     window.OrderSignalR.notifyOrderStatusChanged(
@@ -1554,15 +1573,17 @@ async function completeOrder(maDH) {
       'Đơn đặt hàng #' + maDH + ' đã được giao thành công và hoàn tất! Cảm ơn bạn đã mua hàng.',
       oComp ? oComp.sdtNguoiNhan : '',
       'admin',
-      genHD
+      realSoHD
     );
   }
-  try {
-    await api.put('/donhangonline/' + encodeURIComponent(maDH) + '/trangthai', {
-      trangThai: 'hoan_thanh',
-      soHD: genHD
-    });
-  } catch (err) {}
+
+  // Cập nhật lại giao diện bảng ngay lập tức
+  if (typeof renderDonHangTable === 'function') {
+    const f = document.getElementById('filter-donhang-select')?.value || 'all';
+    const kw = document.getElementById('search-donhang-input')?.value || '';
+    renderDonHangTable(f, kw);
+  }
+  if (typeof renderDashboard === 'function') renderDashboard();
   if (typeof renderHoaDonTable === 'function') renderHoaDonTable();
   if (typeof renderTonKhoTable === 'function') renderTonKhoTable();
   if (typeof renderImeiTable === 'function') renderImeiTable();

@@ -474,11 +474,14 @@ public class OnlineOrderService : IOnlineOrderService
             // Tá»± Ä‘á»™ng gÃ¡n IMEI cÅ© nháº¥t (theo phiáº¿u nháº­p), táº¡o hÃ³a Ä‘Æ¡n online, táº¡o báº£o hÃ nh
             if (newTrangThai == AppConstants.OrderStatus.HoanThanh)
             {
-                string soHD = donHang.SoHD ?? soHDKem ?? string.Empty;
+                // Kiểm tra xem SoHD có tồn tại hợp lệ trong CSDL không
+                string candidateSoHD = donHang.SoHD ?? soHDKem ?? string.Empty;
+                bool invoiceExists = !string.IsNullOrEmpty(candidateSoHD) && await _context.HoaDons.AnyAsync(h => h.SoHD == candidateSoHD);
+                string soHD = invoiceExists ? candidateSoHD : string.Empty;
 
                 if (string.IsNullOrEmpty(soHD))
                 {
-                    // Táº¡o hÃ³a Ä‘Æ¡n má»›i kÃªnh online
+                    // Tạo hóa đơn mới hợp lệ trong CSDL
                     soHD = await _codeGenerator.NextAsync("HD");
                     var ptThanhToan = donHang.PhuongThucThanhToan == "cod" ? "tien_mat" : donHang.PhuongThucThanhToan;
 
@@ -583,6 +586,7 @@ public class OnlineOrderService : IOnlineOrderService
                 }
 
                 donHang.SoHD = soHD;
+                donHang.PaymentStatus = "paid";
             }
 
             donHang.TrangThai = newTrangThai;
@@ -1007,11 +1011,13 @@ public class OnlineOrderService : IOnlineOrderService
             ("da_xac_nhan", "cho_lay_hang") => true,
             ("da_xac_nhan", "loi_van_don") => true,
             ("da_xac_nhan", "dang_giao") => true,
+            ("da_xac_nhan", "hoan_thanh") => true,
 
             ("loi_van_don", "da_xac_nhan") => true,
             ("loi_van_don", "cho_lay_hang") => true,
 
             ("cho_lay_hang", "dang_giao") => true,
+            ("cho_lay_hang", "hoan_thanh") => true,
             ("dang_giao", "hoan_thanh") => true,
             ("dang_giao", "boom") => true,
             ("dang_giao", "hoan_hang") => true,
