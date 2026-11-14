@@ -1700,7 +1700,11 @@ async function completeOrder(maDH) {
     const kw = document.getElementById('search-donhang-input')?.value || '';
     renderDonHangTable(f, kw);
   }
-  if (typeof renderDashboard === 'function') renderDashboard();
+  try {
+    const backendOrders = await api.get('/donhangonline').catch(() => []);
+    AdminRealtimeData.mergeAllOrderSources(backendOrders || []);
+  } catch (e) {}
+  if (typeof renderDashboard === 'function') await renderDashboard();
   if (typeof renderHoaDonTable === 'function') renderHoaDonTable();
   if (typeof renderTonKhoTable === 'function') renderTonKhoTable();
   if (typeof renderImeiTable === 'function') renderImeiTable();
@@ -5667,7 +5671,7 @@ window.showAdminOrderDetail = showAdminOrderDetail;
 // AUTO-POLLING: Làm mới dữ liệu dashboard & đơn hàng mỗi 60 giây
 // ─────────────────────────────────────────────────────────────────────────────
 (function startAdminPolling() {
-  const POLL_INTERVAL = 60_000; // 60s
+  const POLL_INTERVAL = 3_000; // 3s realtime sync liên tục
   let isPolling = false;
 
   async function pollOnce() {
@@ -5677,11 +5681,12 @@ window.showAdminOrderDetail = showAdminOrderDetail;
       const backendOrders = await api.get('/donhangonline').catch(() => []);
       AdminRealtimeData.mergeAllOrderSources(backendOrders || []);
 
-      // Refresh active section
-      if (currentActiveSection === 'view-dashboard') {
-        if (typeof renderDashboard === 'function') renderDashboard();
-      } else if (currentActiveSection === 'view-donhang') {
-        if (typeof renderDonHangTable === 'function') renderDonHangTable();
+      // Luôn làm mới dashboard ngầm để số liệu nhảy realtime tức thì
+      if (typeof renderDashboard === 'function') await renderDashboard();
+      if (currentActiveSection === 'view-donhang' && typeof renderDonHangTable === 'function') {
+        const f = document.getElementById('filter-donhang-select')?.value || 'all';
+        const kw = document.getElementById('search-donhang-input')?.value || '';
+        renderDonHangTable(f, kw);
       }
     } catch (e) {
       // silent
@@ -5690,10 +5695,10 @@ window.showAdminOrderDetail = showAdminOrderDetail;
     }
   }
 
-  // Start after 5s delay so init completes first
+  // Khởi động sau 2 giây
   setTimeout(() => {
     setInterval(pollOnce, POLL_INTERVAL);
-  }, 5000);
+  }, 2000);
 })();
 
 // ─────────────────────────────────────────────────────────────────────────────

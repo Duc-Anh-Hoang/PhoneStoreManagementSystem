@@ -20,12 +20,6 @@ public class DashboardService : IDashboardService
 
     public async Task<DashboardSummaryDto> GetSummaryAsync(DateTime? tuNgay = null, DateTime? denNgay = null)
     {
-        string cacheKey = $"dashboard_summary_{tuNgay:yyyyMMddHHmm}_{denNgay:yyyyMMddHHmm}";
-        if (_cache.TryGetValue(cacheKey, out DashboardSummaryDto? cached) && cached != null)
-        {
-            return cached;
-        }
-
         var now = DateTime.UtcNow;
         var startOfToday = new DateTime(now.Year, now.Month, now.Day, 0, 0, 0, DateTimeKind.Utc);
         var startOfMonth = new DateTime(now.Year, now.Month, 1, 0, 0, 0, DateTimeKind.Utc);
@@ -177,18 +171,11 @@ public class DashboardService : IDashboardService
             SoBaoHanhDangXuLy = warrantyProcessing
         };
 
-        _cache.Set(cacheKey, summary, CacheDuration);
         return summary;
     }
 
     public async Task<List<ChannelRevenueDto>> GetRevenueByChannelAsync(DateTime? tuNgay, DateTime? denNgay)
     {
-        string cacheKey = $"revenue_channel_{tuNgay:yyyyMMdd}_{denNgay:yyyyMMdd}";
-        if (_cache.TryGetValue(cacheKey, out List<ChannelRevenueDto>? cached) && cached != null)
-        {
-            return cached;
-        }
-
         var hdQuery = _context.HoaDons.AsNoTracking();
         var trQuery = _context.TraHangs.AsNoTracking()
             .Where(t => t.TrangThai == "hoan_tat" && (t.HinhThucHoanTien == "tien_mat" || t.HinhThucHoanTien == "chuyen_khoan"));
@@ -233,18 +220,11 @@ public class DashboardService : IDashboardService
             });
         }
 
-        _cache.Set(cacheKey, result, CacheDuration);
         return result;
     }
 
     public async Task<List<CategoryRevenueDto>> GetRevenueByCategoryAsync(DateTime? tuNgay, DateTime? denNgay)
     {
-        string cacheKey = $"revenue_category_{tuNgay:yyyyMMdd}_{denNgay:yyyyMMdd}";
-        if (_cache.TryGetValue(cacheKey, out List<CategoryRevenueDto>? cached) && cached != null)
-        {
-            return cached;
-        }
-
         var hdQuery = _context.HoaDons.AsNoTracking();
         if (tuNgay.HasValue)
         {
@@ -281,7 +261,6 @@ public class DashboardService : IDashboardService
             .OrderByDescending(x => x.DoanhThu)
             .ToList();
 
-        _cache.Set(cacheKey, result, CacheDuration);
         return result;
     }
 }
