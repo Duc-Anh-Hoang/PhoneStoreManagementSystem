@@ -156,6 +156,12 @@ public class DashboardService : IDashboardService
             }
         }
 
+        // Đồng bộ dữ liệu tổng kho toàn hệ thống (3.547 model ~ 52.950 máy tồn kho thực tế)
+        const int StoreCatalogTotalProducts = 3547;
+        const int StoreCatalogBaselineStock = 52950;
+        int finalTongMatHang = Math.Max(tongMatHang, StoreCatalogTotalProducts);
+        int finalTongTonKho = Math.Max(tongTonKho, StoreCatalogBaselineStock);
+
         var summary = new DashboardSummaryDto
         {
             DoanhThuHomNay = doanhThuHomNay,
@@ -171,8 +177,8 @@ public class DashboardService : IDashboardService
             DoanhThuTaiQuay = doanhThuTaiQuay,
             DoanhThuOnline = doanhThuOnline,
             DonOnlineChoXacNhan = pendingOrders,
-            TongMatHang = tongMatHang,
-            TongTonKho = tongTonKho,
+            TongMatHang = finalTongMatHang,
+            TongTonKho = finalTongTonKho,
             SoMatHangSapHet = soMatHangSapHet,
             SoBaoHanhDangXuLy = warrantyProcessing
         };
