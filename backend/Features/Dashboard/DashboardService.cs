@@ -18,9 +18,10 @@ public class DashboardService : IDashboardService
         _cache = cache;
     }
 
-    public async Task<DashboardSummaryDto> GetSummaryAsync()
+    public async Task<DashboardSummaryDto> GetSummaryAsync(DateTime? tuNgay = null, DateTime? denNgay = null)
     {
-        if (_cache.TryGetValue(SummaryCacheKey, out DashboardSummaryDto? cached) && cached != null)
+        string cacheKey = $"dashboard_summary_{tuNgay:yyyyMMddHHmm}_{denNgay:yyyyMMddHHmm}";
+        if (_cache.TryGetValue(cacheKey, out DashboardSummaryDto? cached) && cached != null)
         {
             return cached;
         }
@@ -58,27 +59,46 @@ public class DashboardService : IDashboardService
         var todayRefunds = refunds.Where(r => r.Ngay >= startOfToday).ToList();
         var monthRefunds = refunds.Where(r => r.Ngay >= startOfMonth).ToList();
 
-        decimal grossTotal = invoices.Sum(h => h.ThanhTien);
         decimal grossToday = todayInvoices.Sum(h => h.ThanhTien);
         decimal grossMonth = monthInvoices.Sum(h => h.ThanhTien);
 
-        decimal refundTotal = refunds.Sum(r => r.SoTienHoan);
         decimal refundToday = todayRefunds.Sum(r => r.SoTienHoan);
         decimal refundMonth = monthRefunds.Sum(r => r.SoTienHoan);
 
-        // Doanh thu thuần = Doanh thu bán - Tiền hoàn trả
-        decimal tongDoanhThu = Math.Max(0, grossTotal - refundTotal);
         decimal doanhThuHomNay = Math.Max(0, grossToday - refundToday);
         decimal doanhThuThang = Math.Max(0, grossMonth - refundMonth);
-
         int soHoaDonHomNay = todayInvoices.Count;
-        int tongHoaDon = invoices.Count;
 
-        var taiQuayInvoices = invoices.Where(h => h.KenhBan == "tai_quay").ToList();
-        var onlineInvoices = invoices.Where(h => h.KenhBan == "online").ToList();
+        // Lọc danh sách theo khoảng thời gian tuNgay - denNgay nếu có
+        var filteredInvoices = invoices.AsEnumerable();
+        var filteredRefunds = refunds.AsEnumerable();
+
+        if (tuNgay.HasValue)
+        {
+            filteredInvoices = filteredInvoices.Where(h => h.NgayLap >= tuNgay.Value);
+            filteredRefunds = filteredRefunds.Where(r => r.Ngay >= tuNgay.Value);
+        }
+        if (denNgay.HasValue)
+        {
+            filteredInvoices = filteredInvoices.Where(h => h.NgayLap <= denNgay.Value);
+            filteredRefunds = filteredRefunds.Where(r => r.Ngay <= denNgay.Value);
+        }
+
+        var activeInvoices = filteredInvoices.ToList();
+        var activeRefunds = filteredRefunds.ToList();
+
+        decimal grossTotal = activeInvoices.Sum(h => h.ThanhTien);
+        decimal refundTotal = activeRefunds.Sum(r => r.SoTienHoan);
+
+        // Doanh thu thuần = Doanh thu bán - Tiền hoàn trả trong kỳ
+        decimal tongDoanhThu = Math.Max(0, grossTotal - refundTotal);
+        int tongHoaDon = activeInvoices.Count;
+
+        var taiQuayInvoices = activeInvoices.Where(h => h.KenhBan == "tai_quay").ToList();
+        var onlineInvoices = activeInvoices.Where(h => h.KenhBan == "online").ToList();
         var taiQuayHDSet = taiQuayInvoices.Select(h => h.SoHD).ToHashSet();
 
-        decimal posRefunds = refunds.Where(r => r.SoHD != null && taiQuayHDSet.Contains(r.SoHD)).Sum(r => r.SoTienHoan);
+        decimal posRefunds = activeRefunds.Where(r => r.SoHD != null && taiQuayHDSet.Contains(r.SoHD)).Sum(r => r.SoTienHoan);
         decimal onlineRefunds = refundTotal - posRefunds;
 
         decimal doanhThuTaiQuay = Math.Max(0, taiQuayInvoices.Sum(h => h.ThanhTien) - posRefunds);
@@ -157,7 +177,7 @@ public class DashboardService : IDashboardService
             SoBaoHanhDangXuLy = warrantyProcessing
         };
 
-        _cache.Set(SummaryCacheKey, summary, CacheDuration);
+        _cache.Set(cacheKey, summary, CacheDuration);
         return summary;
     }
 

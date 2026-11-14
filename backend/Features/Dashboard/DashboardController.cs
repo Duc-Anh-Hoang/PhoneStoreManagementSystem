@@ -17,9 +17,11 @@ public class DashboardController : ControllerBase
     }
 
     [HttpGet("summary")]
-    public async Task<IActionResult> GetSummary()
+    public async Task<IActionResult> GetSummary(
+        [FromQuery] DateTime? tuNgay,
+        [FromQuery] DateTime? denNgay)
     {
-        var result = await _dashboardService.GetSummaryAsync();
+        var result = await _dashboardService.GetSummaryAsync(tuNgay, denNgay);
         return Ok(result);
     }
 

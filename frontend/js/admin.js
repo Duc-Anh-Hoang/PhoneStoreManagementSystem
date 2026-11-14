@@ -723,6 +723,96 @@ function renderSection(sectionId) {
 // -------------------------------------------------------------
 // 1. DASHBOARD - ĐỒNG BỘ REALTIME DỮ LIỆU THỰC TẾ TỪ JSON
 // -------------------------------------------------------------
+// =============================================================================
+// BỘ LỌC THỜI GIAN DASHBOARD (NGÀY, TUẦN, THÁNG, NĂM, TÙY CHỌN)
+// =============================================================================
+let currentDashboardFilter = 'all'; // 'today', 'week', 'month', 'year', 'all', 'custom'
+let currentDashboardRange = { from: null, to: null };
+
+window.setDashboardTimeFilter = function(filterType) {
+  currentDashboardFilter = filterType;
+  const now = new Date();
+  let from = null;
+  let to = null;
+
+  if (filterType === 'today') {
+    from = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+    to = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+  } else if (filterType === 'week') {
+    const day = now.getDay();
+    const diff = now.getDate() - day + (day === 0 ? -6 : 1);
+    from = new Date(now.getFullYear(), now.getMonth(), diff, 0, 0, 0);
+    to = new Date(from.getTime() + 6 * 24 * 3600 * 1000 + 86399999);
+  } else if (filterType === 'month') {
+    from = new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0);
+    to = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+  } else if (filterType === 'year') {
+    from = new Date(now.getFullYear(), 0, 1, 0, 0, 0);
+    to = new Date(now.getFullYear(), 11, 31, 23, 59, 59, 999);
+  } else if (filterType === 'all') {
+    from = null;
+    to = null;
+  }
+
+  currentDashboardRange = { from, to };
+
+  document.querySelectorAll('.dash-time-btn').forEach(btn => {
+    if (btn.getAttribute('data-filter') === filterType) {
+      btn.className = 'dash-time-btn px-2.5 py-1 rounded-lg font-semibold bg-white text-slate-900 shadow-2xs transition-all cursor-pointer';
+    } else {
+      btn.className = 'dash-time-btn px-2.5 py-1 rounded-lg font-medium text-slate-600 hover:text-slate-900 transition-all cursor-pointer';
+    }
+  });
+
+  const elFrom = document.getElementById('dash-date-from');
+  const elTo = document.getElementById('dash-date-to');
+  if (elFrom && from) elFrom.value = from.toISOString().split('T')[0];
+  if (elTo && to) elTo.value = to.toISOString().split('T')[0];
+  if (filterType === 'all') {
+    if (elFrom) elFrom.value = '';
+    if (elTo) elTo.value = '';
+  }
+
+  const descEl = document.getElementById('dash-filter-desc');
+  if (descEl) {
+    const labels = {
+      today: 'Hiển thị số liệu hoạt động trong ngày hôm nay.',
+      week: 'Hiển thị số liệu hoạt động trong tuần này (Thứ 2 - Chủ Nhật).',
+      month: 'Hiển thị số liệu hoạt động trong tháng này (Tháng ' + (now.getMonth() + 1) + '/' + now.getFullYear() + ').',
+      year: 'Hiển thị số liệu hoạt động trong năm ' + now.getFullYear() + '.',
+      all: 'Hiển thị toàn bộ số liệu hoạt động từ trước đến nay.'
+    };
+    descEl.textContent = labels[filterType] || 'Số liệu doanh thu thuần, tồn kho và đơn hàng.';
+  }
+
+  renderDashboard();
+};
+
+window.applyDashboardCustomDate = function() {
+  const elFrom = document.getElementById('dash-date-from');
+  const elTo = document.getElementById('dash-date-to');
+  if (!elFrom?.value && !elTo?.value) {
+    setDashboardTimeFilter('all');
+    return;
+  }
+  const from = elFrom?.value ? new Date(elFrom.value + 'T00:00:00') : null;
+  const to = elTo?.value ? new Date(elTo.value + 'T23:59:59.999') : null;
+
+  currentDashboardFilter = 'custom';
+  currentDashboardRange = { from, to };
+
+  document.querySelectorAll('.dash-time-btn').forEach(btn => {
+    btn.className = 'dash-time-btn px-2.5 py-1 rounded-lg font-medium text-slate-600 hover:text-slate-900 transition-all cursor-pointer';
+  });
+
+  const descEl = document.getElementById('dash-filter-desc');
+  if (descEl) {
+    descEl.textContent = `Số liệu từ ngày ${elFrom?.value || 'đầu'} đến ngày ${elTo?.value || 'nay'}.`;
+  }
+
+  renderDashboard();
+};
+
 async function renderDashboard() {
   try {
     if (!AdminRealtimeData.isLoaded) {
@@ -732,14 +822,20 @@ async function renderDashboard() {
     const products = AdminRealtimeData.products || [];
     const orders = AdminRealtimeData.orders || [];
 
-    // Lấy số liệu thống kê realtime từ backend API (Nguồn sự thật duy nhất)
+    // Lấy số liệu thống kê realtime từ backend API có kèm bộ lọc thời gian
+    let queryParams = '';
+    if (currentDashboardRange.from || currentDashboardRange.to) {
+      const p = new URLSearchParams();
+      if (currentDashboardRange.from) p.set('tuNgay', currentDashboardRange.from.toISOString());
+      if (currentDashboardRange.to) p.set('denNgay', currentDashboardRange.to.toISOString());
+      queryParams = '?' + p.toString();
+    }
+
     let summary = null;
     try {
-      summary = await api.get('/dashboard/summary');
+      summary = await api.get('/dashboard/summary' + queryParams);
     } catch (e) {
-      try {
-        summary = await api.get('/dashboard/summary');
-      } catch (err) {}
+      console.warn('Lỗi lấy summary dashboard:', e);
     }
 
     // 1. Tính tổng doanh thu thực tế (Doanh thu bán trừ tiền đổi trả đã hoàn)
@@ -775,11 +871,20 @@ async function renderDashboard() {
 
     const revSubText = document.getElementById('dash-revenue-sub-text');
     if (revSubText) {
+      const filterLabelMap = {
+        today: 'Doanh thu hôm nay',
+        week: 'Doanh thu tuần này',
+        month: 'Doanh thu tháng này',
+        year: 'Doanh thu năm nay',
+        all: 'Toàn bộ thời gian',
+        custom: 'Khoảng ngày đã chọn'
+      };
+      const periodLabel = filterLabelMap[currentDashboardFilter] || 'Kỳ đã chọn';
       if (refundAmount > 0) {
-        revSubText.textContent = `${totalInvoices} đơn hoàn tất (Đã trừ ${Format.currency(refundAmount)} trả hàng)`;
+        revSubText.textContent = `${periodLabel} (${totalInvoices} đơn, trừ ${Format.currency(refundAmount)} trả hàng)`;
         revSubText.title = `Tổng bán: ${Format.currency(summary ? summary.doanhThuGop : totalRev)} - Đã hoàn lại: ${Format.currency(refundAmount)}`;
       } else {
-        revSubText.textContent = `${totalInvoices} đơn hoàn tất (${posInvoicesCount} tại quầy, ${onlineInvoicesCount} online)`;
+        revSubText.textContent = `${periodLabel} (${totalInvoices} đơn hoàn tất: ${posInvoicesCount} tại quầy, ${onlineInvoicesCount} online)`;
       }
     }
 
@@ -913,7 +1018,7 @@ async function renderDashboard() {
     if (catContainer) {
       let catData = [];
       try {
-        const catApi = await api.get('/dashboard/categories').catch(() => null);
+        const catApi = await api.get('/dashboard/categories' + queryParams).catch(() => null);
         if (Array.isArray(catApi) && catApi.length > 0) {
           catData = catApi;
         }
@@ -974,7 +1079,17 @@ async function renderDashboard() {
     // 7. Bảng đơn hàng online gần đây (Dashboard)
     const tbody = document.getElementById('dash-recent-orders-table');
     if (tbody) {
-      const recentOrders = orders.slice(0, 6);
+      let recentOrders = orders;
+      if (currentDashboardRange.from || currentDashboardRange.to) {
+        recentOrders = orders.filter(o => {
+          const d = new Date(o.ngayDat);
+          if (isNaN(d.getTime())) return true;
+          if (currentDashboardRange.from && d < currentDashboardRange.from) return false;
+          if (currentDashboardRange.to && d > currentDashboardRange.to) return false;
+          return true;
+        });
+      }
+      recentOrders = recentOrders.slice(0, 6);
       if (recentOrders.length === 0) {
         tbody.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-slate-400">Chưa có đơn hàng trực tuyến nào</td></tr>';
       } else {

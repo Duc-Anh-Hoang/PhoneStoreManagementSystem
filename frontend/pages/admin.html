@@ -646,20 +646,37 @@
            ===================================================================== -->
       <section id="view-dashboard" class="admin-view-section space-y-5">
 
-        <!-- Header Dashboard: Tiêu đề & Nút Làm Mới Realtime (Gộp 1 hàng theo Bước 5) -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200/80 shadow-card-sleek">
+        <!-- Header Dashboard: Tiêu đề & Bộ Lọc Thời Gian (Tháng, Tuần, Năm, Ngày) -->
+        <div class="flex flex-col xl:flex-row xl:items-center justify-between gap-3 bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200/80 shadow-card-sleek">
           <div>
             <h2 class="text-sm sm:text-base font-bold text-slate-800 flex items-center gap-2">
               <i class="fa-solid fa-chart-line text-slate-700"></i>
               <span>Tổng Quan Hoạt Động & Doanh Thu</span>
             </h2>
-            <p class="text-xs text-slate-500 mt-0.5">Số liệu doanh thu thuần, tồn kho và các khoản khấu trừ đổi trả được đồng bộ tự động theo thời gian thực.</p>
+            <p class="text-xs text-slate-500 mt-0.5" id="dash-filter-desc">Số liệu doanh thu thuần, tồn kho và đơn hàng đồng bộ thời gian thực.</p>
           </div>
-          <div class="flex items-center gap-2.5 self-start sm:self-auto flex-shrink-0">
-            <span id="dash-last-updated" class="text-[11px] text-slate-400 font-mono hidden sm:inline">Cập nhật lúc --:--:--</span>
-            <button onclick="renderDashboard()" class="inline-flex items-center gap-2 px-3 py-1.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-xl text-xs font-medium transition-all shadow-xs cursor-pointer" title="Tải lại toàn bộ số liệu dashboard" aria-label="Làm mới số liệu">
+          <div class="flex flex-wrap items-center gap-2 self-start xl:self-auto flex-shrink-0">
+            <!-- Nút chọn nhanh thời gian -->
+            <div class="inline-flex items-center p-1 bg-slate-100 rounded-xl border border-slate-200 text-xs">
+              <button type="button" onclick="setDashboardTimeFilter('today')" data-filter="today" class="dash-time-btn px-2.5 py-1 rounded-lg font-medium text-slate-600 hover:text-slate-900 transition-all cursor-pointer">Hôm nay</button>
+              <button type="button" onclick="setDashboardTimeFilter('week')" data-filter="week" class="dash-time-btn px-2.5 py-1 rounded-lg font-medium text-slate-600 hover:text-slate-900 transition-all cursor-pointer">Tuần này</button>
+              <button type="button" onclick="setDashboardTimeFilter('month')" data-filter="month" class="dash-time-btn px-2.5 py-1 rounded-lg font-medium text-slate-600 hover:text-slate-900 transition-all cursor-pointer">Tháng này</button>
+              <button type="button" onclick="setDashboardTimeFilter('year')" data-filter="year" class="dash-time-btn px-2.5 py-1 rounded-lg font-medium text-slate-600 hover:text-slate-900 transition-all cursor-pointer">Năm nay</button>
+              <button type="button" onclick="setDashboardTimeFilter('all')" data-filter="all" class="dash-time-btn px-2.5 py-1 rounded-lg font-semibold bg-white text-slate-900 shadow-2xs transition-all cursor-pointer">Toàn bộ</button>
+            </div>
+
+            <!-- Tùy chọn khoảng ngày cụ thể -->
+            <div class="hidden sm:inline-flex items-center gap-1.5 p-1 bg-white rounded-xl border border-slate-200 text-xs shadow-2xs">
+              <input type="date" id="dash-date-from" class="px-1.5 py-0.5 text-xs text-slate-700 border-none outline-none focus:ring-0 bg-transparent" title="Từ ngày">
+              <span class="text-slate-400 text-[11px]">-</span>
+              <input type="date" id="dash-date-to" class="px-1.5 py-0.5 text-xs text-slate-700 border-none outline-none focus:ring-0 bg-transparent" title="Đến ngày">
+              <button type="button" onclick="applyDashboardCustomDate()" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-900 text-white font-medium text-[11px] transition-colors cursor-pointer" title="Lọc theo khoảng ngày">Lọc</button>
+            </div>
+
+            <span id="dash-last-updated" class="text-[11px] text-slate-400 font-mono hidden md:inline">Cập nhật lúc --:--:--</span>
+            <button type="button" onclick="renderDashboard()" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-xl text-xs font-medium transition-all shadow-2xs cursor-pointer" title="Tải lại toàn bộ số liệu dashboard" aria-label="Làm mới số liệu">
               <i class="fa-solid fa-rotate text-xs text-slate-500"></i>
-              <span>Làm mới số liệu</span>
+              <span class="hidden sm:inline">Làm mới</span>
             </button>
           </div>
         </div>
@@ -2916,7 +2933,7 @@
   <script src="../js/api.js?v=3.6"></script>
   <script src="../js/order-signalr.js?v=1.3"></script>
   <script src="../js/auth.js?v=3.6"></script>
-  <script src="../js/admin.js?v=4.3"></script>
+  <script src="../js/admin.js?v=4.4"></script>
 
   <script>
     // Mobile sidebar toggle handler
