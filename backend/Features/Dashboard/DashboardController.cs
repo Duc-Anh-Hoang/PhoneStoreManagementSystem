@@ -42,4 +42,24 @@ public class DashboardController : ControllerBase
         var result = await _dashboardService.GetRevenueByCategoryAsync(tuNgay, denNgay);
         return Ok(result);
     }
+
+    [HttpGet("top-selling")]
+    public async Task<IActionResult> GetTopSelling(
+        [FromQuery] int top = 5,
+        [FromQuery] DateTime? tuNgay = null,
+        [FromQuery] DateTime? denNgay = null)
+    {
+        var result = await _dashboardService.GetTopSellingProductsAsync(top, tuNgay, denNgay);
+        return Ok(result);
+    }
+
+    [HttpGet("slow-moving")]
+    public async Task<IActionResult> GetSlowMoving(
+        [FromQuery] int top = 5,
+        [FromQuery] DateTime? tuNgay = null,
+        [FromQuery] DateTime? denNgay = null)
+    {
+        var result = await _dashboardService.GetSlowMovingProductsAsync(top, tuNgay, denNgay);
+        return Ok(result);
+    }
 }

@@ -35,3 +35,14 @@ public class CategoryRevenueDto
     public decimal DoanhThu { get; set; }
     public int SoLuongBan { get; set; }
 }
+
+public class ProductPerformanceDto
+{
+    public string MaHang { get; set; } = string.Empty;
+    public string TenHang { get; set; } = string.Empty;
+    public string TenNhom { get; set; } = string.Empty;
+    public decimal DonGia { get; set; }
+    public int SoLuongBan { get; set; }
+    public decimal DoanhThu { get; set; }
+    public int TonKhoHienTai { get; set; }
+}

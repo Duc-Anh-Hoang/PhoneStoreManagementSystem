@@ -263,4 +263,186 @@ public class DashboardService : IDashboardService
 
         return result;
     }
+
+    public async Task<List<ProductPerformanceDto>> GetTopSellingProductsAsync(int top = 5, DateTime? tuNgay = null, DateTime? denNgay = null)
+    {
+        top = Math.Clamp(top, 1, 100);
+
+        // 1. Lọc hóa đơn theo thời gian
+        var hdQuery = _context.HoaDons.AsNoTracking();
+        if (tuNgay.HasValue) hdQuery = hdQuery.Where(h => h.NgayLap >= tuNgay.Value);
+        if (denNgay.HasValue) hdQuery = hdQuery.Where(h => h.NgayLap <= denNgay.Value);
+
+        var invoiceDetails = await (
+            from hd in hdQuery
+            join ct in _context.ChiTietHoaDons on hd.SoHD equals ct.SoHD
+            select new
+            {
+                ct.MaHang,
+                SoLuong = ct.SlBan,
+                ThanhTien = ct.SlBan * ct.DonGiaBan
+            }
+        ).ToListAsync();
+
+        // 2. Lấy đơn hàng online chưa xuất hóa đơn (tránh trùng)
+        var onlineQuery = _context.DonHangOnlines.AsNoTracking()
+            .Where(d => d.SoHD == null && d.TrangThai != "da_huy");
+        if (tuNgay.HasValue) onlineQuery = onlineQuery.Where(d => d.NgayDat >= tuNgay.Value);
+        if (denNgay.HasValue) onlineQuery = onlineQuery.Where(d => d.NgayDat <= denNgay.Value);
+
+        var onlineDetails = await (
+            from d in onlineQuery
+            join ct in _context.ChiTietDonHangOnlines on d.MaDH equals ct.MaDH
+            select new
+            {
+                ct.MaHang,
+                SoLuong = ct.SoLuong,
+                ThanhTien = ct.SoLuong * ct.DonGia
+            }
+        ).ToListAsync();
+
+        var salesGroup = invoiceDetails.Concat(onlineDetails)
+            .GroupBy(x => x.MaHang)
+            .Select(g => new
+            {
+                MaHang = g.Key,
+                SoLuongBan = g.Sum(x => x.SoLuong),
+                DoanhThu = g.Sum(x => x.ThanhTien)
+            })
+            .Where(x => x.SoLuongBan > 0)
+            .OrderByDescending(x => x.SoLuongBan)
+            .ThenByDescending(x => x.DoanhThu)
+            .Take(top)
+            .ToList();
+
+        if (salesGroup.Count == 0) return new List<ProductPerformanceDto>();
+
+        var targetIds = salesGroup.Select(s => s.MaHang).ToList();
+        var products = await _context.MatHangs.AsNoTracking()
+            .Include(m => m.NhomHang)
+            .Where(m => targetIds.Contains(m.MaHang))
+            .ToDictionaryAsync(m => m.MaHang);
+
+        var stockDict = await GetStockForProductsAsync(targetIds);
+
+        return salesGroup
+            .Where(s => products.ContainsKey(s.MaHang))
+            .Select(s =>
+            {
+                var p = products[s.MaHang];
+                return new ProductPerformanceDto
+                {
+                    MaHang = p.MaHang,
+                    TenHang = p.TenHang,
+                    TenNhom = p.NhomHang?.TenNhom ?? "Khác",
+                    DonGia = p.DonGia,
+                    SoLuongBan = s.SoLuongBan,
+                    DoanhThu = s.DoanhThu,
+                    TonKhoHienTai = stockDict.TryGetValue(p.MaHang, out var tk) ? tk : 0
+                };
+            }).ToList();
+    }
+
+    public async Task<List<ProductPerformanceDto>> GetSlowMovingProductsAsync(int top = 5, DateTime? tuNgay = null, DateTime? denNgay = null)
+    {
+        top = Math.Clamp(top, 1, 100);
+
+        var hdQuery = _context.HoaDons.AsNoTracking();
+        if (tuNgay.HasValue) hdQuery = hdQuery.Where(h => h.NgayLap >= tuNgay.Value);
+        if (denNgay.HasValue) hdQuery = hdQuery.Where(h => h.NgayLap <= denNgay.Value);
+
+        var invoiceDetails = await (
+            from hd in hdQuery
+            join ct in _context.ChiTietHoaDons on hd.SoHD equals ct.SoHD
+            select new { ct.MaHang, SoLuong = ct.SlBan, ThanhTien = ct.SlBan * ct.DonGiaBan }
+        ).ToListAsync();
+
+        var onlineQuery = _context.DonHangOnlines.AsNoTracking()
+            .Where(d => d.SoHD == null && d.TrangThai != "da_huy");
+        if (tuNgay.HasValue) onlineQuery = onlineQuery.Where(d => d.NgayDat >= tuNgay.Value);
+        if (denNgay.HasValue) onlineQuery = onlineQuery.Where(d => d.NgayDat <= denNgay.Value);
+
+        var onlineDetails = await (
+            from d in onlineQuery
+            join ct in _context.ChiTietDonHangOnlines on d.MaDH equals ct.MaDH
+            select new { ct.MaHang, SoLuong = ct.SoLuong, ThanhTien = ct.SoLuong * ct.DonGia }
+        ).ToListAsync();
+
+        var salesDict = invoiceDetails.Concat(onlineDetails)
+            .GroupBy(x => x.MaHang)
+            .ToDictionary(g => g.Key, g => new { SoLuongBan = g.Sum(x => x.SoLuong), DoanhThu = g.Sum(x => x.ThanhTien) });
+
+        var allProducts = await _context.MatHangs.AsNoTracking()
+            .Include(m => m.NhomHang)
+            .ToListAsync();
+
+        var allIds = allProducts.Select(p => p.MaHang).ToList();
+        var stockDict = await GetStockForProductsAsync(allIds);
+
+        return allProducts.Select(p =>
+        {
+            salesDict.TryGetValue(p.MaHang, out var sale);
+            var sold = sale?.SoLuongBan ?? 0;
+            var rev = sale?.DoanhThu ?? 0m;
+            var stock = stockDict.TryGetValue(p.MaHang, out var tk) ? tk : 0;
+            return new ProductPerformanceDto
+            {
+                MaHang = p.MaHang,
+                TenHang = p.TenHang,
+                TenNhom = p.NhomHang?.TenNhom ?? "Khác",
+                DonGia = p.DonGia,
+                SoLuongBan = sold,
+                DoanhThu = rev,
+                TonKhoHienTai = stock
+            };
+        })
+        .OrderBy(x => x.SoLuongBan)
+        .ThenByDescending(x => x.TonKhoHienTai)
+        .ThenBy(x => x.MaHang)
+        .Take(top)
+        .ToList();
+    }
+
+    private async Task<Dictionary<string, int>> GetStockForProductsAsync(List<string> maHangs)
+    {
+        var imeiConHangGroup = await _context.IMEIs
+            .AsNoTracking()
+            .Where(i => i.TrangThai == "con_hang" && maHangs.Contains(i.MaHang))
+            .GroupBy(i => i.MaHang)
+            .Select(g => new { MaHang = g.Key, Total = g.Count() })
+            .ToDictionaryAsync(x => x.MaHang, x => x.Total);
+
+        var nhapGroup = await _context.ChiTietPhieuNhaps
+            .Where(c => maHangs.Contains(c.MaHang))
+            .GroupBy(c => c.MaHang)
+            .Select(g => new { MaHang = g.Key, Total = g.Sum(x => x.SlNhap) })
+            .ToDictionaryAsync(x => x.MaHang, x => x.Total);
+
+        var banGroup = await _context.ChiTietHoaDons
+            .Where(c => maHangs.Contains(c.MaHang))
+            .GroupBy(c => c.MaHang)
+            .Select(g => new { MaHang = g.Key, Total = g.Sum(x => x.SlBan) })
+            .ToDictionaryAsync(x => x.MaHang, x => x.Total);
+
+        var products = await _context.MatHangs.AsNoTracking()
+            .Where(m => maHangs.Contains(m.MaHang))
+            .Select(m => new { m.MaHang, m.QuanLyImei })
+            .ToListAsync();
+
+        var result = new Dictionary<string, int>();
+        foreach (var p in products)
+        {
+            if (p.QuanLyImei)
+            {
+                result[p.MaHang] = imeiConHangGroup.TryGetValue(p.MaHang, out var c) ? c : 0;
+            }
+            else
+            {
+                var n = nhapGroup.TryGetValue(p.MaHang, out var nh) ? nh : 0;
+                var b = banGroup.TryGetValue(p.MaHang, out var ba) ? ba : 0;
+                result[p.MaHang] = Math.Max(0, n - b);
+            }
+        }
+        return result;
+    }
 }

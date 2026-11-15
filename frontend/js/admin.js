@@ -913,13 +913,13 @@ async function renderDashboard() {
       navBadge.classList.toggle('hidden', pendingCount === 0);
     }
 
-    // 3. Card Tổng Tồn Kho Máy & Cảnh báo sắp hết (Đồng bộ chuẩn xác với kho hàng thực tế hơn 52 ngàn máy)
-    const catalogStock = products.reduce((acc, p) => acc + (p.tonKho || 0), 0);
-    const totalTonKho = catalogStock > 0
-      ? catalogStock
-      : ((summary && typeof summary.tongTonKho === 'number' && summary.tongTonKho > 0) ? summary.tongTonKho : 52950);
-    const lowStockCount = products.filter(p => (p.tonKho || 0) > 0 && (p.tonKho || 0) <= 5).length ||
-      (summary && typeof summary.soMatHangSapHet === 'number' ? summary.soMatHangSapHet : 0);
+    // 3. Card Tổng Tồn Kho Máy & Cảnh báo sắp hết (Đồng bộ trực tiếp từ Database PostgreSQL)
+    const totalTonKho = (summary && typeof summary.tongTonKho === 'number')
+      ? summary.tongTonKho
+      : products.reduce((acc, p) => acc + (p.tonKho || 0), 0);
+    const lowStockCount = (summary && typeof summary.soMatHangSapHet === 'number')
+      ? summary.soMatHangSapHet
+      : products.filter(p => (p.tonKho || 0) <= 5).length;
     const stockEl = document.getElementById('dash-total-stock');
     if (stockEl) {
       stockEl.textContent = totalTonKho.toLocaleString('vi-VN') + ' máy';
@@ -1078,7 +1078,10 @@ async function renderDashboard() {
       }
     }
 
-    // 7. Bảng đơn hàng online gần đây (Dashboard)
+    // 7. Render Hiệu Suất Mặt Hàng (Bán Chạy & Bán Chậm)
+    await renderProductPerformance(queryParams);
+
+    // 8. Bảng đơn hàng online gần đây (Dashboard)
     const tbody = document.getElementById('dash-recent-orders-table');
     if (tbody) {
       let recentOrders = orders;
@@ -6718,3 +6721,133 @@ window.retryShipmentAdmin = async function (maDH) {
     showToast('Thử lại thất bại: ' + (err.message || err), 'error');
   }
 };
+
+
+// =========================================================================
+// QUẢN LÝ HIỆU SUẤT MẶT HÀNG (TOP BÁN CHẠY & BÁN CHẬM) TRÊN DASHBOARD
+// =========================================================================
+let currentProductPerfTop = 5;
+
+window.setTopLimit = function(n) {
+  const num = Math.max(1, Math.min(100, parseInt(n, 10) || 5));
+  currentProductPerfTop = num;
+  const input = document.getElementById('dash-product-perf-top');
+  if (input) input.value = num;
+
+  document.querySelectorAll('.top-pill').forEach(btn => {
+    const isCur = parseInt(btn.textContent.trim(), 10) === num;
+    btn.className = `top-pill px-2 py-0.5 text-[11px] font-semibold rounded-md border cursor-pointer transition ${isCur ? 'bg-slate-900 text-white' : 'border border-slate-200 bg-white text-slate-600 hover:bg-slate-50'}`;
+  });
+
+  let q = '';
+  if (currentDashboardRange.from || currentDashboardRange.to) {
+    const p = new URLSearchParams();
+    if (currentDashboardRange.from) p.set('tuNgay', currentDashboardRange.from.toISOString());
+    if (currentDashboardRange.to) p.set('denNgay', currentDashboardRange.to.toISOString());
+    q = '?' + p.toString();
+  }
+  renderProductPerformance(q);
+};
+
+let topLimitDebounceTimer = null;
+window.onTopLimitChange = function(val) {
+  clearTimeout(topLimitDebounceTimer);
+  topLimitDebounceTimer = setTimeout(() => {
+    window.setTopLimit(val);
+  }, 120);
+};
+
+async function renderProductPerformance(queryParams) {
+  const topBadge1 = document.getElementById('dash-top-selling-badge');
+  const topBadge2 = document.getElementById('dash-slow-moving-badge');
+  if (topBadge1) topBadge1.textContent = `Top ${currentProductPerfTop}`;
+  if (topBadge2) topBadge2.textContent = `Top ${currentProductPerfTop}`;
+
+  const topContainer = document.getElementById('dash-top-selling-list');
+  const slowContainer = document.getElementById('dash-slow-moving-list');
+
+  // Xây dựng query string có param top
+  const sep = (queryParams && queryParams.includes('?')) ? '&' : '?';
+  const fullQuery = (queryParams || '') + `${sep}top=${currentProductPerfTop}`;
+
+  try {
+    const [topSelling, slowMoving] = await Promise.all([
+      api.get('/dashboard/top-selling' + fullQuery).catch(() => []),
+      api.get('/dashboard/slow-moving' + fullQuery).catch(() => [])
+    ]);
+
+    // 1. Render Top Selling (Tone trung tính, thanh lịch)
+    if (topContainer) {
+      if (!Array.isArray(topSelling) || topSelling.length === 0) {
+        topContainer.innerHTML = '<div class="text-center py-6 text-slate-400 italic">Chưa có giao dịch bán hàng trong kỳ này</div>';
+      } else {
+        const maxSold = topSelling[0]?.soLuongBan || 1;
+        topContainer.innerHTML = topSelling.map((p, idx) => {
+          const rank = idx + 1;
+          const pct = Math.min(100, Math.max(8, Math.round((p.soLuongBan / maxSold) * 100)));
+
+          return `
+            <div class="p-3 bg-white rounded-xl border border-slate-200/80 shadow-2xs hover:border-slate-300 transition-all">
+              <div class="flex items-center justify-between gap-3 mb-1.5">
+                <div class="flex items-center gap-2.5 min-w-0 flex-1">
+                  <span class="w-5 h-5 rounded-md flex items-center justify-center font-mono font-bold text-[10px] flex-shrink-0 bg-slate-100 text-slate-700 border border-slate-200">#${rank}</span>
+                  <div class="min-w-0">
+                    <p class="font-semibold text-slate-800 text-xs truncate" title="${p.tenHang}">${p.tenHang}</p>
+                    <span class="text-[11px] text-slate-400 truncate">${p.tenNhom} | ${p.maHang}</span>
+                  </div>
+                </div>
+                <div class="text-right flex-shrink-0">
+                  <span class="font-mono font-bold text-slate-900 text-xs">${Format.currency(p.doanhThu)}</span>
+                  <p class="text-[11px] text-slate-500">Đã bán: <b class="text-slate-800">${p.soLuongBan}</b> | Kho: <b class="text-slate-700">${p.tonKhoHienTai}</b></p>
+                </div>
+              </div>
+              <div class="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                <div class="bg-[#2563EB] h-1.5 rounded-full transition-all duration-500" style="width: ${pct}%"></div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    // 2. Render Slow Moving (Tone trung tính, nút xám nhã nhặn)
+    if (slowContainer) {
+      if (!Array.isArray(slowMoving) || slowMoving.length === 0) {
+        slowContainer.innerHTML = '<div class="text-center py-6 text-slate-400 italic">Không có mặt hàng tồn đọng cần cảnh báo</div>';
+      } else {
+        slowContainer.innerHTML = slowMoving.map((p, idx) => {
+          const rank = idx + 1;
+          const isHighStock = p.tonKhoHienTai > 0;
+          return `
+            <div class="p-3 bg-white rounded-xl border border-slate-200/80 shadow-2xs hover:border-slate-300 transition-all flex items-center justify-between gap-3">
+              <div class="flex items-center gap-2.5 min-w-0 flex-1">
+                <span class="w-5 h-5 rounded-md bg-slate-100 text-slate-600 border border-slate-200 flex items-center justify-center font-mono font-bold text-[10px] flex-shrink-0">${rank}</span>
+                <div class="min-w-0">
+                  <p class="font-semibold text-slate-800 text-xs truncate" title="${p.tenHang}">${p.tenHang}</p>
+                  <div class="flex items-center gap-1.5 text-[11px] text-slate-400">
+                    <span>${p.tenNhom}</span>
+                    <span>•</span>
+                    <span class="font-mono text-slate-600">${Format.currency(p.donGia)}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-center gap-2.5 flex-shrink-0">
+                <div class="text-right">
+                  <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+                    Tồn: ${p.tonKhoHienTai}
+                  </span>
+                  <p class="text-[10px] text-slate-400 mt-0.5">Bán: ${p.soLuongBan}</p>
+                </div>
+                <button type="button" onclick="renderSection('view-khuyenmai')" class="px-2.5 py-1 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 font-medium text-xs rounded-lg shadow-2xs transition-colors cursor-pointer" title="Tạo chương trình khuyến mãi kích cầu">
+                  Tạo KM
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+  } catch (err) {
+    console.error('Lỗi khi tải danh sách hiệu suất sản phẩm:', err);
+  }
+}

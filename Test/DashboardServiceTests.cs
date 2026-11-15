@@ -171,4 +171,40 @@ public class DashboardServiceTests
         Assert.Equal("DT", result[0].MaNhom);
         Assert.Equal(20000000m, result[0].DoanhThu);
     }
+
+    [Fact]
+    public async Task GetTopSellingProductsAsync_ReturnsTopSellingWithCustomLimit()
+    {
+        // Arrange
+        using var context = CreateDbContext();
+        await SeedDashboardDataAsync(context);
+        var cache = CreateCache();
+        var service = new DashboardService(context, cache);
+
+        // Act
+        var result = await service.GetTopSellingProductsAsync(top: 1);
+
+        // Assert
+        Assert.Single(result);
+        Assert.Equal("MH01", result[0].MaHang);
+        Assert.Equal(1, result[0].SoLuongBan);
+        Assert.Equal(20000000m, result[0].DoanhThu);
+    }
+
+    [Fact]
+    public async Task GetSlowMovingProductsAsync_ReturnsSlowMovingOrderedBySalesAndStock()
+    {
+        // Arrange
+        using var context = CreateDbContext();
+        await SeedDashboardDataAsync(context);
+        var cache = CreateCache();
+        var service = new DashboardService(context, cache);
+
+        // Act - lấy top 2 sản phẩm bán chậm
+        var result = await service.GetSlowMovingProductsAsync(top: 2);
+
+        // Assert
+        Assert.Equal(2, result.Count);
+        Assert.All(result, r => Assert.True(r.SoLuongBan <= 1));
+    }
 }
