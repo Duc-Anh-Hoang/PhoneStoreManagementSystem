@@ -102,3 +102,61 @@ Workflow bao gồm 3 jobs song song:
    git push origin feature/<ten-tinh-nang>
    ```
 4. Tạo **Pull Request** vào nhánh `develop` trên GitHub. Chờ CI chạy xanh (Pass 3/3 jobs) trước khi merge.
+
+---
+
+## 🛒 Module Giỏ Hàng & Thanh Toán (Cart & Checkout System)
+
+Hệ thống xử lý đơn hàng và thanh toán trực tuyến bảo toàn tính đúng đắn (Zero-Overselling, Zero-Money-Loss, Idempotency):
+
+### 1. Sơ đồ State Machine Đơn hàng
+
+```mermaid
+stateDiagram-v2
+    [*] --> PENDING_PAYMENT: Tạo đơn (giữ kho)
+    PENDING_PAYMENT --> PAID: Webhook/Query thành công
+    PENDING_PAYMENT --> EXPIRED: Hết hạn + Grace period (hoàn kho)
+    PENDING_PAYMENT --> CANCELLED: Khách hủy (hoàn kho)
+    PENDING_PAYMENT --> CONFIRMED: Xác nhận đơn COD (+ OTP nếu > 20tr)
+
+    EXPIRED --> PAID: Late webhook (kho còn hàng)
+    EXPIRED --> PAID_OUT_OF_STOCK: Late webhook (kho hết hàng)
+
+    PAID --> CONFIRMED: Duyệt đóng gói xuất kho
+    PAID --> REFUNDED: Khách hủy đơn đã thanh toán
+
+    PAID_OUT_OF_STOCK --> REFUNDED: Tự động hoàn tiền
+
+    CONFIRMED --> SHIPPING: Bàn giao vận chuyển GHN
+    SHIPPING --> COMPLETED: Giao hàng thành công
+    COMPLETED --> [*]
+    REFUNDED --> [*]
+    CANCELLED --> [*]
+```
+
+### 2. Thông số Cấu hình Hệ thống (`appsettings.json`)
+
+| Tham số | Giá trị mặc định | Ý nghĩa |
+|---|---|---|
+| `ReservationTtlMinutes` | 10 phút | Thời gian giữ tồn kho của đơn hàng sau khi tạo |
+| `GracePeriodMinutes` | 5 phút | Thời gian ân hạn cho phép thanh toán quét QR phút 9:59 |
+| `MaxQtyPerOrder` | 2 chiếc | Số lượng tối đa cho mỗi dòng sản phẩm trên đơn |
+| `ExpireJobIntervalMinutes` | 1 phút | Chu kỳ tiến trình nền quét và giải phóng đơn quá hạn |
+
+### 3. Hướng dẫn Chạy Kiểm thử Tự động (Automated Tests)
+
+```bash
+# Chạy toàn bộ 128 tests (Unit, Concurrency, State Machine, Reconciliation):
+dotnet test
+
+# Chạy riêng các bài test cốt lõi theo từng Task:
+dotnet test --filter "FullyQualifiedName~Task1SchemaTests"
+dotnet test --filter "FullyQualifiedName~Task2CartTests"
+dotnet test --filter "FullyQualifiedName~Task3OrderTests"
+dotnet test --filter "FullyQualifiedName~Task4StateMachineTests"
+dotnet test --filter "FullyQualifiedName~Task5PaymentWebhookTests"
+dotnet test --filter "FullyQualifiedName~Task6ExpirationTests"
+dotnet test --filter "FullyQualifiedName~Task7RefundAndCancellationTests"
+dotnet test --filter "FullyQualifiedName~Task8PromotionAndShippingTests"
+dotnet test --filter "FullyQualifiedName~Task9And10AbuseAndReconciliationTests"
+```
