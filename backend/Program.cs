@@ -32,6 +32,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 // 3. Đăng ký toàn bộ Feature Services và FluentValidation (1 dòng duy nhất)
+builder.Services.Configure<PhoneStoreAPI.Common.Configs.CheckoutOptions>(builder.Configuration.GetSection(PhoneStoreAPI.Common.Configs.CheckoutOptions.SectionName));
 builder.Services.AddFeatureServices();
 
 // 4. Cấu hình JWT Bearer Authentication & Authorization

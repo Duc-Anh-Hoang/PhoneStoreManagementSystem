@@ -110,6 +110,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ISystemSettingService, SystemSettingService>();
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<IPaymentService, PaymentService>();
+        // Checkout & Cart Module
+        services.AddScoped<PhoneStoreAPI.Features.Checkout.Services.ICartService, PhoneStoreAPI.Features.Checkout.Services.CartService>();
         // Giai đoạn 4: Đăng ký OTP Service
         services.AddScoped<IOtpService, OtpService>();
         // Giai đoạn 6: Đăng ký Shipping Service
