@@ -117,6 +117,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<PhoneStoreAPI.Features.Checkout.PaymentProviders.IPaymentProvider, PhoneStoreAPI.Features.Checkout.PaymentProviders.MockQrPaymentProvider>();
         services.AddScoped<PhoneStoreAPI.Features.Checkout.Services.IPaymentWebhookHandler, PhoneStoreAPI.Features.Checkout.Services.PaymentWebhookHandler>();
         services.AddScoped<PhoneStoreAPI.Features.Checkout.Services.IOrderExpirationService, PhoneStoreAPI.Features.Checkout.Services.OrderExpirationService>();
+        services.AddScoped<PhoneStoreAPI.Features.Checkout.Services.IRefundAndCancellationService, PhoneStoreAPI.Features.Checkout.Services.RefundAndCancellationService>();
         services.AddHostedService<PhoneStoreAPI.Features.Checkout.Background.OrderExpirationBackgroundService>();
         // Giai đoạn 4: Đăng ký OTP Service
         services.AddScoped<IOtpService, OtpService>();

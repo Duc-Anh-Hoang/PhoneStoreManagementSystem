@@ -64,7 +64,7 @@ public class MockQrPaymentProvider : IPaymentProvider
         return Task.FromResult(new TransactionQueryResult(false, 0, providerTxnId ?? string.Empty, "NOT_FOUND"));
     }
 
-    public Task<RefundResult> RefundAsync(string providerTxnId, long amount, string reason, string idempotencyRefundId, CancellationToken cancellationToken = default)
+    public virtual Task<RefundResult> RefundAsync(string providerTxnId, long amount, string reason, string idempotencyRefundId, CancellationToken cancellationToken = default)
     {
         var refundId = "REF_" + idempotencyRefundId;
         return Task.FromResult(new RefundResult(true, refundId, null));
