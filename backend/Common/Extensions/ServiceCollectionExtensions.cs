@@ -114,6 +114,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<PhoneStoreAPI.Features.Checkout.Services.ICartService, PhoneStoreAPI.Features.Checkout.Services.CartService>();
         services.AddScoped<PhoneStoreAPI.Features.Checkout.Services.IOrderStateMachine, PhoneStoreAPI.Features.Checkout.Services.OrderStateMachine>();
         services.AddScoped<PhoneStoreAPI.Features.Checkout.Services.IOrderService, PhoneStoreAPI.Features.Checkout.Services.OrderService>();
+        services.AddScoped<PhoneStoreAPI.Features.Checkout.PaymentProviders.IPaymentProvider, PhoneStoreAPI.Features.Checkout.PaymentProviders.MockQrPaymentProvider>();
+        services.AddScoped<PhoneStoreAPI.Features.Checkout.Services.IPaymentWebhookHandler, PhoneStoreAPI.Features.Checkout.Services.PaymentWebhookHandler>();
         // Giai đoạn 4: Đăng ký OTP Service
         services.AddScoped<IOtpService, OtpService>();
         // Giai đoạn 6: Đăng ký Shipping Service

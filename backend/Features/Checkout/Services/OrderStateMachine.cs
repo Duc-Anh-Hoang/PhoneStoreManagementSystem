@@ -24,7 +24,8 @@ public class OrderStateMachine : IOrderStateMachine
 
     private static readonly Dictionary<string, HashSet<string>> AllowedTransitions = new()
     {
-        [Statuses.PendingPayment] = new() { Statuses.Paid, Statuses.Expired, Statuses.Cancelled },
+        // COD có luồng riêng vào thẳng CONFIRMED (hoặc qua OTP nếu giá trị cao) theo Task 5
+        [Statuses.PendingPayment] = new() { Statuses.Paid, Statuses.Expired, Statuses.Cancelled, Statuses.Confirmed },
         [Statuses.Expired] = new() { Statuses.Paid, Statuses.PaidOutOfStock },
         [Statuses.Paid] = new() { Statuses.Confirmed, Statuses.Refunded },
         [Statuses.Confirmed] = new() { Statuses.Shipping },
