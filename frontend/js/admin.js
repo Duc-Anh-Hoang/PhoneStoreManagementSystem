@@ -6757,6 +6757,39 @@ window.onTopLimitChange = function(val) {
   }, 120);
 };
 
+let currentDashboardPerfTab = 'top-selling';
+
+window.switchDashboardPerfTab = function(tabName) {
+  currentDashboardPerfTab = tabName;
+  const tabs = [
+    { key: 'top-selling', btn: 'tab-btn-top-selling', panel: 'dash-panel-top-selling' },
+    { key: 'slow-moving', btn: 'tab-btn-slow-moving', panel: 'dash-panel-slow-moving' },
+    { key: 'top-customers', btn: 'tab-btn-top-customers', panel: 'dash-panel-top-customers' }
+  ];
+
+  tabs.forEach(t => {
+    const btn = document.getElementById(t.btn);
+    const panel = document.getElementById(t.panel);
+    const isAct = t.key === tabName;
+    if (btn) {
+      if (isAct) {
+        btn.className = 'dash-perf-tab px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer bg-white text-slate-900 shadow-2xs font-bold';
+        btn.setAttribute('aria-selected', 'true');
+      } else {
+        btn.className = 'dash-perf-tab px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer text-slate-600 hover:text-slate-900 font-medium';
+        btn.setAttribute('aria-selected', 'false');
+      }
+    }
+    if (panel) {
+      if (isAct) {
+        panel.classList.remove('hidden');
+      } else {
+        panel.classList.add('hidden');
+      }
+    }
+  });
+};
+
 async function renderProductPerformance(queryParams) {
   const topBadge1 = document.getElementById('dash-top-selling-badge');
   const topBadge2 = document.getElementById('dash-slow-moving-badge');
@@ -6780,33 +6813,42 @@ async function renderProductPerformance(queryParams) {
       api.get('/dashboard/top-customers' + fullQuery).catch(() => [])
     ]);
 
-    // 1. Render Top Selling (Tone trung tính, thanh lịch)
+    // 1. Render Top Selling (Tone trung tính, ngang rộng rãi thoáng mắt)
     if (topContainer) {
       if (!Array.isArray(topSelling) || topSelling.length === 0) {
-        topContainer.innerHTML = '<div class="text-center py-6 text-slate-400 italic">Chưa có giao dịch bán hàng trong kỳ này</div>';
+        topContainer.innerHTML = '<div class="text-center py-8 text-slate-400 italic">Chưa có giao dịch bán hàng trong kỳ này</div>';
       } else {
         const maxSold = topSelling[0]?.soLuongBan || 1;
         topContainer.innerHTML = topSelling.map((p, idx) => {
           const rank = idx + 1;
           const pct = Math.min(100, Math.max(8, Math.round((p.soLuongBan / maxSold) * 100)));
+          const rankBg = rank === 1 ? 'bg-slate-900 text-white' : (rank === 2 ? 'bg-slate-700 text-white' : (rank === 3 ? 'bg-slate-600 text-white' : 'bg-slate-100 text-slate-700 border border-slate-200'));
 
           return `
-            <div class="p-3 bg-white rounded-xl border border-slate-200/80 shadow-2xs hover:border-slate-300 transition-all">
-              <div class="flex items-center justify-between gap-3 mb-1.5">
-                <div class="flex items-center gap-2.5 min-w-0 flex-1">
-                  <span class="w-5 h-5 rounded-md flex items-center justify-center font-mono font-bold text-[10px] flex-shrink-0 bg-slate-100 text-slate-700 border border-slate-200">#${rank}</span>
-                  <div class="min-w-0">
-                    <p class="font-semibold text-slate-800 text-xs truncate" title="${p.tenHang}">${p.tenHang}</p>
-                    <span class="text-[11px] text-slate-400 truncate">${p.tenNhom} | ${p.maHang}</span>
+            <div class="p-3.5 bg-slate-50/50 hover:bg-white rounded-xl border border-slate-200/80 shadow-2xs hover:border-slate-300 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div class="flex items-center gap-3 min-w-0 flex-1">
+                <span class="w-7 h-7 rounded-lg flex items-center justify-center font-mono font-bold text-xs flex-shrink-0 ${rankBg}">#${rank}</span>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <p class="font-bold text-slate-800 text-sm truncate" title="${p.tenHang}">${p.tenHang}</p>
+                    <span class="px-2 py-0.5 text-[10px] font-semibold rounded bg-slate-200/80 text-slate-700 font-mono">${p.maHang}</span>
+                    <span class="px-2 py-0.5 text-[10px] font-medium rounded bg-slate-100 text-slate-600">${p.tenNhom}</span>
+                  </div>
+                  <!-- Progress bar tỉ lệ bán -->
+                  <div class="w-full max-w-sm bg-slate-200/70 rounded-full h-1.5 mt-2 overflow-hidden">
+                    <div class="bg-[#2563EB] h-1.5 rounded-full transition-all duration-500" style="width: ${pct}%"></div>
                   </div>
                 </div>
-                <div class="text-right flex-shrink-0">
-                  <span class="font-mono font-bold text-slate-900 text-xs">${Format.currency(p.doanhThu)}</span>
-                  <p class="text-[11px] text-slate-500">Đã bán: <b class="text-slate-800">${p.soLuongBan}</b> | Kho: <b class="text-slate-700">${p.tonKhoHienTai}</b></p>
-                </div>
               </div>
-              <div class="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
-                <div class="bg-[#2563EB] h-1.5 rounded-full transition-all duration-500" style="width: ${pct}%"></div>
+              <div class="flex items-center gap-6 self-end sm:self-center flex-shrink-0">
+                <div class="text-right">
+                  <span class="font-mono font-bold text-slate-900 text-sm">${Format.currency(p.doanhThu)}</span>
+                  <p class="text-[11px] text-slate-500 mt-0.5">Doanh thu bán</p>
+                </div>
+                <div class="text-right border-l border-slate-200 pl-4 min-w-[90px]">
+                  <span class="font-bold text-slate-800 text-xs">Đã bán: <b class="text-blue-600 font-mono text-sm">${p.soLuongBan}</b></span>
+                  <p class="text-[11px] text-slate-500 mt-0.5">Tồn kho: <b class="text-slate-700 font-mono">${p.tonKhoHienTai}</b></p>
+                </div>
               </div>
             </div>
           `;
@@ -6814,36 +6856,36 @@ async function renderProductPerformance(queryParams) {
       }
     }
 
-    // 2. Render Slow Moving (Tone trung tính, nút xám nhã nhặn)
+    // 2. Render Slow Moving (Ngang rộng rãi, nút kích cầu tiện lợi)
     if (slowContainer) {
       if (!Array.isArray(slowMoving) || slowMoving.length === 0) {
-        slowContainer.innerHTML = '<div class="text-center py-6 text-slate-400 italic">Không có mặt hàng tồn đọng cần cảnh báo</div>';
+        slowContainer.innerHTML = '<div class="text-center py-8 text-slate-400 italic">Không có mặt hàng tồn đọng cần cảnh báo</div>';
       } else {
         slowContainer.innerHTML = slowMoving.map((p, idx) => {
           const rank = idx + 1;
-          const isHighStock = p.tonKhoHienTai > 0;
           return `
-            <div class="p-3 bg-white rounded-xl border border-slate-200/80 shadow-2xs hover:border-slate-300 transition-all flex items-center justify-between gap-3">
-              <div class="flex items-center gap-2.5 min-w-0 flex-1">
-                <span class="w-5 h-5 rounded-md bg-slate-100 text-slate-600 border border-slate-200 flex items-center justify-center font-mono font-bold text-[10px] flex-shrink-0">${rank}</span>
-                <div class="min-w-0">
-                  <p class="font-semibold text-slate-800 text-xs truncate" title="${p.tenHang}">${p.tenHang}</p>
-                  <div class="flex items-center gap-1.5 text-[11px] text-slate-400">
-                    <span>${p.tenNhom}</span>
-                    <span>•</span>
-                    <span class="font-mono text-slate-600">${Format.currency(p.donGia)}</span>
+            <div class="p-3.5 bg-slate-50/50 hover:bg-white rounded-xl border border-slate-200/80 shadow-2xs hover:border-slate-300 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div class="flex items-center gap-3 min-w-0 flex-1">
+                <span class="w-7 h-7 rounded-lg bg-slate-100 text-slate-600 border border-slate-200 flex items-center justify-center font-mono font-bold text-xs flex-shrink-0">${rank}</span>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <p class="font-bold text-slate-800 text-sm truncate" title="${p.tenHang}">${p.tenHang}</p>
+                    <span class="px-2 py-0.5 text-[10px] font-semibold rounded bg-slate-200/80 text-slate-700 font-mono">${p.maHang}</span>
+                    <span class="px-2 py-0.5 text-[10px] font-medium rounded bg-slate-100 text-slate-600">${p.tenNhom}</span>
                   </div>
+                  <p class="text-[11px] text-slate-500 mt-1">Đơn giá niêm yết: <span class="font-mono font-bold text-slate-700">${Format.currency(p.donGia)}</span></p>
                 </div>
               </div>
-              <div class="flex items-center gap-2.5 flex-shrink-0">
+              <div class="flex items-center gap-4 self-end sm:self-center flex-shrink-0">
                 <div class="text-right">
-                  <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+                  <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-slate-100 text-slate-800 border border-slate-200 font-mono">
                     Tồn: ${p.tonKhoHienTai}
                   </span>
-                  <p class="text-[10px] text-slate-400 mt-0.5">Bán: ${p.soLuongBan}</p>
+                  <p class="text-[11px] text-slate-400 mt-1">Đã bán: <b class="text-slate-600 font-mono">${p.soLuongBan}</b></p>
                 </div>
-                <button type="button" onclick="renderSection('view-khuyenmai')" class="px-2.5 py-1 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 font-medium text-xs rounded-lg shadow-2xs transition-colors cursor-pointer" title="Tạo chương trình khuyến mãi kích cầu">
-                  Tạo KM
+                <button type="button" onclick="renderSection('view-khuyenmai')" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 font-medium text-xs rounded-lg shadow-2xs transition-colors cursor-pointer" title="Tạo chương trình khuyến mãi kích cầu">
+                  <i class="fa-solid fa-tag text-[11px] text-slate-500"></i>
+                  <span>Tạo Khuyến Mãi</span>
                 </button>
               </div>
             </div>
@@ -6852,10 +6894,10 @@ async function renderProductPerformance(queryParams) {
       }
     }
 
-    // 3. Render Top Customers (Người dùng mua nhiều nhất - Tone trung tính, thanh lịch)
+    // 3. Render Top Customers (Khách hàng mua nhiều nhất - Sang trọng, rõ ràng)
     if (custContainer) {
       if (!Array.isArray(topCustomers) || topCustomers.length === 0) {
-        custContainer.innerHTML = '<div class="text-center py-6 text-slate-400 italic">Chưa có dữ liệu giao dịch khách hàng</div>';
+        custContainer.innerHTML = '<div class="text-center py-8 text-slate-400 italic">Chưa có dữ liệu giao dịch khách hàng</div>';
       } else {
         custContainer.innerHTML = topCustomers.map((c, idx) => {
           const rank = idx + 1;
@@ -6864,28 +6906,36 @@ async function renderProductPerformance(queryParams) {
           else if (c.hangThanhVien === 'Vàng') tierBadge = 'bg-amber-100 text-amber-900 border border-amber-200';
           else if (c.hangThanhVien === 'Bạc') tierBadge = 'bg-slate-200 text-slate-700';
 
+          const rankBg = rank === 1 ? 'bg-slate-900 text-white' : (rank === 2 ? 'bg-slate-700 text-white' : (rank === 3 ? 'bg-slate-600 text-white' : 'bg-slate-100 text-slate-700 border border-slate-200'));
+
           return `
-            <div class="p-3 bg-white rounded-xl border border-slate-200/80 shadow-2xs hover:border-slate-300 transition-all flex items-center justify-between gap-3">
-              <div class="flex items-center gap-2.5 min-w-0 flex-1">
-                <span class="w-5 h-5 rounded-md bg-slate-100 text-slate-700 border border-slate-200 flex items-center justify-center font-mono font-bold text-[10px] flex-shrink-0">#${rank}</span>
-                <div class="min-w-0">
-                  <div class="flex items-center gap-1.5 flex-wrap">
-                    <p class="font-semibold text-slate-800 text-xs truncate max-w-[130px]" title="${c.hoTen || c.maKH}">${c.hoTen || c.maKH}</p>
-                    <span class="px-1.5 py-0.2 text-[9px] font-bold rounded ${tierBadge}">${c.hangThanhVien}</span>
+            <div class="p-3.5 bg-slate-50/50 hover:bg-white rounded-xl border border-slate-200/80 shadow-2xs hover:border-slate-300 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div class="flex items-center gap-3 min-w-0 flex-1">
+                <span class="w-7 h-7 rounded-lg flex items-center justify-center font-mono font-bold text-xs flex-shrink-0 ${rankBg}">#${rank}</span>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <p class="font-bold text-slate-800 text-sm truncate" title="${c.hoTen || c.maKH}">${c.hoTen || c.maKH}</p>
+                    <span class="px-2 py-0.5 text-[10px] font-bold rounded ${tierBadge}">${c.hangThanhVien}</span>
+                    <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-slate-100 text-slate-600">${c.maKH}</span>
                   </div>
-                  <div class="flex items-center gap-1.5 text-[11px] text-slate-400 mt-0.5">
-                    <span class="font-mono text-slate-500">${c.sdt || c.maKH}</span>
+                  <div class="flex items-center gap-3 text-[11px] text-slate-500 mt-1 flex-wrap">
+                    <span>SĐT: <b class="font-mono text-slate-700">${c.sdt || '-'}</b></span>
                     <span>•</span>
-                    <span><b class="text-slate-700 font-medium">${c.soDonHang}</b> đơn</span>
+                    <span class="truncate max-w-[240px]" title="${c.email || ''}">Email: ${c.email || '-'}</span>
                   </div>
                 </div>
               </div>
-              <div class="flex items-center gap-2 flex-shrink-0">
+              <div class="flex items-center gap-6 self-end sm:self-center flex-shrink-0">
                 <div class="text-right">
-                  <span class="font-mono font-bold text-slate-900 text-xs">${Format.currency(c.tongChiTieu)}</span>
-                  <p class="text-[10px] text-slate-400 mt-0.5">Tổng chi tiêu</p>
+                  <span class="font-mono font-bold text-slate-900 text-sm">${Format.currency(c.tongChiTieu)}</span>
+                  <p class="text-[11px] text-slate-500 mt-0.5">Tổng chi tiêu</p>
                 </div>
-                <button type="button" onclick="renderSection('view-khachhang')" class="w-7 h-7 flex items-center justify-center bg-white hover:bg-slate-50 text-slate-600 border border-slate-200 text-xs rounded-lg shadow-2xs transition-colors cursor-pointer" title="Xem hồ sơ khách hàng">
+                <div class="text-right border-l border-slate-200 pl-4 min-w-[90px]">
+                  <span class="font-bold text-slate-800 text-xs"><b class="text-blue-600 font-mono text-sm">${c.soDonHang}</b> đơn</span>
+                  <p class="text-[11px] text-slate-500 mt-0.5">Đã hoàn tất</p>
+                </div>
+                <button type="button" onclick="renderSection('view-khachhang')" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs rounded-lg shadow-2xs transition-colors cursor-pointer" title="Xem hồ sơ khách hàng">
+                  <span>Chi tiết</span>
                   <i class="fa-solid fa-arrow-right text-[10px]"></i>
                 </button>
               </div>
