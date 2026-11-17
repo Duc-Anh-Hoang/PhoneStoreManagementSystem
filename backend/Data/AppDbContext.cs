@@ -50,6 +50,7 @@ public class AppDbContext : DbContext
     public DbSet<PaymentRecord> Payments => Set<PaymentRecord>();
     public DbSet<OrderStatusHistory> OrderStatusHistories => Set<OrderStatusHistory>();
     public DbSet<RefundRequest> RefundRequests => Set<RefundRequest>();
+    public DbSet<Voucher> Vouchers => Set<Voucher>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -96,6 +97,11 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<RefundRequest>(entity =>
         {
             entity.HasIndex(r => r.ProviderRefundId).IsUnique();
+        });
+
+        modelBuilder.Entity<Voucher>(entity =>
+        {
+            entity.HasIndex(v => v.Code).IsUnique();
         });
 
         // Apply any configuration classes from Data/Configurations

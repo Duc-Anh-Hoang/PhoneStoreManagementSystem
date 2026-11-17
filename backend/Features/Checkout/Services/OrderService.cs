@@ -134,8 +134,57 @@ public class OrderService : IOrderService
                 }
             }
 
-            // 3. Tính tổng tiền ở server
-            long totalAmount = variantSnapshots.Sum(vs => vs.Variant.Price * vs.Qty);
+            // 3. Tính tổng tiền và voucher ở server
+            long subtotal = variantSnapshots.Sum(vs => vs.Variant.Price * vs.Qty);
+            long discountAmount = 0;
+            string? appliedVoucher = null;
+
+            if (!string.IsNullOrWhiteSpace(request.VoucherCode))
+            {
+                var cleanCode = request.VoucherCode.Trim().ToUpperInvariant();
+                if (isRelational)
+                {
+                    var vAffected = await _context.Database.ExecuteSqlInterpolatedAsync(
+                        $"UPDATE vouchers SET used_count = used_count + 1, updated_at = {DateTime.UtcNow} WHERE code = {cleanCode} AND used_count < max_uses AND expires_at > {DateTime.UtcNow}",
+                        cancellationToken);
+
+                    if (vAffected == 0)
+                    {
+                        throw new InvalidOperationException($"Voucher '{cleanCode}' không hợp lệ, đã hết lượt sử dụng hoặc đã quá hạn.");
+                    }
+
+                    var vDb = await _context.Vouchers.AsNoTracking().FirstOrDefaultAsync(v => v.Code == cleanCode, cancellationToken);
+                    if (vDb != null)
+                    {
+                        if (subtotal < vDb.MinOrderTotal)
+                        {
+                            throw new InvalidOperationException($"Đơn hàng chưa đạt giá trị tối thiểu {vDb.MinOrderTotal:N0} VND để áp dụng voucher.");
+                        }
+                        discountAmount = Math.Min(vDb.DiscountAmount, subtotal);
+                        appliedVoucher = cleanCode;
+                    }
+                }
+                else
+                {
+                    var voucher = await _context.Vouchers.FirstOrDefaultAsync(v => v.Code == cleanCode, cancellationToken);
+                    if (voucher == null || voucher.UsedCount >= voucher.MaxUses || voucher.ExpiresAt < DateTime.UtcNow)
+                    {
+                        throw new InvalidOperationException($"Voucher '{cleanCode}' không hợp lệ, đã hết lượt sử dụng hoặc đã quá hạn.");
+                    }
+                    if (subtotal < voucher.MinOrderTotal)
+                    {
+                        throw new InvalidOperationException($"Đơn hàng chưa đạt giá trị tối thiểu {voucher.MinOrderTotal:N0} VND để áp dụng voucher.");
+                    }
+                    voucher.UsedCount++;
+                    voucher.UpdatedAt = DateTime.UtcNow;
+                    discountAmount = Math.Min(voucher.DiscountAmount, subtotal);
+                    appliedVoucher = cleanCode;
+                }
+            }
+
+            // Phí vận chuyển: Miễn phí nếu >= 5.000.000 VND, ngược lại 30.000 VND
+            long shippingFee = subtotal >= 5000000 ? 0 : 30000;
+            long totalAmount = Math.Max(0, subtotal - discountAmount + shippingFee);
 
             // 4. Tạo Order và OrderItems
             var orderCode = "ORD" + DateTime.UtcNow.ToString("yyMMdd") + Random.Shared.Next(100000, 999999);
@@ -152,6 +201,9 @@ public class OrderService : IOrderService
                 RecipientPhone = request.RecipientPhone,
                 ShippingAddress = request.ShippingAddress,
                 PaymentMethod = request.PaymentMethod,
+                VoucherCode = appliedVoucher,
+                DiscountAmount = discountAmount,
+                ShippingFee = shippingFee,
                 UserId = userId,
                 CreatedAt = now,
                 UpdatedAt = now
@@ -263,6 +315,9 @@ public class OrderService : IOrderService
             RecipientPhone = order.RecipientPhone,
             ShippingAddress = order.ShippingAddress,
             PaymentMethod = order.PaymentMethod,
+            VoucherCode = order.VoucherCode,
+            DiscountAmount = order.DiscountAmount,
+            ShippingFee = order.ShippingFee,
             CreatedAt = order.CreatedAt,
             Items = order.Items.Select(i => new OrderItemDTO
             {

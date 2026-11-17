@@ -74,6 +74,22 @@ public class RefundAndCancellationService : IRefundAndCancellationService
                     }
                 }
 
+                // Hoàn lại lượt dùng voucher (nếu có)
+                if (!string.IsNullOrWhiteSpace(order.VoucherCode))
+                {
+                    if (isRelational)
+                    {
+                        await _context.Database.ExecuteSqlInterpolatedAsync(
+                            $"UPDATE vouchers SET used_count = GREATEST(0, used_count - 1), updated_at = {DateTime.UtcNow} WHERE code = {order.VoucherCode}",
+                            cancellationToken);
+                    }
+                    else
+                    {
+                        var voucher = await _context.Vouchers.FirstOrDefaultAsync(v => v.Code == order.VoucherCode, cancellationToken);
+                        if (voucher != null && voucher.UsedCount > 0) voucher.UsedCount--;
+                    }
+                }
+
                 await _context.SaveChangesAsync(cancellationToken);
                 if (tx != null) await tx.CommitAsync(cancellationToken);
 

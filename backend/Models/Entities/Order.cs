@@ -44,6 +44,16 @@ public class Order
     [MaxLength(30)]
     public string PaymentMethod { get; set; } = "QR_PAYMENT";
 
+    [Column("voucher_code")]
+    [MaxLength(50)]
+    public string? VoucherCode { get; set; }
+
+    [Column("discount_amount")]
+    public long DiscountAmount { get; set; } = 0;
+
+    [Column("shipping_fee")]
+    public long ShippingFee { get; set; } = 0;
+
     [Column("user_id")]
     [MaxLength(50)]
     public string? UserId { get; set; }

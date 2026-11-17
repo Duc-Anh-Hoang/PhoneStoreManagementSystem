@@ -12,6 +12,7 @@ public class CreateOrderRequest
     public string RecipientPhone { get; set; } = string.Empty;
     public string ShippingAddress { get; set; } = string.Empty;
     public string PaymentMethod { get; set; } = "QR_PAYMENT"; // QR_PAYMENT, COD
+    public string? VoucherCode { get; set; }
     public List<CreateOrderItemRequest> Items { get; set; } = new();
 }
 
@@ -38,6 +39,9 @@ public class OrderDTO
     public string RecipientPhone { get; set; } = string.Empty;
     public string ShippingAddress { get; set; } = string.Empty;
     public string PaymentMethod { get; set; } = string.Empty;
+    public string? VoucherCode { get; set; }
+    public long DiscountAmount { get; set; }
+    public long ShippingFee { get; set; }
     public DateTime CreatedAt { get; set; }
     public List<OrderItemDTO> Items { get; set; } = new();
 }
