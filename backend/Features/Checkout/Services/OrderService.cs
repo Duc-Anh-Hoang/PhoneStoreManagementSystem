@@ -11,12 +11,14 @@ public class OrderService : IOrderService
 {
     private readonly AppDbContext _context;
     private readonly CheckoutOptions _options;
+    private readonly Microsoft.Extensions.Logging.ILogger<OrderService>? _logger;
     private static readonly SemaphoreSlim _inMemoryInventoryLock = new(1, 1);
 
-    public OrderService(AppDbContext context, IOptions<CheckoutOptions> options)
+    public OrderService(AppDbContext context, IOptions<CheckoutOptions> options, Microsoft.Extensions.Logging.ILogger<OrderService>? logger = null)
     {
         _context = context;
         _options = options.Value;
+        _logger = logger;
     }
 
     public async Task<OrderDTO> CreateOrderAsync(
@@ -45,6 +47,17 @@ public class OrderService : IOrderService
             {
                 throw new InvalidOperationException($"Số lượng đặt cho variant {item.VariantId} vượt quá giới hạn tối đa ({_options.MaxQtyPerOrder} chiếc).");
             }
+        }
+
+        // Kiểm tra cảnh báo lạm dụng (Task 9): Nhiều đơn bất thường từ cùng SĐT / địa chỉ
+        var oneHourAgo = DateTime.UtcNow.AddHours(-1);
+        var recentOrdersCount = await _context.Orders
+            .CountAsync(o => (o.RecipientPhone == request.RecipientPhone || o.ShippingAddress == request.ShippingAddress) && o.CreatedAt >= oneHourAgo, cancellationToken);
+
+        if (recentOrdersCount >= 3)
+        {
+            _logger?.LogWarning("[ABUSE_ALERT] Phát hiện SĐT '{Phone}' hoặc địa chỉ '{Address}' đặt bất thường ({Count} đơn/giờ)!",
+                request.RecipientPhone, request.ShippingAddress, recentOrdersCount + 1);
         }
 
         // 1. Kiểm tra IdempotencyKey trước

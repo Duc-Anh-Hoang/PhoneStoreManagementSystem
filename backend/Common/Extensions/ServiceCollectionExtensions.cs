@@ -118,6 +118,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<PhoneStoreAPI.Features.Checkout.Services.IPaymentWebhookHandler, PhoneStoreAPI.Features.Checkout.Services.PaymentWebhookHandler>();
         services.AddScoped<PhoneStoreAPI.Features.Checkout.Services.IOrderExpirationService, PhoneStoreAPI.Features.Checkout.Services.OrderExpirationService>();
         services.AddScoped<PhoneStoreAPI.Features.Checkout.Services.IRefundAndCancellationService, PhoneStoreAPI.Features.Checkout.Services.RefundAndCancellationService>();
+        services.AddScoped<PhoneStoreAPI.Features.Checkout.Services.IReconciliationService, PhoneStoreAPI.Features.Checkout.Services.ReconciliationService>();
         services.AddHostedService<PhoneStoreAPI.Features.Checkout.Background.OrderExpirationBackgroundService>();
         // Giai đoạn 4: Đăng ký OTP Service
         services.AddScoped<IOtpService, OtpService>();
@@ -208,6 +209,20 @@ public static class ServiceCollectionExtensions
                 return RateLimitPartition.GetFixedWindowLimiter(clientIp, _ => new FixedWindowRateLimiterOptions
                 {
                     PermitLimit = 10,
+                    Window = TimeSpan.FromMinutes(1),
+                    QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                    QueueLimit = 0
+                });
+            });
+
+            // Checkout & Cart policy (Task 9): 60 req/phút/IP
+            options.AddPolicy("checkout", httpContext =>
+            {
+                var forwarded = httpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault();
+                var clientIp = !string.IsNullOrWhiteSpace(forwarded) ? forwarded.Split(",")[0].Trim() : (httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown");
+                return RateLimitPartition.GetFixedWindowLimiter(clientIp, _ => new FixedWindowRateLimiterOptions
+                {
+                    PermitLimit = 60,
                     Window = TimeSpan.FromMinutes(1),
                     QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
                     QueueLimit = 0

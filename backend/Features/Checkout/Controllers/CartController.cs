@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using PhoneStoreAPI.Common.Services;
 using PhoneStoreAPI.Features.Checkout.DTOs;
 using PhoneStoreAPI.Features.Checkout.Services;
@@ -7,6 +8,7 @@ namespace PhoneStoreAPI.Features.Checkout.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[EnableRateLimiting("checkout")]
 public class CartController : ControllerBase
 {
     private readonly ICartService _cartService;
