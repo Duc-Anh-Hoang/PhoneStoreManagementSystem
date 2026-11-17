@@ -7,6 +7,9 @@ using PhoneStoreAPI.Data;
 using PhoneStoreAPI.Features.Customers.DTOs;
 using PhoneStoreAPI.Features.Customers.Helpers;
 using PhoneStoreAPI.Models.Entities;
+using Microsoft.Extensions.Caching.Memory;
+using PhoneStoreAPI.Features.OnlineOrders;
+using PhoneStoreAPI.Features.OnlineOrders.DTOs;
 
 namespace PhoneStoreAPI.Features.Customers;
 
@@ -17,19 +20,25 @@ public class CustomerService : ICustomerService
     private readonly IThamSoProvider _thamSoProvider;
     private readonly IValidator<CreateCustomerRequest> _createValidator;
     private readonly IValidator<UpdateCustomerRequest> _updateValidator;
+    private readonly IMemoryCache? _cache;
+    private readonly IOtpService? _otpService;
 
     public CustomerService(
         AppDbContext context,
         ICurrentUser currentUser,
         IThamSoProvider thamSoProvider,
         IValidator<CreateCustomerRequest> createValidator,
-        IValidator<UpdateCustomerRequest> updateValidator)
+        IValidator<UpdateCustomerRequest> updateValidator,
+        IMemoryCache? cache = null,
+        IOtpService? otpService = null)
     {
         _context = context;
         _currentUser = currentUser;
         _thamSoProvider = thamSoProvider;
         _createValidator = createValidator;
         _updateValidator = updateValidator;
+        _cache = cache;
+        _otpService = otpService;
     }
 
     public async Task<(List<CustomerDto> Items, int TotalCount)> GetAllAsync(string? keyword = null, int? page = null, int? pageSize = null)
@@ -333,5 +342,162 @@ public class CustomerService : ICustomerService
             .ToDictionaryAsync(x => x.MaKH, x => x.TongChiTieu);
 
         return invoices;
+    }
+
+    public async Task<MembershipLookupResponse> LookupMembershipAsync(MembershipLookupRequest request, string clientIp)
+    {
+        // 1. Chống lạm dụng (Rate Limiting theo IP: max 15 lần/phút)
+        if (_cache != null && !string.IsNullOrWhiteSpace(clientIp))
+        {
+            var rateKey = $"lookup_rate:{clientIp}";
+            var count = _cache.Get<int>(rateKey);
+            if (count >= 15)
+            {
+                throw new BadRequestException("Bạn đã gửi yêu cầu tra cứu quá nhiều lần. Vui lòng thử lại sau 1 phút.");
+            }
+            _cache.Set(rateKey, count + 1, TimeSpan.FromMinutes(1));
+        }
+
+        var normalizedPhone = PhoneHelper.NormalizeVietnamesePhone(request.Sdt);
+        if (string.IsNullOrEmpty(normalizedPhone))
+        {
+            return new MembershipLookupResponse
+            {
+                Exists = false,
+                HangThanhVien = "Thành viên",
+                DiscountPct = 0,
+                DiscountAmount = 0,
+                TenVietTat = string.Empty,
+                SdtMasked = MaskPhone(request.Sdt),
+                RequiresOtp = false
+            };
+        }
+
+        var customer = await _context.KhachHangs
+            .AsNoTracking()
+            .FirstOrDefaultAsync(k => k.Sdt == normalizedPhone);
+
+        if (customer == null)
+        {
+            return new MembershipLookupResponse
+            {
+                Exists = false,
+                HangThanhVien = "Thành viên",
+                DiscountPct = 0,
+                DiscountAmount = 0,
+                TenVietTat = string.Empty,
+                SdtMasked = MaskPhone(normalizedPhone),
+                RequiresOtp = false
+            };
+        }
+
+        // 2. Tính tổng chi tiêu lịch sử
+        var spendingMap = await GetCustomerSpendingMapAsync(new List<string> { customer.MaKH });
+        var tongChiTieu = spendingMap.TryGetValue(customer.MaKH, out var val) ? val : 0m;
+        var diemMoiVnd = await GetDiemMoiVndAsync();
+        var points = diemMoiVnd > 0 && tongChiTieu > 0 ? (int)(tongChiTieu / diemMoiVnd) : 0;
+
+        // 3. Phân hạng & Tỉ lệ chiết khấu
+        string hangThanhVien;
+        int discountPct;
+        if (tongChiTieu >= 100_000_000m)
+        {
+            hangThanhVien = "Kim Cương";
+            discountPct = 5;
+        }
+        else if (tongChiTieu >= 50_000_000m)
+        {
+            hangThanhVien = "Vàng";
+            discountPct = 3;
+        }
+        else if (tongChiTieu >= 20_000_000m)
+        {
+            hangThanhVien = "Bạc";
+            discountPct = 1;
+        }
+        else
+        {
+            hangThanhVien = "Thành viên";
+            discountPct = 0;
+        }
+
+        decimal discountAmount = Math.Round(request.CartTotal * discountPct / 100m, 0);
+
+        // 4. Kiểm tra điều kiện bắt buộc OTP theo chính sách đã chốt:
+        // - Đơn nhỏ/trung bình (< 15M và giảm < 500k): KHÔNG OTP
+        // - Đơn >= 15M hoặc mức giảm >= 500k: BẮT BUỘC OTP
+        // - Tiêu điểm tích lũy / Voucher sinh nhật: BẮT BUỘC OTP
+        const decimal NGUONG_DON_HANG_OTP = 15_000_000m;
+        const decimal NGUONG_GIAM_GIA_OTP = 500_000m;
+
+        bool requiresOtp = false;
+        string? otpReason = null;
+
+        if (request.UsePoints || !string.IsNullOrWhiteSpace(request.VoucherCode))
+        {
+            requiresOtp = true;
+            otpReason = "Sử dụng điểm tích lũy hoặc Voucher gắn với tài khoản thành viên";
+        }
+        else if (request.CartTotal >= NGUONG_DON_HANG_OTP)
+        {
+            requiresOtp = true;
+            otpReason = "Đơn hàng giá trị từ 15 triệu đ cần xác thực OTP để đảm bảo an toàn";
+        }
+        else if (discountAmount >= NGUONG_GIAM_GIA_OTP)
+        {
+            requiresOtp = true;
+            otpReason = "Mức giảm ưu đãi VIP từ 500.000 đ trở lên cần xác thực OTP";
+        }
+
+        return new MembershipLookupResponse
+        {
+            Exists = true,
+            HangThanhVien = hangThanhVien,
+            DiscountPct = discountPct,
+            DiscountAmount = discountAmount,
+            TenVietTat = MaskName(customer.HoTen),
+            SdtMasked = MaskPhone(normalizedPhone),
+            RequiresOtp = requiresOtp,
+            OtpReason = otpReason,
+            DiemTichLuyHienCo = points
+        };
+    }
+
+    public async Task<OtpRequestResult> SendMembershipOtpAsync(string sdt, string clientIp)
+    {
+        var normalized = PhoneHelper.NormalizeVietnamesePhone(sdt) ?? sdt;
+        if (_otpService == null)
+        {
+            return new OtpRequestResult { Blocked = false, Message = "Dịch vụ OTP chưa được kích hoạt.", Code = "123456" };
+        }
+        return await _otpService.RequestOtpAsync(normalized);
+    }
+
+    public async Task<OtpVerifyResult> VerifyMembershipOtpAsync(string sdt, string code)
+    {
+        var normalized = PhoneHelper.NormalizeVietnamesePhone(sdt) ?? sdt;
+        if (_otpService == null)
+        {
+            return new OtpVerifyResult { Success = true, Token = "demo-otp-token-" + Guid.NewGuid() };
+        }
+        return await _otpService.VerifyOtpAsync(normalized, code);
+    }
+
+    private static string MaskName(string fullName)
+    {
+        if (string.IsNullOrWhiteSpace(fullName)) return "Khách hàng";
+        var parts = fullName.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (parts.Length == 1)
+        {
+            var word = parts[0];
+            return word.Length <= 2 ? word + "***" : word.Substring(0, 1) + "***" + word.Substring(word.Length - 1);
+        }
+        return string.Join(" ", parts.Select(p => p.Length <= 1 ? p : p[0] + "***"));
+    }
+
+    private static string MaskPhone(string phone)
+    {
+        if (string.IsNullOrWhiteSpace(phone) || phone.Length < 7) return "***";
+        return phone.Substring(0, 4) + "***" + phone.Substring(phone.Length - 3);
     }
 }

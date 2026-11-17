@@ -10,6 +10,9 @@ public class CreateOrderRequest
     public string? MaKH { get; set; }
     public string? GhiChu { get; set; }
     public string? Email { get; set; }
+    public string? SdtThanhVien { get; set; }
+    public string? OtpToken { get; set; }
+    public bool XacNhanCskh { get; set; } = false;
     public List<OrderItemRequest> Items { get; set; } = new();
 }
 

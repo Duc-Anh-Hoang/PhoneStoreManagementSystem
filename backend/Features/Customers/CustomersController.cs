@@ -64,4 +64,34 @@ public class CustomersController : ControllerBase
         await _customerService.DeleteAsync(id);
         return Ok(new { message = $"Đã xóa khách hàng {id} thành công." });
     }
+
+    [HttpPost("lookup-membership")]
+    [AllowAnonymous]
+    public async Task<IActionResult> LookupMembership([FromBody] MembershipLookupRequest request)
+    {
+        var clientIp = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+        var result = await _customerService.LookupMembershipAsync(request, clientIp);
+        return Ok(result);
+    }
+
+    [HttpPost("membership-otp/send")]
+    [AllowAnonymous]
+    public async Task<IActionResult> SendMembershipOtp([FromBody] SendVipOtpRequest request)
+    {
+        var clientIp = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+        var result = await _customerService.SendMembershipOtpAsync(request.Sdt, clientIp);
+        return Ok(result);
+    }
+
+    [HttpPost("membership-otp/verify")]
+    [AllowAnonymous]
+    public async Task<IActionResult> VerifyMembershipOtp([FromBody] VerifyVipOtpRequest request)
+    {
+        var result = await _customerService.VerifyMembershipOtpAsync(request.Sdt, request.Code);
+        if (!result.Success)
+        {
+            return BadRequest(new { message = result.Error ?? "Mã OTP không chính xác hoặc đã hết hạn." });
+        }
+        return Ok(result);
+    }
 }

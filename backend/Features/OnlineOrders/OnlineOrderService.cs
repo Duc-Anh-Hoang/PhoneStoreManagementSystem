@@ -129,7 +129,96 @@ public class OnlineOrderService : IOnlineOrderService
                 });
             }
 
-            // 4. Táº¡o DonHangOnline
+            // 3b. Tính toán và xác minh ưu đãi VIP độc lập từ Backend theo chính sách chốt
+            var sdtMember = !string.IsNullOrWhiteSpace(request.SdtThanhVien)
+                ? (PhoneHelper.NormalizeVietnamesePhone(request.SdtThanhVien) ?? request.SdtThanhVien.Trim())
+                : sdtNorm;
+
+            var memberCustomer = await _context.KhachHangs.AsNoTracking().FirstOrDefaultAsync(k => k.Sdt == sdtMember);
+            decimal giamGiaVip = 0m;
+            string? ghiChuVip = null;
+
+            if (memberCustomer != null)
+            {
+                var invoicesSum = await _context.HoaDons.AsNoTracking()
+                    .Where(h => h.MaKH == memberCustomer.MaKH)
+                    .SumAsync(h => (decimal?)(h.TongTien - h.TienGiamGia)) ?? 0m;
+                var onlineSum = await _context.DonHangOnlines.AsNoTracking()
+                    .Where(d => d.MaKH == memberCustomer.MaKH && d.SoHD == null && d.TrangThai != "da_huy")
+                    .SumAsync(d => (decimal?)d.TongTien) ?? 0m;
+
+                var totalSpending = invoicesSum + onlineSum;
+                int vipPct = totalSpending switch
+                {
+                    >= 100_000_000m => 5,
+                    >= 50_000_000m => 3,
+                    >= 20_000_000m => 1,
+                    _ => 0
+                };
+
+                if (vipPct > 0)
+                {
+                    var calculatedDiscount = Math.Round(tongTien * vipPct / 100m, 0);
+                    const decimal NGUONG_DON_OTP = 15_000_000m;
+                    const decimal NGUONG_GIAM_OTP = 500_000m;
+
+                    bool needOtp = tongTien >= NGUONG_DON_OTP || calculatedDiscount >= NGUONG_GIAM_OTP;
+
+                    if (needOtp)
+                    {
+                        if (request.XacNhanCskh)
+                        {
+                            // Đơn mua hộ / Thành viên không tiện nhận OTP: giữ ưu đãi nhưng đánh dấu cần CSKH xác nhận
+                            giamGiaVip = calculatedDiscount;
+                            ghiChuVip = $"[Ưu đãi VIP {vipPct}%: -{giamGiaVip:N0}đ (SĐT thành viên: {sdtMember}). Cần CSKH gọi xác nhận thành viên trước khi xuất kho]";
+                        }
+                        else
+                        {
+                            // Kiểm tra OTP Token
+                            bool otpValid = false;
+                            if (!string.IsNullOrWhiteSpace(request.OtpToken))
+                            {
+                                try
+                                {
+                                    var tokenHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
+                                    if (tokenHandler.CanReadToken(request.OtpToken))
+                                    {
+                                        var jwt = tokenHandler.ReadJwtToken(request.OtpToken);
+                                        var claimPhone = jwt.Claims.FirstOrDefault(c => c.Type == "phone" || c.Type == "sub")?.Value;
+                                        if (claimPhone == sdtMember && jwt.ValidTo > DateTime.UtcNow)
+                                        {
+                                            otpValid = true;
+                                        }
+                                    }
+                                }
+                                catch {}
+                            }
+
+                            if (otpValid)
+                            {
+                                giamGiaVip = calculatedDiscount;
+                                ghiChuVip = $"[Ưu đãi VIP {vipPct}%: -{giamGiaVip:N0}đ (Đã xác thực OTP SĐT {sdtMember})]";
+                            }
+                            else
+                            {
+                                // Không có OTP hợp lệ -> Không áp dụng giảm giá VIP
+                                giamGiaVip = 0m;
+                                ghiChuVip = $"[Từ chối ưu đãi VIP: Đơn hàng vượt ngưỡng nhưng chưa có mã OTP xác thực]";
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // Đơn nhỏ / trung bình: tự áp giảm % ngay không cần OTP
+                        giamGiaVip = calculatedDiscount;
+                        ghiChuVip = $"[Ưu đãi VIP {vipPct}%: -{giamGiaVip:N0}đ (Áp dụng tự động)]";
+                    }
+
+                    tongTien = Math.Max(0m, tongTien - giamGiaVip);
+                }
+            }
+
+            // 4. Tạo DonHangOnline
             var reqMaDH = !string.IsNullOrWhiteSpace(request.MaDH) ? request.MaDH.Trim().Substring(0, Math.Min(15, request.MaDH.Trim().Length)) : null;
             // Giai đoạn 1: Dùng mã ngẫu nhiên an toàn thay cho sequence tuần tự
             var maDH = (!string.IsNullOrWhiteSpace(reqMaDH) && !await _context.DonHangOnlines.AnyAsync(d => d.MaDH == reqMaDH))
@@ -156,6 +245,12 @@ public class OnlineOrderService : IOnlineOrderService
             var decision = _decisionEngine != null
                 ? await _decisionEngine.DecideInitialStatusAsync(decisionContext)
                 : new OrderDecisionResult { InitialStatus = (phuongThuc == "chuyen_khoan" || phuongThuc == "the") ? AppConstants.OrderStatus.ChoThanhToan : AppConstants.OrderStatus.ChoXacNhan };
+
+            if (request.XacNhanCskh)
+            {
+                // Đơn mua hộ chờ CSKH xác nhận SĐT thành viên -> Luôn đưa về trạng thái chờ xác nhận
+                decision.InitialStatus = AppConstants.OrderStatus.ChoXacNhan;
+            }
 
             var donHang = new DonHangOnline
             {
@@ -185,9 +280,11 @@ public class OnlineOrderService : IOnlineOrderService
                 FromStatus = null,
                 ToStatus = decision.InitialStatus,
                 Actor = "customer",
-                Reason = decision.RiskFlag
-                    ? $"Đơn được tạo kèm cờ rủi ro: {string.Join(", ", decision.RiskReasons)}"
-                    : (decision.InitialStatus == "cho_tu_duyet" ? $"Khách tin cậy, hẹn tự duyệt sau 15 phút ({decision.AutoApproveAt:HH:mm})" : "Đơn hàng mới tạo")
+                Reason = !string.IsNullOrWhiteSpace(ghiChuVip)
+                    ? ghiChuVip
+                    : (decision.RiskFlag
+                        ? $"Đơn được tạo kèm cờ rủi ro: {string.Join(", ", decision.RiskReasons)}"
+                        : (decision.InitialStatus == "cho_tu_duyet" ? $"Khách tin cậy, hẹn tự duyệt sau 15 phút ({decision.AutoApproveAt:HH:mm})" : "Đơn hàng mới tạo"))
             });
             await _context.SaveChangesAsync();
 

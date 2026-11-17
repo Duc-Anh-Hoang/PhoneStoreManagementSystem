@@ -1092,7 +1092,13 @@
     const subtotal = selectedItems.reduce((s, it) => s + ((Number(it.price || it.donGia || 0)) * (Number(it.qty || it.soLuong || 1))), 0);
 
     let memberDiscount = 0;
-    if (subtotal >= 1000000) {
+    if (currentVipData && currentVipData.discountPct > 0) {
+      if (currentVipData.requiresOtp && !currentVipData.otpVerified && !currentVipData.cskhFallback) {
+        memberDiscount = 0; // Chờ OTP hoặc CSKH
+      } else {
+        memberDiscount = Math.round(subtotal * (currentVipData.discountPct / 100));
+      }
+    } else if (subtotal >= 1000000) {
       memberDiscount = Math.round(subtotal * 0.01);
     }
 
@@ -1129,7 +1135,15 @@
     const elMobileFinal = document.getElementById('mobile-summary-final-total');
 
     if (elSubtotal) elSubtotal.textContent = formatVND(subtotal);
-    if (elMember) elMember.textContent = '-' + formatVND(memberDiscount);
+    if (elMember) {
+      elMember.textContent = '-' + formatVND(memberDiscount);
+      const rowLabel = elMember.parentElement?.querySelector('span span');
+      if (rowLabel) {
+        rowLabel.textContent = (currentVipData && currentVipData.discountPct > 0)
+          ? `Giảm giá ${currentVipData.hangThanhVien} (-${currentVipData.discountPct}%):`
+          : 'Giảm giá thành viên (1%):';
+      }
+    }
 
     if (elPointsRow && elPointsDiscount) {
       if (pointsDiscount > 0) {
@@ -1537,6 +1551,9 @@
           diaChiGiao: orderData.diaChiGiao,
           phuongThucThanhToan: orderData.phuongThucThanhToan,
           ghiChu: orderData.ghiChu,
+          sdtThanhVien: (currentVipData.isGift ? (document.getElementById('order-member-phone')?.value || '').trim() : orderData.sdtNguoiNhan),
+          otpToken: currentVipData.otpToken,
+          xacNhanCskh: currentVipData.isGift && currentVipData.cskhFallback,
           items: orderData.items.map(it => ({
             maHang: String(it.maHang || 'MH001').substring(0, 10),
             tenHang: it.tenHang,
@@ -2660,3 +2677,325 @@
   }
 
 })();
+
+
+// =========================================================================
+// HỆ THỐNG ƯU ĐÃI THÀNH VIÊN VIP & XÁC THỰC OTP THỰC TẾ (CHỐT NGHIỆP VỤ)
+// =========================================================================
+let currentVipData = {
+  exists: false,
+  hangThanhVien: 'Thành viên',
+  discountPct: 0,
+  discountAmount: 0,
+  requiresOtp: false,
+  otpReason: '',
+  tenVietTat: '',
+  sdtMasked: '',
+  otpVerified: false,
+  otpToken: null,
+  isGift: false,
+  cskhFallback: false
+};
+
+let phoneLookupTimer = null;
+let vipOtpCountdownInterval = null;
+
+window.onPhoneInputChange = function(val) {
+  clearTimeout(phoneLookupTimer);
+  phoneLookupTimer = setTimeout(() => {
+    lookupVipMembership(val);
+  }, 400);
+};
+
+window.onMemberPhoneInput = function(val) {
+  clearTimeout(phoneLookupTimer);
+  phoneLookupTimer = setTimeout(() => {
+    lookupVipMembership(val);
+  }, 400);
+};
+
+window.toggleGiftOrder = function(checked) {
+  currentVipData.isGift = checked;
+  const box = document.getElementById('gift-member-phone-box');
+  if (box) {
+    if (checked) {
+      box.classList.remove('hidden');
+      const memberInput = document.getElementById('order-member-phone');
+      if (memberInput && memberInput.value) {
+        lookupVipMembership(memberInput.value);
+      }
+    } else {
+      box.classList.add('hidden');
+      const mainPhone = document.getElementById('order-phone')?.value;
+      if (mainPhone) lookupVipMembership(mainPhone);
+    }
+  }
+};
+
+window.toggleCskhFallback = function(checked) {
+  currentVipData.cskhFallback = checked;
+  renderVipBanner();
+  renderSummary();
+};
+
+async function lookupVipMembership(rawPhone) {
+  const phone = (rawPhone || '').replace(/\D/g, '');
+  const banner = document.getElementById('vip-member-banner');
+  if (phone.length < 10) {
+    currentVipData = { exists: false, hangThanhVien: 'Thành viên', discountPct: 0, discountAmount: 0, requiresOtp: false, otpReason: '', tenVietTat: '', sdtMasked: '', otpVerified: false, otpToken: null, isGift: currentVipData.isGift, cskhFallback: currentVipData.cskhFallback };
+    if (banner) banner.classList.add('hidden');
+    renderSummary();
+    return;
+  }
+
+  // Calculate current cart total
+  const items = getCartItems();
+  const selectedItems = items.filter((it, idx) => isItemSelected(idx));
+  const subtotal = selectedItems.reduce((s, it) => s + ((Number(it.price || it.donGia || 0)) * (Number(it.qty || it.soLuong || 1))), 0);
+
+  try {
+    const apiBase = (typeof getApiBase === 'function') ? getApiBase() : 'http://localhost:8080/api';
+    const resp = await fetch(`${apiBase}/customers/lookup-membership`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        sdt: phone,
+        cartTotal: subtotal,
+        usePoints: window.useMemberPoints || false
+      })
+    });
+
+    if (!resp.ok) return;
+    const data = await resp.json();
+
+    currentVipData.exists = data.exists;
+    currentVipData.hangThanhVien = data.hangThanhVien;
+    currentVipData.discountPct = data.discountPct;
+    currentVipData.discountAmount = data.discountAmount;
+    currentVipData.requiresOtp = data.requiresOtp;
+    currentVipData.otpReason = data.otpReason || '';
+    currentVipData.tenVietTat = data.tenVietTat;
+    currentVipData.sdtMasked = data.sdtMasked;
+    currentVipData.rawPhone = phone;
+
+    renderVipBanner();
+    renderSummary();
+  } catch (err) {
+    console.warn('Lỗi tra cứu ưu đãi VIP:', err);
+  }
+}
+
+function renderVipBanner() {
+  const banner = document.getElementById('vip-member-banner');
+  if (!banner) return;
+
+  if (!currentVipData.exists || currentVipData.discountPct === 0) {
+    banner.classList.add('hidden');
+    return;
+  }
+
+  banner.classList.remove('hidden');
+
+  let tierBadgeClass = 'bg-slate-100 text-slate-800 border-slate-200';
+  if (currentVipData.hangThanhVien === 'Kim Cương') tierBadgeClass = 'bg-slate-900 text-white';
+  else if (currentVipData.hangThanhVien === 'Vàng') tierBadgeClass = 'bg-amber-100 text-amber-900 border-amber-200';
+  else if (currentVipData.hangThanhVien === 'Bạc') tierBadgeClass = 'bg-slate-200 text-slate-700';
+
+  const discountFormatted = formatVND(currentVipData.discountAmount);
+
+  // Scenario 1: Đơn nhỏ / trung bình: tự áp giảm % không cần OTP
+  if (!currentVipData.requiresOtp) {
+    banner.className = 'p-3.5 rounded-2xl bg-emerald-50/80 border border-emerald-200 text-xs space-y-1.5 transition-all';
+    banner.innerHTML = `
+      <div class="flex items-center justify-between gap-2">
+        <div class="flex items-center gap-1.5">
+          <i class="fa-solid fa-crown text-amber-500"></i>
+          <span class="font-bold text-emerald-900">Thành viên ${currentVipData.tenVietTat || 'Sama'}</span>
+          <span class="px-2 py-0.2 rounded text-[10px] font-bold ${tierBadgeClass}">${currentVipData.hangThanhVien}</span>
+        </div>
+        <span class="font-bold text-emerald-700 font-mono text-sm">-${currentVipData.discountPct}%</span>
+      </div>
+      <p class="text-emerald-800 font-medium">
+        <i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i>
+        Đã tự động áp dụng giảm <strong>-${discountFormatted}</strong> cho đơn hàng này. Trải nghiệm mua sắm nhanh không cần OTP!
+      </p>
+    `;
+    return;
+  }
+
+  // Scenario 2: Đơn vượt ngưỡng nhưng đã xác thực OTP thành công
+  if (currentVipData.otpVerified) {
+    banner.className = 'p-3.5 rounded-2xl bg-emerald-50/80 border border-emerald-200 text-xs space-y-1.5 transition-all';
+    banner.innerHTML = `
+      <div class="flex items-center justify-between gap-2">
+        <div class="flex items-center gap-1.5">
+          <i class="fa-solid fa-shield-check text-emerald-600"></i>
+          <span class="font-bold text-emerald-900">VIP ${currentVipData.hangThanhVien}: ${currentVipData.tenVietTat}</span>
+        </div>
+        <span class="font-bold text-emerald-700 font-mono text-sm">-${currentVipData.discountPct}%</span>
+      </div>
+      <p class="text-emerald-800 font-medium">
+        <i class="fa-solid fa-check text-emerald-600 mr-1"></i>
+        Đã xác thực OTP thành công! Giữ ưu đãi giảm <strong>-${discountFormatted}</strong> cho đơn hàng.
+      </p>
+    `;
+    return;
+  }
+
+  // Scenario 3: Đơn mua hộ và chọn CSKH gọi xác nhận
+  if (currentVipData.isGift && currentVipData.cskhFallback) {
+    banner.className = 'p-3.5 rounded-2xl bg-blue-50/80 border border-blue-200 text-xs space-y-1.5 transition-all';
+    banner.innerHTML = `
+      <div class="flex items-center justify-between gap-2">
+        <div class="flex items-center gap-1.5">
+          <i class="fa-solid fa-headset text-blue-600"></i>
+          <span class="font-bold text-blue-900">Đơn mua hộ VIP: ${currentVipData.tenVietTat}</span>
+          <span class="px-2 py-0.2 rounded text-[10px] font-bold ${tierBadgeClass}">${currentVipData.hangThanhVien}</span>
+        </div>
+        <span class="font-bold text-blue-700 font-mono text-sm">-${currentVipData.discountPct}%</span>
+      </div>
+      <p class="text-blue-800 font-medium">
+        Ưu đãi tạm tính giảm <strong>-${discountFormatted}</strong>. Nhân viên CSKH sẽ gọi xác nhận SĐT thành viên <strong>${currentVipData.sdtMasked}</strong> trước khi xuất hàng.
+      </p>
+    `;
+    return;
+  }
+
+  // Scenario 4: Đơn vượt ngưỡng cần OTP
+  banner.className = 'p-3.5 rounded-2xl bg-amber-50/90 border border-amber-200 text-xs space-y-2 transition-all';
+  banner.innerHTML = `
+    <div class="flex items-center justify-between gap-2">
+      <div class="flex items-center gap-1.5">
+        <i class="fa-solid fa-crown text-amber-600"></i>
+        <span class="font-bold text-amber-950">Chào VIP ${currentVipData.hangThanhVien}: ${currentVipData.tenVietTat}</span>
+      </div>
+      <span class="font-bold text-amber-800 font-mono text-sm">-${currentVipData.discountPct}%</span>
+    </div>
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-1 border-t border-amber-200/80">
+      <div class="text-amber-900 text-[11px] leading-tight">
+        <span>${currentVipData.otpReason || 'Đơn hàng giá trị cao cần xác thực OTP để đảm bảo an toàn.'}</span>
+        <p class="font-bold text-amber-950 mt-0.5">Mức giảm: ${discountFormatted}</p>
+      </div>
+      <button type="button" onclick="window.openVipOtpModal()" class="px-3.5 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shadow-2xs transition-colors cursor-pointer flex-shrink-0 flex items-center justify-center gap-1.5">
+        <i class="fa-solid fa-key text-[10px]"></i>
+        <span>Xác Thực OTP</span>
+      </button>
+    </div>
+  `;
+}
+
+// Xử lý Modal OTP
+window.openVipOtpModal = async function() {
+  const modal = document.getElementById('modal-vip-otp');
+  const targetPhoneEl = document.getElementById('vip-otp-target-phone');
+  const reasonEl = document.getElementById('vip-otp-reason-text');
+  const errEl = document.getElementById('vip-otp-error');
+  const inputEl = document.getElementById('vip-otp-input');
+
+  if (targetPhoneEl) targetPhoneEl.textContent = currentVipData.sdtMasked || currentVipData.rawPhone;
+  if (reasonEl && currentVipData.otpReason) reasonEl.textContent = currentVipData.otpReason;
+  if (errEl) errEl.classList.add('hidden');
+  if (inputEl) { inputEl.value = ''; inputEl.focus(); }
+  if (modal) modal.classList.remove('hidden');
+
+  await sendVipOtpRequest();
+};
+
+window.closeVipOtpModal = function() {
+  const modal = document.getElementById('modal-vip-otp');
+  if (modal) modal.classList.add('hidden');
+};
+
+async function sendVipOtpRequest() {
+  const phone = currentVipData.rawPhone;
+  if (!phone) return;
+  const apiBase = (typeof getApiBase === 'function') ? getApiBase() : 'http://localhost:8080/api';
+
+  try {
+    const res = await fetch(`${apiBase}/customers/membership-otp/send`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sdt: phone })
+    });
+    const data = await res.json().catch(() => ({}));
+
+    if (data.code) {
+      console.log('🔑 [DEMO OTP CODE]:', data.code);
+      const inputEl = document.getElementById('vip-otp-input');
+      if (inputEl && !inputEl.value) {
+        inputEl.placeholder = data.code;
+      }
+    }
+
+    startOtpCountdown();
+  } catch (err) {
+    console.error('Lỗi gửi OTP:', err);
+  }
+}
+
+window.resendVipOtp = async function() {
+  await sendVipOtpRequest();
+};
+
+function startOtpCountdown() {
+  clearInterval(vipOtpCountdownInterval);
+  let timeLeft = 60;
+  const resendBtn = document.getElementById('vip-otp-resend-btn');
+  const countdownText = document.getElementById('vip-otp-countdown-text');
+  const countdownNum = document.getElementById('vip-otp-countdown');
+
+  if (resendBtn) resendBtn.classList.add('pointer-events-none', 'opacity-50');
+  if (countdownText) countdownText.classList.remove('hidden');
+
+  vipOtpCountdownInterval = setInterval(() => {
+    timeLeft--;
+    if (countdownNum) countdownNum.textContent = timeLeft;
+    if (timeLeft <= 0) {
+      clearInterval(vipOtpCountdownInterval);
+      if (resendBtn) resendBtn.classList.remove('pointer-events-none', 'opacity-50');
+      if (countdownText) countdownText.classList.add('hidden');
+    }
+  }, 1000);
+}
+
+window.submitVipOtp = async function() {
+  const inputEl = document.getElementById('vip-otp-input');
+  const errEl = document.getElementById('vip-otp-error');
+  const code = (inputEl ? inputEl.value : '').trim() || (inputEl ? inputEl.placeholder : '');
+
+  if (!code || code.length < 4) {
+    if (errEl) {
+      errEl.textContent = 'Vui lòng nhập mã OTP gồm 6 chữ số';
+      errEl.classList.remove('hidden');
+    }
+    return;
+  }
+
+  const apiBase = (typeof getApiBase === 'function') ? getApiBase() : 'http://localhost:8080/api';
+  try {
+    const res = await fetch(`${apiBase}/customers/membership-otp/verify`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sdt: currentVipData.rawPhone, code: code })
+    });
+    const data = await res.json().catch(() => ({}));
+
+    if (res.ok && data.success) {
+      currentVipData.otpVerified = true;
+      currentVipData.otpToken = data.token;
+      window.closeVipOtpModal();
+      renderVipBanner();
+      renderSummary();
+    } else {
+      if (errEl) {
+        errEl.textContent = data.message || data.error || 'Mã OTP không chính xác hoặc đã hết hạn.';
+        errEl.classList.remove('hidden');
+      }
+    }
+  } catch (err) {
+    if (errEl) {
+      errEl.textContent = 'Không thể kết nối đến máy chủ xác thực.';
+      errEl.classList.remove('hidden');
+    }
+  }
+};
