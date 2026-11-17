@@ -6760,20 +6760,24 @@ window.onTopLimitChange = function(val) {
 async function renderProductPerformance(queryParams) {
   const topBadge1 = document.getElementById('dash-top-selling-badge');
   const topBadge2 = document.getElementById('dash-slow-moving-badge');
+  const topBadge3 = document.getElementById('dash-top-customers-badge');
   if (topBadge1) topBadge1.textContent = `Top ${currentProductPerfTop}`;
   if (topBadge2) topBadge2.textContent = `Top ${currentProductPerfTop}`;
+  if (topBadge3) topBadge3.textContent = `Top ${currentProductPerfTop}`;
 
   const topContainer = document.getElementById('dash-top-selling-list');
   const slowContainer = document.getElementById('dash-slow-moving-list');
+  const custContainer = document.getElementById('dash-top-customers-list');
 
   // Xây dựng query string có param top
   const sep = (queryParams && queryParams.includes('?')) ? '&' : '?';
   const fullQuery = (queryParams || '') + `${sep}top=${currentProductPerfTop}`;
 
   try {
-    const [topSelling, slowMoving] = await Promise.all([
+    const [topSelling, slowMoving, topCustomers] = await Promise.all([
       api.get('/dashboard/top-selling' + fullQuery).catch(() => []),
-      api.get('/dashboard/slow-moving' + fullQuery).catch(() => [])
+      api.get('/dashboard/slow-moving' + fullQuery).catch(() => []),
+      api.get('/dashboard/top-customers' + fullQuery).catch(() => [])
     ]);
 
     // 1. Render Top Selling (Tone trung tính, thanh lịch)
@@ -6847,7 +6851,50 @@ async function renderProductPerformance(queryParams) {
         }).join('');
       }
     }
+
+    // 3. Render Top Customers (Người dùng mua nhiều nhất - Tone trung tính, thanh lịch)
+    if (custContainer) {
+      if (!Array.isArray(topCustomers) || topCustomers.length === 0) {
+        custContainer.innerHTML = '<div class="text-center py-6 text-slate-400 italic">Chưa có dữ liệu giao dịch khách hàng</div>';
+      } else {
+        custContainer.innerHTML = topCustomers.map((c, idx) => {
+          const rank = idx + 1;
+          let tierBadge = 'bg-slate-100 text-slate-700 border border-slate-200';
+          if (c.hangThanhVien === 'Kim Cương') tierBadge = 'bg-slate-900 text-white';
+          else if (c.hangThanhVien === 'Vàng') tierBadge = 'bg-amber-100 text-amber-900 border border-amber-200';
+          else if (c.hangThanhVien === 'Bạc') tierBadge = 'bg-slate-200 text-slate-700';
+
+          return `
+            <div class="p-3 bg-white rounded-xl border border-slate-200/80 shadow-2xs hover:border-slate-300 transition-all flex items-center justify-between gap-3">
+              <div class="flex items-center gap-2.5 min-w-0 flex-1">
+                <span class="w-5 h-5 rounded-md bg-slate-100 text-slate-700 border border-slate-200 flex items-center justify-center font-mono font-bold text-[10px] flex-shrink-0">#${rank}</span>
+                <div class="min-w-0">
+                  <div class="flex items-center gap-1.5 flex-wrap">
+                    <p class="font-semibold text-slate-800 text-xs truncate max-w-[130px]" title="${c.hoTen || c.maKH}">${c.hoTen || c.maKH}</p>
+                    <span class="px-1.5 py-0.2 text-[9px] font-bold rounded ${tierBadge}">${c.hangThanhVien}</span>
+                  </div>
+                  <div class="flex items-center gap-1.5 text-[11px] text-slate-400 mt-0.5">
+                    <span class="font-mono text-slate-500">${c.sdt || c.maKH}</span>
+                    <span>•</span>
+                    <span><b class="text-slate-700 font-medium">${c.soDonHang}</b> đơn</span>
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-center gap-2 flex-shrink-0">
+                <div class="text-right">
+                  <span class="font-mono font-bold text-slate-900 text-xs">${Format.currency(c.tongChiTieu)}</span>
+                  <p class="text-[10px] text-slate-400 mt-0.5">Tổng chi tiêu</p>
+                </div>
+                <button type="button" onclick="renderSection('view-khachhang')" class="w-7 h-7 flex items-center justify-center bg-white hover:bg-slate-50 text-slate-600 border border-slate-200 text-xs rounded-lg shadow-2xs transition-colors cursor-pointer" title="Xem hồ sơ khách hàng">
+                  <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
   } catch (err) {
-    console.error('Lỗi khi tải danh sách hiệu suất sản phẩm:', err);
+    console.error('Lỗi khi tải danh sách hiệu suất sản phẩm và khách hàng:', err);
   }
 }

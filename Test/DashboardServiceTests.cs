@@ -207,4 +207,58 @@ public class DashboardServiceTests
         Assert.Equal(2, result.Count);
         Assert.All(result, r => Assert.True(r.SoLuongBan <= 1));
     }
+
+    [Fact]
+    public async Task GetTopCustomersAsync_ReturnsTopSpenders()
+    {
+        // Arrange
+        using var context = CreateDbContext();
+        await SeedDashboardDataAsync(context);
+
+        var kh1 = new KhachHang { MaKH = "KH_VIP", HoTen = "Khách Hàng VIP", Sdt = "0900000001", Email = "vip@test.com" };
+        var kh2 = new KhachHang { MaKH = "KH_NORMAL", HoTen = "Khách Hàng Thường", Sdt = "0900000002", Email = "normal@test.com" };
+        context.KhachHangs.AddRange(kh1, kh2);
+
+        var hdVip = new HoaDon
+        {
+            SoHD = "HD_VIP_01",
+            MaNV = "NV01",
+            MaKH = "KH_VIP",
+            NgayLap = DateTime.UtcNow,
+            KenhBan = "tai_quay",
+            TongTien = 120000000,
+            TienGiamGia = 0,
+            ThanhTien = 120000000,
+            PhuongThucThanhToan = "chuyen_khoan"
+        };
+        var hdNormal = new HoaDon
+        {
+            SoHD = "HD_NORMAL_01",
+            MaNV = "NV01",
+            MaKH = "KH_NORMAL",
+            NgayLap = DateTime.UtcNow,
+            KenhBan = "tai_quay",
+            TongTien = 25000000,
+            TienGiamGia = 0,
+            ThanhTien = 25000000,
+            PhuongThucThanhToan = "tien_mat"
+        };
+        context.HoaDons.AddRange(hdVip, hdNormal);
+        await context.SaveChangesAsync();
+
+        var cache = CreateCache();
+        var service = new DashboardService(context, cache);
+
+        // Act
+        var result = await service.GetTopCustomersAsync(top: 2);
+
+        // Assert
+        Assert.Equal(2, result.Count);
+        Assert.Equal("KH_VIP", result[0].MaKH);
+        Assert.Equal(120000000m, result[0].TongChiTieu);
+        Assert.Equal("Kim Cương", result[0].HangThanhVien);
+        Assert.Equal("KH_NORMAL", result[1].MaKH);
+        Assert.Equal(25000000m, result[1].TongChiTieu);
+        Assert.Equal("Bạc", result[1].HangThanhVien);
+    }
 }

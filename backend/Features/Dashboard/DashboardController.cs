@@ -62,4 +62,14 @@ public class DashboardController : ControllerBase
         var result = await _dashboardService.GetSlowMovingProductsAsync(top, tuNgay, denNgay);
         return Ok(result);
     }
+
+    [HttpGet("top-customers")]
+    public async Task<IActionResult> GetTopCustomers(
+        [FromQuery] int top = 5,
+        [FromQuery] DateTime? tuNgay = null,
+        [FromQuery] DateTime? denNgay = null)
+    {
+        var result = await _dashboardService.GetTopCustomersAsync(top, tuNgay, denNgay);
+        return Ok(result);
+    }
 }

@@ -9,4 +9,5 @@ public interface IDashboardService
     Task<List<CategoryRevenueDto>> GetRevenueByCategoryAsync(DateTime? tuNgay, DateTime? denNgay);
     Task<List<ProductPerformanceDto>> GetTopSellingProductsAsync(int top = 5, DateTime? tuNgay = null, DateTime? denNgay = null);
     Task<List<ProductPerformanceDto>> GetSlowMovingProductsAsync(int top = 5, DateTime? tuNgay = null, DateTime? denNgay = null);
+    Task<List<TopCustomerDto>> GetTopCustomersAsync(int top = 5, DateTime? tuNgay = null, DateTime? denNgay = null);
 }

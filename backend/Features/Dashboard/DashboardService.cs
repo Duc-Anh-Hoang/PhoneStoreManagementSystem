@@ -445,4 +445,83 @@ public class DashboardService : IDashboardService
         }
         return result;
     }
+
+    public async Task<List<TopCustomerDto>> GetTopCustomersAsync(int top = 5, DateTime? tuNgay = null, DateTime? denNgay = null)
+    {
+        top = Math.Clamp(top, 1, 100);
+
+        var hdQuery = _context.HoaDons.AsNoTracking()
+            .Where(h => !string.IsNullOrEmpty(h.MaKH));
+        if (tuNgay.HasValue) hdQuery = hdQuery.Where(h => h.NgayLap >= tuNgay.Value);
+        if (denNgay.HasValue) hdQuery = hdQuery.Where(h => h.NgayLap <= denNgay.Value);
+
+        var invoiceSummary = await hdQuery
+            .Select(h => new
+            {
+                MaKH = h.MaKH!,
+                ThanhTien = h.ThanhTien > 0 ? h.ThanhTien : (h.TongTien - h.TienGiamGia)
+            })
+            .ToListAsync();
+
+        var onlineQuery = _context.DonHangOnlines.AsNoTracking()
+            .Where(d => !string.IsNullOrEmpty(d.MaKH) && d.SoHD == null && d.TrangThai != "da_huy");
+        if (tuNgay.HasValue) onlineQuery = onlineQuery.Where(d => d.NgayDat >= tuNgay.Value);
+        if (denNgay.HasValue) onlineQuery = onlineQuery.Where(d => d.NgayDat <= denNgay.Value);
+
+        var onlineSummary = await onlineQuery
+            .Select(d => new
+            {
+                MaKH = d.MaKH,
+                ThanhTien = d.TongTien
+            })
+            .ToListAsync();
+
+        var customerStats = invoiceSummary.Concat(onlineSummary)
+            .GroupBy(x => x.MaKH)
+            .Select(g => new
+            {
+                MaKH = g.Key,
+                SoDonHang = g.Count(),
+                TongChiTieu = g.Sum(x => x.ThanhTien)
+            })
+            .OrderByDescending(x => x.TongChiTieu)
+            .ThenByDescending(x => x.SoDonHang)
+            .Take(top)
+            .ToList();
+
+        if (customerStats.Count == 0) return new List<TopCustomerDto>();
+
+        var targetMaKHs = customerStats.Select(c => c.MaKH).ToList();
+        var customers = await _context.KhachHangs.AsNoTracking()
+            .Where(k => targetMaKHs.Contains(k.MaKH))
+            .ToDictionaryAsync(k => k.MaKH);
+
+        return customerStats
+            .Select(c =>
+            {
+                customers.TryGetValue(c.MaKH, out var k);
+                var hoTen = k?.HoTen ?? "Khách hàng";
+                var sdt = k?.Sdt ?? "";
+                var email = k?.Email ?? "";
+
+                string tier = c.TongChiTieu switch
+                {
+                    >= 100_000_000m => "Kim Cương",
+                    >= 50_000_000m => "Vàng",
+                    >= 20_000_000m => "Bạc",
+                    _ => "Thành viên"
+                };
+
+                return new TopCustomerDto
+                {
+                    MaKH = c.MaKH,
+                    HoTen = hoTen,
+                    Sdt = sdt,
+                    Email = email,
+                    SoDonHang = c.SoDonHang,
+                    TongChiTieu = c.TongChiTieu,
+                    HangThanhVien = tier
+                };
+            }).ToList();
+    }
 }

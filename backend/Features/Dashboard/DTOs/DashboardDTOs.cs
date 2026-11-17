@@ -46,3 +46,14 @@ public class ProductPerformanceDto
     public decimal DoanhThu { get; set; }
     public int TonKhoHienTai { get; set; }
 }
+
+public class TopCustomerDto
+{
+    public string MaKH { get; set; } = string.Empty;
+    public string HoTen { get; set; } = string.Empty;
+    public string Sdt { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    public int SoDonHang { get; set; }
+    public decimal TongChiTieu { get; set; }
+    public string HangThanhVien { get; set; } = "Thành viên";
+}
