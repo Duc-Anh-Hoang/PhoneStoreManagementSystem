@@ -404,3 +404,132 @@ SELECT EXTRACT(YEAR FROM NGAYLAP)::INT AS NAM, EXTRACT(MONTH FROM NGAYLAP)::INT 
        SUM(THANHTIEN) AS DOANHTHU
 FROM HoaDon
 GROUP BY EXTRACT(YEAR FROM NGAYLAP), EXTRACT(MONTH FROM NGAYLAP), KENHBAN;
+
+-- ====================================================================
+-- MODULE: GIỎ HÀNG VÀ THANH TOÁN (PRODUCTS, VARIANTS, CARTS, ORDERS, PAYMENTS)
+-- ====================================================================
+
+CREATE TABLE IF NOT EXISTS products (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description TEXT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS variants (
+    id BIGSERIAL PRIMARY KEY,
+    product_id BIGINT NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+    sku VARCHAR(100) NOT NULL UNIQUE,
+    color VARCHAR(50) NOT NULL,
+    storage VARCHAR(50) NOT NULL,
+    price BIGINT NOT NULL CHECK (price >= 0),
+    stock INT NOT NULL DEFAULT 0 CHECK (stock >= 0),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT CK_variants_stock CHECK (stock >= 0)
+);
+
+CREATE TABLE IF NOT EXISTS carts (
+    id BIGSERIAL PRIMARY KEY,
+    cart_token VARCHAR(64) UNIQUE NULL,
+    user_id VARCHAR(50) NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS cart_items (
+    id BIGSERIAL PRIMARY KEY,
+    cart_id BIGINT NOT NULL REFERENCES carts(id) ON DELETE CASCADE,
+    variant_id BIGINT NOT NULL REFERENCES variants(id) ON DELETE CASCADE,
+    qty INT NOT NULL DEFAULT 1 CHECK (qty > 0),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT UQ_cart_items_cart_variant UNIQUE (cart_id, variant_id)
+);
+
+CREATE TABLE IF NOT EXISTS orders (
+    id BIGSERIAL PRIMARY KEY,
+    order_code VARCHAR(32) NOT NULL UNIQUE,
+    status VARCHAR(32) NOT NULL DEFAULT 'PENDING_PAYMENT',
+    total BIGINT NOT NULL CHECK (total >= 0),
+    expires_at TIMESTAMPTZ NOT NULL,
+    idempotency_key VARCHAR(128) NOT NULL UNIQUE,
+    recipient_name VARCHAR(100) NOT NULL,
+    recipient_phone VARCHAR(20) NOT NULL,
+    shipping_address VARCHAR(255) NOT NULL,
+    payment_method VARCHAR(30) NOT NULL DEFAULT 'QR_PAYMENT',
+    user_id VARCHAR(50) NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS order_items (
+    id BIGSERIAL PRIMARY KEY,
+    order_id BIGINT NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+    variant_id BIGINT NOT NULL REFERENCES variants(id),
+    product_name_snapshot VARCHAR(255) NOT NULL,
+    sku_snapshot VARCHAR(100) NOT NULL,
+    price_snapshot BIGINT NOT NULL CHECK (price_snapshot >= 0),
+    qty INT NOT NULL CHECK (qty > 0),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS payments (
+    id BIGSERIAL PRIMARY KEY,
+    order_id BIGINT NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+    provider VARCHAR(50) NOT NULL,
+    provider_txn_id VARCHAR(100) NOT NULL UNIQUE,
+    amount BIGINT NOT NULL CHECK (amount >= 0),
+    status VARCHAR(32) NOT NULL,
+    raw_payload TEXT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS order_status_history (
+    id BIGSERIAL PRIMARY KEY,
+    order_id BIGINT NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+    from_status VARCHAR(32) NULL,
+    to_status VARCHAR(32) NOT NULL,
+    reason VARCHAR(255) NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS refund_requests (
+    id BIGSERIAL PRIMARY KEY,
+    order_id BIGINT NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+    payment_id BIGINT NULL REFERENCES payments(id),
+    amount BIGINT NOT NULL CHECK (amount >= 0),
+    reason VARCHAR(255) NOT NULL,
+    status VARCHAR(32) NOT NULL DEFAULT 'PENDING',
+    provider_refund_id VARCHAR(100) UNIQUE NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS IX_variants_product ON variants(product_id);
+CREATE INDEX IF NOT EXISTS IX_orders_status ON orders(status);
+CREATE INDEX IF NOT EXISTS IX_orders_expires_at ON orders(expires_at);
+CREATE INDEX IF NOT EXISTS IX_payments_order ON payments(order_id);
+CREATE INDEX IF NOT EXISTS IX_order_status_history_order ON order_status_history(order_id);
+
+-- SEED DATA: 3 SẢN PHẨM × NHIỀU VARIANT
+INSERT INTO products (id, name, description) VALUES
+    (1, 'iPhone 16 Pro Max', 'Siêu phẩm Apple 2026 với chip A18 Pro và viền titan sa mạc'),
+    (2, 'Samsung Galaxy S24 Ultra', 'Flagship AI đỉnh cao từ Samsung với bút S-Pen và Snapdragon 8 Gen 3'),
+    (3, 'Xiaomi 14 Ultra', 'Chuyên gia nhiếp ảnh Leica thế hệ mới với cảm biến 1 inch')
+ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO variants (id, product_id, sku, color, storage, price, stock) VALUES
+    (1, 1, 'IP16PM-DESERT-256', 'Desert Titanium', '256GB', 34990000, 10),
+    (2, 1, 'IP16PM-NATURAL-512', 'Natural Titanium', '512GB', 40990000, 5),
+    (3, 1, 'IP16PM-BLACK-1TB', 'Black Titanium', '1TB', 46990000, 3),
+    (4, 2, 'S24U-GRAY-256', 'Titanium Gray', '256GB', 29990000, 8),
+    (5, 2, 'S24U-BLACK-512', 'Titanium Black', '512GB', 33990000, 4),
+    (6, 3, 'XM14U-BLACK-512', 'Black', '512GB', 28990000, 6),
+    (7, 3, 'XM14U-WHITE-512', 'White', '512GB', 28990000, 2)
+ON CONFLICT (id) DO NOTHING;
+
+SELECT setval('products_id_seq', (SELECT COALESCE(MAX(id), 1) FROM products));
+SELECT setval('variants_id_seq', (SELECT COALESCE(MAX(id), 1) FROM variants));
+

@@ -127,7 +127,114 @@ LEFT JOIN (SELECT h.MAKH, SUM(COALESCE(t.SOTIENHOAN, ct.SLBAN * ct.DONGIA_BAN)) 
 LEFT JOIN LATERAL (SELECT GIATRI FROM ThamSo WHERE MATHAMSO = 'DIEM_MOI_VND') p ON TRUE;
 ";
             await context.Database.ExecuteSqlRawAsync(migrationSql);
-            logger.LogInformation("Đã kiểm tra và đồng bộ schema bảng TraHang & TraHangLichSu thành công.");
+
+            const string checkoutMigrationSql = @"
+CREATE TABLE IF NOT EXISTS products (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description TEXT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS variants (
+    id BIGSERIAL PRIMARY KEY,
+    product_id BIGINT NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+    sku VARCHAR(100) NOT NULL UNIQUE,
+    color VARCHAR(50) NOT NULL,
+    storage VARCHAR(50) NOT NULL,
+    price BIGINT NOT NULL CHECK (price >= 0),
+    stock INT NOT NULL DEFAULT 0 CHECK (stock >= 0),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT CK_variants_stock CHECK (stock >= 0)
+);
+
+CREATE TABLE IF NOT EXISTS carts (
+    id BIGSERIAL PRIMARY KEY,
+    cart_token VARCHAR(64) UNIQUE NULL,
+    user_id VARCHAR(50) NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS cart_items (
+    id BIGSERIAL PRIMARY KEY,
+    cart_id BIGINT NOT NULL REFERENCES carts(id) ON DELETE CASCADE,
+    variant_id BIGINT NOT NULL REFERENCES variants(id) ON DELETE CASCADE,
+    qty INT NOT NULL DEFAULT 1 CHECK (qty > 0),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT UQ_cart_items_cart_variant UNIQUE (cart_id, variant_id)
+);
+
+CREATE TABLE IF NOT EXISTS orders (
+    id BIGSERIAL PRIMARY KEY,
+    order_code VARCHAR(32) NOT NULL UNIQUE,
+    status VARCHAR(32) NOT NULL DEFAULT 'PENDING_PAYMENT',
+    total BIGINT NOT NULL CHECK (total >= 0),
+    expires_at TIMESTAMPTZ NOT NULL,
+    idempotency_key VARCHAR(128) NOT NULL UNIQUE,
+    recipient_name VARCHAR(100) NOT NULL,
+    recipient_phone VARCHAR(20) NOT NULL,
+    shipping_address VARCHAR(255) NOT NULL,
+    payment_method VARCHAR(30) NOT NULL DEFAULT 'QR_PAYMENT',
+    user_id VARCHAR(50) NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS order_items (
+    id BIGSERIAL PRIMARY KEY,
+    order_id BIGINT NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+    variant_id BIGINT NOT NULL REFERENCES variants(id),
+    product_name_snapshot VARCHAR(255) NOT NULL,
+    sku_snapshot VARCHAR(100) NOT NULL,
+    price_snapshot BIGINT NOT NULL CHECK (price_snapshot >= 0),
+    qty INT NOT NULL CHECK (qty > 0),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS payments (
+    id BIGSERIAL PRIMARY KEY,
+    order_id BIGINT NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+    provider VARCHAR(50) NOT NULL,
+    provider_txn_id VARCHAR(100) NOT NULL UNIQUE,
+    amount BIGINT NOT NULL CHECK (amount >= 0),
+    status VARCHAR(32) NOT NULL,
+    raw_payload TEXT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS order_status_history (
+    id BIGSERIAL PRIMARY KEY,
+    order_id BIGINT NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+    from_status VARCHAR(32) NULL,
+    to_status VARCHAR(32) NOT NULL,
+    reason VARCHAR(255) NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS refund_requests (
+    id BIGSERIAL PRIMARY KEY,
+    order_id BIGINT NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+    payment_id BIGINT NULL REFERENCES payments(id),
+    amount BIGINT NOT NULL CHECK (amount >= 0),
+    reason VARCHAR(255) NOT NULL,
+    status VARCHAR(32) NOT NULL DEFAULT 'PENDING',
+    provider_refund_id VARCHAR(100) UNIQUE NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS IX_variants_product ON variants(product_id);
+CREATE INDEX IF NOT EXISTS IX_orders_status ON orders(status);
+CREATE INDEX IF NOT EXISTS IX_orders_expires_at ON orders(expires_at);
+CREATE INDEX IF NOT EXISTS IX_payments_order ON payments(order_id);
+CREATE INDEX IF NOT EXISTS IX_order_status_history_order ON order_status_history(order_id);
+";
+            await context.Database.ExecuteSqlRawAsync(checkoutMigrationSql);
+            logger.LogInformation("Đã kiểm tra và đồng bộ schema module Giỏ hàng và Thanh toán thành công.");
         }
         catch (Exception ex)
         {
@@ -380,6 +487,27 @@ LEFT JOIN LATERAL (SELECT GIATRI FROM ThamSo WHERE MATHAMSO = 'DIEM_MOI_VND') p 
                             GhiChu = "Tiếp nhận hồ sơ đổi trả tại quầy"
                         });
                         await context.SaveChangesAsync();
+                    }
+                    if (!await context.Products.AnyAsync())
+                    {
+                        var p1 = new Product { Id = 1, Name = "iPhone 16 Pro Max", Description = "Siêu phẩm Apple 2026 với chip A18 Pro và viền titan sa mạc" };
+                        var p2 = new Product { Id = 2, Name = "Samsung Galaxy S24 Ultra", Description = "Flagship AI đỉnh cao từ Samsung với bút S-Pen và Snapdragon 8 Gen 3" };
+                        var p3 = new Product { Id = 3, Name = "Xiaomi 14 Ultra", Description = "Chuyên gia nhiếp ảnh Leica thế hệ mới với cảm biến 1 inch" };
+
+                        context.Products.AddRange(p1, p2, p3);
+                        await context.SaveChangesAsync();
+
+                        context.ProductVariants.AddRange(
+                            new ProductVariant { Id = 1, ProductId = 1, Sku = "IP16PM-DESERT-256", Color = "Desert Titanium", Storage = "256GB", Price = 34990000, Stock = 10 },
+                            new ProductVariant { Id = 2, ProductId = 1, Sku = "IP16PM-NATURAL-512", Color = "Natural Titanium", Storage = "512GB", Price = 40990000, Stock = 5 },
+                            new ProductVariant { Id = 3, ProductId = 1, Sku = "IP16PM-BLACK-1TB", Color = "Black Titanium", Storage = "1TB", Price = 46990000, Stock = 3 },
+                            new ProductVariant { Id = 4, ProductId = 2, Sku = "S24U-GRAY-256", Color = "Titanium Gray", Storage = "256GB", Price = 29990000, Stock = 8 },
+                            new ProductVariant { Id = 5, ProductId = 2, Sku = "S24U-BLACK-512", Color = "Titanium Black", Storage = "512GB", Price = 33990000, Stock = 4 },
+                            new ProductVariant { Id = 6, ProductId = 3, Sku = "XM14U-BLACK-512", Color = "Black", Storage = "512GB", Price = 28990000, Stock = 6 },
+                            new ProductVariant { Id = 7, ProductId = 3, Sku = "XM14U-WHITE-512", Color = "White", Storage = "512GB", Price = 28990000, Stock = 2 }
+                        );
+                        await context.SaveChangesAsync();
+                        logger.LogInformation("Đã seed thành công 3 sản phẩm và các variants cho module Giỏ hàng & Thanh toán.");
                     }
                 }
             }

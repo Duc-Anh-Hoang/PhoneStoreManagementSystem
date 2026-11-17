@@ -86,4 +86,19 @@ jobs:
           SPECS_COUNT=$(psql -h localhost -U postgres -d phonestoredb -t -c "SELECT count(*) FROM ChiTietThuocTinh;" | xargs)
           echo "ChiTietThuocTinh count: $SPECS_COUNT"
 
+          # Check products and variants count (Checkout & Cart module)
+          PRODUCTS_COUNT=$(psql -h localhost -U postgres -d phonestoredb -t -c "SELECT count(*) FROM products;" | xargs)
+          echo "Products count: $PRODUCTS_COUNT"
+          if [ "$PRODUCTS_COUNT" -lt 3 ]; then
+            echo "Error: products table has less than 3 seeded products!"
+            exit 1
+          fi
+
+          VARIANTS_COUNT=$(psql -h localhost -U postgres -d phonestoredb -t -c "SELECT count(*) FROM variants;" | xargs)
+          echo "Variants count: $VARIANTS_COUNT"
+          if [ "$VARIANTS_COUNT" -lt 6 ]; then
+            echo "Error: variants table has insufficient seeded variants!"
+            exit 1
+          fi
+
           echo "Database verification completed successfully!"
