@@ -8,7 +8,7 @@ public interface IOnlineOrderService
     Task<OrderDto?> GetOrderByMaDHAsync(string maDH, string? sdt);
     Task<List<OrderDto>> GetOrdersByPhoneAsync(string sdt);
     Task<(List<OrderDto> Items, int Total)> GetAdminOrdersAsync(string? trangThai, DateOnly? tuNgay, DateOnly? denNgay, int page, int pageSize);
-    Task<OrderDto> UpdateOrderStatusAsync(string maDH, string newTrangThai, string? soHDKem = null);
+    Task<OrderDto> UpdateOrderStatusAsync(string maDH, string newTrangThai, string? soHDKem = null, decimal? confirmedAmount = null, string? paymentReference = null);
     Task<OrderDto> CancelOrderByCustomerAsync(string maDH, CancelOrderRequest request);
 
     // Giai đoạn 2: Tra cứu công khai (thông tin đã được che)

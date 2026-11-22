@@ -23,6 +23,7 @@ public class ConfirmPaymentRequest
 public class PaymentWebhookPayload
 {
     public string? Content { get; set; }
+    public string? TransferType { get; set; }
     public decimal? TransferAmount { get; set; }
     public string? Gateway { get; set; }
     public string? ReferenceCode { get; set; }

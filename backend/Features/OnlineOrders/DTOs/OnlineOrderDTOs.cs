@@ -34,6 +34,7 @@ public class OrderDto
     public string DiaChiGiao { get; set; } = string.Empty;
     public string PhuongThucThanhToan { get; set; } = "cod";
     public decimal TongTien { get; set; }
+    public string PaymentStatus { get; set; } = "unpaid";
     public string TrangThai { get; set; } = "cho_xac_nhan";
     public string? MaNV { get; set; }
     public string? SoHD { get; set; }

@@ -10,7 +10,6 @@ using PhoneStoreAPI.Data;
 using PhoneStoreAPI.Features.OnlineOrders;
 using PhoneStoreAPI.Features.OnlineOrders.Hubs;
 using PhoneStoreAPI.Features.Payment.DTOs;
-using QRCoder;
 using System.Text.RegularExpressions;
 
 namespace PhoneStoreAPI.Features.Payment;
@@ -53,12 +52,23 @@ public class PaymentService : IPaymentService
             throw new NotFoundException($"Không tìm thấy đơn hàng '{maDH}'.");
         }
 
-        // Đọc cấu hình ngân hàng từ appsettings (hoặc fallback mặc định)
-        string bankId = _configuration["VietQR:BankId"] ?? "MB";
-        string bankBin = _configuration["VietQR:BankBin"] ?? "970422";
-        string accountNumber = _configuration["VietQR:AccountNumber"] ?? "098765432100";
-        string accountName = _configuration["VietQR:AccountName"] ?? "SAMAMOBILE STORE";
-        string template = _configuration["VietQR:Template"] ?? "compact2";
+        if (donHang.TrangThai != AppConstants.OrderStatus.ChoThanhToan ||
+            donHang.NgayDat.AddMinutes(15) <= DateTime.UtcNow)
+        {
+            throw new ConflictException("Đơn hàng không còn trong thời gian chờ quét mã.");
+        }
+
+        var bankId = _configuration["VietQR:BankId"];
+        var bankBin = _configuration["VietQR:BankBin"];
+        var accountNumber = _configuration["VietQR:AccountNumber"];
+        var accountName = _configuration["VietQR:AccountName"];
+        if (string.IsNullOrWhiteSpace(bankId) || string.IsNullOrWhiteSpace(bankBin) ||
+            string.IsNullOrWhiteSpace(accountNumber) || string.IsNullOrWhiteSpace(accountName))
+        {
+            throw new ConflictException("Cửa hàng chưa cấu hình tài khoản nhận tiền.");
+        }
+
+        const string template = "compact2";
 
         long amount = (long)Math.Round(donHang.TongTien);
         string memo = donHang.MaDH;
@@ -67,23 +77,6 @@ public class PaymentService : IPaymentService
         string encodedAccountName = Uri.EscapeDataString(accountName);
         string encodedMemo = Uri.EscapeDataString(memo);
         string qrUrl = $"https://img.vietqr.io/image/{bankBin}-{accountNumber}-{template}.png?amount={amount}&addInfo={encodedMemo}&accountName={encodedAccountName}";
-
-        // 2. Dùng thư viện QRCoder của .NET 10 để tự render mã QR Base64 PNG
-        string qrBase64 = string.Empty;
-        try
-        {
-            using var qrGenerator = new QRCodeGenerator();
-            // Chuỗi dữ liệu thanh toán chuẩn VietQR / QuickLink
-            string qrPayload = $"https://api.vietqr.io/{bankBin}/{accountNumber}/{amount}/{memo}/vietqr.jpg";
-            using var qrCodeData = qrGenerator.CreateQrCode(qrPayload, QRCodeGenerator.ECCLevel.Q);
-            var qrCode = new PngByteQRCode(qrCodeData);
-            byte[] qrBytes = qrCode.GetGraphic(20);
-            qrBase64 = "data:image/png;base64," + Convert.ToBase64String(qrBytes);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogWarning(ex, "Không thể sinh mã Base64 QR code bằng QRCoder.");
-        }
 
         return new VietQrResponse
         {
@@ -94,8 +87,7 @@ public class PaymentService : IPaymentService
             AccountName = accountName,
             Amount = donHang.TongTien,
             Memo = memo,
-            QrUrl = qrUrl,
-            QrBase64 = qrBase64
+            QrUrl = qrUrl
         };
     }
 
@@ -117,29 +109,23 @@ public class PaymentService : IPaymentService
             throw new BadRequestException("Đơn hàng đã bị hủy, không thể xác nhận thanh toán.");
         }
 
-        // TỰ ĐỘNG DUYỆT ĐƠN THÔNG MINH (Auto-Approval Pipeline - Giải pháp 1):
-        // Đã thanh toán chuyển khoản thành công -> Chuyển thẳng sang Đã xác nhận, xuất hóa đơn & đẩy vận đơn GHN ngay lập tức!
-        try
+        var reference = request.TransactionId?.Trim().ToUpperInvariant();
+        if (string.IsNullOrWhiteSpace(reference) || reference.Length > 100 || request.Amount is null or <= 0)
         {
-            using var scope = _serviceProvider.CreateScope();
-            var onlineOrderService = scope.ServiceProvider.GetService<IOnlineOrderService>();
-            if (onlineOrderService != null)
-            {
-                await onlineOrderService.UpdateOrderStatusAsync(donHang.MaDH, AppConstants.OrderStatus.DaXacNhan);
-                donHang.TrangThai = AppConstants.OrderStatus.DaXacNhan;
-            }
-            else
-            {
-                donHang.TrangThai = AppConstants.OrderStatus.DaXacNhan;
-                await _context.SaveChangesAsync();
-            }
+            throw new BadRequestException("Cần nhập mã giao dịch và số tiền thực nhận.");
         }
-        catch (Exception ex)
+
+        if (donHang.PaymentStatus == "paid" && request.Amount == donHang.TongTien &&
+            await _context.OrderStatusLogs.AnyAsync(log =>
+                log.OrderId == donHang.MaDH && log.Actor == "payment" && log.Reason == reference))
         {
-            _logger.LogWarning(ex, "Lỗi khi tự động duyệt đơn hàng #{MaDH} sau thanh toán", donHang.MaDH);
-            donHang.TrangThai = AppConstants.OrderStatus.DaXacNhan;
-            await _context.SaveChangesAsync();
+            return true;
         }
+
+        using var scope = _serviceProvider.CreateScope();
+        var onlineOrderService = scope.ServiceProvider.GetRequiredService<IOnlineOrderService>();
+        var order = await onlineOrderService.UpdateOrderStatusAsync(donHang.MaDH, AppConstants.OrderStatus.DaXacNhan,
+            confirmedAmount: request.Amount, paymentReference: reference);
 
         // Gửi thông báo Realtime qua SignalR tới cả trang khách hàng đang mở mã QR và Dashboard Admin
         if (_hubContext != null)
@@ -147,11 +133,11 @@ public class PaymentService : IPaymentService
             var paymentPayload = new
             {
                 maDH = donHang.MaDH,
-                trangThai = donHang.TrangThai,
+                trangThai = order.TrangThai,
                 isPaid = true,
                 daThanhToan = true,
                 amount = donHang.TongTien,
-                transactionId = request.TransactionId ?? $"PAY-{DateTime.UtcNow:yyyyMMddHHmmss}",
+                transactionId = reference,
                 message = $"Đơn hàng #{donHang.MaDH} đã thanh toán thành công {donHang.TongTien:N0}đ qua VietQR/Ngân hàng!",
                 sdt = donHang.SdtNguoiNhan,
                 updatedAt = DateTime.UtcNow
@@ -163,7 +149,6 @@ public class PaymentService : IPaymentService
                 {
                     await _hubContext.Clients.Group($"Order_{donHang.MaDH.Trim()}").SendAsync("PaymentSuccess", paymentPayload);
                     await _hubContext.Clients.Group(OrderHub.AdminGroup).SendAsync("ReceiveOrderPaid", paymentPayload);
-                    await _hubContext.Clients.All.SendAsync("OrderStatusUpdated", paymentPayload);
                 }
                 catch { }
             });
@@ -194,7 +179,9 @@ public class PaymentService : IPaymentService
 
     public async Task<bool> ProcessWebhookAsync(PaymentWebhookPayload payload)
     {
-        if (payload == null || string.IsNullOrWhiteSpace(payload.Content))
+        if (payload == null || string.IsNullOrWhiteSpace(payload.Content) ||
+            string.IsNullOrWhiteSpace(payload.ReferenceCode) || payload.TransferAmount is null or <= 0 ||
+            !string.Equals(payload.TransferType, "in", StringComparison.OrdinalIgnoreCase))
         {
             return false;
         }
@@ -221,9 +208,7 @@ public class PaymentService : IPaymentService
         }
 
         var donHang = await _context.DonHangOnlines.FirstOrDefaultAsync(d =>
-            d.MaDH == matchedCode ||
-            d.MaDH.Replace("-", "") == matchedCode ||
-            (matchedCode.Length >= 4 && d.MaDH.Contains(matchedCode)));
+            d.MaDH == matchedCode || d.MaDH.Replace("-", "") == matchedCode);
 
         if (donHang == null)
         {
@@ -232,7 +217,7 @@ public class PaymentService : IPaymentService
 
         return await ConfirmOrderPaymentAsync(donHang.MaDH, new ConfirmPaymentRequest
         {
-            TransactionId = payload.ReferenceCode ?? payload.Gateway,
+            TransactionId = payload.ReferenceCode,
             Amount = payload.TransferAmount,
             Note = $"Tự động xác thực qua Webhook {payload.Gateway}"
         });
@@ -252,11 +237,7 @@ public class PaymentService : IPaymentService
             throw new NotFoundException($"Không tìm thấy đơn hàng '{maDH}'.");
         }
 
-        // Với đơn online: khi thoát khỏi "cho_thanh_toan" và không bị "da_huy", nghĩa là đã thanh toán
-        bool isOnline = donHang.PhuongThucThanhToan == "chuyen_khoan" || donHang.PhuongThucThanhToan == "the";
-        bool isPaid = isOnline
-            ? (donHang.TrangThai != AppConstants.OrderStatus.ChoThanhToan && donHang.TrangThai != AppConstants.OrderStatus.DaHuy)
-            : (donHang.TrangThai == AppConstants.OrderStatus.HoanThanh);
+        bool isPaid = donHang.PaymentStatus == "paid";
 
         return new PaymentStatusResponse
         {

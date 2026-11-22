@@ -5,7 +5,7 @@ namespace PhoneStoreAPI.Features.OnlineOrders.Validators;
 
 public class CreateOrderRequestValidator : AbstractValidator<CreateOrderRequest>
 {
-    private static readonly string[] ValidPaymentMethods = { "cod", "chuyen_khoan", "the", "banking", "momo", "vnpay", "zalopay", "card", "tien_mat" };
+    private static readonly string[] ValidPaymentMethods = { "cod", "chuyen_khoan", "banking", "tien_mat" };
 
     public CreateOrderRequestValidator()
     {
@@ -25,7 +25,7 @@ public class CreateOrderRequestValidator : AbstractValidator<CreateOrderRequest>
         RuleFor(x => x.PhuongThucThanhToan)
             .NotEmpty().WithMessage("Phương thức thanh toán không được để trống")
             .Must(m => !string.IsNullOrWhiteSpace(m) && ValidPaymentMethods.Contains(m.Trim().ToLowerInvariant()))
-            .WithMessage("Phương thức thanh toán phải là cod, chuyen_khoan hoặc the");
+            .WithMessage("Phương thức thanh toán phải là COD hoặc chuyển khoản VietQR");
 
         RuleFor(x => x.Items)
             .NotEmpty().WithMessage("Đơn hàng phải có ít nhất 1 sản phẩm");

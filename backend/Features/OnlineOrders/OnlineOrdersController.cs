@@ -22,6 +22,7 @@ public class OnlineOrdersController : ControllerBase
     /// </summary>
     [HttpPost]
     [AllowAnonymous]
+    [EnableRateLimiting("checkout")]
     public async Task<IActionResult> CreateOrder([FromBody] CreateOrderRequest request)
     {
         var result = await _onlineOrderService.CreateOrderAsync(request);
@@ -108,6 +109,7 @@ public class OnlineOrdersController : ControllerBase
     [HttpPut("{maDH}/cancel")]
     [HttpPost("{maDH}/cancel")]
     [AllowAnonymous]
+    [EnableRateLimiting("public-lookup")]
     public async Task<IActionResult> CancelOrder(string maDH, [FromBody] CancelOrderRequest request)
     {
         var result = await _onlineOrderService.CancelOrderByCustomerAsync(maDH, request);

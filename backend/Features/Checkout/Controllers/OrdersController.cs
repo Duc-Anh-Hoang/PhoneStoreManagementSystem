@@ -7,7 +7,7 @@ using PhoneStoreAPI.Features.Checkout.Services;
 namespace PhoneStoreAPI.Features.Checkout.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/checkout/orders")]
 [EnableRateLimiting("checkout")]
 public class OrdersController : ControllerBase
 {

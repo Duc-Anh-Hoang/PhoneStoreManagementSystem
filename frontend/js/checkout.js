@@ -178,17 +178,6 @@
 
     updateBankQR(total) {
       const qrImg = document.getElementById('checkout-vietqr-image');
-      const qrAmount = document.getElementById('checkout-qr-amount');
-      const qrMemo = document.getElementById('checkout-qr-memo');
-      const memoCode = 'CPS' + Math.floor(100000 + Math.random() * 900000);
-
-      if (qrAmount) qrAmount.textContent = (window.CellphoneSCart || window.Cart).formatMoney(total);
-      if (qrMemo) qrMemo.textContent = memoCode;
-      if (qrImg) {
-        // Sử dụng chuẩn QuickLink VietQR mở
-        const qrUrl = `https://img.vietqr.io/image/970436-098765432100-compact2.png?amount=${Math.round(total)}&addInfo=${memoCode}&accountName=CELLPHONES%20241%20LE%20VAN%20VIET`;
-        qrImg.src = qrUrl;
-      }
     }
 
     /**
@@ -241,13 +230,14 @@
       }
 
       const fullAddress = `${address}, ${city}`;
-      const totalAmount = (window.CellphoneSCart || window.Cart).getTotal();
       const appliedPromo = (window.CellphoneSCart || window.Cart).appliedPromo;
       const user = (window.CellphoneSAuth || window.Auth) ? (window.CellphoneSAuth || window.Auth).getUser() : null;
       const maKH = (user && user.type === 'customer' && user.maKH) ? user.maKH : null;
 
       // Nút đặt hàng loading
       const submitBtn = document.getElementById('btn-checkout-submit');
+      if (submitBtn?.disabled) return;
+      const submitLabel = submitBtn?.innerHTML;
       if (submitBtn) {
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Đang xử lý đơn hàng...';
@@ -269,37 +259,33 @@
         }))
       };
 
-      let orderResult = null;
+      const fingerprint = JSON.stringify(requestPayload);
+      if (this.pendingOrder?.fingerprint !== fingerprint) {
+        this.pendingOrder = { fingerprint, code: generateOrderCode() };
+      }
 
-      // 1. Thử gửi lên REST API Backend nếu có
+      let orderResult;
       try {
-        const resp = await fetch(`${getApiBase()}/orders`, {
+        const response = await fetch(getApiBase() + '/orders', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(requestPayload)
+          body: JSON.stringify({ ...requestPayload, maDH: this.pendingOrder.code })
         });
-        if (resp.ok) {
-          orderResult = await resp.json().catch(() => null);
+        orderResult = await response.json();
+        if (!response.ok || !orderResult.maDH) {
+          throw new Error(orderResult.message || 'Máy chủ chưa xác nhận đơn hàng.');
         }
-      } catch (err) {
-        console.warn('API /orders không khả dụng hoặc sản phẩm thuộc kho JSON thực, chuyển sang chế độ lưu trữ thời gian thực:', err);
+      } catch (error) {
+        alert(error.message || 'Chưa xác nhận được đơn hàng. Giỏ hàng vẫn được giữ.');
+        return;
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = submitLabel;
+        }
       }
 
-      // 2. Nếu backend không khả dụng hoặc trả về lỗi, tự sinh mã đơn hàng an toàn (Giai đoạn 1)
-      const isOnline = paymentMethod === 'banking' || paymentMethod === 'momo' || paymentMethod === 'card';
-      const initialStatus = isOnline ? 'cho_thanh_toan' : 'cho_xac_nhan';
-
-      if (!orderResult || !orderResult.maDH) {
-        const genId = generateOrderCode(); // Giai đoạn 1: dùng crypto thay Math.random
-        orderResult = {
-          maDH: genId,
-          soHD: null,
-          tongTien: totalAmount,
-          trangThai: initialStatus,
-          ngayDat: new Date().toISOString(),
-          message: isOnline ? 'Đơn hàng đã khởi tạo, vui lòng quét mã thanh toán!' : 'Đặt hàng thành công!'
-        };
-      }
+      this.pendingOrder = null;
 
       // 3. ĐỒNG BỘ REALTIME VÀO KHO DỮ LIỆU ĐƠN HÀNG THỰC TẾ
       const realOrder = {
@@ -309,8 +295,8 @@
         sdtNguoiNhan: phone,
         diaChiGiao: fullAddress,
         phuongThucThanhToan: paymentMethod,
-        tongTien: totalAmount,
-        trangThai: orderResult.trangThai || initialStatus,
+        tongTien: orderResult.tongTien,
+        trangThai: orderResult.trangThai,
         ghiChu: note || '',
         items: cartItems.map(it => ({
           maHang: it.maHang,
@@ -343,7 +329,7 @@
       }
 
       this.closeCheckout();
-      this.showThankYou(realOrder, cartItems, totalAmount);
+      this.showThankYou(realOrder, cartItems, orderResult.tongTien);
     }
 
     showThankYou(order, items, total) {
@@ -392,9 +378,33 @@
       };
       if (elPayment) elPayment.textContent = paymentMap[order.phuongThucThanhToan] || order.phuongThucThanhToan;
 
+      const qrBox = document.getElementById('thankyou-qr-box');
+      const qrImage = document.getElementById('thankyou-qr');
+      const qrStatus = document.getElementById('thankyou-qr-status');
+      qrBox.classList.toggle('hidden', order.phuongThucThanhToan !== 'chuyen_khoan');
+      qrImage.classList.add('hidden');
+      qrImage.removeAttribute('src');
+      if (order.phuongThucThanhToan === 'chuyen_khoan') {
+        qrStatus.textContent = 'Đang tải mã thanh toán…';
+        this.loadPaymentQr(order.maDH, qrImage, qrStatus);
+      }
+
       if (modal) {
         modal.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
+      }
+    }
+
+    async loadPaymentQr(orderCode, image, status) {
+      try {
+        const response = await fetch(getApiBase() + '/payment/vietqr/' + encodeURIComponent(orderCode));
+        const qr = await response.json();
+        if (!response.ok) throw new Error(qr.message || 'Chưa lấy được mã thanh toán.');
+        image.src = qr.qrUrl;
+        image.classList.remove('hidden');
+        status.textContent = 'Quét mã để chuyển khoản với nội dung ' + qr.memo + '.';
+      } catch (error) {
+        status.textContent = error.message || 'Vui lòng liên hệ cửa hàng để thanh toán.';
       }
     }
 

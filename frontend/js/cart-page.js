@@ -17,13 +17,6 @@
     'FREE50K': { code: 'FREE50K', discount: 50000, type: 'fixed', minOrder: 300000, desc: 'Tặng voucher 50.000đ phụ kiện' }
   };
 
-  const BANK_CONFIGS = {
-    'MB': { name: 'MBBank (Ngân hàng Quân Đội)', sepayBank: 'MBBank', accountNo: '0901234567', accountName: 'CONG TY TNHH SAMA MOBILE' },
-    'VCB': { name: 'Vietcombank (Ngoại Thương VN)', sepayBank: 'Vietcombank', accountNo: '1029384756', accountName: 'CONG TY TNHH SAMA MOBILE' },
-    'TCB': { name: 'Techcombank (Kỹ Thương VN)', sepayBank: 'Techcombank', accountNo: '1903847561', accountName: 'CONG TY TNHH SAMA MOBILE' },
-    'ACB': { name: 'ACB (Ngân hàng Á Châu)', sepayBank: 'ACB', accountNo: '246813579', accountName: 'CONG TY TNHH SAMA MOBILE' }
-  };
-
   const RECOMMENDED_DEALS = [
     {
       id: 'REC_DT01',
@@ -83,31 +76,10 @@
     }
   ];
 
-  function getActiveBankConfig() {
-    try {
-      const saved = localStorage.getItem('samamobile_custom_bank_config');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (parsed && parsed.accountNo) return parsed;
-      }
-    } catch (e) {}
-    return BANK_CONFIGS[selectedBank] || BANK_CONFIGS['MB'];
-  }
-
-  function getQrCodeUrl(bankCfg, amount, memo) {
-    const bank = bankCfg.sepayBank || bankCfg.name?.split(' ')[0] || selectedBank || 'MBBank';
-    const acc = bankCfg.accountNo || '0901234567';
-    const amt = Math.max(1000, Math.round(Number(amount) || 0));
-    const safeMemo = (memo || 'SAMA').replace(/[^a-zA-Z0-9 ]/g, '').trim();
-    return `https://qr.sepay.vn/img?bank=${encodeURIComponent(bank)}&acc=${encodeURIComponent(acc)}&amount=${amt}&des=${encodeURIComponent(safeMemo)}`;
-  }
-
   let appliedVoucher = null;
   let useMemberPoints = false; // Tài khoản có 200 Đ điểm tích lũy
   let deliveryMethod = 'delivery'; // 'delivery' | 'store'
   let paymentMethod = 'banking'; // 'banking' | 'momo' | 'cod' | 'card'
-  let selectedBank = 'MB'; // 'MB' | 'VCB' | 'TCB' | 'ACB'
-  let selectedWallet = 'momo'; // 'momo' | 'vnpay' | 'zalopay'
   let currentActiveTab = 'cart'; // 'cart' | 'orders'
   let currentOrderStatusFilter = 'all'; // 'all' | 'cho_xac_nhan' | 'dang_giao' | 'da_giao' | 'da_huy'
   let pendingCancelOrderCode = null;
@@ -241,32 +213,6 @@
     return Number(num).toLocaleString('vi-VN') + '₫';
   }
 
-  function getCartFinalTotal() {
-    const items = getCart();
-    const selectedItems = items.filter((it, idx) => {
-      const id = String(it.id || `${it.maHang}_${idx}`);
-      return selectedItemIds.size === 0 || selectedItemIds.has(id);
-    });
-
-    const subtotal = selectedItems.reduce((s, it) => s + ((Number(it.price || it.donGia || 0)) * (Number(it.qty || it.soLuong || 1))), 0);
-    let memberDiscount = 0;
-    if (subtotal >= 1000000) memberDiscount = Math.round(subtotal * 0.01);
-
-    let pointsDiscount = 0;
-    if (useMemberPoints && subtotal > 0) {
-      pointsDiscount = Math.min(200000, subtotal);
-    }
-
-    let voucherDiscount = 0;
-    if (appliedVoucher && subtotal > 0) {
-      if (appliedVoucher.type === 'percent') {
-        voucherDiscount = Math.round((subtotal * appliedVoucher.discount) / 100);
-      } else {
-        voucherDiscount = appliedVoucher.discount;
-      }
-    }
-    return Math.max(0, subtotal - memberDiscount - pointsDiscount - voucherDiscount);
-  }
 
   function updateHeaderBadge() {
     const items = getCart();
@@ -1167,8 +1113,6 @@
     if (elMobileFinal) elMobileFinal.textContent = formatVND(finalTotal);
 
     updateFreeshipProgress(subtotal);
-    updateVietQR(finalTotal);
-    updateEWalletQR(finalTotal);
     updateCodAvailability(finalTotal);
   }
 
@@ -1284,84 +1228,6 @@
     if (typeof updateShippingQuote === 'function') updateShippingQuote();
   };
 
-  // Cập nhật VietQR Code động
-  function updateVietQR(amount) {
-    const cfg = getActiveBankConfig();
-    const qrImg = document.getElementById('vietqr-code-img');
-    const qrAmount = document.getElementById('vietqr-amount-text');
-    const bankName = document.getElementById('vietqr-bank-name');
-    const accountNo = document.getElementById('vietqr-account-no');
-    const accountNameEl = document.getElementById('vietqr-account-name');
-    const memoEl = document.getElementById('vietqr-memo-text');
-
-    if (qrAmount) qrAmount.textContent = formatVND(amount);
-    if (bankName) bankName.textContent = cfg.name;
-    if (accountNo) accountNo.textContent = cfg.accountNo;
-    if (accountNameEl) accountNameEl.textContent = cfg.accountName || 'CONG TY TNHH SAMA MOBILE';
-
-    const memo = 'SAMA 261106';
-    if (memoEl) memoEl.textContent = memo;
-
-    if (qrImg) {
-      const amt = Math.max(1000, Math.round(amount));
-      qrImg.src = getQrCodeUrl(cfg, amt, memo);
-    }
-  }
-
-  window.selectVietQrBank = function (bankCode) {
-    selectedBank = bankCode;
-    const buttons = document.querySelectorAll('.vietqr-bank-chip');
-    buttons.forEach(btn => {
-      btn.className = 'vietqr-bank-chip p-2 rounded-xl border border-slate-200 bg-white hover:border-slate-300 font-medium text-slate-700 flex items-center justify-center gap-2 cursor-pointer transition-all';
-    });
-    const targetBtn = document.getElementById(`bank-btn-${bankCode}`);
-    if (targetBtn) {
-      targetBtn.className = 'vietqr-bank-chip p-2 rounded-xl border-2 border-blue-600 bg-blue-50/60 font-bold text-blue-900 flex items-center justify-center gap-2 cursor-pointer transition-all';
-    }
-    const finalTotal = getCartFinalTotal();
-    updateVietQR(finalTotal);
-  };
-
-  // Cập nhật QR Ví Điện Tử
-  function updateEWalletQR(amount) {
-    const qrImg = document.getElementById('ewallet-qr-img');
-    const amtEl = document.getElementById('ewallet-amount-text');
-    const labelEl = document.getElementById('ewallet-name-label');
-    const appNameEl = document.getElementById('ewallet-app-name');
-
-    if (amtEl) amtEl.textContent = formatVND(amount);
-
-    const amt = Math.max(10000, Math.round(amount));
-    const memo = 'SAMA WALLET 261106';
-
-    if (qrImg) {
-      const cfg = getActiveBankConfig();
-      qrImg.src = getQrCodeUrl(cfg, amt, memo);
-    }
-
-    if (labelEl) {
-      labelEl.textContent = selectedWallet === 'vnpay' ? 'Cổng VNPAY-QR Doanh Nghiệp' : (selectedWallet === 'zalopay' ? 'Ví ZaloPay Doanh Nghiệp' : 'Ví MoMo Doanh Nghiệp');
-    }
-    if (appNameEl) {
-      appNameEl.textContent = selectedWallet === 'vnpay' ? 'VNPAY / App Ngân Hàng' : (selectedWallet === 'zalopay' ? 'ZaloPay' : 'MoMo');
-    }
-  }
-
-  window.selectEWallet = function (walletCode) {
-    selectedWallet = walletCode;
-    const buttons = document.querySelectorAll('.ewallet-tab-btn');
-    buttons.forEach(btn => {
-      btn.className = 'ewallet-tab-btn p-2 rounded-xl border border-slate-200 bg-white hover:border-slate-300 font-medium text-slate-700 flex items-center justify-center gap-2 cursor-pointer transition-all';
-    });
-    const target = document.getElementById(`ewallet-btn-${walletCode}`);
-    if (target) {
-      const color = walletCode === 'momo' ? 'pink' : (walletCode === 'vnpay' ? 'blue' : 'cyan');
-      target.className = `ewallet-tab-btn p-2 rounded-xl border-2 border-${color}-600 bg-${color}-50/60 font-bold text-${color}-900 flex items-center justify-center gap-2 cursor-pointer transition-all`;
-    }
-    const finalTotal = getCartFinalTotal();
-    updateEWalletQR(finalTotal);
-  };
-
   // Sao chép văn bản & thông báo toast
   window.copyText = function (text, label) {
     if (!text) return;
@@ -1403,9 +1269,13 @@
     }, 2400);
   }
 
+  let pendingCheckout;
+  let submittingCheckout = false;
+
   // Submit Đặt Hàng
   window.submitCheckoutOrder = async function (e) {
     if (e) e.preventDefault();
+    if (submittingCheckout) return;
 
     const items = getCart();
     if (!items || items.length === 0) {
@@ -1475,7 +1345,6 @@
     }
     const finalTotal = Math.max(0, subtotal - discount) + (currentShippingFee || 0);
 
-    const randomCode = Math.floor(1000 + Math.random() * 9000);
     // Giai đoạn 1: Sinh mã đơn hàng ngẫu nhiên dạng DH-XXXXXX (loại bỏ 0,O,1,I,L)
     const ORDER_CODE_CHARSET = '23456789ABCDEFGHJKMNPQRSTUVWXYZ';
     const arr = new Uint8Array(6);
@@ -1518,55 +1387,51 @@
     };
 
     const btnSubmit = document.getElementById('btn-submit-order');
+    const submitLabel = btnSubmit?.innerHTML;
     if (btnSubmit) {
       btnSubmit.disabled = true;
       btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Đang tạo đơn hàng...';
     }
 
-    // Lưu đơn hàng
     try {
-      const orders = getOrders();
-      orders.unshift(orderData);
-      saveOrders(orders);
-    } catch (e) {}
+      submittingCheckout = true;
+      const request = {
+        tenNguoiNhan: orderData.tenNguoiNhan,
+        sdtNguoiNhan: orderData.sdtNguoiNhan,
+        email: orderData.email,
+        diaChiGiao: orderData.diaChiGiao,
+        phuongThucThanhToan: orderData.phuongThucThanhToan,
+        ghiChu: orderData.ghiChu,
+        sdtThanhVien: (currentVipData.isGift ? (document.getElementById('order-member-phone')?.value || '').trim() : orderData.sdtNguoiNhan),
+        otpToken: currentVipData.otpToken,
+        xacNhanCskh: currentVipData.isGift && currentVipData.cskhFallback,
+        items: orderData.items.map(it => ({
+          maHang: String(it.maHang || ''),
+          tenHang: it.tenHang,
+          soLuong: it.soLuong,
+          donGia: it.donGia
+        }))
+      };
+      const fingerprint = JSON.stringify(request);
+      if (pendingCheckout?.fingerprint !== fingerprint) pendingCheckout = { fingerprint, maDH };
+      const saved = await window.api.post('/orders', { ...request, maDH: pendingCheckout.maDH });
+      if (!saved?.maDH) throw new Error('Máy chủ chưa xác nhận đơn hàng.');
 
-    // Gửi realtime qua SignalR & BroadcastChannel tới Admin ngay lập tức
-    try {
-      if (window.OrderSignalR && typeof window.OrderSignalR.notifyNewOrder === 'function') {
-        window.OrderSignalR.notifyNewOrder(orderData);
-        window.OrderSignalR.joinOrderGroup(orderData.maDH);
-        if (orderData.sdtNguoiNhan) window.OrderSignalR.joinCustomerGroup(orderData.sdtNguoiNhan);
+      pendingCheckout = null;
+      Object.assign(orderData, { maDH: saved.maDH, trangThai: saved.trangThai, tongTien: saved.tongTien, ngayDat: saved.ngayDat });
+    } catch (error) {
+      showToast(error.message || 'Chưa xác nhận được đơn hàng. Giỏ hàng vẫn được giữ.');
+      return;
+    } finally {
+      submittingCheckout = false;
+      if (btnSubmit) {
+        btnSubmit.disabled = false;
+        btnSubmit.innerHTML = submitLabel;
       }
-    } catch (e) {}
+    }
 
-
-    // Gửi lên REST API backend (đồng bộ MaDH để Admin và DB khớp 100%)
-    try {
-      if (window.api && typeof window.api.post === 'function') {
-        const postPromise = window.api.post('/orders', {
-          maDH: orderData.maDH,
-          tenNguoiNhan: orderData.tenNguoiNhan,
-          sdtNguoiNhan: orderData.sdtNguoiNhan,
-          email: orderData.email,
-          diaChiGiao: orderData.diaChiGiao,
-          phuongThucThanhToan: orderData.phuongThucThanhToan,
-          ghiChu: orderData.ghiChu,
-          sdtThanhVien: (currentVipData.isGift ? (document.getElementById('order-member-phone')?.value || '').trim() : orderData.sdtNguoiNhan),
-          otpToken: currentVipData.otpToken,
-          xacNhanCskh: currentVipData.isGift && currentVipData.cskhFallback,
-          items: orderData.items.map(it => ({
-            maHang: String(it.maHang || 'MH001').substring(0, 10),
-            tenHang: it.tenHang,
-            soLuong: it.soLuong,
-            donGia: it.donGia
-          }))
-        });
-        await Promise.race([
-          postPromise,
-          new Promise(resolve => setTimeout(resolve, 2500))
-        ]).catch(() => {});
-      }
-    } catch (e) {}
+    saveOrders([orderData, ...getOrders().filter(order => order.maDH !== orderData.maDH)]);
+    window.OrderSignalR?.joinOrderGroup?.(orderData.maDH);
 
     // Giữ lại các mặt hàng chưa chọn (nếu có), xóa các mặt hàng đã đặt
     const remainingItems = items.filter((it, idx) => {
@@ -1577,7 +1442,7 @@
     saveCart(remainingItems);
 
     // Hiển thị màn hình thành công
-    showSuccessScreen(orderData);
+    await showSuccessScreen(orderData);
   };
 
   let qrPollingInterval = null;
@@ -1593,7 +1458,7 @@
     }
   }
 
-  function handlePaymentSuccessUI(maDH, totalAmount) {
+  function handlePaymentSuccessUI(maDH, totalAmount, status) {
     stopQrFlow();
 
     // 1. Cập nhật LocalStorage: đã thanh toán nhưng trạng thái là "cho_xac_nhan" chờ Admin duyệt!
@@ -1602,7 +1467,7 @@
       const idx = orders.findIndex(o => o.maDH === maDH);
       if (idx > -1) {
         orders[idx].daThanhToan = true;
-        orders[idx].trangThai = 'da_xac_nhan';
+        orders[idx].trangThai = status;
         saveOrders(orders);
       }
     } catch (e) {}
@@ -1618,7 +1483,7 @@
       iconEl.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
     }
     if (titleEl) titleEl.textContent = 'Đã Nhận Thanh Toán Chuyển Khoản!';
-    if (subEl) subEl.textContent = 'SamaMobile đã nhận được tiền thanh toán. Hệ thống đã TỰ ĐỘNG XÁC NHẬN đơn hàng & đẩy sang GHN đóng gói bưu phẩm!';
+    if (subEl) subEl.textContent = 'SamaMobile đã ghi nhận khoản chuyển khoản cho đơn hàng này.';
     if (badgeContainer) {
       badgeContainer.innerHTML = `
         <div class="flex flex-wrap items-center justify-center gap-2">
@@ -1641,7 +1506,7 @@
       const celebTitle = celebBox.querySelector('h3');
       const celebDesc = celebBox.querySelector('p');
       if (celebTitle) celebTitle.textContent = 'Giao Dịch Thanh Toán Thành Công!';
-      if (celebDesc) celebDesc.textContent = 'Hệ thống đã tự động ghi nhận chuyển khoản, duyệt đơn và tạo vận đơn GHN thành công! Đang tiến hành đóng gói bưu phẩm.';
+      if (celebDesc) celebDesc.textContent = 'Bạn có thể theo dõi tiến độ giao hàng trong mục Đơn hàng.';
     }
 
     // 4. Phát âm thanh Ting ting & Toast
@@ -1658,18 +1523,13 @@
 
     qrPollingInterval = setInterval(async () => {
       try {
-        const res = await fetch(`http://localhost:5132/api/payment/status/${encodeURIComponent(maDH)}`);
-        if (res.ok) {
-          const data = await res.json();
-          if (data && (data.isPaid || data.daThanhToan || data.trangThai === 'da_xac_nhan' || data.trangThai === 'dang_giao' || data.trangThai === 'hoan_thanh')) {
-            handlePaymentSuccessUI(maDH, data.tongTien);
-          }
-        }
+        const data = await window.api.get('/payment/status/' + encodeURIComponent(maDH));
+        if (data.isPaid) handlePaymentSuccessUI(maDH, data.tongTien, data.trangThai);
       } catch (e) {}
     }, 2500);
   }
 
-  function showSuccessScreen(order) {
+  async function showSuccessScreen(order) {
     const mainScreen = document.getElementById('cart-main-wrapper');
     const successScreen = document.getElementById('order-success-screen');
     const stepperContainer = document.getElementById('cart-stepper-container');
@@ -1744,32 +1604,27 @@
           const qrBank = document.getElementById('success-qr-bank-name');
           const qrAccName = document.getElementById('success-qr-account-name');
           const qrAccNo = document.getElementById('success-qr-account-no');
-          const memo = order.maDH;
-
-          const cfg = getActiveBankConfig();
-          if (memoText) memoText.textContent = memo;
-          if (qrAmount) qrAmount.textContent = formatVND(order.tongTien);
-          if (qrBank) qrBank.textContent = cfg.name;
-          if (qrAccName) qrAccName.textContent = cfg.accountName || 'CONG TY TNHH SAMA MOBILE';
-          if (qrAccNo) qrAccNo.textContent = cfg.accountNo;
-          if (qrImg) {
-            qrImg.src = getQrCodeUrl(cfg, order.tongTien, memo);
+          try {
+            const qr = await window.api.get('/payment/vietqr/' + encodeURIComponent(order.maDH));
+            if (memoText) memoText.textContent = qr.memo;
+            if (qrAmount) qrAmount.textContent = formatVND(qr.amount);
+            if (qrBank) qrBank.textContent = qr.bankId;
+            if (qrAccName) qrAccName.textContent = qr.accountName;
+            if (qrAccNo) qrAccNo.textContent = qr.accountNumber;
+            if (qrImg) qrImg.src = qr.qrUrl;
+          } catch (error) {
+            vietQrBox.classList.add('hidden');
+            if (titleEl) titleEl.textContent = 'Đơn hàng đã được ghi nhận';
+            if (subEl) subEl.textContent = error.message || 'Chưa lấy được mã thanh toán. Vui lòng liên hệ cửa hàng.';
+            startPaymentPolling(order.maDH);
+            return;
           }
 
-          startQrCountdown(order.maDH);
+          startQrCountdown(order.ngayDat);
           startPaymentPolling(order.maDH);
         }
 
-        // Lắng nghe Realtime qua SignalR
-        const handleStatusEvent = (e) => {
-          if (e.detail && e.detail.maDH === order.maDH) {
-            if (e.detail.isPaid || e.detail.trangThai === 'da_xac_nhan' || e.detail.trangThai === 'dang_giao' || e.detail.trangThai === 'hoan_thanh') {
-              handlePaymentSuccessUI(order.maDH, order.tongTien);
-            }
-          }
-        };
-        window.addEventListener('samamobile:payment_success', handleStatusEvent);
-        window.addEventListener('samamobile:order_status_updated', handleStatusEvent);
+
 
       } else {
         // Giao diện COD (Phương án 1)
@@ -1791,19 +1646,21 @@
     }
   }
 
-  function startQrCountdown(maDH) {
+  function startQrCountdown(createdAt) {
     if (qrCountdownInterval) clearInterval(qrCountdownInterval);
-    let secondsLeft = 15 * 60;
+    const expiresAt = new Date(createdAt).getTime() + 15 * 60 * 1000;
     const timerEl = document.getElementById('success-qr-timer');
     const statusTextEl = document.getElementById('qr-realtime-status-text');
 
     qrCountdownInterval = setInterval(() => {
-      secondsLeft--;
+      const secondsLeft = Math.ceil((expiresAt - Date.now()) / 1000);
       if (secondsLeft <= 0) {
-        stopQrFlow();
+        clearInterval(qrCountdownInterval);
+        qrCountdownInterval = null;
+        document.getElementById('success-vietqr-img')?.removeAttribute('src');
         if (timerEl) timerEl.textContent = '00:00 (Hết hạn)';
         if (statusTextEl) {
-          statusTextEl.textContent = 'Đơn hàng đã hết hạn giữ chỗ thanh toán.';
+          statusTextEl.textContent = 'Đã hết thời gian giữ hàng. Vui lòng liên hệ cửa hàng nếu đã chuyển tiền.';
           statusTextEl.parentElement?.classList.replace('bg-amber-50/90', 'bg-rose-50');
           statusTextEl.parentElement?.classList.replace('text-amber-800', 'text-rose-700');
           statusTextEl.parentElement?.classList.replace('border-amber-200', 'border-rose-200');
@@ -1811,10 +1668,6 @@
         const badgeContainer = document.getElementById('success-screen-badge-container');
         if (badgeContainer) {
           badgeContainer.innerHTML = '<span class="px-3.5 py-1.5 rounded-full bg-rose-50 text-rose-700 border border-rose-300 text-xs font-bold inline-flex items-center gap-1.5 shadow-2xs"><i class="fa-solid fa-ban text-rose-600"></i> Đã hết hạn thanh toán</span>';
-        }
-        // Gọi API hủy đơn quá hạn
-        if (maDH && window.api && typeof window.api.post === 'function') {
-          window.api.post(`/donhangonline/${encodeURIComponent(maDH)}/trangthai`, { trangThai: 'da_huy' }).catch(() => {});
         }
         return;
       }
@@ -1831,32 +1684,12 @@
     const orderCode = elCode ? elCode.textContent.trim() : '';
     if (!orderCode) return;
 
-    const btn = document.getElementById('btn-manual-confirm-qr');
-    if (btn) {
-      btn.disabled = true;
-      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Đang kiểm tra...';
-    }
-
     try {
-      const payPayload = {
-        transactionId: `CLIENT_MANUAL_${Date.now()}`,
-        note: 'Khách hàng bấm kiểm tra thanh toán ngay trên web'
-      };
-      const res = await (window.api && typeof window.api.post === 'function'
-        ? window.api.post('/payment/confirm/' + encodeURIComponent(orderCode), payPayload)
-        : fetch('/api/payment/confirm/' + encodeURIComponent(orderCode), {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payPayload)
-          }).then(r => r.json()));
-
-      if (res.ok) {
-        handlePaymentSuccessUI(orderCode);
-      } else {
-        handlePaymentSuccessUI(orderCode);
-      }
-    } catch (e) {
-      handlePaymentSuccessUI(orderCode);
+      const status = await window.api.get('/payment/status/' + encodeURIComponent(orderCode));
+      if (status.isPaid) handlePaymentSuccessUI(orderCode, status.tongTien, status.trangThai);
+      else showToast('Chưa thấy giao dịch khớp với đơn hàng. Vui lòng kiểm tra lại sau.');
+    } catch {
+      showToast('Không kiểm tra được giao dịch. Vui lòng thử lại.');
     }
   };
 
@@ -1867,32 +1700,10 @@
 
     if (!confirm(`Bạn chắc chắn muốn hủy đơn hàng #${orderCode}?`)) return;
 
-    stopQrFlow();
-
-    try {
-      if (window.api && typeof window.api.post === 'function') {
-        await window.api.post(`/donhangonline/${encodeURIComponent(orderCode)}/trangthai`, {
-          trangThai: 'da_huy'
-        }).catch(() => {});
-      }
-    } catch (e) {}
-
-    try {
-      const orders = getOrders();
-      const idx = orders.findIndex(o => o.maDH === orderCode);
-      if (idx > -1) {
-        orders[idx].trangThai = 'da_huy';
-        saveOrders(orders);
-      }
-    } catch (e) {}
-
-    if (typeof showToast === 'function') {
-      showToast(`Đã hủy đơn hàng #${orderCode}`, 'info');
-    }
-
-    setTimeout(() => {
+    if (await cancelCustomerOrder(orderCode, 'Khách yêu cầu hủy trước khi thanh toán')) {
+      stopQrFlow();
       window.switchCartTab('orders');
-    }, 600);
+    }
   };
 
   window.downloadQrImage = function () {
@@ -2142,7 +1953,7 @@
     window.renderOrders();
   };
 
-  window.showOrderQrModal = function (orderCode) {
+  window.showOrderQrModal = async function (orderCode) {
     const orders = getOrders();
     const order = orders.find(o => o.maDH === orderCode);
     if (!order) return;
@@ -2157,15 +1968,15 @@
     if (title) title.textContent = `Thanh toán đơn ${order.maDH}`;
     if (amount) amount.textContent = formatVND(order.tongTien);
 
-    const memoText = order.maDH;
-    if (memo) memo.textContent = memoText;
-
-    if (img) {
-      const cfg = getActiveBankConfig();
-      img.src = getQrCodeUrl(cfg, order.tongTien, memoText);
+    try {
+      const qr = await window.api.get('/payment/vietqr/' + encodeURIComponent(order.maDH));
+      if (memo) memo.textContent = qr.memo;
+      if (amount) amount.textContent = formatVND(qr.amount);
+      if (img) img.src = qr.qrUrl;
+      if (modal) modal.classList.remove('hidden');
+    } catch (error) {
+      showToast(error.message || 'Chưa lấy được mã thanh toán.');
     }
-
-    if (modal) modal.classList.remove('hidden');
   };
 
   window.closeOrderQrModal = function () {
@@ -2177,29 +1988,20 @@
   window.confirmModalPayment = async function () {
     if (!activeModalOrderCode) return;
     const code = activeModalOrderCode;
-    const orders = getOrders();
-    const idx = orders.findIndex(o => o.maDH === code);
-    if (idx > -1) {
-      orders[idx].daThanhToan = true;
-      orders[idx].trangThai = 'da_xac_nhan';
-      saveOrders(orders);
-      window.renderOrders();
-      showToast(`Thanh toán thành công! Hệ thống đã TỰ ĐỘNG XÁC NHẬN đơn ${code} và đẩy sang GHN.`, 'success');
-    }
-    window.closeOrderQrModal();
-
     try {
-      const modalPayload = { transactionId: `MODAL_CONFIRM_${Date.now()}`, note: 'Khách xác nhận thanh toán qua modal' };
-      if (window.api && typeof window.api.post === 'function') {
-        await window.api.post('/payment/confirm/' + encodeURIComponent(code), modalPayload);
-      } else {
-        await fetch('/api/payment/confirm/' + encodeURIComponent(code), {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(modalPayload)
-        });
+      const status = await window.api.get('/payment/status/' + encodeURIComponent(code));
+      if (!status.isPaid) {
+        showToast('Chưa thấy giao dịch khớp với đơn hàng. Vui lòng kiểm tra lại sau.');
+        return;
       }
-    } catch (e) {}
+      saveOrders(getOrders().map(order => order.maDH === code
+        ? { ...order, daThanhToan: true, trangThai: status.trangThai }
+        : order));
+      window.renderOrders();
+      window.closeOrderQrModal();
+    } catch {
+      showToast('Không kiểm tra được giao dịch. Vui lòng thử lại.');
+    }
   };
 
   window.openCancelModal = function (maDH) {
@@ -2216,38 +2018,30 @@
     pendingCancelOrderCode = null;
   };
 
-  window.confirmCancelOrder = function () {
-    if (!pendingCancelOrderCode) return;
-
-    const reason = document.getElementById('cancel-reason-select')?.value || 'Tôi muốn đổi ý';
-    const orders = getOrders();
-    const idx = orders.findIndex(o => o.maDH === pendingCancelOrderCode);
-
-    if (idx > -1) {
-      const canceledOrder = orders[idx];
-      canceledOrder.trangThai = 'da_huy';
-      canceledOrder.lyDoHuy = reason;
-      saveOrders(orders);
-      window.renderOrders();
-      showToast(`Đã hủy thành công đơn hàng ${pendingCancelOrderCode}!`);
-      if (window.OrderSignalR && typeof window.OrderSignalR.notifyOrderStatusChanged === 'function') {
-        window.OrderSignalR.notifyOrderStatusChanged(
-          canceledOrder.maDH,
-          'da_huy',
-          `Khách hàng ${canceledOrder.tenNguoiNhan || ''} vừa hủy đơn hàng #${canceledOrder.maDH} (Lý do: ${reason})`,
-          canceledOrder.sdtNguoiNhan || '',
-          'user'
-        );
-      }
-      if (window.api && typeof window.api.put === 'function') {
-        window.api.put('/orders/' + encodeURIComponent(canceledOrder.maDH) + '/cancel', {
-          sdt: canceledOrder.sdtNguoiNhan || '',
-          lyDo: reason
-        }).catch(() => {});
-      }
+  async function cancelCustomerOrder(code, reason) {
+    const order = getOrders().find(item => item.maDH === code);
+    if (!order) return false;
+    try {
+      const saved = await window.api.put('/orders/' + encodeURIComponent(code) + '/cancel', {
+        sdt: order.sdtNguoiNhan, lyDo: reason
+      });
+      saveOrders(getOrders().map(item => item.maDH === code
+        ? { ...item, trangThai: saved.trangThai, lyDoHuy: reason } : item));
+      showToast('Đã hủy đơn hàng ' + code);
+      return true;
+    } catch (error) {
+      showToast(error.message || 'Chưa hủy được đơn hàng.');
+      return false;
     }
+  }
 
-    window.closeCancelModal();
+  window.confirmCancelOrder = async function () {
+    if (!pendingCancelOrderCode) return;
+    const reason = document.getElementById('cancel-reason-select')?.value || 'Tôi muốn đổi ý';
+    if (await cancelCustomerOrder(pendingCancelOrderCode, reason)) {
+      window.renderOrders();
+      window.closeCancelModal();
+    }
   };
 
   window.reOrderItems = function (maDH) {
@@ -2324,75 +2118,6 @@
       }
     }
   });
-
-  // Tùy chỉnh STK nhận tiền thực tế để test quét app ngân hàng
-  window.openCustomBankModal = function () {
-    const modal = document.getElementById('custom-bank-modal');
-    if (modal) modal.classList.remove('hidden');
-  };
-
-  window.closeCustomBankModal = function () {
-    const modal = document.getElementById('custom-bank-modal');
-    if (modal) modal.classList.add('hidden');
-  };
-
-  window.saveCustomBankConfig = function () {
-    const bank = document.getElementById('custom-bank-select')?.value || 'MBBank';
-    const acc = (document.getElementById('custom-bank-account')?.value || '').trim();
-    const name = (document.getElementById('custom-bank-name')?.value || '').trim();
-
-    if (!acc) {
-      alert('Vui lòng nhập số tài khoản ngân hàng của bạn');
-      return;
-    }
-
-    const cfg = {
-      name: `${bank} (${name || 'Tài khoản cá nhân'})`,
-      sepayBank: bank,
-      accountNo: acc,
-      accountName: name || 'NGUOI THU HUONG'
-    };
-
-    localStorage.setItem('samamobile_custom_bank_config', JSON.stringify(cfg));
-    window.closeCustomBankModal();
-    updateVietQR(getCartFinalTotal());
-
-    const successQrImg = document.getElementById('success-vietqr-img');
-    const successCode = document.getElementById('success-order-code')?.textContent?.trim();
-    if (successQrImg && successCode && !document.getElementById('order-success-screen')?.classList.contains('hidden')) {
-      successQrImg.src = getQrCodeUrl(cfg, getCartFinalTotal(), successCode);
-      const qrBank = document.getElementById('success-qr-bank-name');
-      const qrAccName = document.getElementById('success-qr-account-name');
-      const qrAccNo = document.getElementById('success-qr-account-no');
-      if (qrBank) qrBank.textContent = cfg.name;
-      if (qrAccName) qrAccName.textContent = cfg.accountName || 'CONG TY TNHH SAMA MOBILE';
-      if (qrAccNo) qrAccNo.textContent = cfg.accountNo;
-    }
-
-    showToast('Đã lưu cấu hình tài khoản nhận tiền mới!');
-  };
-
-  window.resetDefaultBankConfig = function () {
-    localStorage.removeItem('samamobile_custom_bank_config');
-    window.closeCustomBankModal();
-    updateVietQR(getCartFinalTotal());
-
-    const successQrImg = document.getElementById('success-vietqr-img');
-    const successCode = document.getElementById('success-order-code')?.textContent?.trim();
-    if (successQrImg && successCode && !document.getElementById('order-success-screen')?.classList.contains('hidden')) {
-      const cfg = getActiveBankConfig();
-      successQrImg.src = getQrCodeUrl(cfg, getCartFinalTotal(), successCode);
-      const qrBank = document.getElementById('success-qr-bank-name');
-      const qrAccName = document.getElementById('success-qr-account-name');
-      const qrAccNo = document.getElementById('success-qr-account-no');
-      if (qrBank) qrBank.textContent = cfg.name;
-      if (qrAccName) qrAccName.textContent = cfg.accountName || 'CONG TY TNHH SAMA MOBILE';
-      if (qrAccNo) qrAccNo.textContent = cfg.accountNo;
-    }
-
-    showToast('Đã khôi phục tài khoản mặc định SamaMobile!');
-  };
-
 
   // =========================================================================
   // BƯỚC 2 & 3: TÍCH HỢP ĐỊA CHỈ 3 CẤP GHN & TÍNH PHÍ VẬN CHUYỂN DỰ KIẾN (QUOTE)

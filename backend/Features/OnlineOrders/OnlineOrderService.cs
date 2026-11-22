@@ -1,3 +1,4 @@
+using PhoneStoreAPI.Features.Inventory;
 using System.Text.Json;
 using Microsoft.AspNetCore.SignalR;
 using PhoneStoreAPI.Features.OnlineOrders.Hubs;
@@ -58,6 +59,41 @@ public class OnlineOrderService : IOnlineOrderService
             var sdtNorm = PhoneHelper.NormalizeVietnamesePhone(request.SdtNguoiNhan)
                           ?? request.SdtNguoiNhan.Trim().Replace(" ", "").Replace(".", "").Replace("-", "");
 
+            var phuongThuc = request.PhuongThucThanhToan?.Trim().ToLowerInvariant() switch
+            {
+                "banking" or "chuyen_khoan" => "chuyen_khoan",
+                "cod" or "tien_mat" => "cod",
+                _ => throw new BadRequestException("Đơn online hỗ trợ VietQR và thanh toán khi nhận hàng."),
+            };
+
+            var groupedItems = request.Items.GroupBy(item => item.MaHang.Trim())
+                .Select(group => new { MaHang = group.Key, SoLuong = group.Sum(item => item.SoLuong) }).ToList();
+            var reqMaDH = string.IsNullOrWhiteSpace(request.MaDH) ? null : request.MaDH.Trim().ToUpperInvariant();
+            if (reqMaDH != null)
+            {
+                if (reqMaDH.Length > 15)
+                {
+                    throw new BadRequestException("Mã đơn hàng không hợp lệ.");
+                }
+                if (_context.Database.IsNpgsql())
+                {
+                    await _context.Database.ExecuteSqlInterpolatedAsync($"SELECT pg_advisory_xact_lock(hashtextextended({reqMaDH}, 1))");
+                }
+                var existing = await GetOrderByMaDHAsync(reqMaDH, null);
+                if (existing != null)
+                {
+                    if (existing.SdtNguoiNhan != sdtNorm || existing.TenNguoiNhan != request.TenNguoiNhan.Trim() ||
+                        existing.DiaChiGiao != request.DiaChiGiao.Trim() || existing.PhuongThucThanhToan != phuongThuc ||
+                        existing.Items == null || existing.Items.Count != groupedItems.Count || groupedItems.Any(item =>
+                            !existing.Items.Any(line => line.MaHang == item.MaHang && line.SoLuong == item.SoLuong)))
+                    {
+                        throw new ConflictException("Mã đơn đã được dùng cho thông tin đặt hàng khác.");
+                    }
+                    await transaction.CommitAsync();
+                    return existing;
+                }
+            }
+
             // 2. TÃ¬m hoáº·c táº¡o khÃ¡ch hÃ ng
             KhachHang? khachHang = null;
             if (!string.IsNullOrWhiteSpace(request.MaKH))
@@ -95,30 +131,13 @@ public class OnlineOrderService : IOnlineOrderService
             decimal tongTien = 0m;
             var chiTietList = new List<ChiTietDonHangOnline>();
 
-            var groupedItems = request.Items.GroupBy(x => (x.MaHang ?? "MH001").Trim().Substring(0, Math.Min(10, (x.MaHang ?? "MH001").Trim().Length))).Select(g => new OrderItemRequest { MaHang = g.Key, TenHang = g.First().TenHang, SoLuong = g.Sum(i => i.SoLuong), DonGia = g.First().DonGia }).ToList();
+            await SellableStock.LockItemsAsync(_context, groupedItems.Select(item => item.MaHang));
             foreach (var item in groupedItems)
             {
-                var matHang = await _context.MatHangs.FirstOrDefaultAsync(m => m.MaHang == item.MaHang);
-                if (matHang == null)
-                {
-                    var tenH = !string.IsNullOrWhiteSpace(item.TenHang) ? item.TenHang.Trim() : item.MaHang;
-                    var gia = item.DonGia > 0 ? item.DonGia : 5000000m;
-                    matHang = new MatHang
-                    {
-                        MaHang = item.MaHang,
-                        TenHang = tenH,
-                        DonGia = gia,
-                        Dvt = "CÃ¡i",
-                                                MaLoai = (_context.LoaiHangs.Select(l => l.MaLoai).FirstOrDefault() ?? "APPLE"),
-                        MaNhom = (_context.NhomHangs.Select(n => n.MaNhom).FirstOrDefault() ?? "DIENTHOAI"),
-                        QuanLyImei = true,
-                        ThoiHanBaoHanh = 12
-                    };
-                    _context.MatHangs.Add(matHang);
-                    await _context.SaveChangesAsync();
-                }
-
-                decimal donGiaDb = matHang.DonGia > 0 ? matHang.DonGia : (item.DonGia > 0 ? item.DonGia : 5000000m);
+                var matHang = await _context.MatHangs.FirstOrDefaultAsync(m => m.MaHang == item.MaHang)
+                    ?? throw new NotFoundException($"Mặt hàng {item.MaHang} không tồn tại.");
+                await SellableStock.EnsureAvailableAsync(_context, matHang, item.SoLuong);
+                var donGiaDb = matHang.DonGia;
                 tongTien += donGiaDb * item.SoLuong;
 
                 chiTietList.Add(new ChiTietDonHangOnline
@@ -218,18 +237,12 @@ public class OnlineOrderService : IOnlineOrderService
                 }
             }
 
-            // 4. Tạo DonHangOnline
-            var reqMaDH = !string.IsNullOrWhiteSpace(request.MaDH) ? request.MaDH.Trim().Substring(0, Math.Min(15, request.MaDH.Trim().Length)) : null;
-            // Giai đoạn 1: Dùng mã ngẫu nhiên an toàn thay cho sequence tuần tự
-            var maDH = (!string.IsNullOrWhiteSpace(reqMaDH) && !await _context.DonHangOnlines.AnyAsync(d => d.MaDH == reqMaDH))
-                ? reqMaDH
-                : await _codeGenerator.GenerateOrderCode(code => _context.DonHangOnlines.AnyAsync(d => d.MaDH == code));
-            var phuongThuc = (request.PhuongThucThanhToan ?? "cod").Trim().ToLowerInvariant() switch
+            if (phuongThuc == "cod" && tongTien > (_settings == null ? 30_000_000m : await _settings.GetCodMaxValueAsync()))
             {
-                "banking" or "momo" or "vnpay" or "zalopay" or "chuyen_khoan" => "chuyen_khoan",
-                "card" or "the" => "the",
-                _ => "cod"
-            };
+                throw new BadRequestException("Đơn hàng vượt hạn mức thu hộ. Vui lòng chọn chuyển khoản.");
+            }
+
+            var maDH = reqMaDH ?? await _codeGenerator.GenerateOrderCode(code => _context.DonHangOnlines.AnyAsync(d => d.MaDH == code));
 
             // plan (8).md: Quyết định trạng thái ban đầu bằng Engine
             var addressHash = AddressHashHelper.ComputeAddressHash(request.DiaChiGiao);
@@ -371,6 +384,7 @@ public class OnlineOrderService : IOnlineOrderService
                 DiaChiGiao = donHang.DiaChiGiao,
                 PhuongThucThanhToan = donHang.PhuongThucThanhToan,
                 TongTien = donHang.TongTien,
+                PaymentStatus = donHang.PaymentStatus,
                 TrangThai = donHang.TrangThai,
                 Items = chiTietList.Select(ct => new OrderItemDto
                 {
@@ -418,6 +432,7 @@ public class OnlineOrderService : IOnlineOrderService
             DiaChiGiao = order.DiaChiGiao,
             PhuongThucThanhToan = order.PhuongThucThanhToan,
             TongTien = order.TongTien,
+            PaymentStatus = order.PaymentStatus,
             TrangThai = order.TrangThai,
             SoHD = order.SoHD,
             Items = order.ChiTietDonHangs.Select(c => new OrderItemDto
@@ -449,6 +464,7 @@ public class OnlineOrderService : IOnlineOrderService
             DiaChiGiao = o.DiaChiGiao,
             PhuongThucThanhToan = o.PhuongThucThanhToan,
             TongTien = o.TongTien,
+            PaymentStatus = o.PaymentStatus,
             TrangThai = o.TrangThai,
             SoHD = o.SoHD
         }).ToList();
@@ -500,6 +516,7 @@ public class OnlineOrderService : IOnlineOrderService
             DiaChiGiao = o.DiaChiGiao,
             PhuongThucThanhToan = o.PhuongThucThanhToan,
             TongTien = o.TongTien,
+            PaymentStatus = o.PaymentStatus,
             TrangThai = o.TrangThai,
             MaNV = o.MaNV,
             SoHD = o.SoHD,
@@ -521,7 +538,7 @@ public class OnlineOrderService : IOnlineOrderService
         return (dtos, total);
     }
 
-    public async Task<OrderDto> UpdateOrderStatusAsync(string maDH, string newTrangThai, string? soHDKem = null)
+    public async Task<OrderDto> UpdateOrderStatusAsync(string maDH, string newTrangThai, string? soHDKem = null, decimal? confirmedAmount = null, string? paymentReference = null)
     {
         var maNV = _currentUser.MaNV;
         if (string.IsNullOrWhiteSpace(maNV))
@@ -532,6 +549,11 @@ public class OnlineOrderService : IOnlineOrderService
         using var transaction = await _context.Database.BeginTransactionAsync();
         try
         {
+            if (_context.Database.IsNpgsql())
+            {
+                await _context.Database.ExecuteSqlInterpolatedAsync($"SELECT 1 FROM donhangonline WHERE madh = {maDH} FOR UPDATE");
+            }
+
             var donHang = await _context.DonHangOnlines
                 .Include(d => d.ChiTietDonHangs)
                     .ThenInclude(c => c.MatHang)
@@ -544,11 +566,66 @@ public class OnlineOrderService : IOnlineOrderService
 
             var curr = donHang.TrangThai;
 
+            if (paymentReference != null)
+            {
+                if (curr != AppConstants.OrderStatus.ChoThanhToan ||
+                    newTrangThai != AppConstants.OrderStatus.DaXacNhan ||
+                    donHang.PhuongThucThanhToan is not ("chuyen_khoan" or "the") ||
+                    confirmedAmount != donHang.TongTien || confirmedAmount <= 0)
+                {
+                    throw new ConflictException("Giao dịch không khớp với đơn đang chờ thanh toán.");
+                }
+
+                if (_context.Database.IsNpgsql())
+                {
+                    await _context.Database.ExecuteSqlInterpolatedAsync($"SELECT pg_advisory_xact_lock(hashtextextended({paymentReference}, 0))");
+                }
+
+                if (await _context.OrderStatusLogs.AnyAsync(log => log.Actor == "payment" && log.Reason == paymentReference))
+                {
+                    throw new ConflictException("Mã giao dịch đã được ghi nhận.");
+                }
+
+                donHang.PaymentStatus = "paid";
+                _context.OrderStatusLogs.Add(new OrderStatusLog
+                {
+                    OrderId = maDH,
+                    FromStatus = curr,
+                    ToStatus = newTrangThai,
+                    Actor = "payment",
+                    Reason = paymentReference
+                });
+            }
+
             // Kiểm tra máy trạng thái hợp lệ theo mục 4 plan (8).md
             bool validTransition = IsValidTransition(curr, newTrangThai);
             if (!validTransition)
             {
                 throw new ConflictException($"Không thể chuyển trạng thái đơn hàng từ '{curr}' sang '{newTrangThai}'.");
+            }
+
+            if ((newTrangThai == AppConstants.OrderStatus.DaXacNhan || newTrangThai == AppConstants.OrderStatus.HoanThanh)
+                && (donHang.PhuongThucThanhToan is "chuyen_khoan" or "the")
+                && donHang.PaymentStatus != "paid")
+            {
+                throw new ConflictException("Đơn hàng chưa được đối soát thanh toán.");
+            }
+
+            if (newTrangThai == AppConstants.OrderStatus.DaXacNhan || newTrangThai == AppConstants.OrderStatus.HoanThanh)
+            {
+                await SellableStock.LockItemsAsync(_context, donHang.ChiTietDonHangs.Select(item => item.MaHang));
+                if (donHang.SoHD == null)
+                {
+                    foreach (var item in donHang.ChiTietDonHangs)
+                    {
+                        await SellableStock.EnsureAvailableAsync(_context, item.MatHang!, item.SoLuong, maDH);
+                    }
+                }
+            }
+
+            if (newTrangThai == AppConstants.OrderStatus.DaHuy && donHang.PaymentStatus == "paid")
+            {
+                throw new ConflictException("Đơn đã thu tiền. Cần xử lý hoàn tiền trước khi hủy.");
             }
 
             // Bước 7: Hủy đơn đồng bộ với GHN
@@ -572,7 +649,11 @@ public class OnlineOrderService : IOnlineOrderService
             if (newTrangThai == AppConstants.OrderStatus.HoanThanh)
             {
                 // Kiểm tra xem SoHD có tồn tại hợp lệ trong CSDL không
-                string candidateSoHD = donHang.SoHD ?? soHDKem ?? string.Empty;
+                if (!string.IsNullOrWhiteSpace(soHDKem) && soHDKem != donHang.SoHD)
+                {
+                    throw new ConflictException("Hóa đơn phải do hệ thống lập cho đơn hàng này.");
+                }
+                string candidateSoHD = donHang.SoHD ?? string.Empty;
                 bool invoiceExists = !string.IsNullOrEmpty(candidateSoHD) && await _context.HoaDons.AnyAsync(h => h.SoHD == candidateSoHD);
                 string soHD = invoiceExists ? candidateSoHD : string.Empty;
 
@@ -582,6 +663,7 @@ public class OnlineOrderService : IOnlineOrderService
                     soHD = await _codeGenerator.NextAsync("HD");
                     var ptThanhToan = donHang.PhuongThucThanhToan == "cod" ? "tien_mat" : donHang.PhuongThucThanhToan;
 
+                    var gross = donHang.ChiTietDonHangs.Sum(item => item.DonGia * item.SoLuong);
                     var hoaDon = new HoaDon
                     {
                         SoHD = soHD,
@@ -589,8 +671,8 @@ public class OnlineOrderService : IOnlineOrderService
                         MaKH = donHang.MaKH,
                         MaNV = maNV,
                         KenhBan = AppConstants.SaleChannels.Online,
-                        TongTien = donHang.TongTien,
-                        TienGiamGia = 0m,
+                        TongTien = gross,
+                        TienGiamGia = Math.Max(0m, gross - donHang.TongTien),
                         PhuongThucThanhToan = ptThanhToan
                     };
                     _context.HoaDons.Add(hoaDon);
@@ -614,41 +696,7 @@ public class OnlineOrderService : IOnlineOrderService
 
                                 if (imei == null)
                                 {
-                                    // Tá»± Ä‘á»™ng sinh phiáº¿u nháº­p vÃ  IMEI náº¿u sáº£n pháº©m chÆ°a cÃ³ sáºµn trong kho
-                                    var defaultNCC = await _context.NhaCungCaps.FirstOrDefaultAsync();
-                                    string autoSoPN = await _codeGenerator.NextAsync("PN");
-                                    var pn = new PhieuNhap
-                                    {
-                                        SoPN = autoSoPN,
-                                        NgayNhap = DateTime.UtcNow,
-                                        MaNCC = defaultNCC?.MaNCC ?? "NCC001",
-                                        MaNV = "NV001",
-                                    };
-                                    _context.PhieuNhaps.Add(pn);
-                                    _context.ChiTietPhieuNhaps.Add(new ChiTietPhieuNhap
-                                    {
-                                        SoPN = autoSoPN,
-                                        MaHang = item.MaHang,
-                                        SlNhap = 1,
-                                        DonGiaNhap = item.DonGia
-                                    });
-                                    string autoSoImei = "86" + Random.Shared.NextInt64(1000000000000L, 9999999999999L).ToString();
-                                    imei = new IMEI
-                                    {
-                                        MaIMEI = autoSoImei,
-                                        SoIMEI = autoSoImei,
-                                        MaHang = item.MaHang,
-                                        SoPN = autoSoPN,
-                                        TrangThai = "con_hang"
-                                    };
-                                    _context.IMEIs.Add(imei);
-                                    await _context.SaveChangesAsync();
-                                }
-
-                                // Äá»‘i vá»›i PostgreSQL, trigger fn_trg_chitiethoadon_imei_ban tá»± Ä‘á»™ng kiá»ƒm tra 'con_hang' vÃ  cáº­p nháº­t 'da_ban'
-                                if (!_context.Database.IsRelational())
-                                {
-                                    imei.TrangThai = "da_ban";
+                                    throw new ConflictException($"Không đủ IMEI thực tế trong kho cho mặt hàng {item.MaHang}.");
                                 }
 
                                 var ctHD = new ChiTietHoaDon
@@ -660,6 +708,8 @@ public class OnlineOrderService : IOnlineOrderService
                                     DonGiaBan = item.DonGia
                                 };
                                 _context.ChiTietHoaDons.Add(ctHD);
+                                await _context.SaveChangesAsync();
+                                imei.TrangThai = "da_ban";
                                 await _context.SaveChangesAsync();
 
                                 // Táº¡o báº£o hÃ nh
@@ -850,6 +900,7 @@ public class OnlineOrderService : IOnlineOrderService
                 DiaChiGiao = donHang.DiaChiGiao,
                 PhuongThucThanhToan = donHang.PhuongThucThanhToan,
                 TongTien = donHang.TongTien,
+                PaymentStatus = donHang.PaymentStatus,
                 TrangThai = donHang.TrangThai,
                 MaNV = donHang.MaNV,
                 SoHD = donHang.SoHD
@@ -869,33 +920,34 @@ public class OnlineOrderService : IOnlineOrderService
             throw new BadRequestException("MÃ£ Ä‘Æ¡n hÃ ng khÃ´ng há»£p lá»‡.");
         }
 
+        maDH = maDH.Trim();
+        using var transaction = await _context.Database.BeginTransactionAsync();
+        if (_context.Database.IsNpgsql())
+        {
+            await _context.Database.ExecuteSqlInterpolatedAsync($"SELECT 1 FROM donhangonline WHERE madh = {maDH} FOR UPDATE");
+        }
+
         var donHang = await _context.DonHangOnlines.FirstOrDefaultAsync(d => d.MaDH == maDH.Trim());
         if (donHang == null)
         {
             throw new NotFoundException($"KhÃ´ng tÃ¬m tháº¥y Ä‘Æ¡n hÃ ng {maDH}");
         }
 
-        // Kiá»ƒm tra sá»‘ Ä‘iá»‡n thoáº¡i ngÆ°á»i nháº­n Ä‘á»ƒ xÃ¡c thá»±c
-        var sdtNorm = (request.Sdt ?? string.Empty).Trim().Replace(" ", "").Replace(".", "").Replace("-", "");
-        if (!string.IsNullOrEmpty(sdtNorm) && !donHang.SdtNguoiNhan.Equals(sdtNorm, StringComparison.OrdinalIgnoreCase))
+        var phone = PhoneHelper.NormalizeVietnamesePhone(request.Sdt);
+        if (string.IsNullOrWhiteSpace(phone) || phone != donHang.SdtNguoiNhan)
         {
-            throw new BadRequestException("Sá»‘ Ä‘iá»‡n thoáº¡i khÃ´ng khá»›p vá»›i thÃ´ng tin Ä‘Æ¡n hÃ ng.");
+            throw new BadRequestException("Số điện thoại không khớp với thông tin đơn hàng.");
         }
 
-        // Chá»‰ cho phÃ©p há»§y khi Ä‘Æ¡n chÆ°a giao
-        if (donHang.TrangThai == AppConstants.OrderStatus.DangGiao || donHang.TrangThai == AppConstants.OrderStatus.HoanThanh)
+        if (donHang.PaymentStatus == "paid" || donHang.TrangThai is not
+            ("cho_thanh_toan" or "cho_xac_nhan" or "cho_tu_duyet" or "can_kiem_tra" or "da_huy"))
         {
-            throw new BadRequestException("ÄÆ¡n hÃ ng Ä‘ang giao hoáº·c Ä‘Ã£ hoÃ n thÃ nh, khÃ´ng thá»ƒ tá»± há»§y trá»±c tuyáº¿n. Vui lÃ²ng liÃªn há»‡ hotline.");
-        }
-
-        if (donHang.TrangThai == AppConstants.OrderStatus.DaHuy)
-        {
-            throw new BadRequestException("ÄÆ¡n hÃ ng nÃ y Ä‘Ã£ Ä‘Æ°á»£c há»§y trÆ°á»›c Ä‘Ã³.");
+            throw new ConflictException("Đơn đã thu tiền hoặc đang được xử lý. Vui lòng liên hệ cửa hàng để hủy.");
         }
 
         donHang.TrangThai = AppConstants.OrderStatus.DaHuy;
-
         await _context.SaveChangesAsync();
+        await transaction.CommitAsync();
 
         if (_hubContext != null)
         {
@@ -955,6 +1007,7 @@ public class OnlineOrderService : IOnlineOrderService
             DiaChiGiao = donHang.DiaChiGiao,
             PhuongThucThanhToan = donHang.PhuongThucThanhToan,
             TongTien = donHang.TongTien,
+            PaymentStatus = donHang.PaymentStatus,
             TrangThai = donHang.TrangThai,
             MaNV = donHang.MaNV,
             SoHD = donHang.SoHD
@@ -1085,7 +1138,7 @@ public class OnlineOrderService : IOnlineOrderService
 
         if (to == AppConstants.OrderStatus.DaHuy &&
             from != AppConstants.OrderStatus.DangGiao &&
-            from != AppConstants.OrderStatus.HoanThanh &&
+            from != AppConstants.OrderStatus.HoanThanh && from != "da_giao" &&
             from != "boom" &&
             from != "hoan_hang")
         {
@@ -1116,8 +1169,10 @@ public class OnlineOrderService : IOnlineOrderService
             ("cho_lay_hang", "dang_giao") => true,
             ("cho_lay_hang", "hoan_thanh") => true,
             ("dang_giao", "hoan_thanh") => true,
+            ("da_giao", "hoan_thanh") => true,
             ("dang_giao", "boom") => true,
             ("dang_giao", "hoan_hang") => true,
+            ("boom", "hoan_hang") => true,
 
             _ => false
         };

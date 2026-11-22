@@ -1646,126 +1646,59 @@ function quickApproveOrder(maDH) {
 }
 
 async function confirmPaymentAdmin(maDH) {
-  if (!confirm('Xác nhận đã nhận được tiền thanh toán cho đơn hàng ' + maDH + '?')) return;
-  AdminRealtimeData.updateOrderStatus(maDH, 'cho_xac_nhan');
-  const o = (AdminRealtimeData.orders || []).find(x => x.maDH === maDH);
-  if (o) o.daThanhToan = true;
-  showToast('Đã ghi nhận thanh toán đơn ' + maDH + '! Trạng thái: Chờ duyệt đơn.', 'success');
-  if (window.OrderSignalR && typeof window.OrderSignalR.notifyOrderStatusChanged === 'function') {
-    window.OrderSignalR.notifyOrderStatusChanged(
-      maDH,
-      'cho_xac_nhan',
-      'Đơn đặt hàng #' + maDH + ' đã nhận tiền thanh toán thành công! Đang chờ Admin duyệt.',
-      o ? o.sdtNguoiNhan : ''
-    );
+  const transactionId = prompt('Nhập mã giao dịch trên sao kê ngân hàng')?.trim();
+  if (!transactionId) return;
+  const received = prompt('Nhập số tiền thực nhận (VND)')?.trim();
+  if (!received) return;
+  const amount = Number(received);
+  if (!Number.isSafeInteger(amount) || amount <= 0) {
+    showToast('Số tiền thực nhận không hợp lệ.', 'warning');
+    return;
   }
   try {
-    await api.post('/payment/confirm/' + encodeURIComponent(maDH), { transactionId: 'ADMIN_MANUAL', note: 'Admin duyệt tay tiền đã về' });
-  } catch (err) {
-    try {
-      await api.put('/donhangonline/' + encodeURIComponent(maDH) + '/trangthai', { trangThai: 'cho_xac_nhan' });
-    } catch (e) {}
+    await api.post('/payment/confirm/' + encodeURIComponent(maDH), { transactionId, amount });
+    showToast('Đã đối soát thanh toán đơn ' + maDH, 'success');
+  } catch (error) {
+    showToast(error.message || 'Chưa ghi nhận được thanh toán.', 'error');
+  }
+}
+
+async function saveOnlineOrderStatus(maDH, trangThai) {
+  try {
+    const saved = await api.put('/donhangonline/' + encodeURIComponent(maDH) + '/trangthai', { trangThai });
+    const order = (AdminRealtimeData.orders || []).find(item => item.maDH === maDH);
+    if (order) order.paymentStatus = saved.paymentStatus;
+    AdminRealtimeData.updateOrderStatus(maDH, saved.trangThai, saved.soHD);
+    return saved;
+  } catch (error) {
+    showToast(error.message || 'Chưa cập nhật được trạng thái đơn hàng.', 'error');
+    return null;
   }
 }
 
 async function approveOrder(maDH) {
-  AdminRealtimeData.updateOrderStatus(maDH, 'da_xac_nhan');
-  showToast('Đã duyệt xác nhận đơn hàng ' + maDH, 'success');
-  // Realtime notification qua SignalR
-  const oApprove = (AdminRealtimeData.orders || []).find(x => x.maDH === maDH);
-  if (window.OrderSignalR && typeof window.OrderSignalR.notifyOrderStatusChanged === 'function') {
-    window.OrderSignalR.notifyOrderStatusChanged(
-      maDH,
-      'da_xac_nhan',
-      'Đơn đặt hàng #' + maDH + ' đã được Admin xác nhận thành công! Đang chuẩn bị đóng gói.',
-      oApprove ? oApprove.sdtNguoiNhan : ''
-    );
+  if (await saveOnlineOrderStatus(maDH, 'da_xac_nhan')) {
+    showToast('Đã xác nhận đơn ' + maDH, 'success');
   }
-  try {
-    await api.put('/donhangonline/' + encodeURIComponent(maDH) + '/trangthai', { trangThai: 'da_xac_nhan' });
-  } catch (err) {}
 }
 
 async function shipOrder(maDH) {
-  AdminRealtimeData.updateOrderStatus(maDH, 'dang_giao');
-  showToast('Đang giao hàng đơn ' + maDH, 'info');
-  // Realtime notification qua SignalR
-  const oShip = (AdminRealtimeData.orders || []).find(x => x.maDH === maDH);
-  if (window.OrderSignalR && typeof window.OrderSignalR.notifyOrderStatusChanged === 'function') {
-    window.OrderSignalR.notifyOrderStatusChanged(
-      maDH,
-      'dang_giao',
-      'Đơn đặt hàng #' + maDH + ' đã được xuất kho và đang trên đường giao đến bạn!',
-      oShip ? oShip.sdtNguoiNhan : ''
-    );
+  if (await saveOnlineOrderStatus(maDH, 'dang_giao')) {
+    showToast('Đang giao đơn ' + maDH, 'info');
   }
-  try {
-    await api.put('/donhangonline/' + encodeURIComponent(maDH) + '/trangthai', { trangThai: 'dang_giao' });
-  } catch (err) {}
 }
 
 async function cancelOrder(maDH) {
   if (!confirm('Bạn chắc chắn muốn hủy đơn hàng ' + maDH + '?')) return;
-  AdminRealtimeData.updateOrderStatus(maDH, 'da_huy');
-  showToast('Đã hủy đơn hàng ' + maDH, 'warning');
-  // Realtime notification qua SignalR
-  const oCancel = (AdminRealtimeData.orders || []).find(x => x.maDH === maDH);
-  if (window.OrderSignalR && typeof window.OrderSignalR.notifyOrderStatusChanged === 'function') {
-    window.OrderSignalR.notifyOrderStatusChanged(
-      maDH,
-      'da_huy',
-      'Đơn đặt hàng #' + maDH + ' đã được cập nhật trạng thái: Đã hủy.',
-      oCancel ? oCancel.sdtNguoiNhan : ''
-    );
+  if (await saveOnlineOrderStatus(maDH, 'da_huy')) {
+    showToast('Đã hủy đơn ' + maDH, 'success');
   }
-  try {
-    await api.put('/donhangonline/' + encodeURIComponent(maDH) + '/trangthai', { trangThai: 'da_huy' });
-  } catch (err) {}
 }
 
 async function completeOrder(maDH) {
-  const oComp = (AdminRealtimeData.orders || []).find(x => x.maDH === maDH);
-  const pm = String(oComp?.phuongThucThanhToan || oComp?.paymentMethod || '').toLowerCase();
-  const isPaidOnline = ['chuyen_khoan', 'banking', 'momo', 'vnpay', 'zalopay', 'card', 'the'].includes(pm) || oComp?.paymentStatus === 'paid';
-
-  let realSoHD = oComp?.soHD || null;
-
-  try {
-    // Không gửi soHD ngẫu nhiên để tránh lỗi ràng buộc khóa ngoại CSDL (donhangonline_sohd_fkey)
-    const res = await api.put('/donhangonline/' + encodeURIComponent(maDH) + '/trangthai', {
-      trangThai: 'hoan_thanh'
-    });
-    if (res && res.soHD) realSoHD = res.soHD;
-  } catch (err) {
-    console.warn('API hoàn tất đơn hàng:', err);
-  }
-
-  if (!realSoHD) realSoHD = 'HD' + Math.floor(10000 + Math.random() * 90000);
-
-  AdminRealtimeData.updateOrderStatus(maDH, 'hoan_thanh', realSoHD);
-  if (oComp) {
-    oComp.trangThai = 'hoan_thanh';
-    oComp.soHD = realSoHD;
-  }
-
-  showToast(
-    isPaidOnline
-      ? ('Đã xác nhận giao thành công & hoàn tất đơn ' + maDH + ' (Mã HĐ: ' + realSoHD + ')!')
-      : ('Đã thu tiền COD & hoàn tất đơn hàng ' + maDH + ' (Mã HĐ: ' + realSoHD + ')!'),
-    'success'
-  );
-
-  // Realtime notification qua SignalR
-  if (window.OrderSignalR && typeof window.OrderSignalR.notifyOrderStatusChanged === 'function') {
-    window.OrderSignalR.notifyOrderStatusChanged(
-      maDH,
-      'hoan_thanh',
-      'Đơn đặt hàng #' + maDH + ' đã được giao thành công và hoàn tất! Cảm ơn bạn đã mua hàng.',
-      oComp ? oComp.sdtNguoiNhan : '',
-      'admin',
-      realSoHD
-    );
-  }
+  const saved = await saveOnlineOrderStatus(maDH, 'hoan_thanh');
+  if (!saved) return;
+  showToast('Đã hoàn tất đơn ' + maDH + ' · Hóa đơn ' + saved.soHD, 'success');
 
   // Cập nhật lại giao diện bảng ngay lập tức
   if (typeof renderDonHangTable === 'function') {
@@ -5497,7 +5430,7 @@ function _aodActionHtml(order) {
       <button onclick="cancelOrder('${maDH}'); closeModal('modal-admin-order-detail');" class="px-3 py-2 text-slate-500 hover:text-rose-600 hover:bg-rose-50 font-medium rounded-xl text-xs border border-slate-200 transition-colors cursor-pointer">
         Hủy đơn
       </button>`;
-  } else if (order.trangThai === 'dang_giao') {
+  } else if ((order.trangThai === 'dang_giao' || order.trangThai === 'da_giao')) {
     const pm = String(order.phuongThucThanhToan || order.paymentMethod || '').toLowerCase();
     const isPaidOnline = ['chuyen_khoan','banking','momo','vnpay','zalopay','card','the'].includes(pm) || order.paymentStatus === 'paid';
     return `
@@ -5574,7 +5507,7 @@ async function showAdminOrderDetail(maDH) {
   document.getElementById('aod-date').textContent = fmtLocalDateTime(order.ngayDat);
   const pm = String(order.phuongThucThanhToan || order.paymentMethod || '').toLowerCase();
   document.getElementById('aod-payment').textContent = PAYMENT_LABEL[pm] || order.phuongThucThanhToan || '—';
-  const isPaid = ['chuyen_khoan','banking','momo','vnpay','zalopay','card','the'].includes(pm) || order.paymentStatus === 'paid' || order.trangThai === 'hoan_thanh';
+  const isPaid = order.paymentStatus === 'paid';
   const payStatusEl = document.getElementById('aod-pay-status');
   payStatusEl.textContent = isPaid ? '✓ Đã thanh toán' : '⏳ Chưa thu tiền';
   payStatusEl.className = 'font-semibold ' + (isPaid ? 'text-emerald-600' : 'text-amber-600');

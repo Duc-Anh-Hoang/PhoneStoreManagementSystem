@@ -1,3 +1,6 @@
+using System.Security.Cryptography;
+using System.Text;
+using PhoneStoreAPI.Common.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PhoneStoreAPI.Features.Payment.DTOs;
@@ -10,9 +13,12 @@ public class PaymentController : ControllerBase
 {
     private readonly IPaymentService _paymentService;
 
-    public PaymentController(IPaymentService paymentService)
+    private readonly IConfiguration _configuration;
+
+    public PaymentController(IPaymentService paymentService, IConfiguration configuration)
     {
         _paymentService = paymentService;
+        _configuration = configuration;
     }
 
     /// <summary>
@@ -30,7 +36,7 @@ public class PaymentController : ControllerBase
     /// Khách hàng hoặc thu ngân xác nhận đã thanh toán chuyển khoản
     /// </summary>
     [HttpPost("confirm/{maDH}")]
-    [AllowAnonymous]
+    [Authorize(Roles = $"{AppConstants.Roles.Admin},{AppConstants.Roles.Manager},{AppConstants.Roles.Cashier}")]
     public async Task<IActionResult> ConfirmPayment(string maDH, [FromBody] ConfirmPaymentRequest request)
     {
         var success = await _paymentService.ConfirmOrderPaymentAsync(maDH, request);
@@ -55,6 +61,14 @@ public class PaymentController : ControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> Webhook([FromBody] PaymentWebhookPayload payload)
     {
+        var secret = _configuration["Payment:WebhookSecret"];
+        var authorization = Request.Headers.Authorization.ToString();
+        if (string.IsNullOrWhiteSpace(secret) || !CryptographicOperations.FixedTimeEquals(
+                Encoding.UTF8.GetBytes(authorization), Encoding.UTF8.GetBytes($"Apikey {secret}")))
+        {
+            return Unauthorized();
+        }
+
         var processed = await _paymentService.ProcessWebhookAsync(payload);
         return Ok(new { success = processed });
     }

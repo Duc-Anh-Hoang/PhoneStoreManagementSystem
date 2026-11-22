@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PhoneStoreAPI.Data;
+using PhoneStoreAPI.Common.Constants;
 using PhoneStoreAPI.Features.Customers.Helpers;
 using PhoneStoreAPI.Features.OnlineOrders.DTOs;
 using PhoneStoreAPI.Features.OnlineOrders.Services;
@@ -10,7 +11,7 @@ namespace PhoneStoreAPI.Features.OnlineOrders;
 
 [ApiController]
 [Route("api/donhangonline")]
-[AllowAnonymous]
+[Authorize(Roles = $"{AppConstants.Roles.Admin},{AppConstants.Roles.Manager},{AppConstants.Roles.Sales},{AppConstants.Roles.Cashier}")]
 public class DonHangOnlineController : ControllerBase
 {
     private readonly IOnlineOrderService _onlineOrderService;

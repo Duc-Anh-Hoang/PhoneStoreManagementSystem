@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using PhoneStoreAPI.Features.Inventory;
+using Microsoft.EntityFrameworkCore;
 using PhoneStoreAPI.Common.Constants;
 using PhoneStoreAPI.Common.Exceptions;
 using PhoneStoreAPI.Common.Services;
@@ -397,17 +398,22 @@ public class ReturnsService : IReturnsService
 
             if (traHang.HinhThucHoanTien == "doi_hang")
             {
+                await SellableStock.LockItemsAsync(_context, [traHang.IMEI!.MaHang]);
+                var matHangDoi = await _context.MatHangs.FindAsync(traHang.IMEI.MaHang)
+                    ?? throw new NotFoundException("Không tìm thấy mặt hàng cần đổi.");
+                await SellableStock.EnsureAvailableAsync(_context, matHangDoi, 1);
                 IMEI? imeiMoi = null;
                 // Nếu nhân viên chọn cụ thể IMEI máy mới tương đương từ form:
                 if (!string.IsNullOrWhiteSpace(request.SoIMEIMoi) || !string.IsNullOrWhiteSpace(request.MaIMEIMoi))
                 {
                     imeiMoi = await _context.IMEIs.FirstOrDefaultAsync(im =>
                         (im.SoIMEI == request.SoIMEIMoi || im.MaIMEI == request.MaIMEIMoi) &&
+                        im.MaHang == traHang.IMEI!.MaHang &&
                         im.TrangThai == "con_hang");
 
                     if (imeiMoi == null)
                     {
-                        throw new BadRequestException("Số IMEI máy mới được chọn không tồn tại hoặc không còn hàng trong kho.");
+                        throw new BadRequestException("IMEI máy đổi phải thuộc cùng mặt hàng và còn hàng trong kho.");
                     }
                 }
                 else
@@ -447,8 +453,13 @@ public class ReturnsService : IReturnsService
             }
             else
             {
+                var reference = request.MaGiaoDich?.Trim();
+                if (traHang.HinhThucHoanTien == "chuyen_khoan" && string.IsNullOrWhiteSpace(reference))
+                {
+                    throw new BadRequestException("Cần mã giao dịch hoàn tiền qua ngân hàng.");
+                }
                 traHang.SoTienHoan = soTienHoan;
-                traHang.MaGiaoDich = request.MaGiaoDich?.Trim();
+                traHang.MaGiaoDich = reference;
             }
 
             // Kết thúc bảo hành máy cũ

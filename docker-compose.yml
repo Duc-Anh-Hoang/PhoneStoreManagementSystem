@@ -32,6 +32,11 @@ services:
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Development}
       ConnectionStrings__DefaultConnection: ${ConnectionStrings__DefaultConnection:-Host=postgres;Port=5432;Database=PhoneStoreDB;Username=postgres;Password=postgres}
       Jwt__Key: ${Jwt__Key:-PhoneStoreManagementSystem_SuperSecretKey_2026_AspNetCore10_StrongSecretKey!}
+      VietQR__BankId: ${VIETQR_BANK_ID:-}
+      VietQR__BankBin: ${VIETQR_BANK_BIN:-}
+      VietQR__AccountNumber: ${VIETQR_ACCOUNT_NUMBER:-}
+      VietQR__AccountName: ${VIETQR_ACCOUNT_NAME:-}
+      Payment__WebhookSecret: ${PAYMENT_WEBHOOK_SECRET:-}
       Jwt__Issuer: ${Jwt__Issuer:-PhoneStoreAPI}
       Jwt__Audience: ${Jwt__Audience:-PhoneStoreClient}
       Jwt__ExpireMinutes: ${Jwt__ExpireMinutes:-1440}

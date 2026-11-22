@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using PhoneStoreAPI.Features.Inventory;
+using Microsoft.EntityFrameworkCore;
 using PhoneStoreAPI.Common.Constants;
 using PhoneStoreAPI.Common.Exceptions;
 using PhoneStoreAPI.Common.Services;
@@ -74,7 +75,9 @@ public class SalesService : ISalesService
 
             // 3. Chuẩn bị danh sách chi tiết và kiểm tra hàng hóa, IMEI
             var chiTietEntities = new List<ChiTietHoaDon>();
-            var imeiUpdates = new List<string>(); // Danh sách MaIMEI cần cập nhật
+            var soldImeis = new Dictionary<string, IMEI>();
+            var checkedItems = new HashSet<string>();
+            await SellableStock.LockItemsAsync(_context, request.ChiTiet.Select(item => item.MaHang));
             decimal tongTien = 0m;
 
             foreach (var item in request.ChiTiet)
@@ -86,6 +89,12 @@ public class SalesService : ISalesService
                 }
 
                 decimal donGia = matHang.DonGia; // Lấy từ DB, bỏ qua giá client
+
+                if (checkedItems.Add(matHang.MaHang))
+                {
+                    var requested = request.ChiTiet.Where(line => line.MaHang == matHang.MaHang).Sum(line => line.SoLuong);
+                    await SellableStock.EnsureAvailableAsync(_context, matHang, requested);
+                }
 
                 if (matHang.QuanLyImei)
                 {
@@ -115,9 +124,10 @@ public class SalesService : ISalesService
                         throw new ConflictException($"IMEI {imeiRecord.SoIMEI} đã được bán hoặc không còn trong kho.");
                     }
 
-                    // Cập nhật trạng thái IMEI sang da_ban trực tiếp trong C# Service (nguồn sự thật duy nhất)
-                    imeiRecord.TrangThai = "da_ban";
-                    _context.IMEIs.Update(imeiRecord);
+                    if (!soldImeis.TryAdd(imeiRecord.MaIMEI, imeiRecord))
+                    {
+                        throw new ConflictException($"IMEI {imeiRecord.SoIMEI} bị lặp trên hóa đơn.");
+                    }
 
                     chiTietEntities.Add(new ChiTietHoaDon
                     {
@@ -131,21 +141,6 @@ public class SalesService : ISalesService
                 }
                 else
                 {
-                    // Mặt hàng không quản lý IMEI: Kiểm tra tồn kho (tổng nhập - tổng bán)
-                    var tongNhap = await _context.ChiTietPhieuNhaps
-                        .Where(p => p.MaHang == matHang.MaHang)
-                        .SumAsync(p => (int?)p.SlNhap) ?? 0;
-
-                    var tongBan = await _context.ChiTietHoaDons
-                        .Where(h => h.MaHang == matHang.MaHang)
-                        .SumAsync(h => (int?)h.SlBan) ?? 0;
-
-                    int tonKho = tongNhap - tongBan;
-                    if (tonKho < item.SoLuong)
-                    {
-                        throw new BadRequestException($"Mặt hàng {matHang.TenHang} không đủ số lượng tồn kho (còn {tonKho}).");
-                    }
-
                     chiTietEntities.Add(new ChiTietHoaDon
                     {
                         MaHang = matHang.MaHang,
@@ -188,6 +183,12 @@ public class SalesService : ISalesService
             {
                 ct.SoHD = soHD;
                 _context.ChiTietHoaDons.Add(ct);
+            }
+            await _context.SaveChangesAsync();
+
+            foreach (var imei in soldImeis.Values)
+            {
+                imei.TrangThai = "da_ban";
             }
             await _context.SaveChangesAsync();
 

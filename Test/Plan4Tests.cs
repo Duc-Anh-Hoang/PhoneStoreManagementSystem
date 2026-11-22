@@ -370,4 +370,49 @@ public class Plan4Tests
         await Assert.ThrowsAsync<ConflictException>(() =>
             orderService.UpdateOrderStatusAsync(created.MaDH, AppConstants.OrderStatus.DaHuy));
     }
+
+    [Fact]
+    public async Task OnlineOrder_ReserveStockAndReuseOrderCode()
+    {
+        using var context = GetInMemoryDbContext(Guid.NewGuid().ToString());
+        SeedBaseData(context);
+        var codeGenerator = new CodeGenerator(context);
+        var service = new OnlineOrderService(context, new MockCurrentUser(), codeGenerator,
+            new WarrantyService(context, codeGenerator));
+        var request = new CreateOrderRequest
+        {
+            MaDH = "DH-TEST22",
+            TenNguoiNhan = "Khách Hàng Test",
+            SdtNguoiNhan = "0987654321",
+            DiaChiGiao = "123 Lê Văn Việt, TP Thủ Đức",
+            PhuongThucThanhToan = "chuyen_khoan",
+            Items = [new OrderItemRequest { MaHang = "IP15PM", SoLuong = 3 }]
+        };
+
+        var created = await service.CreateOrderAsync(request);
+        Assert.Equal(created.MaDH, (await service.CreateOrderAsync(request)).MaDH);
+        Assert.Single(context.DonHangOnlines);
+        await Assert.ThrowsAsync<ConflictException>(() =>
+            service.UpdateOrderStatusAsync(created.MaDH, AppConstants.OrderStatus.DaXacNhan));
+
+        request.MaDH = "DH-TEST23";
+        request.Items[0].SoLuong = 1;
+        await Assert.ThrowsAsync<ConflictException>(() => service.CreateOrderAsync(request));
+        Assert.Equal(3, await context.IMEIs.CountAsync());
+
+        await service.CancelOrderByCustomerAsync(created.MaDH, new CancelOrderRequest
+        {
+            Sdt = request.SdtNguoiNhan
+        });
+        var next = await service.CreateOrderAsync(request);
+        Assert.Equal("DH-TEST23", next.MaDH);
+
+        await Assert.ThrowsAsync<ConflictException>(() => service.UpdateOrderStatusAsync(next.MaDH,
+            AppConstants.OrderStatus.DaXacNhan, confirmedAmount: next.TongTien - 1, paymentReference: "BANK-1"));
+        var paid = await service.UpdateOrderStatusAsync(next.MaDH,
+            AppConstants.OrderStatus.DaXacNhan, confirmedAmount: next.TongTien, paymentReference: "BANK-1");
+        Assert.Equal("paid", paid.PaymentStatus);
+        await Assert.ThrowsAsync<ConflictException>(() => service.CancelOrderByCustomerAsync(next.MaDH,
+            new CancelOrderRequest { Sdt = request.SdtNguoiNhan }));
+    }
 }
