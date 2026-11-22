@@ -151,6 +151,29 @@
     aside ::-webkit-scrollbar-thumb { background: #E2E8F0; }
     aside ::-webkit-scrollbar-thumb:hover { background: #CBD5E1; }
 
+    /* Top horizontal scrollbar matching bottom scrollbar */
+    .table-top-scrollbar {
+      overflow-x: auto;
+      overflow-y: hidden;
+      height: 12px;
+      scrollbar-width: thin;
+      scrollbar-color: #CBD5E1 #F8FAFC;
+    }
+    .table-top-scrollbar::-webkit-scrollbar {
+      height: 6px;
+    }
+    .table-top-scrollbar::-webkit-scrollbar-track {
+      background: #F8FAFC;
+      border-radius: 999px;
+    }
+    .table-top-scrollbar::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 999px;
+    }
+    .table-top-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #94A3B8;
+    }
+
     .glass-topbar {
       background: rgba(255, 255, 255, 0.92);
       backdrop-filter: blur(12px);
@@ -997,8 +1020,13 @@
               </select>
             </div>
           </div>
-          <div class="overflow-x-auto rounded-xl border border-slate-200/80">
-            <table class="w-full text-left border-collapse min-w-[1050px]">
+          <!-- Thanh cuộn ngang ở trên (Đồng bộ trái - phải với bảng bên dưới) -->
+          <div id="donhang-top-scroll" class="table-top-scrollbar rounded-t-xl bg-slate-50 border border-slate-200/80 border-b-0 px-1" title="Kéo thanh cuộn ngang để xem các cột bên phải">
+            <div id="donhang-top-scroll-inner" style="height: 1px; min-width: 1050px;"></div>
+          </div>
+
+          <div id="donhang-table-container" class="overflow-x-auto rounded-b-xl border border-slate-200/80">
+            <table id="table-donhang" class="w-full text-left border-collapse min-w-[1050px]">
               <thead>
                 <tr class="bg-slate-50/90 text-slate-500 text-[11px] font-extrabold uppercase tracking-wider border-b border-slate-200">
                   <th class="p-3.5 w-28 min-w-[100px] whitespace-nowrap">Mã ĐH</th>

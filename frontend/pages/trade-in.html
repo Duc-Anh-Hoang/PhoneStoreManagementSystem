@@ -1028,8 +1028,8 @@
 
             <!-- 3. Chọn Dung lượng -->
             <div>
-              <label class="block text-sm font-semibold text-slate-900 mb-2">3. Dung lượng máy cũ:</label>
-              <div class="flex flex-wrap gap-2.5" id="capacity-options-container">
+              <label class="block text-sm font-semibold text-slate-900 mb-2">3. Dung lượng lưu trữ:</label>
+              <div class="flex flex-wrap gap-2.5" id="capacity-options-container" role="radiogroup" aria-label="Chọn dung lượng máy cũ">
                 <!-- Render động -->
               </div>
             </div>
@@ -1038,13 +1038,35 @@
             <div>
               <div class="flex items-center justify-between mb-2">
                 <label class="text-sm font-semibold text-slate-900">4. Tình trạng máy của bạn:</label>
-                <a href="#chinh-sach-video" class="text-xs text-[#0066FF] hover:underline font-semibold flex items-center gap-1">
+                <button type="button" onclick="openConditionGuideModal()" class="text-xs text-[#0066FF] hover:underline font-semibold flex items-center gap-1 cursor-pointer focus:outline-none focus:ring-1 focus:ring-blue-400 rounded-md px-1" aria-haspopup="dialog">
                   <i class="fa-regular fa-circle-question"></i>
-                  <span>Xem chi tiết 4 loại máy</span>
-                </a>
+                  <span>Hướng dẫn phân loại tình trạng máy</span>
+                </button>
               </div>
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5" id="condition-tiers-container">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5" id="condition-tiers-container" role="radiogroup" aria-label="Chọn tình trạng máy cũ">
                 <!-- Render động -->
+              </div>
+
+              <!-- Bảng câu hỏi lỗi cụ thể cho Loại 4 (Hiển thị khi chọn Loại 4) -->
+              <div id="condition-defects-wrapper" class="hidden mt-4 p-4 rounded-2xl bg-amber-50/80 border border-amber-300 text-slate-800 space-y-3 transition-all animate-in fade-in duration-200">
+                <div class="flex items-start gap-2.5">
+                  <i class="fa-solid fa-triangle-exclamation text-amber-600 text-base mt-0.5 flex-shrink-0"></i>
+                  <div>
+                    <h4 class="font-bold text-xs sm:text-sm text-amber-950">Chọn các lỗi phần cứng hoặc ngoại hình máy gặp phải (nếu có):</h4>
+                    <p class="text-[11px] text-amber-800 leading-relaxed mt-0.5">
+                      Để đảm bảo tính minh bạch, máy có lỗi linh kiện sẽ được nhân viên thẩm định trực tiếp tại chi nhánh. SamaMobile cam kết không ép giá, hỗ trợ thu mua xác máy tối đa.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1" id="defect-checkboxes-container">
+                  <!-- Render động từ TradeInCore.DEFECT_ITEMS -->
+                </div>
+
+                <div id="defect-assessment-alert" class="p-3 rounded-xl bg-white/90 border border-amber-200 text-xs text-amber-900 flex items-center gap-2">
+                  <i class="fa-solid fa-store text-[#0066FF]"></i>
+                  <span id="defect-alert-text">Khi có lỗi cụ thể, định giá chính thức sẽ được chuyên viên xác nhận sau khi kiểm tra máy tại cửa hàng.</span>
+                </div>
               </div>
             </div>
 
@@ -1059,66 +1081,108 @@
             
             <div class="flex items-center justify-between pb-3 border-b border-slate-100">
               <h3 class="font-bold text-base sm:text-lg text-slate-900">Chi Tiết Bù Tiền Lên Đời</h3>
-              <span class="px-2.5 py-0.5 rounded-full bg-blue-50 text-[#0066FF] border border-blue-200 text-xs font-bold">Cam kết tốt nhất</span>
+              <span id="quote-badge-status" class="px-2.5 py-0.5 rounded-full bg-blue-50 text-[#0066FF] border border-blue-200 text-xs font-bold">Báo giá dự kiến</span>
             </div>
 
+            <!-- Bảng diễn giải chi tiết từng dòng theo công thức rõ ràng -->
             <div class="space-y-3 text-sm">
-              <div class="flex items-center justify-between text-slate-600">
-                <span>Giá máy mới dự kiến:</span>
-                <span id="calc-target-price" class="font-bold text-slate-900 tabular-nums">0₫</span>
+              <!-- Dòng 1: Giá máy mới (+) -->
+              <div class="flex items-start justify-between text-slate-600">
+                <div>
+                  <span class="font-medium">Giá máy mới niêm yết:</span>
+                  <div id="calc-target-subtext" class="text-[11px] text-slate-400">Đã bao gồm VAT & ưu đãi</div>
+                </div>
+                <span id="calc-target-price" class="font-bold text-slate-900 tabular-nums text-base">0₫</span>
               </div>
 
-              <div class="flex items-center justify-between text-slate-600">
-                <span>Định giá máy cũ của bạn:</span>
+              <!-- Dòng 2: Định giá máy cũ (-) -->
+              <div class="flex items-start justify-between text-slate-600">
+                <div>
+                  <span class="font-medium">Định giá máy cũ dự kiến:</span>
+                  <div id="calc-used-subtext" class="text-[11px] text-[#0066FF] font-semibold truncate max-w-[200px] sm:max-w-[240px]">iPhone 15 Pro Max • 256GB • Loại 1</div>
+                </div>
                 <span id="calc-used-value" class="font-bold text-[#0066FF] tabular-nums text-base">- 0₫</span>
               </div>
 
-              <div class="flex items-center justify-between text-blue-900 bg-blue-50/80 p-2.5 rounded-xl border border-blue-200">
-                <span class="flex items-center gap-1.5 font-semibold text-xs sm:text-sm text-blue-900">
-                  <i class="fa-solid fa-gift text-[#0066FF]"></i>
-                  <span>Trợ giá lên đời SamaMobile:</span>
-                </span>
+              <!-- Dòng 3: Trợ giá SamaMobile (-) -->
+              <div class="flex items-start justify-between text-blue-900 bg-blue-50/80 p-2.5 rounded-xl border border-blue-200">
+                <div>
+                  <span class="flex items-center gap-1.5 font-semibold text-xs sm:text-sm text-blue-900">
+                    <i class="fa-solid fa-gift text-[#0066FF]"></i>
+                    <span>Trợ giá lên đời SamaMobile:</span>
+                  </span>
+                  <div id="calc-subsidy-subtext" class="text-[10px] text-blue-700 mt-0.5">Ưu đãi trợ giá độc quyền theo giá trị máy</div>
+                </div>
                 <span id="calc-subsidy" class="font-bold text-[#DC2626] tabular-nums text-sm sm:text-base">- 2.500.000₫</span>
               </div>
 
+              <!-- Dòng 4: Tổng tiết kiệm (=) -->
               <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-slate-700 text-xs">
                 <span>Tổng giá trị được giảm trừ:</span>
                 <span id="calc-total-benefit" class="font-bold text-[#0066FF] tabular-nums text-sm">Tiết kiệm: 0₫</span>
               </div>
 
               <!-- KHỐI TIỀN BÙ NỔI BẬT NHẤT: CHỮ ĐỎ #DC2626 -->
-              <div class="p-4 rounded-xl bg-white border-2 border-[#DC2626] shadow-sm mt-2 text-center sm:text-left">
-                <div class="text-xs font-bold text-[#DC2626] uppercase tracking-wide">
-                  Số tiền bạn chỉ cần bù / thanh toán:
+              <div class="p-4 rounded-xl bg-white border-2 border-[#DC2626] shadow-sm mt-2 text-center sm:text-left transition-all" id="calc-final-box">
+                <div class="text-xs font-bold text-[#DC2626] uppercase tracking-wide flex items-center justify-between">
+                  <span>Số tiền bạn chỉ cần bù / thanh toán:</span>
+                  <span id="calc-final-badge" class="hidden text-[10px] px-2 py-0.5 rounded-md bg-amber-100 text-amber-800 font-bold">Cần thẩm định</span>
                 </div>
                 <div id="calc-final-diff" class="text-3xl sm:text-4xl font-black text-[#DC2626] tabular-nums leading-none my-2.5">
                   0₫
                 </div>
-                <div class="text-xs text-slate-600 flex items-center justify-center sm:justify-start gap-1.5 font-normal">
+                <div class="text-xs text-slate-600 flex items-center justify-center sm:justify-start gap-1.5 font-normal" id="calc-installment-wrapper">
                   <i class="fa-solid fa-credit-card text-[#0066FF] text-xs"></i>
-                  <span>Hoặc trả góp 0% chỉ từ <strong id="calc-installment" class="text-[#0066FF] font-bold tabular-nums">0₫</strong> / tháng (6 tháng)</span>
+                  <span>Hoặc trả góp 0% chỉ từ <strong id="calc-installment" class="text-[#0066FF] font-bold tabular-nums">0₫</strong> / tháng (kỳ hạn 6 tháng)</span>
                 </div>
+              </div>
+
+              <!-- Ghi chú minh bạch theo Plan P1.6 -->
+              <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-[11px] text-slate-500 leading-relaxed flex items-start gap-1.5">
+                <i class="fa-solid fa-circle-info text-blue-500 text-xs mt-0.5 flex-shrink-0"></i>
+                <span>Giá thu trên là <strong>giá thu dự kiến</strong>, có thể thay đổi sau khi kỹ thuật viên kiểm tra máy thực tế tại cửa hàng.</span>
               </div>
             </div>
 
-            <!-- Form Đăng Ký Giữ Suất -->
-            <div class="pt-3 border-t border-slate-200 space-y-2.5">
-              <div class="text-xs font-bold text-slate-900">Đăng ký giữ mức trợ giá tốt nhất trong 7 ngày:</div>
-              <input type="text" id="booking-name" placeholder="Họ và tên của bạn" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0066FF]">
-              <input type="tel" id="booking-phone" placeholder="Số điện thoại nhận tin nhắn xác nhận *" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0066FF]">
-              <select id="booking-branch" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0066FF] bg-white">
-                <option value="241 Lê Văn Việt">Chi nhánh 1: 241 Lê Văn Việt, TP. Thủ Đức, TP.HCM</option>
-                <option value="55 Trần Quang Khải">Chi nhánh 2: 55 Trần Quang Khải, Quận 1, TP.HCM</option>
-                <option value="122 Thái Hà">Chi nhánh 3: 122 Thái Hà, Đống Đa, Hà Nội</option>
-                <option value="153 Hàm Nghi">Chi nhánh 4: 153 Hàm Nghi, Thanh Khê, Đà Nẵng</option>
-              </select>
-            </div>
+            <!-- Form Đăng Ký Giữ Suất có validation inline -->
+            <form id="trade-in-booking-form" onsubmit="event.preventDefault(); submitTradeInBooking();" class="pt-3 border-t border-slate-200 space-y-2.5" novalidate>
+              <div class="text-xs font-bold text-slate-900 flex items-center justify-between">
+                <span>Đăng ký giữ mức trợ giá tốt nhất trong 7 ngày:</span>
+                <span class="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">
+                  <i class="fa-solid fa-shield-halved"></i> Bảo mật 100%
+                </span>
+              </div>
+              
+              <div>
+                <label for="booking-name" class="sr-only">Họ và tên của bạn</label>
+                <input type="text" id="booking-name" placeholder="Họ và tên của bạn *" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0066FF]" oninput="clearFieldError('booking-name')">
+                <span id="booking-name-error" class="hidden text-[11px] text-red-500 font-semibold mt-1 block"></span>
+              </div>
 
-            <!-- Nút Chính: Xanh #0066FF -->
-            <button type="button" onclick="submitTradeInBooking()" class="w-full h-12 rounded-xl bg-[#0066FF] hover:bg-[#0052cc] text-white font-bold text-base tracking-wide shadow-md shadow-blue-500/25 active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer">
-              <i class="fa-solid fa-arrows-rotate text-white text-sm"></i>
-              <span>ĐĂNG KÝ THU CŨ LÊN ĐỜI NGAY</span>
-            </button>
+              <div>
+                <label for="booking-phone" class="sr-only">Số điện thoại liên hệ</label>
+                <input type="tel" id="booking-phone" placeholder="Số điện thoại nhận tin nhắn xác nhận (Ví dụ: 0912345678) *" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0066FF]" oninput="clearFieldError('booking-phone')">
+                <span id="booking-phone-error" class="hidden text-[11px] text-red-500 font-semibold mt-1 block"></span>
+              </div>
+
+              <div>
+                <label for="booking-branch" class="sr-only">Chi nhánh tiếp nhận</label>
+                <select id="booking-branch" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0066FF] bg-white cursor-pointer" onchange="clearFieldError('booking-branch')">
+                  <option value="">-- Vui lòng chọn chi nhánh tiếp nhận gần bạn --</option>
+                  <option value="Chi nhánh 1: 241 Lê Văn Việt, TP. Thủ Đức, TP.HCM" selected>Chi nhánh 1: 241 Lê Văn Việt, TP. Thủ Đức, TP.HCM</option>
+                  <option value="Chi nhánh 2: 55 Trần Quang Khải, Quận 1, TP.HCM">Chi nhánh 2: 55 Trần Quang Khải, Quận 1, TP.HCM</option>
+                  <option value="Chi nhánh 3: 122 Thái Hà, Đống Đa, Hà Nội">Chi nhánh 3: 122 Thái Hà, Đống Đa, Hà Nội</option>
+                  <option value="Chi nhánh 4: 153 Hàm Nghi, Thanh Khê, Đà Nẵng">Chi nhánh 4: 153 Hàm Nghi, Thanh Khê, Đà Nẵng</option>
+                </select>
+                <span id="booking-branch-error" class="hidden text-[11px] text-red-500 font-semibold mt-1 block"></span>
+              </div>
+
+              <!-- Nút Chính: Xanh #0066FF -->
+              <button type="submit" id="btn-submit-trade-in" class="w-full h-12 rounded-xl bg-[#0066FF] hover:bg-[#0052cc] text-white font-bold text-base tracking-wide shadow-md shadow-blue-500/25 active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer">
+                <i class="fa-solid fa-arrows-rotate text-white text-sm" id="btn-submit-icon"></i>
+                <span id="btn-submit-trade-in-text">ĐĂNG KÝ THU CŨ LÊN ĐỜI NGAY</span>
+              </button>
+            </form>
 
             <p class="text-[12px] text-slate-500 text-center font-normal">
               Nhân viên kỹ thuật sẽ gọi lại tư vấn chi tiết trong 15 phút. Thẩm định công khai tại cửa hàng.
@@ -1301,7 +1365,176 @@
     </div>
   </footer>
 
+  <!-- =========================================================================
+       MODAL: HƯỚNG DẪN PHÂN LOẠI TÌNH TRẠNG MÁY THU CŨ
+       ========================================================================= -->
+  <div id="condition-guide-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-150" role="dialog" aria-modal="true" aria-labelledby="condition-guide-title">
+    <div class="bg-white w-full max-w-3xl rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[90vh]">
+      <div class="p-4 sm:px-6 sm:py-4 bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-white flex items-center justify-between border-b border-slate-800 flex-shrink-0">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center text-sm shadow-md">
+            <i class="fa-solid fa-sliders"></i>
+          </div>
+          <div>
+            <h3 id="condition-guide-title" class="font-bold text-sm sm:text-base">Hướng Dẫn Phân Loại Tình Trạng Máy Thu Cũ</h3>
+            <p class="text-[11px] text-slate-300">Tiêu chuẩn thẩm định 4 cấp độ minh bạch tại hệ thống SamaMobile</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeConditionGuideModal()" class="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-sm transition-colors cursor-pointer" aria-label="Đóng hướng dẫn">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="p-4 sm:p-6 overflow-y-auto space-y-4 custom-scrollbar text-xs sm:text-sm text-slate-700">
+        <!-- Loại 1 -->
+        <div class="p-4 rounded-2xl bg-emerald-50/60 border border-emerald-200">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center text-xs">1</span>
+              <h4 class="font-bold text-slate-900 text-sm sm:text-base">Loại 1 — Như mới (Định giá tối đa 100%)</h4>
+            </div>
+            <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200 font-bold text-xs">Đẹp 99%</span>
+          </div>
+          <ul class="list-disc pl-5 space-y-1 text-slate-600">
+            <li><strong>Màn hình:</strong> Không trầy xước, không xước lông mèo, hiển thị sáng đều, không đốm sáng/ám ố.</li>
+            <li><strong>Thân vỏ:</strong> Khung viền và mặt lưng hoàn hảo, không cấn móp, sơn zin nguyên bản.</li>
+            <li><strong>Chức năng:</strong> Mọi tính năng (FaceID, cảm ứng, camera, loa, mic, sạc...) hoạt động hoàn hảo.</li>
+            <li><strong>Pin:</strong> Dung lượng pin trên 85%, không báo bảo trì hay linh kiện không xác định.</li>
+          </ul>
+        </div>
+
+        <!-- Loại 2 -->
+        <div class="p-4 rounded-2xl bg-blue-50/60 border border-blue-200">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-xs">2</span>
+              <h4 class="font-bold text-slate-900 text-sm sm:text-base">Loại 2 — Xước nhẹ (Định giá ~88%)</h4>
+            </div>
+            <span class="px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800 border border-blue-200 font-bold text-xs">Dùng lướt 95%</span>
+          </div>
+          <ul class="list-disc pl-5 space-y-1 text-slate-600">
+            <li><strong>Màn hình:</strong> Có vết xước dăm li ti khó thấy ở khoảng cách thông thường, không nứt vỡ hay sọc màn.</li>
+            <li><strong>Thân vỏ:</strong> Thân vỏ có vết xước lông mèo nhỏ do ốp lưng cọ xát, không móp méo hay biến dạng góc.</li>
+            <li><strong>Chức năng:</strong> Linh kiện zin, mọi tính năng hoạt động bình thường và ổn định.</li>
+            <li><strong>Pin:</strong> Dung lượng pin trên 80%.</li>
+          </ul>
+        </div>
+
+        <!-- Loại 3 -->
+        <div class="p-4 rounded-2xl bg-amber-50/60 border border-amber-200">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-amber-600 text-white font-bold flex items-center justify-center text-xs">3</span>
+              <h4 class="font-bold text-slate-900 text-sm sm:text-base">Loại 3 — Cấn / Trầy nhiều (Định giá ~72%)</h4>
+            </div>
+            <span class="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200 font-bold text-xs">Ngoại hình 85%</span>
+          </div>
+          <ul class="list-disc pl-5 space-y-1 text-slate-600">
+            <li><strong>Màn hình:</strong> Có vết xước thấy rõ hoặc hơi ám nhẹ ở mép nhưng cảm ứng hoạt động mượt mà.</li>
+            <li><strong>Thân vỏ:</strong> Cấn móp góc nhẹ, xước xát nhiều ở viền/lưng do quá trình sử dụng không dùng ốp.</li>
+            <li><strong>Chức năng:</strong> Toàn bộ tính năng vẫn sử dụng bình thường, chưa qua sửa chữa bo mạch.</li>
+            <li><strong>Pin:</strong> Có thể chai nhẹ nhưng vẫn duy trì hoạt động tốt.</li>
+          </ul>
+        </div>
+
+        <!-- Loại 4 -->
+        <div class="p-4 rounded-2xl bg-rose-50/60 border border-rose-200">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-rose-600 text-white font-bold flex items-center justify-center text-xs">4</span>
+              <h4 class="font-bold text-slate-900 text-sm sm:text-base">Loại 4 — Máy lỗi / Thẩm định tại cửa hàng</h4>
+            </div>
+            <span class="px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 border border-rose-200 font-bold text-xs">Cần thẩm định</span>
+          </div>
+          <ul class="list-disc pl-5 space-y-1 text-slate-600">
+            <li><strong>Màn hình / Kính:</strong> Vỡ kính ngoài, sọc màn hình, đốm đen hoặc lỗi cảm ứng.</li>
+            <li><strong>Linh kiện:</strong> Hỏng camera, chai pin phồng rộp, loa rè, hỏng nút bấm vật lý hoặc mất FaceID.</li>
+            <li><strong>Nguyên tắc định giá:</strong> SamaMobile <strong>không tự ý trừ tiền vô căn cứ</strong>. Kỹ thuật viên sẽ mở máy kiểm tra công khai trước mặt khách hàng để định giá giá trị linh kiện còn dùng được.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="p-4 border-t border-slate-200 bg-slate-50 flex items-center justify-end flex-shrink-0">
+        <button type="button" onclick="closeConditionGuideModal()" class="px-5 py-2.5 rounded-xl bg-[#0066FF] hover:bg-[#0052cc] text-white font-bold text-xs sm:text-sm transition-colors cursor-pointer">
+          Đã hiểu, quay lại chọn máy
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL: PHIẾU XÁC NHẬN ĐĂNG KÝ THU CŨ LÊN ĐỜI THÀNH CÔNG
+       ========================================================================= -->
+  <div id="booking-success-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-150" role="dialog" aria-modal="true" aria-labelledby="booking-success-title">
+    <div class="bg-white w-full max-w-lg rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col">
+      <div class="p-5 text-center bg-gradient-to-b from-emerald-50 to-white border-b border-slate-100">
+        <div class="w-14 h-14 rounded-full bg-emerald-100 text-emerald-600 mx-auto flex items-center justify-center text-2xl mb-3 shadow-inner">
+          <i class="fa-solid fa-circle-check"></i>
+        </div>
+        <h3 id="booking-success-title" class="text-lg sm:text-xl font-extrabold text-slate-900">Đăng Ký Thu Cũ Lên Đời Thành Công!</h3>
+        <p class="text-xs text-slate-500 mt-1">Hệ thống SamaMobile đã ghi nhận yêu cầu giữ giá của quý khách trong 7 ngày.</p>
+      </div>
+
+      <div class="p-5 space-y-3.5 text-xs sm:text-sm text-slate-700 bg-white">
+        <div class="p-3.5 rounded-xl bg-blue-50/70 border border-blue-200 flex items-center justify-between">
+          <span class="text-slate-600 font-medium">Mã phiếu giữ giá ưu đãi:</span>
+          <span id="receipt-booking-code" class="text-base sm:text-lg font-black text-[#0066FF] font-mono tracking-wider">TC-889922</span>
+        </div>
+
+        <div class="space-y-2 border-b border-slate-100 pb-3">
+          <div class="flex justify-between">
+            <span class="text-slate-500">Khách hàng:</span>
+            <span id="receipt-customer" class="font-bold text-slate-900">--</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-500">Máy cũ gửi lại:</span>
+            <span id="receipt-used-device" class="font-bold text-slate-900 text-right">--</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-500">Máy mới muốn lên đời:</span>
+            <span id="receipt-target-product" class="font-bold text-[#0066FF] text-right">--</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-500">Số tiền dự kiến bù thêm:</span>
+            <span id="receipt-compensation-diff" class="font-black text-[#DC2626] text-base tabular-nums">--</span>
+          </div>
+        </div>
+
+        <div>
+          <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Chi nhánh tiếp nhận:</div>
+          <p id="receipt-branch" class="font-semibold text-slate-800 text-xs bg-slate-50 p-2.5 rounded-xl border border-slate-200">--</p>
+        </div>
+
+        <div class="p-3 rounded-xl bg-amber-50/70 border border-amber-200 text-[11px] text-amber-900 leading-relaxed">
+          <i class="fa-solid fa-phone-volume text-amber-600 mr-1"></i>
+          Chuyên viên tư vấn sẽ liên hệ qua số điện thoại của quý khách trong <strong>15 phút</strong> để xác nhận lịch hẹn và chuẩn bị máy mới.
+        </div>
+      </div>
+
+      <div class="p-4 border-t border-slate-100 bg-slate-50 flex items-center gap-2">
+        <button type="button" onclick="closeBookingSuccessModal()" class="w-full py-2.5 rounded-xl bg-[#0066FF] hover:bg-[#0052cc] text-white font-bold text-xs sm:text-sm transition-colors cursor-pointer text-center">
+          Xác nhận & Hoàn tất
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       STICKY BAR DI ĐỘNG: TÓM TẮT TIỀN BÙ VÀ CTA NHANH TRÊN MOBILE
+       ========================================================================= -->
+  <div id="mobile-tradein-bar" class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 px-4 py-2.5 shadow-2xl flex items-center justify-between gap-3 animate-in slide-in-from-bottom duration-200">
+    <div class="min-w-0">
+      <div class="text-[10px] text-slate-500 font-semibold uppercase">Tiền bù dự kiến:</div>
+      <div id="mobile-bar-diff" class="text-lg font-black text-[#DC2626] tabular-nums leading-tight">0₫</div>
+    </div>
+    <button type="button" onclick="scrollToBookingForm()" class="px-5 py-2.5 rounded-xl bg-[#0066FF] hover:bg-[#0052cc] text-white font-bold text-xs shadow-md shadow-blue-500/25 active:scale-95 transition-all flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
+      <span>Đăng ký giữ giá</span>
+      <i class="fa-solid fa-arrow-right text-[10px]"></i>
+    </button>
+  </div>
+
   <!-- SCRIPT LOGIC ĐỊNH GIÁ & TÍNH TOÁN CỦA TRANG -->
+  <script src="../js/trade-in-core.js?v=1.0"></script>
   <script src="../js/auth.js?v=6.0"></script>
   <script src="../js/cart.js?v=6.0"></script>
   <script src="../js/store-data.js?v=3.8"></script>
@@ -1415,6 +1648,7 @@
     let selectedModel = null;
     let selectedCapacity = '128GB';
     let selectedCondition = 1; // 1: Loại 1, 2: Loại 2, 3: Loại 3, 4: Loại 4
+    let selectedDefects = [];  // Mảng chứa các mã lỗi checked khi chọn Loại 4
     let isShowingMoreUsed = false;
     let modalBrandFilter = 'ALL';
 
@@ -1540,11 +1774,12 @@
       ]
     };
 
-    const CONDITION_DATA = [
-      { id: 1, title: 'Loại 1 (Máy đẹp 99%)', desc: 'Màn hình & thân vỏ không xước, pin > 85%, hoạt động hoàn hảo', rate: 1.0 },
-      { id: 2, title: 'Loại 2 (Xước nhẹ 95%)', desc: 'Thân vỏ xước dăm li ti khó thấy, pin > 80%, linh kiện zin', rate: 0.88 },
-      { id: 3, title: 'Loại 3 (Cấn móp 85%)', desc: 'Cấn viền nhẹ, màn xước lông mèo hoặc hơi ám nhẹ, dùng tốt', rate: 0.72 },
-      { id: 4, title: 'Loại 4 (Vỡ kính / Lỗi)', desc: 'Vỡ kính, lỗi camera, chai pin nặng (thu xác linh kiện giá cao)', rate: 0.52 }
+    // Phân loại tình trạng máy lấy từ TradeInCore hoặc fallback
+    const CONDITION_DATA = (typeof TradeInCore !== 'undefined') ? TradeInCore.CONDITION_TIERS : [
+      { id: 1, name: 'Loại 1 — Như mới', subtitle: 'Máy đẹp 99%', shortDesc: 'Ngoại hình đẹp, không trầy xước, pin tốt, mọi chức năng hoạt động hoàn hảo', rate: 1.0 },
+      { id: 2, name: 'Loại 2 — Xước nhẹ', subtitle: 'Dùng lướt 95%', shortDesc: 'Vết xước dăm li ti khó thấy, màn hình đẹp, mọi chức năng hoàn hảo', rate: 0.88 },
+      { id: 3, name: 'Loại 3 — Cấn / Trầy nhiều', subtitle: 'Ngoại hình 85%', shortDesc: 'Thân vỏ cấn móp nhẹ hoặc trầy xước thấy rõ, màn hình xước nhẹ, chức năng bình thường', rate: 0.72 },
+      { id: 4, name: 'Loại 4 — Máy lỗi / Thẩm định', subtitle: 'Hỏng hóc / Lỗi phần cứng', shortDesc: 'Vỡ kính, nứt màn hình, chai pin nặng, camera lỗi hoặc hỏng chức năng. Thẩm định tại cửa hàng.', rate: 0.52 }
     ];
 
     // ==========================================
@@ -1596,6 +1831,7 @@
       renderUsedModelsGrid();
       renderCapacityOptions();
       renderConditionOptions();
+      renderDefectCheckboxes();
       recalculate();
 
       // Đóng popover khi click ngoài
@@ -1604,6 +1840,16 @@
         const btn = document.getElementById('btn-customer-avatar-toggle');
         if (pop && !pop.classList.contains('hidden') && !pop.contains(e.target) && !btn?.contains(e.target)) {
           window.closeCustomerAvatarMenu && window.closeCustomerAvatarMenu();
+        }
+      });
+
+      // Lắng nghe phím ESC để đóng mọi modal đang mở
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          closeConditionGuideModal();
+          closeBookingSuccessModal();
+          closeProductSelectorModal();
+          closeTradeInVideoModal();
         }
       });
     });
@@ -1886,11 +2132,14 @@
       const container = document.getElementById('brand-buttons-container');
       if (!container) return;
       const brands = ['Apple', 'Samsung', 'Xiaomi', 'OPPO'];
-      container.innerHTML = brands.map(b => `
-        <button type="button" onclick="selectBrand('${b}')" id="btn-brand-${b}" class="brand-btn h-11 px-2 sm:px-3 rounded-xl border text-xs sm:text-sm font-semibold transition-all text-center cursor-pointer ${selectedBrand === b ? 'bg-[#0066FF] text-white border-[#0066FF] shadow-xs' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'}">
-          ${b === 'Apple' ? '<i class="fa-brands fa-apple mr-0.5 sm:mr-1"></i> Apple' : b}
-        </button>
-      `).join('');
+      container.innerHTML = brands.map(b => {
+        const isSelected = selectedBrand === b;
+        return `
+          <button type="button" role="tab" aria-selected="${isSelected}" tabindex="0" onclick="selectBrand('${b}')" onkeydown="if(event.key==='Enter'||event.key===' '){ selectBrand('${b}'); event.preventDefault(); }" id="btn-brand-${b}" class="brand-btn h-11 px-2 sm:px-3 rounded-xl border text-xs sm:text-sm font-semibold transition-all text-center cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-[#0066FF] ${isSelected ? 'bg-[#0066FF] text-white border-[#0066FF] shadow-xs' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'}">
+            ${b === 'Apple' ? '<i class="fa-brands fa-apple mr-0.5 sm:mr-1"></i> Apple' : b}
+          </button>
+        `;
+      }).join('');
     }
 
     function selectBrand(brand) {
@@ -1901,8 +2150,14 @@
       if (selectedModel) {
         selectedCapacity = selectedModel.capacities[0];
       }
+      // Reset về Loại 1 và xóa danh sách lỗi
+      selectedCondition = 1;
+      selectedDefects = [];
+
       renderUsedModelsGrid();
       renderCapacityOptions();
+      renderConditionOptions();
+      renderDefectCheckboxes();
       recalculate();
     }
 
@@ -1932,16 +2187,27 @@
         }
       }
 
+      if (toShow.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full py-8 text-center text-slate-500 bg-slate-50 rounded-2xl border border-dashed border-slate-300 p-4">
+            <i class="fa-solid fa-magnifying-glass text-2xl text-slate-400 mb-2"></i>
+            <p class="text-xs sm:text-sm font-bold text-slate-700">Không tìm thấy model nào khớp với "${searchVal}"</p>
+            <p class="text-[11px] text-slate-400 mt-0.5">Vui lòng kiểm tra lại từ khóa hoặc chọn hãng sản xuất khác.</p>
+          </div>
+        `;
+        return;
+      }
+
       container.innerHTML = toShow.map(item => {
         const isSelected = selectedModel && selectedModel.model === item.model;
         return `
-          <div onclick="selectUsedModel('${item.model}')" title="${item.model}" class="p-2.5 sm:p-3 rounded-xl border transition-all cursor-pointer flex items-center gap-2.5 sm:gap-3 ${isSelected ? 'border-2 border-[#0066FF] bg-blue-50/80 shadow-xs ring-1 ring-[#0066FF]/20' : 'border-slate-200 bg-white hover:border-blue-300 hover:bg-slate-50'}">
+          <div role="button" tabindex="0" onclick="selectUsedModel('${item.model}')" onkeydown="if(event.key==='Enter'||event.key===' '){ selectUsedModel('${item.model}'); event.preventDefault(); }" title="${item.model}" aria-pressed="${isSelected}" class="p-2.5 sm:p-3 rounded-xl border transition-all cursor-pointer flex items-center gap-2.5 sm:gap-3 outline-none focus-visible:ring-2 focus-visible:ring-[#0066FF] ${isSelected ? 'border-2 border-[#0066FF] bg-blue-50/80 shadow-xs ring-1 ring-[#0066FF]/20' : 'border-slate-200 bg-white hover:border-blue-300 hover:bg-slate-50'}">
             <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-white p-0.5 border border-slate-200 flex-shrink-0 flex items-center justify-center">
               <img src="${item.img || '../images/banner/iphone-18-cat-082925094.png'}" alt="${item.model}" class="max-h-full max-w-full object-contain" onerror="this.onerror=null; this.src='../images/categories/dien-thoai.png'">
             </div>
             <div class="flex-1 min-w-0">
               <div class="text-xs sm:text-[13px] font-semibold text-slate-900 line-clamp-2 leading-tight ${isSelected ? 'text-[#0066FF] font-bold' : ''}">${item.model}</div>
-              <div class="text-[11px] sm:text-xs text-[#DC2626] font-bold tabular-nums mt-0.5">Thu tới: ${formatMoney(item.basePrice)}</div>
+              <div class="text-[11px] sm:text-xs text-[#DC2626] font-bold tabular-nums mt-0.5" title="Giá thu tham khảo tối đa loại 1">Thu tới: ${formatMoney(item.basePrice)}</div>
             </div>
             ${isSelected ? '<i class="fa-solid fa-circle-check text-[#0066FF] text-base ml-auto flex-shrink-0"></i>' : ''}
           </div>
@@ -1963,7 +2229,10 @@
       const found = list.find(m => m.model === modelName);
       if (found) {
         selectedModel = found;
-        selectedCapacity = found.capacities[0];
+        // Nếu dung lượng đang chọn không tồn tại ở model mới, tự chọn dung lượng cơ bản đầu tiên
+        if (!found.capacities.includes(selectedCapacity)) {
+          selectedCapacity = found.capacities[0];
+        }
         renderUsedModelsGrid();
         renderCapacityOptions();
         recalculate();
@@ -1977,7 +2246,7 @@
       container.innerHTML = selectedModel.capacities.map(cap => {
         const isSelected = selectedCapacity === cap;
         return `
-          <button type="button" onclick="selectCapacity('${cap}')" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold border transition-all cursor-pointer ${isSelected ? 'bg-[#0066FF] text-white border-[#0066FF] shadow-xs' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'}">
+          <button type="button" role="radio" aria-checked="${isSelected}" tabindex="0" onclick="selectCapacity('${cap}')" onkeydown="if(event.key==='Enter'||event.key===' '){ selectCapacity('${cap}'); event.preventDefault(); }" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold border transition-all cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-[#0066FF] ${isSelected ? 'bg-[#0066FF] text-white border-[#0066FF] shadow-xs' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'}">
             ${cap}
           </button>
         `;
@@ -1996,13 +2265,19 @@
 
       container.innerHTML = CONDITION_DATA.map(item => {
         const isSelected = selectedCondition === item.id;
+        const titleText = item.name || item.title;
+        const descText = item.shortDesc || item.desc;
+        const subText = item.subtitle || '';
         return `
-          <div onclick="selectCondition(${item.id})" class="p-3.5 rounded-xl border transition-all cursor-pointer flex flex-col justify-between ${isSelected ? 'border-2 border-[#0066FF] bg-blue-50/70 shadow-xs' : 'border-slate-200 bg-white hover:border-blue-300 hover:bg-slate-50'}">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs sm:text-sm font-bold ${isSelected ? 'text-[#0066FF]' : 'text-slate-900'}">${item.title}</span>
-              ${isSelected ? '<i class="fa-solid fa-circle-check text-[#0066FF] text-sm"></i>' : '<span class="w-4 h-4 rounded-full border border-slate-300"></span>'}
+          <div role="radio" aria-checked="${isSelected}" tabindex="0" onclick="selectCondition(${item.id})" onkeydown="if(event.key==='Enter'||event.key===' '){ selectCondition(${item.id}); event.preventDefault(); }" class="p-3.5 rounded-xl border transition-all cursor-pointer flex flex-col justify-between outline-none focus-visible:ring-2 focus-visible:ring-[#0066FF] ${isSelected ? 'border-2 border-[#0066FF] bg-blue-50/70 shadow-xs' : 'border-slate-200 bg-white hover:border-blue-300 hover:bg-slate-50'}">
+            <div>
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-xs sm:text-sm font-bold ${isSelected ? 'text-[#0066FF]' : 'text-slate-900'}">${titleText}</span>
+                ${isSelected ? '<i class="fa-solid fa-circle-check text-[#0066FF] text-sm"></i>' : '<span class="w-4 h-4 rounded-full border border-slate-300"></span>'}
+              </div>
+              ${subText ? `<span class="inline-block px-1.5 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-600 mb-1">${subText}</span>` : ''}
+              <p class="text-[11px] text-slate-500 leading-snug font-normal">${descText}</p>
             </div>
-            <p class="text-[11px] text-slate-500 leading-snug font-normal">${item.desc}</p>
           </div>
         `;
       }).join('');
@@ -2010,38 +2285,159 @@
 
     function selectCondition(tierId) {
       selectedCondition = Number(tierId);
+      // Khi người dùng chuyển từ Loại 4 sang Loại 1, 2, 3 thì reset danh sách lỗi đã chọn
+      if (selectedCondition !== 4) {
+        selectedDefects = [];
+      }
       renderConditionOptions();
+      renderDefectCheckboxes();
+      recalculate();
+    }
+
+    function renderDefectCheckboxes() {
+      const wrapper = document.getElementById('condition-defects-wrapper');
+      const container = document.getElementById('defect-checkboxes-container');
+      if (!wrapper || !container) return;
+
+      if (selectedCondition === 4) {
+        wrapper.classList.remove('hidden');
+        const defectList = (typeof TradeInCore !== 'undefined') ? TradeInCore.DEFECT_ITEMS : [];
+        container.innerHTML = defectList.map(defect => {
+          const isChecked = selectedDefects.includes(defect.id);
+          return `
+            <label class="flex items-start gap-2 p-2 rounded-xl border cursor-pointer transition-colors text-xs font-medium ${isChecked ? 'bg-amber-100/80 border-amber-400 text-amber-950 font-semibold' : 'bg-white/80 border-amber-200/80 text-slate-700 hover:bg-amber-50'}">
+              <input type="checkbox" onchange="toggleDefect('${defect.id}')" ${isChecked ? 'checked' : ''} class="mt-0.5 rounded text-amber-600 focus:ring-amber-500 cursor-pointer">
+              <span class="leading-snug">${defect.label}</span>
+            </label>
+          `;
+        }).join('');
+      } else {
+        wrapper.classList.add('hidden');
+      }
+    }
+
+    function toggleDefect(defectId) {
+      const idx = selectedDefects.indexOf(defectId);
+      if (idx >= 0) {
+        selectedDefects.splice(idx, 1);
+      } else {
+        selectedDefects.push(defectId);
+      }
+      renderDefectCheckboxes();
       recalculate();
     }
 
     function recalculate() {
       if (!selectedModel) return;
 
-      let val = selectedModel.basePrice;
-      if (selectedCapacity === '256GB') val *= 1.08;
-      else if (selectedCapacity === '512GB') val *= 1.18;
-      else if (selectedCapacity === '1TB') val *= 1.28;
-
-      const cond = CONDITION_DATA.find(c => c.id === selectedCondition) || CONDITION_DATA[0];
-      val = Math.round((val * cond.rate) / 10000) * 10000;
-
-      // Trợ giá lên đời độc quyền SamaMobile
-      let subsidy = 1000000;
-      if (val >= 15000000) subsidy = 2500000;
-      else if (val >= 10000000) subsidy = 1800000;
-      else if (val >= 6000000) subsidy = 1200000;
-
       const targetPrice = targetSelectedCapacity?.gia || targetProduct?.donGia || 41490000;
-      const totalBenefit = val + subsidy;
-      const diff = Math.max(0, targetPrice - totalBenefit);
-      const installment = Math.round(diff / 6);
 
-      document.getElementById('calc-target-price').textContent = formatMoney(targetPrice);
-      document.getElementById('calc-used-value').textContent = `- ${formatMoney(val)}`;
-      document.getElementById('calc-subsidy').textContent = `- ${formatMoney(subsidy)}`;
-      document.getElementById('calc-total-benefit').textContent = `Tiết kiệm: ${formatMoney(totalBenefit)}`;
-      document.getElementById('calc-final-diff').textContent = formatMoney(diff);
-      document.getElementById('calc-installment').textContent = formatMoney(installment);
+      let quote;
+      if (typeof TradeInCore !== 'undefined') {
+        quote = TradeInCore.calculateQuote({
+          targetPrice: targetPrice,
+          usedModel: selectedModel,
+          selectedCapacity: selectedCapacity,
+          conditionId: selectedCondition,
+          selectedDefects: selectedDefects
+        });
+      } else {
+        // Fallback nội bộ
+        let val = selectedModel.basePrice;
+        if (selectedCapacity === '256GB') val *= 1.08;
+        else if (selectedCapacity === '512GB') val *= 1.18;
+        else if (selectedCapacity === '1TB') val *= 1.28;
+        const cond = CONDITION_DATA.find(c => c.id === selectedCondition) || CONDITION_DATA[0];
+        val = Math.round((val * cond.rate) / 10000) * 10000;
+        let sub = 1000000;
+        if (val >= 15000000) sub = 2500000;
+        else if (val >= 10000000) sub = 1800000;
+        else if (val >= 6000000) sub = 1200000;
+        const diff = Math.max(0, targetPrice - (val + sub));
+        quote = {
+          targetPrice,
+          usedValuation: val,
+          subsidyBonus: sub,
+          totalBenefit: val + sub,
+          compensationDiff: diff,
+          monthlyInstallment: Math.round(diff / 6),
+          needsAssessment: selectedCondition === 4,
+          condition: cond
+        };
+      }
+
+      // Cập nhật giao diện bên phải
+      const elTargetPrice = document.getElementById('calc-target-price');
+      const elTargetSubtext = document.getElementById('calc-target-subtext');
+      const elUsedValue = document.getElementById('calc-used-value');
+      const elUsedSubtext = document.getElementById('calc-used-subtext');
+      const elSubsidy = document.getElementById('calc-subsidy');
+      const elSubsidySubtext = document.getElementById('calc-subsidy-subtext');
+      const elTotalBenefit = document.getElementById('calc-total-benefit');
+      const elFinalDiff = document.getElementById('calc-final-diff');
+      const elFinalBadge = document.getElementById('calc-final-badge');
+      const elInstallment = document.getElementById('calc-installment');
+      const elInstallmentWrapper = document.getElementById('calc-installment-wrapper');
+      const elQuoteBadge = document.getElementById('quote-badge-status');
+      const elBtnText = document.getElementById('btn-submit-trade-in-text');
+      const elMobileDiff = document.getElementById('mobile-bar-diff');
+
+      if (elTargetPrice) elTargetPrice.textContent = formatMoney(quote.targetPrice);
+      if (elTargetSubtext) elTargetSubtext.textContent = `${targetProduct?.tenHang || 'Máy mới'} (${targetSelectedCapacity?.dungLuong || 'Tiêu chuẩn'})`;
+
+      if (quote.needsAssessment && quote.usedValuation === null) {
+        // Trường hợp Loại 4 có lỗi cụ thể: Không tự ý sinh số trừ, báo rõ cần thẩm định thực tế
+        if (elUsedValue) {
+          elUsedValue.textContent = 'Cần thẩm định';
+          elUsedValue.className = 'font-bold text-amber-600 text-sm sm:text-base';
+        }
+        if (elUsedSubtext) elUsedSubtext.textContent = `${selectedModel.model} • ${selectedCapacity} • ${quote.selectedDefects.length} lỗi ghi nhận`;
+        if (elSubsidy) {
+          elSubsidy.textContent = 'Áp dụng sau thẩm định';
+          elSubsidy.className = 'font-bold text-slate-500 text-xs sm:text-sm';
+        }
+        if (elSubsidySubtext) elSubsidySubtext.textContent = 'Áp dụng mức trợ giá tối đa sau khi kiểm tra máy';
+        if (elTotalBenefit) elTotalBenefit.textContent = 'Xác nhận sau kiểm tra';
+        if (elFinalDiff) {
+          elFinalDiff.textContent = 'Chờ thẩm định';
+          elFinalDiff.className = 'text-2xl sm:text-3xl font-black text-amber-600 tabular-nums leading-none my-2.5';
+        }
+        if (elFinalBadge) elFinalBadge.classList.remove('hidden');
+        if (elInstallmentWrapper) elInstallmentWrapper.classList.add('hidden');
+        if (elQuoteBadge) {
+          elQuoteBadge.textContent = 'Cần thẩm định thực tế';
+          elQuoteBadge.className = 'px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 text-xs font-bold';
+        }
+        if (elBtnText) elBtnText.textContent = 'ĐĂNG KÝ THẨM ĐỊNH MÁY LỖI MIỄN PHÍ';
+        if (elMobileDiff) elMobileDiff.textContent = 'Chờ thẩm định';
+      } else {
+        // Trường hợp bình thường có định giá dự kiến
+        const condName = quote.condition?.name || quote.condition?.title || `Loại ${selectedCondition}`;
+        if (elUsedValue) {
+          elUsedValue.textContent = `- ${formatMoney(quote.usedValuation)}`;
+          elUsedValue.className = 'font-bold text-[#0066FF] tabular-nums text-base';
+        }
+        if (elUsedSubtext) elUsedSubtext.textContent = `${selectedModel.model} • ${selectedCapacity} • ${condName}`;
+        if (elSubsidy) {
+          elSubsidy.textContent = `- ${formatMoney(quote.subsidyBonus)}`;
+          elSubsidy.className = 'font-bold text-[#DC2626] tabular-nums text-sm sm:text-base';
+        }
+        if (elSubsidySubtext) elSubsidySubtext.textContent = 'Trợ giá lên đời độc quyền SamaMobile';
+        if (elTotalBenefit) elTotalBenefit.textContent = `Tiết kiệm: ${formatMoney(quote.totalBenefit)}`;
+        if (elFinalDiff) {
+          elFinalDiff.textContent = formatMoney(quote.compensationDiff);
+          elFinalDiff.className = 'text-3xl sm:text-4xl font-black text-[#DC2626] tabular-nums leading-none my-2.5';
+        }
+        if (elFinalBadge) elFinalBadge.classList.add('hidden');
+        if (elInstallmentWrapper) elInstallmentWrapper.classList.remove('hidden');
+        if (elInstallment) elInstallment.textContent = formatMoney(quote.monthlyInstallment);
+        if (elQuoteBadge) {
+          elQuoteBadge.textContent = 'Báo giá dự kiến';
+          elQuoteBadge.className = 'px-2.5 py-0.5 rounded-full bg-blue-50 text-[#0066FF] border border-blue-200 text-xs font-bold';
+        }
+        if (elBtnText) elBtnText.textContent = 'ĐĂNG KÝ THU CŨ LÊN ĐỜI NGAY';
+        if (elMobileDiff) elMobileDiff.textContent = formatMoney(quote.compensationDiff);
+      }
     }
 
     // Modal chọn máy mới
@@ -2101,7 +2497,7 @@
         const isCurrent = targetProduct && targetProduct.maHang === p.maHang;
         const img = p.anhChinh && (p.anhChinh.startsWith('http') || p.anhChinh.startsWith('/') ? p.anhChinh : `../${p.anhChinh}`);
         return `
-          <div onclick="selectTargetProductFromModal('${p.maHang}')" class="bg-white rounded-2xl border p-3 flex flex-col justify-between hover:shadow-lg transition-all cursor-pointer ${isCurrent ? 'border-2 border-[#0066FF] bg-blue-50/50 shadow-sm' : 'border-slate-200 hover:border-blue-400'}">
+          <div role="button" tabindex="0" onclick="selectTargetProductFromModal('${p.maHang}')" onkeydown="if(event.key==='Enter'||event.key===' '){ selectTargetProductFromModal('${p.maHang}'); event.preventDefault(); }" class="bg-white rounded-2xl border p-3 flex flex-col justify-between hover:shadow-lg transition-all cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-[#0066FF] ${isCurrent ? 'border-2 border-[#0066FF] bg-blue-50/50 shadow-sm' : 'border-slate-200 hover:border-blue-400'}">
             <div>
               <div class="relative w-full aspect-square rounded-xl bg-slate-50 p-2 flex items-center justify-center overflow-hidden mb-2.5">
                 <img src="${img}" alt="${p.tenHang}" class="max-h-full max-w-full object-contain" onerror="this.onerror=null; this.src='../images/categories/dien-thoai.png'">
@@ -2130,27 +2526,223 @@
       }
     }
 
-    function submitTradeInBooking() {
-      const name = document.getElementById('booking-name')?.value?.trim();
-      const phone = document.getElementById('booking-phone')?.value?.trim();
-      const branch = document.getElementById('booking-branch')?.value;
+    // ==========================================
+    // FORM VALIDATION & SUBMIT BOOKING
+    // ==========================================
+    function setFieldError(fieldId, errorMsg) {
+      const errorEl = document.getElementById(`${fieldId}-error`);
+      const inputEl = document.getElementById(fieldId);
+      if (errorEl) {
+        if (errorMsg) {
+          errorEl.textContent = errorMsg;
+          errorEl.classList.remove('hidden');
+        } else {
+          errorEl.textContent = '';
+          errorEl.classList.add('hidden');
+        }
+      }
+      if (inputEl) {
+        if (errorMsg) {
+          inputEl.classList.add('border-red-500', 'ring-1', 'ring-red-400');
+        } else {
+          inputEl.classList.remove('border-red-500', 'ring-1', 'ring-red-400');
+        }
+      }
+    }
 
-      if (!phone || phone.length < 9) {
-        alert('Vui lòng nhập số điện thoại hợp lệ để nhận mã xác nhận giữ giá và chi nhánh hỗ trợ!');
+    function clearFieldError(fieldId) {
+      setFieldError(fieldId, '');
+    }
+
+    function submitTradeInBooking() {
+      const nameInput = document.getElementById('booking-name');
+      const phoneInput = document.getElementById('booking-phone');
+      const branchSelect = document.getElementById('booking-branch');
+      const submitBtn = document.getElementById('btn-submit-trade-in');
+
+      // Validate bằng pure function
+      let validation;
+      if (typeof TradeInCore !== 'undefined') {
+        validation = TradeInCore.validateBookingForm({
+          name: nameInput?.value,
+          phone: phoneInput?.value,
+          branch: branchSelect?.value
+        });
+      } else {
+        const p = phoneInput?.value?.trim();
+        const isValidPhone = p && p.length >= 9;
+        validation = {
+          isValid: Boolean(isValidPhone && nameInput?.value?.trim() && branchSelect?.value),
+          errors: {
+            name: !nameInput?.value?.trim() ? 'Vui lòng nhập họ và tên' : undefined,
+            phone: !isValidPhone ? 'Số điện thoại không hợp lệ' : undefined,
+            branch: !branchSelect?.value ? 'Vui lòng chọn chi nhánh' : undefined
+          },
+          cleanedData: {
+            name: nameInput?.value?.trim() || '',
+            phone: p || '',
+            branch: branchSelect?.value || ''
+          }
+        };
+      }
+
+      // Xóa lỗi cũ
+      clearFieldError('booking-name');
+      clearFieldError('booking-phone');
+      clearFieldError('booking-branch');
+
+      if (!validation.isValid) {
+        if (validation.errors.name) setFieldError('booking-name', validation.errors.name);
+        if (validation.errors.phone) setFieldError('booking-phone', validation.errors.phone);
+        if (validation.errors.branch) setFieldError('booking-branch', validation.errors.branch);
         return;
       }
 
-      const diff = document.getElementById('calc-final-diff')?.textContent || '0₫';
-      const code = 'TC-' + Math.floor(100000 + Math.random() * 900000);
+      // Trạng thái pending chống duplicate submit
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.dataset.originalHtml = submitBtn.innerHTML;
+        submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>Đang xử lý đăng ký...</span>`;
+        submitBtn.classList.add('opacity-75', 'cursor-not-allowed');
+      }
 
-      alert(`🎉 ĐĂNG KÝ THU CŨ LÊN ĐỜI THÀNH CÔNG!\n\n` +
-            `• Mã phiếu giữ giá: ${code} (Hiệu lực 7 ngày)\n` +
-            `• Khách hàng: ${name || 'Quý khách'} (${phone})\n` +
-            `• Máy cũ: ${selectedModel?.model} (${selectedCapacity})\n` +
-            `• Lên đời máy: ${targetProduct?.tenHang}\n` +
-            `• Số tiền bù ước tính: ${diff}\n` +
-            `• Chi nhánh tiếp nhận: ${branch}\n\n` +
-            `Chuyên viên SamaMobile sẽ gọi xác nhận trong 15 phút!`);
+      // Xử lý gửi thông tin
+      setTimeout(() => {
+        try {
+          const targetPrice = targetSelectedCapacity?.gia || targetProduct?.donGia || 0;
+          let calc;
+          if (typeof TradeInCore !== 'undefined') {
+            calc = TradeInCore.calculateQuote({
+              targetPrice: targetPrice,
+              usedModel: selectedModel,
+              selectedCapacity: selectedCapacity,
+              conditionId: selectedCondition,
+              selectedDefects: selectedDefects
+            });
+          } else {
+            calc = {
+              targetPrice: targetPrice,
+              usedValuation: 0,
+              subsidyBonus: 0,
+              compensationDiff: targetPrice,
+              needsAssessment: selectedCondition === 4,
+              condition: { name: `Loại ${selectedCondition}` }
+            };
+          }
+
+          const bookingCode = 'TC-' + Math.floor(100000 + Math.random() * 900000);
+          const bookingData = {
+            code: bookingCode,
+            createdAt: new Date().toISOString(),
+            customer: validation.cleanedData,
+            targetProduct: {
+              id: targetProduct?.maHang,
+              name: targetProduct?.tenHang,
+              price: calc.targetPrice
+            },
+            usedDevice: {
+              brand: selectedBrand,
+              model: selectedModel?.model,
+              capacity: selectedCapacity,
+              condition: calc.condition?.name || `Loại ${selectedCondition}`,
+              defects: selectedDefects,
+              valuation: calc.usedValuation,
+              subsidy: calc.subsidyBonus,
+              compensationDiff: calc.compensationDiff,
+              needsAssessment: calc.needsAssessment
+            },
+            branch: validation.cleanedData.branch,
+            status: 'PENDING_CONFIRMATION'
+          };
+
+          // Lưu phiếu vào localStorage (an toàn không log PII ra console)
+          try {
+            const history = JSON.parse(localStorage.getItem('sama_tradein_bookings') || '[]');
+            history.unshift(bookingData);
+            localStorage.setItem('sama_tradein_bookings', JSON.stringify(history.slice(0, 20)));
+          } catch (e) {
+            // Không chặn nếu localStorage bị tắt
+          }
+
+          // Reset input
+          if (nameInput) nameInput.value = '';
+          if (phoneInput) phoneInput.value = '';
+
+          // Hiển thị modal biên nhận thành công
+          openBookingSuccessModal(bookingData);
+        } finally {
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = submitBtn.dataset.originalHtml || `<span>ĐĂNG KÝ THU CŨ LÊN ĐỜI NGAY</span>`;
+            submitBtn.classList.remove('opacity-75', 'cursor-not-allowed');
+          }
+        }
+      }, 350);
+    }
+
+    // Modal Hướng dẫn phân loại máy
+    function openConditionGuideModal() {
+      const modal = document.getElementById('condition-guide-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeConditionGuideModal() {
+      const modal = document.getElementById('condition-guide-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        document.body.style.overflow = '';
+      }
+    }
+
+    // Modal Phiếu xác nhận đăng ký
+    function openBookingSuccessModal(data) {
+      if (!data) return;
+      const modal = document.getElementById('booking-success-modal');
+      if (!modal) return;
+
+      document.getElementById('receipt-booking-code').textContent = data.code;
+      document.getElementById('receipt-customer').textContent = `${data.customer.name} • ${data.customer.phone}`;
+      
+      const usedDesc = `${data.usedDevice.model} (${data.usedDevice.capacity}) - ${data.usedDevice.condition}`;
+      document.getElementById('receipt-used-device').textContent = usedDesc;
+      document.getElementById('receipt-target-product').textContent = data.targetProduct.name;
+      
+      const diffEl = document.getElementById('receipt-compensation-diff');
+      if (diffEl) {
+        if (data.usedDevice.needsAssessment && data.usedDevice.compensationDiff === null) {
+          diffEl.textContent = 'Chờ thẩm định máy';
+          diffEl.className = 'font-black text-amber-600 text-base';
+        } else {
+          diffEl.textContent = formatMoney(data.usedDevice.compensationDiff);
+          diffEl.className = 'font-black text-[#DC2626] text-base tabular-nums';
+        }
+      }
+      
+      document.getElementById('receipt-branch').textContent = data.branch;
+
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeBookingSuccessModal() {
+      const modal = document.getElementById('booking-success-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        document.body.style.overflow = '';
+      }
+    }
+
+    function scrollToBookingForm() {
+      const form = document.getElementById('trade-in-booking-form');
+      if (form) {
+        form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(() => {
+          document.getElementById('booking-name')?.focus();
+        }, 500);
+      }
     }
 
     // =========================================================================

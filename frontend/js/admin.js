@@ -1569,7 +1569,77 @@ async function renderDonHangTable(filter = 'all', keyword = '') {
       </tr>
     `;
   }).join('');
+
+  if (typeof syncDonHangScroll === 'function') {
+    syncDonHangScroll();
+  }
 }
+
+// -------------------------------------------------------------
+// ĐỒNG BỘ THANH CUỘN NGANG TRÊN & DƯỚI BẢNG ĐƠN HÀNG ONLINE
+// -------------------------------------------------------------
+function syncDonHangScroll() {
+  const topScroll = document.getElementById('donhang-top-scroll');
+  const tableContainer = document.getElementById('donhang-table-container');
+  const inner = document.getElementById('donhang-top-scroll-inner');
+  const table = document.getElementById('table-donhang');
+
+  if (!topScroll || !tableContainer || !inner || !table) return;
+
+  const sw = Math.max(table.scrollWidth, table.offsetWidth, 1050);
+  inner.style.width = sw + 'px';
+  initDonHangScrollSync();
+}
+
+function initDonHangScrollSync() {
+  const topScroll = document.getElementById('donhang-top-scroll');
+  const tableContainer = document.getElementById('donhang-table-container');
+  const inner = document.getElementById('donhang-top-scroll-inner');
+  const table = document.getElementById('table-donhang');
+
+  if (!topScroll || !tableContainer || !inner || !table) return;
+  if (topScroll._hasSyncBound) return;
+  topScroll._hasSyncBound = true;
+
+  let isSyncingTop = false;
+  let isSyncingTable = false;
+
+  topScroll.addEventListener('scroll', () => {
+    if (!isSyncingTop) {
+      isSyncingTable = true;
+      tableContainer.scrollLeft = topScroll.scrollLeft;
+    }
+    isSyncingTop = false;
+  }, { passive: true });
+
+  tableContainer.addEventListener('scroll', () => {
+    if (!isSyncingTable) {
+      isSyncingTop = true;
+      topScroll.scrollLeft = tableContainer.scrollLeft;
+    }
+    isSyncingTable = false;
+  }, { passive: true });
+
+  if (window.ResizeObserver) {
+    const ro = new ResizeObserver(() => syncDonHangScroll());
+    ro.observe(table);
+    ro.observe(tableContainer);
+  } else {
+    window.addEventListener('resize', syncDonHangScroll);
+  }
+}
+
+function scrollDonHangHorizontally(delta) {
+  const tableContainer = document.getElementById('donhang-table-container');
+  const topScroll = document.getElementById('donhang-top-scroll');
+  if (!tableContainer) return;
+  tableContainer.scrollBy({ left: delta, behavior: 'smooth' });
+  if (topScroll) {
+    topScroll.scrollBy({ left: delta, behavior: 'smooth' });
+  }
+}
+window.scrollDonHangHorizontally = scrollDonHangHorizontally;
+window.syncDonHangScroll = syncDonHangScroll;
 
 function quickApproveOrder(maDH) {
   approveOrder(maDH);

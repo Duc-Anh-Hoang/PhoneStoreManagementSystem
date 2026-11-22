@@ -52,12 +52,12 @@
     { brand: 'Xiaomi', model: 'Xiaomi 13', basePrice: 7800000, capacities: ['128GB', '256GB'] }
   ];
 
-  // Hệ số tình trạng máy
+  // Hệ số tình trạng máy chuẩn hóa đồng bộ
   const CONDITION_TIERS = [
-    { id: 1, name: 'Loại 1 (Máy đẹp 99%)', desc: 'Màn hình & thân máy đẹp, không trầy xước, pin tốt, mọi chức năng hoạt động hoàn hảo', rate: 1.0 },
-    { id: 2, name: 'Loại 2 (Xước nhẹ 95%)', desc: 'Màn hình đẹp, thân máy có vết xước lông mèo nhỏ, pin & chức năng ổn định', rate: 0.88 },
-    { id: 3, name: 'Loại 3 (Cấn viền 90%)', desc: 'Màn hình có xước nhẹ, thân máy cấn móp nhẹ ở các góc, không lỗi chức năng', rate: 0.72 },
-    { id: 4, name: 'Loại 4 (Màn ám / Lỗi nhẹ)', desc: 'Thân máy trầy xước nhiều, màn hình có vết ố/ám nhẹ, các tính năng cơ bản còn tốt', rate: 0.52 }
+    { id: 1, name: 'Loại 1 — Như mới', desc: 'Màn hình & thân máy đẹp, không trầy xước, pin > 85%, mọi chức năng hoàn hảo', rate: 1.0 },
+    { id: 2, name: 'Loại 2 — Xước nhẹ', desc: 'Thân máy có vết xước lông mèo nhỏ li ti, pin > 80%, chức năng hoạt động hoàn hảo', rate: 0.88 },
+    { id: 3, name: 'Loại 3 — Cấn / Trầy nhiều', desc: 'Thân máy cấn móp hoặc trầy rõ, màn hình xước nhẹ, chức năng bình thường', rate: 0.72 },
+    { id: 4, name: 'Loại 4 — Máy lỗi / Thẩm định', desc: 'Vỡ kính, nứt màn hình, chai pin nặng, camera lỗi hoặc lỗi linh kiện... Thẩm định tại cửa hàng', rate: 0.52 }
   ];
 
   class TradeInManager {
@@ -126,7 +126,25 @@
     calculate() {
       if (!this.selectedModel) return { valuation: 0, subsidy: 0, targetPrice: 0, diff: 0, installment: 0 };
 
-      // Tính giá máy cũ
+      if (typeof window !== 'undefined' && window.TradeInCore) {
+        const quote = window.TradeInCore.calculateQuote({
+          targetPrice: Number(this.selectedTargetProduct?.donGia) || 30990000,
+          usedModel: this.selectedModel,
+          selectedCapacity: this.selectedCapacity,
+          conditionId: this.selectedCondition.id,
+          selectedDefects: []
+        });
+        return {
+          usedValuation: quote.usedValuation || 0,
+          subsidyBonus: quote.subsidyBonus || 0,
+          totalBenefit: quote.totalBenefit || 0,
+          targetPrice: quote.targetPrice,
+          compensationDiff: quote.compensationDiff || 0,
+          monthlyInstallment: quote.monthlyInstallment || 0
+        };
+      }
+
+      // Tính giá máy cũ dự phòng
       let val = this.selectedModel.basePrice;
       if (this.selectedCapacity === '256GB') val *= 1.08;
       else if (this.selectedCapacity === '512GB') val *= 1.18;
