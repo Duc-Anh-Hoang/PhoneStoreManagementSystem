@@ -14,8 +14,7 @@ public class CreateNhanVienRequestValidator : AbstractValidator<CreateNhanVienRe
 
         RuleFor(x => x.ChucVu)
             .NotEmpty().WithMessage("Chức vụ không được để trống.")
-            .Must(c => AppConstants.ValidPositions.Contains(c))
-            .WithMessage($"Chức vụ phải là một trong các giá trị: {string.Join(", ", AppConstants.ValidPositions)}.");
+            .MaximumLength(50);
 
         RuleFor(x => x.Email)
             .EmailAddress().When(x => !string.IsNullOrEmpty(x.Email))
@@ -37,8 +36,7 @@ public class UpdateNhanVienRequestValidator : AbstractValidator<UpdateNhanVienRe
 
         RuleFor(x => x.ChucVu)
             .NotEmpty().WithMessage("Chức vụ không được để trống.")
-            .Must(c => AppConstants.ValidPositions.Contains(c))
-            .WithMessage($"Chức vụ phải là một trong các giá trị: {string.Join(", ", AppConstants.ValidPositions)}.");
+            .MaximumLength(50);
 
         RuleFor(x => x.Email)
             .EmailAddress().When(x => !string.IsNullOrEmpty(x.Email))

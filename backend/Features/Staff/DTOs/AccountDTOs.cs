@@ -28,6 +28,7 @@ public class UpdateTaiKhoanRequest
 
 public class PhanQuyenDto
 {
+    public string? QuyenCoSo { get; set; }
     public string MaQuyen { get; set; } = string.Empty;
     public string TenQuyen { get; set; } = string.Empty;
     public string? MoTa { get; set; }

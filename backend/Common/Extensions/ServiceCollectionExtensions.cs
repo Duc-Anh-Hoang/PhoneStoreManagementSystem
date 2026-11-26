@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using PhoneStoreAPI.Data;
+using PhoneStoreAPI.Common.Constants;
 using PhoneStoreAPI.Features.Payment;
 using System.Net;
 using System.Security.Claims;
@@ -58,6 +61,26 @@ public static class ServiceCollectionExtensions
         {
             options.RequireHttpsMetadata = false;
             options.SaveToken = true;
+            options.Events = new JwtBearerEvents
+            {
+                OnTokenValidated = async context =>
+                {
+                    var principal = context.Principal;
+                    if (principal?.FindFirstValue("manv") is not string staffId) return;
+
+                    var db = context.HttpContext.RequestServices.GetRequiredService<AppDbContext>();
+                    var username = principal!.FindFirstValue(ClaimTypes.Name);
+                    var currentRole = await db.TaiKhoans.AsNoTracking()
+                        .Where(a => a.UserName == username && a.MaNV == staffId &&
+                            a.TrangThai == AppConstants.AccountStatus.HoatDong &&
+                            a.NhanVien!.TrangThai == AppConstants.EmployeeStatus.DangLam)
+                        .Select(a => a.PhanQuyen!.QuyenCoSo ?? a.MaQuyen)
+                        .SingleOrDefaultAsync(context.HttpContext.RequestAborted);
+
+                    if (currentRole == null || !principal.IsInRole(currentRole))
+                        context.Fail("Quyền tài khoản đã thay đổi. Vui lòng đăng nhập lại.");
+                }
+            };
             options.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,

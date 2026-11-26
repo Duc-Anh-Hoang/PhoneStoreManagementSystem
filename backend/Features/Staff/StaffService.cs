@@ -18,6 +18,13 @@ public class StaffService : IStaffService
         _logger = logger;
     }
 
+    private async Task ValidatePositionAsync(string position)
+    {
+        if (!AppConstants.ValidPositions.Contains(position) &&
+            !await _context.PhanQuyens.AnyAsync(p => p.QuyenCoSo != null && p.TenQuyen == position))
+            throw new BadRequestException("Chức vụ không có trong danh sách.");
+    }
+
     public async Task<(List<NhanVienDto> items, int totalCount)> GetAllAsync(
         string? keyword,
         string? chucVu,
@@ -134,6 +141,7 @@ public class StaffService : IStaffService
             }
         }
 
+        await ValidatePositionAsync(request.ChucVu.Trim());
         var newStaff = new NhanVien
         {
             MaNV = maNV,
@@ -186,6 +194,7 @@ public class StaffService : IStaffService
         }
 
         staff.HoTen = request.HoTen.Trim();
+        await ValidatePositionAsync(request.ChucVu.Trim());
         staff.ChucVu = request.ChucVu.Trim();
         staff.Sdt = request.Sdt?.Trim();
         staff.Email = request.Email?.Trim();

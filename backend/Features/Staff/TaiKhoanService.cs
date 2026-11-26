@@ -248,6 +248,7 @@ public class TaiKhoanService : ITaiKhoanService
             {
                 MaQuyen = p.MaQuyen,
                 TenQuyen = p.TenQuyen,
+                QuyenCoSo = p.QuyenCoSo,
                 MoTa = p.MoTa
             })
             .ToListAsync();

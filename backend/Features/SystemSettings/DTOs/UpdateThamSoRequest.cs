@@ -7,3 +7,8 @@ public class UpdateThamSoRequest
     public string? DonVi { get; set; }
 }
 
+
+public class CreateThamSoRequest : UpdateThamSoRequest
+{
+    public string? MaThamSo { get; set; }
+}

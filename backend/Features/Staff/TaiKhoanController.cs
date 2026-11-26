@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using PhoneStoreAPI.Data;
+using PhoneStoreAPI.Models.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PhoneStoreAPI.Common.Constants;
@@ -92,5 +95,36 @@ public class PhanQuyenController : ControllerBase
     {
         var list = await _taiKhoanService.GetAllRolesAsync();
         return Ok(list);
+    }
+
+    [HttpPost, Authorize(Roles = AppConstants.Roles.Admin)]
+    public async Task<IActionResult> Create(PhanQuyenDto request, [FromServices] AppDbContext db)
+    {
+        var code = request.MaQuyen.Trim().ToLowerInvariant();
+        var name = request.TenQuyen.Trim();
+        if (!System.Text.RegularExpressions.Regex.IsMatch(code, "^[a-z][a-z0-9_]{1,9}$") ||
+            name.Length is < 2 or > 50 || request.MoTa?.Length > 255 ||
+            request.QuyenCoSo is not ("manager" or "sales" or "cashier" or "stock" or "tech") ||
+            code is "admin" or "manager" or "sales" or "cashier" or "stock" or "tech" or "customer")
+            return BadRequest(new { message = "Mã, tên, mô tả hoặc nhóm quyền không hợp lệ." });
+
+        if (AppConstants.ValidPositions.Any(p => string.Equals(p, name, StringComparison.OrdinalIgnoreCase)) ||
+            await db.PhanQuyens.AnyAsync(p => p.MaQuyen == code || p.TenQuyen.ToLower() == name.ToLower()))
+            return Conflict(new { message = "Mã hoặc tên vai trò đã tồn tại." });
+
+        db.PhanQuyens.Add(new PhanQuyen { MaQuyen = code, TenQuyen = name, QuyenCoSo = request.QuyenCoSo, MoTa = request.MoTa?.Trim() });
+        await db.SaveChangesAsync();
+        return Created("/api/phanquyen", new { maQuyen = code, tenQuyen = name });
+    }
+
+    [HttpPut("{code}"), Authorize(Roles = AppConstants.Roles.Admin)]
+    public async Task<IActionResult> Update(string code, PhanQuyenDto request, [FromServices] AppDbContext db)
+    {
+        var role = await db.PhanQuyens.FindAsync(code);
+        if (role == null) return NotFound();
+        if (request.MoTa?.Length > 255) return BadRequest(new { message = "Mô tả tối đa 255 ký tự." });
+        role.MoTa = request.MoTa?.Trim();
+        await db.SaveChangesAsync();
+        return Ok(new { role.MaQuyen, role.MoTa });
     }
 }

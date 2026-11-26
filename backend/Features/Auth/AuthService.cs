@@ -81,7 +81,7 @@ public class AuthService : IAuthService
             throw new ForbiddenException("Nhân viên gắn với tài khoản này đã nghỉ việc.");
         }
 
-        string role = account.MaQuyen;
+        string role = account.PhanQuyen?.QuyenCoSo ?? account.MaQuyen;
         string tenQuyen = account.PhanQuyen?.TenQuyen ?? role;
         string hoTen = account.NhanVien?.HoTen ?? account.UserName;
 

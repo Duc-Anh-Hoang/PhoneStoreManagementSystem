@@ -2397,7 +2397,7 @@ async function openTiepNhanBaoHanhModal() {
         });
         const listToRender = techs.length > 0 ? techs : staffList;
         selectKtv.innerHTML = '<option value="">-- Chọn kỹ thuật viên --</option>' +
-          listToRender.map(s => `<option value="${s.maNV}">${s.hoTen || s.tenNV || s.maNV} (${s.chucVu || 'Kỹ thuật viên'})</option>`).join('');
+          listToRender.map(s => `<option value="${s.maNV}">${s.hoTen || s.tenNV || s.maNV} (${escapeAdminChatHtml(s.chucVu || 'Kỹ thuật viên')})</option>`).join('');
       }
     } catch (e) {
       if (selectKtv.options.length <= 1) {
@@ -2929,7 +2929,7 @@ async function renderNhanVienTable() {
       <tr class="border-b border-slate-200 hover:bg-slate-50 transition-colors">
         <td class="p-3.5 font-mono font-bold text-xs text-slate-600 whitespace-nowrap">${nv.maNV}</td>
         <td class="p-3.5 font-bold text-sm text-navy whitespace-nowrap">${nv.hoTen}</td>
-        <td class="p-3.5 text-xs text-slate-700 whitespace-nowrap">${nv.chucVu || '-'}</td>
+        <td class="p-3.5 text-xs text-slate-700 whitespace-nowrap">${escapeAdminChatHtml(nv.chucVu || '-')}</td>
         <td class="p-3.5 font-mono text-xs text-slate-600 whitespace-nowrap">${nv.sdt || '-'}</td>
         <td class="p-3.5 text-xs text-slate-500 whitespace-nowrap">${nv.email || '-'}</td>
         <td class="p-3.5 text-xs text-center whitespace-nowrap">${Format.statusBadge(nv.trangThai)}</td>
@@ -2961,7 +2961,7 @@ async function renderTaiKhoan() {
       <tr class="border-b border-slate-200 hover:bg-slate-50 transition-colors">
         <td class="p-3.5 font-mono font-bold text-xs text-slate-800 whitespace-nowrap">${tk.username}</td>
         <td class="p-3.5 font-bold text-sm text-navy whitespace-nowrap">${tk.tenNhanVien || tk.maNV || '-'}</td>
-        <td class="p-3.5 font-bold text-xs text-indigo-700 whitespace-nowrap">${tk.tenQuyen || tk.maQuyen}</td>
+        <td class="p-3.5 font-bold text-xs text-indigo-700 whitespace-nowrap">${escapeAdminChatHtml(tk.tenQuyen || tk.maQuyen)}</td>
         <td class="p-3.5 text-xs text-slate-500 font-mono whitespace-nowrap">BCrypt băm</td>
         <td class="p-3.5 text-xs text-center whitespace-nowrap">${Format.statusBadge(tk.trangThai)}</td>
         <td class="p-3.5 text-xs text-right whitespace-nowrap">
@@ -3050,7 +3050,7 @@ async function renderThamSo() {
       <div class="flex items-center justify-between p-3.5 bg-slate-50 rounded-xl border border-slate-200">
         <div>
           <div class="font-bold text-sm text-navy">${ts.tenThamSo}</div>
-          <div class="font-mono text-xs text-slate-500">${ts.maThamSo}</div>
+          <div class="font-mono text-xs text-slate-500">${escapeAdminChatHtml(ts.maThamSo)}</div>
         </div>
         <div class="text-right">
           <div class="font-extrabold text-base text-[#15803D]">${Number(ts.giaTri).toLocaleString('vi-VN')} ${ts.donVi || ''}</div>
@@ -4154,14 +4154,13 @@ function renderTaiKhoan() {
       const uName = tk.username || tk.tenDangNhap || '-';
       const nv = store.data.nhanVien.find(n => n.maNV === tk.maNV);
       const displayName = tk.hoTen || tk.tenNhanVien || (nv ? nv.hoTen : tk.maNV || '-');
-      const roleName = tk.tenQuyen || (nv ? nv.chucVu : 'Nhân viên');
       const dateStr = Format.date(tk.ngayTao || '2026-09-01');
 
       return `
         <tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors">
           <td class="p-3 font-mono font-bold text-slate-800">${uName}</td>
           <td class="p-3 font-semibold text-slate-800">${displayName}</td>
-          <td class="p-3 text-slate-600">${roleName}</td>
+          <td class="p-3 text-slate-600"><select data-account-role aria-label="Vai trò tài khoản" class="border rounded-lg px-2 py-1"></select></td>
           <td class="p-3 text-center">${Format.statusBadge(tk.trangThai)}</td>
           <td class="p-3 text-slate-500 font-mono text-[11px]">${dateStr}</td>
           <td class="p-3 text-right space-x-1.5 whitespace-nowrap">
@@ -4183,27 +4182,55 @@ function renderTaiKhoan() {
     }).join('');
   }
 
+  tbodyTK?.querySelectorAll('[data-account-role]').forEach((select, index) => {
+    const account = store.data.taiKhoan[index];
+    for (const role of store.data.phanQuyen) select.add(new Option(role.tenQuyen, role.maQuyen));
+    select.value = account.maQuyen;
+    select.onchange = async () => {
+      select.disabled = true;
+      try {
+        const updated = await api.put('/taikhoan/' + encodeURIComponent(account.username), { maQuyen: select.value });
+        Object.assign(account, updated);
+      } catch (error) {
+        select.value = account.maQuyen;
+        alert(error.message);
+      } finally {
+        select.disabled = false;
+      }
+    };
+  });
+
   if (tbodyPQ) {
     tbodyPQ.innerHTML = store.data.phanQuyen.map(pq => `
       <tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors">
         <td class="p-3"><span class="font-mono text-xs text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded">${pq.maQuyen}</span></td>
         <td class="p-3 font-semibold text-slate-800">
-          <div>${pq.tenQuyen}</div>
-          <div class="text-[11px] text-slate-400 font-normal">${pq.moTa || ''}</div>
+          <div>${escapeAdminChatHtml(pq.tenQuyen)}</div>
+          <div class="text-[11px] text-slate-400 font-normal">${escapeAdminChatHtml(pq.moTa || '')}</div>
         </td>
-        <td class="p-3 text-center"><span class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-medium text-xs">${pq.soNhanVien || 1}</span></td>
+        <td class="p-3 text-center"><span class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-medium text-xs">${store.data.taiKhoan.filter(account => account.maQuyen === pq.maQuyen).length}</span></td>
         <td class="p-3 text-right space-x-1 whitespace-nowrap">
           <button onclick="openPhanQuyenModal('${pq.maQuyen}')" class="px-2 py-1 text-blue-600 hover:bg-blue-50 rounded-lg text-xs font-medium transition-colors">Sửa</button>
-          <button onclick="deletePhanQuyen('${pq.maQuyen}')" class="px-2 py-1 text-rose-600 hover:bg-rose-50 rounded-lg text-xs font-medium transition-colors">Xóa</button>
         </td>
       </tr>
     `).join('');
   }
 }
 
-function openTaiKhoanModal() {
+async function openTaiKhoanModal() {
   const modal = document.getElementById('modal-taikhoan');
   if (!modal) return;
+  try {
+    [store.data.nhanVien, store.data.phanQuyen, store.data.taiKhoan] = await Promise.all([
+      api.get('/nhanvien?pageSize=100'), api.get('/phanquyen'), api.get('/taikhoan')
+    ]);
+  } catch (error) {
+    alert(error.message);
+    return;
+  }
+  const selectRole = modal.querySelector('[name="maQuyen"]');
+  selectRole.replaceChildren(new Option('Chọn vai trò tài khoản', ''));
+  for (const role of store.data.phanQuyen) selectRole.add(new Option(role.tenQuyen, role.maQuyen));
   const selectNV = document.getElementById('tk-select-nhanvien');
   if (selectNV) {
     const existingMaNVs = store.data.taiKhoan.map(t => t.maNV);
@@ -4211,9 +4238,15 @@ function openTaiKhoanModal() {
     if (availableNV.length === 0) {
       selectNV.innerHTML = '<option value="">-- Mọi nhân viên đều đã có tài khoản --</option>';
     } else {
-      selectNV.innerHTML = availableNV.map(n => `<option value="${n.maNV}">${n.hoTen} (${n.maNV} - ${n.chucVu})</option>`).join('');
+      selectNV.innerHTML = availableNV.map(n => `<option value="${n.maNV}">${n.hoTen} (${n.maNV} - ${escapeAdminChatHtml(n.chucVu)})</option>`).join('');
     }
   }
+  const suggestRole = () => {
+    const staff = store.data.nhanVien.find(n => n.maNV === selectNV.value);
+    selectRole.value = store.data.phanQuyen.find(p => p.quyenCoSo && p.tenQuyen === staff?.chucVu)?.maQuyen || '';
+  };
+  selectNV.onchange = suggestRole;
+  suggestRole();
   modal.classList.remove('hidden');
 }
 
@@ -4226,7 +4259,8 @@ async function toggleLockTaiKhoan(username, curStatus) {
   try {
     await api.put('/taikhoan/' + encodeURIComponent(username) + '/trangthai?trangThai=' + newStatus);
   } catch (e) {
-    // Fallback in-memory
+    alert(e.message);
+    return;
   }
   const tk = store.data.taiKhoan.find(t => (t.username === username || t.tenDangNhap === username));
   if (tk) {
@@ -4237,39 +4271,30 @@ async function toggleLockTaiKhoan(username, curStatus) {
   showToast((newStatus === 'bi_khoa' ? 'Đã khóa tài khoản: ' : 'Đã mở khóa tài khoản: ') + username, 'info');
 }
 
-function resetMatKhauTaiKhoan(username) {
-  if (confirm('Đặt lại mật khẩu cho tài khoản ' + username + ' về mặc định "123456"? (Mật khẩu sẽ được mã hóa an toàn)')) {
-    showToast('Đã đặt lại mật khẩu cho ' + username + ' thành công!', 'success');
+async function resetMatKhauTaiKhoan(username) {
+  const password = prompt('Nhập mật khẩu mới cho ' + username);
+  if (!password) return;
+  try {
+    await api.put('/taikhoan/' + encodeURIComponent(username), { newPassword: password });
+    showToast('Đã đặt lại mật khẩu.', 'success');
+  } catch (error) {
+    alert(error.message);
   }
 }
 
-function saveTaiKhoan(e) {
+async function saveTaiKhoan(e) {
   e.preventDefault();
   const form = e.target;
-  const maNV = form.maNV.value;
-  const tenDangNhap = form.tenDangNhap.value.trim().toLowerCase();
-
-  if (!maNV) {
-    alert('Không còn nhân viên nào chưa có tài khoản (Mỗi nhân viên tối đa 1 tài khoản).');
-    return;
+  try {
+    await api.post('/taikhoan', { username: form.tenDangNhap.value.trim(), password: form.matKhau.value,
+      maNV: form.maNV.value, maQuyen: form.maQuyen.value });
+    store.data.taiKhoan = await api.get('/taikhoan');
+    form.reset();
+    closeModal('modal-taikhoan');
+    renderTaiKhoan();
+  } catch (error) {
+    alert(error.message);
   }
-
-  if (store.data.taiKhoan.some(t => t.tenDangNhap === tenDangNhap)) {
-    alert('Tên đăng nhập đã tồn tại, vui lòng chọn tên khác!');
-    return;
-  }
-
-  store.data.taiKhoan.push({
-    tenDangNhap: tenDangNhap,
-    maNV: maNV,
-    trangThai: 'hoat_dong',
-    ngayTao: new Date().toISOString().substring(0, 10)
-  });
-
-  store.save();
-  closeModal('modal-taikhoan');
-  renderTaiKhoan();
-  showToast('Đã tạo tài khoản cho nhân viên: ' + tenDangNhap, 'success');
 }
 
 function openPhanQuyenModal(maQuyen = null) {
@@ -4283,49 +4308,34 @@ function openPhanQuyenModal(maQuyen = null) {
       form.maQuyen.value = item.maQuyen;
       form.maQuyen.readOnly = true;
       form.tenQuyen.value = item.tenQuyen;
+      form.tenQuyen.readOnly = true;
+      form.quyenCoSo.value = item.quyenCoSo || "";
+      form.quyenCoSo.disabled = true;
       form.moTa.value = item.moTa;
     }
   } else {
     document.getElementById('phanquyen-modal-title').textContent = 'Thêm Vai Trò & Quyền';
     form.reset();
     form.maQuyen.readOnly = false;
-    form.maQuyen.value = 'PQ' + String(store.data.phanQuyen.length + 1).padStart(2, '0');
+    form.tenQuyen.readOnly = false;
+    form.quyenCoSo.disabled = false;
   }
   modal.classList.remove('hidden');
 }
 
-function savePhanQuyen(e) {
+async function savePhanQuyen(e) {
   e.preventDefault();
   const form = e.target;
-  const maQuyen = form.maQuyen.value.trim();
-  const tenQuyen = form.tenQuyen.value.trim();
-  const moTa = form.moTa.value.trim();
-
-  const idx = store.data.phanQuyen.findIndex(p => p.maQuyen === maQuyen);
-  if (idx >= 0) {
-    store.data.phanQuyen[idx].tenQuyen = tenQuyen;
-    store.data.phanQuyen[idx].moTa = moTa;
-    showToast('Đã cập nhật phân quyền: ' + maQuyen, 'success');
-  } else {
-    store.data.phanQuyen.push({ maQuyen, tenQuyen, moTa, soNhanVien: 0 });
-    showToast('Đã thêm phân quyền mới: ' + maQuyen, 'success');
-  }
-  store.save();
-  closeModal('modal-phanquyen');
-  renderTaiKhoan();
-}
-
-function deletePhanQuyen(maQuyen) {
-  const item = store.data.phanQuyen.find(p => p.maQuyen === maQuyen);
-  if (item && item.soNhanVien > 0) {
-    alert('Không thể xóa! Có nhân viên đang đảm nhiệm vai trò này.');
-    return;
-  }
-  if (confirm('Bạn chắc chắn muốn xóa vai trò ' + maQuyen + '?')) {
-    store.data.phanQuyen = store.data.phanQuyen.filter(p => p.maQuyen !== maQuyen);
-    store.save();
+  const data = { maQuyen: form.maQuyen.value.trim(), tenQuyen: form.tenQuyen.value.trim(),
+    moTa: form.moTa.value.trim(), quyenCoSo: form.quyenCoSo.value };
+  try {
+    if (form.maQuyen.readOnly) await api.put('/phanquyen/' + encodeURIComponent(data.maQuyen), data);
+    else await api.post('/phanquyen', data);
+    store.data.phanQuyen = await api.get('/phanquyen');
+    closeModal('modal-phanquyen');
     renderTaiKhoan();
-    showToast('Đã xóa vai trò!', 'success');
+  } catch (error) {
+    alert(error.message);
   }
 }
 
@@ -4957,10 +4967,22 @@ async function deleteKhachHang(maKH) {
 
 // 3. NHÂN VIÊN CRUD
 let cachedNhanVienList = [];
-function openNhanVienModal(item = null) {
+async function openNhanVienModal(item = null) {
   const modal = document.getElementById('modal-nhanvien');
   const form = document.getElementById('form-nhanvien');
   if (!modal || !form) return;
+  try {
+    store.data.phanQuyen = await api.get('/phanquyen');
+  } catch (error) {
+    alert(error.message);
+    return;
+  }
+  for (const option of form.chucVu.querySelectorAll('[data-custom-role]')) option.remove();
+  for (const role of store.data.phanQuyen.filter(role => role.quyenCoSo)) {
+    const option = new Option(role.tenQuyen, role.tenQuyen);
+    option.dataset.customRole = '';
+    form.chucVu.add(option);
+  }
   if (item) {
     document.getElementById('nv-modal-title').textContent = 'Cập Nhật Nhân Viên: ' + item.maNV;
     form.maNV.value = item.maNV;
@@ -5113,14 +5135,18 @@ async function renderThamSoTable() {
     }
     tbody.innerHTML = list.map(ts => `
       <tr class="border-b border-slate-200 hover:bg-slate-50 transition-colors">
-        <td class="p-3.5 font-mono font-bold text-xs text-slate-700 whitespace-nowrap">${ts.maThamSo}</td>
-        <td class="p-3.5 font-bold text-sm text-navy">${ts.tenThamSo || ts.maThamSo}</td>
-        <td class="p-3.5 font-mono font-semibold text-sm text-slate-800 text-right whitespace-nowrap">${ts.giaTri} ${ts.donVi || ''}</td>
+        <td class="p-3.5 font-mono font-bold text-xs text-slate-700 whitespace-nowrap">${escapeAdminChatHtml(ts.maThamSo)}</td>
+        <td class="p-3.5 font-bold text-sm text-navy">${escapeAdminChatHtml(ts.tenThamSo || ts.maThamSo)}</td>
+        <td class="p-3.5 font-mono font-semibold text-sm text-slate-800 text-right whitespace-nowrap">${ts.giaTri} ${escapeAdminChatHtml(ts.donVi || '')}</td>
         <td class="p-3.5 text-xs text-right whitespace-nowrap">
-          <button onclick="editThamSo('${ts.maThamSo}', ${ts.giaTri}, '${ts.donVi || ''}')" class="px-2.5 py-1 text-blue-600 hover:bg-blue-50 border border-slate-200 rounded-lg font-medium text-xs transition-colors">Chỉnh sửa</button>
+          <button data-edit-setting class="px-2.5 py-1 text-blue-600 hover:bg-blue-50 border border-slate-200 rounded-lg font-medium text-xs transition-colors">Chỉnh sửa</button>
         </td>
       </tr>
     `).join('');
+    tbody.querySelectorAll('[data-edit-setting]').forEach((button, index) => {
+      const setting = list[index];
+      button.onclick = () => editThamSo(setting.maThamSo, setting.giaTri, setting.donVi || '');
+    });
   } catch (err) {
     tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-rose-500">Lỗi tải tham số: ${err.message}</td></tr>`;
   }
@@ -5265,7 +5291,6 @@ window.resetMatKhauTaiKhoan = resetMatKhauTaiKhoan;
 
 window.openPhanQuyenModal = openPhanQuyenModal;
 window.savePhanQuyen = savePhanQuyen;
-window.deletePhanQuyen = deletePhanQuyen;
 
 window.closeModal = closeModal;
 window.renderSection = renderSection;
@@ -6977,5 +7002,27 @@ async function loadTradeInBookings() {
     status.textContent = bookings.length ? '' : 'Chưa có phiếu thu cũ.';
   } catch (err) {
     status.textContent = err.message || 'Chưa tải được phiếu thu cũ.';
+  }
+}
+
+
+function openThamSoModal() {
+  const modal = document.getElementById('modal-thamso');
+  const form = modal.querySelector('form');
+  form.reset();
+  modal.classList.remove('hidden');
+  form.maThamSo.focus();
+}
+
+async function createThamSo(event) {
+  event.preventDefault();
+  const form = event.target;
+  try {
+    await api.post('/settings', { maThamSo: form.maThamSo.value, tenThamSo: form.tenThamSo.value,
+      giaTri: form.giaTri.valueAsNumber, donVi: form.donVi.value });
+    closeModal('modal-thamso');
+    await renderThamSoTable();
+  } catch (error) {
+    alert(error.message);
   }
 }

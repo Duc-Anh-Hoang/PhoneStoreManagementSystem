@@ -15,6 +15,9 @@ public class PhanQuyen
     [MaxLength(50)]
     public string TenQuyen { get; set; } = string.Empty;
 
+    [Column("quyen_co_so")]
+    public string? QuyenCoSo { get; set; }
+
     [Column("mota")]
     [MaxLength(255)]
     public string? MoTa { get; set; }

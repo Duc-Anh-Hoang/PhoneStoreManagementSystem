@@ -90,3 +90,20 @@ $$ LANGUAGE plpgsql;
 DROP TRIGGER IF EXISTS restore_online_voucher ON donhangonline;
 CREATE TRIGGER restore_online_voucher AFTER UPDATE OF trangthai ON donhangonline
 FOR EACH ROW EXECUTE FUNCTION restore_online_voucher();
+
+ALTER TABLE phanquyen ADD COLUMN IF NOT EXISTS quyen_co_so varchar(10)
+    CHECK (quyen_co_so IN ('manager','sales','cashier','stock','tech'));
+ALTER TABLE nhanvien DROP CONSTRAINT IF EXISTS ck_nhanvien_chucvu;
+
+CREATE OR REPLACE FUNCTION validate_staff_position() RETURNS trigger AS $$
+BEGIN
+    IF NEW.chucvu NOT IN ('Quản lý','Bán hàng','Thu ngân','Kho','Kỹ thuật & Bảo hành')
+       AND NOT EXISTS (SELECT 1 FROM phanquyen WHERE quyen_co_so IS NOT NULL AND tenquyen=NEW.chucvu) THEN
+        RAISE EXCEPTION 'Chức vụ không có trong danh sách' USING ERRCODE='23514';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+DROP TRIGGER IF EXISTS validate_staff_position ON nhanvien;
+CREATE TRIGGER validate_staff_position BEFORE INSERT OR UPDATE OF chucvu ON nhanvien
+FOR EACH ROW EXECUTE FUNCTION validate_staff_position();
