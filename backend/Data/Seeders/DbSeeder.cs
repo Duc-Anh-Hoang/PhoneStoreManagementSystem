@@ -179,10 +179,55 @@ CREATE TABLE IF NOT EXISTS orders (
     recipient_phone VARCHAR(20) NOT NULL,
     shipping_address VARCHAR(255) NOT NULL,
     payment_method VARCHAR(30) NOT NULL DEFAULT 'QR_PAYMENT',
+    voucher_code VARCHAR(50) NULL,
+    discount_amount BIGINT NOT NULL DEFAULT 0,
+    shipping_fee BIGINT NOT NULL DEFAULT 0,
     user_id VARCHAR(50) NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+ALTER TABLE orders ADD COLUMN IF NOT EXISTS voucher_code VARCHAR(50) NULL;
+ALTER TABLE orders ADD COLUMN IF NOT EXISTS discount_amount BIGINT NOT NULL DEFAULT 0;
+ALTER TABLE orders ADD COLUMN IF NOT EXISTS shipping_fee BIGINT NOT NULL DEFAULT 0;
+
+ALTER TABLE donhangonline ADD COLUMN IF NOT EXISTS address_hash VARCHAR(64) NULL;
+ALTER TABLE donhangonline ADD COLUMN IF NOT EXISTS auto_approve_at TIMESTAMPTZ NULL;
+ALTER TABLE donhangonline ADD COLUMN IF NOT EXISTS client_ip VARCHAR(45) NULL;
+ALTER TABLE donhangonline ADD COLUMN IF NOT EXISTS ghn_error TEXT NULL;
+ALTER TABLE donhangonline ADD COLUMN IF NOT EXISTS ghn_order_code VARCHAR(50) NULL;
+ALTER TABLE donhangonline ADD COLUMN IF NOT EXISTS payment_status VARCHAR(30) NOT NULL DEFAULT 'unpaid';
+ALTER TABLE donhangonline ADD COLUMN IF NOT EXISTS risk_flag VARCHAR(20) NOT NULL DEFAULT 'none';
+ALTER TABLE donhangonline ADD COLUMN IF NOT EXISTS risk_reasons TEXT NULL;
+
+ALTER TABLE khachhang ADD COLUMN IF NOT EXISTS completed_orders INT DEFAULT 0;
+ALTER TABLE khachhang ADD COLUMN IF NOT EXISTS qualified_orders INT DEFAULT 0;
+ALTER TABLE khachhang ADD COLUMN IF NOT EXISTS max_completed_value NUMERIC(18,2) DEFAULT 0;
+ALTER TABLE khachhang ADD COLUMN IF NOT EXISTS failed_orders INT DEFAULT 0;
+ALTER TABLE khachhang ADD COLUMN IF NOT EXISTS is_blacklisted BOOLEAN DEFAULT FALSE;
+ALTER TABLE khachhang ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW();
+
+CREATE TABLE IF NOT EXISTS customer_addresses (
+    id SERIAL PRIMARY KEY,
+    phone VARCHAR(15) NOT NULL,
+    address_hash VARCHAR(64) NOT NULL,
+    full_address VARCHAR(255) NOT NULL,
+    last_delivered_at TIMESTAMPTZ DEFAULT NOW(),
+    CONSTRAINT uq_customer_addresses UNIQUE (phone, address_hash)
+);
+
+CREATE TABLE IF NOT EXISTS order_settings (
+    key VARCHAR(64) PRIMARY KEY,
+    value TEXT NOT NULL,
+    description TEXT NULL
+);
+
+INSERT INTO order_settings (key, value, description) VALUES
+    ('auto_approve_delay_minutes', '30', 'Thời gian chờ tự động duyệt (phút)'),
+    ('max_daily_orders_per_address', '3', 'Số đơn tối đa/ngày/địa chỉ'),
+    ('max_order_amount_auto_approve', '50000000', 'Giá trị đơn tối đa cho phép tự duyệt (VNĐ)'),
+    ('enable_auto_approve', 'true', 'Bật/tắt tính năng tự động duyệt')
+ON CONFLICT (key) DO NOTHING;
 
 CREATE TABLE IF NOT EXISTS order_items (
     id BIGSERIAL PRIMARY KEY,

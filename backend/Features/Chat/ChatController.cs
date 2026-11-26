@@ -49,7 +49,10 @@ public class ChatController : ControllerBase
         string? maKh = null;
         if (!string.IsNullOrWhiteSpace(request.Sdt))
         {
-            var kh = await _context.KhachHangs.FirstOrDefaultAsync(k => k.Sdt == request.Sdt);
+            var kh = await _context.KhachHangs
+                .Where(k => k.Sdt == request.Sdt)
+                .Select(k => new { k.MaKH })
+                .FirstOrDefaultAsync();
             if (kh != null)
             {
                 maKh = kh.MaKH;

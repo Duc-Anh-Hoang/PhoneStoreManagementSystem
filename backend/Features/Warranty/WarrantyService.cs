@@ -34,6 +34,18 @@ public class WarrantyService : IWarrantyService
             return;
         }
 
+        // Kiểm tra xem IMEI này đã có bản ghi bảo hành chưa để tránh lỗi duplicate unique constraint
+        var existingBaoHanh = await _context.BaoHanhs.FirstOrDefaultAsync(b => b.MaIMEI == maIMEI);
+        if (existingBaoHanh != null)
+        {
+            existingBaoHanh.SoHD = soHD;
+            existingBaoHanh.NgayBD = DateTime.UtcNow;
+            existingBaoHanh.ThoiHanThang = matHang.ThoiHanBaoHanh;
+            existingBaoHanh.NgayKT = DateTime.UtcNow.AddMonths(matHang.ThoiHanBaoHanh);
+            await _context.SaveChangesAsync();
+            return;
+        }
+
         string maBH = await _codeGenerator.NextAsync("BH");
 
         var ngayBD = DateTime.UtcNow;
