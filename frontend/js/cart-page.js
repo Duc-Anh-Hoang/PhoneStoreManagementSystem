@@ -10,12 +10,6 @@
   const ORDERS_STORAGE_KEY = 'samamobile_user_orders';
   const RECENTLY_VIEWED_KEY = 'samamobile_recently_viewed';
 
-  const VOUCHERS = {
-    'SAMAMEMBER': { code: 'SAMAMEMBER', discount: 100000, type: 'fixed', minOrder: 500000, desc: 'Giảm 100.000đ cho hội viên Sama' },
-    'HELLOSAMA': { code: 'HELLOSAMA', discount: 5, type: 'percent', minOrder: 0, desc: 'Giảm 5% cho đơn hàng đầu tiên' },
-    'GIAM100K': { code: 'GIAM100K', discount: 100000, type: 'fixed', minOrder: 1000000, desc: 'Giảm 100.000đ đơn từ 1 triệu' },
-    'FREE50K': { code: 'FREE50K', discount: 50000, type: 'fixed', minOrder: 300000, desc: 'Tặng voucher 50.000đ phụ kiện' }
-  };
 
   const RECOMMENDED_DEALS = [
     {
@@ -650,6 +644,7 @@
   // Bật/tắt điểm tích lũy SamaMember (200 Đ = 200.000 ₫)
   window.toggleUseMemberPoints = function (enabled) {
     useMemberPoints = enabled;
+    lookupVipMembership(currentVipData.rawPhone || document.getElementById('order-phone')?.value);
     const notice = document.getElementById('member-points-notice');
     const pointsRow = document.getElementById('summary-points-row');
     if (notice) notice.classList.toggle('hidden', !enabled);
@@ -1028,6 +1023,17 @@
   };
 
   // Tính toán tổng tiền
+  function discountsFor(subtotal) {
+    const verified = !currentVipData.requiresOtp || currentVipData.otpVerified || currentVipData.cskhFallback;
+    const memberDiscount = verified ? Math.round(subtotal * currentVipData.discountPct / 100) : 0;
+    const voucherValue = appliedVoucher?.type === 'percent'
+      ? Math.round(subtotal * appliedVoucher.discount / 100) : (appliedVoucher?.discount || 0);
+    const voucherDiscount = Math.min(subtotal - memberDiscount, voucherValue);
+    const pointsDiscount = useMemberPoints
+      ? Math.min(currentVipData.availablePoints || 0, 200, Math.floor((subtotal - memberDiscount - voucherDiscount) / 1000)) * 1000 : 0;
+    return {memberDiscount, voucherDiscount, pointsDiscount};
+  }
+
   function calculateTotals() {
     const items = getCart();
     const selectedItems = items.filter((it, idx) => {
@@ -1037,31 +1043,7 @@
 
     const subtotal = selectedItems.reduce((s, it) => s + ((Number(it.price || it.donGia || 0)) * (Number(it.qty || it.soLuong || 1))), 0);
 
-    let memberDiscount = 0;
-    if (currentVipData && currentVipData.discountPct > 0) {
-      if (currentVipData.requiresOtp && !currentVipData.otpVerified && !currentVipData.cskhFallback) {
-        memberDiscount = 0; // Chờ OTP hoặc CSKH
-      } else {
-        memberDiscount = Math.round(subtotal * (currentVipData.discountPct / 100));
-      }
-    } else if (subtotal >= 1000000) {
-      memberDiscount = Math.round(subtotal * 0.01);
-    }
-
-    let pointsDiscount = 0;
-    if (useMemberPoints && subtotal > 0) {
-      pointsDiscount = Math.min(200000, subtotal);
-    }
-
-    let voucherDiscount = 0;
-    if (appliedVoucher && subtotal > 0) {
-      if (appliedVoucher.type === 'percent') {
-        voucherDiscount = Math.round((subtotal * appliedVoucher.discount) / 100);
-      } else {
-        voucherDiscount = appliedVoucher.discount;
-      }
-    }
-
+    const {memberDiscount, pointsDiscount, voucherDiscount} = discountsFor(subtotal);
     const finalTotal = Math.max(0, subtotal - memberDiscount - pointsDiscount - voucherDiscount) + (currentShippingFee || 0);
     updateTotals(subtotal, memberDiscount, voucherDiscount, finalTotal, pointsDiscount);
     if (typeof debounceShippingQuote === 'function') debounceShippingQuote();
@@ -1087,7 +1069,7 @@
       if (rowLabel) {
         rowLabel.textContent = (currentVipData && currentVipData.discountPct > 0)
           ? `Giảm giá ${currentVipData.hangThanhVien} (-${currentVipData.discountPct}%):`
-          : 'Giảm giá thành viên (1%):';
+          : 'Giảm giá thành viên:';
       }
     }
 
@@ -1168,7 +1150,7 @@
     window.applyVoucherCode();
   };
 
-  window.applyVoucherCode = function () {
+  window.applyVoucherCode = async function () {
     const input = document.getElementById('voucher-input');
     if (!input) return;
 
@@ -1178,9 +1160,15 @@
       return;
     }
 
-    const voucher = VOUCHERS[code];
-    if (!voucher) {
-      showVoucherMsg(`Mã "${code}" không hợp lệ hoặc đã hết hạn`, 'error');
+    let voucher;
+    try {
+      const terms = await window.api.get('/orders/vouchers/' + encodeURIComponent(code));
+      if (input.value.trim().toUpperCase() !== code) return;
+      voucher = { code: terms.code, minOrder: terms.minOrderTotal,
+        type: terms.discountPercent ? 'percent' : 'fixed', discount: terms.discountPercent || terms.discountAmount };
+    } catch (error) {
+      if (input.value.trim().toUpperCase() !== code) return;
+      showVoucherMsg(error.message || 'Chưa kiểm tra được voucher.', 'error');
       appliedVoucher = null;
       calculateTotals();
       return;
@@ -1195,7 +1183,7 @@
     }
 
     appliedVoucher = voucher;
-    showVoucherMsg(`Áp dụng thành công: ${voucher.desc}`, 'success');
+    showVoucherMsg(`Đã áp dụng mã ${voucher.code}`, 'success');
     calculateTotals();
   };
 
@@ -1337,12 +1325,8 @@
     }
 
     const subtotal = selectedItems.reduce((s, it) => s + ((Number(it.price || it.donGia || 0)) * (Number(it.qty || it.soLuong || 1))), 0);
-    let discount = 0;
-    if (subtotal >= 1000000) discount += Math.round(subtotal * 0.01);
-    if (useMemberPoints && subtotal > 0) discount += Math.min(200000, subtotal);
-    if (appliedVoucher) {
-      discount += appliedVoucher.type === 'percent' ? Math.round((subtotal * appliedVoucher.discount) / 100) : appliedVoucher.discount;
-    }
+    const {memberDiscount, voucherDiscount, pointsDiscount} = discountsFor(subtotal);
+    const discount = memberDiscount + voucherDiscount + pointsDiscount;
     const finalTotal = Math.max(0, subtotal - discount) + (currentShippingFee || 0);
 
     // Giai đoạn 1: Sinh mã đơn hàng ngẫu nhiên dạng DH-XXXXXX (loại bỏ 0,O,1,I,L)
@@ -1402,6 +1386,11 @@
         diaChiGiao: orderData.diaChiGiao,
         phuongThucThanhToan: orderData.phuongThucThanhToan,
         ghiChu: orderData.ghiChu,
+        voucherCode: appliedVoucher?.code,
+        usePoints: useMemberPoints,
+        expectedTotal: finalTotal,
+        toDistrictId: deliveryMethod === 'delivery' ? Number(document.getElementById('order-district')?.value || 0) : null,
+        toWardCode: document.getElementById('order-ward')?.value,
         sdtThanhVien: (currentVipData.isGift ? (document.getElementById('order-member-phone')?.value || '').trim() : orderData.sdtNguoiNhan),
         otpToken: currentVipData.otpToken,
         xacNhanCskh: currentVipData.isGift && currentVipData.cskhFallback,
@@ -2305,12 +2294,8 @@
       return selectedItemIds.size === 0 || selectedItemIds.has(id);
     });
     const subtotal = selectedItems.reduce((s, it) => s + ((Number(it.price || it.donGia || 0)) * (Number(it.qty || it.soLuong || 1))), 0);
-    let discount = 0;
-    if (subtotal >= 1000000) discount += Math.round(subtotal * 0.01);
-    if (useMemberPoints && subtotal > 0) discount += Math.min(200000, subtotal);
-    if (appliedVoucher && subtotal > 0) {
-      discount += appliedVoucher.type === 'percent' ? Math.round((subtotal * appliedVoucher.discount) / 100) : appliedVoucher.discount;
-    }
+    const {memberDiscount, voucherDiscount, pointsDiscount} = discountsFor(subtotal);
+    const discount = memberDiscount + voucherDiscount + pointsDiscount;
     const subtotalAfterDiscount = Math.max(0, subtotal - discount);
 
     if (toDistrictId <= 0) {
@@ -2370,7 +2355,8 @@
       }
     } catch (err) {
       console.warn('Lỗi tính phí quote GHN:', err);
-      currentShippingFee = subtotalAfterDiscount >= 1000000 ? 0 : 25000;
+      const local = toDistrictId === 3695 || (toDistrictId >= 1442 && toDistrictId <= 1463);
+      currentShippingFee = subtotalAfterDiscount >= (local ? 5000000 : 20000000) ? 0 : (local ? 25000 : 40000);
       if (elFee) elFee.innerHTML = currentShippingFee === 0 ? '<span class="text-emerald-600 font-bold">Miễn phí (0₫)</span>' : `<span class="text-slate-800 font-bold font-mono">${formatVND(currentShippingFee)}</span>`;
     }
 
@@ -2384,14 +2370,7 @@
       return selectedItemIds.size === 0 || selectedItemIds.has(id);
     });
     const subtotal = selectedItems.reduce((s, it) => s + ((Number(it.price || it.donGia || 0)) * (Number(it.qty || it.soLuong || 1))), 0);
-    let memberDiscount = 0;
-    if (subtotal >= 1000000) memberDiscount += Math.round(subtotal * 0.01);
-    let pointsDiscount = 0;
-    if (useMemberPoints && subtotal > 0) pointsDiscount = Math.min(200000, subtotal);
-    let voucherDiscount = 0;
-    if (appliedVoucher && subtotal > 0) {
-      voucherDiscount = appliedVoucher.type === 'percent' ? Math.round((subtotal * appliedVoucher.discount) / 100) : appliedVoucher.discount;
-    }
+    const {memberDiscount, pointsDiscount, voucherDiscount} = discountsFor(subtotal);
     const finalTotal = Math.max(0, subtotal - memberDiscount - pointsDiscount - voucherDiscount) + (currentShippingFee || 0);
     updateTotals(subtotal, memberDiscount, voucherDiscount, finalTotal, pointsDiscount);
   }
@@ -2401,7 +2380,6 @@
     setTimeout(initGhnAddressSelector, 10);
   }
 
-})();
 
 
 // =========================================================================
@@ -2422,6 +2400,7 @@ let currentVipData = {
   cskhFallback: false
 };
 
+let lookupSequence = 0;
 let phoneLookupTimer = null;
 let vipOtpCountdownInterval = null;
 
@@ -2460,39 +2439,46 @@ window.toggleGiftOrder = function(checked) {
 window.toggleCskhFallback = function(checked) {
   currentVipData.cskhFallback = checked;
   renderVipBanner();
-  renderSummary();
+  calculateTotals();
 };
 
 async function lookupVipMembership(rawPhone) {
+  const sequence = ++lookupSequence;
   const phone = (rawPhone || '').replace(/\D/g, '');
   const banner = document.getElementById('vip-member-banner');
   if (phone.length < 10) {
     currentVipData = { exists: false, hangThanhVien: 'Thành viên', discountPct: 0, discountAmount: 0, requiresOtp: false, otpReason: '', tenVietTat: '', sdtMasked: '', otpVerified: false, otpToken: null, isGift: currentVipData.isGift, cskhFallback: currentVipData.cskhFallback };
     if (banner) banner.classList.add('hidden');
-    renderSummary();
+    calculateTotals();
     return;
   }
 
   // Calculate current cart total
-  const items = getCartItems();
-  const selectedItems = items.filter((it, idx) => isItemSelected(idx));
+  const items = getCart();
+  const selectedItems = items.filter((it, idx) => selectedItemIds.size === 0 || selectedItemIds.has(String(it.id || `${it.maHang}_${idx}`)));
   const subtotal = selectedItems.reduce((s, it) => s + ((Number(it.price || it.donGia || 0)) * (Number(it.qty || it.soLuong || 1))), 0);
 
   try {
-    const apiBase = (typeof getApiBase === 'function') ? getApiBase() : 'http://localhost:8080/api';
+    const apiBase = window.API_BASE || '/api';
     const resp = await fetch(`${apiBase}/customers/lookup-membership`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         sdt: phone,
         cartTotal: subtotal,
-        usePoints: window.useMemberPoints || false
+        usePoints: useMemberPoints
       })
     });
 
     if (!resp.ok) return;
     const data = await resp.json();
 
+    if (sequence !== lookupSequence) return;
+    if (currentVipData.rawPhone !== phone) {
+      currentVipData.otpVerified = false;
+      currentVipData.otpToken = null;
+    }
+    currentVipData.availablePoints = data.diemTichLuyHienCo || 0;
     currentVipData.exists = data.exists;
     currentVipData.hangThanhVien = data.hangThanhVien;
     currentVipData.discountPct = data.discountPct;
@@ -2504,7 +2490,7 @@ async function lookupVipMembership(rawPhone) {
     currentVipData.rawPhone = phone;
 
     renderVipBanner();
-    renderSummary();
+    calculateTotals();
   } catch (err) {
     console.warn('Lỗi tra cứu ưu đãi VIP:', err);
   }
@@ -2514,7 +2500,7 @@ function renderVipBanner() {
   const banner = document.getElementById('vip-member-banner');
   if (!banner) return;
 
-  if (!currentVipData.exists || currentVipData.discountPct === 0) {
+  if (!currentVipData.exists || (currentVipData.discountPct === 0 && !useMemberPoints)) {
     banner.classList.add('hidden');
     return;
   }
@@ -2568,7 +2554,7 @@ function renderVipBanner() {
   }
 
   // Scenario 3: Đơn mua hộ và chọn CSKH gọi xác nhận
-  if (currentVipData.isGift && currentVipData.cskhFallback) {
+  if (currentVipData.isGift && currentVipData.cskhFallback && !useMemberPoints) {
     banner.className = 'p-3.5 rounded-2xl bg-blue-50/80 border border-blue-200 text-xs space-y-1.5 transition-all';
     banner.innerHTML = `
       <div class="flex items-center justify-between gap-2">
@@ -2634,7 +2620,7 @@ window.closeVipOtpModal = function() {
 async function sendVipOtpRequest() {
   const phone = currentVipData.rawPhone;
   if (!phone) return;
-  const apiBase = (typeof getApiBase === 'function') ? getApiBase() : 'http://localhost:8080/api';
+  const apiBase = window.API_BASE || '/api';
 
   try {
     const res = await fetch(`${apiBase}/customers/membership-otp/send`, {
@@ -2696,7 +2682,7 @@ window.submitVipOtp = async function() {
     return;
   }
 
-  const apiBase = (typeof getApiBase === 'function') ? getApiBase() : 'http://localhost:8080/api';
+  const apiBase = window.API_BASE || '/api';
   try {
     const res = await fetch(`${apiBase}/customers/membership-otp/verify`, {
       method: 'POST',
@@ -2710,7 +2696,7 @@ window.submitVipOtp = async function() {
       currentVipData.otpToken = data.token;
       window.closeVipOtpModal();
       renderVipBanner();
-      renderSummary();
+      calculateTotals();
     } else {
       if (errEl) {
         errEl.textContent = data.message || data.error || 'Mã OTP không chính xác hoặc đã hết hạn.';
@@ -2724,3 +2710,5 @@ window.submitVipOtp = async function() {
     }
   }
 };
+
+})();

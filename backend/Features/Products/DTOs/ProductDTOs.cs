@@ -2,6 +2,7 @@ namespace PhoneStoreAPI.Features.Products.DTOs;
 
 public class ProductDto
 {
+    public long? CheckoutVariantId { get; set; }
     public string MaHang { get; set; } = string.Empty;
     public string TenHang { get; set; } = string.Empty;
     public decimal DonGia { get; set; }

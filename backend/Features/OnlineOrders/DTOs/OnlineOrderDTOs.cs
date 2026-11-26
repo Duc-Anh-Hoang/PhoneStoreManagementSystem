@@ -10,6 +10,11 @@ public class CreateOrderRequest
     public string? MaKH { get; set; }
     public string? GhiChu { get; set; }
     public string? Email { get; set; }
+    public string? VoucherCode { get; set; }
+    public bool UsePoints { get; set; }
+    public int? ToDistrictId { get; set; }
+    public string? ToWardCode { get; set; }
+    public decimal? ExpectedTotal { get; set; }
     public string? SdtThanhVien { get; set; }
     public string? OtpToken { get; set; }
     public bool XacNhanCskh { get; set; } = false;
@@ -26,6 +31,7 @@ public class OrderItemRequest
 
 public class OrderDto
 {
+    public string? GhiChu { get; set; }
     public string MaDH { get; set; } = string.Empty;
     public DateTime NgayDat { get; set; }
     public string MaKH { get; set; } = string.Empty;

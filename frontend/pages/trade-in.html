@@ -1534,6 +1534,7 @@
   </div>
 
   <!-- SCRIPT LOGIC ĐỊNH GIÁ & TÍNH TOÁN CỦA TRANG -->
+  <script src="../js/api.js"></script>
   <script src="../js/trade-in-core.js?v=1.0"></script>
   <script src="../js/auth.js?v=6.0"></script>
   <script src="../js/cart.js?v=6.0"></script>
@@ -2554,7 +2555,8 @@
       setFieldError(fieldId, '');
     }
 
-    function submitTradeInBooking() {
+    let pendingBooking;
+    async function submitTradeInBooking() {
       const nameInput = document.getElementById('booking-name');
       const phoneInput = document.getElementById('booking-phone');
       const branchSelect = document.getElementById('booking-branch');
@@ -2607,8 +2609,7 @@
       }
 
       // Xử lý gửi thông tin
-      setTimeout(() => {
-        try {
+      try {
           const targetPrice = targetSelectedCapacity?.gia || targetProduct?.donGia || 0;
           let calc;
           if (typeof TradeInCore !== 'undefined') {
@@ -2630,9 +2631,8 @@
             };
           }
 
-          const bookingCode = 'TC-' + Math.floor(100000 + Math.random() * 900000);
           const bookingData = {
-            code: bookingCode,
+            code: null,
             createdAt: new Date().toISOString(),
             customer: validation.cleanedData,
             targetProduct: {
@@ -2655,6 +2655,16 @@
             status: 'PENDING_CONFIRMATION'
           };
 
+          const payload = { ...bookingData.customer, targetProduct: bookingData.targetProduct, usedDevice: bookingData.usedDevice };
+          const fingerprint = JSON.stringify(payload);
+          if (pendingBooking?.fingerprint !== fingerprint) {
+            const bytes = crypto.getRandomValues(new Uint8Array(16));
+            pendingBooking = { fingerprint, requestId: Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('').replace(/(.{8})(.{4})(.{4})(.{4})(.{12})/, '$1-$2-$3-$4-$5') };
+          }
+          const receipt = await window.api.post('/trade-in/bookings', { ...payload, requestId: pendingBooking.requestId });
+          bookingData.code = receipt.code;
+          pendingBooking = null;
+
           // Lưu phiếu vào localStorage (an toàn không log PII ra console)
           try {
             const history = JSON.parse(localStorage.getItem('sama_tradein_bookings') || '[]');
@@ -2670,6 +2680,8 @@
 
           // Hiển thị modal biên nhận thành công
           openBookingSuccessModal(bookingData);
+        } catch (error) {
+          alert(error.message || "Chưa lưu được phiếu, vui lòng thử lại.");
         } finally {
           if (submitBtn) {
             submitBtn.disabled = false;
@@ -2677,7 +2689,6 @@
             submitBtn.classList.remove('opacity-75', 'cursor-not-allowed');
           }
         }
-      }, 350);
     }
 
     // Modal Hướng dẫn phân loại máy

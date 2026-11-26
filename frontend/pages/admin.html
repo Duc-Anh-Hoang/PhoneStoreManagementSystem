@@ -423,6 +423,9 @@
             <i class="fa-solid fa-file-invoice-dollar text-xs w-4 text-slate-400"></i>
             <span class="nav-link-text whitespace-nowrap">Hóa đơn</span>
           </a>
+          <a href="#" data-target="view-thucu" onclick="renderSection('view-thucu'); return false;" class="admin-nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-50" title="Phiếu thu cũ">
+            <i class="fa-solid fa-mobile-screen-button"></i><span class="nav-link-text">Phiếu thu cũ</span>
+          </a>
           <a href="#" data-target="view-donhang" onclick="renderSection('view-donhang'); return false;" class="admin-nav-link flex items-center justify-between gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#F9FAFB] hover:text-slate-900 transition-colors" title="Đơn hàng online">
             <div class="flex items-center gap-2.5 min-w-0">
               <i class="fa-solid fa-cart-shopping text-xs w-4 text-slate-400"></i>
@@ -982,6 +985,18 @@
       <!-- =====================================================================
            SECTION 3: XỬ LÝ DỮ LIỆU: ĐƠN HÀNG ONLINE
            ===================================================================== -->
+      <section id="view-thucu" class="admin-view-section hidden space-y-4">
+        <h2 class="text-xl font-bold">Phiếu thu cũ</h2>
+        <form class="flex gap-2" onsubmit="event.preventDefault(); loadTradeInBookings();">
+          <input id="trade-in-code" aria-label="Mã phiếu thu cũ" placeholder="Nhập mã phiếu hoặc để trống để xem danh sách" class="w-full max-w-md rounded-lg border px-3 py-2">
+          <button class="rounded-lg bg-blue-600 px-4 py-2 text-white">Tra cứu</button>
+        </form>
+        <p id="trade-in-status" role="status"></p>
+        <div class="overflow-x-auto"><table class="w-full text-sm text-left">
+          <thead><tr><th>Mã phiếu</th><th>Khách hàng</th><th>Điện thoại</th><th>Chi nhánh</th><th>Máy thu cũ</th><th>Máy muốn mua</th></tr></thead>
+          <tbody id="trade-in-results"></tbody>
+        </table></div>
+      </section>
       <section id="view-donhang" class="admin-view-section hidden space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>

@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using PhoneStoreAPI.Data;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -33,6 +35,15 @@ public class OnlineOrdersController : ControllerBase
     /// P4-06: Khách tra cứu chi tiết đơn hàng theo mã đơn và SĐT (thông tin đã mask).
     /// Trả lỗi chung khi không tìm thấy để tránh lộ thông tin sai mã/sai SĐT.
     /// </summary>
+    [HttpGet("vouchers/{code}"), AllowAnonymous, EnableRateLimiting("checkout")]
+    public async Task<IActionResult> Voucher(string code, [FromServices] AppDbContext db)
+    {
+        var key = code.Trim().ToUpperInvariant();
+        var voucher = await db.Vouchers.AsNoTracking().Where(v => v.Code == key && v.ExpiresAt > DateTime.UtcNow && v.UsedCount < v.MaxUses)
+            .Select(v => new { v.Code, v.DiscountPercent, v.DiscountAmount, v.MinOrderTotal }).SingleOrDefaultAsync();
+        return voucher == null ? NotFound(new { message = "Mã voucher hết hạn hoặc không còn lượt sử dụng." }) : Ok(voucher);
+    }
+
     [HttpGet("{maDH}")]
     [AllowAnonymous]
     [EnableRateLimiting("public-lookup")]

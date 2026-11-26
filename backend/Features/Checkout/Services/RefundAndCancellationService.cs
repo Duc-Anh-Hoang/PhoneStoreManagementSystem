@@ -64,7 +64,7 @@ public class RefundAndCancellationService : IRefundAndCancellationService
                     if (isRelational)
                     {
                         await _context.Database.ExecuteSqlInterpolatedAsync(
-                            $"UPDATE variants SET stock = stock + {item.Qty}, updated_at = {DateTime.UtcNow} WHERE id = {item.VariantId}",
+                            $"UPDATE variants SET stock = stock + {item.Qty}, updated_at = {DateTime.UtcNow} WHERE id = {item.VariantId} AND product_id IN (SELECT id FROM products WHERE store_item_code IS NULL)",
                             cancellationToken);
                     }
                     else
@@ -117,7 +117,7 @@ public class RefundAndCancellationService : IRefundAndCancellationService
                     if (isRelational)
                     {
                         await _context.Database.ExecuteSqlInterpolatedAsync(
-                            $"UPDATE variants SET stock = stock + {item.Qty}, updated_at = {DateTime.UtcNow} WHERE id = {item.VariantId}",
+                            $"UPDATE variants SET stock = stock + {item.Qty}, updated_at = {DateTime.UtcNow} WHERE id = {item.VariantId} AND product_id IN (SELECT id FROM products WHERE store_item_code IS NULL)",
                             cancellationToken);
                     }
                     else

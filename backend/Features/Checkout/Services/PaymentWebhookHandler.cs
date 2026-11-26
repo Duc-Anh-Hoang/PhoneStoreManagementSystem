@@ -1,3 +1,4 @@
+using PhoneStoreAPI.Features.Inventory;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using PhoneStoreAPI.Data;
@@ -203,11 +204,8 @@ public class PaymentWebhookHandler : IPaymentWebhookHandler
             {
                 if (isRelational)
                 {
-                    var affected = await _context.Database.ExecuteSqlInterpolatedAsync(
-                        $"UPDATE variants SET stock = stock - {item.Qty}, updated_at = {DateTime.UtcNow} WHERE id = {item.VariantId} AND stock >= {item.Qty}",
-                        cancellationToken);
-
-                    if (affected == 0)
+                    var reserved = await SellableStock.ReserveVariantAsync(_context, item.VariantId, item.Qty, cancellationToken);
+                    if (!reserved)
                     {
                         canReserveStock = false;
                         break;
@@ -242,6 +240,11 @@ public class PaymentWebhookHandler : IPaymentWebhookHandler
                     "Late webhook: thanh toán sau grace period nhưng kho còn đủ hàng, đã giữ lại hàng thành công.",
                     cancellationToken);
 
+                if (!transition.Success)
+                {
+                    if (tx != null) await tx.RollbackAsync(cancellationToken);
+                    return await _context.Orders.Where(o => o.Id == order.Id).Select(o => o.Status).SingleAsync(cancellationToken);
+                }
                 if (tx != null) await tx.CommitAsync(cancellationToken);
                 return OrderStateMachine.Statuses.Paid;
             }

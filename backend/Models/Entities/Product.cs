@@ -10,6 +10,9 @@ public class Product
     [Column("id")]
     public long Id { get; set; }
 
+    [Column("store_item_code")]
+    public string? StoreItemCode { get; set; }
+
     [Column("name")]
     [MaxLength(255)]
     public string Name { get; set; } = string.Empty;

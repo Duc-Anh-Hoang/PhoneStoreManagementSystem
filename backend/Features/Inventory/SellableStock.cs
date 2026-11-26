@@ -20,6 +20,13 @@ internal static class SellableStock
     public static async Task EnsureAvailableAsync(
         AppDbContext context, MatHang item, int quantity, string? excludedOrder = null)
     {
+        var available = await GetAvailableAsync(context, item, excludedOrder);
+        if (quantity > available)
+            throw new ConflictException($"Mặt hàng {item.TenHang} chỉ còn {available} sản phẩm khả dụng.");
+    }
+
+    public static async Task<int> GetAvailableAsync(AppDbContext context, MatHang item, string? excludedOrder = null)
+    {
         int onHand;
         if (item.QuanLyImei)
         {
@@ -40,9 +47,24 @@ internal static class SellableStock
                                     order.TrangThai != "hoan_hang" &&
                                     (order.TrangThai != "cho_thanh_toan" || order.NgayDat > unpaidCutoff)
                               select line.SoLuong).SumAsync();
-        if (quantity > onHand - reserved)
-        {
-            throw new ConflictException($"Mặt hàng {item.TenHang} chỉ còn {Math.Max(0, onHand - reserved)} sản phẩm khả dụng.");
-        }
+        var checkoutReserved = await context.OrderItems
+            .Where(i => i.Variant!.Product!.StoreItemCode == item.MaHang &&
+                (i.Order!.Status == "PENDING_PAYMENT" || i.Order.Status == "PAID" ||
+                 i.Order.Status == "CONFIRMED" || i.Order.Status == "SHIPPING" || i.Order.Status == "COMPLETED"))
+            .SumAsync(i => i.Qty);
+        return Math.Max(0, onHand - reserved - checkoutReserved);
+    }
+
+    public static async Task<bool> ReserveVariantAsync(AppDbContext context, long variantId, int qty, CancellationToken ct)
+    {
+        var code = await context.ProductVariants.Where(v => v.Id == variantId)
+            .Select(v => v.Product!.StoreItemCode).SingleOrDefaultAsync(ct);
+        if (code == null)
+            return await context.Database.ExecuteSqlInterpolatedAsync(
+                $"UPDATE variants SET stock=stock-{qty}, updated_at=now() WHERE id={variantId} AND stock>={qty}", ct) == 1;
+
+        await LockItemsAsync(context, [code]);
+        var item = await context.MatHangs.SingleOrDefaultAsync(m => m.MaHang == code, ct);
+        return item != null && qty <= await GetAvailableAsync(context, item);
     }
 }

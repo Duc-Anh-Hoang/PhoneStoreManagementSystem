@@ -197,7 +197,7 @@ ALTER TABLE donhangonline ADD COLUMN IF NOT EXISTS client_ip VARCHAR(45) NULL;
 ALTER TABLE donhangonline ADD COLUMN IF NOT EXISTS ghn_error TEXT NULL;
 ALTER TABLE donhangonline ADD COLUMN IF NOT EXISTS ghn_order_code VARCHAR(50) NULL;
 ALTER TABLE donhangonline ADD COLUMN IF NOT EXISTS payment_status VARCHAR(30) NOT NULL DEFAULT 'unpaid';
-ALTER TABLE donhangonline ADD COLUMN IF NOT EXISTS risk_flag VARCHAR(20) NOT NULL DEFAULT 'none';
+ALTER TABLE donhangonline ADD COLUMN IF NOT EXISTS risk_flag BOOLEAN NOT NULL DEFAULT FALSE;
 ALTER TABLE donhangonline ADD COLUMN IF NOT EXISTS risk_reasons TEXT NULL;
 
 ALTER TABLE khachhang ADD COLUMN IF NOT EXISTS completed_orders INT DEFAULT 0;
@@ -279,6 +279,9 @@ CREATE INDEX IF NOT EXISTS IX_payments_order ON payments(order_id);
 CREATE INDEX IF NOT EXISTS IX_order_status_history_order ON order_status_history(order_id);
 ";
             await context.Database.ExecuteSqlRawAsync(checkoutMigrationSql);
+            using var migration = typeof(DbSeeder).Assembly.GetManifestResourceStream("StoreConsistency.sql")!;
+            using var reader = new StreamReader(migration);
+            await context.Database.ExecuteSqlRawAsync(await reader.ReadToEndAsync());
             logger.LogInformation("Đã kiểm tra và đồng bộ schema module Giỏ hàng và Thanh toán thành công.");
         }
         catch (Exception ex)
@@ -533,28 +536,30 @@ CREATE INDEX IF NOT EXISTS IX_order_status_history_order ON order_status_history
                         });
                         await context.SaveChangesAsync();
                     }
-                    if (!await context.Products.AnyAsync())
-                    {
-                        var p1 = new Product { Id = 1, Name = "iPhone 16 Pro Max", Description = "Siêu phẩm Apple 2026 với chip A18 Pro và viền titan sa mạc" };
-                        var p2 = new Product { Id = 2, Name = "Samsung Galaxy S24 Ultra", Description = "Flagship AI đỉnh cao từ Samsung với bút S-Pen và Snapdragon 8 Gen 3" };
-                        var p3 = new Product { Id = 3, Name = "Xiaomi 14 Ultra", Description = "Chuyên gia nhiếp ảnh Leica thế hệ mới với cảm biến 1 inch" };
 
-                        context.Products.AddRange(p1, p2, p3);
-                        await context.SaveChangesAsync();
-
-                        context.ProductVariants.AddRange(
-                            new ProductVariant { Id = 1, ProductId = 1, Sku = "IP16PM-DESERT-256", Color = "Desert Titanium", Storage = "256GB", Price = 34990000, Stock = 10 },
-                            new ProductVariant { Id = 2, ProductId = 1, Sku = "IP16PM-NATURAL-512", Color = "Natural Titanium", Storage = "512GB", Price = 40990000, Stock = 5 },
-                            new ProductVariant { Id = 3, ProductId = 1, Sku = "IP16PM-BLACK-1TB", Color = "Black Titanium", Storage = "1TB", Price = 46990000, Stock = 3 },
-                            new ProductVariant { Id = 4, ProductId = 2, Sku = "S24U-GRAY-256", Color = "Titanium Gray", Storage = "256GB", Price = 29990000, Stock = 8 },
-                            new ProductVariant { Id = 5, ProductId = 2, Sku = "S24U-BLACK-512", Color = "Titanium Black", Storage = "512GB", Price = 33990000, Stock = 4 },
-                            new ProductVariant { Id = 6, ProductId = 3, Sku = "XM14U-BLACK-512", Color = "Black", Storage = "512GB", Price = 28990000, Stock = 6 },
-                            new ProductVariant { Id = 7, ProductId = 3, Sku = "XM14U-WHITE-512", Color = "White", Storage = "512GB", Price = 28990000, Stock = 2 }
-                        );
-                        await context.SaveChangesAsync();
-                        logger.LogInformation("Đã seed thành công 3 sản phẩm và các variants cho module Giỏ hàng & Thanh toán.");
-                    }
                 }
+            }
+
+            if (!await context.Products.AnyAsync())
+            {
+                var p1 = new Product { Name = "iPhone 16 Pro Max", Description = "Siêu phẩm Apple 2026 với chip A18 Pro và viền titan sa mạc" };
+                var p2 = new Product { Name = "Samsung Galaxy S24 Ultra", Description = "Flagship AI đỉnh cao từ Samsung với bút S-Pen và Snapdragon 8 Gen 3" };
+                var p3 = new Product { Name = "Xiaomi 14 Ultra", Description = "Chuyên gia nhiếp ảnh Leica thế hệ mới với cảm biến 1 inch" };
+
+                context.Products.AddRange(p1, p2, p3);
+                await context.SaveChangesAsync();
+
+                context.ProductVariants.AddRange(
+                    new ProductVariant { ProductId = p1.Id, Sku = "IP16PM-DESERT-256", Color = "Desert Titanium", Storage = "256GB", Price = 34990000, Stock = 10 },
+                    new ProductVariant { ProductId = p1.Id, Sku = "IP16PM-NATURAL-512", Color = "Natural Titanium", Storage = "512GB", Price = 40990000, Stock = 5 },
+                    new ProductVariant { ProductId = p1.Id, Sku = "IP16PM-BLACK-1TB", Color = "Black Titanium", Storage = "1TB", Price = 46990000, Stock = 3 },
+                    new ProductVariant { ProductId = p2.Id, Sku = "S24U-GRAY-256", Color = "Titanium Gray", Storage = "256GB", Price = 29990000, Stock = 8 },
+                    new ProductVariant { ProductId = p2.Id, Sku = "S24U-BLACK-512", Color = "Titanium Black", Storage = "512GB", Price = 33990000, Stock = 4 },
+                    new ProductVariant { ProductId = p3.Id, Sku = "XM14U-BLACK-512", Color = "Black", Storage = "512GB", Price = 28990000, Stock = 6 },
+                    new ProductVariant { ProductId = p3.Id, Sku = "XM14U-WHITE-512", Color = "White", Storage = "512GB", Price = 28990000, Stock = 2 }
+                );
+                await context.SaveChangesAsync();
+                logger.LogInformation("Đã seed thành công 3 sản phẩm và các variants cho module Giỏ hàng & Thanh toán.");
             }
         }
         catch (Exception ex)

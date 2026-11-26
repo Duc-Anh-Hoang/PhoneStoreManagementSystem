@@ -72,6 +72,17 @@ public class DonHangOnline
     [Column("ghn_error")]
     public string? GhnError { get; set; }
 
+    [Column("ghichu")]
+    public string? GhiChu { get; set; }
+    [Column("shipping_fee")]
+    public decimal ShippingFee { get; set; }
+    [Column("voucher_code")]
+    public string? VoucherCode { get; set; }
+    [Column("points_used")]
+    public int PointsUsed { get; set; }
+    [Column("member_phone")]
+    public string? MemberPhone { get; set; }
+
     [Column("client_ip")]
     [MaxLength(50)]
     public string? ClientIp { get; set; }

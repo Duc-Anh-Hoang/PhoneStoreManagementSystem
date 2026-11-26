@@ -851,7 +851,7 @@
   window.quickBuy = function (maHang) {
     window.quickAddToCart(maHang);
     if (window.CellphoneSCheckout || window.Checkout) {
-      (window.CellphoneSCheckout || window.Checkout).openCheckout();
+      window.location.href = 'pages/cart.html';
     }
   };
 

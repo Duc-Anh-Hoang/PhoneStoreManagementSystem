@@ -887,6 +887,10 @@
           <!-- CỘT PHẢI (~40% / lg:col-span-5 xl:col-span-5): Tóm tắt đơn hàng & Nút Xác Nhận Thanh Toán (Sticky) -->
           <div class="lg:col-span-5 xl:col-span-5 space-y-5 lg:sticky lg:top-24">
             
+            <label class="flex items-center gap-2 bg-white rounded-2xl p-4 text-sm border border-slate-200">
+              <input type="checkbox" onchange="window.toggleUseMemberPoints(this.checked)">
+              Dùng điểm thành viên (1 điểm = 1.000đ, tối đa 200 điểm, xác thực OTP)
+            </label>
             <!-- KHỐI MÃ GIẢM GIÁ / VOUCHER -->
             <div class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs space-y-3">
               <h4 class="font-extrabold text-xs sm:text-sm text-slate-900 flex items-center gap-1.5">
@@ -934,7 +938,7 @@
                 <div class="flex justify-between items-center text-emerald-600">
                   <span class="flex items-center gap-1.5">
                     <i class="fa-solid fa-crown text-amber-500 text-xs"></i>
-                    <span>Giảm giá Sama Member (1%):</span>
+                    <span>Giảm giá thành viên:</span>
                   </span>
                   <strong id="summary-member-discount" class="tabular-nums font-bold whitespace-nowrap">-0₫</strong>
                 </div>

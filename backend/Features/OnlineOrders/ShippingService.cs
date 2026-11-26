@@ -3,6 +3,7 @@ using System.Net.Http.Json;
 using System.Security.Cryptography;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Caching.Memory;
 using Npgsql;
 using PhoneStoreAPI.Data;
@@ -368,6 +369,9 @@ public class ShippingService : IShippingService
         var maDH = payload.ClientOrderCode?.Trim();
         if (string.IsNullOrWhiteSpace(maDH)) return false;
 
+        await using var transaction = _context.Database.IsNpgsql() ? await _context.Database.BeginTransactionAsync() : null;
+        if (transaction != null)
+            await _context.Database.ExecuteSqlInterpolatedAsync($"SELECT 1 FROM donhangonline WHERE madh={maDH} FOR UPDATE");
         var shipment = await LoadShipmentAsync(maDH);
         if (shipment == null) return false;
         if (!string.IsNullOrWhiteSpace(shipment.TrackingCode) &&
@@ -380,52 +384,45 @@ public class ShippingService : IShippingService
         var eventTime = (payload.Time ?? DateTime.UtcNow).ToUniversalTime();
 
         // Idempotency: Cùng OrderCode + Status + thời gian gần nhau (< 1 phút) thì bỏ qua ghi trùng
-        if (shipment.Events.Any(e => e.Status == payload.Status && Math.Abs((e.Time - eventTime).TotalSeconds) < 60))
+        var duplicate = shipment.Events.Any(e => e.Status == payload.Status && Math.Abs((e.Time - eventTime).TotalSeconds) < 60);
+        var latest = shipment.Events.Count == 0 || eventTime >= shipment.Events.Max(e => e.Time);
+        if (!duplicate)
         {
-            _logger.LogInformation("[Shipping] Bỏ qua webhook trùng cho đơn {MaDH}, status: {Status}", maDH, payload.Status);
-            return true;
+            var mapped = MapGhnStatus(payload.Status, _logger);
+            if (latest) shipment.ShippingStatus = mapped;
+            shipment.Events.Add(new ShippingEventDto
+            {
+                Time = eventTime,
+                Status = payload.Status ?? "unknown",
+                Description = string.IsNullOrWhiteSpace(payload.Description) ? mapped : payload.Description.Trim(),
+                Location = "GHN"
+            });
+            shipment.Events = shipment.Events.OrderByDescending(e => e.Time).ToList();
+            await SaveShipmentAsync(maDH, shipment);
         }
-
-        var mappedStatus = MapGhnStatus(payload.Status, _logger);
-        shipment.ShippingStatus = mappedStatus;
-        shipment.Events.Insert(0, new ShippingEventDto
-        {
-            Time = eventTime,
-            Status = payload.Status ?? "unknown",
-            Description = string.IsNullOrWhiteSpace(payload.Description) ? mappedStatus : payload.Description.Trim(),
-            Location = "GHN"
-        });
-
-        await SaveShipmentAsync(maDH, shipment);
 
         // Đồng bộ ngược lại trạng thái đơn hàng trong DB nếu có thay đổi
-        try
+        var order = await _context.DonHangOnlines.FirstOrDefaultAsync(d => d.MaDH == maDH);
+        if (order != null && latest)
         {
-            var order = await _context.DonHangOnlines.FirstOrDefaultAsync(d => d.MaDH == maDH);
-            if (order != null)
+            var st = (payload.Status ?? string.Empty).ToLowerInvariant();
+            if (st == "delivered" && order.TrangThai is "dang_giao" or "cho_lay_hang" or "da_xac_nhan")
             {
-                var st = (payload.Status ?? string.Empty).ToLowerInvariant();
-                if (st == "delivered" && order.TrangThai != "hoan_thanh")
-                {
-                    order.TrangThai = "da_giao";
-                    await _context.SaveChangesAsync();
-                }
-                else if ((st == "picked" || st == "delivering" || st == "transporting") && order.TrangThai == "da_xac_nhan")
-                {
-                    order.TrangThai = "dang_giao";
-                    await _context.SaveChangesAsync();
-                }
-                else if (st == "cancel" && order.TrangThai != "da_huy")
-                {
-                    order.TrangThai = "da_huy";
-                    await _context.SaveChangesAsync();
-                }
+                order.TrangThai = "da_giao";
+                await _context.SaveChangesAsync();
+            }
+            else if ((st == "picked" || st == "delivering" || st == "transporting") && order.TrangThai is "da_xac_nhan" or "cho_lay_hang")
+            {
+                order.TrangThai = "dang_giao";
+                await _context.SaveChangesAsync();
+            }
+            else if (st == "cancel" && order.TrangThai is "da_xac_nhan" or "cho_lay_hang" or "dang_giao")
+            {
+                order.TrangThai = "da_huy";
+                await _context.SaveChangesAsync();
             }
         }
-        catch (Exception ex)
-        {
-            _logger.LogWarning(ex, "[Shipping] Không thể cập nhật trạng thái đơn trong DB từ webhook GHN cho {MaDH}", maDH);
-        }
+        if (transaction != null) await transaction.CommitAsync();
 
         return true;
     }
@@ -621,18 +618,22 @@ public class ShippingService : IShippingService
 
     private async Task SaveShipmentAsync(string maDH, OrderShippingDto dto)
     {
-        _memoryStore[maDH] = dto;
-
-        if (!_context.Database.IsRelational()) return;
+        if (!_context.Database.IsRelational())
+        {
+            _memoryStore[maDH] = dto;
+            return;
+        }
         var connStr = _context.Database.GetConnectionString();
         if (string.IsNullOrWhiteSpace(connStr)) return;
 
         try
         {
             await EnsureTableAsync(connStr);
-            await using var conn = new NpgsqlConnection(connStr);
-            await conn.OpenAsync();
-            await using var cmd = conn.CreateCommand();
+            var transaction = _context.Database.CurrentTransaction?.GetDbTransaction();
+            await using var owned = transaction == null ? new NpgsqlConnection(connStr) : null;
+            if (owned != null) await owned.OpenAsync();
+            await using var cmd = (owned ?? (NpgsqlConnection)transaction!.Connection!).CreateCommand();
+            cmd.Transaction = (NpgsqlTransaction?)transaction;
             cmd.CommandText = @"
                 INSERT INTO donhang_vandon (madh, carrier, tracking_code, shipping_status, expected_delivery, tracking_url, is_demo, events_json, updated_at)
                 VALUES (@madh, @carrier, @tracking_code, @shipping_status, @expected_delivery, @tracking_url, @is_demo, @events_json, NOW())
@@ -658,12 +659,13 @@ public class ShippingService : IShippingService
         catch (Exception ex)
         {
             _logger.LogWarning(ex, "[Shipping] Lỗi lưu vận đơn vào PostgreSQL cho {MaDH}", maDH);
+            throw;
         }
     }
 
     private async Task<OrderShippingDto?> LoadShipmentAsync(string maDH)
     {
-        if (_memoryStore.TryGetValue(maDH, out var cached))
+        if (!_context.Database.IsRelational() && _memoryStore.TryGetValue(maDH, out var cached))
             return cached;
 
         if (!_context.Database.IsRelational()) return null;
@@ -673,9 +675,11 @@ public class ShippingService : IShippingService
         try
         {
             await EnsureTableAsync(connStr);
-            await using var conn = new NpgsqlConnection(connStr);
-            await conn.OpenAsync();
-            await using var cmd = conn.CreateCommand();
+            var transaction = _context.Database.CurrentTransaction?.GetDbTransaction();
+            await using var owned = transaction == null ? new NpgsqlConnection(connStr) : null;
+            if (owned != null) await owned.OpenAsync();
+            await using var cmd = (owned ?? (NpgsqlConnection)transaction!.Connection!).CreateCommand();
+            cmd.Transaction = (NpgsqlTransaction?)transaction;
             cmd.CommandText = @"
                 SELECT carrier, tracking_code, shipping_status, expected_delivery, tracking_url, is_demo, events_json
                 FROM donhang_vandon WHERE madh = @madh LIMIT 1;";
@@ -697,13 +701,12 @@ public class ShippingService : IShippingService
                 IsDemo = reader.GetBoolean(5),
                 Events = events
             };
-            _memoryStore[maDH] = dto;
             return dto;
         }
         catch (Exception ex)
         {
             _logger.LogWarning(ex, "[Shipping] Lỗi đọc vận đơn từ PostgreSQL cho {MaDH}", maDH);
-            return null;
+            throw;
         }
     }
 }

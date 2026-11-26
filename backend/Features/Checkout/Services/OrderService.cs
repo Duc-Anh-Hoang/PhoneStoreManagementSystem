@@ -1,3 +1,4 @@
+using PhoneStoreAPI.Features.Inventory;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using PhoneStoreAPI.Common.Configs;
@@ -36,6 +37,9 @@ public class OrderService : IOrderService
         {
             throw new InvalidOperationException("Đơn hàng phải có ít nhất một sản phẩm.");
         }
+
+        if (request.Items.Select(i => i.VariantId).Distinct().Count() != request.Items.Count)
+            throw new InvalidOperationException("Một biến thể chỉ được xuất hiện một lần trong đơn.");
 
         foreach (var item in request.Items)
         {
@@ -104,11 +108,8 @@ public class OrderService : IOrderService
             {
                 if (isRelational)
                 {
-                    var affected = await _context.Database.ExecuteSqlInterpolatedAsync(
-                        $"UPDATE variants SET stock = stock - {item.Qty}, updated_at = {DateTime.UtcNow} WHERE id = {item.VariantId} AND stock >= {item.Qty}",
-                        cancellationToken);
-
-                    if (affected == 0)
+                    var reserved = await SellableStock.ReserveVariantAsync(_context, item.VariantId, item.Qty, cancellationToken);
+                    if (!reserved)
                     {
                         throw new InvalidOperationException($"Sản phẩm variant #{item.VariantId} đã hết hàng hoặc không đủ số lượng tồn kho.");
                     }
@@ -155,6 +156,17 @@ public class OrderService : IOrderService
             if (!string.IsNullOrWhiteSpace(request.VoucherCode))
             {
                 var cleanCode = request.VoucherCode.Trim().ToUpperInvariant();
+                var phone = PhoneStoreAPI.Features.Customers.Helpers.PhoneHelper.NormalizeVietnamesePhone(request.RecipientPhone) ?? request.RecipientPhone.Trim();
+                if (cleanCode == "SAMAMEMBER" && !await _context.KhachHangs.AnyAsync(k => k.Sdt == phone, cancellationToken))
+                    throw new InvalidOperationException("Voucher dành cho thành viên.");
+                if (cleanCode == "HELLOSAMA")
+                {
+                    if (isRelational)
+                        await _context.Database.ExecuteSqlInterpolatedAsync($"SELECT pg_advisory_xact_lock(hashtextextended({phone}, 3))", cancellationToken);
+                    if (await _context.Orders.AnyAsync(o => o.RecipientPhone == phone && o.Status != "CANCELLED" && o.Status != "EXPIRED", cancellationToken) ||
+                        await _context.DonHangOnlines.AnyAsync(d => d.SdtNguoiNhan == phone && d.TrangThai != "da_huy", cancellationToken))
+                        throw new InvalidOperationException("HELLOSAMA chỉ áp dụng cho đơn đầu tiên.");
+                }
                 if (isRelational)
                 {
                     var vAffected = await _context.Database.ExecuteSqlInterpolatedAsync(
@@ -173,7 +185,7 @@ public class OrderService : IOrderService
                         {
                             throw new InvalidOperationException($"Đơn hàng chưa đạt giá trị tối thiểu {vDb.MinOrderTotal:N0} VND để áp dụng voucher.");
                         }
-                        discountAmount = Math.Min(vDb.DiscountAmount, subtotal);
+                        discountAmount = Math.Min((long)vDb.DiscountFor(subtotal), subtotal);
                         appliedVoucher = cleanCode;
                     }
                 }
@@ -190,7 +202,7 @@ public class OrderService : IOrderService
                     }
                     voucher.UsedCount++;
                     voucher.UpdatedAt = DateTime.UtcNow;
-                    discountAmount = Math.Min(voucher.DiscountAmount, subtotal);
+                    discountAmount = Math.Min((long)voucher.DiscountFor(subtotal), subtotal);
                     appliedVoucher = cleanCode;
                 }
             }

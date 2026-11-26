@@ -543,11 +543,11 @@ let currentActiveSection = 'view-dashboard';
 // PHÂN QUYỀN MÀN HÌNH THEO VAI TRÒ (A3 - plan.md)
 // -------------------------------------------------------------
 const ROLE_PERMISSIONS = {
-  'ADMIN': ['view-dashboard', 'view-mathang', 'view-nhomloai', 'view-thuoctinh', 'view-khuyenmai', 'view-thamso', 'view-nhanvien', 'view-taikhoan', 'view-donhang', 'view-chat', 'view-tonkho', 'view-imei', 'view-hoadon', 'view-hoadon-list', 'view-trahang', 'view-baohanh', 'view-tracuu-baohanh', 'view-nhacungcap', 'view-nhapkho', 'view-khachhang'],
-  'QUANLY': ['view-dashboard', 'view-mathang', 'view-nhomloai', 'view-thuoctinh', 'view-khuyenmai', 'view-thamso', 'view-nhanvien', 'view-taikhoan', 'view-donhang', 'view-chat', 'view-tonkho', 'view-imei', 'view-hoadon', 'view-hoadon-list', 'view-trahang', 'view-baohanh', 'view-tracuu-baohanh', 'view-nhacungcap', 'view-nhapkho', 'view-khachhang'],
-  'MANAGER': ['view-dashboard', 'view-mathang', 'view-nhomloai', 'view-thuoctinh', 'view-khuyenmai', 'view-thamso', 'view-nhanvien', 'view-taikhoan', 'view-donhang', 'view-chat', 'view-tonkho', 'view-imei', 'view-hoadon', 'view-hoadon-list', 'view-trahang', 'view-baohanh', 'view-tracuu-baohanh', 'view-nhacungcap', 'view-nhapkho', 'view-khachhang'],
-  'BANHANG': ['view-donhang', 'view-chat', 'view-tonkho', 'view-imei', 'view-hoadon', 'view-hoadon-list', 'view-trahang', 'view-khachhang'],
-  'SALES': ['view-donhang', 'view-chat', 'view-tonkho', 'view-imei', 'view-hoadon', 'view-hoadon-list', 'view-trahang', 'view-khachhang'],
+  'ADMIN': ['view-dashboard', 'view-mathang', 'view-nhomloai', 'view-thuoctinh', 'view-khuyenmai', 'view-thamso', 'view-nhanvien', 'view-taikhoan', 'view-donhang', 'view-thucu', 'view-chat', 'view-tonkho', 'view-imei', 'view-hoadon', 'view-hoadon-list', 'view-trahang', 'view-baohanh', 'view-tracuu-baohanh', 'view-nhacungcap', 'view-nhapkho', 'view-khachhang'],
+  'QUANLY': ['view-dashboard', 'view-mathang', 'view-nhomloai', 'view-thuoctinh', 'view-khuyenmai', 'view-thamso', 'view-nhanvien', 'view-taikhoan', 'view-donhang', 'view-thucu', 'view-chat', 'view-tonkho', 'view-imei', 'view-hoadon', 'view-hoadon-list', 'view-trahang', 'view-baohanh', 'view-tracuu-baohanh', 'view-nhacungcap', 'view-nhapkho', 'view-khachhang'],
+  'MANAGER': ['view-dashboard', 'view-mathang', 'view-nhomloai', 'view-thuoctinh', 'view-khuyenmai', 'view-thamso', 'view-nhanvien', 'view-taikhoan', 'view-donhang', 'view-thucu', 'view-chat', 'view-tonkho', 'view-imei', 'view-hoadon', 'view-hoadon-list', 'view-trahang', 'view-baohanh', 'view-tracuu-baohanh', 'view-nhacungcap', 'view-nhapkho', 'view-khachhang'],
+  'BANHANG': ['view-donhang', 'view-thucu', 'view-chat', 'view-tonkho', 'view-imei', 'view-hoadon', 'view-hoadon-list', 'view-trahang', 'view-khachhang'],
+  'SALES': ['view-donhang', 'view-thucu', 'view-chat', 'view-tonkho', 'view-imei', 'view-hoadon', 'view-hoadon-list', 'view-trahang', 'view-khachhang'],
   'THUNGAN': ['view-hoadon', 'view-hoadon-list', 'view-trahang', 'view-khachhang'],
   'CASHIER': ['view-hoadon', 'view-hoadon-list', 'view-trahang', 'view-khachhang'],
   'KHO': ['view-nhacungcap', 'view-nhapkho', 'view-imei', 'view-tonkho'],
@@ -664,6 +664,7 @@ function renderSection(sectionId) {
     const titles = {
       'view-dashboard': isEn ? 'Dashboard Overview' : 'Tổng quan thống kê',
       'view-mathang': isEn ? 'Product Catalog' : 'Danh mục Sản phẩm',
+      'view-thucu': isEn ? 'Trade-in bookings' : 'Phiếu thu cũ',
       'view-donhang': isEn ? 'Online Orders' : 'Đơn hàng online',
       'view-hoadon': isEn ? 'POS & Invoices' : 'Bán tại quầy & Hóa đơn',
       'view-nhapkho': isEn ? 'Warehouse Imports' : 'Nhập kho & Sinh IMEI',
@@ -691,6 +692,7 @@ function renderSection(sectionId) {
     switch (currentActiveSection) {
     case 'view-dashboard': renderDashboard(); break;
     case 'view-mathang': renderMatHangTable(); break;
+    case 'view-thucu': loadTradeInBookings(); break;
     case 'view-donhang': renderDonHangTable(); break;
     case 'view-hoadon': renderHoaDonTable(); break;
     case 'view-hoadon-list': renderHoaDonListTable(); break;
@@ -4358,7 +4360,7 @@ function applyRolePermissions(userIdentifier) {
   if (idStr.includes('admin') || idStr.includes('quanly') || idStr.includes('quản lý') || idStr.includes('quản trị')) {
     allowedTargets = 'all';
   } else if (idStr.includes('banhang') || idStr.includes('bán hàng')) {
-    allowedTargets = ['view-dashboard', 'view-hoadon', 'view-hoadon-list', 'view-donhang', 'view-tonkho', 'view-khachhang'];
+    allowedTargets = ['view-dashboard', 'view-hoadon', 'view-hoadon-list', 'view-donhang', 'view-thucu', 'view-tonkho', 'view-khachhang'];
   } else if (idStr.includes('thungan') || idStr.includes('thu ngân')) {
     allowedTargets = ['view-dashboard', 'view-hoadon', 'view-hoadon-list', 'view-trahang', 'view-khachhang'];
   } else if (idStr.includes('kho')) {
@@ -6949,5 +6951,31 @@ async function renderProductPerformance(queryParams) {
     }
   } catch (err) {
     console.error('Lỗi khi tải danh sách hiệu suất sản phẩm và khách hàng:', err);
+  }
+}
+
+
+async function loadTradeInBookings() {
+  const code = document.getElementById('trade-in-code').value.trim().toUpperCase();
+  const status = document.getElementById('trade-in-status');
+  const rows = document.getElementById('trade-in-results');
+  status.textContent = 'Đang tra cứu…';
+  rows.replaceChildren();
+  try {
+    const path = '/trade-in/bookings' + (code ? '/' + encodeURIComponent(code) : '');
+    const response = await api.get(path);
+    const bookings = code ? [response] : response;
+    for (const booking of bookings) {
+      const row = rows.insertRow();
+      for (const value of [booking.code, booking.name, booking.phone, booking.branch,
+                           booking.used_device?.model, booking.target_product?.name]) {
+        const cell = row.insertCell();
+        cell.className = 'border-b py-2 pr-3';
+        cell.textContent = value ?? '';
+      }
+    }
+    status.textContent = bookings.length ? '' : 'Chưa có phiếu thu cũ.';
+  } catch (err) {
+    status.textContent = err.message || 'Chưa tải được phiếu thu cũ.';
   }
 }

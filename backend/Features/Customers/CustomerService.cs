@@ -75,6 +75,10 @@ public class CustomerService : ICustomerService
         var spendingMap = await GetCustomerSpendingMapAsync(customerIds);
         var diemMoiVnd = await GetDiemMoiVndAsync();
 
+        var phones = customers.Where(c => c.Sdt != null).Select(c => c.Sdt!).ToList();
+        var used = await _context.DonHangOnlines.Where(d => d.PointsUsed > 0 && d.TrangThai != "da_huy" && d.TrangThai != "hoan_hang" && d.TrangThai != "boom" && phones.Contains(d.MemberPhone!))
+            .GroupBy(d => d.MemberPhone!).Select(g => new { Phone = g.Key, Points = g.Sum(x => x.PointsUsed) })
+            .ToDictionaryAsync(x => x.Phone, x => x.Points);
         var result = customers.Select(c =>
         {
             var spending = spendingMap.TryGetValue(c.MaKH, out var val) ? val : 0m;
@@ -87,7 +91,7 @@ public class CustomerService : ICustomerService
                 Sdt = c.Sdt,
                 Email = c.Email,
                 TongChiTieu = spending,
-                DiemTichLuy = points
+                DiemTichLuy = Math.Max(0, points - used.GetValueOrDefault(c.Sdt ?? ""))
             };
         }).ToList();
 
@@ -118,7 +122,7 @@ public class CustomerService : ICustomerService
             Sdt = c.Sdt,
             Email = c.Email,
             TongChiTieu = spending,
-            DiemTichLuy = points
+            DiemTichLuy = await AvailablePointsAsync(points, c.Sdt)
         };
     }
 
@@ -161,7 +165,7 @@ public class CustomerService : ICustomerService
             Sdt = c.Sdt,
             Email = c.Email,
             TongChiTieu = spending,
-            DiemTichLuy = points
+            DiemTichLuy = await AvailablePointsAsync(points, c.Sdt)
         };
     }
 
@@ -260,7 +264,7 @@ public class CustomerService : ICustomerService
             Sdt = entity.Sdt,
             Email = entity.Email,
             TongChiTieu = spending,
-            DiemTichLuy = points
+            DiemTichLuy = await AvailablePointsAsync(points, entity.Sdt)
         };
     }
 
@@ -311,6 +315,12 @@ public class CustomerService : ICustomerService
         }
 
         return $"KH{(maxNum + 1):D3}";
+    }
+
+    private async Task<int> AvailablePointsAsync(int earned, string? phone)
+    {
+        var used = await _context.DonHangOnlines.Where(d => d.MemberPhone == phone && d.TrangThai != "da_huy" && d.TrangThai != "hoan_hang" && d.TrangThai != "boom").SumAsync(d => d.PointsUsed);
+        return Math.Max(0, earned - used);
     }
 
     private async Task<decimal> GetDiemMoiVndAsync()
@@ -421,7 +431,7 @@ public class CustomerService : ICustomerService
             discountPct = 0;
         }
 
-        decimal discountAmount = Math.Round(request.CartTotal * discountPct / 100m, 0);
+        decimal discountAmount = Math.Round(request.CartTotal * discountPct / 100m, MidpointRounding.AwayFromZero);
 
         // 4. Kiểm tra điều kiện bắt buộc OTP theo chính sách đã chốt:
         // - Đơn nhỏ/trung bình (< 15M và giảm < 500k): KHÔNG OTP
@@ -459,7 +469,7 @@ public class CustomerService : ICustomerService
             SdtMasked = MaskPhone(normalizedPhone),
             RequiresOtp = requiresOtp,
             OtpReason = otpReason,
-            DiemTichLuyHienCo = points
+            DiemTichLuyHienCo = await AvailablePointsAsync(points, customer.Sdt)
         };
     }
 

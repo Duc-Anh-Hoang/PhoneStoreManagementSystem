@@ -85,8 +85,12 @@ public class ProductService : IProductService
             .Where(v => maHangList.Contains(v.MaHang))
             .ToDictionaryAsync(v => v.MaHang, v => v.TonKho);
 
+        var variantIds = await _context.ProductVariants.Where(v => v.Product!.StoreItemCode != null &&
+                maHangList.Contains(v.Product.StoreItemCode) && v.Sku == "STORE:" + v.Product.StoreItemCode)
+            .ToDictionaryAsync(v => v.Product!.StoreItemCode!, v => (long?)v.Id);
         var items = pagedMatHang.Select(m => new ProductDto
         {
+            CheckoutVariantId = variantIds.GetValueOrDefault(m.MaHang),
             MaHang = m.MaHang,
             TenHang = m.TenHang,
             DonGia = m.DonGia,
@@ -137,6 +141,7 @@ public class ProductService : IProductService
 
         return new ProductDetailDto
         {
+            CheckoutVariantId = await _context.ProductVariants.Where(v => v.Sku == "STORE:" + maHang).Select(v => (long?)v.Id).SingleOrDefaultAsync(),
             MaHang = m.MaHang,
             TenHang = m.TenHang,
             DonGia = m.DonGia,

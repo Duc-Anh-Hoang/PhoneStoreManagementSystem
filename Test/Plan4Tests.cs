@@ -372,6 +372,25 @@ public class Plan4Tests
     }
 
     [Fact]
+    public async Task OnlineOrder_AppliesPercentageVoucherOnceAndPreservesNoteOnRetry()
+    {
+        using var context = GetInMemoryDbContext(Guid.NewGuid().ToString());
+        SeedBaseData(context);
+        var generator = new CodeGenerator(context);
+        var service = new OnlineOrderService(context, new MockCurrentUser(), generator, new WarrantyService(context, generator));
+        context.Vouchers.Add(new Voucher { Code = "TEST5", DiscountPercent = 5, MaxUses = 1, ExpiresAt = DateTime.UtcNow.AddDays(1) });
+        await context.SaveChangesAsync();
+        var request = new CreateOrderRequest { MaDH = "DH-TEST5", TenNguoiNhan = "Khách",
+            SdtNguoiNhan = "0901234567", DiaChiGiao = "Cửa hàng", GhiChu = "Gọi trước", VoucherCode = "TEST5",
+            ExpectedTotal = 475000, Items = [new() { MaHang = "SAC20W", SoLuong = 1 }] };
+        var created = await service.CreateOrderAsync(request);
+        var retried = await service.CreateOrderAsync(request);
+        Assert.Equal(475000m, created.TongTien);
+        Assert.Equal("Gọi trước", retried.GhiChu);
+        Assert.Equal(1, (await context.Vouchers.SingleAsync()).UsedCount);
+    }
+
+    [Fact]
     public async Task OnlineOrder_ReserveStockAndReuseOrderCode()
     {
         using var context = GetInMemoryDbContext(Guid.NewGuid().ToString());

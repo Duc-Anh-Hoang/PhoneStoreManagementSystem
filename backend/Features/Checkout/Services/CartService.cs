@@ -1,3 +1,4 @@
+using PhoneStoreAPI.Features.Inventory;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using PhoneStoreAPI.Common.Configs;
@@ -229,6 +230,12 @@ public class CartService : ICartService
                 continue;
             }
 
+            var stock = variant.Stock;
+            if (variant.Product?.StoreItemCode is string code)
+            {
+                var storeItem = await _context.MatHangs.FindAsync(code);
+                stock = storeItem == null ? 0 : await SellableStock.GetAvailableAsync(_context, storeItem);
+            }
             var itemDto = new CartItemDTO
             {
                 Id = item.Id,
@@ -239,13 +246,13 @@ public class CartService : ICartService
                 Storage = variant.Storage,
                 Price = variant.Price, // Server is source of truth
                 Qty = item.Qty,
-                AvailableStock = variant.Stock
+                AvailableStock = stock
             };
 
             dto.Items.Add(itemDto);
 
             // Warnings calculation
-            if (variant.Stock == 0)
+            if (stock == 0)
             {
                 dto.Warnings.Add(new CartWarningDTO
                 {
@@ -254,13 +261,13 @@ public class CartService : ICartService
                     Message = $"Sản phẩm {itemDto.ProductName} ({variant.Color} - {variant.Storage}) hiện đã hết hàng."
                 });
             }
-            else if (variant.Stock < item.Qty)
+            else if (stock < item.Qty)
             {
                 dto.Warnings.Add(new CartWarningDTO
                 {
                     VariantId = item.VariantId,
                     Code = "INSUFFICIENT_STOCK",
-                    Message = $"Sản phẩm {itemDto.ProductName} chỉ còn {variant.Stock} chiếc trong kho (bạn đang chọn {item.Qty})."
+                    Message = $"Sản phẩm {itemDto.ProductName} chỉ còn {stock} chiếc trong kho (bạn đang chọn {item.Qty})."
                 });
             }
 

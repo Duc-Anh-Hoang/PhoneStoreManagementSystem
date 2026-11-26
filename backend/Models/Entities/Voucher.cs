@@ -17,6 +17,13 @@ public class Voucher
     [Column("discount_amount")]
     public long DiscountAmount { get; set; }
 
+    [Column("discount_percent")]
+    public int DiscountPercent { get; set; }
+
+    public decimal DiscountFor(decimal subtotal) => DiscountPercent > 0
+        ? Math.Round(subtotal * DiscountPercent / 100m, MidpointRounding.AwayFromZero)
+        : DiscountAmount;
+
     [Column("min_order_total")]
     public long MinOrderTotal { get; set; }
 

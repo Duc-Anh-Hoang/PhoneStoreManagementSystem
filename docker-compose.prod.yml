@@ -28,6 +28,7 @@ services:
     restart: always
     environment:
       ASPNETCORE_ENVIRONMENT: Production
+      STORE_TRUSTED_PROXY: frontend
       ConnectionStrings__DefaultConnection: ${ConnectionStrings__DefaultConnection:-Host=postgres;Port=5432;Database=PhoneStoreDB;Username=postgres;Password=postgres_secure_pass_2026}
       Jwt__Key: ${Jwt__Key:-PhoneStoreManagementSystem_SuperSecretKey_2026_AspNetCore10_StrongSecretKey!}
       VietQR__BankId: ${VIETQR_BANK_ID:-}

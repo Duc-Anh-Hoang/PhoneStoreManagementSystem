@@ -28,6 +28,9 @@ public class OnlineOrderService : IOnlineOrderService
     private readonly IOrderDecisionEngine? _decisionEngine;
     private readonly IOrderSettingsService? _settings;
 
+    private readonly IHttpContextAccessor? _http;
+    private readonly ShippingQuoteService? _quotes;
+
     public OnlineOrderService(
         AppDbContext context,
         ICurrentUser currentUser,
@@ -37,7 +40,7 @@ public class OnlineOrderService : IOnlineOrderService
         IHubContext<OrderHub>? hubContext = null,
         IShippingService? shippingService = null,
         IOrderDecisionEngine? decisionEngine = null,
-        IOrderSettingsService? settings = null)
+        IOrderSettingsService? settings = null, IHttpContextAccessor? http = null, ShippingQuoteService? quotes = null)
     {
         _context = context;
         _currentUser = currentUser;
@@ -48,7 +51,30 @@ public class OnlineOrderService : IOnlineOrderService
         _shippingService = shippingService;
         _decisionEngine = decisionEngine;
         _settings = settings;
+        _http = http;
+        _quotes = quotes;
     }
+
+    private async Task<string?> GetClientIpAsync()
+    {
+        var http = _http?.HttpContext;
+        var peer = http?.Connection.RemoteIpAddress;
+        var proxyHost = Environment.GetEnvironmentVariable("STORE_TRUSTED_PROXY");
+        if (peer == null || http == null || string.IsNullOrEmpty(proxyHost)) return peer?.ToString();
+        var forwarded = http.Request.Headers["X-Forwarded-For"].ToString().Split(',')[^1].Trim();
+        if (!System.Net.IPAddress.TryParse(forwarded, out var client)) return peer.ToString();
+        try
+        {
+            var proxies = await System.Net.Dns.GetHostAddressesAsync(proxyHost);
+            if (proxies.Any(p => p.MapToIPv6().Equals(peer.MapToIPv6()))) return client.ToString();
+        }
+        catch (System.Net.Sockets.SocketException) { }
+        return peer.ToString();
+    }
+
+    private bool HasMemberOtp(string? token, string phone) =>
+        !string.IsNullOrWhiteSpace(token) && _http?.HttpContext is { } context &&
+        OtpTokenValidator.ValidateAndExtractPhone(token, context.RequestServices) == phone;
 
     public async Task<OrderDto> CreateOrderAsync(CreateOrderRequest request)
     {
@@ -66,6 +92,9 @@ public class OnlineOrderService : IOnlineOrderService
                 _ => throw new BadRequestException("Đơn online hỗ trợ VietQR và thanh toán khi nhận hàng."),
             };
 
+            if (request.Items == null || request.Items.Count == 0 ||
+                request.Items.Any(i => i.SoLuong <= 0 || string.IsNullOrWhiteSpace(i.MaHang)))
+                throw new BadRequestException("Đơn hàng cần ít nhất một mặt hàng với số lượng dương.");
             var groupedItems = request.Items.GroupBy(item => item.MaHang.Trim())
                 .Select(group => new { MaHang = group.Key, SoLuong = group.Sum(item => item.SoLuong) }).ToList();
             var reqMaDH = string.IsNullOrWhiteSpace(request.MaDH) ? null : request.MaDH.Trim().ToUpperInvariant();
@@ -82,7 +111,10 @@ public class OnlineOrderService : IOnlineOrderService
                 var existing = await GetOrderByMaDHAsync(reqMaDH, null);
                 if (existing != null)
                 {
-                    if (existing.SdtNguoiNhan != sdtNorm || existing.TenNguoiNhan != request.TenNguoiNhan.Trim() ||
+                    var previous = await _context.DonHangOnlines.AsNoTracking().SingleAsync(d => d.MaDH == reqMaDH);
+                    if (previous.GhiChu != request.GhiChu?.Trim() || previous.VoucherCode != request.VoucherCode?.Trim().ToUpperInvariant() ||
+                        (request.ExpectedTotal.HasValue && existing.TongTien != request.ExpectedTotal) ||
+                        existing.SdtNguoiNhan != sdtNorm || existing.TenNguoiNhan != request.TenNguoiNhan.Trim() ||
                         existing.DiaChiGiao != request.DiaChiGiao.Trim() || existing.PhuongThucThanhToan != phuongThuc ||
                         existing.Items == null || existing.Items.Count != groupedItems.Count || groupedItems.Any(item =>
                             !existing.Items.Any(line => line.MaHang == item.MaHang && line.SoLuong == item.SoLuong)))
@@ -106,6 +138,7 @@ public class OnlineOrderService : IOnlineOrderService
                 khachHang = await _context.KhachHangs.FirstOrDefaultAsync(k => k.Sdt == sdtNorm);
             }
 
+            var registeredMember = khachHang != null;
             if (khachHang == null)
             {
                 var newMaKH = await _codeGenerator.NextAsync("KH");
@@ -157,17 +190,13 @@ public class OnlineOrderService : IOnlineOrderService
             decimal giamGiaVip = 0m;
             string? ghiChuVip = null;
 
+            var subtotal = tongTien;
             if (memberCustomer != null)
             {
                 var invoicesSum = await _context.HoaDons.AsNoTracking()
                     .Where(h => h.MaKH == memberCustomer.MaKH)
                     .SumAsync(h => (decimal?)(h.TongTien - h.TienGiamGia)) ?? 0m;
-                var onlineSum = await _context.DonHangOnlines.AsNoTracking()
-                    .Where(d => d.MaKH == memberCustomer.MaKH && d.SoHD == null && d.TrangThai != "da_huy")
-                    .SumAsync(d => (decimal?)d.TongTien) ?? 0m;
-
-                var totalSpending = invoicesSum + onlineSum;
-                int vipPct = totalSpending switch
+                int vipPct = invoicesSum switch
                 {
                     >= 100_000_000m => 5,
                     >= 50_000_000m => 3,
@@ -177,7 +206,7 @@ public class OnlineOrderService : IOnlineOrderService
 
                 if (vipPct > 0)
                 {
-                    var calculatedDiscount = Math.Round(tongTien * vipPct / 100m, 0);
+                    var calculatedDiscount = Math.Round(tongTien * vipPct / 100m, MidpointRounding.AwayFromZero);
                     const decimal NGUONG_DON_OTP = 15_000_000m;
                     const decimal NGUONG_GIAM_OTP = 500_000m;
 
@@ -194,25 +223,7 @@ public class OnlineOrderService : IOnlineOrderService
                         else
                         {
                             // Kiểm tra OTP Token
-                            bool otpValid = false;
-                            if (!string.IsNullOrWhiteSpace(request.OtpToken))
-                            {
-                                try
-                                {
-                                    var tokenHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
-                                    if (tokenHandler.CanReadToken(request.OtpToken))
-                                    {
-                                        var jwt = tokenHandler.ReadJwtToken(request.OtpToken);
-                                        var claimPhone = jwt.Claims.FirstOrDefault(c => c.Type == "phone" || c.Type == "sub")?.Value;
-                                        if (claimPhone == sdtMember && jwt.ValidTo > DateTime.UtcNow)
-                                        {
-                                            otpValid = true;
-                                        }
-                                    }
-                                }
-                                catch {}
-                            }
-
+                            var otpValid = HasMemberOtp(request.OtpToken, sdtMember);
                             if (otpValid)
                             {
                                 giamGiaVip = calculatedDiscount;
@@ -237,6 +248,63 @@ public class OnlineOrderService : IOnlineOrderService
                 }
             }
 
+            var code = request.VoucherCode?.Trim().ToUpperInvariant();
+            if (request.UsePoints)
+            {
+                if (_context.Database.IsNpgsql())
+                    await _context.Database.ExecuteSqlInterpolatedAsync($"SELECT pg_advisory_xact_lock(hashtextextended({sdtMember}, 2))");
+            }
+            if (!string.IsNullOrEmpty(code))
+            {
+                var voucher = await _context.Vouchers.SingleOrDefaultAsync(v => v.Code == code);
+                if (voucher == null || subtotal < voucher.MinOrderTotal || voucher.ExpiresAt <= DateTime.UtcNow ||
+                    voucher.UsedCount >= voucher.MaxUses)
+                    throw new BadRequestException("Voucher hết hạn, hết lượt hoặc chưa đạt giá trị đơn tối thiểu.");
+                if (code == "HELLOSAMA" && _context.Database.IsNpgsql())
+                    await _context.Database.ExecuteSqlInterpolatedAsync($"SELECT pg_advisory_xact_lock(hashtextextended({sdtNorm}, 3))");
+                if (code == "HELLOSAMA" &&
+                    (await _context.DonHangOnlines.AnyAsync(d => d.SdtNguoiNhan == sdtNorm && d.TrangThai != "da_huy") ||
+                     await _context.Orders.AnyAsync(o => o.RecipientPhone == sdtNorm && o.Status != "CANCELLED" && o.Status != "EXPIRED")))
+                    throw new BadRequestException("HELLOSAMA chỉ áp dụng cho đơn đầu tiên.");
+                if (code == "SAMAMEMBER" && (memberCustomer == null || (!registeredMember && sdtNorm == sdtMember)))
+                    throw new BadRequestException("Voucher dành cho thành viên.");
+                if (_context.Database.IsNpgsql())
+                {
+                    var used = await _context.Database.ExecuteSqlInterpolatedAsync(
+                        $"UPDATE vouchers SET used_count=used_count+1, updated_at=now() WHERE id={voucher.Id} AND used_count<max_uses AND expires_at>now()");
+                    if (used == 0) throw new ConflictException("Voucher đã hết lượt.");
+                }
+                else voucher.UsedCount++;
+                tongTien = Math.Max(0, tongTien - voucher.DiscountFor(subtotal));
+            }
+            var points = 0;
+            if (request.UsePoints)
+            {
+                if (memberCustomer == null || !HasMemberOtp(request.OtpToken, sdtMember))
+                    throw new BadRequestException("Cần xác thực OTP thành viên để dùng điểm.");
+                var unit = await _context.ThamSos.Where(x => x.MaThamSo == "DIEM_MOI_VND").Select(x => (decimal?)x.GiaTri).FirstOrDefaultAsync() ?? 100000m;
+                var spent = await _context.HoaDons.Where(h => h.MaKH == memberCustomer.MaKH).SumAsync(h => h.TongTien - h.TienGiamGia);
+                var redeemed = await _context.DonHangOnlines.Where(d => d.MemberPhone == sdtMember && d.TrangThai != "da_huy" && d.TrangThai != "boom" && d.TrangThai != "hoan_hang").SumAsync(d => d.PointsUsed);
+                var available = Math.Floor(spent / (unit > 0 ? unit : 100000m)) - redeemed;
+                points = (int)Math.Min(available, Math.Min(200m, Math.Floor(tongTien / 1000m)));
+                if (points <= 0)
+                    throw new BadRequestException("Số điểm khả dụng không đủ.");
+                tongTien -= points * 1000m;
+            }
+            decimal shippingFee = 0;
+            if (request.ToDistrictId.HasValue && _quotes != null)
+            {
+                if (request.ToDistrictId <= 0) throw new BadRequestException("Vui lòng chọn quận/huyện giao hàng.");
+                var quote = await _quotes.CalculateAsync(new ShippingQuoteRequest {
+                    ToDistrictId = request.ToDistrictId.Value, ToWardCode = request.ToWardCode ?? "",
+                    SubtotalAfterDiscount = tongTien, Items = groupedItems.Select(i => new ShippingQuoteItem { ProductId=i.MaHang, Quantity=i.SoLuong }).ToList()
+                });
+                shippingFee = quote.CustomerFee;
+                tongTien += shippingFee;
+            }
+            if (request.ExpectedTotal.HasValue && request.ExpectedTotal != tongTien)
+                throw new ConflictException($"Tổng tiền hiện tại là {tongTien:N0} đ. Vui lòng cập nhật giỏ hàng và kiểm tra ưu đãi.");
+
             if (phuongThuc == "cod" && tongTien > (_settings == null ? 30_000_000m : await _settings.GetCodMaxValueAsync()))
             {
                 throw new BadRequestException("Đơn hàng vượt hạn mức thu hộ. Vui lòng chọn chuyển khoản.");
@@ -249,6 +317,7 @@ public class OnlineOrderService : IOnlineOrderService
             var decisionContext = new OrderDecisionContext
             {
                 Phone = sdtNorm,
+                ClientIp = await GetClientIpAsync(),
                 AddressHash = addressHash,
                 OrderAmount = tongTien,
                 PaymentMethod = phuongThuc,
@@ -277,6 +346,8 @@ public class OnlineOrderService : IOnlineOrderService
                 TongTien = tongTien,
                 TrangThai = decision.InitialStatus,
                 RiskFlag = decision.RiskFlag,
+                ClientIp = decisionContext.ClientIp, GhiChu = request.GhiChu?.Trim(),
+                ShippingFee = shippingFee, VoucherCode = code, PointsUsed = points, MemberPhone = sdtMember,
                 RiskReasons = decision.RiskReasons.Count > 0 ? JsonSerializer.Serialize(decision.RiskReasons) : null,
                 AutoApproveAt = decision.AutoApproveAt,
                 AddressHash = addressHash,
@@ -382,6 +453,7 @@ public class OnlineOrderService : IOnlineOrderService
                 TenNguoiNhan = donHang.TenNguoiNhan,
                 SdtNguoiNhan = donHang.SdtNguoiNhan,
                 DiaChiGiao = donHang.DiaChiGiao,
+                GhiChu = donHang.GhiChu,
                 PhuongThucThanhToan = donHang.PhuongThucThanhToan,
                 TongTien = donHang.TongTien,
                 PaymentStatus = donHang.PaymentStatus,
@@ -430,6 +502,7 @@ public class OnlineOrderService : IOnlineOrderService
             TenNguoiNhan = order.TenNguoiNhan,
             SdtNguoiNhan = order.SdtNguoiNhan,
             DiaChiGiao = order.DiaChiGiao,
+            GhiChu = order.GhiChu,
             PhuongThucThanhToan = order.PhuongThucThanhToan,
             TongTien = order.TongTien,
             PaymentStatus = order.PaymentStatus,
@@ -514,6 +587,7 @@ public class OnlineOrderService : IOnlineOrderService
             TenNguoiNhan = o.TenNguoiNhan,
             SdtNguoiNhan = o.SdtNguoiNhan,
             DiaChiGiao = o.DiaChiGiao,
+            GhiChu = o.GhiChu,
             PhuongThucThanhToan = o.PhuongThucThanhToan,
             TongTien = o.TongTien,
             PaymentStatus = o.PaymentStatus,
@@ -671,11 +745,13 @@ public class OnlineOrderService : IOnlineOrderService
                         MaKH = donHang.MaKH,
                         MaNV = maNV,
                         KenhBan = AppConstants.SaleChannels.Online,
-                        TongTien = gross,
-                        TienGiamGia = Math.Max(0m, gross - donHang.TongTien),
+                        TongTien = gross + donHang.ShippingFee,
+                        TienGiamGia = Math.Max(0m, gross + donHang.ShippingFee - donHang.TongTien),
                         PhuongThucThanhToan = ptThanhToan
                     };
                     _context.HoaDons.Add(hoaDon);
+                    await _context.SaveChangesAsync();
+                    donHang.SoHD = soHD;
                     await _context.SaveChangesAsync();
 
                     // Xá»­ lÃ½ tá»«ng dÃ²ng chi tiáº¿t Ä‘Æ¡n
@@ -898,6 +974,7 @@ public class OnlineOrderService : IOnlineOrderService
                 TenNguoiNhan = donHang.TenNguoiNhan,
                 SdtNguoiNhan = donHang.SdtNguoiNhan,
                 DiaChiGiao = donHang.DiaChiGiao,
+                GhiChu = donHang.GhiChu,
                 PhuongThucThanhToan = donHang.PhuongThucThanhToan,
                 TongTien = donHang.TongTien,
                 PaymentStatus = donHang.PaymentStatus,
@@ -1005,6 +1082,7 @@ public class OnlineOrderService : IOnlineOrderService
             TenNguoiNhan = donHang.TenNguoiNhan,
             SdtNguoiNhan = donHang.SdtNguoiNhan,
             DiaChiGiao = donHang.DiaChiGiao,
+            GhiChu = donHang.GhiChu,
             PhuongThucThanhToan = donHang.PhuongThucThanhToan,
             TongTien = donHang.TongTien,
             PaymentStatus = donHang.PaymentStatus,

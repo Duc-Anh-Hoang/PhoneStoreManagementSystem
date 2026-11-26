@@ -123,6 +123,7 @@ public static class ServiceCollectionExtensions
         // Giai đoạn 4: Đăng ký OTP Service
         services.AddScoped<IOtpService, OtpService>();
         // Giai đoạn 6: Đăng ký Shipping Service
+        services.AddScoped<ShippingQuoteService>();
         services.AddScoped<IShippingService, ShippingService>();
         // plan (8).md: Đăng ký OrderSettingsService & OrderDecisionEngine
         services.AddScoped<PhoneStoreAPI.Features.OnlineOrders.Services.IOrderSettingsService, PhoneStoreAPI.Features.OnlineOrders.Services.OrderSettingsService>();
