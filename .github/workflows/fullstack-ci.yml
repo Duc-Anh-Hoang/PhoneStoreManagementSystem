@@ -4,6 +4,9 @@ on:
   push:
     branches: [ "main" ]
     paths:
+      - "backend/**"
+      - "frontend/**"
+      - "database/initdb/**"
       - "docker-compose*.yml"
       - ".env.example"
       - ".github/workflows/fullstack-ci.yml"
@@ -45,7 +48,7 @@ jobs:
       - name: Test Endpoints
         run: |
           echo "Testing Frontend HTTP 200..."
-          curl -f http://localhost:8088/ || exit 1
+          curl -fsS --retry 5 --retry-connrefused http://localhost:8088/ -o /dev/null || exit 1
 
           echo "Testing Backend Direct Healthcheck..."
           curl -f http://localhost:8080/api/health || exit 1

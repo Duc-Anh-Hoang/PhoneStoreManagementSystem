@@ -87,7 +87,8 @@ public class ProductService : IProductService
 
         var variantIds = await _context.ProductVariants.Where(v => v.Product!.StoreItemCode != null &&
                 maHangList.Contains(v.Product.StoreItemCode) && v.Sku == "STORE:" + v.Product.StoreItemCode)
-            .ToDictionaryAsync(v => v.Product!.StoreItemCode!, v => (long?)v.Id);
+            .Select(v => new { Code = v.Product!.StoreItemCode!, v.Id })
+            .ToDictionaryAsync(v => v.Code, v => (long?)v.Id);
         var items = pagedMatHang.Select(m => new ProductDto
         {
             CheckoutVariantId = variantIds.GetValueOrDefault(m.MaHang),
