@@ -52,7 +52,7 @@ public class PaymentController : ControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> DemoConfirmPayment(string maDH)
     {
-        var demoEnabled = _environment.IsDevelopment() && _configuration.GetValue<bool>("Payment:DemoAutoConfirm");
+        var demoEnabled = _configuration.GetValue<bool>("Payment:DemoAutoConfirm");
         if (!demoEnabled)
         {
             return StatusCode(403, new { message = "Chức năng xác nhận demo đang tắt." });
