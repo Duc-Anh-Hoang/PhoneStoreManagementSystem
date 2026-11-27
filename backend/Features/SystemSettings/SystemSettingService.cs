@@ -40,7 +40,7 @@ public class SystemSettingService : ISystemSettingService
             .OrderBy(t => t.MaThamSo)
             .Select(t => new ThamSoDto
             {
-                MaThamSo = t.MaThamSo,
+                MaThamSo = t.MaHienThi ?? t.MaThamSo,
                 TenThamSo = t.TenThamSo,
                 GiaTri = t.GiaTri,
                 DonVi = t.DonVi
@@ -50,9 +50,10 @@ public class SystemSettingService : ISystemSettingService
 
     public async Task<ThamSoDto> GetByMaAsync(string ma)
     {
+        var code = ma.Trim().ToUpperInvariant();
         var entity = await _context.ThamSos
             .AsNoTracking()
-            .FirstOrDefaultAsync(t => t.MaThamSo.ToUpper() == ma.Trim().ToUpper());
+            .FirstOrDefaultAsync(t => t.MaThamSo == code || t.MaHienThi == code);
 
         if (entity == null)
         {
@@ -61,7 +62,7 @@ public class SystemSettingService : ISystemSettingService
 
         return new ThamSoDto
         {
-            MaThamSo = entity.MaThamSo,
+            MaThamSo = entity.MaHienThi ?? entity.MaThamSo,
             TenThamSo = entity.TenThamSo,
             GiaTri = entity.GiaTri,
             DonVi = entity.DonVi
@@ -70,14 +71,31 @@ public class SystemSettingService : ISystemSettingService
 
     public async Task<ThamSoDto> UpdateAsync(string ma, UpdateThamSoRequest request)
     {
-        await _updateValidator.ValidateAndThrowAsync(request);
+        if (_updateValidator != null) await _updateValidator.ValidateAndThrowAsync(request);
 
+        var currentCode = ma.Trim().ToUpperInvariant();
         var entity = await _context.ThamSos
-            .FirstOrDefaultAsync(t => t.MaThamSo.ToUpper() == ma.Trim().ToUpper());
+            .FirstOrDefaultAsync(t => t.MaThamSo == currentCode || t.MaHienThi == currentCode);
 
         if (entity == null)
         {
             throw new NotFoundException($"Không tìm thấy tham số '{ma}'.");
+        }
+
+        var newCode = request.MaThamSo?.Trim().ToUpperInvariant();
+        var name = request.TenThamSo?.Trim();
+        var unit = request.DonVi?.Trim();
+        if ((newCode != null && !System.Text.RegularExpressions.Regex.IsMatch(newCode, "^[A-Z][A-Z0-9_]{0,29}$")) ||
+            (name != null && name.Length is < 1 or > 100) || unit?.Length > 20 ||
+            request.GiaTri < 0 || request.GiaTri > 9999999999999999.99m || decimal.Round(request.GiaTri, 2) != request.GiaTri)
+            throw new BadRequestException("Mã, tên, đơn vị hoặc giá trị tham số không hợp lệ.");
+
+        if (newCode != null)
+        {
+            if (await _context.ThamSos.AnyAsync(t => t.MaThamSo != entity.MaThamSo &&
+                (t.MaThamSo == newCode || t.MaHienThi == newCode)))
+                throw new ConflictException("Mã tham số đã tồn tại.");
+            entity.MaHienThi = newCode == entity.MaThamSo ? null : newCode;
         }
 
         entity.GiaTri = request.GiaTri;
@@ -97,7 +115,7 @@ public class SystemSettingService : ISystemSettingService
 
         return new ThamSoDto
         {
-            MaThamSo = entity.MaThamSo,
+            MaThamSo = entity.MaHienThi ?? entity.MaThamSo,
             TenThamSo = entity.TenThamSo,
             GiaTri = entity.GiaTri,
             DonVi = entity.DonVi

@@ -78,6 +78,8 @@
   let currentOrderStatusFilter = 'all'; // 'all' | 'cho_xac_nhan' | 'dang_giao' | 'da_giao' | 'da_huy'
   let pendingCancelOrderCode = null;
   let activeModalOrderCode = null;
+  let successQrIsDemo = false;
+  let modalQrIsDemo = false;
   let qrCountdownInterval = null;
 
   // Quản lý các item được chọn thanh toán (Mặc định chọn tất cả)
@@ -141,6 +143,35 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify(items || []));
       updateHeaderBadge();
     } catch (e) {}
+  }
+
+  async function refreshCartProducts() {
+    const codes = [...new Set(getCart().map(item => item.maHang || item.id))];
+    if (!codes.length) return;
+    const products = await Promise.all(codes.map(async code => {
+      try {
+        return [code, await window.api.get('/mathang/' + encodeURIComponent(code))];
+      } catch {
+        return [code, null];
+      }
+    }));
+    const byCode = new Map(products);
+    saveCart(getCart().map(item => {
+      const product = byCode.get(item.maHang || item.id);
+      if (!product) return item;
+      return {
+        ...item,
+        maHang: product.maHang,
+        tenHang: product.tenHang,
+        name: product.tenHang,
+        price: product.donGia,
+        donGia: product.donGia,
+        oldPrice: product.donGia,
+        giaGoc: product.donGia,
+        tonKho: product.tonKho
+      };
+    }));
+    renderCart();
   }
 
   window.getCart = getCart;
@@ -269,6 +300,7 @@
     initPrefillUser();
     initItemSelection();
     renderCart();
+    void refreshCartProducts();
     updateHeaderBadge();
     updateOrderCounts();
     initGhnAddressSelector();
@@ -1595,6 +1627,7 @@
         }
 
         if (vietQrBox) {
+          successQrIsDemo = false;
           vietQrBox.classList.remove('hidden');
           const qrImg = document.getElementById('success-vietqr-img');
           const memoText = document.getElementById('success-transfer-content');
@@ -1610,16 +1643,15 @@
             if (qrAccName) qrAccName.textContent = qr.accountName;
             if (qrAccNo) qrAccNo.textContent = qr.accountNumber;
             if (qrImg) qrImg.src = qr.qrUrl;
+            successQrIsDemo = qr.isDemo === true;
+            updateSuccessQrDemoLabels(successQrIsDemo);
           } catch (error) {
-            const fallbackAmount = Math.round(Number(order.tongTien || 0));
-            const fallbackMemo = `SAMAMOBILE ${order.maDH}`;
-            const fallbackQrUrl = `https://img.vietqr.io/image/970422-098765432100-compact2.png?amount=${fallbackAmount}&addInfo=${encodeURIComponent(fallbackMemo)}&accountName=${encodeURIComponent('SAMAMOBILE STORE')}`;
-            if (memoText) memoText.textContent = fallbackMemo;
-            if (qrAmount) qrAmount.textContent = formatVND(fallbackAmount);
-            if (qrBank) qrBank.textContent = 'MB';
-            if (qrAccName) qrAccName.textContent = 'SAMAMOBILE STORE';
-            if (qrAccNo) qrAccNo.textContent = '098765432100';
-            if (qrImg) qrImg.src = fallbackQrUrl;
+            vietQrBox.classList.add('hidden');
+            if (qrImg) qrImg.removeAttribute('src');
+            if (titleEl) titleEl.textContent = 'Đơn hàng đang chờ thanh toán';
+            if (subEl) subEl.textContent = error.message || 'Chưa lấy được mã QR.';
+            startPaymentPolling(order.maDH);
+            return;
           }
 
           startQrCountdown(order.ngayDat);
@@ -1681,6 +1713,19 @@
     }, 1000);
   }
 
+  function updateSuccessQrDemoLabels(isDemo) {
+    const notice = document.getElementById('success-qr-realtime-status');
+    const button = document.getElementById('btn-manual-confirm-qr');
+    const title = document.getElementById('success-screen-title');
+    const subtitle = document.getElementById('success-screen-subtitle');
+    if (notice) notice.textContent = isDemo ? 'QR demo · không chuyển tiền thật' : 'Đang chờ ngân hàng ghi nhận chuyển khoản…';
+    if (button) button.textContent = isDemo ? 'Mô phỏng thanh toán thành công' : 'Tôi đã chuyển (Kiểm tra ngay)';
+    if (isDemo && title) title.textContent = 'Đơn hàng thử nghiệm';
+    if (isDemo && subtitle) subtitle.textContent = 'Bấm mô phỏng thanh toán để thử luồng xử lý đơn.';
+    const account = document.getElementById('success-qr-account-no');
+    if (account?.parentElement?.parentElement) account.parentElement.parentElement.hidden = isDemo;
+  }
+
   window.confirmQrTransferSuccess = async function () {
     const elCode = document.getElementById('success-order-code');
     const orderCode = elCode ? elCode.textContent.trim() : '';
@@ -1693,7 +1738,10 @@
         return;
       }
 
-      // Chế độ Demo: cho phép khách bấm "Tôi đã chuyển" để xác nhận thanh toán ngay & chuyển sang Admin đóng gói giao hàng
+      if (!successQrIsDemo) {
+        showToast('Chưa thấy giao dịch khớp với đơn hàng. Vui lòng kiểm tra lại sau.');
+        return;
+      }
       const demoRes = await window.api.post('/payment/demo-confirm/' + encodeURIComponent(orderCode), {});
       if (demoRes && (demoRes.isPaid || demoRes.success)) {
         handlePaymentSuccessUI(orderCode, demoRes.tongTien || status.tongTien, demoRes.trangThai || 'da_xac_nhan');
@@ -1982,6 +2030,10 @@
 
     try {
       const qr = await window.api.get('/payment/vietqr/' + encodeURIComponent(order.maDH));
+      modalQrIsDemo = qr.isDemo === true;
+      if (title && modalQrIsDemo) title.textContent = 'QR demo · không chuyển tiền thật';
+      const confirm = document.querySelector('#order-qr-modal button[onclick*=confirmModalPayment]');
+      if (confirm) confirm.textContent = modalQrIsDemo ? 'Mô phỏng thanh toán thành công' : 'Kiểm tra thanh toán';
       if (memo) memo.textContent = qr.memo;
       if (amount) amount.textContent = formatVND(qr.amount);
       if (img) img.src = qr.qrUrl;
@@ -1995,13 +2047,17 @@
     const modal = document.getElementById('order-qr-modal');
     if (modal) modal.classList.add('hidden');
     activeModalOrderCode = null;
+    modalQrIsDemo = false;
   };
 
   window.confirmModalPayment = async function () {
     if (!activeModalOrderCode) return;
     const code = activeModalOrderCode;
     try {
-      const status = await window.api.get('/payment/status/' + encodeURIComponent(code));
+      let status = await window.api.get('/payment/status/' + encodeURIComponent(code));
+      if (!status.isPaid && modalQrIsDemo) {
+        status = await window.api.post('/payment/demo-confirm/' + encodeURIComponent(code), {});
+      }
       if (!status.isPaid) {
         showToast('Chưa thấy giao dịch khớp với đơn hàng. Vui lòng kiểm tra lại sau.');
         return;

@@ -37,6 +37,12 @@ public class PurchasingController : ControllerBase
         return Ok(items);
     }
 
+    [HttpGet("suppliers/by-product/{maHang}")]
+    public async Task<IActionResult> GetSupplierCodesForProduct(string maHang)
+    {
+        return Ok(await _purchasingService.GetSupplierCodesForProductAsync(maHang));
+    }
+
     [HttpGet("{so}")]
     public async Task<IActionResult> GetBySo(string so)
     {

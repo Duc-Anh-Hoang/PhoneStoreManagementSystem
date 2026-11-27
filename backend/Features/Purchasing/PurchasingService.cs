@@ -352,6 +352,13 @@ public class PurchasingService : IPurchasingService
         return (result, totalCount);
     }
 
+    public Task<List<string>> GetSupplierCodesForProductAsync(string maHang) =>
+        _context.ChiTietPhieuNhaps.AsNoTracking()
+            .Where(item => item.MaHang == maHang && item.PhieuNhap != null)
+            .Select(item => item.PhieuNhap!.MaNCC)
+            .Distinct()
+            .ToListAsync();
+
     public async Task<PhieuNhapDto> GetBySoAsync(string soPN)
     {
         var p = await _context.PhieuNhaps

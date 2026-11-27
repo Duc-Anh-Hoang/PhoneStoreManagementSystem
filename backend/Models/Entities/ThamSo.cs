@@ -11,6 +11,10 @@ public class ThamSo
     [MaxLength(30)]
     public string MaThamSo { get; set; } = string.Empty;
 
+    [Column("mahienthi")]
+    [MaxLength(30)]
+    public string? MaHienThi { get; set; }
+
     [Column("tenthamso")]
     [MaxLength(100)]
     public string TenThamSo { get; set; } = string.Empty;

@@ -11,6 +11,7 @@ using PhoneStoreAPI.Features.OnlineOrders;
 using PhoneStoreAPI.Features.OnlineOrders.Hubs;
 using PhoneStoreAPI.Features.Payment.DTOs;
 using System.Text.RegularExpressions;
+using QRCoder;
 
 namespace PhoneStoreAPI.Features.Payment;
 
@@ -56,6 +57,24 @@ public class PaymentService : IPaymentService
             donHang.NgayDat.AddMinutes(15) <= DateTime.UtcNow)
         {
             throw new ConflictException("Đơn hàng không còn trong thời gian chờ quét mã.");
+        }
+
+        if (_serviceProvider.GetService<IHostEnvironment>()?.IsDevelopment() == true &&
+            _configuration.GetValue<bool>("Payment:DemoAutoConfirm"))
+        {
+            using var data = QRCodeGenerator.GenerateQrCode($"SAMAMOBILE DEMO | {donHang.MaDH} | {donHang.TongTien:0} VND", QRCodeGenerator.ECCLevel.M);
+            using var qr = new PngByteQRCode(data);
+            return new VietQrResponse
+            {
+                IsDemo = true,
+                MaDH = donHang.MaDH,
+                BankId = "DEMO",
+                BankBin = "",
+                AccountName = "Thanh toán mô phỏng",
+                Amount = donHang.TongTien,
+                Memo = $"DEMO {donHang.MaDH}",
+                QrUrl = "data:image/png;base64," + Convert.ToBase64String(qr.GetGraphic(6))
+            };
         }
 
         var bankId = _configuration["VietQR:BankId"];

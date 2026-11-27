@@ -2,6 +2,7 @@ namespace PhoneStoreAPI.Features.Payment.DTOs;
 
 public class VietQrResponse
 {
+    public bool IsDemo { get; set; }
     public string MaDH { get; set; } = string.Empty;
     public string BankId { get; set; } = "MB";
     public string BankBin { get; set; } = "970422";

@@ -221,56 +221,16 @@
       }
 
       try {
-        // 1. Kiểm tra tài khoản đã tồn tại và hoàn tất hồ sơ hay chưa
-        let existingUser = null;
-        try {
-          const regList = JSON.parse(localStorage.getItem('samamobile_registered_users') || '[]');
-          existingUser = regList.find(u => u.sdt && u.sdt.replace(/\s/g, '') === phone && u.isProfileComplete);
-        } catch (e) {}
-
-        let backendToken = null;
-        try {
-          const resp = await fetch(`${API_BASE}/auth/customer-login`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ phone })
-          });
-          if (resp.ok) {
-            const resJson = await resp.json().catch(() => ({}));
-            if (resJson && resJson.token) backendToken = resJson.token;
-            const u = resJson.user || resJson.customer;
-            if (u && u.hoTen && u.hoTen !== 'Khách Hàng' && !existingUser) {
-              existingUser = {
-                type: 'customer',
-                role: 'CUSTOMER',
-                maKH: u.maKH || '',
-                hoTen: u.hoTen,
-                sdt: phone,
-                email: u.email || '',
-                diaChi: u.diaChi || '',
-                isProfileComplete: true,
-                token: backendToken || ('cust_token_' + Date.now())
-              };
-            }
-          }
-        } catch (e) {}
-
-        // 2. Tự động đăng nhập và lưu hồ sơ (không bắt chuyển sang complete-registration.html)
-        const completeUser = {
-          type: 'customer',
-          role: 'CUSTOMER',
-          maKH: existingUser?.maKH || ('KH_' + Math.floor(100000 + Math.random() * 900000)),
-          hoTen: existingUser?.hoTen || ('Khách hàng ' + phone.slice(-4)),
-          sdt: phone,
-          email: existingUser?.email || '',
-          diaChi: existingUser?.diaChi || 'TP. Hồ Chí Minh',
-          taiKhoan: existingUser?.taiKhoan || ('user_' + phone.slice(-4)),
-          avatar: existingUser?.avatar || '',
-          isProfileComplete: true,
-          diemTichLuy: existingUser?.diemTichLuy || 100,
-          hangThanhVien: existingUser?.hangThanhVien || 'S-Member',
-          token: backendToken || existingUser?.token || ('cust_token_' + Date.now())
-        };
+        const resp = await fetch(API_BASE + '/auth/customer-login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone })
+        });
+        const data = await resp.json().catch(() => ({}));
+        if (!resp.ok || !data.token || !data.user?.maKH) {
+          throw new Error(data.message || 'Không đăng nhập được tài khoản khách hàng');
+        }
+        const completeUser = { ...data.user, token: data.token, type: 'customer', role: 'CUSTOMER', isProfileComplete: true };
 
         localStorage.setItem('cellphones_auth_user', JSON.stringify(completeUser));
         localStorage.setItem('customer_token', completeUser.token);
@@ -430,8 +390,6 @@
   // =========================================================================
 
   let currentLoginMethod = 'phone';
-  let cachedOtpEmail = '';
-  let cachedOtpCode = '';
   let otpCountdownTimer = null;
 
   window.switchLoginMethod = function(method) {
@@ -473,204 +431,16 @@
     }
   };
 
-  window.sendEmailOtp = async function() {
-    const emailInput = document.getElementById('customer-login-email');
-    const email = (emailInput ? emailInput.value : '').trim().toLowerCase();
-    const errorMsg = document.getElementById('customer-login-error');
-    const errorText = document.getElementById('customer-login-error-text');
-    const sendBtn = document.getElementById('btn-send-email-otp');
+  function showEmailLoginUnavailable() {
+    const error = document.getElementById('customer-login-error');
+    const label = document.getElementById('customer-login-error-text');
+    if (label) label.textContent = 'Vui lòng đăng nhập bằng Google hoặc số điện thoại.';
+    if (error) error.classList.remove('hidden');
+  }
 
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      if (errorMsg) {
-        if (errorText) errorText.textContent = 'Vui lòng nhập địa chỉ email hợp lệ (Ví dụ: tenban@gmail.com).';
-        else errorMsg.textContent = 'Vui lòng nhập địa chỉ email hợp lệ.';
-        errorMsg.classList.remove('hidden');
-      }
-      return;
-    }
+  window.sendEmailOtp = showEmailLoginUnavailable;
+  window.verifyEmailOtpAndLogin = showEmailLoginUnavailable;
 
-    if (errorMsg) errorMsg.classList.add('hidden');
-    if (sendBtn) {
-      sendBtn.disabled = true;
-      sendBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Đang gửi...';
-    }
-
-    // Sinh mã OTP 6 số chuẩn
-    const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
-    cachedOtpCode = generatedOtp;
-    cachedOtpEmail = email;
-
-    let emailSentViaBackend = false;
-    let finalOtp = generatedOtp;
-    try {
-      const resp = await fetch(API_BASE + '/email/send-otp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email, otpCode: generatedOtp, purpose: 'đăng nhập tài khoản Sama Member' })
-      });
-      const data = await resp.json().catch(() => ({}));
-      if (resp.ok && data) {
-        if (data.otpCode) {
-          finalOtp = data.otpCode;
-          cachedOtpCode = data.otpCode;
-        }
-        if (!data.isSimulated) {
-          emailSentViaBackend = true;
-        }
-      }
-    } catch (e) {
-      // Backend offline hoặc chưa có route email
-    }
-    cachedOtpCode = finalOtp;
-
-    // Hiển thị khung nhập OTP
-    const otpBox = document.getElementById('login-field-otp-box');
-    if (otpBox) otpBox.classList.remove('hidden');
-
-    const otpInput = document.getElementById('customer-login-otp');
-    if (otpInput) {
-      otpInput.value = '';
-      otpInput.focus();
-    }
-
-    // Bắt đầu đếm ngược 60 giây
-    let countdown = 60;
-    if (otpCountdownTimer) clearInterval(otpCountdownTimer);
-    if (sendBtn) {
-      sendBtn.disabled = true;
-      sendBtn.textContent = 'Gửi lại (' + countdown + 's)';
-    }
-    otpCountdownTimer = setInterval(() => {
-      countdown--;
-      if (countdown <= 0) {
-        clearInterval(otpCountdownTimer);
-        otpCountdownTimer = null;
-        if (sendBtn) {
-          sendBtn.disabled = false;
-          sendBtn.textContent = 'Gửi lại OTP';
-        }
-      } else {
-        if (sendBtn) sendBtn.textContent = 'Gửi lại (' + countdown + 's)';
-      }
-    }, 1000);
-
-    // Thông báo cho người dùng
-    if (window.CellphoneSCart || window.Cart) {
-      if (emailSentViaBackend) {
-        (window.CellphoneSCart || window.Cart).showToast('Mã OTP xác thực đã được gửi về hòm thư ' + email, 'success');
-      } else {
-        (window.CellphoneSCart || window.Cart).showToast('Mã OTP xác thực gửi về ' + email + ': [ ' + generatedOtp + ' ]', 'success');
-        if (otpInput) otpInput.value = generatedOtp;
-      }
-    } else {
-      alert('Mã OTP xác thực gửi về ' + email + ': ' + generatedOtp);
-    }
-  };
-
-  window.verifyEmailOtpAndLogin = async function() {
-    const email = cachedOtpEmail || (document.getElementById('customer-login-email')?.value || '').trim().toLowerCase();
-    const otp = (document.getElementById('customer-login-otp')?.value || '').trim();
-    const errorMsg = document.getElementById('customer-login-error');
-    const errorText = document.getElementById('customer-login-error-text');
-    const submitBtn = document.getElementById('btn-customer-do-login');
-
-    if (!otp || otp.length < 4) {
-      if (errorMsg) {
-        if (errorText) errorText.textContent = 'Vui lòng nhập mã OTP gồm 6 chữ số gửi về email của bạn.';
-        else errorMsg.textContent = 'Vui lòng nhập mã OTP gồm 6 chữ số.';
-        errorMsg.classList.remove('hidden');
-      }
-      return;
-    }
-
-    // Kiểm tra khớp OTP
-    if (cachedOtpCode && otp !== cachedOtpCode && otp !== '123456') {
-      if (errorMsg) {
-        if (errorText) errorText.textContent = 'Mã OTP không chính xác hoặc đã hết hạn. Vui lòng kiểm tra lại!';
-        else errorMsg.textContent = 'Mã OTP không chính xác!';
-        errorMsg.classList.remove('hidden');
-      }
-      return;
-    }
-
-    if (errorMsg) errorMsg.classList.add('hidden');
-    if (submitBtn) {
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Đang xác thực...';
-    }
-
-    try {
-      // 1. Kiểm tra tài khoản đã tồn tại và hoàn tất hồ sơ hay chưa
-      let existingProfile = null;
-      try {
-        const regList = JSON.parse(localStorage.getItem('samamobile_registered_users') || '[]');
-        existingProfile = regList.find(reg => 
-          reg.email && reg.email.toLowerCase() === email.toLowerCase() && reg.isProfileComplete
-        );
-      } catch (e) {}
-
-      // 2. Tự động đăng nhập và lưu hồ sơ (không bắt chuyển sang complete-registration.html)
-      const completeUser = {
-        type: 'customer',
-        role: 'CUSTOMER',
-        maKH: existingProfile?.maKH || ('KH_' + Math.floor(100000 + Math.random() * 900000)),
-        hoTen: existingProfile?.hoTen || (email.split('@')[0]),
-        email: email,
-        sdt: existingProfile?.sdt || '',
-        diaChi: existingProfile?.diaChi || 'TP. Hồ Chí Minh',
-        taiKhoan: existingProfile?.taiKhoan || (email.split('@')[0]),
-        avatar: existingProfile?.avatar || '',
-        isProfileComplete: true,
-        diemTichLuy: existingProfile?.diemTichLuy || 100,
-        hangThanhVien: existingProfile?.hangThanhVien || 'S-Member',
-        token: existingProfile?.token || ('email_token_' + Date.now())
-      };
-
-      localStorage.setItem('cellphones_auth_user', JSON.stringify(completeUser));
-      localStorage.setItem('customer_token', completeUser.token);
-      localStorage.removeItem('cellphones_pending_user');
-
-      try {
-        let regList = JSON.parse(localStorage.getItem('samamobile_registered_users') || '[]');
-        const idx = regList.findIndex(reg => reg.email && reg.email.toLowerCase() === email.toLowerCase());
-        if (idx > -1) {
-          regList[idx] = { ...regList[idx], ...completeUser };
-        } else {
-          regList.push(completeUser);
-        }
-        localStorage.setItem('samamobile_registered_users', JSON.stringify(regList));
-      } catch (e) {}
-
-      if (window.CellphoneSAuth || window.Auth) {
-        (window.CellphoneSAuth || window.Auth).setUser(completeUser);
-      }
-      window.CellphoneSCustomerPortal.closeLoginModal();
-      if (window.CellphoneSCart || window.Cart) {
-        (window.CellphoneSCart || window.Cart).showToast('Chào mừng ' + completeUser.hoTen + ' đã đăng nhập!', 'success');
-      }
-      return;
-
-    } catch (err) {
-      if (errorMsg) {
-        if (errorText) errorText.textContent = 'Lỗi kết nối xác thực: ' + err.message;
-        else errorMsg.textContent = 'Lỗi kết nối xác thực: ' + err.message;
-        errorMsg.classList.remove('hidden');
-      }
-    } finally {
-      if (submitBtn) {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = 'Tiếp tục';
-      }
-    }
-  };
-
-  /**
-   * 3. ĐĂNG NHẬP GOOGLE OAUTH THỰC TẾ (Sử dụng Google Identity Services SDK)
-   * Tự động chuyển đổi thông minh:
-   * - Khi chạy trên Tên miền HTTPS hoặc Localhost: Chạy Google Identity Services chính thức.
-   * - Khi chạy trên IP công khai (như Azure VM 20.198.178.34): Google OAuth 2.0 chặn với lỗi 400 (vì chính sách Google cấm dùng IP trần).
-   *   Hệ thống tự động kích hoạt Modal chọn tài khoản Google để trải nghiệm mượt mà không bị lỗi 400.
-   */
   window.triggerGoogleOAuthLogin = async function() {
     const btn = document.getElementById('btn-google-login');
     const originalText = btn ? btn.innerHTML : '';
@@ -726,39 +496,13 @@
 
               if (resp.ok) {
                 const data = await resp.json().catch(() => ({}));
-                if (data && data.token) {
+                if (data?.token && data.user?.maKH) {
                   applyCustomerLoginSuccess(data);
                   loginSuccess = true;
                 }
               }
             } catch (netErr) {
               console.warn('Backend chưa online, lấy trực tiếp thông tin từ Google API...');
-            }
-
-            // 2. Lấy hồ sơ chính thức trực tiếp từ Google UserInfo
-            if (!loginSuccess) {
-              try {
-                const gResp = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-                  headers: { 'Authorization': 'Bearer ' + tokenResponse.access_token }
-                });
-
-                if (gResp.ok) {
-                  const gUser = await gResp.json();
-                  applyCustomerLoginSuccess({
-                    token: 'google_token_' + (gUser.sub || Date.now()),
-                    user: {
-                      maKH: 'GG_' + (gUser.sub ? gUser.sub.slice(-6) : Math.floor(100000 + Math.random() * 900000)),
-                      hoTen: gUser.name || (gUser.email ? gUser.email.split('@')[0] : 'Khách Hàng Google'),
-                      email: gUser.email || '',
-                      avatar: gUser.picture || '',
-                      sdt: ''
-                    }
-                  }, gUser.email);
-                  loginSuccess = true;
-                }
-              } catch (gErr) {
-                console.error('Lỗi kết nối Google UserInfo API:', gErr);
-              }
             }
 
             if (!loginSuccess) {
@@ -804,17 +548,17 @@
     const completeUser = {
       type: 'customer',
       role: 'CUSTOMER',
-      maKH: existingProfile?.maKH || u.maKH || ('KH_' + Math.floor(100000 + Math.random() * 900000)),
-      hoTen: existingProfile?.hoTen || u.hoTen || (emailVal ? emailVal.split('@')[0] : 'Khách Hàng'),
+      maKH: u.maKH,
+      hoTen: u.hoTen,
       email: emailVal || existingProfile?.email || '',
       sdt: phoneVal || existingProfile?.sdt || '',
       avatar: u.avatar || existingProfile?.avatar || '',
       taiKhoan: existingProfile?.taiKhoan || (emailVal ? emailVal.split('@')[0] : (phoneVal ? 'user_' + phoneVal.slice(-4) : 'user')),
-      diaChi: existingProfile?.diaChi || u.diaChi || 'TP. Hồ Chí Minh',
+      diaChi: u.diaChi || '',
       isProfileComplete: true,
-      diemTichLuy: existingProfile?.diemTichLuy || 100,
+      diemTichLuy: u.diemTichLuy,
       hangThanhVien: existingProfile?.hangThanhVien || 'S-Member',
-      token: resJson.token || existingProfile?.token || ('cust_token_' + Date.now())
+      token: resJson.token
     };
 
     localStorage.setItem('cellphones_auth_user', JSON.stringify(completeUser));

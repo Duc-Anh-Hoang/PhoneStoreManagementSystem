@@ -7,7 +7,6 @@
   'use strict';
 
   const AUTH_KEY = 'cellphones_auth_user';
-  const REG_USERS_KEY = 'samamobile_registered_users';
 
   // Lấy dữ liệu user hiện tại
   function getCurrentUser() {
@@ -20,24 +19,12 @@
 
   // Khởi tạo trang Profile & Cài đặt
   function initProfilePage() {
-    let user = getCurrentUser();
+    const user = getCurrentUser();
 
-    // Nếu chưa đăng nhập, tự tạo tài khoản khách mặc định hoặc dùng tài khoản gần nhất
-    if (!user) {
-      user = {
-        hoTen: 'Khang Huy',
-        email: 'huykhang666@gmail.com',
-        sdt: '0383224846',
-        taiKhoan: 'huykhang666',
-        diaChi: '241 Lê Văn Việt, Phường Hiệp Phú, TP. Thủ Đức, TP. Hồ Chí Minh',
-        ngaySinh: '2000-01-01',
-        gioiTinh: 'Nam',
-        diemTichLuy: 200,
-        hangThanhVien: 'SamaMember',
-        avatar: '',
-        token: 'cust_' + Date.now()
-      };
-      localStorage.setItem(AUTH_KEY, JSON.stringify(user));
+    if (!user?.token) {
+      const main = document.querySelector('main');
+      if (main) main.textContent = 'Vui lòng đăng nhập để xem hồ sơ.';
+      return;
     }
 
     // Điền dữ liệu vào giao diện
@@ -52,7 +39,7 @@
     setupTabButtons();
 
     // Gắn sự kiện submit form
-    setupForms(user);
+    setupForms();
     setupMainHeader(user);
   }
 
@@ -162,100 +149,15 @@
       tabSettingsBtn.addEventListener('click', () => switchProfileTab('settings'));
     }
 
-    // Nút đổi avatar
-    const btnChangeAvatar = document.getElementById('btn-change-avatar');
-    if (btnChangeAvatar) {
-      btnChangeAvatar.addEventListener('click', () => {
-        const avatars = [
-          'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
-          'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
-          'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80',
-          'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80'
-        ];
-        const randomAvatar = avatars[Math.floor(Math.random() * avatars.length)];
-        let u = getCurrentUser() || {};
-        u.avatar = randomAvatar;
-        localStorage.setItem(AUTH_KEY, JSON.stringify(u));
-        populateUserData(u);
-        showToast('Đã cập nhật ảnh đại diện mới!', 'success');
-      });
-    }
   }
 
-  // Gắn sự kiện submit form
-  function setupForms(initialUser) {
-    // Form Cập nhật hồ sơ
-    const formProfile = document.getElementById('form-update-profile');
-    if (formProfile) {
-      formProfile.addEventListener('submit', function (e) {
-        e.preventDefault();
-
-        const fullname = (document.getElementById('profile-fullname')?.value || '').trim();
-        const phone = (document.getElementById('profile-phone')?.value || '').trim();
-        const email = (document.getElementById('profile-email')?.value || '').trim();
-        const dob = document.getElementById('profile-dob')?.value || '';
-        const address = (document.getElementById('profile-address')?.value || '').trim();
-        const gender = document.querySelector('input[name="profile-gender"]:checked')?.value || 'Nam';
-
-        if (!fullname) {
-          showToast('Vui lòng nhập họ và tên của bạn!', 'error');
-          return;
-        }
-
-        let user = getCurrentUser() || initialUser;
-        user.hoTen = fullname;
-        user.sdt = phone;
-        user.email = email;
-        user.ngaySinh = dob;
-        user.diaChi = address;
-        user.gioiTinh = gender;
-
-        // Lưu vào localStorage
-        localStorage.setItem(AUTH_KEY, JSON.stringify(user));
-
-        // Cập nhật danh sách registered users nếu có
-        try {
-          let regList = JSON.parse(localStorage.getItem(REG_USERS_KEY) || '[]');
-          const idx = regList.findIndex(r => (r.email && r.email.toLowerCase() === user.email.toLowerCase()) || r.taiKhoan === user.taiKhoan);
-          if (idx > -1) {
-            regList[idx] = { ...regList[idx], ...user };
-          } else {
-            regList.push(user);
-          }
-          localStorage.setItem(REG_USERS_KEY, JSON.stringify(regList));
-        } catch (e) {}
-
-        populateUserData(user);
-        showToast('Cập nhật hồ sơ cá nhân thành công!', 'success');
-      });
-    }
-
-    // Form Đổi mật khẩu
-    const formPassword = document.getElementById('form-change-password');
-    if (formPassword) {
-      formPassword.addEventListener('submit', function (e) {
-        e.preventDefault();
-
-        const currentPass = document.getElementById('pwd-current')?.value || '';
-        const newPass = document.getElementById('pwd-new')?.value || '';
-        const confirmPass = document.getElementById('pwd-confirm')?.value || '';
-
-        if (!currentPass) {
-          showToast('Vui lòng nhập mật khẩu hiện tại!', 'error');
-          return;
-        }
-        if (!newPass || newPass.length < 6) {
-          showToast('Mật khẩu mới phải có tối thiểu 6 ký tự!', 'error');
-          return;
-        }
-        if (newPass !== confirmPass) {
-          showToast('Mật khẩu xác nhận không trùng khớp!', 'error');
-          return;
-        }
-
-        // Cập nhật mật khẩu thành công
-        formPassword.reset();
-        showToast('Đổi mật khẩu tài khoản thành công!', 'success');
+  function setupForms() {
+    for (const id of ['form-update-profile', 'form-change-password']) {
+      const form = document.getElementById(id);
+      if (!form) continue;
+      form.addEventListener('submit', event => {
+        event.preventDefault();
+        showToast('Vui lòng liên hệ cửa hàng để cập nhật thông tin tài khoản.', 'error');
       });
     }
   }

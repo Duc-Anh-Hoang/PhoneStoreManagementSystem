@@ -46,7 +46,7 @@ public class SystemSettingsController : ControllerBase
             name.Length is < 1 or > 100 || unit?.Length > 20 ||
             request.GiaTri < 0 || request.GiaTri > 9999999999999999.99m || decimal.Round(request.GiaTri, 2) != request.GiaTri)
             return BadRequest(new { message = "Mã, tên, đơn vị hoặc giá trị tham số không hợp lệ." });
-        if (await db.ThamSos.AnyAsync(t => t.MaThamSo == code))
+        if (await db.ThamSos.AnyAsync(t => t.MaThamSo == code || t.MaHienThi == code))
             return Conflict(new { message = "Mã tham số đã tồn tại." });
         db.ThamSos.Add(new ThamSo { MaThamSo = code, TenThamSo = name, DonVi = unit, GiaTri = request.GiaTri });
         await db.SaveChangesAsync();

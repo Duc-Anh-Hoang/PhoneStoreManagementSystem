@@ -15,11 +15,14 @@ namespace PhoneStoreAPI.Features.TradeIn;
 [Route("api/trade-in/bookings")]
 public class TradeInController(AppDbContext db, IHubContext<OrderHub> hubContext) : ControllerBase
 {
+    private const string BranchAddress = "241 Lê Văn Việt, TP. Thủ Đức, TP.HCM";
+
     [HttpPost, AllowAnonymous, EnableRateLimiting("checkout"), RequestSizeLimit(16384)]
     public async Task<IActionResult> Create(BookingRequest request, CancellationToken ct)
     {
-        if (request.RequestId == Guid.Empty || request.TargetProduct.ValueKind != JsonValueKind.Object ||
-            request.UsedDevice.ValueKind != JsonValueKind.Object)
+        if (request.RequestId == Guid.Empty || !HasText(request.TargetProduct, "name") ||
+            !HasText(request.UsedDevice, "model") ||
+            (request.Branch != BranchAddress && request.Branch != $"Chi nhánh 1: {BranchAddress}"))
             return BadRequest(new { message = "Thông tin phiếu thu cũ chưa đầy đủ." });
 
         var code = $"TC-{request.RequestId:N}";
@@ -27,9 +30,9 @@ public class TradeInController(AppDbContext db, IHubContext<OrderHub> hubContext
         var device = request.UsedDevice.GetRawText();
         var updated = await db.Database.ExecuteSqlInterpolatedAsync($"""
             INSERT INTO trade_in_bookings(code,name,phone,branch,target_product,used_device)
-            VALUES ({code},{request.Name},{request.Phone},{request.Branch},CAST({target} AS jsonb),CAST({device} AS jsonb))
+            VALUES ({code},{request.Name},{request.Phone},{BranchAddress},CAST({target} AS jsonb),CAST({device} AS jsonb))
             ON CONFLICT (code) DO UPDATE SET code=excluded.code
-            WHERE (trade_in_bookings.name, trade_in_bookings.phone, trade_in_bookings.branch,
+            WHERE (trade_in_bookings.name, trade_in_bookings.phone, replace(trade_in_bookings.branch, 'Chi nhánh 1: ', ''),
                    trade_in_bookings.target_product, trade_in_bookings.used_device) =
                   (excluded.name, excluded.phone, excluded.branch, excluded.target_product, excluded.used_device)
             """, ct);
@@ -42,7 +45,7 @@ public class TradeInController(AppDbContext db, IHubContext<OrderHub> hubContext
                 code,
                 name = request.Name,
                 phone = request.Phone,
-                branch = request.Branch,
+                branch = BranchAddress,
                 createdAt = DateTime.UtcNow
             }, ct);
         }
@@ -51,13 +54,23 @@ public class TradeInController(AppDbContext db, IHubContext<OrderHub> hubContext
         return Ok(new { code });
     }
 
+    private static bool HasText(JsonElement value, string key) =>
+        value.ValueKind == JsonValueKind.Object && value.TryGetProperty(key, out var text) &&
+        text.ValueKind == JsonValueKind.String && !string.IsNullOrWhiteSpace(text.GetString());
+
     [HttpGet, Authorize(Roles = $"{AppConstants.Roles.Admin},{AppConstants.Roles.Manager},{AppConstants.Roles.Sales}")]
-    public async Task<IActionResult> List([FromQuery] int page = 1, CancellationToken ct = default)
+    public async Task<IActionResult> List([FromQuery] int page = 1, [FromQuery] string? phone = null, CancellationToken ct = default)
     {
+        var localPhone = phone?.Trim();
+        if (localPhone?.StartsWith("+84", StringComparison.Ordinal) == true)
+            localPhone = "0" + localPhone[3..];
+        var internationalPhone = localPhone?.StartsWith('0') == true ? "+84" + localPhone[1..] : localPhone;
+        var showAll = string.IsNullOrEmpty(localPhone);
         var offset = (Math.Clamp(page, 1, 1000000) - 1) * 50;
         var json = await db.Database.SqlQuery<string>($"""
             SELECT coalesce(json_agg(b),'[]')::text AS "Value" FROM
-                (SELECT code,name,phone,branch,status,created_at FROM trade_in_bookings
+                (SELECT code,name,phone,branch,status,created_at,target_product,used_device FROM trade_in_bookings
+                 WHERE {showAll} OR phone IN ({localPhone}, {internationalPhone})
                  ORDER BY created_at DESC,code LIMIT 50 OFFSET {offset}) b
             """).SingleAsync(ct);
         return Content(json, "application/json");
@@ -66,6 +79,8 @@ public class TradeInController(AppDbContext db, IHubContext<OrderHub> hubContext
     [HttpGet("{code}"), Authorize(Roles = $"{AppConstants.Roles.Admin},{AppConstants.Roles.Manager},{AppConstants.Roles.Sales}")]
     public async Task<IActionResult> Get(string code, CancellationToken ct)
     {
+        if (code.StartsWith("TC-", StringComparison.OrdinalIgnoreCase))
+            code = "TC-" + code[3..].ToLowerInvariant();
         var json = await db.Database.SqlQuery<string>($"""
             SELECT row_to_json(b)::text AS "Value" FROM trade_in_bookings b WHERE code={code}
             """).SingleOrDefaultAsync(ct);

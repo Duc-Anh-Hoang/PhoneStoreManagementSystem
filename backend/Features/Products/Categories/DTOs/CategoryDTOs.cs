@@ -9,6 +9,7 @@ public class NhomHangDto
 
 public class CreateNhomHangRequest
 {
+    public List<string> MaHangs { get; set; } = new();
     public string MaNhom { get; set; } = string.Empty;
     public string TenNhom { get; set; } = string.Empty;
 }
@@ -27,6 +28,7 @@ public class LoaiHangDto
 
 public class CreateLoaiHangRequest
 {
+    public List<string> MaHangs { get; set; } = new();
     public string MaLoai { get; set; } = string.Empty;
     public string TenLoai { get; set; } = string.Empty;
 }

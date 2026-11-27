@@ -14,11 +14,13 @@ public class PaymentController : ControllerBase
     private readonly IPaymentService _paymentService;
 
     private readonly IConfiguration _configuration;
+    private readonly IWebHostEnvironment _environment;
 
-    public PaymentController(IPaymentService paymentService, IConfiguration configuration)
+    public PaymentController(IPaymentService paymentService, IConfiguration configuration, IWebHostEnvironment environment)
     {
         _paymentService = paymentService;
         _configuration = configuration;
+        _environment = environment;
     }
 
     /// <summary>
@@ -50,7 +52,7 @@ public class PaymentController : ControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> DemoConfirmPayment(string maDH)
     {
-        var demoEnabled = _configuration.GetValue<bool>("Payment:DemoAutoConfirm");
+        var demoEnabled = _environment.IsDevelopment() && _configuration.GetValue<bool>("Payment:DemoAutoConfirm");
         if (!demoEnabled)
         {
             return StatusCode(403, new { message = "Chức năng xác nhận demo đang tắt." });
@@ -61,6 +63,9 @@ public class PaymentController : ControllerBase
         {
             return Ok(new { success = true, isPaid = true, tongTien = status.TongTien, trangThai = status.TrangThai });
         }
+        if (status.TrangThai != AppConstants.OrderStatus.ChoThanhToan ||
+            status.NgayDat is not DateTime createdAt || createdAt.AddMinutes(15) <= DateTime.UtcNow)
+            return Conflict(new { message = "Đơn hàng không còn chờ thanh toán." });
 
         await _paymentService.ConfirmOrderPaymentAsync(maDH, new ConfirmPaymentRequest
         {

@@ -198,8 +198,8 @@ const AdminRealtimeData = {
     });
 
     window.addEventListener('samamobile:trade_in_created', () => {
-      if (currentActiveSection === 'view-thucu' && typeof window.renderThuCuTable === 'function') {
-        window.renderThuCuTable();
+      if (currentActiveSection === 'view-thucu') {
+        void loadTradeInBookings();
       }
     });
 
@@ -500,6 +500,8 @@ function renderSection(sectionId) {
     if (dash) dash.classList.remove('hidden');
     currentActiveSection = 'view-dashboard';
   }
+
+  try { sessionStorage.setItem('admin_active_section', currentActiveSection); } catch {}
 
   // Cập nhật trạng thái active sidebar (Tone màu Trắng & Xanh dương sáng rõ)
   document.querySelectorAll('.admin-nav-link').forEach(link => {
@@ -1532,12 +1534,12 @@ async function renderHoaDonTable() {
   const tbody = document.getElementById('table-hoadon-body');
   if (!tbody) return;
 
-  tbody.innerHTML = '<tr><td colspan="9" class="p-4 text-center text-slate-500">Đang tải danh sách hóa đơn...</td></tr>';
+  tbody.innerHTML = '<tr><td colspan="10" class="p-4 text-center text-slate-500">Đang tải danh sách hóa đơn...</td></tr>';
 
   try {
     const list = await getAdminPages('/hoadon');
     if (!list || list.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="9" class="p-4 text-center text-slate-400">Chưa có hóa đơn nào</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="10" class="p-4 text-center text-slate-400">Chưa có hóa đơn nào</td></tr>';
       return;
     }
 
@@ -1549,13 +1551,15 @@ async function renderHoaDonTable() {
         ? `<span class="font-mono text-indigo-700">${imeiList.join(', ')}</span>`
         : `<span class="text-slate-400 italic text-[11px]">Không áp dụng (Phụ kiện)</span>`;
       const ngay = fmtLocalDateTime(h.ngayLap);
-      const tenKh = h.tenKhachHang || h.tenKH || 'Khách lẻ';
+      const tenKh = escapeAdminChatHtml(h.tenKhachHang || h.tenKH || 'Khách lẻ');
+      const products = (h.chiTiet || []).map(item => escapeAdminChatHtml(item.tenHang || item.maHang) + ' ×' + item.slBan).join('<br>');
 
       return `
         <tr class="border-b border-slate-200 hover:bg-slate-50 transition-colors">
           <td class="p-3.5 font-mono font-bold text-xs text-slate-800 whitespace-nowrap">${h.soHD}</td>
           <td class="p-3.5 text-xs text-slate-500 whitespace-nowrap">${ngay}</td>
-          <td class="p-3.5 font-semibold text-sm text-navy whitespace-nowrap">${tenKh}</td>
+          <td class="p-3.5 font-semibold text-sm text-navy whitespace-nowrap">${tenKh}${h.sdtKhachHang ? `<div class="text-xs font-normal text-slate-500">${escapeAdminChatHtml(h.sdtKhachHang)}</div>` : ''}</td>
+          <td class="p-3.5 text-xs text-slate-700 min-w-[180px]">${products || '—'}</td>
           <td class="p-3.5 text-xs text-center whitespace-nowrap">${Format.statusBadge(h.kenhBan)}</td>
           <td class="p-3.5 text-xs whitespace-nowrap">${imeiStr}</td>
           <td class="p-3.5 font-medium text-xs text-slate-700 text-right whitespace-nowrap font-mono">${Format.currency(h.tongTien)}</td>
@@ -1566,50 +1570,83 @@ async function renderHoaDonTable() {
       `;
     }).join('');
   } catch (err) {
-    tbody.innerHTML = `<tr><td colspan="9" class="p-4 text-center text-rose-500">Lỗi tải hóa đơn: ${err.message}</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="10" class="p-4 text-center text-rose-500">Lỗi tải hóa đơn: ${err.message}</td></tr>`;
   }
 }
 
-async function openLapHoaDonModal() {
+let selectedPosProduct = null;
+const adminProductSearchTimers = new Map();
+
+function openLapHoaDonModal() {
   const modal = document.getElementById('modal-lap-hoadon');
   if (!modal) return;
+  const input = document.getElementById('pos-search-mathang');
+  input.value = '';
+  modal.classList.remove('hidden');
+  searchPosProducts();
+  input.focus();
+}
 
-  const selectMH = document.getElementById('pos-select-mathang');
-  try {
-    // Luôn ưu tiên lấy dữ liệu mặt hàng và tồn kho trực tiếp từ backend API
-    const products = await getAdminPages('/mathang');
-    window._posProductList = Array.isArray(products) ? products : [];
-    if (selectMH) {
-      selectMH.innerHTML = window._posProductList.map(m => `
-        <option value="${m.maHang}" data-quanlyimei="${m.quanLyImei ? 'true' : 'false'}" data-tonkho="${m.tonKho != null ? m.tonKho : 0}">
-          ${m.tenHang} - ${Format.currency(m.donGia)} (Kho: ${m.tonKho != null ? m.tonKho : 0} ${m.dvt || 'Cái'}${m.quanLyImei ? ' - Có IMEI' : ' - Phụ kiện'})
-        </option>
-      `).join('');
+function searchPosProducts() {
+  searchAdminProducts('pos-search-mathang', 'pos-product-results', product => {
+    selectedPosProduct = product;
+    void updatePosImeiOptions();
+  }, product => Format.currency(product.donGia) + ' · Kho: ' + product.tonKho);
+}
+
+function searchAdminProducts(inputId, resultsId, selectProduct, describeProduct) {
+  const input = document.getElementById(inputId);
+  const results = document.getElementById(resultsId);
+  const keyword = input.value.trim();
+  clearTimeout(adminProductSearchTimers.get(inputId));
+  adminProductSearchTimers.delete(inputId);
+  selectProduct(null);
+  results.textContent = keyword ? 'Đang tìm mặt hàng…' : '';
+  results.hidden = !keyword;
+  if (!keyword) return;
+
+  const timer = setTimeout(async () => {
+    try {
+      const products = await api.get('/mathang?pageSize=12&keyword=' + encodeURIComponent(keyword));
+      if (adminProductSearchTimers.get(inputId) !== timer) return;
+      results.replaceChildren();
+      if (!products.length) results.textContent = 'Không tìm thấy mặt hàng.';
+      for (const product of products) {
+        const option = document.createElement('button');
+        option.type = 'button';
+        option.className = 'block w-full px-3 py-2 text-left hover:bg-blue-50 focus:bg-blue-50';
+        option.textContent = product.maHang + ' · ' + product.tenHang + ' · ' + describeProduct(product);
+        option.addEventListener('click', () => {
+          selectProduct(product);
+          input.value = product.tenHang + ' (' + product.maHang + ')';
+          results.hidden = true;
+        });
+        results.append(option);
+      }
+    } catch {
+      if (adminProductSearchTimers.get(inputId) === timer) results.textContent = 'Không tải được mặt hàng.';
     }
-    await updatePosImeiOptions();
-    modal.classList.remove('hidden');
-  } catch (err) {
-    showToast('Lỗi tải danh sách mặt hàng: ' + err.message, 'error');
-  }
+  }, 250);
+  adminProductSearchTimers.set(inputId, timer);
 }
 
 async function updatePosImeiOptions() {
-  const selectMH = document.getElementById('pos-select-mathang');
   const selectImei = document.getElementById('pos-select-imei');
   const imeiContainer = document.getElementById('pos-imei-container');
   const qtyContainer = document.getElementById('pos-qty-container');
   const imeiLabel = document.getElementById('pos-imei-label');
-  if (!selectMH || !selectImei) return;
-
-  const maHang = selectMH.value;
-  if (!maHang) {
-    selectImei.innerHTML = '<option value="">-- Chưa chọn mặt hàng --</option>';
+  if (!selectImei) return;
+  const product = selectedPosProduct;
+  if (!product) {
+    imeiContainer?.classList.add('hidden');
+    qtyContainer?.classList.add('hidden');
+    selectImei.required = false;
+    selectImei.disabled = true;
+    selectImei.replaceChildren();
     return;
   }
 
-  const selectedOpt = selectMH.selectedOptions[0];
-  const isImei = selectedOpt?.getAttribute('data-quanlyimei') === 'true';
-  const tonKho = parseInt(selectedOpt?.getAttribute('data-tonkho') || '0', 10);
+  const { maHang, quanLyImei: isImei, tonKho } = product;
 
   if (!isImei) {
     // Hàng phụ kiện (không quản lý IMEI)
@@ -1634,17 +1671,19 @@ async function updatePosImeiOptions() {
   selectImei.innerHTML = '<option value="">Đang tải IMEI khả dụng trong kho...</option>';
 
   try {
-    const imeis = await api.get('/imei/available/' + encodeURIComponent(maHang)).catch(() => []);
+    const imeis = await api.get('/imei/available/' + encodeURIComponent(maHang));
+    if (product !== selectedPosProduct) return;
     if (!imeis || imeis.length === 0) {
       selectImei.disabled = true;
       selectImei.innerHTML = '<option value="">-- HẾT HÀNG TRONG KHO (0 IMEI khả dụng) --</option>';
     } else {
       selectImei.disabled = false;
       selectImei.innerHTML = imeis.map(i => `
-        <option value="${i.soIMEI || i.soImei}">${i.soIMEI || i.soImei} (${i.soPn || i.soPN || 'Lô nhập'})</option>
+        <option value="${i.soIMEI || i.soImei}">${i.soIMEI || i.soImei}</option>
       `).join('');
     }
   } catch (err) {
+    if (product !== selectedPosProduct) return;
     selectImei.disabled = true;
     selectImei.innerHTML = '<option value="">-- Lỗi tải danh sách IMEI --</option>';
   }
@@ -1654,11 +1693,19 @@ async function saveLapHoaDon(e) {
   e.preventDefault();
   const form = e.target;
   const tenKH = form.tenKH.value.trim();
-  const selectMH = document.getElementById('pos-select-mathang');
-  const maHang = selectMH.value;
-  const selectedOpt = selectMH.selectedOptions[0];
-  const isImei = selectedOpt?.getAttribute('data-quanlyimei') === 'true';
-  const tonKho = parseInt(selectedOpt?.getAttribute('data-tonkho') || '0', 10);
+  const sdtKH = form.sdtKH.value.replace(/[\s.()-]/g, '');
+  if (!/^(0|\+84)[35789][0-9]{8}$/.test(sdtKH)) {
+    showToast('Nhập số điện thoại di động hợp lệ.', 'error');
+    form.sdtKH.focus();
+    return;
+  }
+  const maKM = form.maKM.value.trim();
+
+  if (!selectedPosProduct) {
+    showToast('Chọn mặt hàng từ danh sách kết quả.', 'error');
+    return;
+  }
+  const { maHang, quanLyImei: isImei, tonKho } = selectedPosProduct;
 
   const selectImei = document.getElementById('pos-select-imei');
   const soImei = selectImei ? selectImei.value : null;
@@ -1678,7 +1725,7 @@ async function saveLapHoaDon(e) {
 
   const chiTietItem = {
     maHang: maHang,
-    slBan: soLuong
+    soLuong: soLuong
   };
   if (isImei && soImei) {
     chiTietItem.soIMEI = soImei;
@@ -1686,6 +1733,9 @@ async function saveLapHoaDon(e) {
 
   const payload = {
     kenhBan: 'tai_quay',
+    tenKhachLe: tenKH,
+    sdtKhachLe: sdtKH,
+    maKM: maKM || null,
     phuongThucThanhToan: phuongThuc,
     chiTiet: [ chiTietItem ]
   };
@@ -1805,31 +1855,76 @@ async function renderNhapKhoTable() {
   }
 }
 
+let selectedPurchaseProduct = null;
+let purchaseSuppliers = [];
+let purchaseSuggestedCodes = null;
+let purchaseSupplierLoadId = 0;
+
+function renderPurchaseSuppliers() {
+  const select = document.getElementById('purchase-supplier');
+  const showAll = document.getElementById('purchase-show-all-suppliers');
+  const status = document.getElementById('purchase-supplier-status');
+  const previous = select.value;
+
+  if (!selectedPurchaseProduct || purchaseSuggestedCodes === null) {
+    select.replaceChildren(new Option(selectedPurchaseProduct ? 'Đang tìm nhà cung cấp…' : 'Chọn mặt hàng trước', ''));
+    select.disabled = true;
+    showAll.disabled = true;
+    status.textContent = '';
+    return;
+  }
+
+  const suggested = purchaseSuppliers.filter(supplier => purchaseSuggestedCodes.has(supplier.maNCC));
+  const choices = showAll.checked || !suggested.length ? purchaseSuppliers : suggested;
+  select.replaceChildren(new Option('Chọn nhà cung cấp', ''), ...choices.map(supplier => new Option(supplier.tenNCC, supplier.maNCC)));
+  if (choices.some(supplier => supplier.maNCC === previous)) select.value = previous;
+  select.disabled = choices.length === 0;
+  showAll.disabled = !suggested.length || suggested.length === purchaseSuppliers.length;
+  status.textContent = !choices.length ? 'Chưa có nhà cung cấp.' :
+    !suggested.length ? 'Chưa tìm thấy nhà cung cấp theo mặt hàng. Chọn trong danh sách hiện có.' : '';
+}
+
+async function selectPurchaseProduct(product) {
+  const loadId = ++purchaseSupplierLoadId;
+  selectedPurchaseProduct = product;
+  purchaseSuggestedCodes = null;
+  document.getElementById('purchase-show-all-suppliers').checked = false;
+  renderPurchaseSuppliers();
+  if (!product) return;
+
+  const supplierCodes = await api.get('/purchasing/suppliers/by-product/' + encodeURIComponent(product.maHang))
+    .catch(() => []);
+  if (loadId !== purchaseSupplierLoadId) return;
+
+  const brand = product.tenLoai?.trim().toLowerCase();
+  const brandMatches = purchaseSuppliers.filter(supplier => brand && brand.length >= 3 &&
+    supplier.tenNCC.toLowerCase().includes(brand));
+  purchaseSuggestedCodes = new Set([...supplierCodes, ...brandMatches.map(supplier => supplier.maNCC)]);
+  renderPurchaseSuppliers();
+}
+
+function searchPurchaseProducts() {
+  searchAdminProducts('purchase-product-search', 'purchase-product-results', product => {
+    void selectPurchaseProduct(product);
+  }, product => product.quanLyImei ? 'Quản lý theo IMEI' : 'Quản lý theo số lượng');
+}
+
 async function openNhapKhoModal() {
   const modal = document.getElementById('modal-nhapkho');
   if (!modal) return;
 
   try {
-    const [nccList, mhList] = await Promise.all([
-      api.get('/suppliers'),
-      getAdminPages('/mathang')
-    ]);
-
-    const selectNCC = modal.querySelector('select[name="maNCC"]');
-    if (selectNCC) {
-      selectNCC.innerHTML = nccList.map(c => `<option value="${c.maNCC}">${c.tenNCC}</option>`).join('');
-    }
-
-    const selectMH = modal.querySelector('select[name="maHang"]');
-    if (selectMH) {
-      selectMH.innerHTML = mhList.map(m => `<option data-imei="${m.quanLyImei}" value="${m.maHang}">${m.tenHang}</option>`).join('');
-    }
+    purchaseSuppliers = await api.get('/suppliers');
   } catch (err) {
     showToast('Không tải được dữ liệu nhập kho: ' + err.message, 'error');
     return;
   }
 
+  const input = document.getElementById('purchase-product-search');
+  input.value = '';
+  searchPurchaseProducts();
   modal.classList.remove('hidden');
+  input.focus();
 }
 
 function updateImeiCount() {
@@ -1843,15 +1938,19 @@ function updateImeiCount() {
 async function saveNhapKho(e) {
   e.preventDefault();
   const form = e.target;
-  const maHang = form.maHang.value;
+  const maHang = selectedPurchaseProduct?.maHang;
   const slNhap = Number(form.slNhap.value);
   const donGiaNhap = Number(form.donGiaNhap.value);
   const imeiText = form.imeiList.value.trim();
   const imeis = imeiText.split(/\s+/).filter(Boolean);
-  const isImeiManaged = form.maHang.selectedOptions[0]?.dataset.imei === 'true';
+  const isImeiManaged = selectedPurchaseProduct?.quanLyImei === true;
 
   if (!Number.isInteger(slNhap) || slNhap < 1 || !maHang) {
     showToast('Chọn mặt hàng và nhập số lượng hợp lệ', 'error');
+    return;
+  }
+  if (!form.maNCC.value) {
+    showToast('Chọn nhà cung cấp trước khi lưu phiếu nhập.', 'error');
     return;
   }
   if (isImeiManaged && (imeis.length !== slNhap || imeis.some(imei => !/^\d{15}$/.test(imei)) || new Set(imeis).size !== imeis.length)) {
@@ -2983,13 +3082,13 @@ async function renderHoaDonListTable(keyword = '') {
         ? h.chiTiet.map(ct => ct.soIMEI || ct.maIMEI).filter(Boolean).join(', ')
         : (h.maImei || '-');
       const ngay = fmtLocalDateTime(h.ngayLap);
-      const tenKh = h.tenKhachHang || h.tenKH || 'Khách lẻ';
+      const tenKh = escapeAdminChatHtml(h.tenKhachHang || h.tenKH || 'Khách lẻ');
 
       return `
         <tr class="border-b border-slate-200 hover:bg-slate-50 transition-colors">
           <td class="p-3.5 font-mono font-bold text-xs text-slate-800 whitespace-nowrap">${h.soHD}</td>
           <td class="p-3.5 text-xs text-slate-500 whitespace-nowrap">${ngay}</td>
-          <td class="p-3.5 font-semibold text-sm text-navy whitespace-nowrap">${tenKh}</td>
+          <td class="p-3.5 font-semibold text-sm text-navy whitespace-nowrap">${tenKh}${h.sdtKhachHang ? `<div class="text-xs font-normal text-slate-500">${escapeAdminChatHtml(h.sdtKhachHang)}</div>` : ''}</td>
           <td class="p-3.5 text-xs text-center whitespace-nowrap">${Format.statusBadge(h.kenhBan)}</td>
           <td class="p-3.5 font-mono text-xs text-slate-700 whitespace-nowrap">${imeiStr}</td>
           <td class="p-3.5 font-medium text-xs text-slate-700 text-right whitespace-nowrap font-mono">${Format.currency(h.tongTien)}</td>
@@ -3019,7 +3118,7 @@ async function viewHoaDonDetail(soHD) {
     const h = await api.get('/hoadon/' + encodeURIComponent(soHD));
     const vatAmount = h.tienVatDaGom;
     const ngay = fmtLocalDateTime(h.ngayLap);
-    const tenKh = h.tenKhachHang || h.tenKH || 'Khách lẻ';
+    const tenKh = escapeAdminChatHtml(h.tenKhachHang || h.tenKH || 'Khách lẻ');
 
     let itemsHtml = '';
     if (h.chiTiet && h.chiTiet.length > 0) {
@@ -3055,6 +3154,7 @@ async function viewHoaDonDetail(soHD) {
         <div>
           <span class="text-slate-400 font-bold uppercase text-[10px] block">Khách hàng:</span>
           <div class="font-bold text-slate-800 text-sm mt-0.5">${tenKh}</div>
+          ${h.sdtKhachHang ? `<div class="text-slate-600 text-[11px]">SĐT: ${escapeAdminChatHtml(h.sdtKhachHang)}</div>` : ''}
           <div class="text-slate-600 text-[11px]">Mã KH: ${h.maKH || 'Khách lẻ'}</div>
         </div>
         <div class="text-right">
@@ -3381,6 +3481,32 @@ async function renderNhomLoai() {
   }
 }
 
+function resetCategoryModelPicker(type, form, isEditing) {
+  form.querySelector('[data-category-model-picker]').hidden = isEditing;
+  form.querySelector('[data-category-models]').replaceChildren();
+  document.getElementById(type + '-model-search').value = '';
+  searchCategoryModels(type);
+}
+
+function searchCategoryModels(type) {
+  const selected = document.querySelector('#modal-' + type + ' [data-category-models]');
+  searchAdminProducts(type + '-model-search', type + '-model-results', product => {
+    if (!product || Array.from(selected.children).some(item => item.dataset.modelCode === product.maHang)) return;
+    const item = document.createElement('div');
+    item.dataset.modelCode = product.maHang;
+    item.className = 'flex justify-between gap-2 rounded-lg bg-slate-50 px-2 py-1';
+    const label = document.createElement('span');
+    label.textContent = product.maHang + ' · ' + product.tenHang;
+    const remove = document.createElement('button');
+    remove.type = 'button';
+    remove.textContent = 'Bỏ chọn';
+    remove.className = 'text-rose-600 whitespace-nowrap';
+    remove.addEventListener('click', () => item.remove());
+    item.append(label, remove);
+    selected.append(item);
+  }, product => [product.tenNhom, product.tenLoai].filter(Boolean).join(' / '));
+}
+
 function openNhomHangModal(maNhom = null) {
   const modal = document.getElementById('modal-nhomhang');
   if (!modal) return;
@@ -3399,6 +3525,7 @@ function openNhomHangModal(maNhom = null) {
     form.maNhom.readOnly = false;
     form.maNhom.value = 'NH' + String(store.data.nhomHang.length + 1).padStart(2, '0');
   }
+  resetCategoryModelPicker('nhomhang', form, Boolean(maNhom));
   modal.classList.remove('hidden');
 }
 
@@ -3411,7 +3538,8 @@ async function saveNhomHang(e) {
     if (form.maNhom.readOnly) {
       await api.put('/nhomhang/' + encodeURIComponent(code), fields);
     } else {
-      await api.post('/nhomhang', { maNhom: code, ...fields });
+      const maHangs = Array.from(form.querySelector('[data-category-models]').children, item => item.dataset.modelCode);
+      await api.post('/nhomhang', { maNhom: code, ...fields, maHangs });
     }
     AdminRealtimeData.isLoaded = false;
     closeModal('modal-nhomhang');
@@ -3452,6 +3580,7 @@ function openLoaiHangModal(maLoai = null) {
     form.maLoai.readOnly = false;
     form.maLoai.value = 'LH' + String(store.data.loaiHang.length + 1).padStart(2, '0');
   }
+  resetCategoryModelPicker('loaihang', form, Boolean(maLoai));
   modal.classList.remove('hidden');
 }
 
@@ -3464,7 +3593,8 @@ async function saveLoaiHang(e) {
     if (form.maLoai.readOnly) {
       await api.put('/loaihang/' + encodeURIComponent(code), fields);
     } else {
-      await api.post('/loaihang', { maLoai: code, ...fields });
+      const maHangs = Array.from(form.querySelector('[data-category-models]').children, item => item.dataset.modelCode);
+      await api.post('/loaihang', { maLoai: code, ...fields, maHangs });
     }
     AdminRealtimeData.isLoaded = false;
     closeModal('modal-loaihang');
@@ -3819,8 +3949,9 @@ function openPhanQuyenModal(maQuyen = null) {
       form.maQuyen.readOnly = true;
       form.tenQuyen.value = item.tenQuyen;
       form.tenQuyen.readOnly = true;
-      form.quyenCoSo.value = item.quyenCoSo || "";
-      form.quyenCoSo.disabled = true;
+      form.quyenCoSo.value = item.quyenCoSo || item.maQuyen;
+      form.quyenCoSo.disabled = item.maQuyen === 'admin';
+      document.getElementById('phanquyen-admin-hint').hidden = item.maQuyen !== 'admin';
       form.moTa.value = item.moTa;
     }
   } else {
@@ -3829,6 +3960,7 @@ function openPhanQuyenModal(maQuyen = null) {
     form.maQuyen.readOnly = false;
     form.tenQuyen.readOnly = false;
     form.quyenCoSo.disabled = false;
+    document.getElementById('phanquyen-admin-hint').hidden = true;
   }
   modal.classList.remove('hidden');
 }
@@ -4029,6 +4161,12 @@ function initAdminDashboard() {
   }
   isAdminInitialized = true;
 
+  try {
+    const savedSection = sessionStorage.getItem('admin_active_section');
+    if (savedSection && document.getElementById(savedSection)?.classList.contains('admin-view-section')) {
+      currentActiveSection = savedSection;
+    }
+  } catch {}
   initNavigation();
 
   // Cập nhật thông tin User trên Header & Dropdown (Bước 3)
@@ -4083,16 +4221,6 @@ function initAdminDashboard() {
   } catch (e) {}
 
   // Khôi phục mật độ hiển thị (Bước 7)
-  try {
-    const density = localStorage.getItem('admin_density');
-    if (density === 'compact') {
-      document.body.classList.add('density-compact');
-      const icon = document.getElementById('density-icon');
-      if (icon) icon.className = 'fa-solid fa-expand text-xs';
-      const label = document.getElementById('dropdown-density-label');
-      if (label) label.textContent = 'Gọn';
-    }
-  } catch (e) {}
 
   // Phím tắt bàn phím theo Bước 7 (Esc đóng popover/menu, / focus tìm kiếm)
   document.addEventListener('keydown', (e) => {
@@ -4126,7 +4254,7 @@ function initAdminDashboard() {
   });
 
   AdminRealtimeData.setupRealtimeListeners();
-  renderDashboard();
+  renderSection(currentActiveSection);
 
   // Khởi tạo và đồng bộ ngôn ngữ i18n
   if (window.cellphonesI18n) {
@@ -4284,21 +4412,6 @@ window.toggleUserMenuDropdown = function(event) {
 };
 
 // Density toggle: Gọn / Thoải mái (Bước 7)
-window.toggleDisplayDensity = function() {
-  const isCompact = document.body.classList.toggle('density-compact');
-  const icon = document.getElementById('density-icon');
-  if (icon) {
-    icon.className = isCompact ? 'fa-solid fa-expand text-xs' : 'fa-solid fa-compress text-xs';
-  }
-  const label = document.getElementById('dropdown-density-label');
-  if (label) {
-    label.textContent = isCompact ? 'Gọn' : 'Thoải mái';
-  }
-  try {
-    localStorage.setItem('admin_density', isCompact ? 'compact' : 'comfortable');
-  } catch (e) {}
-  showToast(isCompact ? 'Đã bật chế độ hiển thị Gọn' : 'Đã bật chế độ hiển thị Thoải mái', 'info');
-};
 
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', checkAdminAuthAndStart);
@@ -4653,28 +4766,15 @@ async function renderThamSoTable() {
     `).join('');
     tbody.querySelectorAll('[data-edit-setting]').forEach((button, index) => {
       const setting = list[index];
-      button.onclick = () => editThamSo(setting.maThamSo, setting.giaTri, setting.donVi || '');
+      button.onclick = () => editThamSo(setting);
     });
   } catch (err) {
     tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-rose-500">Lỗi tải tham số: ${err.message}</td></tr>`;
   }
 }
 
-async function editThamSo(maTS, currentValue, donVi) {
-  const newVal = prompt(`Cập nhật giá trị mới cho tham số ${maTS} (${donVi}):`, currentValue);
-  if (newVal === null || newVal.trim() === '') return;
-  const num = Number(newVal);
-  if (isNaN(num) || num < 0) {
-    alert('Giá trị tham số phải là số không âm');
-    return;
-  }
-  try {
-    await api.put('/settings/' + encodeURIComponent(maTS), { maThamSo: maTS, giaTri: num, donVi: donVi });
-    showToast(`Đã cập nhật tham số ${maTS} thành công`, 'success');
-    renderThamSoTable();
-  } catch (e) {
-    alert('Không thể cập nhật tham số: ' + e.message);
-  }
+function editThamSo(setting) {
+  openThamSoModal(setting);
 }
 
 // 6. TRA CỨU BẢO HÀNH ACTION
@@ -6619,36 +6719,76 @@ async function renderProductPerformance(queryParams) {
 }
 
 
+function tradeInDeviceLabel(name, capacity) {
+  if (!name) return 'Chưa có thông tin';
+  if (!capacity || capacity === 'Tiêu chuẩn' || name.toLowerCase().includes(capacity.toLowerCase())) return name;
+  return name + ' · ' + capacity;
+}
+
+function tradeInAmount(label, amount) {
+  return Number.isFinite(amount) ? label + ': ' + Format.currency(amount) : '';
+}
+
+let tradeInLoadId = 0;
+
 async function loadTradeInBookings() {
-  const code = document.getElementById('trade-in-code').value.trim().toUpperCase();
+  const loadId = ++tradeInLoadId;
+  const search = document.getElementById('trade-in-code').value.trim();
   const status = document.getElementById('trade-in-status');
   const rows = document.getElementById('trade-in-results');
   status.textContent = 'Đang tra cứu…';
   rows.replaceChildren();
   try {
-    const path = '/trade-in/bookings' + (code ? '/' + encodeURIComponent(code) : '');
+    const phone = search.replace(/[\s.()-]/g, '');
+    const byPhone = /^\+?\d+$/.test(phone);
+    const byCode = Boolean(search && !byPhone);
+    const path = '/trade-in/bookings' + (byCode ? '/' + encodeURIComponent(search) :
+      byPhone ? '?phone=' + encodeURIComponent(phone) : '');
     const response = await api.get(path);
-    const bookings = code ? [response] : response;
+    if (loadId !== tradeInLoadId) return;
+    const bookings = byCode ? [response] : response;
     for (const booking of bookings) {
+      const used = booking.used_device || {};
+      const target = booking.target_product || {};
+      const usedName = tradeInDeviceLabel(used.model, used.capacity);
+      const targetName = tradeInDeviceLabel(target.name, target.capacity);
+      const usedDetails = [usedName, used.condition].filter(Boolean).join('\n');
+      const prices = [
+        tradeInAmount('Giá máy mới', target.price),
+        tradeInAmount('Giá thu máy cũ', used.valuation),
+        tradeInAmount('Trợ giá', used.subsidy),
+        used.needsAssessment && used.compensationDiff == null
+          ? 'Tiền cần bù: Chờ thẩm định'
+          : tradeInAmount('Tiền cần bù', used.compensationDiff)
+      ].filter(Boolean).join('\n');
+
       const row = rows.insertRow();
       for (const value of [booking.code, booking.name, booking.phone, booking.branch,
-                           booking.used_device?.model, booking.target_product?.name]) {
+                           usedDetails, targetName, prices || 'Chưa có thông tin']) {
         const cell = row.insertCell();
-        cell.className = 'border-b py-2 pr-3';
+        cell.className = 'border-b py-2 pr-3 whitespace-pre-line';
         cell.textContent = value ?? '';
       }
     }
-    status.textContent = bookings.length ? '' : 'Chưa có phiếu thu cũ.';
+    status.textContent = bookings.length ? '' : search ? 'Không tìm thấy phiếu thu cũ phù hợp.' : 'Chưa có phiếu thu cũ.';
   } catch (err) {
-    status.textContent = err.message || 'Chưa tải được phiếu thu cũ.';
+    if (loadId === tradeInLoadId) status.textContent = err.message || 'Chưa tải được phiếu thu cũ.';
   }
 }
 
 
-function openThamSoModal() {
+function openThamSoModal(setting = null) {
   const modal = document.getElementById('modal-thamso');
   const form = modal.querySelector('form');
   form.reset();
+  form.dataset.originalCode = setting?.maThamSo || '';
+  document.getElementById('thamso-modal-title').textContent = setting ? 'Chỉnh sửa tham số' : 'Thêm tham số';
+  if (setting) {
+    form.maThamSo.value = setting.maThamSo;
+    form.tenThamSo.value = setting.tenThamSo;
+    form.giaTri.value = setting.giaTri;
+    form.donVi.value = setting.donVi || '';
+  }
   modal.classList.remove('hidden');
   form.maThamSo.focus();
 }
@@ -6657,8 +6797,13 @@ async function createThamSo(event) {
   event.preventDefault();
   const form = event.target;
   try {
-    await api.post('/settings', { maThamSo: form.maThamSo.value, tenThamSo: form.tenThamSo.value,
-      giaTri: form.giaTri.valueAsNumber, donVi: form.donVi.value });
+    const data = { maThamSo: form.maThamSo.value, tenThamSo: form.tenThamSo.value,
+      giaTri: form.giaTri.valueAsNumber, donVi: form.donVi.value };
+    if (form.dataset.originalCode) {
+      await api.put('/settings/' + encodeURIComponent(form.dataset.originalCode), data);
+    } else {
+      await api.post('/settings', data);
+    }
     closeModal('modal-thamso');
     await renderThamSoTable();
   } catch (error) {

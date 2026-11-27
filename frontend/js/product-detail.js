@@ -89,196 +89,16 @@
   var isArticleExpanded = false;
 
   // Danh mục 114 chi nhánh của SAMAMOBILE chuẩn Hoàng Hà Mobile (Screenshot 2)
-  var STORE_LOCATIONS = [
-    { city: 'hanoi', name: '194 Lê Duẩn, Phường Văn Miếu - Quốc Tử Giám, Hà Nội', phone: '0962066208', stock: true, demo: true },
-    { city: 'hanoi', name: '196 Quang Trung, Phường Hà Đông, Hà Nội', phone: '0375866186', stock: true, demo: true },
-    { city: 'thanhhoa', name: '222 Trần Phú, Phường Hạc Thành, Thanh Hóa', phone: '0888203536', stock: true, demo: true },
-    { city: 'hanoi', name: '28 Trần Phú, Phường Hà Đông, Hà Nội', phone: '0903202328', stock: true, demo: true },
-    { city: 'hcm', name: '232 Nguyễn Thái Học, Phường Quy Nhơn Nam, TP.HCM', phone: '0898198383', stock: true, demo: true },
-    { city: 'hanoi', name: '122 Thái Hà, Phường Đống Đa, Hà Nội', phone: '0973790122', stock: true, demo: true },
-    { city: 'hcm', name: '241 Lê Văn Việt, Tăng Nhơn Phú B, TP. Thủ Đức, TP.HCM', phone: '18006868', stock: true, demo: true },
-    { city: 'hcm', name: '55 Trần Quang Khải, Phường Tân Định, Quận 1, TP.HCM', phone: '0908889977', stock: true, demo: true },
-    { city: 'danang', name: '153 Hàm Nghi, Quận Thanh Khê, Đà Nẵng', phone: '0905556677', stock: true, demo: true },
-    { city: 'danang', name: '580 Điện Biên Phủ, Quận Thanh Khê, Đà Nẵng', phone: '0905123789', stock: true, demo: true },
-    { city: 'haiphong', name: 'Số 258 Đường Tô Hiệu, Phường Lê Chân, Hải Phòng', phone: '0961791516', stock: true, demo: true },
-    { city: 'cantho', name: '221 Đường 30 Tháng 4, Phường Hưng Lợi, Ninh Kiều, Cần Thơ', phone: '0939998877', stock: true, demo: true },
-    { city: 'hcm', name: '1060 Quang Trung, Phường 8, Gò Vấp, TP.HCM', phone: '0903332211', stock: true, demo: true },
-    { city: 'hcm', name: '347 Hoàng Văn Thụ, Phường 2, Tân Bình, TP.HCM', phone: '0902223344', stock: true, demo: true },
-    { city: 'hanoi', name: '348 Hồ Tùng Mậu, Phường Cầu Diễn, Hà Nội', phone: '0965868348', stock: true, demo: true },
-    { city: 'hanoi', name: '382 Nguyễn Văn Cừ, Phường Bồ Đề, Hà Nội', phone: '0915963222', stock: true, demo: true },
-    { city: 'hanoi', name: '392 Cầu Giấy, Phường Cầu Giấy, Hà Nội', phone: '0968323399', stock: true, demo: true }
-  ];
+
 
   // Sản phẩm nền mặc định chuẩn Hoàng Hà Samsung S26 Ultra (Khớp 100% Ảnh 1)
-  var BUILTIN_PRODUCTS = {
-    'SAMPLE-dien-thoai-1': {
-      maHang: 'SAMPLE-dien-thoai-1',
-      sku: 'S948B256TRANG',
-      tenHang: 'Samsung Galaxy S26 Ultra',
-      nhanHieu: 'Samsung',
-      tenLoai: 'Điện thoại',
-      tenNhom: 'Điện thoại',
-      donGia: 30490000,
-      giaGoc: 40990000,
-      anhChinh: 'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-trang-1.png',
-      album: [
-        { label: 'Mặt trước & S-Pen', img: 'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-trang-1.png' },
-        { label: 'Góc nghiêng Xanh', img: 'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-xanh-1.png' },
-        { label: 'Mặt sau & 4 Camera', img: 'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-den-1.png' },
-        { label: 'Toàn cảnh viền Titan', img: 'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-tim-1.png' },
-        { label: 'Cận cảnh Camera Zoom', img: 'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png' }
-      ],
-      phienBan: [
-        { id: 'v_256', dungLuong: 'S26 Ultra 12GB/256GB', gia: 30490000, giaGoc: 40990000 },
-        { id: 'v_512', dungLuong: 'S26 Ultra 12GB/512GB', gia: 35490000, giaGoc: 44990000 },
-        { id: 'v_1tb', dungLuong: 'S26 Ultra 16GB/1TB', gia: 41990000, giaGoc: 51990000 }
-      ],
-      mauSac: [
-        { id: 'c_trang', ten: 'Trắng', hex: '#FFFFFF', anh: 'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-trang-1.png' },
-        { id: 'c_xanh', ten: 'Xanh Dương', hex: '#38BDF8', anh: 'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-xanh-1.png' },
-        { id: 'c_den', ten: 'Đen', hex: '#1E293B', anh: 'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-den-1.png' },
-        { id: 'c_tim', ten: 'Tím', hex: '#6366F1', anh: 'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-tim-1.png' }
-      ],
-      thongSoNoiBat: {
-        'Kích thước màn hình': '6.9\"',
-        'Bộ nhớ trong': '256GB',
-        'Vi xử lý': 'Snap 8 Elite Gen 5',
-        'Dung lượng pin hiển thị': '5000mAh'
-      },
-      thongSoChiTiet: {
-        'Kích thước màn hình': '6.9\"',
-        'Độ phân giải camera': 'Camera siêu rộng 50MP, Camera góc rộng 200 MP, Camera Tele (5x) 50MP, Camera Tele (3x) 10MP',
-        'Độ phân giải camera trước': '12 MP',
-        'Vi xử lý': 'Snapdragon 8 Elite Gen 5 dành cho Galaxy (3nm)',
-        'Hệ điều hành': 'Android 16',
-        'RAM': '12GB',
-        'Bộ nhớ trong': '256GB',
-        'Kết Nối NFC': 'Có',
-        'Mạng di động': '2G, 3G, 4G, 5G',
-        'Wi-Fi': 'Có (Wi-Fi 7)',
-        'Cổng kết nối/sạc': 'Type-C',
-        'Bluetooth': 'Có (5.4)',
-        'Kích thước': 'Dài 163.6mm - Ngang 78.1mm - Dày 7.9mm',
-        'Trọng lượng': '214g',
-        'Dung lượng pin sản phẩm': '5000mAh',
-        'Kháng nước, kháng bụi': 'IP68'
-      }
-    },
-    'MH796': {
-      maHang: 'MH796',
-      sku: 'TABS12U12256',
-      tenHang: 'Samsung Galaxy Tab S12 Ultra Wi-Fi 12GB/256GB',
-      nhanHieu: 'Samsung',
-      tenLoai: 'Máy tính bảng',
-      tenNhom: 'Máy tính bảng',
-      category: 'tablet',
-      donGia: 34990000,
-      giaGoc: 39990000,
-      anhChinh: 'https://i.hoanghamobile.vn/Uploads/2026/10/02/galaxy-tab-s12-ultra-2-161156363.png',
-      album: [
-        { label: 'Mặt trước & Bút', img: 'https://i.hoanghamobile.vn/Uploads/2026/10/02/galaxy-tab-s12-ultra-2-161156363.png' },
-        { label: 'Kèm bàn phím', img: 'https://i.hoanghamobile.vn/Uploads/2025/10/30/galaxy-tab-s11-ultra-2.png' },
-        { label: 'Góc nghiêng 45°', img: 'https://i.hoanghamobile.vn/Uploads/2026/10/02/galaxy-tab-s12-plus-1-161156166.png' },
-        { label: 'Bàn phím & Touchpad', img: 'https://i.hoanghamobile.vn/Uploads/2026/10/08/ban-phim-samsung-galaxy-tab-s12-plus-1-110353435.png' },
-        { label: 'Bút S-Pen & Cạnh viền', img: 'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png' }
-      ],
-      phienBan: [
-        { id: 'v_256', dungLuong: '12GB/256GB', gia: 34990000, giaGoc: 39990000 },
-        { id: 'v_512', dungLuong: '16GB/512GB', gia: 38990000, giaGoc: 44990000 }
-      ],
-      mauSac: [
-        { id: 'c_xam', ten: 'Xám Titan', hex: '#64748B', anh: 'https://i.hoanghamobile.vn/Uploads/2026/10/02/galaxy-tab-s12-ultra-2-161156363.png' },
-        { id: 'c_bac', ten: 'Bạc Ánh Kim', hex: '#E2E8F0', anh: 'https://i.hoanghamobile.vn/Uploads/2025/10/30/galaxy-tab-s11-ultra-2.png' }
-      ],
-      thongSoNoiBat: {
-        'Kích thước màn hình': '14.6" Dynamic AMOLED 2X',
-        'Bộ nhớ trong': '256GB / RAM 12GB',
-        'Vi xử lý': 'MediaTek Dimensity 9500 (3nm)',
-        'Dung lượng pin hiển thị': '11.600mAh (Sạc 45W)'
-      },
-      thongSoChiTiet: {
-        'Kích thước màn hình': '14.6 inch Dynamic AMOLED 2X, 120Hz, HDR10+',
-        'Độ phân giải màn hình': '1848 x 2960 pixels, tỷ lệ 16:10',
-        'Độ phân giải camera': 'Camera chính 13MP, Camera góc siêu rộng 8MP',
-        'Độ phân giải camera trước': 'Camera kép 12MP (Rộng & Siêu rộng)',
-        'Vi xử lý': 'MediaTek Dimensity 9500 (3nm đỉnh cao đa nhiệm)',
-        'Hệ điều hành': 'Android 16, One UI 8.0 (Galaxy AI)',
-        'RAM': '12GB LPDDR5X',
-        'Bộ nhớ trong': '256GB UFS 4.0 (hỗ trợ thẻ MicroSD lên đến 1.5TB)',
-        'Kết Nối NFC': 'Không',
-        'Mạng di động': 'Wi-Fi 7 (802.11be), 3 băng tần',
-        'Wi-Fi': 'Có (Wi-Fi 7)',
-        'Cổng kết nối/sạc': 'Type-C USB 3.2 Gen 1 (DisplayPort out)',
-        'Bluetooth': 'Có (Bluetooth 5.4)',
-        'Kích thước': 'Dài 326.4mm - Ngang 208.6mm - Dày 5.4mm',
-        'Trọng lượng': '723g',
-        'Dung lượng pin sản phẩm': '11.600mAh, sạc nhanh 45W',
-        'Kháng nước, kháng bụi': 'IP68 cho cả máy tính bảng và bút S-Pen'
-      }
-    },
-    'MH001': {
-      maHang: 'MH001',
-      sku: 'IP18PM256TN',
-      tenHang: 'iPhone 18 Pro Max 256GB - Chính hãng VN/A',
-      nhanHieu: 'Apple',
-      tenLoai: 'Điện thoại',
-      tenNhom: 'Điện thoại',
-      donGia: 41790000,
-      giaGoc: 44990000,
-      anhChinh: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png',
-      album: [
-        { label: 'Mặt trước & Sau', img: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png' },
-        { label: 'Góc nghiêng Trắng', img: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-glacier-pdp-images-vi-vn-021233298.png' },
-        { label: 'Cụm 3 Camera 48MP', img: 'https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-sa-mac-1.png' },
-        { label: 'Viền Titan & Cổng sạc', img: 'https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-tu-nhien-1.png' }
-      ],
-      phienBan: [
-        { id: 'v_256', dungLuong: '256GB', gia: 41790000, giaGoc: 44990000 },
-        { id: 'v_512', dungLuong: '512GB', gia: 47990000, giaGoc: 51990000 },
-        { id: 'v_1tb', dungLuong: '1TB', gia: 59990000, giaGoc: 63990000 },
-        { id: 'v_2tb', dungLuong: '2TB', gia: 78990000, giaGoc: 82990000 }
-      ],
-      mauSac: [
-        { id: 'c_den', ten: 'Đen', hex: '#1E293B', anh: 'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png' },
-        { id: 'c_bac', ten: 'Bạc', hex: '#E2E8F0', anh: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-glacier-pdp-images-vi-vn-021233298.png' },
-        { id: 'c_burgundy', ten: 'Đỏ Burgundy', hex: '#5B1E31', anh: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png' },
-        { id: 'c_bang_thanh', ten: 'Băng Thanh', hex: '#B0C4DE', anh: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-glacier-pdp-images-vi-vn-021233298.png' }
-      ],
-      thongSoNoiBat: {
-        'Kích thước màn hình': '6.9\" Super Retina XDR',
-        'Bộ nhớ trong': '256GB NVMe',
-        'Vi xử lý': 'Apple A20 Pro',
-        'Dung lượng pin hiển thị': '4850mAh'
-      },
-      thongSoChiTiet: {
-        'Kích thước màn hình': '6.9\" Super Retina XDR OLED, ProMotion 120Hz, 2500 nits',
-        'Độ phân giải camera': 'Camera chính 48MP Fusion, Camera siêu rộng 48MP, Camera Tele 5x 12MP',
-        'Độ phân giải camera trước': '12 MP TrueDepth Autofocus',
-        'Vi xử lý': 'Apple A20 Pro (3nm, 6 nhân CPU & 6 nhân GPU)',
-        'Hệ điều hành': 'iOS 19 (Apple Intelligence Tiếng Việt)',
-        'RAM': '8GB',
-        'Bộ nhớ trong': '256GB NVMe',
-        'Kết Nối NFC': 'Có',
-        'Mạng di động': '5G sub-6 GHz, eSIM & SIM vật lý',
-        'Wi-Fi': 'Có (Wi-Fi 7)',
-        'Cổng kết nối/sạc': 'Type-C USB 3 (10Gb/s)',
-        'Bluetooth': 'Có (Bluetooth 5.4)',
-        'Kích thước': 'Dài 163.0mm - Ngang 77.6mm - Dày 8.25mm',
-        'Trọng lượng': '227g',
-        'Dung lượng pin sản phẩm': '4850mAh, Sạc nhanh MagSafe 25W',
-        'Kháng nước, kháng bụi': 'IP68 (độ sâu 6 mét trong 30 phút)'
-      }
-    }
-  };
-
   // Khởi tạo trang
   async function init() {
     setupMainHeader();
     setupStickyPurchaseBar();
     setupCommentForm();
     setupBankPromos();
-    await loadProductsData();
-    resolveAndRenderProduct();
+    await resolveAndRenderProduct();
   }
 
   // Header helpers
@@ -333,59 +153,24 @@
     }
   }
 
-  async function loadProductsData() {
-    try {
-      const data = await fetchJsonSafely('data/products-meta.json');
-      if (data) {
-        allProductsMeta = data;
-        window.allProductsMeta = data;
-      }
-    } catch (e) {
-      console.warn('Could not load products-meta.json', e);
-    }
-  }
-
   function getQueryParam(name) {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get(name);
   }
 
-  function resolveAndRenderProduct() {
-    const rawId = getQueryParam('id') || getQueryParam('maHang');
-    const id = rawId ? rawId.trim() : '';
-    const dashId = id.replace(/\s+/g, '-');
-    const slug = getQueryParam('slug');
-
-    let prod = null;
-
-    if (id && allProductsMeta[id]) prod = allProductsMeta[id];
-    else if (dashId && allProductsMeta[dashId]) prod = allProductsMeta[dashId];
-    else if (id && BUILTIN_PRODUCTS[id]) prod = BUILTIN_PRODUCTS[id];
-    else if (dashId && BUILTIN_PRODUCTS[dashId]) prod = BUILTIN_PRODUCTS[dashId];
-
-    if (!prod) {
-      try {
-        const stored = sessionStorage.getItem('current_view_product');
-        if (stored) {
-          const item = JSON.parse(stored);
-          if (item && (!id || item.id === id || item.maHang === id || item.id === dashId || item.maHang === dashId)) {
-            prod = item.rawProduct || item;
-          }
-        }
-      } catch (e) {}
+  async function resolveAndRenderProduct() {
+    const id = (getQueryParam('id') || getQueryParam('maHang') || '').trim();
+    let prod;
+    try {
+      if (!id) throw new Error('Thiếu mã mặt hàng');
+      prod = await window.StoreData.getProductDetail(id);
+      allProductsMeta = { [prod.maHang]: prod };
+      window.allProductsMeta = allProductsMeta;
+    } catch (error) {
+      const main = document.querySelector('main');
+      if (main) main.textContent = 'Không tải được thông tin mặt hàng.';
+      return;
     }
-
-    if (!prod && slug) {
-      prod = Object.values(allProductsMeta).find(p => p.slug && p.slug.includes(slug));
-    } else if (!prod && id) {
-      prod = Object.values(allProductsMeta).find(p => p.maHang === id || p.id === id);
-    }
-
-    // Mặc định chuẩn Samsung Galaxy S26 Ultra (Khớp ảnh 1 của User)
-    if (!prod) {
-      prod = BUILTIN_PRODUCTS['SAMPLE-dien-thoai-1'];
-    }
-
     currentProduct = normalizeProduct(prod);
     window.currentProduct = currentProduct;
     renderProductDetail(currentProduct);
@@ -404,8 +189,8 @@
   }
 
   function normalizeProduct(p) {
-    const donGia = Number(p.donGia) || 30490000;
-    const giaGoc = Number(p.giaGoc) || Math.round(donGia * 1.25);
+    const donGia = Number(p.donGia);
+    const giaGoc = donGia;
     const anh = resolveAssetPath(p.anhChinh || p.image || 'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-tim-1.png');
     const category = detectProductCategory(p);
     const pName = p.tenHang || 'Samsung Galaxy S26 Ultra';
@@ -413,7 +198,7 @@
 
     // 1. Phân loại Phiên bản
     let phienBan = p.phienBan && p.phienBan.length > 0 ? p.phienBan : [];
-    if (phienBan.length <= 1) {
+    if (phienBan.length === 0) {
       if (category === 'phone') {
         if (pNameLower.includes('s26') || pNameLower.includes('s25') || pNameLower.includes('s24')) {
           phienBan = [
@@ -480,124 +265,9 @@
     mauSac = mauSac.map(c => Object.assign({}, c, { anh: resolveAssetPath(c.anh || anh) }));
 
     // 3. Thông số nổi bật 4 ô có Icon theo danh mục
-    let thongSoNoiBat = p.thongSoNoiBat;
-    if (!thongSoNoiBat) {
-      if (category === 'laptop') {
-        thongSoNoiBat = {
-          'Kích thước màn hình': p.thongSo?.['Màn hình'] || '15.3" Liquid Retina',
-          'Vi xử lý': p.thongSo?.['Số hiệu CPU'] || 'Apple M3 / Core i7',
-          'RAM & Ổ cứng': p.thongSo?.['RAM'] ? (p.thongSo['RAM'] + ' / 512GB') : '16GB / 512GB',
-          'Trọng lượng pin': '1.51 kg • 70Wh'
-        };
-      } else if (category === 'tablet') {
-        thongSoNoiBat = {
-          'Kích thước màn hình': p.thongSo?.['Màn hình'] || '11" Tandem OLED',
-          'Bộ nhớ trong': p.thongSo?.['Bộ nhớ trong'] || '256GB',
-          'Vi xử lý': p.thongSo?.['Vi xử lý'] || 'Apple M4 / 8 Gen 2',
-          'Dung lượng pin hiển thị': '8340mAh (30W)'
-        };
-      } else if (category === 'audio') {
-        thongSoNoiBat = {
-          'Thời lượng pin': p.thongSo?.['Thời gian sử dụng'] || '6h / 30h hộp sạc',
-          'Chống ồn': p.thongSo?.['Chống ồn'] || 'ANC chủ động 2X',
-          'Kháng nước': 'IP54 chống nước',
-          'Kết nối': 'Bluetooth 5.3'
-        };
-      } else if (category === 'watch') {
-        thongSoNoiBat = {
-          'Kích thước mặt': '46mm AMOLED',
-          'Thời lượng pin': 'Đến 14 ngày',
-          'Kháng nước': '5 ATM (50 mét)',
-          'Tương thích': 'Android & iOS'
-        };
-      } else if (category === 'accessory') {
-        thongSoNoiBat = {
-          'Công suất': '30W / 65W GaN',
-          'Cổng ra': 'Type-C PD 3.0',
-          'Công nghệ': 'GaN III tản mát',
-          'Bảo hành': '18 tháng 1 đổi 1'
-        };
-      } else {
-        // Điện thoại
-        thongSoNoiBat = {
-          'Kích thước màn hình': p.thongSo?.['Kích thước màn hình'] || '6.9\"',
-          'Bộ nhớ trong': p.thongSo?.['Bộ nhớ trong'] || '256GB',
-          'Vi xử lý': p.thongSo?.['Vi xử lý'] || 'Snap 8 Elite Gen 5',
-          'Dung lượng pin hiển thị': p.thongSo?.['Dung lượng pin'] || '5000mAh'
-        };
-      }
-    }
-
-    // 4. Bảng thông số kỹ thuật chi tiết chuẩn 16 hàng (Screenshot 3)
-    let thongSoChiTiet = p.thongSoChiTiet;
-    if (!thongSoChiTiet) {
-      if (category === 'laptop') {
-        thongSoChiTiet = {
-          'Kích thước màn hình': '15.3 inch Liquid Retina (2880 x 1864), 500 nits, dải màu P3',
-          'Vi xử lý': 'Apple M3 (8-core CPU với 4 lõi hiệu năng cao & 4 lõi tiết kiệm)',
-          'Card đồ họa (GPU)': '10-core GPU kiến trúc mới, hỗ trợ Ray Tracing',
-          'Hệ điều hành': 'macOS Sequoia chính hãng',
-          'RAM': '16GB Unified Memory',
-          'Ổ cứng lưu trữ': '512GB SSD tốc độ cao',
-          'Cổng kết nối': '2x Thunderbolt 4 / USB 4, Cổng sạc MagSafe 3, Jack tai nghe 3.5mm',
-          'Bàn phím & Touchpad': 'Magic Keyboard tích hợp Touch ID, bàn di chuột Force Touch',
-          'Webcam': '1080p FaceTime HD Camera',
-          'Âm thanh': 'Hệ thống 6 loa stereo với Spatial Audio & Dolby Atmos',
-          'Wi-Fi': 'Wi-Fi 6E (802.11ax)',
-          'Bluetooth': 'Bluetooth 5.3',
-          'Kích thước': 'Dày 1.15 cm - Dài 34.04 cm - Rộng 23.76 cm',
-          'Trọng lượng': '1.51 kg',
-          'Dung lượng pin': '66.5Wh Lithium-polymer, thời lượng đến 18 giờ',
-          'Bảo hành': '12 tháng chính hãng tại trung tâm Apple Authorized'
-        };
-      } else if (category === 'audio') {
-        thongSoChiTiet = {
-          'Loại tai nghe': 'True Wireless In-ear không dây thông minh',
-          'Chipset xử lý': 'Apple H2 / DSP Custom Hi-Res Audio 24-bit',
-          'Công nghệ chống ồn': 'Chống ồn chủ động ANC 2X, Chế độ Xuyên âm thích ứng Adaptive',
-          'Công nghệ âm thanh': 'Spatial Audio cá nhân hóa theo dõi cử động đầu, EQ thích ứng',
-          'Thời lượng pin tai nghe': 'Lên đến 6 giờ nghe liên tục (bật ANC)',
-          'Thời lượng hộp sạc': 'Lên đến 30 giờ khi kết hợp hộp sạc MagSafe USB-C',
-          'Sạc nhanh': '5 phút sạc trong hộp nghe được 1 giờ',
-          'Cổng kết nối/sạc': 'Type-C, Sạc không dây MagSafe, chuẩn Qi',
-          'Bluetooth': 'Bluetooth 5.3 độ trễ cực thấp',
-          'Microphone': 'Hệ thống micro kép dạng chùm sóng khử tạp âm gió',
-          'Kháng nước & bụi': 'IP54 cho cả tai nghe và hộp sạc',
-          'Trọng lượng': 'Tai nghe: 5.3g mỗi bên - Hộp sạc: 50.8g',
-          'Tương thích': 'iOS, iPadOS, macOS, watchOS, Android, Windows',
-          'Bảo hành': '12 tháng chính hãng'
-        };
-      } else {
-        // Điện thoại chuẩn Screenshot 3
-        thongSoChiTiet = {
-          'Kích thước màn hình': p.thongSo?.['Kích thước màn hình'] || '6.9\"',
-          'Độ phân giải camera': p.thongSo?.['Camera sau'] || 'Camera siêu rộng 50MP, Camera góc rộng 200 MP, Camera Tele (5x) 50MP, Camera Tele (3x) 10MP',
-          'Độ phân giải camera trước': p.thongSo?.['Camera trước'] || '12 MP',
-          'Vi xử lý': p.thongSo?.['Vi xử lý'] || 'Snapdragon 8 Elite Gen 5 dành cho Galaxy (3nm)',
-          'Hệ điều hành': p.thongSo?.['Hệ điều hành'] || 'Android 16',
-          'RAM': '12GB',
-          'Bộ nhớ trong': p.thongSo?.['Bộ nhớ trong'] || '256GB',
-          'Kết Nối NFC': 'Có',
-          'Mạng di động': '2G, 3G, 4G, 5G',
-          'Wi-Fi': 'Có (Wi-Fi 7)',
-          'Cổng kết nối/sạc': 'Type-C',
-          'Bluetooth': 'Có (5.4)',
-          'Kích thước': 'Dài 163.6mm - Ngang 78.1mm - Dày 7.9mm',
-          'Trọng lượng': '214g',
-          'Dung lượng pin sản phẩm': p.thongSo?.['Dung lượng pin'] || '5000mAh',
-          'Kháng nước, kháng bụi': 'IP68'
-        };
-      }
-    }
-
-    // SKU
-    let sku = p.sku;
-    if (!sku) {
-      if (pNameLower.includes('s26')) sku = 'S948B256TRANG';
-      else if (pNameLower.includes('s25')) sku = 'S938BZKCXEV';
-      else if (pNameLower.includes('iphone')) sku = 'IP18PM256TN';
-      else sku = (p.maHang || 'SP') + '256' + Math.floor(Math.random() * 90 + 10);
-    }
+    const thongSoChiTiet = p.thongSo || {};
+    const thongSoNoiBat = Object.fromEntries(Object.entries(thongSoChiTiet).slice(0, 4));
+    const sku = p.maHang;
 
     // 5. Album ảnh nhiều góc độ
     let album = p.album;
@@ -645,7 +315,9 @@
     }
 
     return {
-      maHang: p.maHang || 'SP' + Math.floor(Math.random() * 9000 + 1000),
+      maHang: p.maHang,
+      maNhom: p.maNhom,
+      tonKho: p.tonKho,
       sku: sku,
       tenHang: pName,
       nhanHieu: p.nhanHieu || 'Chính hãng',
@@ -1237,47 +909,9 @@
     const countEl = document.getElementById('store-count-number');
     if (!container) return;
 
-    let filtered = STORE_LOCATIONS;
-    if (city && city !== 'all') {
-      filtered = filtered.filter(s => s.city === city);
-    }
-    if (query && query.trim() !== '') {
-      const q = query.toLowerCase().trim();
-      filtered = filtered.filter(s => s.name.toLowerCase().includes(q) || s.phone.includes(q));
-    }
-
-    if (countEl) countEl.textContent = filtered.length;
-
-    if (filtered.length === 0) {
-      container.innerHTML = `
-        <div class="p-6 text-center text-slate-500 text-xs">
-          Không tìm thấy chi nhánh nào phù hợp với từ khóa "${query}".
-        </div>
-      `;
-      return;
-    }
-
-    container.innerHTML = filtered.map(store => `
-      <div class="p-2.5 sm:p-3 rounded-xl border border-slate-200/90 bg-white hover:border-blue-300 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-        <div class="space-y-1 flex-1 pr-2">
-          <div class="text-[12px] sm:text-xs text-slate-700 font-normal leading-relaxed">${store.name}</div>
-          <div class="flex items-center gap-2 pt-0.5">
-            <a href="tel:${store.phone}" class="px-2.5 py-1 rounded-md bg-[#0066FF] hover:bg-[#0052cc] text-white font-bold text-[11px] inline-flex items-center gap-1.5 transition-colors shadow-2xs">
-              <i class="fa-solid fa-phone text-[9px]"></i> <span>${store.phone}</span>
-            </a>
-            <button type="button" onclick="showCopyNotification('Địa chỉ: ${store.name}. Giờ mở cửa: 08:00 - 21:30 hàng ngày.')" class="px-2 py-0.5 rounded-md bg-slate-700 hover:bg-slate-800 text-white font-normal text-[10px] transition-colors cursor-pointer">
-              Xem chi tiết
-            </button>
-          </div>
-        </div>
-
-        <div class="flex items-center gap-1.5 text-[#16A34A] text-[11px] font-semibold self-start sm:self-center whitespace-nowrap">
-          <i class="fa-solid fa-circle text-[7px] text-[#16A34A]"></i> Đang sẵn hàng
-        </div>
-      </div>
-    `).join('');
-
-    syncStoreCardHeight();
+    const stock = currentProduct?.tonKho;
+    if (countEl) countEl.textContent = stock == null ? '—' : stock.toLocaleString('vi-VN');
+    container.textContent = 'Liên hệ cửa hàng để xác nhận tình trạng hàng tại chi nhánh.';
   }
 
   window.filterStoreLocations = function () {
@@ -2321,13 +1955,7 @@
   window.showCopyNotification = showCopyNotification;
 
   // Tự động gợi ý Phụ kiện mua kèm phù hợp theo từng loại thiết bị & hãng từ allProductsMeta
-  var DEFAULT_UNIVERSAL_ADDONS = [
-    { id: 'MH1575', cat: 'charger', name: 'Củ sạc chính hãng Apple 20W Type-C', price: 450000, img: 'https://i.hoanghamobile.vn/Uploads/2023/10/02/20w.png' },
-    { id: 'MH1566', cat: 'battery', name: 'Sạc dự phòng UGREEN 10000mAh 55W PB727 tích hợp cáp Type C', price: 790000, img: 'https://i.hoanghamobile.vn/Uploads/2026/10/21/ugreen-10000mah-55w-pb727-1-160819717.png' },
-    { id: 'MH1550', cat: 'glass', name: 'Cổng chuyển đổi Baseus UltraJoy Series 7-Port HUB Docking Station', price: 420000, img: 'https://i.hoanghamobile.vn/Uploads/2024/09/10/ip16-xanh-mong-ket.png' },
-    { id: 'MH1568', cat: 'battery', name: 'Sạc Dự Phòng AUKEY 20000mAh 35W PB-Y92L', price: 850000, img: 'https://i.hoanghamobile.vn/Uploads/2026/10/21/ugreen-10000mah-55w-pb727-1-160819717.png' }
-  ];
-  var currentAddonsList = DEFAULT_UNIVERSAL_ADDONS;
+  let currentAddonsList = [];
 
   function classifyAddonCategory(name) {
     const n = (name || '').toLowerCase();
@@ -2338,117 +1966,11 @@
     return 'case';
   }
 
-  function buildDynamicAddons(prod) {
-    const metaVals = Object.values(allProductsMeta || {});
-    if (!metaVals.length || !prod) return DEFAULT_UNIVERSAL_ADDONS;
-
-    const pName = (prod.tenHang || '').toLowerCase();
-    const pGroup = (prod.maNhom || prod.tenNhom || '').toLowerCase();
-    const pBrand = (prod.nhanHieu || '').toLowerCase();
-
-    const isTablet = pGroup.includes('tablet') || pGroup.includes('máy tính bảng') || pName.includes('ipad') || pName.includes('tab ');
-    const isLaptop = pGroup.includes('laptop') || pName.includes('macbook') || pName.includes('laptop');
-    const isWatch = pGroup.includes('dongho') || pGroup.includes('đồng hồ') || pName.includes('watch');
-    const isPhone = !isTablet && !isLaptop && !isWatch && (pGroup.includes('dienthoai') || pGroup.includes('điện thoại'));
-
-    const accessories = metaVals.filter(x =>
-      x && x.maHang && x.tenHang && Number(x.donGia) > 0 &&
-      (x.maNhom === 'PHUKIEN' || (x.tenNhom || '').toLowerCase().includes('phụ kiện')) &&
-      !/thay pin|sửa chữa|ép kính/i.test(x.tenHang)
-    );
-
-    const scoreItem = (x) => {
-      const n = x.tenHang.toLowerCase();
-      let s = 0;
-
-      if (isTablet) {
-        if (/đồng hồ|watch|47mm|43mm|40mm|iphone|galaxy s|redmi/.test(n)) return -100;
-        if (pName.includes('ipad') && /ipad/.test(n)) s += 50;
-        else if (pName.includes('galaxy tab') && /galaxy tab/.test(n)) s += 50;
-        else if (/ipad|galaxy tab/.test(n)) return -50; // không gợi ý phụ kiện hãng khác
-        if (/bao da|bàn phím|túi|tablet|hub|cổng chuyển/.test(n)) s += 30;
-        if (/củ sạc|sạc nhanh|20w|30w|45w|65w/.test(n)) s += 20;
-        if (/dự phòng/.test(n)) s += 15;
-      } else if (isLaptop) {
-        if (/đồng hồ|watch|47mm|43mm|iphone|ipad|ốp lưng/.test(n)) return -100;
-        if (/hub|docking|cổng chuyển|chuột|bàn phím|balo|túi/.test(n)) s += 40;
-        if (/100w|140w|65w|gan|dự phòng/.test(n)) s += 25;
-      } else if (isWatch) {
-        if (/iphone|ipad|macbook|laptop|ốp lưng|bao da/.test(n)) return -100;
-        if (/đồng hồ|watch|dây đeo|47mm|43mm|40mm/.test(n)) s += 50;
-        if (pBrand && n.includes(pBrand)) s += 20;
-      } else if (isPhone) {
-        if (/đồng hồ|watch|47mm|43mm|40mm|ipad|macbook|tablet/.test(n)) return -100;
-        if (pName.includes('iphone')) {
-          if (/samsung|galaxy|xiaomi|oppo/.test(n)) return -80;
-          if (/iphone/.test(n)) s += 40;
-          if (pName.includes('18') && n.includes('18')) s += 30;
-          else if (pName.includes('17') && n.includes('17')) s += 30;
-          else if (pName.includes('16') && n.includes('16')) s += 30;
-          else if (pName.includes('15') && n.includes('15')) s += 30;
-        } else if (pBrand) {
-          if (n.includes(pBrand)) s += 40;
-          else if (/iphone|apple/.test(n) && !/củ sạc|dự phòng|cáp/.test(n)) return -50;
-        }
-        if (/ốp lưng|cường lực/.test(n)) s += 20;
-        if (/củ sạc|dự phòng|cáp/.test(n)) s += 15;
-      } else {
-        if (/củ sạc|dự phòng|cáp|hub/.test(n)) s += 25;
-      }
-
-      if (x.anhChinh) s += 5;
-      return s;
-    };
-
-    const ranked = accessories
-      .map(x => ({ item: x, score: scoreItem(x) }))
-      .filter(r => r.score > 0)
-      .sort((a, b) => b.score - a.score);
-
-    // Chọn đa dạng theo nhóm (case, glass/hub, charger, battery) tối đa 4 món
-    const picked = [];
-    const usedIds = new Set();
-    const usedCats = new Set();
-
-    for (const r of ranked) {
-      const cat = classifyAddonCategory(r.item.tenHang);
-      if (!usedCats.has(cat) && !usedIds.has(r.item.maHang)) {
-        usedCats.add(cat);
-        usedIds.add(r.item.maHang);
-        picked.push({
-          id: r.item.maHang,
-          cat,
-          name: r.item.tenHang,
-          price: Number(r.item.donGia),
-          img: r.item.anhChinh || '../images/default-phone.png'
-        });
-        if (picked.length >= 4) break;
-      }
-    }
-
-    // Bổ sung nếu chưa đủ 4 món
-    for (const r of ranked) {
-      if (picked.length >= 4) break;
-      if (!usedIds.has(r.item.maHang)) {
-        usedIds.add(r.item.maHang);
-        picked.push({
-          id: r.item.maHang,
-          cat: classifyAddonCategory(r.item.tenHang),
-          name: r.item.tenHang,
-          price: Number(r.item.donGia),
-          img: r.item.anhChinh || '../images/default-phone.png'
-        });
-      }
-    }
-
-    return picked.length > 0 ? picked : DEFAULT_UNIVERSAL_ADDONS;
-  }
-
   window.addAddonToCart = function (addonId, btnEl) {
-    const item = (currentAddonsList || []).find(x => x.id === addonId) || DEFAULT_UNIVERSAL_ADDONS.find(x => x.id === addonId);
+    const item = currentAddonsList.find(x => x.id === addonId);
     if (!item) return;
 
-    const origPrice = Math.round(item.price * 1.25);
+    const origPrice = item.price;
     const cartItem = {
       id: item.id + '_Tiêu chuẩn_Mặc định',
       maHang: item.id,
@@ -2510,11 +2032,22 @@
     renderAddons(cat);
   };
 
-  function renderAddons(cat) {
+  let addonsRequest = 0;
+
+  async function renderAddons(cat) {
     const container = document.getElementById('addons-container');
     if (!container) return;
+    const request = ++addonsRequest;
+    const rows = await window.StoreData.getProductsByGroup('PHUKIEN', 24).catch(() => []);
+    if (request !== addonsRequest) return;
 
-    currentAddonsList = buildDynamicAddons(currentProduct);
+    currentAddonsList = rows.filter(product => product.tonKho > 0).map(product => ({
+      id: product.maHang,
+      cat: classifyAddonCategory(product.tenHang),
+      name: product.tenHang,
+      price: product.donGia,
+      img: resolveAssetPath(product.anhChinh)
+    }));
     const list = cat === 'all' ? currentAddonsList : currentAddonsList.filter(it => it.cat === cat);
 
     if (list.length === 0) {
@@ -2523,7 +2056,6 @@
     }
 
     container.innerHTML = list.map(item => {
-      const origPrice = Math.round(item.price * 1.25);
       return `
         <div class="p-3.5 sm:p-4 rounded-2xl border border-slate-200/90 bg-white hover:border-[#0066FF] hover:shadow-xs transition-all flex items-center justify-between gap-3.5 sm:gap-4 group">
           <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-slate-50 border border-slate-100 p-1.5 flex items-center justify-center flex-shrink-0 shadow-2xs group-hover:scale-105 transition-transform">
@@ -2533,8 +2065,6 @@
             <div class="addon-item-name text-sm sm:text-[14.5px] font-bold text-slate-800 line-clamp-2 leading-snug group-hover:text-blue-600 transition-colors">${item.name}</div>
             <div class="flex items-baseline gap-2 mt-1">
               <span class="addon-item-price text-sm sm:text-base font-extrabold text-[#E11B22] tabular-nums">${formatCurrency(item.price)}</span>
-              <span class="text-xs text-slate-400 line-through tabular-nums">${formatCurrency(origPrice)}</span>
-              <span class="text-[10px] font-bold text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded border border-rose-200">-20%</span>
             </div>
           </div>
           <button type="button" onclick="window.addAddonToCart('${item.id}', this)" class="addon-btn-add px-4 py-2 rounded-xl text-xs sm:text-sm font-bold text-[#0066FF] bg-white border-2 border-[#0066FF] hover:bg-[#0066FF] hover:text-white flex-shrink-0 cursor-pointer shadow-2xs transition-all active:scale-95 flex items-center gap-1.5">
@@ -2548,28 +2078,23 @@
   }
 
   // Render Sản phẩm tương tự
-  function renderSimilarProducts() {
+  async function renderSimilarProducts() {
     const grid = document.getElementById('similar-products-grid');
     if (!grid) return;
 
-    const items = [
-      { id: 'MH108', name: 'Samsung Galaxy A08 4GB/64GB', price: 4490000, oldPrice: 4890000, img: resolveAssetPath('images/products/phone-mh108.png') },
-      { id: 'MH109', name: 'Samsung Galaxy A18 6GB/128GB', price: 6690000, oldPrice: 7190000, img: resolveAssetPath('images/products/phone-mh109.png') },
-      { id: 'MH104', name: 'Nubia Air 5G 8GB/256GB', price: 5490000, oldPrice: 5990000, img: 'https://i.hoanghamobile.vn/Uploads/2026/07/07/back-gold1-171113527.png' },
-      { id: 'MH112', name: 'Xiaomi Redmi Note 17 6GB/128GB', price: 4890000, oldPrice: 5290000, img: resolveAssetPath('images/products/phone-mh112.png') },
-      { id: 'MH114', name: 'OPPO A68 5G 8GB/128GB', price: 5690000, oldPrice: 6190000, img: resolveAssetPath('images/products/phone-mh114.png') }
-    ];
+    const items = (await window.StoreData.getProductsByGroup(currentProduct.maNhom).catch(() => []))
+      .filter(product => product.maHang !== currentProduct.maHang)
+      .slice(0, 5)
+      .map(product => ({ id: product.maHang, name: product.tenHang, price: product.donGia, img: resolveAssetPath(product.anhChinh) }));
 
     grid.innerHTML = items.map(p => `
       <div class="bg-white rounded-2xl border border-slate-200/90 p-3 flex flex-col justify-between hover:border-blue-400 hover:shadow-md transition-all cursor-pointer group" onclick="window.location.href='product-detail.html?id=${p.id}'">
         <div class="relative w-full aspect-square flex items-center justify-center p-2 mb-2">
           <img src="${p.img}" alt="${p.name}" class="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform" onerror="this.src='../images/default-phone.png';" />
-          <span class="absolute top-1 left-1 px-1.5 py-0.5 rounded-md bg-rose-500 text-white font-bold text-[9px]">-8%</span>
         </div>
         <div>
           <h4 class="text-xs font-bold text-slate-800 line-clamp-2 leading-snug group-hover:text-blue-600 transition-colors">${p.name}</h4>
           <div class="text-xs sm:text-sm font-semibold text-rose-600 tabular-nums mt-1">${formatCurrency(p.price)}</div>
-          <div class="text-[10px] text-slate-400 line-through">${formatCurrency(p.oldPrice)}</div>
         </div>
       </div>
     `).join('');

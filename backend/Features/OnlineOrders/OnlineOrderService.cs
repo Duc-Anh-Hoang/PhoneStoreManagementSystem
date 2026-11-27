@@ -694,7 +694,9 @@ public class OnlineOrderService : IOnlineOrderService
                 && (donHang.PhuongThucThanhToan is "chuyen_khoan" or "the")
                 && donHang.PaymentStatus != "paid")
             {
-                var demoAutoConfirm = _http?.HttpContext?.RequestServices.GetService<IConfiguration>()?.GetValue<bool>("Payment:DemoAutoConfirm") == true;
+                var requestServices = _http?.HttpContext?.RequestServices;
+                var demoAutoConfirm = requestServices?.GetService<IHostEnvironment>()?.IsDevelopment() == true &&
+                    requestServices.GetService<IConfiguration>()?.GetValue<bool>("Payment:DemoAutoConfirm") == true;
                 if (demoAutoConfirm)
                 {
                     donHang.PaymentStatus = "paid";

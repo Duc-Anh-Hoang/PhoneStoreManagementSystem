@@ -42,6 +42,7 @@ services:
       Jwt__Audience: ${Jwt__Audience:-PhoneStoreClient}
       Jwt__ExpireMinutes: ${Jwt__ExpireMinutes:-1440}
       OTP_MODE: ${OTP_MODE:-demo}
+      Payment__DemoAutoConfirm: ${PAYMENT_DEMO_AUTO_CONFIRM:-true}
       SHIPPING_MODE: ${SHIPPING_MODE:-mock}
       GHN_TOKEN: ${GHN_TOKEN:-}
       GHN_SHOP_ID: ${GHN_SHOP_ID:-}

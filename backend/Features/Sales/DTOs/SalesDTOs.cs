@@ -1,8 +1,14 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace PhoneStoreAPI.Features.Sales.DTOs;
 
 public class CreateHoaDonRequest
 {
     public string? MaKH { get; set; }
+    [StringLength(100)]
+    public string? TenKhachLe { get; set; }
+    [RegularExpression(@"^(0|\+84)[35789][0-9]{8}$")]
+    public string? SdtKhachLe { get; set; }
     public string? MaKM { get; set; }
     public string PhuongThucThanhToan { get; set; } = "tien_mat"; // tien_mat, chuyen_khoan, the
     public string? KenhBan { get; set; } = "tai_quay";
@@ -23,6 +29,7 @@ public class HoaDonDto
     public DateTime NgayLap { get; set; }
     public string? MaKH { get; set; }
     public string? TenKhachHang { get; set; }
+    public string? SdtKhachHang { get; set; }
     public string? TenKH { get; set; }
     public string MaNV { get; set; } = string.Empty;
     public string? TenNV { get; set; }

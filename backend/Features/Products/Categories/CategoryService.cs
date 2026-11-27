@@ -78,14 +78,16 @@ public class CategoryService : ICategoryService
             TenNhom = tenNhom
         };
 
+        var products = await LoadSelectedModelsAsync(request.MaHangs);
         _context.NhomHangs.Add(entity);
+        foreach (var product in products) product.MaNhom = maNhom;
         await _context.SaveChangesAsync();
 
         return new NhomHangDto
         {
             MaNhom = entity.MaNhom,
             TenNhom = entity.TenNhom,
-            SoLuongMatHang = 0
+            SoLuongMatHang = products.Count
         };
     }
 
@@ -200,15 +202,27 @@ public class CategoryService : ICategoryService
             TenLoai = tenLoai
         };
 
+        var products = await LoadSelectedModelsAsync(request.MaHangs);
         _context.LoaiHangs.Add(entity);
+        foreach (var product in products) product.MaLoai = maLoai;
         await _context.SaveChangesAsync();
 
         return new LoaiHangDto
         {
             MaLoai = entity.MaLoai,
             TenLoai = entity.TenLoai,
-            SoLuongMatHang = 0
+            SoLuongMatHang = products.Count
         };
+    }
+
+    private async Task<List<MatHang>> LoadSelectedModelsAsync(List<string> codes)
+    {
+        if (codes.Count == 0) return new List<MatHang>();
+        var uniqueCodes = codes.Distinct().ToArray();
+        var products = await _context.MatHangs.Where(item => uniqueCodes.Contains(item.MaHang)).ToListAsync();
+        if (products.Count != uniqueCodes.Length)
+            throw new BadRequestException("Có model đã chọn không còn tồn tại.");
+        return products;
     }
 
     public async Task<LoaiHangDto> UpdateLoaiHangAsync(string maLoai, UpdateLoaiHangRequest request)

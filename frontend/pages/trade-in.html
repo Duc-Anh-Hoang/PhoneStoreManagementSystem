@@ -730,24 +730,13 @@
                 </div>
                 <div>
                   <label class="block text-xs font-semibold text-slate-700 mb-1.5">Khu vực bạn ở <span class="text-red-500">*</span></label>
-                  <select id="broken-city" onchange="onCityChange(this.value)" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:border-[#0066FF]">
-                    <option value="TP. Hồ Chí Minh">TP. Hồ Chí Minh</option>
-                    <option value="Hà Nội">Hà Nội</option>
-                    <option value="Đà Nẵng">Đà Nẵng</option>
-                    <option value="Bình Dương">Bình Dương</option>
-                    <option value="Cần Thơ">Cần Thơ</option>
-                  </select>
+                  <input id="broken-city" readonly value="TP.HCM" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-slate-50 text-xs sm:text-sm text-slate-700">
                 </div>
               </div>
 
               <div>
                 <label class="block text-xs font-semibold text-slate-700 mb-1.5">Cửa hàng tiếp nhận gần nhất <span class="text-red-500">*</span></label>
-                <select id="broken-store" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:border-[#0066FF]">
-                  <option value="241 Lê Văn Việt, TP. Thủ Đức, TP.HCM">Chi nhánh 1: 241 Lê Văn Việt, Tăng Nhơn Phú B, TP. Thủ Đức, TP.HCM</option>
-                  <option value="55 Trần Quang Khải, Quận 1, TP.HCM">Chi nhánh 2: 55 Trần Quang Khải, Phường Tân Định, Quận 1, TP.HCM</option>
-                  <option value="122 Thái Hà, Đống Đa, Hà Nội">Chi nhánh 3: 122 Thái Hà, Phường Đống Đa, Hà Nội</option>
-                  <option value="153 Hàm Nghi, Thanh Khê, Đà Nẵng">Chi nhánh 4: 153 Hàm Nghi, Quận Thanh Khê, Đà Nẵng</option>
-                </select>
+                <input id="broken-store" readonly value="241 Lê Văn Việt, TP. Thủ Đức, TP.HCM" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-slate-50 text-xs sm:text-sm text-slate-700">
               </div>
 
               <div>
@@ -1167,13 +1156,7 @@
 
               <div>
                 <label for="booking-branch" class="sr-only">Chi nhánh tiếp nhận</label>
-                <select id="booking-branch" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0066FF] bg-white cursor-pointer" onchange="clearFieldError('booking-branch')">
-                  <option value="">-- Vui lòng chọn chi nhánh tiếp nhận gần bạn --</option>
-                  <option value="Chi nhánh 1: 241 Lê Văn Việt, TP. Thủ Đức, TP.HCM" selected>Chi nhánh 1: 241 Lê Văn Việt, TP. Thủ Đức, TP.HCM</option>
-                  <option value="Chi nhánh 2: 55 Trần Quang Khải, Quận 1, TP.HCM">Chi nhánh 2: 55 Trần Quang Khải, Quận 1, TP.HCM</option>
-                  <option value="Chi nhánh 3: 122 Thái Hà, Đống Đa, Hà Nội">Chi nhánh 3: 122 Thái Hà, Đống Đa, Hà Nội</option>
-                  <option value="Chi nhánh 4: 153 Hàm Nghi, Thanh Khê, Đà Nẵng">Chi nhánh 4: 153 Hàm Nghi, Thanh Khê, Đà Nẵng</option>
-                </select>
+                <input id="booking-branch" readonly value="241 Lê Văn Việt, TP. Thủ Đức, TP.HCM" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-slate-50 text-xs sm:text-sm text-slate-700">
                 <span id="booking-branch-error" class="hidden text-[11px] text-red-500 font-semibold mt-1 block"></span>
               </div>
 
@@ -1538,7 +1521,7 @@
   <script src="../js/trade-in-core.js?v=1.0"></script>
   <script src="../js/auth.js?v=6.0"></script>
   <script src="../js/cart.js?v=6.0"></script>
-  <script src="../js/store-data.js?v=3.8"></script>
+  <script src="../js/store-data.js?v=4.0"></script>
 
   <script>
     // =========================================================================
@@ -1787,29 +1770,8 @@
     // DOM READY & KHỞI TẠO
     // ==========================================
     document.addEventListener('DOMContentLoaded', async () => {
-      // 1. Tải danh mục sản phẩm từ JSON
-      try {
-        const metaRes = await fetch('../data/products-meta.json').then(r => r.ok ? r.json() : null).catch(() => null);
-        if (metaRes && typeof metaRes === 'object') {
-          allProducts = Object.values(metaRes);
-        }
-      } catch (e) {
-        console.warn('Cannot fetch products-meta.json directly', e);
-      }
-
-      if (allProducts.length === 0 && window.StoreData) {
-        allProducts = window.StoreData.products || [];
-      }
-
-      // Fallback nếu rỗng
-      if (allProducts.length === 0) {
-        allProducts = [
-          { maHang: 'MH101', tenHang: 'iPhone 18 Pro Max 256GB', donGia: 41490000, giaGoc: 44809200, nhanHieu: 'Apple', anhChinh: 'https://i.hoanghamobile.vn/Uploads/2026/09/10/iphone-18-pro-max-burgundy-pdp-images-vi-vn-021130982.png' },
-          { maHang: 'MH114', tenHang: 'Samsung Galaxy Z Fold8 5G', donGia: 39990000, giaGoc: 43990000, nhanHieu: 'Samsung', anhChinh: 'https://i.hoanghamobile.vn/Uploads/2026/07/22/samsung-galaxy-z-fold8-tim-8-153436602.png' },
-          { maHang: 'MH113', tenHang: 'Samsung Galaxy S26 Ultra', donGia: 30890000, giaGoc: 34990000, nhanHieu: 'Samsung', anhChinh: 'https://i.hoanghamobile.vn/Uploads/2026/02/25/s26-ultra-tim-1.png' },
-          { maHang: 'MH117', tenHang: 'Xiaomi 17T Pro Leica 512GB', donGia: 17490000, giaGoc: 19990000, nhanHieu: 'Xiaomi', anhChinh: 'https://i.hoanghamobile.vn/Uploads/2026/08/01/q15a-green-back1-091121733.png' }
-        ];
-      }
+      await window.StoreData.init();
+      allProducts = window.StoreData.getAllProducts().filter(product => product.maNhom === 'DIENTHOAI');
 
       // Kiểm tra URL param để chọn máy mới
       const urlParams = new URLSearchParams(window.location.search);
@@ -2089,8 +2051,8 @@
       document.getElementById('target-name').textContent = targetProduct.tenHang;
       document.getElementById('target-brand-badge').textContent = targetProduct.nhanHieu || 'Chính Hãng';
       
-      const price = targetSelectedCapacity?.gia || targetProduct.donGia || 41490000;
-      const oldPrice = targetSelectedCapacity?.giaGoc || targetProduct.giaGoc || Math.round(price * 1.08);
+      const price = targetSelectedCapacity?.gia ?? targetProduct.donGia;
+      const oldPrice = targetSelectedCapacity?.giaGoc ?? targetProduct.giaGoc;
       const discount = oldPrice > price ? Math.round(((oldPrice - price) / oldPrice) * 100) : 8;
 
       document.getElementById('target-price').textContent = formatMoney(price);
@@ -2329,9 +2291,9 @@
     }
 
     function recalculate() {
-      if (!selectedModel) return;
+      if (!selectedModel || !targetProduct) return;
 
-      const targetPrice = targetSelectedCapacity?.gia || targetProduct?.donGia || 41490000;
+      const targetPrice = targetSelectedCapacity?.gia ?? targetProduct.donGia;
 
       let quote;
       if (typeof TradeInCore !== 'undefined') {
@@ -2561,6 +2523,11 @@
       const phoneInput = document.getElementById('booking-phone');
       const branchSelect = document.getElementById('booking-branch');
       const submitBtn = document.getElementById('btn-submit-trade-in');
+      if (submitBtn?.disabled) return;
+      if (!targetProduct?.tenHang || !selectedModel?.model) {
+        showToast('Chọn máy thu cũ và máy muốn mua trước khi đăng ký.');
+        return;
+      }
 
       // Validate bằng pure function
       let validation;
@@ -2638,6 +2605,7 @@
             targetProduct: {
               id: targetProduct?.maHang,
               name: targetProduct?.tenHang,
+              capacity: targetSelectedCapacity?.dungLuong || null,
               price: calc.targetPrice
             },
             usedDevice: {
@@ -2759,26 +2727,6 @@
     // =========================================================================
     // SECTION 4: FORM ĐĂNG KÝ TƯ VẤN MÁY NÁT
     // =========================================================================
-    function onCityChange(city) {
-      const storeSelect = document.getElementById('broken-store');
-      if (!storeSelect) return;
-      if (city === 'Hà Nội') {
-        storeSelect.innerHTML = `
-          <option value="122 Thái Hà, Đống Đa, Hà Nội">Chi nhánh: 122 Thái Hà, Phường Đống Đa, Hà Nội</option>
-          <option value="392 Cầu Giấy, Hà Nội">Chi nhánh: 392 Cầu Giấy, Quận Cầu Giấy, Hà Nội</option>
-        `;
-      } else if (city === 'Đà Nẵng') {
-        storeSelect.innerHTML = `
-          <option value="153 Hàm Nghi, Thanh Khê, Đà Nẵng">Chi nhánh: 153 Hàm Nghi, Quận Thanh Khê, Đà Nẵng</option>
-        `;
-      } else {
-        storeSelect.innerHTML = `
-          <option value="241 Lê Văn Việt, TP. Thủ Đức, TP.HCM">Chi nhánh 1: 241 Lê Văn Việt, Tăng Nhơn Phú B, TP. Thủ Đức, TP.HCM</option>
-          <option value="55 Trần Quang Khải, Quận 1, TP.HCM">Chi nhánh 2: 55 Trần Quang Khải, Phường Tân Định, Quận 1, TP.HCM</option>
-        `;
-      }
-    }
-
     function submitBrokenDeviceForm(event) {
       event.preventDefault();
       const name = document.getElementById('broken-name')?.value?.trim();
@@ -2842,6 +2790,6 @@
       }, 3500);
     }
   </script>
-  <script src="../js/chat-widget.js?v=1.0"></script>
+  <script src="../js/chat-widget.js?v=1.1"></script>
 </body>
 </html>

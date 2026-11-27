@@ -82,117 +82,28 @@
           throw new Error(errDetail);
         }
       } catch (err) {
-        // Nếu backend đã phản hồi (kể cả lỗi mật khẩu hay lỗi server), hiển thị lỗi cho người dùng, không tạo token giả
-        if (err.name !== 'TypeError' && !err.message.includes('Failed to fetch') && !err.message.includes('NetworkError')) {
-          throw err;
-        }
-        console.warn('Backend chưa online hoặc không kết nối được cổng 8080. Kiểm tra tài khoản mẫu seed hệ thống...');
+        if (err instanceof TypeError) throw new Error('Không kết nối được máy chủ đăng nhập');
+        throw err;
       }
-
-      // 2. Dự phòng tài khoản Seed (khớp chính xác với DbSeeder.cs)
-      const SEED_STAFF = {
-        'admin':   { hoTen: 'Nguyễn Văn Quản Trị', maNV: 'NV001', role: 'ADMIN', tenQuyen: 'Quản trị viên' },
-        'quanly':  { hoTen: 'Trần Thị Quản Lý', maNV: 'NV002', role: 'MANAGER', tenQuyen: 'Quản lý' },
-        'kythuat': { hoTen: 'Lê Văn Kỹ Thuật', maNV: 'NV003', role: 'TECH', tenQuyen: 'Kỹ thuật & Bảo hành' },
-        'kho':     { hoTen: 'Phạm Văn Kho', maNV: 'NV004', role: 'WAREHOUSE', tenQuyen: 'Thủ kho' },
-        'banhang': { hoTen: 'Hoàng Thị Bán Hàng', maNV: 'NV005', role: 'SALES', tenQuyen: 'Bán hàng' },
-        'thungan': { hoTen: 'Đỗ Thị Thu Ngân', maNV: 'NV006', role: 'CASHIER', tenQuyen: 'Thu ngân' }
-      };
-
-      const matched = SEED_STAFF[username];
-      const validPasswords = ['admin123', '123456', 'admin'];
-      if (matched && validPasswords.includes(password)) {
-        const fallbackToken = 'offline_admin_token_' + Date.now();
-        const userObj = {
-          type: 'staff',
-          username: username,
-          tenNhanVien: matched.hoTen,
-          tenQuyen: matched.tenQuyen,
-          maNV: matched.maNV,
-          role: matched.role,
-          token: fallbackToken
-        };
-        localStorage.setItem('admin_token', fallbackToken);
-        this.setUser(userObj);
-        return { success: true, redirect: (window.location.pathname.includes('/pages/') ? 'admin.html' : 'pages/admin.html'), user: userObj };
-      }
-
-      throw new Error('Tên đăng nhập hoặc mật khẩu không chính xác');
     },
 
-    /**
-     * Đăng nhập Khách hàng / Người dùng
-     */
     async loginCustomer(phone) {
       phone = (phone || '').trim().replace(/\s/g, '');
-      if (!phone) {
-        throw new Error('Vui lòng nhập số điện thoại khách hàng');
+      if (!phone) throw new Error('Vui lòng nhập số điện thoại khách hàng');
+
+      const response = await fetch(getApiBase() + '/auth/customer-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone })
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || !data.token || !data.user?.maKH) {
+        throw new Error(data.message || 'Không đăng nhập được tài khoản khách hàng');
       }
-
-      // 1. Kiểm tra tài khoản đã hoàn tất thông tin chưa
-      let existingProfile = null;
-      try {
-        const regList = JSON.parse(localStorage.getItem('samamobile_registered_users') || '[]');
-        existingProfile = regList.find(reg => reg.sdt && reg.sdt.replace(/\s/g, '') === phone && reg.isProfileComplete);
-      } catch (e) {}
-
-      if (existingProfile && existingProfile.isProfileComplete) {
-        this.setUser(existingProfile);
-        return { success: true, redirect: 'index.html', user: existingProfile };
-      }
-
-      // 2. Thử gọi API Backend nếu online
-      try {
-        const resp = await fetch(`${API_BASE}/auth/customer-login`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ phone })
-        });
-        const data = await resp.json().catch(() => ({}));
-        if (resp.ok && data.user && data.user.hoTen && data.user.isProfileComplete) {
-          const userObj = {
-            type: 'customer',
-            role: 'CUSTOMER',
-            maKH: data.user.maKH,
-            hoTen: data.user.hoTen,
-            sdt: data.user.sdt,
-            email: data.user.email,
-            diaChi: data.user.diaChi,
-            isProfileComplete: true,
-            token: data.token
-          };
-          this.setUser(userObj);
-          return { success: true, redirect: 'index.html', user: userObj };
-        }
-      } catch (err) {
-        // Backend offline -> xử lý frontend
-      }
-
-      // 3. Nếu là số mới / chưa có hồ sơ: Tự động khởi tạo và đăng nhập ngay
-      const userObj = {
-        type: 'customer',
-        role: 'CUSTOMER',
-        maKH: 'KH_' + Math.floor(100000 + Math.random() * 900000),
-        hoTen: 'Khách hàng ' + phone.slice(-4),
-        sdt: phone,
-        taiKhoan: 'user_' + phone.slice(-4),
-        email: '',
-        diaChi: 'TP. Hồ Chí Minh',
-        isProfileComplete: true,
-        diemTichLuy: 100,
-        hangThanhVien: 'S-Member',
-        token: 'cust_token_' + Date.now()
-      };
-      localStorage.setItem('customer_token', userObj.token);
-      this.setUser(userObj);
-      try {
-        let regList = JSON.parse(localStorage.getItem('samamobile_registered_users') || '[]');
-        const idx = regList.findIndex(u => u.sdt && u.sdt.replace(/\s/g, '') === phone);
-        if (idx > -1) regList[idx] = { ...regList[idx], ...userObj };
-        else regList.push(userObj);
-        localStorage.setItem('samamobile_registered_users', JSON.stringify(regList));
-      } catch (e) {}
-      return { success: true, redirect: 'index.html', user: userObj };
+      const user = { ...data.user, type: 'customer', role: 'CUSTOMER', token: data.token };
+      localStorage.setItem('customer_token', data.token);
+      this.setUser(user);
+      return { success: true, redirect: 'index.html', user };
     },
 
     async logout() {

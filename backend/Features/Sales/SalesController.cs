@@ -16,11 +16,16 @@ public class SalesController : ControllerBase
         _salesService = salesService;
     }
 
+    private bool CanViewCustomerPhone() =>
+        User.IsInRole(AppConstants.Roles.Admin) || User.IsInRole(AppConstants.Roles.Manager) ||
+        User.IsInRole(AppConstants.Roles.Sales) || User.IsInRole(AppConstants.Roles.Cashier);
+
     [HttpPost]
     [AllowAnonymous]
     public async Task<IActionResult> CreateHoaDon([FromBody] CreateHoaDonRequest request)
     {
         var result = await _salesService.CreateHoaDonAsync(request);
+        if (!CanViewCustomerPhone()) result.SdtKhachHang = null;
         return StatusCode(StatusCodes.Status201Created, result);
     }
 
@@ -36,6 +41,10 @@ public class SalesController : ControllerBase
         [FromQuery] int pageSize = 20)
     {
         var (items, total) = await _salesService.GetHoaDonsAsync(tuNgay, denNgay, kenhBan, maKH, keyword, page, pageSize);
+        if (!CanViewCustomerPhone())
+        {
+            foreach (var item in items) item.SdtKhachHang = null;
+        }
         Response.Headers["X-Total-Count"] = total.ToString();
         return Ok(items);
     }
@@ -45,6 +54,7 @@ public class SalesController : ControllerBase
     public async Task<IActionResult> GetHoaDonChiTiet(string soHD)
     {
         var result = await _salesService.GetHoaDonChiTietAsync(soHD);
+        if (!CanViewCustomerPhone()) result.SdtKhachHang = null;
         return Ok(result);
     }
 }

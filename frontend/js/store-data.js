@@ -1,7 +1,6 @@
 /**
  * CellphoneS - 241 Lê Văn Việt - DATA LAYER & REPOSITORY
- * Dữ liệu lấy trực tiếp từ Backend REST API (Spring Boot / SQL Server)
- * Tuyệt đối không lưu dữ liệu giả hoặc rơi về dữ liệu cứng
+ * Danh mục nghiệp vụ từ REST API .NET và PostgreSQL.
  */
 
 (function (root, factory) {
@@ -15,7 +14,23 @@
 }(typeof self !== 'undefined' ? self : this, function () {
   'use strict';
 
-  var API_BASE = window.API_BASE || '/api';
+  async function read(path) {
+    const localPreview = ['5500', '5501', '3000'].includes(window.location.port) || window.location.protocol === 'file:';
+    const apiBase = window.API_BASE || (localPreview ? 'http://localhost:5132/api' : '/api');
+    const response = await fetch(apiBase + path);
+    if (!response.ok) throw new Error('Không tải được ' + path);
+    return response.json();
+  }
+
+  async function readCatalog() {
+    const products = [];
+    const pageSize = 100;
+    for (let page = 1; ; page++) {
+      const rows = await read('/mathang?pageSize=' + pageSize + '&page=' + page);
+      products.push(...rows);
+      if (rows.length < pageSize) return products;
+    }
+  }
 
   class StoreDataManager {
     constructor() {
@@ -31,84 +46,18 @@
       if (this.isInitialized) return;
 
       try {
-        const [mathangRes, nhomhangRes, loaihangRes, kmRes, metaRes] = await Promise.all([
-          fetch(`${API_BASE}/mathang`).then(r => r.ok ? r.json() : []).catch(() => []),
-          fetch(`${API_BASE}/nhomhang`).then(r => r.ok ? r.json() : []).catch(() => []),
-          fetch(`${API_BASE}/loaihang`).then(r => r.ok ? r.json() : []).catch(() => []),
-          fetch(`${API_BASE}/promotions/active`).then(r => r.ok ? r.json() : []).catch(() => []),
-          fetch('data/products-meta.json').then(r => r.ok ? r.json() : fetch('products-meta.json').then(r2 => r2.ok ? r2.json() : {})).catch(() => ({}))
+        const [products, groups, types, promotions, media] = await Promise.all([
+          readCatalog(),
+          read('/nhomhang'),
+          read('/loaihang'),
+          read('/promotions/active'),
+          fetch('/data/products-meta.json').then(r => r.ok ? r.json() : {}).catch(() => ({}))
         ]);
-
-        this.nhomHang = Array.isArray(nhomhangRes) ? nhomhangRes : [];
-        this.loaiHang = Array.isArray(loaihangRes) ? loaihangRes : [];
-        this.promotions = Array.isArray(kmRes) ? kmRes : [];
-
-        const metaMap = (metaRes && typeof metaRes === 'object') ? metaRes : {};
-        const metaValues = Object.values(metaMap);
-        const backendItems = Array.isArray(mathangRes) ? mathangRes : [];
-
-        const mergedList = [];
-        const seenIds = new Set();
-        const seenNames = new Set();
-
-        for (const item of backendItems) {
-          seenIds.add(item.maHang);
-          if (item.tenHang) seenNames.add(item.tenHang.trim().toLowerCase());
-          const meta = metaMap[item.maHang] || metaValues.find(m => m.tenHang && item.tenHang && m.tenHang.toLowerCase() === item.tenHang.toLowerCase());
-          const tonKho = item.tonKho !== undefined ? Number(item.tonKho) : (meta?.tonKho || 15);
-          const donGia = Number(item.donGia) || meta?.donGia || 0;
-          const anhChinh = meta?.anhChinh || item.hinhAnh || 'https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-tu-nhien-1.png';
-
-          mergedList.push({
-            maHang: item.maHang,
-            tenHang: item.tenHang,
-            donGia: donGia,
-            giaGoc: meta?.giaGoc || Math.round(donGia * 1.08),
-            dvt: item.dvt || 'Cái',
-            maNhom: item.maNhom || meta?.maNhom || 'DIENTHOAI',
-            tenNhom: item.tenNhom || meta?.tenNhom || (this.nhomHang.find(n => n.maNhom === item.maNhom)?.tenNhom || 'Điện thoại'),
-            maLoai: item.maLoai || meta?.maLoai || 'OTHER',
-            tenLoai: item.tenLoai || meta?.nhanHieu || (this.loaiHang.find(l => l.maLoai === item.maLoai)?.tenLoai || ''),
-            nhanHieu: item.tenLoai || meta?.nhanHieu || 'Chính hãng',
-            quanLyImei: !!item.quanLyIMEI,
-            thoiHanBaoHanh: item.thoiHanBaoHanh !== undefined ? item.thoiHanBaoHanh : 12,
-            tonKho: tonKho,
-            anhChinh: anhChinh,
-            mauSac: meta?.mauSac && meta.mauSac.length > 0 ? meta.mauSac : [{ id: 'std', ten: 'Mặc định', anh: anhChinh, hex: '#d70018' }],
-            phienBan: meta?.phienBan && meta.phienBan.length > 0 ? meta.phienBan : [{ id: 'std', dungLuong: 'Tiêu chuẩn', gia: donGia, giaGoc: Math.round(donGia * 1.08), tonKho: tonKho }],
-            thongSo: meta?.thongSo || {}
-          });
-        }
-
-        // Add metadata products not yet in backend
-        for (const meta of metaValues) {
-          const normName = (meta.tenHang || '').trim().toLowerCase();
-          if (!seenIds.has(meta.maHang) && (!normName || !seenNames.has(normName))) {
-            seenIds.add(meta.maHang);
-            if (normName) seenNames.add(normName);
-            mergedList.push({
-              maHang: meta.maHang,
-              tenHang: meta.tenHang,
-              donGia: meta.donGia,
-              giaGoc: meta.giaGoc || Math.round(meta.donGia * 1.08),
-              dvt: 'Cái',
-              maNhom: meta.maNhom || 'DIENTHOAI',
-              tenNhom: meta.tenNhom || 'Điện thoại',
-              maLoai: meta.maLoai || 'OTHER',
-              tenLoai: meta.nhanHieu || '',
-              nhanHieu: meta.nhanHieu || 'Chính hãng',
-              quanLyImei: true,
-              thoiHanBaoHanh: 12,
-              tonKho: 15,
-              anhChinh: meta.anhChinh,
-              mauSac: meta.mauSac || [{ id: 'std', ten: 'Mặc định', anh: meta.anhChinh, hex: '#d70018' }],
-              phienBan: meta.phienBan || [{ id: 'std', dungLuong: 'Tiêu chuẩn', gia: meta.donGia, giaGoc: meta.giaGoc, tonKho: 15 }],
-              thongSo: meta.thongSo || {}
-            });
-          }
-        }
-
-        this.products = mergedList;
+        this.nhomHang = groups;
+        this.loaiHang = types;
+        this.promotions = promotions;
+        this.products = products.map(item => this.decorateProduct(item, media[item.maHang]));
+        this.media = media;
         this.isInitialized = true;
         this.loadError = null;
       } catch (err) {
@@ -123,6 +72,37 @@
           </div>`;
         }
       }
+    }
+
+    decorateProduct(item, media = {}) {
+      const image = media.anhChinh || item.hinhAnh || '';
+      return {
+        ...item,
+        anhChinh: image,
+        gallery: media.gallery,
+        album: media.album,
+        slug: media.slug,
+        nhanHieu: item.tenLoai || '',
+        giaGoc: item.donGia,
+        phienBan: [{ id: 'std', dungLuong: 'Tiêu chuẩn', gia: item.donGia, giaGoc: item.donGia, tonKho: item.tonKho }],
+        thongSo: Object.fromEntries((item.thongSo || []).map(spec => [spec.tenThuocTinh, spec.giaTri]))
+      };
+    }
+
+    async getProductDetail(code) {
+      const item = await read('/mathang/' + encodeURIComponent(code));
+      let media = this.media;
+      if (!media) {
+        media = await fetch('/data/products-meta.json').then(r => r.ok ? r.json() : {}).catch(() => ({}));
+      }
+      this.media = media;
+      return this.decorateProduct(item, media[item.maHang]);
+    }
+
+    async getProductsByGroup(group, pageSize = 6) {
+      if (!group) return [];
+      const rows = await read('/mathang?pageSize=' + pageSize + '&maNhom=' + encodeURIComponent(group));
+      return rows.map(item => this.decorateProduct(item, this.media?.[item.maHang]));
     }
 
     getAllProducts() {

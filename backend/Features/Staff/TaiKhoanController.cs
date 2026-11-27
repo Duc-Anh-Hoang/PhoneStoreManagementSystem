@@ -123,8 +123,14 @@ public class PhanQuyenController : ControllerBase
         var role = await db.PhanQuyens.FindAsync(code);
         if (role == null) return NotFound();
         if (request.MoTa?.Length > 255) return BadRequest(new { message = "Mô tả tối đa 255 ký tự." });
+        if (request.QuyenCoSo != null && role.MaQuyen != AppConstants.Roles.Admin)
+        {
+            if (request.QuyenCoSo is not ("manager" or "sales" or "cashier" or "stock" or "tech"))
+                return BadRequest(new { message = "Nhóm quyền kế thừa không hợp lệ." });
+            role.QuyenCoSo = request.QuyenCoSo == role.MaQuyen ? null : request.QuyenCoSo;
+        }
         role.MoTa = request.MoTa?.Trim();
         await db.SaveChangesAsync();
-        return Ok(new { role.MaQuyen, role.MoTa });
+        return Ok(new { role.MaQuyen, role.MoTa, role.QuyenCoSo });
     }
 }

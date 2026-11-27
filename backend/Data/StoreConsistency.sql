@@ -1,3 +1,9 @@
+ALTER TABLE thamso ADD COLUMN IF NOT EXISTS mahienthi varchar(30);
+CREATE UNIQUE INDEX IF NOT EXISTS ux_thamso_mahienthi ON thamso (COALESCE(mahienthi, mathamso));
+
+ALTER TABLE hoadon ADD COLUMN IF NOT EXISTS tenkhachle varchar(100),
+    ADD COLUMN IF NOT EXISTS sdtkhachle varchar(15);
+
 ALTER TABLE donhangonline ADD COLUMN IF NOT EXISTS ghichu text,
     ADD COLUMN IF NOT EXISTS shipping_fee numeric(18,2) NOT NULL DEFAULT 0,
     ADD COLUMN IF NOT EXISTS voucher_code varchar(50),

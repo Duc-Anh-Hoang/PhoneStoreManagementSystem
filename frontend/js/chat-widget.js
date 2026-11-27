@@ -8,9 +8,11 @@
 (function () {
   'use strict';
 
-  const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-    ? 'http://localhost:5132'
-    : window.location.origin;
+  const localPreview = window.location.protocol === 'file:' ||
+    ['5500', '5501', '3000'].includes(window.location.port);
+  const apiBase = window.API_BASE || window.APP_CONFIG?.API_BASE ||
+    (localPreview ? 'http://localhost:5132/api' : '/api');
+  const API_BASE = apiBase.replace(/\/api\/?$/, '');
 
   const CHAT_HUB_URL = `${API_BASE}/hubs/chat`;
   const isInPagesDir = window.location.pathname.includes('/pages/');

@@ -167,6 +167,8 @@ public class SalesService : ISalesService
                 SoHD = soHD,
                 NgayLap = DateTime.UtcNow,
                 MaKH = request.MaKH,
+                TenKhachLe = string.IsNullOrWhiteSpace(request.TenKhachLe) ? null : request.TenKhachLe.Trim(),
+                SdtKhachLe = string.IsNullOrWhiteSpace(request.SdtKhachLe) ? null : request.SdtKhachLe,
                 MaNV = maNV,
                 MaKM = validMaKM,
                 KenhBan = string.IsNullOrWhiteSpace(request.KenhBan) ? "tai_quay" : request.KenhBan,
@@ -253,6 +255,7 @@ public class SalesService : ISalesService
         {
             var kw = keyword.Trim().ToLower();
             query = query.Where(h => h.SoHD.ToLower().Contains(kw)
+                || (h.TenKhachLe != null && h.TenKhachLe.ToLower().Contains(kw))
                 || h.ChiTietHoaDons.Any(c => c.MaIMEI != null &&
                     (c.MaIMEI.ToLower().Contains(kw) || (c.IMEI != null && c.IMEI.SoIMEI.Contains(kw))))
                 || (h.KhachHang != null && (h.KhachHang.HoTen.ToLower().Contains(kw) || (h.KhachHang.Sdt != null && h.KhachHang.Sdt.Contains(kw)))));
@@ -307,8 +310,9 @@ public class SalesService : ISalesService
             SoHD = h.SoHD,
             NgayLap = h.NgayLap,
             MaKH = h.MaKH,
-            TenKhachHang = h.KhachHang?.HoTen,
-            TenKH = h.KhachHang?.HoTen ?? "Khách lẻ",
+            TenKhachHang = h.KhachHang?.HoTen ?? h.TenKhachLe,
+            SdtKhachHang = h.SdtKhachLe ?? h.KhachHang?.Sdt,
+            TenKH = h.KhachHang?.HoTen ?? h.TenKhachLe ?? "Khách lẻ",
             MaNV = h.MaNV,
             TenNV = h.NhanVien?.HoTen,
             MaKM = h.MaKM,

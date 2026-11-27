@@ -18,6 +18,14 @@ public class HoaDon
     [MaxLength(10)]
     public string? MaKH { get; set; }
 
+    [Column("tenkhachle")]
+    [MaxLength(100)]
+    public string? TenKhachLe { get; set; }
+
+    [Column("sdtkhachle")]
+    [MaxLength(15)]
+    public string? SdtKhachLe { get; set; }
+
     [ForeignKey(nameof(MaKH))]
     public KhachHang? KhachHang { get; set; }
 
