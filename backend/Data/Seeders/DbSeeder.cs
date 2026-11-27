@@ -352,13 +352,26 @@ CREATE INDEX IF NOT EXISTS IX_order_status_history_order ON order_status_history
                 }
             }
 
-            // Bổ sung tồn kho & IMEI cho các model bị thiếu trong seed_full_stock.sql (ví dụ MH101..MH112, MH106)
-            var hasGapStock = await context.PhieuNhaps.AnyAsync(p => p.SoPN == "PN_TONKHO_GAP");
-            if (!hasGapStock)
+            // Bổ sung tồn kho & IMEI cho các model bị thiếu trong seed_full_stock.sql (ví dụ MH001, MH002, IP15128, CAP_C_L, MH101..MH112)
+            var hasMissingStock = await context.MatHangs.AnyAsync(m => !context.ChiTietPhieuNhaps.Any(c => c.MaHang == m.MaHang));
+            if (hasMissingStock)
             {
                 await context.Database.ExecuteSqlRawAsync("""
+                    INSERT INTO nhacungcap (mancc, tenncc, sdt, diachi)
+                    VALUES ('NCC_AP', 'Apple Vietnam / Nhà phân phối chính hãng', '18001127', 'TP. Hồ Chí Minh')
+                    ON CONFLICT (mancc) DO NOTHING;
+
+                    INSERT INTO nhanvien (manv, hoten, sdt, email, trangthai)
+                    VALUES ('NV001', 'Nguyễn Văn Quản Lý', '0900000001', 'admin@samamobile.com', 'dang_lam')
+                    ON CONFLICT (manv) DO NOTHING;
+
                     INSERT INTO PhieuNhap (SOPN, NGAYNHAP, MANCC, MANV)
-                    VALUES ('PN_TONKHO_GAP', NOW() - INTERVAL '5 days', 'NCC_AP', 'NV001')
+                    VALUES (
+                        'PN_TONKHO_GAP',
+                        NOW() - INTERVAL '5 days',
+                        COALESCE((SELECT mancc FROM nhacungcap ORDER BY mancc LIMIT 1), 'NCC_AP'),
+                        COALESCE((SELECT manv FROM nhanvien ORDER BY manv LIMIT 1), 'NV001')
+                    )
                     ON CONFLICT (SOPN) DO NOTHING;
 
                     INSERT INTO ChiTietPhieuNhap (SOPN, MAHANG, SLNHAP, DONGIA_NHAP)

@@ -3947,8 +3947,11 @@ function openPhanQuyenModal(maQuyen = null) {
       document.getElementById('phanquyen-modal-title').textContent = 'Sửa Phân Quyền: ' + item.maQuyen;
       form.maQuyen.value = item.maQuyen;
       form.maQuyen.readOnly = true;
-      form.tenQuyen.value = item.tenQuyen;
-      form.tenQuyen.readOnly = true;
+      if (item.tenQuyen && !Array.from(form.tenQuyen.options).some(opt => opt.value === item.tenQuyen)) {
+        form.tenQuyen.add(new Option(item.tenQuyen, item.tenQuyen));
+      }
+      form.tenQuyen.value = item.tenQuyen || "";
+      form.tenQuyen.disabled = true;
       form.quyenCoSo.value = item.quyenCoSo || item.maQuyen;
       form.quyenCoSo.disabled = item.maQuyen === 'admin';
       document.getElementById('phanquyen-admin-hint').hidden = item.maQuyen !== 'admin';
@@ -3958,7 +3961,7 @@ function openPhanQuyenModal(maQuyen = null) {
     document.getElementById('phanquyen-modal-title').textContent = 'Thêm Vai Trò & Quyền';
     form.reset();
     form.maQuyen.readOnly = false;
-    form.tenQuyen.readOnly = false;
+    form.tenQuyen.disabled = false;
     form.quyenCoSo.disabled = false;
     document.getElementById('phanquyen-admin-hint').hidden = true;
   }
@@ -6763,11 +6766,20 @@ async function loadTradeInBookings() {
       ].filter(Boolean).join('\n');
 
       const row = rows.insertRow();
-      for (const value of [booking.code, booking.name, booking.phone, booking.branch,
-                           usedDetails, targetName, prices || 'Chưa có thông tin']) {
+      row.className = 'hover:bg-blue-50/40 transition-colors';
+      const cols = [
+        { val: booking.code, cls: 'px-4 py-3.5 whitespace-nowrap font-mono text-xs font-bold text-[#0057B7]' },
+        { val: booking.name, cls: 'px-4 py-3.5 whitespace-nowrap font-semibold text-slate-800 text-[13px]' },
+        { val: booking.phone, cls: 'px-4 py-3.5 whitespace-nowrap font-mono text-[13px] text-slate-700' },
+        { val: booking.branch, cls: 'px-4 py-3.5 text-[13px] text-slate-600' },
+        { val: usedDetails, cls: 'px-4 py-3.5 font-medium text-slate-800 text-[13px] whitespace-pre-line' },
+        { val: targetName, cls: 'px-4 py-3.5 font-semibold text-slate-900 text-[13px]' },
+        { val: prices || 'Chưa có thông tin', cls: 'px-4 py-3.5 text-[13px] text-slate-700 whitespace-pre-line' }
+      ];
+      for (const col of cols) {
         const cell = row.insertCell();
-        cell.className = 'border-b py-2 pr-3 whitespace-pre-line';
-        cell.textContent = value ?? '';
+        cell.className = col.cls;
+        cell.textContent = col.val ?? '';
       }
     }
     status.textContent = bookings.length ? '' : search ? 'Không tìm thấy phiếu thu cũ phù hợp.' : 'Chưa có phiếu thu cũ.';

@@ -1077,17 +1077,34 @@
       <!-- =====================================================================
            SECTION 3: XỬ LÝ DỮ LIỆU: ĐƠN HÀNG ONLINE
            ===================================================================== -->
-      <section id="view-thucu" class="admin-view-section hidden space-y-4">
-        <h2 class="text-xl font-bold">Phiếu thu cũ</h2>
-        <form class="flex gap-2" onsubmit="event.preventDefault(); loadTradeInBookings();">
-          <input id="trade-in-code" aria-label="Mã phiếu hoặc số điện thoại" placeholder="Nhập mã phiếu hoặc số điện thoại" class="w-full max-w-md rounded-lg border px-3 py-2">
-          <button class="rounded-lg bg-blue-600 px-4 py-2 text-white">Tra cứu</button>
-        </form>
-        <p id="trade-in-status" role="status"></p>
-        <div class="overflow-x-auto"><table class="w-full text-sm text-left">
-          <thead><tr><th>Mã phiếu</th><th>Khách hàng</th><th>Điện thoại</th><th>Chi nhánh</th><th>Máy thu cũ</th><th>Máy muốn mua</th><th>Tiền tạm tính</th></tr></thead>
-          <tbody id="trade-in-results"></tbody>
-        </table></div>
+      <section id="view-thucu" class="admin-view-section hidden space-y-5">
+        <div>
+          <h2 class="text-xl font-extrabold text-navy tracking-tight">Phiếu Thu Cũ</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Tra cứu danh sách phiếu định giá thu cũ và máy khách hàng muốn lên đời</p>
+        </div>
+        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-card-sleek p-5 space-y-4">
+          <form class="flex flex-wrap items-center gap-2.5" onsubmit="event.preventDefault(); loadTradeInBookings();">
+            <input id="trade-in-code" aria-label="Mã phiếu hoặc số điện thoại" placeholder="Nhập mã phiếu hoặc số điện thoại (để trống để xem tất cả)" class="w-full max-w-md rounded-xl border border-slate-200 px-3.5 py-2 text-sm text-slate-800 focus:border-[#0057B7] focus:outline-none">
+            <button class="rounded-xl bg-[#0057B7] hover:bg-blue-700 px-4 py-2 text-sm font-semibold text-white transition-colors cursor-pointer">Tra cứu</button>
+          </form>
+          <p id="trade-in-status" role="status" class="text-xs text-slate-500"></p>
+          <div class="overflow-x-auto rounded-xl border border-slate-200/80">
+            <table class="w-full text-sm text-left border-collapse">
+              <thead class="bg-slate-50/90 text-slate-600 text-xs font-bold uppercase tracking-wider border-b border-slate-200">
+                <tr>
+                  <th class="px-4 py-3 whitespace-nowrap">Mã phiếu</th>
+                  <th class="px-4 py-3 whitespace-nowrap">Khách hàng</th>
+                  <th class="px-4 py-3 whitespace-nowrap">Điện thoại</th>
+                  <th class="px-4 py-3 whitespace-nowrap">Chi nhánh</th>
+                  <th class="px-4 py-3 whitespace-nowrap">Máy thu cũ</th>
+                  <th class="px-4 py-3 whitespace-nowrap">Máy muốn mua</th>
+                  <th class="px-4 py-3 whitespace-nowrap">Tiền tạm tính</th>
+                </tr>
+              </thead>
+              <tbody id="trade-in-results" class="divide-y divide-slate-100 text-slate-700"></tbody>
+            </table>
+          </div>
+        </div>
       </section>
       <section id="view-donhang" class="admin-view-section hidden space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -2840,20 +2857,33 @@
           <input type="text" name="maQuyen" required class="w-full h-10 px-3 border border-slate-200 rounded-xl font-mono focus:border-[#2563EB] focus:outline-none">
         </div>
         <div>
-          <label class="block font-bold text-slate-700 mb-1">Tên Vai Trò (Ví dụ: Quản lý, Bán hàng, Thu ngân, Kho, Kỹ thuật):</label>
-          <input type="text" name="tenQuyen" required class="w-full h-10 px-3 border border-slate-200 rounded-xl font-bold focus:border-[#2563EB] focus:outline-none">
+          <label class="block font-bold text-slate-700 mb-1">Tên Vai Trò:</label>
+          <select name="tenQuyen" required class="w-full h-10 px-3 border border-slate-200 rounded-xl font-semibold text-slate-800 bg-white focus:border-[#2563EB] focus:outline-none">
+            <option value="">-- Chọn tên vai trò --</option>
+            <option value="Quản trị viên">Quản trị viên</option>
+            <option value="Quản lý">Quản lý</option>
+            <option value="Bán hàng">Bán hàng</option>
+            <option value="Thu ngân">Thu ngân</option>
+            <option value="Kho">Kho</option>
+            <option value="Kỹ thuật">Kỹ thuật</option>
+            <option value="Bảo hành">Bảo hành</option>
+            <option value="Chăm sóc khách hàng">Chăm sóc khách hàng</option>
+          </select>
         </div>
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">Nhóm quyền kế thừa
-            <select name="quyenCoSo" required class="w-full h-10 px-3 border rounded-xl">
+        <div class="space-y-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Nhóm quyền kế thừa:</label>
+            <select name="quyenCoSo" required class="w-full h-10 px-3 border border-slate-200 rounded-xl bg-white focus:border-[#2563EB] focus:outline-none">
               <option value="">Chọn nhóm quyền</option><option value="admin" disabled>Quản trị viên</option><option value="manager">Quản lý</option>
               <option value="sales">Bán hàng</option><option value="cashier">Thu ngân</option>
               <option value="stock">Kho</option><option value="tech">Kỹ thuật &amp; Bảo hành</option>
             </select>
-          </label>
-          <p id="phanquyen-admin-hint" hidden class="mt-1 mb-2 text-slate-500">Quyền quản trị gốc được giữ cố định. Để đổi quyền của một nhân viên, chọn vai trò tại bảng Tài khoản.</p>
-          <label class="block font-bold text-slate-700 mb-1">Mô tả phạm vi quyền hạn:</label>
-          <textarea name="moTa" rows="3" class="w-full p-3 border border-slate-200 rounded-xl focus:border-[#2563EB] focus:outline-none"></textarea>
+            <p id="phanquyen-admin-hint" hidden class="mt-1 mb-2 text-slate-500">Quyền quản trị gốc được giữ cố định. Để đổi quyền của một nhân viên, chọn vai trò tại bảng Tài khoản.</p>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Mô tả phạm vi quyền hạn:</label>
+            <textarea name="moTa" rows="3" class="w-full p-3 border border-slate-200 rounded-xl focus:border-[#2563EB] focus:outline-none"></textarea>
+          </div>
         </div>
         <div class="pt-3 border-t flex justify-end gap-2.5">
           <button type="button" onclick="closeModal('modal-phanquyen')" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl text-xs transition-colors">Hủy</button>
@@ -3264,7 +3294,7 @@
   <script src="../js/api.js?v=3.6"></script>
   <script src="../js/order-signalr.js?v=1.3"></script>
   <script src="../js/auth.js?v=4.0"></script>
-  <script src="../js/admin.js?v=4.23"></script>
+  <script src="../js/admin.js?v=4.24"></script>
 
   <script>
     // Mobile sidebar toggle handler
