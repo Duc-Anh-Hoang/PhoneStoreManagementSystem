@@ -1077,19 +1077,6 @@
       <!-- =====================================================================
            SECTION 3: XỬ LÝ DỮ LIỆU: ĐƠN HÀNG ONLINE
            ===================================================================== -->
-<<<<<<< HEAD
-      <section id="view-thucu" class="admin-view-section hidden space-y-4">
-        <h2 class="text-xl font-bold">Phiếu thu cũ</h2>
-        <form class="flex gap-2" onsubmit="event.preventDefault(); loadTradeInBookings();">
-          <input id="trade-in-code" aria-label="Mã phiếu hoặc số điện thoại" placeholder="Nhập mã phiếu hoặc số điện thoại" class="w-full max-w-md rounded-lg border px-3 py-2">
-          <button class="rounded-lg bg-blue-600 px-4 py-2 text-white">Tra cứu</button>
-        </form>
-        <p id="trade-in-status" role="status"></p>
-        <div class="overflow-x-auto"><table class="w-full text-sm text-left">
-          <thead><tr><th>Mã phiếu</th><th>Khách hàng</th><th>Điện thoại</th><th>Chi nhánh</th><th>Máy thu cũ</th><th>Máy muốn mua</th><th>Tiền tạm tính</th></tr></thead>
-          <tbody id="trade-in-results"></tbody>
-        </table></div>
-=======
       <section id="view-thucu" class="admin-view-section hidden space-y-5">
         <div>
           <h2 class="text-xl font-extrabold text-navy tracking-tight">Phiếu Thu Cũ</h2>
@@ -1097,7 +1084,7 @@
         </div>
         <div class="bg-white rounded-2xl border border-slate-200/80 shadow-card-sleek p-5 space-y-4">
           <form class="flex flex-wrap items-center gap-2.5" onsubmit="event.preventDefault(); loadTradeInBookings();">
-            <input id="trade-in-code" aria-label="Mã phiếu thu cũ" placeholder="Nhập mã phiếu hoặc số điện thoại (để trống để xem tất cả)" class="w-full max-w-md rounded-xl border border-slate-200 px-3.5 py-2 text-sm text-slate-800 focus:border-[#0057B7] focus:outline-none">
+            <input id="trade-in-code" aria-label="Mã phiếu hoặc số điện thoại" placeholder="Nhập mã phiếu hoặc số điện thoại (để trống để xem tất cả)" class="w-full max-w-md rounded-xl border border-slate-200 px-3.5 py-2 text-sm text-slate-800 focus:border-[#0057B7] focus:outline-none">
             <button class="rounded-xl bg-[#0057B7] hover:bg-blue-700 px-4 py-2 text-sm font-semibold text-white transition-colors cursor-pointer">Tra cứu</button>
           </form>
           <p id="trade-in-status" role="status" class="text-xs text-slate-500"></p>
@@ -1111,13 +1098,13 @@
                   <th class="px-4 py-3 whitespace-nowrap">Chi nhánh</th>
                   <th class="px-4 py-3 whitespace-nowrap">Máy thu cũ</th>
                   <th class="px-4 py-3 whitespace-nowrap">Máy muốn mua</th>
+                  <th class="px-4 py-3 whitespace-nowrap">Tiền tạm tính</th>
                 </tr>
               </thead>
               <tbody id="trade-in-results" class="divide-y divide-slate-100 text-slate-700"></tbody>
             </table>
           </div>
         </div>
->>>>>>> 476575d (Fix admin role dropdown, trade-in UI, and stock seeder)
       </section>
       <section id="view-donhang" class="admin-view-section hidden space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -2883,33 +2870,20 @@
             <option value="Chăm sóc khách hàng">Chăm sóc khách hàng</option>
           </select>
         </div>
-<<<<<<< HEAD
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">Nhóm quyền kế thừa
-            <select name="quyenCoSo" required class="w-full h-10 px-3 border rounded-xl">
-              <option value="">Chọn nhóm quyền</option><option value="admin" disabled>Quản trị viên</option><option value="manager">Quản lý</option>
-              <option value="sales">Bán hàng</option><option value="cashier">Thu ngân</option>
-              <option value="stock">Kho</option><option value="tech">Kỹ thuật &amp; Bảo hành</option>
-            </select>
-          </label>
-          <p id="phanquyen-admin-hint" hidden class="mt-1 mb-2 text-slate-500">Quyền quản trị gốc được giữ cố định. Để đổi quyền của một nhân viên, chọn vai trò tại bảng Tài khoản.</p>
-          <label class="block font-bold text-slate-700 mb-1">Mô tả phạm vi quyền hạn:</label>
-          <textarea name="moTa" rows="3" class="w-full p-3 border border-slate-200 rounded-xl focus:border-[#2563EB] focus:outline-none"></textarea>
-=======
         <div class="space-y-3">
           <div>
             <label class="block font-bold text-slate-700 mb-1">Nhóm quyền kế thừa:</label>
             <select name="quyenCoSo" required class="w-full h-10 px-3 border border-slate-200 rounded-xl bg-white focus:border-[#2563EB] focus:outline-none">
-              <option value="">Chọn nhóm quyền</option><option value="manager">Quản lý</option>
+              <option value="">Chọn nhóm quyền</option><option value="admin" disabled>Quản trị viên</option><option value="manager">Quản lý</option>
               <option value="sales">Bán hàng</option><option value="cashier">Thu ngân</option>
               <option value="stock">Kho</option><option value="tech">Kỹ thuật &amp; Bảo hành</option>
             </select>
+            <p id="phanquyen-admin-hint" hidden class="mt-1 text-slate-500">Quyền quản trị gốc được giữ cố định. Để đổi quyền của một nhân viên, chọn vai trò tại bảng Tài khoản.</p>
           </div>
           <div>
             <label class="block font-bold text-slate-700 mb-1">Mô tả phạm vi quyền hạn:</label>
             <textarea name="moTa" rows="3" class="w-full p-3 border border-slate-200 rounded-xl focus:border-[#2563EB] focus:outline-none"></textarea>
           </div>
->>>>>>> 476575d (Fix admin role dropdown, trade-in UI, and stock seeder)
         </div>
         <div class="pt-3 border-t flex justify-end gap-2.5">
           <button type="button" onclick="closeModal('modal-phanquyen')" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl text-xs transition-colors">Hủy</button>
@@ -3319,13 +3293,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.7/signalr.min.js"></script>
   <script src="../js/api.js?v=3.6"></script>
   <script src="../js/order-signalr.js?v=1.3"></script>
-<<<<<<< HEAD
   <script src="../js/auth.js?v=4.0"></script>
-  <script src="../js/admin.js?v=4.23"></script>
-=======
-  <script src="../js/auth.js?v=3.6"></script>
-  <script src="../js/admin.js?v=4.13"></script>
->>>>>>> 476575d (Fix admin role dropdown, trade-in UI, and stock seeder)
+  <script src="../js/admin.js?v=4.24"></script>
 
   <script>
     // Mobile sidebar toggle handler
