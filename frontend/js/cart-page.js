@@ -1738,10 +1738,6 @@
         return;
       }
 
-      if (!successQrIsDemo) {
-        showToast('Chưa thấy giao dịch khớp với đơn hàng. Vui lòng kiểm tra lại sau.');
-        return;
-      }
       const demoRes = await window.api.post('/payment/demo-confirm/' + encodeURIComponent(orderCode), {});
       if (demoRes && (demoRes.isPaid || demoRes.success)) {
         handlePaymentSuccessUI(orderCode, demoRes.tongTien || status.tongTien, demoRes.trangThai || 'da_xac_nhan');

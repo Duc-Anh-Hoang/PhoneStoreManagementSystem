@@ -377,7 +377,8 @@ CREATE INDEX IF NOT EXISTS IX_order_status_history_order ON order_status_history
                     INSERT INTO ChiTietPhieuNhap (SOPN, MAHANG, SLNHAP, DONGIA_NHAP)
                     SELECT 'PN_TONKHO_GAP', m.mahang, 15, GREATEST(1000, ROUND(m.dongia * 0.8))
                     FROM mathang m
-                    WHERE NOT EXISTS (SELECT 1 FROM chitietphieunhap c WHERE c.mahang = m.mahang)
+                    WHERE (m.quanlyimei = false AND NOT EXISTS (SELECT 1 FROM chitietphieunhap c WHERE c.mahang = m.mahang))
+                       OR (m.quanlyimei = true AND NOT EXISTS (SELECT 1 FROM imei i WHERE i.mahang = m.mahang AND i.trangthai = 'con_hang'))
                     ON CONFLICT (SOPN, MAHANG) DO NOTHING;
 
                     INSERT INTO imei (maimei, mahang, sopn, soimei, trangthai)
