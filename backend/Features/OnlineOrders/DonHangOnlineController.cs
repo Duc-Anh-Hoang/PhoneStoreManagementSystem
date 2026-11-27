@@ -47,6 +47,13 @@ public class DonHangOnlineController : ControllerBase
         return Ok(items);
     }
 
+    [HttpGet("{maDH}")]
+    public async Task<IActionResult> GetOrder(string maDH)
+    {
+        var order = await _onlineOrderService.GetOrderByMaDHAsync(maDH, null);
+        return order == null ? NotFound() : Ok(order);
+    }
+
     /// <summary>
     /// P4-07: Cập nhật trạng thái đơn hàng online
     /// </summary>

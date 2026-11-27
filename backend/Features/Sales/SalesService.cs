@@ -252,7 +252,9 @@ public class SalesService : ISalesService
         if (!string.IsNullOrWhiteSpace(keyword))
         {
             var kw = keyword.Trim().ToLower();
-            query = query.Where(h => h.SoHD.ToLower().Contains(kw) 
+            query = query.Where(h => h.SoHD.ToLower().Contains(kw)
+                || h.ChiTietHoaDons.Any(c => c.MaIMEI != null &&
+                    (c.MaIMEI.ToLower().Contains(kw) || (c.IMEI != null && c.IMEI.SoIMEI.Contains(kw))))
                 || (h.KhachHang != null && (h.KhachHang.HoTen.ToLower().Contains(kw) || (h.KhachHang.Sdt != null && h.KhachHang.Sdt.Contains(kw)))));
         }
 
@@ -260,6 +262,7 @@ public class SalesService : ISalesService
 
         var list = await query
             .OrderByDescending(h => h.NgayLap)
+            .ThenBy(h => h.SoHD)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();

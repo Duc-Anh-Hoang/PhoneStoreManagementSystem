@@ -90,7 +90,7 @@ public class DashboardService : IDashboardService
 
         var taiQuayInvoices = activeInvoices.Where(h => h.KenhBan == "tai_quay").ToList();
         var onlineInvoices = activeInvoices.Where(h => h.KenhBan == "online").ToList();
-        var taiQuayHDSet = taiQuayInvoices.Select(h => h.SoHD).ToHashSet();
+        var taiQuayHDSet = invoices.Where(h => h.KenhBan == "tai_quay").Select(h => h.SoHD).ToHashSet();
 
         decimal posRefunds = activeRefunds.Where(r => r.SoHD != null && taiQuayHDSet.Contains(r.SoHD)).Sum(r => r.SoTienHoan);
         decimal onlineRefunds = refundTotal - posRefunds;
@@ -108,6 +108,7 @@ public class DashboardService : IDashboardService
 
         var allProducts = await _context.MatHangs.AsNoTracking().ToListAsync();
         int tongMatHang = allProducts.Count;
+        int tongNhomHang = await _context.NhomHangs.CountAsync();
 
         var imeiConHangGroup = await _context.IMEIs
             .AsNoTracking()
@@ -157,7 +158,7 @@ public class DashboardService : IDashboardService
             TongDoanhThu = tongDoanhThu,
             DoanhThuGop = grossTotal,
             TongTienHoanTra = refundTotal,
-            SoDonHoanTra = refunds.Count,
+            SoDonHoanTra = activeRefunds.Count,
             SoHoaDonHomNay = soHoaDonHomNay,
             TongHoaDon = tongHoaDon,
             SoHoaDonTaiQuay = taiQuayInvoices.Count,
@@ -166,6 +167,7 @@ public class DashboardService : IDashboardService
             DoanhThuOnline = doanhThuOnline,
             DonOnlineChoXacNhan = pendingOrders,
             TongMatHang = tongMatHang,
+            TongNhomHang = tongNhomHang,
             TongTonKho = tongTonKho,
             SoMatHangSapHet = soMatHangSapHet,
             SoBaoHanhDangXuLy = warrantyProcessing

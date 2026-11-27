@@ -575,6 +575,7 @@ public class OnlineOrderService : IOnlineOrderService
 
         var list = await query
             .OrderByDescending(d => d.NgayDat)
+            .ThenBy(d => d.MaDH)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();

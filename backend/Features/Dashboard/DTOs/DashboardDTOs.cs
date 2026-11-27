@@ -16,6 +16,7 @@ public class DashboardSummaryDto
     public decimal DoanhThuOnline { get; set; }
     public int DonOnlineChoXacNhan { get; set; }
     public int TongMatHang { get; set; }
+    public int TongNhomHang { get; set; }
     public int TongTonKho { get; set; }
     public int SoMatHangSapHet { get; set; }
     public int SoBaoHanhDangXuLy { get; set; }

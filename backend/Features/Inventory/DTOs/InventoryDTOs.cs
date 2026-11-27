@@ -4,6 +4,7 @@ public class TonKhoDto
 {
     public string MaHang { get; set; } = string.Empty;
     public string TenHang { get; set; } = string.Empty;
+    public string? Dvt { get; set; }
     public string? MaNhom { get; set; }
     public string? MaLoai { get; set; }
     public decimal DonGia { get; set; }
@@ -37,6 +38,7 @@ public class ImeiDto
 public class ImeiQueryParameters
 {
     public string? MaHang { get; set; }
+    public string? SoPN { get; set; }
     public string? TrangThai { get; set; } // "con_hang", "da_ban", "tra_hang"
     public string? Keyword { get; set; }
     public int Page { get; set; } = 1;

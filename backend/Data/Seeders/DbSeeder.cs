@@ -290,7 +290,7 @@ CREATE INDEX IF NOT EXISTS IX_order_status_history_order ON order_status_history
         }
     }
 
-    public static async Task SeedAsync(AppDbContext context, ILogger logger)
+    public static async Task SeedAsync(AppDbContext context, ILogger logger, bool seedSampleData)
     {
         try
         {
@@ -406,7 +406,7 @@ CREATE INDEX IF NOT EXISTS IX_order_status_history_order ON order_status_history
             }
 
             // 5. Seed PhieuNhap & IMEI mẫu nếu kho trống để kiểm thử bán hàng POS
-            if (!await context.PhieuNhaps.AnyAsync())
+            if (seedSampleData && !await context.PhieuNhaps.AnyAsync())
             {
                 logger.LogInformation("Seeding PhieuNhap & IMEI mẫu...");
                 var now = DateTime.UtcNow;
@@ -467,7 +467,7 @@ CREATE INDEX IF NOT EXISTS IX_order_status_history_order ON order_status_history
             }
 
             // 6. Seed Hóa đơn mẫu có gắn IMEI đã bán và Phiếu đổi trả mẫu (nếu chưa có) để phục vụ kiểm thử Đổi trả & Bảo hành
-            if (!await context.HoaDons.AnyAsync(h => h.SoHD == "HD261100001"))
+            if (seedSampleData && !await context.HoaDons.AnyAsync(h => h.SoHD == "HD261100001"))
             {
                 var imeiSold1 = await context.IMEIs.FirstOrDefaultAsync(i => i.MaIMEI == "IMEI_IP15PM_05");
                 var imeiSold2 = await context.IMEIs.FirstOrDefaultAsync(i => i.MaIMEI == "IMEI_IP15P_05");

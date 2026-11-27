@@ -1,3 +1,17 @@
+async function getAdminPages(path, filters = {}) {
+  const items = [];
+  const pageSize = 100;
+  const query = new URLSearchParams(filters);
+  query.set('pageSize', pageSize);
+  for (let page = 1; ; page++) {
+    query.set('page', page);
+    const rows = await api.get(path + '?' + query);
+    if (!Array.isArray(rows)) throw new Error('Phản hồi danh sách không hợp lệ');
+    items.push(...rows);
+    if (rows.length < pageSize) return items;
+  }
+}
+
 ﻿/**
  * ADMIN PORTAL JAVASCRIPT - QUẢN LÝ CỬA HÀNG ĐIỆN THOẠI
  * Hỗ trợ: Giao diện Cập nhật dữ liệu, Xử lý dữ liệu & Báo cáo thống kê
@@ -54,60 +68,7 @@ class AdminStore {
     };
   }
 
-  save() {
-    // In-memory store: không lưu localStorage
-  }
 
-  async syncFromBackend() {
-    try {
-      const [mh, nh, lh, tt, kh, nv, pq, ncc, tk, pn, hd, imei] = await Promise.all([
-        api.get('/mathang').catch(() => []),
-        api.get('/nhomhang').catch(() => []),
-        api.get('/loaihang').catch(() => []),
-        api.get('/thuoctinh').catch(() => []),
-        api.get('/customers').catch(() => []),
-        api.get('/nhanvien').catch(() => []),
-        api.get('/phanquyen').catch(() => []),
-        api.get('/suppliers').catch(() => []),
-        api.get('/taikhoan').catch(() => []),
-        api.get('/purchasing').catch(() => []),
-        api.get('/hoadon').catch(() => []),
-        api.get('/imei').catch(() => [])
-      ]);
-      if (Array.isArray(mh)) {
-        if (typeof AdminRealtimeData !== 'undefined' && AdminRealtimeData.products && AdminRealtimeData.products.length > mh.length) {
-          // Giữ trọn vẹn 3,530 sản phẩm thực tế từ products-meta.json
-        } else if (mh.length > 0) {
-          this.data.matHang = mh;
-        }
-      }
-      if (Array.isArray(nh)) {
-        if (typeof AdminRealtimeData !== 'undefined' && AdminRealtimeData.categories && AdminRealtimeData.categories.length > nh.length) {
-          // Giữ trọn vẹn danh mục từ hoangha-categories.json
-        } else if (nh.length > 0) {
-          this.data.nhomHang = nh;
-        }
-      }
-      if (Array.isArray(lh)) {
-        if (typeof AdminRealtimeData !== 'undefined' && AdminRealtimeData.brands && AdminRealtimeData.brands.length > lh.length) {
-          // Giữ trọn vẹn thương hiệu từ dữ liệu thực tế
-        } else if (lh.length > 0) {
-          this.data.loaiHang = lh;
-        }
-      }
-      if (Array.isArray(tt)) this.data.thuocTinh = tt;
-      if (Array.isArray(kh)) this.data.khachHang = kh;
-      if (Array.isArray(nv)) this.data.nhanVien = nv;
-      if (Array.isArray(pq)) this.data.phanQuyen = pq;
-      if (Array.isArray(ncc)) this.data.nhaCungCap = ncc;
-      if (Array.isArray(tk)) this.data.taiKhoan = tk;
-      if (Array.isArray(pn)) this.data.phieuNhap = pn;
-      if (Array.isArray(hd)) this.data.hoaDon = hd;
-      if (Array.isArray(imei)) this.data.danhSachImei = imei;
-    } catch (e) {
-      console.warn('Lỗi syncFromBackend:', e);
-    }
-  }
 }
 
 const store = new AdminStore();
@@ -148,108 +109,18 @@ const AdminRealtimeData = {
     this.isLoading = true;
 
     try {
-      const [metaRes, catRes, backendMh, backendOrders] = await Promise.all([
-        fetch('/data/products-meta.json').then(r => r.ok ? r.json() : fetch('../data/products-meta.json').then(r2 => r2.ok ? r2.json() : fetch('data/products-meta.json').then(r3 => r3.ok ? r3.json() : {}))).catch(() => ({})),
-        fetch('/data/hoangha-categories.json').then(r => r.ok ? r.json() : fetch('../data/hoangha-categories.json').then(r2 => r2.ok ? r2.json() : fetch('data/hoangha-categories.json').then(r3 => r3.ok ? r3.json() : {}))).catch(() => ({})),
-        api.get('/mathang').catch(() => []),
-        api.get('/donhangonline').catch(() => [])
+      const [products, categories, brands] = await Promise.all([
+        getAdminPages('/mathang'),
+        api.get('/nhomhang'),
+        api.get('/loaihang')
       ]);
-
-      const metaMap = (metaRes && typeof metaRes === 'object') ? metaRes : {};
-      const productList = [];
-      const seenIds = new Set();
-
-      // 1. Dữ liệu từ backend nếu có
-      if (Array.isArray(backendMh) && backendMh.length > 0) {
-        backendMh.forEach(b => {
-          if (!b.maHang) return;
-          seenIds.add(b.maHang);
-          const meta = metaMap[b.maHang];
-          productList.push({
-            maHang: b.maHang,
-            tenHang: b.tenHang || b.maHang,
-            donGia: Number(b.donGia) || meta?.donGia || 0,
-            giaGoc: meta?.giaGoc || Math.round((Number(b.donGia) || 0) * 1.08),
-            dvt: b.dvt || 'Cái',
-            maNhom: b.maNhom || meta?.maNhom || 'DIENTHOAI',
-            tenNhom: b.tenNhom || meta?.tenNhom || 'Điện thoại',
-            maLoai: b.maLoai || meta?.maLoai || 'OTHER',
-            tenLoai: b.tenLoai || meta?.nhanHieu || 'Chính hãng',
-            nhanHieu: b.tenLoai || meta?.nhanHieu || 'Chính hãng',
-            quanLyImei: b.quanLyImei !== undefined ? !!b.quanLyImei : true,
-            thoiHanBaoHanh: b.thoiHanBaoHanh || 12,
-            tonKho: b.tonKho !== undefined ? Number(b.tonKho) : (meta?.tonKho || 15),
-            anhChinh: meta?.anhChinh || b.hinhAnh || '',
-            thongSo: meta?.thongSo || {}
-          });
-        });
-      }
-
-      // 2. Toàn bộ 3.530 sản phẩm thực tế từ products-meta.json
-      for (const [key, p] of Object.entries(metaMap)) {
-        const maHang = p.maHang || key;
-        if (!seenIds.has(maHang)) {
-          seenIds.add(maHang);
-          productList.push({
-            maHang: maHang,
-            tenHang: p.tenHang || key,
-            donGia: Number(p.donGia) || 0,
-            giaGoc: Number(p.giaGoc) || Math.round((Number(p.donGia) || 0) * 1.08),
-            dvt: p.dvt || 'Cái',
-            maNhom: p.maNhom || 'DIENTHOAI',
-            tenNhom: p.tenNhom || 'Điện thoại',
-            maLoai: p.maLoai || (p.nhanHieu ? p.nhanHieu.toUpperCase() : 'OTHER'),
-            tenLoai: p.nhanHieu || 'Chính hãng',
-            nhanHieu: p.nhanHieu || 'Chính hãng',
-            quanLyImei: p.quanLyImei !== undefined ? !!p.quanLyImei : true,
-            thoiHanBaoHanh: p.thoiHanBaoHanh || 12,
-            tonKho: p.tonKho !== undefined ? Number(p.tonKho) : 15,
-            anhChinh: p.anhChinh || '',
-            thongSo: p.thongSo || {}
-          });
-        }
-      }
-
-      this.products = productList;
-
-      // 3. Khởi tạo danh mục nhóm hàng & thương hiệu thực tế
-      const nhomMap = new Map();
-      const brandMap = new Map();
-
-      this.products.forEach(p => {
-        const nhom = p.tenNhom || p.maNhom || 'Khác';
-        nhomMap.set(nhom, (nhomMap.get(nhom) || 0) + 1);
-        const brand = p.nhanHieu || p.tenLoai || 'Khác';
-        brandMap.set(brand, (brandMap.get(brand) || 0) + 1);
-      });
-
-      this.categories = Array.from(nhomMap.entries()).map(([name, count]) => ({
-        maNhom: name.toUpperCase().replace(/[^A-Z0-9]/g, '_').substring(0, 10),
-        tenNhom: name,
-        count
-      }));
-
-      this.brands = Array.from(brandMap.entries())
-        .map(([name, count]) => ({
-          maLoai: name.toUpperCase().replace(/[^A-Z0-9]/g, '_').substring(0, 10),
-          tenLoai: name,
-          count
-        }))
-        .sort((a, b) => b.count - a.count);
-
-      // Đồng bộ vào store.data để tương thích ngược
-      store.data.matHang = this.products;
-      store.data.nhomHang = this.categories;
-      store.data.loaiHang = this.brands;
-
-      // 4. Khởi tạo đơn hàng thực tế
-      this.initOrders(backendOrders);
+      this.products = products;
+      this.categories = categories.map(item => ({ ...item, count: item.soLuongMatHang }));
+      this.brands = brands.map(item => ({ ...item, count: item.soLuongMatHang }));
 
       this.isLoaded = true;
       this.isLoading = false;
 
-      // Thiết lập lắng nghe Realtime
-      this.setupRealtimeListeners();
     } catch (err) {
       console.error('Lỗi khởi tạo AdminRealtimeData:', err);
       this.isLoading = false;
@@ -271,45 +142,32 @@ const AdminRealtimeData = {
       });
     }
 
-    // 2. Bổ sung các đơn mới từ User đặt tại cùng trình duyệt nếu chưa đồng bộ lên Backend
-    try {
-      const userRaw = localStorage.getItem('samamobile_user_orders');
-      if (userRaw) {
-        const userList = JSON.parse(userRaw);
-        if (Array.isArray(userList)) {
-          userList.forEach(o => {
-            if (o && o.maDH && !map.has(o.maDH)) {
-              map.set(o.maDH, o);
-            }
-          });
-        }
-      }
-    } catch (e) {}
-
     let merged = Array.from(map.values());
 
     // Sắp xếp đơn mới nhất lên đầu
     merged.sort((a, b) => new Date(b.ngayDat || 0).getTime() - new Date(a.ngayDat || 0).getTime());
 
     this.orders = merged;
-    try {
-      localStorage.setItem('cellphones_online_orders', JSON.stringify(merged));
-    } catch (e) {}
 
     return merged;
   },
 
-  initOrders(backendOrders) {
-    this.mergeAllOrderSources(backendOrders);
+  async refreshOrders() {
+    try {
+      this.mergeAllOrderSources(await getAdminPages('/donhangonline'));
+    } catch (err) {
+      console.warn('Lỗi tải đơn hàng:', err);
+    }
   },
 
   setupRealtimeListeners() {
-    window.addEventListener('storage', (e) => {
+    window.addEventListener('storage', async (e) => {
       if (e.key === 'samamobile_user_orders' || e.key === 'cellphones_online_orders' || e.key === 'cellphones_order_last_updated') {
         try {
           const prevCount = (this.orders || []).length;
           const prevTopId = (this.orders && this.orders[0]) ? this.orders[0].maDH : null;
-          const updatedOrders = this.mergeAllOrderSources([]);
+          await this.refreshOrders();
+          const updatedOrders = this.orders;
           if (updatedOrders.length > prevCount || (updatedOrders[0] && updatedOrders[0].maDH !== prevTopId)) {
             const newest = updatedOrders[0];
             this.playOrderChime();
@@ -365,14 +223,7 @@ const AdminRealtimeData = {
       order.trangThai = newStatus;
       if (soHD) order.soHD = soHD;
 
-      if (newStatus === 'hoan_thanh') {
-        (order.items || []).forEach(it => {
-          const prod = this.products.find(p => p.maHang === it.maHang);
-          if (prod && prod.tonKho > 0) {
-            prod.tonKho = Math.max(0, prod.tonKho - (it.soLuong || 1));
-          }
-        });
-      }
+      if (newStatus === 'hoan_thanh') this.isLoaded = false;
 
       try {
         localStorage.setItem('cellphones_online_orders', JSON.stringify(this.orders));
@@ -815,61 +666,52 @@ window.applyDashboardCustomDate = function() {
   renderDashboard();
 };
 
+let dashboardRequestId = 0;
+
 async function renderDashboard() {
   try {
-    if (!AdminRealtimeData.isLoaded) {
-      await AdminRealtimeData.init();
-    }
-
-    const products = AdminRealtimeData.products || [];
-    const orders = AdminRealtimeData.orders || [];
+    const requestId = ++dashboardRequestId;
+    const range = currentDashboardRange;
+    const filter = currentDashboardFilter;
 
     // Lấy số liệu thống kê realtime từ backend API có kèm bộ lọc thời gian
     let queryParams = '';
-    if (currentDashboardRange.from || currentDashboardRange.to) {
+    if (range.from || range.to) {
       const p = new URLSearchParams();
-      if (currentDashboardRange.from) p.set('tuNgay', currentDashboardRange.from.toISOString());
-      if (currentDashboardRange.to) p.set('denNgay', currentDashboardRange.to.toISOString());
+      if (range.from) p.set('tuNgay', range.from.toISOString());
+      if (range.to) p.set('denNgay', range.to.toISOString());
       queryParams = '?' + p.toString();
     }
 
-    let summary = null;
-    try {
-      summary = await api.get('/dashboard/summary' + queryParams);
-    } catch (e) {
-      console.warn('Lỗi lấy summary dashboard:', e);
-    }
+    const orderFilters = {};
+    if (range.from) orderFilters.tuNgay = range.from.toISOString().slice(0, 10);
+    if (range.to) orderFilters.denNgay = range.to.toISOString().slice(0, 10);
+    const recentOrdersRequest = queryParams
+      ? getAdminPages('/donhangonline', orderFilters)
+      : api.get('/donhangonline?pageSize=6');
 
-    // 1. Tính tổng doanh thu thực tế (Doanh thu bán trừ tiền đổi trả đã hoàn)
-    let totalRev = 0;
-    let totalInvoices = 0;
-    let posRev = 0;
-    let onlineRev = 0;
-    let posInvoicesCount = 0;
-    let onlineInvoicesCount = 0;
-    let refundAmount = 0;
-    let refundCount = 0;
+    const [summary, orders, categories] = await Promise.all([
+      api.get('/dashboard/summary' + queryParams).catch(() => null),
+      recentOrdersRequest.catch(() => null),
+      api.get('/dashboard/categories' + queryParams).catch(() => null)
+    ]);
+    if (requestId !== dashboardRequestId) return;
 
-    if (summary) {
-      totalRev = Number(summary.tongDoanhThu) || 0;
-      totalInvoices = summary.tongHoaDon || 0;
-      posRev = Number(summary.doanhThuTaiQuay) || 0;
-      onlineRev = Number(summary.doanhThuOnline) || 0;
-      posInvoicesCount = summary.soHoaDonTaiQuay || 0;
-      onlineInvoicesCount = summary.soHoaDonOnline || 0;
-      refundAmount = Number(summary.tongTienHoanTra) || 0;
-      refundCount = summary.soDonHoanTra || 0;
-    } else {
-      const completedOrders = orders.filter(o => o.trangThai === 'hoan_thanh');
-      onlineRev = completedOrders.reduce((acc, o) => acc + (Number(o.tongTien) || 0), 0);
-      posRev = 0;
-      totalRev = onlineRev;
-      onlineInvoicesCount = completedOrders.length;
-      totalInvoices = completedOrders.length;
-    }
+    const totalRev = summary?.tongDoanhThu;
+    const totalInvoices = summary?.tongHoaDon;
+    const posRev = summary?.doanhThuTaiQuay;
+    const onlineRev = summary?.doanhThuOnline;
+    const posInvoicesCount = summary?.soHoaDonTaiQuay;
+    const onlineInvoicesCount = summary?.soHoaDonOnline;
+    const refundAmount = summary?.tongTienHoanTra;
+    const refundCount = summary?.soDonHoanTra;
+    const loadError = 'Không tải được dữ liệu';
+    const formatCount = (count, unit) => typeof count === 'number'
+      ? count.toLocaleString('vi-VN') + ' ' + unit
+      : '—';
 
     const revEl = document.getElementById('dash-revenue');
-    if (revEl) revEl.textContent = Format.currency(totalRev);
+    if (revEl) revEl.textContent = summary ? Format.currency(totalRev) : '—';
 
     const revSubText = document.getElementById('dash-revenue-sub-text');
     if (revSubText) {
@@ -881,91 +723,67 @@ async function renderDashboard() {
         all: 'Toàn bộ thời gian',
         custom: 'Khoảng ngày đã chọn'
       };
-      const periodLabel = filterLabelMap[currentDashboardFilter] || 'Kỳ đã chọn';
-      if (refundAmount > 0) {
+      const periodLabel = filterLabelMap[filter] || 'Kỳ đã chọn';
+      revSubText.removeAttribute('title');
+      if (!summary) {
+        revSubText.textContent = loadError;
+      } else if (refundAmount > 0) {
         revSubText.textContent = `${periodLabel} (${totalInvoices} đơn, trừ ${Format.currency(refundAmount)} trả hàng)`;
-        revSubText.title = `Tổng bán: ${Format.currency(summary ? summary.doanhThuGop : totalRev)} - Đã hoàn lại: ${Format.currency(refundAmount)}`;
+        revSubText.title = `Tổng bán: ${Format.currency(summary.doanhThuGop)} - Đã hoàn lại: ${Format.currency(refundAmount)}`;
       } else {
         revSubText.textContent = `${periodLabel} (${totalInvoices} đơn hoàn tất: ${posInvoicesCount} tại quầy, ${onlineInvoicesCount} online)`;
       }
     }
 
     // 2. Card Đơn Chờ Duyệt (Realtime)
-    const pendingCount = (summary && typeof summary.donOnlineChoXacNhan === 'number')
-      ? summary.donOnlineChoXacNhan
-      : orders.filter(o => o.trangThai === 'cho_xac_nhan').length;
+    const pendingCount = summary?.donOnlineChoXacNhan;
     const pendingEl = document.getElementById('dash-pending-orders');
-    if (pendingEl) pendingEl.textContent = pendingCount + ' đơn';
+    if (pendingEl) pendingEl.textContent = formatCount(pendingCount, 'đơn');
 
     const pendingSub = document.getElementById('dash-pending-orders-sub');
     if (pendingSub) {
-      if (pendingCount > 0) {
-        pendingSub.textContent = 'Cần duyệt & xuất hóa đơn';
-        pendingSub.className = 'text-[11px] text-slate-500 font-normal mt-1 truncate whitespace-nowrap';
-      } else {
-        pendingSub.textContent = 'Đã xử lý hết đơn hàng';
-        pendingSub.className = 'text-[11px] text-slate-500 font-normal mt-1 truncate whitespace-nowrap';
-      }
+      pendingSub.textContent = summary
+        ? (pendingCount > 0 ? 'Cần duyệt & xuất hóa đơn' : 'Không có đơn chờ duyệt')
+        : loadError;
     }
 
-    // Cập nhật Badge trên thanh Menu điều hướng
     const navBadge = document.getElementById('nav-badge-donhang');
     if (navBadge) {
-      navBadge.textContent = pendingCount;
-      navBadge.classList.toggle('hidden', pendingCount === 0);
+      navBadge.textContent = pendingCount ?? '';
+      navBadge.classList.toggle('hidden', !pendingCount);
     }
 
-    // 3. Card Tổng Tồn Kho Máy & Cảnh báo sắp hết (Đồng bộ trực tiếp từ Database PostgreSQL)
-    const totalTonKho = (summary && typeof summary.tongTonKho === 'number')
-      ? summary.tongTonKho
-      : products.reduce((acc, p) => acc + (p.tonKho || 0), 0);
-    const lowStockCount = (summary && typeof summary.soMatHangSapHet === 'number')
-      ? summary.soMatHangSapHet
-      : products.filter(p => (p.tonKho || 0) <= 5).length;
     const stockEl = document.getElementById('dash-total-stock');
-    if (stockEl) {
-      stockEl.textContent = totalTonKho.toLocaleString('vi-VN') + ' máy';
-    }
-
+    if (stockEl) stockEl.textContent = formatCount(summary?.tongTonKho, 'đơn vị');
     const stockSub = document.getElementById('dash-total-stock-sub');
     if (stockSub) {
-      if (lowStockCount > 0) {
-        stockSub.textContent = `Kho thực tế (${lowStockCount} model sắp hết)`;
-        stockSub.className = 'text-[11px] text-slate-500 font-normal mt-1 truncate whitespace-nowrap';
-      } else {
-        const totalModels = products.length || summary?.tongMatHang || 3547;
-        stockSub.textContent = `Đang còn hàng (${totalModels.toLocaleString('vi-VN')} model)`;
-        stockSub.className = 'text-[11px] text-slate-500 font-normal mt-1 truncate whitespace-nowrap';
-      }
+      stockSub.textContent = summary
+        ? formatCount(summary.soMatHangSapHet, 'model') + ' tồn kho từ 0 đến 5'
+        : loadError;
     }
 
-    // Cập nhật timestamp theo Bước 5
     const updatedEl = document.getElementById('dash-last-updated');
     if (updatedEl) {
-      const now = new Date();
-      updatedEl.textContent = 'Cập nhật lúc ' + now.toLocaleTimeString('vi-VN');
+      updatedEl.textContent = summary
+        ? 'Cập nhật lúc ' + new Date().toLocaleTimeString('vi-VN')
+        : loadError;
     }
 
-    // 4. Card Tổng Mặt Hàng Đang Kinh Doanh (Đồng bộ toàn bộ 3.547 model thực tế của cửa hàng)
     const prodEl = document.getElementById('dash-total-products');
-    const totalProducts = products.length > 0
-      ? products.length
-      : ((summary && typeof summary.tongMatHang === 'number' && summary.tongMatHang > 0) ? summary.tongMatHang : 3547);
-    if (prodEl) {
-      prodEl.textContent = totalProducts.toLocaleString('vi-VN') + ' model';
-    }
+    if (prodEl) prodEl.textContent = formatCount(summary?.tongMatHang, 'model');
     const prodSub = document.getElementById('dash-total-products-sub');
     if (prodSub) {
-      const catCount = (AdminRealtimeData.categories && AdminRealtimeData.categories.length) || 9;
-      prodSub.textContent = `${catCount} nhóm ngành hàng thực tế`;
+      prodSub.textContent = summary ? formatCount(summary.tongNhomHang, 'nhóm ngành hàng') : loadError;
     }
 
     // 5. Render Doanh Thu Theo Kênh Bán
     const channelContainer = document.getElementById('dash-channel-stats');
-    if (channelContainer) {
+    if (channelContainer && !summary) {
+      channelContainer.textContent = loadError;
+    } else if (channelContainer) {
       const totalAllRev = (posRev + onlineRev) > 0 ? (posRev + onlineRev) : 1;
       const posPct = Math.min(100, Math.max(0, Math.round((posRev / totalAllRev) * 100)));
-      const onlinePct = 100 - posPct;
+      const onlinePct = posRev + onlineRev > 0 ? 100 - posPct : 0;
 
       let refundNotice = '';
       if (refundAmount > 0) {
@@ -1020,39 +838,11 @@ async function renderDashboard() {
     // 6. Render Doanh Thu Theo Nhóm Hàng Thực Tế
     const catContainer = document.getElementById('dash-category-stats');
     if (catContainer) {
-      let catData = [];
-      try {
-        const catApi = await api.get('/dashboard/categories' + queryParams).catch(() => null);
-        if (Array.isArray(catApi) && catApi.length > 0) {
-          catData = catApi;
-        }
-      } catch (e) {}
-
-      if (catData.length === 0) {
-        // Fallback: tính từ danh mục mặt hàng
-        const topCategories = (AdminRealtimeData.categories || []).slice(0, 4);
-        const totalModelCount = products.length || 1;
-        catContainer.innerHTML = topCategories.map((c) => {
-          const pct = Math.round((c.count / totalModelCount) * 100);
-          return `
-            <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
-              <div class="flex items-center justify-between mb-1.5">
-                <span class="font-semibold text-slate-800 flex items-center gap-1.5">
-                  <i class="fa-solid fa-layer-group text-slate-400 text-xs"></i>
-                  ${c.tenNhom}
-                </span>
-                <span class="font-mono font-bold text-slate-900">${c.count} model</span>
-              </div>
-              <div class="flex items-center justify-between text-[11px] text-slate-500 mb-1.5">
-                <span>Tỷ trọng danh mục</span>
-                <span class="font-semibold text-slate-700">${pct}%</span>
-              </div>
-              <div class="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
-                <div class="bg-[#2563EB] h-1.5 rounded-full transition-all duration-500" style="width: ${pct}%"></div>
-              </div>
-            </div>
-          `;
-        }).join('');
+      const catData = categories;
+      if (!Array.isArray(catData)) {
+        catContainer.textContent = loadError;
+      } else if (catData.length === 0) {
+        catContainer.textContent = 'Chưa có doanh thu theo nhóm hàng trong kỳ';
       } else {
         const totalCatRev = catData.reduce((acc, c) => acc + (Number(c.doanhThu) || 0), 0) || 1;
         catContainer.innerHTML = catData.map((c) => {
@@ -1080,23 +870,22 @@ async function renderDashboard() {
       }
     }
 
-    // 7. Render Hiệu Suất Mặt Hàng (Bán Chạy & Bán Chậm)
-    await renderProductPerformance(queryParams);
-
     // 8. Bảng đơn hàng online gần đây (Dashboard)
     const tbody = document.getElementById('dash-recent-orders-table');
-    if (tbody) {
+    if (tbody && !Array.isArray(orders)) {
+      tbody.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-slate-400">Không tải được đơn hàng</td></tr>';
+    } else if (tbody) {
       let recentOrders = orders;
-      if (currentDashboardRange.from || currentDashboardRange.to) {
+      if (range.from || range.to) {
         recentOrders = orders.filter(o => {
           const d = new Date(o.ngayDat);
           if (isNaN(d.getTime())) return true;
-          if (currentDashboardRange.from && d < currentDashboardRange.from) return false;
-          if (currentDashboardRange.to && d > currentDashboardRange.to) return false;
+          if (range.from && d < range.from) return false;
+          if (range.to && d > range.to) return false;
           return true;
         });
       }
-      recentOrders = recentOrders.slice(0, 6);
+      recentOrders = [...recentOrders].sort((a, b) => new Date(b.ngayDat) - new Date(a.ngayDat)).slice(0, 6);
       if (recentOrders.length === 0) {
         tbody.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-slate-400">Chưa có đơn hàng trực tuyến nào</td></tr>';
       } else {
@@ -1133,6 +922,7 @@ async function renderDashboard() {
         }).join('');
       }
     }
+    await renderProductPerformance(queryParams);
   } catch (err) {
     console.warn('Lỗi render dashboard:', err);
   }
@@ -1222,7 +1012,11 @@ async function renderMatHangTable(page = 1, keyword = null, category = null, bra
     AdminRealtimeData.matHangPage = 1;
   }
 
-  cachedMatHangList = AdminRealtimeData.products || [];
+  if (!AdminRealtimeData.isLoaded) {
+    tbody.innerHTML = '<tr><td colspan="8" class="p-4 text-center text-rose-600">Không tải được mặt hàng</td></tr>';
+    return;
+  }
+  cachedMatHangList = AdminRealtimeData.products;
 
   // Điền dropdown Nhóm hàng và Thương hiệu nếu chưa có
   const catSelect = document.getElementById('filter-mathang-category');
@@ -1280,7 +1074,7 @@ async function renderMatHangTable(page = 1, keyword = null, category = null, bra
       ? '<span class="whitespace-nowrap inline-flex items-center justify-center px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-300 font-bold text-[11px] shadow-2xs">Quản lý IMEI</span>'
       : '<span class="whitespace-nowrap inline-flex items-center justify-center px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-300 text-[11px]">Không</span>';
 
-    const tonKhoVal = m.tonKho != null ? m.tonKho : 15;
+    const tonKhoVal = m.tonKho;
     let tonKhoClass = 'bg-emerald-50 text-emerald-700 border-emerald-200';
     if (tonKhoVal === 0) {
       tonKhoClass = 'bg-rose-50 text-rose-700 border-rose-200';
@@ -1310,7 +1104,7 @@ async function renderMatHangTable(page = 1, keyword = null, category = null, bra
           <span class="inline-block px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 text-[11px] font-medium">${m.tenNhom || 'Điện thoại'}</span>
         </td>
         <td class="p-3 text-xs text-center whitespace-nowrap">${imeiBadge}</td>
-        <td class="p-3 text-xs text-center text-slate-600 whitespace-nowrap">${m.thoiHanBaoHanh || 12} tháng</td>
+        <td class="p-3 text-xs text-center text-slate-600 whitespace-nowrap">${m.thoiHanBaoHanh ?? ''} tháng</td>
         <td class="p-3 text-xs text-center whitespace-nowrap">
           <span class="px-2 py-0.5 rounded-full border text-[11px] ${tonKhoClass}">${tonKhoVal}</span>
         </td>
@@ -1415,6 +1209,7 @@ async function saveMatHang(e) {
       showToast('Đã thêm mặt hàng mới ' + item.maHang + ' thành công!', 'success');
     }
     closeModal('modal-mathang');
+    AdminRealtimeData.isLoaded = false;
     await renderMatHangTable();
   } catch (err) {
     alert('Lỗi lưu mặt hàng: ' + err.message);
@@ -1426,6 +1221,7 @@ async function deleteMatHang(maHang) {
   try {
     await api.delete('/mathang/' + encodeURIComponent(maHang));
     showToast('Đã xóa mặt hàng ' + maHang + ' thành công!', 'success');
+    AdminRealtimeData.isLoaded = false;
     await renderMatHangTable();
   } catch (err) {
     alert('Không thể xóa mặt hàng: ' + err.message);
@@ -1441,19 +1237,13 @@ async function renderDonHangTable(filter = 'all', keyword = '') {
   const tbody = document.getElementById('table-donhang-body');
   if (!tbody) return;
 
-  if (!AdminRealtimeData.isLoaded) {
-    await AdminRealtimeData.init();
-  }
-
-  // Đảm bảo đồng bộ ngay lập tức đơn hàng mới đặt từ index/cart
+  let orders;
   try {
-    const backendOrders = await api.get('/donhangonline').catch(() => []);
-    AdminRealtimeData.mergeAllOrderSources(backendOrders);
-  } catch (e) {
-    AdminRealtimeData.mergeAllOrderSources([]);
+    orders = AdminRealtimeData.mergeAllOrderSources(await getAdminPages('/donhangonline'));
+  } catch (err) {
+    tbody.innerHTML = '<tr><td colspan="9" class="p-6 text-center text-rose-600">Không tải được đơn hàng</td></tr>';
+    return;
   }
-
-  let orders = AdminRealtimeData.orders || [];
   cachedDonHangList = orders;
   if (filter !== 'all') {
     orders = cachedDonHangList.filter(o => o.trangThai === filter);
@@ -1728,7 +1518,7 @@ async function renderHoaDonTable() {
   tbody.innerHTML = '<tr><td colspan="9" class="p-4 text-center text-slate-500">Đang tải danh sách hóa đơn...</td></tr>';
 
   try {
-    const list = await api.get('/hoadon');
+    const list = await getAdminPages('/hoadon');
     if (!list || list.length === 0) {
       tbody.innerHTML = '<tr><td colspan="9" class="p-4 text-center text-slate-400">Chưa có hóa đơn nào</td></tr>';
       return;
@@ -1770,13 +1560,7 @@ async function openLapHoaDonModal() {
   const selectMH = document.getElementById('pos-select-mathang');
   try {
     // Luôn ưu tiên lấy dữ liệu mặt hàng và tồn kho trực tiếp từ backend API
-    let products = await api.get('/mathang').catch(() => []);
-    if (!products || products.length === 0) {
-      if (typeof AdminRealtimeData !== 'undefined' && !AdminRealtimeData.isLoaded) {
-        await AdminRealtimeData.init();
-      }
-      products = (typeof AdminRealtimeData !== 'undefined' && AdminRealtimeData.products) ? AdminRealtimeData.products : [];
-    }
+    const products = await getAdminPages('/mathang');
     window._posProductList = Array.isArray(products) ? products : [];
     if (selectMH) {
       selectMH.innerHTML = window._posProductList.map(m => `
@@ -1891,6 +1675,7 @@ async function saveLapHoaDon(e) {
 
   try {
     const createdHD = await api.post('/hoadon', payload);
+    AdminRealtimeData.isLoaded = false;
     showToast('Xuất hóa đơn POS thành công! Mã HĐ: ' + createdHD.soHD, 'success');
     closeModal('modal-lap-hoadon');
     form.reset();
@@ -2009,20 +1794,23 @@ async function openNhapKhoModal() {
 
   try {
     const [nccList, mhList] = await Promise.all([
-      api.get('/suppliers').catch(() => []),
-      api.get('/mathang').catch(() => [])
+      api.get('/suppliers'),
+      getAdminPages('/mathang')
     ]);
 
     const selectNCC = modal.querySelector('select[name="maNCC"]');
-    if (selectNCC && nccList && nccList.length > 0) {
+    if (selectNCC) {
       selectNCC.innerHTML = nccList.map(c => `<option value="${c.maNCC}">${c.tenNCC}</option>`).join('');
     }
 
     const selectMH = modal.querySelector('select[name="maHang"]');
-    if (selectMH && mhList && mhList.length > 0) {
-      selectMH.innerHTML = mhList.map(m => `<option value="${m.maHang}">${m.tenHang}</option>`).join('');
+    if (selectMH) {
+      selectMH.innerHTML = mhList.map(m => `<option data-imei="${m.quanLyImei}" value="${m.maHang}">${m.tenHang}</option>`).join('');
     }
-  } catch (e) {}
+  } catch (err) {
+    showToast('Không tải được dữ liệu nhập kho: ' + err.message, 'error');
+    return;
+  }
 
   modal.classList.remove('hidden');
 }
@@ -2039,33 +1827,23 @@ async function saveNhapKho(e) {
   e.preventDefault();
   const form = e.target;
   const maHang = form.maHang.value;
-  const slNhap = Number(form.slNhap.value) || 1;
-  const donGiaNhap = Number(form.donGiaNhap.value) || 0;
-  const imeiText = (form.imeiList ? form.imeiList.value : '').trim();
-  let imeis = imeiText ? imeiText.split('\n').map(s => s.trim()).filter(s => s.length > 0) : [];
+  const slNhap = Number(form.slNhap.value);
+  const donGiaNhap = Number(form.donGiaNhap.value);
+  const imeiText = form.imeiList.value.trim();
+  const imeis = imeiText.split(/\s+/).filter(Boolean);
+  const isImeiManaged = form.maHang.selectedOptions[0]?.dataset.imei === 'true';
 
-  // Nhận diện mặt hàng có quản lý IMEI hay không
-  let isImeiManaged = true;
-  if (typeof AdminRealtimeData !== 'undefined' && AdminRealtimeData.products) {
-    const prod = AdminRealtimeData.products.find(p => p.maHang === maHang);
-    if (prod && prod.quanLyImei === false) {
-      isImeiManaged = false;
-    }
+  if (!Number.isInteger(slNhap) || slNhap < 1 || !maHang) {
+    showToast('Chọn mặt hàng và nhập số lượng hợp lệ', 'error');
+    return;
   }
-
-  if (isImeiManaged) {
-    // Tự động sinh IMEI 15 chữ số cho đủ số lượng nhập theo đúng nút "Lưu & Sinh IMEI"
-    if (imeis.length < slNhap) {
-      const need = slNhap - imeis.length;
-      for (let i = 0; i < need; i++) {
-        imeis.push('86' + String(Math.floor(1000000000000 + Math.random() * 9000000000000)));
-      }
-    } else if (imeis.length > slNhap) {
-      imeis = imeis.slice(0, slNhap);
-    }
-  } else {
-    // Phụ kiện không quản lý IMEI
-    imeis = [];
+  if (isImeiManaged && (imeis.length !== slNhap || imeis.some(imei => !/^\d{15}$/.test(imei)) || new Set(imeis).size !== imeis.length)) {
+    showToast('Nhập đúng số lượng IMEI thực tế, mỗi IMEI gồm 15 chữ số và không trùng nhau', 'error');
+    return;
+  }
+  if (!isImeiManaged && imeis.length > 0) {
+    showToast('Mặt hàng này quản lý theo số lượng. Xóa danh sách IMEI để tiếp tục.', 'error');
+    return;
   }
 
   const payload = {
@@ -2082,6 +1860,7 @@ async function saveNhapKho(e) {
 
   try {
     const createdPn = await api.post('/purchasing', payload);
+    AdminRealtimeData.isLoaded = false;
     showToast('Lập phiếu nhập ' + createdPn.soPNhap + ' thành công!', 'success');
     closeModal('modal-nhapkho');
     form.reset();
@@ -2096,7 +1875,7 @@ async function saveNhapKho(e) {
 
 async function viewChiTietNhapKho(soPN) {
   const modal = document.getElementById('modal-chitiet-nhapkho');
-  const container = document.getElementById('chitiet-nhapkho-content');
+  const container = document.getElementById('chitiet-pn-body');
   if (!modal || !container) return;
 
   container.innerHTML = '<div class="text-center p-4">Đang tải chi tiết lô nhập...</div>';
@@ -2104,7 +1883,7 @@ async function viewChiTietNhapKho(soPN) {
 
   try {
     const pn = await api.get('/purchasing/' + encodeURIComponent(soPN));
-    const allImeis = await api.get('/imei').catch(() => []);
+    const allImeis = await getAdminPages('/imei', { soPN });
     const imeisInPn = allImeis.filter(i => (i.soPN === soPN || i.soPn === soPN));
 
     container.innerHTML = `
@@ -2471,7 +2250,7 @@ async function renderTraHangTable() {
   tbody.innerHTML = '<tr><td colspan="8" class="p-4 text-center text-slate-500">Đang tải phiếu đổi trả...</td></tr>';
 
   try {
-    const list = await api.get('/trahang');
+    const list = await getAdminPages('/trahang');
     if (!list || list.length === 0) {
       tbody.innerHTML = '<tr><td colspan="8" class="p-5 text-center text-slate-400 font-medium">Chưa có phiếu đổi trả nào phát sinh trong hệ thống</td></tr>';
       return;
@@ -2802,7 +2581,7 @@ async function openTraHangModal() {
 
   // Nạp danh sách gợi ý IMEI đã bán (da_ban) để nhân viên chọn ngay mà không cần nhớ số
   try {
-    const imeisDaBan = await api.get('/imei?trangThai=da_ban').catch(() => []);
+    const imeisDaBan = await getAdminPages('/imei', { trangThai: 'da_ban' }).catch(() => []);
     let datalist = document.getElementById('dl-imei-daban');
     if (!datalist) {
       datalist = document.createElement('datalist');
@@ -2892,7 +2671,7 @@ async function renderKhachHangTable(keyword = '') {
           <td class="p-3.5 font-bold text-sm text-navy whitespace-nowrap">${k.hoTen}</td>
           <td class="p-3.5 font-mono text-xs text-slate-700 whitespace-nowrap">${k.sdt}</td>
           <td class="p-3.5 text-xs text-slate-500 whitespace-nowrap">${k.email || '-'}</td>
-          <td class="p-3.5 text-xs text-slate-600 max-w-[200px] truncate" title="${k.diaChi || ''}">${k.diaChi || 'TP. Hồ Chí Minh'}</td>
+          <td class="p-3.5 text-xs text-slate-600 max-w-[200px] truncate" title="${k.diaChi || ''}">${k.diaChi || '—'}</td>
           <td class="p-3.5 text-xs text-center whitespace-nowrap">
             <div class="font-bold text-sm text-slate-800 font-mono">${diem} điểm</div>
             <span class="inline-block mt-0.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-slate-100 text-slate-600">${rank}</span>
@@ -2919,7 +2698,7 @@ async function renderNhanVienTable() {
   tbody.innerHTML = '<tr><td colspan="7" class="p-4 text-center text-slate-500">Đang tải nhân viên...</td></tr>';
 
   try {
-    const list = await api.get('/nhanvien');
+    const list = await getAdminPages('/nhanvien');
     if (!list || list.length === 0) {
       tbody.innerHTML = '<tr><td colspan="7" class="p-4 text-center text-slate-400">Chưa có nhân viên nào</td></tr>';
       return;
@@ -2941,49 +2720,6 @@ async function renderNhanVienTable() {
     `).join('');
   } catch (err) {
     tbody.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-rose-500">Lỗi tải nhân viên: ${err.message}</td></tr>`;
-  }
-}
-
-async function renderTaiKhoan() {
-  const tbody = document.getElementById('table-taikhoan-body');
-  if (!tbody) return;
-
-  tbody.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-slate-500">Đang tải tài khoản...</td></tr>';
-
-  try {
-    const list = await api.get('/taikhoan');
-    if (!list || list.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-slate-400">Chưa có tài khoản nào</td></tr>';
-      return;
-    }
-
-    tbody.innerHTML = list.map(tk => `
-      <tr class="border-b border-slate-200 hover:bg-slate-50 transition-colors">
-        <td class="p-3.5 font-mono font-bold text-xs text-slate-800 whitespace-nowrap">${tk.username}</td>
-        <td class="p-3.5 font-bold text-sm text-navy whitespace-nowrap">${tk.tenNhanVien || tk.maNV || '-'}</td>
-        <td class="p-3.5 font-bold text-xs text-indigo-700 whitespace-nowrap">${escapeAdminChatHtml(tk.tenQuyen || tk.maQuyen)}</td>
-        <td class="p-3.5 text-xs text-slate-500 font-mono whitespace-nowrap">BCrypt băm</td>
-        <td class="p-3.5 text-xs text-center whitespace-nowrap">${Format.statusBadge(tk.trangThai)}</td>
-        <td class="p-3.5 text-xs text-right whitespace-nowrap">
-          <button onclick="toggleLockTaiKhoan('${tk.username}', '${tk.trangThai}')" class="px-2.5 py-1 text-xs font-bold rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors">
-            ${tk.trangThai === 'hoat_dong' ? 'Khóa' : 'Mở khóa'}
-          </button>
-        </td>
-      </tr>
-    `).join('');
-  } catch (err) {
-    tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-rose-500">Lỗi tải tài khoản: ${err.message}</td></tr>`;
-  }
-}
-
-async function toggleLockTaiKhoan(username, curStatus) {
-  const newStatus = curStatus === 'hoat_dong' ? 'bi_khoa' : 'hoat_dong';
-  try {
-    await api.put('/taikhoan/' + encodeURIComponent(username) + '/trangthai?trangThai=' + newStatus);
-    showToast('Đã đổi trạng thái tài khoản ' + username + ' sang ' + newStatus, 'success');
-    await renderTaiKhoan();
-  } catch (err) {
-    alert('Lỗi: ' + err.message);
   }
 }
 
@@ -3064,32 +2800,21 @@ async function renderThamSo() {
 
 // (renderNhomLoai được định nghĩa đầy đủ với tính năng CRUD & Thống kê Model tại mục 19 bên dưới)
 
-async function renderThuocTinh() {
-  const tbody = document.getElementById('table-thuoctinh-body');
-  if (!tbody) return;
-
-  try {
-    const list = await api.get('/thuoctinh');
-    tbody.innerHTML = list.map(tt => `
-      <tr class="border-b border-slate-200">
-        <td class="p-3 font-mono font-bold text-xs text-slate-600">${tt.maThuocTinh}</td>
-        <td class="p-3 font-bold text-sm text-navy">${tt.tenThuocTinh}</td>
-      </tr>
-    `).join('');
-  } catch (err) {
-    console.warn('Lỗi tải thuộc tính:', err);
-  }
-}
-
-// 12. TỒN KHO - QUẢN LÝ KHO THỰC TẾ 3.530 MODEL TỪ JSON
-// -------------------------------------------------------------
 async function renderTonKhoTable(page = 1, keyword = null, statusFilter = null) {
   const tbody = document.getElementById('table-tonkho-body');
   if (!tbody) return;
 
-  if (!AdminRealtimeData.isLoaded) {
-    tbody.innerHTML = '<tr><td colspan="6" class="p-6 text-center text-slate-500"><i class="fa-solid fa-spinner fa-spin mr-2"></i>Đang tải dữ liệu tồn kho thực tế...</td></tr>';
-    await AdminRealtimeData.init();
+  const unitsEl = document.getElementById('tonkho-total-units');
+  let items;
+  try {
+    items = await getAdminPages('/tonkho');
+  } catch (err) {
+    if (unitsEl) unitsEl.textContent = '—';
+    renderPaginationControls('tonkho-pagination-buttons', 1, 1, 'changeTonKhoPage');
+    const infoEl = document.getElementById('tonkho-pagination-info');
+    if (infoEl) infoEl.textContent = '';
+    tbody.innerHTML = '<tr><td colspan="6" class="p-6 text-center text-rose-600">Không tải được tồn kho</td></tr>';
+    return;
   }
 
   if (keyword !== null) {
@@ -3101,10 +2826,8 @@ async function renderTonKhoTable(page = 1, keyword = null, statusFilter = null) 
     AdminRealtimeData.tonKhoPage = 1;
   }
 
-  let items = AdminRealtimeData.products || [];
   const totalStockAll = items.reduce((acc, p) => acc + (p.tonKho || 0), 0);
-  const unitsEl = document.getElementById('tonkho-total-units');
-  if (unitsEl) unitsEl.textContent = `${totalStockAll.toLocaleString('vi-VN')} máy`;
+  if (unitsEl) unitsEl.textContent = `${totalStockAll.toLocaleString('vi-VN')} đơn vị`;
 
   const kw = (AdminRealtimeData.tonKhoKeyword || '').toLowerCase().trim();
   if (kw) {
@@ -3115,9 +2838,9 @@ async function renderTonKhoTable(page = 1, keyword = null, statusFilter = null) 
   }
 
   if (AdminRealtimeData.tonKhoStatus === 'in_stock') {
-    items = items.filter(m => (m.tonKho || 0) > 10);
+    items = items.filter(m => (m.tonKho || 0) > 5);
   } else if (AdminRealtimeData.tonKhoStatus === 'low_stock') {
-    items = items.filter(m => (m.tonKho || 0) > 0 && (m.tonKho || 0) <= 10);
+    items = items.filter(m => (m.tonKho || 0) > 0 && (m.tonKho || 0) <= 5);
   } else if (AdminRealtimeData.tonKhoStatus === 'out_of_stock') {
     items = items.filter(m => (m.tonKho || 0) <= 0);
   }
@@ -3140,17 +2863,17 @@ async function renderTonKhoTable(page = 1, keyword = null, statusFilter = null) 
   const pageItems = items.slice(startIndex, startIndex + pageSize);
 
   tbody.innerHTML = pageItems.map(m => {
-    const currentStock = m.tonKho != null ? m.tonKho : 15;
-    const totalSold = Math.max(0, 20 - currentStock);
-    const totalImport = currentStock + totalSold;
+    const currentStock = m.tonKho;
+    const totalSold = m.tongBan;
+    const totalImport = m.tongNhap;
 
     let stockBadge = '';
     if (currentStock <= 0) {
       stockBadge = '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium bg-[#FEF2F2] text-[#991B1B] whitespace-nowrap"><span class="w-1.5 h-1.5 rounded-full bg-[#EF4444] shrink-0"></span>Hết hàng</span>';
     } else if (currentStock <= 5) {
-      stockBadge = `<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium bg-[#FEFCE8] text-[#854D0E] whitespace-nowrap"><span class="w-1.5 h-1.5 rounded-full bg-[#EAB308] shrink-0"></span>${currentStock} máy</span>`;
+      stockBadge = `<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium bg-[#FEFCE8] text-[#854D0E] whitespace-nowrap"><span class="w-1.5 h-1.5 rounded-full bg-[#EAB308] shrink-0"></span>${currentStock} đơn vị</span>`;
     } else {
-      stockBadge = `<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium bg-[#F0FDF4] text-[#166534] whitespace-nowrap"><span class="w-1.5 h-1.5 rounded-full bg-[#22C55E] shrink-0"></span>${currentStock} máy</span>`;
+      stockBadge = `<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium bg-[#F0FDF4] text-[#166534] whitespace-nowrap"><span class="w-1.5 h-1.5 rounded-full bg-[#22C55E] shrink-0"></span>${currentStock} đơn vị</span>`;
     }
 
     return `
@@ -3159,7 +2882,7 @@ async function renderTonKhoTable(page = 1, keyword = null, statusFilter = null) 
         <td class="p-3.5 font-semibold text-xs text-navy max-w-[320px] truncate" title="${m.tenHang}">${m.tenHang}</td>
         <td class="p-3.5 text-xs text-slate-500 text-center whitespace-nowrap">${m.dvt || 'Cái'}</td>
         <td class="p-3.5 text-xs font-medium text-slate-700 text-center whitespace-nowrap font-mono">${totalImport}</td>
-        <td class="p-3.5 text-xs font-medium text-slate-700 text-center whitespace-nowrap font-mono">${totalSold > 0 ? totalSold : '—'}</td>
+        <td class="p-3.5 text-xs font-medium text-slate-700 text-center whitespace-nowrap font-mono">${totalSold}</td>
         <td class="p-3.5 text-xs text-center whitespace-nowrap">${stockBadge}</td>
       </tr>
     `;
@@ -3179,26 +2902,11 @@ async function renderImeiTable(keyword = '') {
   tbody.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-slate-500">Đang tải danh sách IMEI...</td></tr>';
 
   try {
-    let imeiList = await api.get('/imei').catch(() => []);
-    if (!Array.isArray(imeiList) || imeiList.length === 0) {
-      if (typeof AdminRealtimeData !== 'undefined' && AdminRealtimeData.products) {
-        imeiList = AdminRealtimeData.products
-          .filter(p => p.quanLyIMEI || p.quanLyImei || p.tenNhom === 'Điện thoại di động' || p.tenNhom === 'Máy tính bảng')
-          .slice(0, 30)
-          .map((p, idx) => ({
-            maIMEI: `IMEI${String(idx + 1).padStart(4, '0')}`,
-            soIMEI: `86745206${String(1000000 + idx)}`,
-            tenHang: p.tenHang,
-            soPN: `PN${String(1000 + (idx % 5))}`,
-            trangThai: (idx % 4 === 0) ? 'da_ban' : 'chua_ban'
-          }));
-      }
-    }
+    const imeiList = await getAdminPages('/imei', keyword.trim() ? { keyword: keyword.trim() } : {});
     const kw = (keyword || '').toLowerCase().trim();
     const list = kw
       ? imeiList.filter(i => (i.soIMEI && i.soIMEI.includes(kw)) || (i.tenHang && i.tenHang.toLowerCase().includes(kw)) || (i.maIMEI && i.maIMEI.toLowerCase().includes(kw)))
       : imeiList;
-    cachedImeiList = list;
 
     if (!list || list.length === 0) {
       tbody.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-slate-400">Không tìm thấy mã IMEI nào</td></tr>';
@@ -3235,39 +2943,7 @@ async function renderHoaDonListTable(keyword = '') {
   tbody.innerHTML = '<tr><td colspan="10" class="p-4 text-center text-slate-500">Đang tải hóa đơn...</td></tr>';
 
   try {
-    let list = await api.get('/hoadon').catch(() => []);
-    if (!Array.isArray(list)) list = [];
-
-    // Gộp các hóa đơn online từ AdminRealtimeData.orders đã hoàn tất
-    if (typeof AdminRealtimeData !== 'undefined' && AdminRealtimeData.orders) {
-      const existingIds = new Set(list.map(h => h.soHD));
-      AdminRealtimeData.orders
-        .filter(o => o.trangThai === 'hoan_thanh' && o.soHD)
-        .forEach(o => {
-          if (!existingIds.has(o.soHD)) {
-            list.push({
-              soHD: o.soHD,
-              ngayLap: o.ngayDat,
-              tenKhachHang: o.tenNguoiNhan,
-              kenhBan: 'online',
-              maImei: (o.items && o.items[0]) ? ('IMEI' + o.items[0].maHang) : 'IMEI-ONLINE',
-              tongTien: o.tongTien,
-              tienGiamGia: 0,
-              thanhTien: o.tongTien,
-              phuongThucThanhToan: o.phuongThucThanhToan || 'chuyen_khoan',
-              chiTiet: (o.items || []).map(it => ({
-                tenHang: it.tenHang,
-                maHang: it.maHang,
-                slBan: it.soLuong,
-                donGiaBan: it.donGia,
-                thanhTien: (it.soLuong || 1) * it.donGia,
-                soIMEI: 'IMEI' + it.maHang
-              }))
-            });
-            existingIds.add(o.soHD);
-          }
-        });
-    }
+    let list = await getAdminPages('/hoadon');
 
     const kw = (keyword || '').toLowerCase().trim();
     if (kw) {
@@ -3321,38 +2997,8 @@ async function viewHoaDonDetail(soHD) {
   if (!container || !modal) return;
 
   try {
-    let h;
-    try {
-      h = await api.get('/hoadon/' + encodeURIComponent(soHD));
-    } catch (apiErr) {
-      const foundOrder = (typeof AdminRealtimeData !== 'undefined' && AdminRealtimeData.orders)
-        ? AdminRealtimeData.orders.find(o => o.soHD === soHD)
-        : null;
-      if (foundOrder) {
-        h = {
-          soHD: foundOrder.soHD,
-          ngayLap: foundOrder.ngayDat,
-          tenKhachHang: foundOrder.tenNguoiNhan,
-          kenhBan: 'online',
-          thanhTien: foundOrder.tongTien,
-          tongTien: foundOrder.tongTien,
-          tienGiamGia: 0,
-          phuongThucThanhToan: foundOrder.phuongThucThanhToan,
-          chiTiet: (foundOrder.items || []).map(it => ({
-            tenHang: it.tenHang,
-            maHang: it.maHang,
-            slBan: it.soLuong,
-            donGiaBan: it.donGia,
-            thanhTien: (it.soLuong || 1) * it.donGia,
-            soIMEI: 'IMEI' + it.maHang
-          }))
-        };
-      } else {
-        throw apiErr;
-      }
-    }
-    const vatPercent = 10;
-    const vatAmount = Math.round((h.thanhTien * vatPercent) / 110);
+    const h = await api.get('/hoadon/' + encodeURIComponent(soHD));
+    const vatAmount = h.tienVatDaGom;
     const ngay = fmtLocalDateTime(h.ngayLap);
     const tenKh = h.tenKhachHang || h.tenKH || 'Khách lẻ';
 
@@ -3426,7 +3072,7 @@ async function viewHoaDonDetail(soHD) {
           <span>-${Format.currency(h.tienGiamGia || 0)}</span>
         </div>
         <div class="flex justify-between text-slate-500 text-[11px]">
-          <span>Thuế GTGT (VAT 10% đã bao gồm):</span>
+          <span>Thuế GTGT đã gồm:</span>
           <span>${Format.currency(vatAmount)}</span>
         </div>
         <div class="flex justify-between text-base font-extrabold text-[#15803D] pt-2 border-t">
@@ -3456,161 +3102,39 @@ function renderTraCuuBaoHanh() {
     res.innerHTML = `
       <div class="p-8 text-center border-2 border-dashed border-slate-200 rounded-2xl text-slate-400 text-xs">
         <i class="fa-solid fa-magnifying-glass text-2xl mb-2 text-slate-300"></i>
-        <p>Vui lòng nhập 15 số IMEI hoặc số điện thoại của khách hàng để tra cứu bảo hành.</p>
+        <p>Nhập số IMEI để tra cứu bảo hành.</p>
       </div>
     `;
   }
-}
-
-function traCuuBaoHanhAction(e) {
-  if (e) e.preventDefault();
-  const input = document.getElementById('input-tracuu-imei');
-  if (!input) return;
-
-  const query = input.value.trim();
-  if (!query) return;
-
-  const res = document.getElementById('tracuu-baohanh-result');
-  if (!res) return;
-
-  let bh = store.data.baoHanh.find(b => b.maImei === query);
-
-  if (!bh) {
-    const cust = store.data.khachHang.find(k => k.sdt === query);
-    if (cust) {
-      const hd = store.data.hoaDon.find(h => h.maKH === cust.maKH && h.maImei);
-      if (hd) {
-        bh = store.data.baoHanh.find(b => b.maImei === hd.maImei);
-      }
-    }
-  }
-
-  if (!bh) {
-    res.innerHTML = `
-      <div class="p-6 bg-rose-50 border border-rose-200 rounded-2xl text-rose-700 text-xs space-y-2 text-center animate-in fade-in duration-200">
-        <i class="fa-solid fa-circle-exclamation text-2xl text-rose-500"></i>
-        <div class="font-bold text-sm">Không tìm thấy thông tin bảo hành</div>
-        <p>Số IMEI hoặc Số điện thoại "${query}" chưa phát sinh hóa đơn bán hoặc chưa được đăng ký bảo hành trong hệ thống.</p>
-      </div>
-    `;
-    return;
-  }
-
-  const today = new Date();
-  const endDate = new Date(bh.ngayKT);
-  const diffTime = endDate - today;
-  const remainingDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  const isStillValid = remainingDays > 0;
-  const activeTicket = store.data.tiepNhanBaoHanh.find(t => t.soImei === bh.maImei && t.trangThai === 'dang_sua');
-
-  res.innerHTML = `
-    <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-6 space-y-5 animate-in fade-in duration-200">
-      <div class="flex items-start justify-between border-b border-slate-200 pb-4">
-        <div>
-          <span class="text-[10px] font-bold uppercase tracking-wider text-[#15803D] bg-blue-100 px-2.5 py-1 rounded-full">Phiếu: ${bh.maBH}</span>
-          <h3 class="font-extrabold text-navy text-base mt-2">${bh.tenHang}</h3>
-          <div class="text-xs font-mono text-slate-500 mt-0.5">Số IMEI: <strong class="text-[#166534] font-bold">${bh.maImei}</strong></div>
-        </div>
-        <div>
-          ${isStillValid ? `
-            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-100 text-emerald-800 font-bold text-xs">
-              <i class="fa-solid fa-circle-check text-emerald-600"></i> Còn ${remainingDays} ngày bảo hành
-            </span>
-          ` : `
-            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-100 text-rose-800 font-bold text-xs">
-              <i class="fa-solid fa-circle-xmark text-rose-600"></i> Đã hết hạn bảo hành
-            </span>
-          `}
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
-        <div class="p-3 bg-white rounded-xl border border-slate-200">
-          <span class="text-slate-400 font-bold block text-[10px] uppercase">Ngày Kích Hoạt (Bán)</span>
-          <div class="font-bold text-slate-800 mt-1">${bh.ngayBD}</div>
-          <div class="text-slate-500 text-[11px] mt-0.5">Hóa đơn: <strong>${bh.soHD}</strong></div>
-        </div>
-        <div class="p-3 bg-white rounded-xl border border-slate-200">
-          <span class="text-slate-400 font-bold block text-[10px] uppercase">Thời Hạn Bảo Hành</span>
-          <div class="font-bold text-slate-800 mt-1">${bh.thoiHanThang} Tháng</div>
-          <div class="text-slate-500 text-[11px] mt-0.5">Tiêu chuẩn Apple Care</div>
-        </div>
-        <div class="p-3 bg-white rounded-xl border border-slate-200">
-          <span class="text-slate-400 font-bold block text-[10px] uppercase">Ngày Hết Hạn BH</span>
-          <div class="font-bold ${isStillValid ? 'text-emerald-700' : 'text-rose-600'} mt-1">${bh.ngayKT}</div>
-          <div class="text-slate-500 text-[11px] mt-0.5">${isStillValid ? 'Bảo hành chính hãng' : 'Hết hạn bảo hành'}</div>
-        </div>
-      </div>
-
-      <div class="p-4 rounded-xl ${activeTicket ? 'bg-amber-50 border border-amber-200' : 'bg-emerald-50 border border-emerald-200'} text-xs">
-        <div class="font-bold text-slate-800 flex items-center gap-2">
-          <i class="fa-solid ${activeTicket ? 'fa-screwdriver-wrench text-amber-600' : 'fa-check text-emerald-600'}"></i>
-          <span>${activeTicket ? 'Thiết bị đang trong quá trình sửa chữa bảo hành' : 'Không có yêu cầu bảo hành mở nào'}</span>
-        </div>
-        ${activeTicket ? `
-          <div class="mt-2 text-slate-600 space-y-1">
-            <div>Mã phiếu tiếp nhận: <strong class="font-mono">${activeTicket.maTN}</strong> (Ngày nhận: ${activeTicket.ngayNhan})</div>
-            <div>Tình trạng lỗi: <em>"${activeTicket.tinhTrangLoi}"</em></div>
-            <div>Kỹ thuật viên phụ trách: <strong>${activeTicket.nvKyThuat}</strong> - Hẹn trả máy: <strong>${activeTicket.ngayHenTra}</strong></div>
-          </div>
-        ` : `
-          <div class="mt-1 text-slate-500">Máy hoạt động bình thường, sẵn sàng tiếp nhận nếu khách hàng cần hỗ trợ kỹ thuật.</div>
-        `}
-      </div>
-    </div>
-  `;
 }
 
 // -------------------------------------------------------------
 // 16. TRUY VẾT LỊCH SỬ IMEI (FR14)
 // -------------------------------------------------------------
 async function viewImeiTimeline(soImei) {
-  let imeiObj = (cachedImeiList || []).find(i => (i.soIMEI === soImei || i.soImei === soImei || i.maIMEI === soImei));
-  if (!imeiObj && store && store.data && store.data.danhSachImei) {
-    imeiObj = store.data.danhSachImei.find(i => (i.soIMEI === soImei || i.soImei === soImei || i.maIMEI === soImei));
+  let imeiObj;
+  try {
+    const imeis = await getAdminPages('/imei', { keyword: soImei });
+    imeiObj = imeis.find(i => i.soIMEI === soImei || i.maIMEI === soImei);
+  } catch (err) {
+    showToast('Không tải được IMEI: ' + err.message, 'error');
+    return;
   }
   if (!imeiObj) {
-    try {
-      const allImeis = await api.get('/imei').catch(() => []);
-      if (Array.isArray(allImeis)) {
-        cachedImeiList = allImeis;
-        imeiObj = allImeis.find(i => (i.soIMEI === soImei || i.soImei === soImei || i.maIMEI === soImei));
-      }
-    } catch (e) {}
-  }
-  if (!imeiObj) {
-    imeiObj = {
-      soImei: soImei,
-      soIMEI: soImei,
-      soPN: 'PN0001',
-      tenHang: 'Thiết bị di động chính hãng',
-      trangThai: 'con_hang'
-    };
+    showToast('Không tìm thấy IMEI', 'info');
+    return;
   }
 
-  const pn = (store && store.data && store.data.phieuNhap ? store.data.phieuNhap.find(p => p.soPN === imeiObj.soPN) : null) || { ngayNhap: '2026-10-01', tenNCC: 'Nhà phân phối chính hãng' };
-  let hd = (store && store.data && store.data.hoaDon ? store.data.hoaDon.find(h => h.maImei === soImei || (h.chiTiet && h.chiTiet.some(c => c.soIMEI === soImei || c.maIMEI === soImei))) : null);
-  if (!hd && (imeiObj.trangThai === 'da_ban' || imeiObj.trangthai === 'da_ban')) {
-    try {
-      const hds = await api.get('/hoadon').catch(() => []);
-      if (Array.isArray(hds)) {
-        hd = hds.find(h => h.chiTiet && h.chiTiet.some(c => c.soIMEI === soImei || c.maIMEI === soImei));
-      }
-    } catch (e) {}
-    if (!hd) {
-      hd = {
-        soHD: 'HD' + String(soImei).slice(-5),
-        ngayLap: new Date().toISOString().substring(0, 10),
-        kenhBan: 'tai_quay',
-        tenKH: 'Khách lẻ',
-        thanhTien: 15000000,
-        phuongThuc: 'Tiền mặt'
-      };
-    }
-  }
-  const bh = (store && store.data && store.data.baoHanh ? store.data.baoHanh.find(b => b.maImei === soImei) : null);
-  const tr = (store && store.data && store.data.traHang ? store.data.traHang.find(t => t.maImei === soImei) : null);
-  const tn = (store && store.data && store.data.tiepNhanBaoHanh ? store.data.tiepNhanBaoHanh.filter(t => t.soImei === soImei) : []);
+  const [pn, invoices, bh, returns, tickets] = await Promise.all([
+    api.get('/purchasing/' + encodeURIComponent(imeiObj.soPN)).catch(() => null),
+    getAdminPages('/hoadon', { keyword: soImei }).catch(() => []),
+    api.get('/baohanh/imei/' + encodeURIComponent(soImei)).catch(() => null),
+    getAdminPages('/trahang', { keyword: imeiObj.maIMEI }).catch(() => []),
+    getAdminPages('/tiepnhanbaohanh', { keyword: soImei }).catch(() => [])
+  ]);
+  const hd = invoices.find(h => h.chiTiet?.some(c => c.soIMEI === soImei || c.maIMEI === imeiObj.maIMEI));
+  const tr = returns.find(t => t.soIMEI === soImei || t.maIMEI === imeiObj.maIMEI);
+  const tn = tickets.filter(t => t.soIMEI === soImei);
 
   const titleEl = document.getElementById('timeline-imei-title');
   if (titleEl) titleEl.textContent = 'Vòng Đời Thiết Bị: ' + soImei;
@@ -3625,11 +3149,11 @@ async function viewImeiTimeline(soImei) {
           <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
             <div class="flex justify-between items-center text-xs">
               <span class="font-bold text-navy">1. Nhập kho từ Nhà cung cấp</span>
-              <span class="text-slate-400 font-mono">${pn ? (pn.ngayNhap ? pn.ngayNhap.substring(0, 10) : '2026-10-01') : '2026-10-01'}</span>
+              <span class="text-slate-400 font-mono">${fmtLocalDateTime(imeiObj.ngayNhap || pn?.ngayNhap, true)}</span>
             </div>
             <div class="text-[11px] text-slate-600 mt-1">
-              Số phiếu nhập: <strong class="font-mono text-[#15803D]">${imeiObj.soPN || 'PN0001'}</strong><br>
-              Nhà cung cấp: <strong>${pn ? (pn.tenNCC || 'Nhà phân phối chính hãng') : 'Nhà phân phối chính hãng'}</strong><br>
+              Số phiếu nhập: <strong class="font-mono text-[#15803D]">${imeiObj.soPN || '—'}</strong><br>
+              Nhà cung cấp: <strong>${pn?.tenNCC || '—'}</strong><br>
               Thiết bị: <strong>${imeiObj.tenHang || 'Điện thoại di động'}</strong>
             </div>
           </div>
@@ -3641,7 +3165,7 @@ async function viewImeiTimeline(soImei) {
           <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
             <div class="flex justify-between items-center text-xs">
               <span class="font-bold text-navy">2. Xuất bán cho khách hàng</span>
-              <span class="text-slate-400 font-mono">${hd ? fmtLocalDateTime(hd.ngayLap, true) : 'Chưa xuất bán'}</span>
+              <span class="text-slate-400 font-mono">${hd ? fmtLocalDateTime(hd.ngayLap, true) : 'Chưa có dữ liệu hóa đơn'}</span>
             </div>
             ${hd ? `
               <div class="text-[11px] text-slate-600 mt-1">
@@ -3650,7 +3174,7 @@ async function viewImeiTimeline(soImei) {
                 Tổng thanh toán: <strong class="text-[#166534]">${Format.currency(hd.thanhTien || hd.tongTien || 0)}</strong> (${hd.phuongThucThanhToan || hd.phuongThuc || 'Tiền mặt'})
               </div>
             ` : `
-              <div class="text-[11px] text-emerald-600 font-bold mt-1">Thiết bị hiện còn trong kho (trạng thái: con_hang).</div>
+              <div class="text-[11px] text-emerald-600 font-bold mt-1">Trạng thái hiện tại: ${Format.statusBadge(imeiObj.trangThai)}</div>
             `}
           </div>
         </div>
@@ -3665,8 +3189,8 @@ async function viewImeiTimeline(soImei) {
                 <span class="text-slate-400 font-mono">${bh.ngayBD || '-'}</span>
               </div>
               <div class="text-[11px] text-slate-600 mt-1">
-                Mã bảo hành: <strong class="font-mono text-indigo-600">${bh.maBH}</strong><br>
-                Thời hạn: <strong>${bh.thoiHanThang || 12} Tháng</strong> (Hết hạn: <strong class="text-slate-800">${bh.ngayKT || '-'}</strong>)
+                Trạng thái: <strong>${Format.statusBadge(bh.trangThai)}</strong><br>
+                Ngày hết hạn: <strong class="text-slate-800">${fmtLocalDateTime(bh.ngayKT, true)}</strong>
               </div>
             </div>
           </div>
@@ -3715,64 +3239,21 @@ async function viewImeiTimeline(soImei) {
 }
 
 // -------------------------------------------------------------
-// 17. CHI TIẾT LÔ NHẬP KHO & DANH SÁCH IMEI (FR12)
+// 18. LỊCH SỬ KHÁCH HÀNG
 // -------------------------------------------------------------
-function viewChiTietNhapKho(soPN) {
-  const pn = store.data.phieuNhap.find(p => p.soPN === soPN);
-  const imeis = store.data.danhSachImei.filter(i => i.soPN === soPN);
-
-  document.getElementById('chitiet-pn-title').textContent = 'Lô Nhập: ' + soPN + ' (' + imeis.length + ' IMEI)';
-  const body = document.getElementById('chitiet-pn-body');
-  if (!body) return;
-
-  body.innerHTML = `
-    <div class="p-3 bg-blue-50/70 rounded-xl border border-blue-100 flex justify-between items-center text-xs text-blue-900 mb-3">
-      <div>
-        <strong>${pn ? pn.tenNCC : 'Nhà cung cấp'}</strong><br>
-        <span class="text-slate-500">Ngày nhập: ${pn ? pn.ngayNhap : '-'}</span>
-      </div>
-      <div class="text-right">
-        <span class="text-slate-500">Tổng tiền:</span> <strong class="font-mono text-[#166534]">${pn ? Format.currency(pn.tongTienNhap) : '-'}</strong>
-      </div>
-    </div>
-    <div class="border rounded-xl overflow-hidden">
-      <table class="w-full text-left border-collapse text-xs">
-        <thead>
-          <tr class="bg-slate-50 border-b text-slate-500 text-[11px] font-bold">
-            <th class="p-2.5">STT</th>
-            <th class="p-2.5">Số IMEI (15 Số - BR01)</th>
-            <th class="p-2.5">Tên Thiết Bị</th>
-            <th class="p-2.5 text-center">Tình Trạng</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${imeis.map((im, idx) => `
-            <tr class="border-b border-slate-100 hover:bg-slate-50">
-              <td class="p-2.5 text-slate-400 font-mono">${idx + 1}</td>
-              <td class="p-2.5 font-mono font-bold text-[#15803D]">${im.soImei}</td>
-              <td class="p-2.5 font-semibold text-slate-800">${im.tenHang}</td>
-              <td class="p-2.5 text-center">${Format.statusBadge(im.trangThai)}</td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    </div>
-  `;
-
-  const modal = document.getElementById('modal-chitiet-nhapkho');
-  if (modal) modal.classList.remove('hidden');
-}
-
-// -------------------------------------------------------------
-// 18. LỊCH SỬ MUA HÀNG & TÍCH ĐIỂM (FR08, BR21)
-// -------------------------------------------------------------
-function viewKhachHangHistory(maKH) {
-  const cust = store.data.khachHang.find(k => k.maKH === maKH);
-  if (!cust) return;
-
-  const orders = store.data.hoaDon.filter(h => h.maKH === maKH);
-  const totalSpent = orders.reduce((sum, h) => sum + (Number(h.thanhTien) || 0), 0);
-  const points = Math.floor(totalSpent / 100000);
+async function viewKhachHangHistory(maKH) {
+  let cust, orders;
+  try {
+    [cust, orders] = await Promise.all([
+      api.get('/customers/' + encodeURIComponent(maKH)),
+      getAdminPages('/hoadon', { maKH })
+    ]);
+  } catch (err) {
+    showToast('Không tải được lịch sử khách hàng: ' + err.message, 'error');
+    return;
+  }
+  const totalSpent = cust.tongChiTieu;
+  const points = cust.diemTichLuy;
 
   document.getElementById('lichsu-kh-title').textContent = 'Lịch Sử: ' + cust.hoTen + ' (' + cust.maKH + ')';
   const body = document.getElementById('lichsu-kh-body');
@@ -3811,9 +3292,9 @@ function viewKhachHangHistory(maKH) {
             <tr class="border-b border-slate-100 hover:bg-slate-50">
               <td class="p-2.5 font-mono font-bold text-[#15803D]">${o.soHD}</td>
               <td class="p-2.5 text-slate-500">${o.ngayLap}</td>
-              <td class="p-2.5 font-mono text-slate-700">${o.maImei || '-'}</td>
+              <td class="p-2.5 font-mono text-slate-700">${o.chiTiet?.map(item => item.soIMEI || item.maIMEI).filter(Boolean).join(', ') || '—'}</td>
               <td class="p-2.5 text-right font-bold text-slate-800 font-mono">${Format.currency(o.thanhTien)}</td>
-              <td class="p-2.5 text-center">${Format.statusBadge(o.phuongThuc)}</td>
+              <td class="p-2.5 text-center">${Format.statusBadge(o.phuongThucThanhToan)}</td>
             </tr>
           `).join('') : `
             <tr><td colspan="5" class="p-4 text-center text-slate-400">Khách hàng chưa phát sinh hóa đơn bán lẻ.</td></tr>
@@ -3830,25 +3311,25 @@ function viewKhachHangHistory(maKH) {
 // -------------------------------------------------------------
 // 19. HÃNG & LOẠI HÀNG - CRUD ĐẦY ĐỦ (FR07)
 // -------------------------------------------------------------
-function renderNhomLoai() {
+async function renderNhomLoai() {
   const tbodyNhom = document.getElementById('table-nhomhang-body');
   const tbodyLoai = document.getElementById('table-loaihang-body');
 
-  const categories = (typeof AdminRealtimeData !== 'undefined' && AdminRealtimeData.categories && AdminRealtimeData.categories.length > 0)
-    ? AdminRealtimeData.categories
-    : store.data.nhomHang;
-
-  const brands = (typeof AdminRealtimeData !== 'undefined' && AdminRealtimeData.brands && AdminRealtimeData.brands.length > 0)
-    ? AdminRealtimeData.brands
-    : store.data.loaiHang;
-
-  const allProducts = (typeof AdminRealtimeData !== 'undefined' && AdminRealtimeData.products && AdminRealtimeData.products.length > 0)
-    ? AdminRealtimeData.products
-    : store.data.matHang;
+  let categories, brands;
+  try {
+    [categories, brands] = await Promise.all([api.get('/nhomhang'), api.get('/loaihang')]);
+    store.data.nhomHang = categories;
+    store.data.loaiHang = brands;
+  } catch (err) {
+    const errorRow = '<tr><td colspan="4" class="p-3 text-rose-600">Không tải được danh mục</td></tr>';
+    if (tbodyNhom) tbodyNhom.innerHTML = errorRow;
+    if (tbodyLoai) tbodyLoai.innerHTML = errorRow;
+    return;
+  }
 
   if (tbodyNhom) {
     tbodyNhom.innerHTML = categories.map(n => {
-      const modelCount = n.count !== undefined ? n.count : allProducts.filter(m => m.maNhom === n.maNhom || m.categoryName === n.tenNhom).length;
+      const modelCount = n.soLuongMatHang;
       return `
         <tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors">
           <td class="p-3 font-mono font-bold text-slate-700">${n.maNhom}</td>
@@ -3865,7 +3346,7 @@ function renderNhomLoai() {
 
   if (tbodyLoai) {
     tbodyLoai.innerHTML = brands.map(l => {
-      const modelCount = l.count !== undefined ? l.count : allProducts.filter(m => m.maLoai === l.maLoai || m.brand === l.tenLoai || m.nhanHieu === l.tenLoai).length;
+      const modelCount = l.soLuongMatHang;
       return `
         <tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors">
           <td class="p-3 font-mono font-bold text-slate-700">${l.maLoai}</td>
@@ -3902,36 +3383,35 @@ function openNhomHangModal(maNhom = null) {
   modal.classList.remove('hidden');
 }
 
-function saveNhomHang(e) {
+async function saveNhomHang(e) {
   e.preventDefault();
   const form = e.target;
-  const maNhom = form.maNhom.value.trim();
-  const tenNhom = form.tenNhom.value.trim();
-
-  const idx = store.data.nhomHang.findIndex(n => n.maNhom === maNhom);
-  if (idx >= 0) {
-    store.data.nhomHang[idx].tenNhom = tenNhom;
-    showToast('Đã cập nhật nhóm hàng: ' + maNhom, 'success');
-  } else {
-    store.data.nhomHang.push({ maNhom, tenNhom });
-    showToast('Đã thêm nhóm hàng mới: ' + maNhom, 'success');
+  const code = form.maNhom.value.trim();
+  const fields = { tenNhom: form.tenNhom.value.trim() };
+  try {
+    if (form.maNhom.readOnly) {
+      await api.put('/nhomhang/' + encodeURIComponent(code), fields);
+    } else {
+      await api.post('/nhomhang', { maNhom: code, ...fields });
+    }
+    AdminRealtimeData.isLoaded = false;
+    closeModal('modal-nhomhang');
+    await renderNhomLoai();
+    showToast('Đã lưu nhóm hàng', 'success');
+  } catch (err) {
+    showToast('Không lưu được nhóm hàng: ' + err.message, 'error');
   }
-  store.save();
-  closeModal('modal-nhomhang');
-  renderNhomLoai();
 }
 
-function deleteNhomHang(maNhom) {
-  const hasProducts = store.data.matHang.some(m => m.maNhom === maNhom);
-  if (hasProducts) {
-    alert('Không thể xóa! Có các model sản phẩm đang trực thuộc nhóm hàng này.');
-    return;
-  }
-  if (confirm('Bạn chắc chắn muốn xóa nhóm hàng ' + maNhom + '?')) {
-    store.data.nhomHang = store.data.nhomHang.filter(n => n.maNhom !== maNhom);
-    store.save();
-    renderNhomLoai();
-    showToast('Đã xóa nhóm hàng!', 'success');
+async function deleteNhomHang(code) {
+  if (!confirm('Bạn chắc chắn muốn xóa nhóm hàng ' + code + '?')) return;
+  try {
+    await api.delete('/nhomhang/' + encodeURIComponent(code));
+    AdminRealtimeData.isLoaded = false;
+    await renderNhomLoai();
+    showToast('Đã xóa nhóm hàng', 'success');
+  } catch (err) {
+    showToast('Không xóa được nhóm hàng: ' + err.message, 'error');
   }
 }
 
@@ -3956,45 +3436,57 @@ function openLoaiHangModal(maLoai = null) {
   modal.classList.remove('hidden');
 }
 
-function saveLoaiHang(e) {
+async function saveLoaiHang(e) {
   e.preventDefault();
   const form = e.target;
-  const maLoai = form.maLoai.value.trim();
-  const tenLoai = form.tenLoai.value.trim();
-
-  const idx = store.data.loaiHang.findIndex(l => l.maLoai === maLoai);
-  if (idx >= 0) {
-    store.data.loaiHang[idx].tenLoai = tenLoai;
-    showToast('Đã cập nhật loại hàng: ' + maLoai, 'success');
-  } else {
-    store.data.loaiHang.push({ maLoai, tenLoai });
-    showToast('Đã thêm loại hàng mới: ' + maLoai, 'success');
+  const code = form.maLoai.value.trim();
+  const fields = { tenLoai: form.tenLoai.value.trim() };
+  try {
+    if (form.maLoai.readOnly) {
+      await api.put('/loaihang/' + encodeURIComponent(code), fields);
+    } else {
+      await api.post('/loaihang', { maLoai: code, ...fields });
+    }
+    AdminRealtimeData.isLoaded = false;
+    closeModal('modal-loaihang');
+    await renderNhomLoai();
+    showToast('Đã lưu loại hàng', 'success');
+  } catch (err) {
+    showToast('Không lưu được loại hàng: ' + err.message, 'error');
   }
-  store.save();
-  closeModal('modal-loaihang');
-  renderNhomLoai();
 }
 
-function deleteLoaiHang(maLoai) {
-  const hasProducts = store.data.matHang.some(m => m.maLoai === maLoai);
-  if (hasProducts) {
-    alert('Không thể xóa! Có các model sản phẩm đang trực thuộc loại hàng này.');
-    return;
-  }
-  if (confirm('Bạn chắc chắn muốn xóa loại hàng ' + maLoai + '?')) {
-    store.data.loaiHang = store.data.loaiHang.filter(l => l.maLoai !== maLoai);
-    store.save();
-    renderNhomLoai();
-    showToast('Đã xóa loại hàng!', 'success');
+async function deleteLoaiHang(code) {
+  if (!confirm('Bạn chắc chắn muốn xóa loại hàng ' + code + '?')) return;
+  try {
+    await api.delete('/loaihang/' + encodeURIComponent(code));
+    AdminRealtimeData.isLoaded = false;
+    await renderNhomLoai();
+    showToast('Đã xóa loại hàng', 'success');
+  } catch (err) {
+    showToast('Không xóa được loại hàng: ' + err.message, 'error');
   }
 }
 
 // -------------------------------------------------------------
 // 20. THUỘC TÍNH & THÔNG SỐ KỸ THUẬT (FR06)
 // -------------------------------------------------------------
-function renderThuocTinh() {
+async function renderThuocTinh() {
   const tbodyTT = document.getElementById('table-thuoctinh-body');
   const tbodySpecs = document.getElementById('table-chitietspecs-body');
+  try {
+    const [attributes, products] = await Promise.all([
+      api.get('/thuoctinh'),
+      getAdminPages('/mathang')
+    ]);
+    store.data.thuocTinh = attributes;
+    store.data.matHang = products;
+  } catch (err) {
+    const errorRow = '<tr><td colspan="3" class="p-3 text-rose-600">Không tải được dữ liệu</td></tr>';
+    if (tbodyTT) tbodyTT.innerHTML = errorRow;
+    if (tbodySpecs) tbodySpecs.innerHTML = errorRow;
+    return;
+  }
 
   if (tbodyTT) {
     tbodyTT.innerHTML = store.data.thuocTinh.map(tt => `
@@ -4011,21 +3503,13 @@ function renderThuocTinh() {
 
   if (tbodySpecs) {
     tbodySpecs.innerHTML = store.data.matHang.map(m => {
-      const specs = store.data.chiTietThuocTinh.filter(ct => ct.maHang === m.maHang);
-      const specText = specs.length > 0 
-        ? specs.map(s => {
-            const ttName = store.data.thuocTinh.find(t => t.maThuocTinh === s.maThuocTinh)?.tenThuocTinh || s.maThuocTinh;
-            return `<strong>${ttName}:</strong> ${s.giaTri}`;
-          }).join(' | ')
-        : '<span class="text-slate-400 italic">Chưa cấu hình thông số kỹ thuật</span>';
-
       return `
         <tr class="border-b border-slate-100 hover:bg-slate-50">
           <td class="p-3 font-bold text-slate-900">
             <div>${m.tenHang}</div>
             <div class="text-[11px] font-mono text-slate-400">${m.maHang}</div>
           </td>
-          <td class="p-3 text-slate-600 text-[11px] leading-relaxed">${specText}</td>
+          <td class="p-3 text-slate-600 text-[11px] leading-relaxed">Mở cấu hình để xem giá trị hiện tại</td>
           <td class="p-3 text-right whitespace-nowrap">
             <button onclick="openGanSpecsModal('${m.maHang}')" class="px-2.5 py-1 bg-indigo-50 text-indigo-700 hover:bg-indigo-600 hover:text-white border border-indigo-200 rounded-lg text-xs font-bold transition-colors">
               <i class="fa-solid fa-gear mr-1"></i>Cấu Hình
@@ -4058,40 +3542,39 @@ function openThuocTinhModal(maTT = null) {
   modal.classList.remove('hidden');
 }
 
-function saveThuocTinh(e) {
+async function saveThuocTinh(e) {
   e.preventDefault();
   const form = e.target;
-  const maThuocTinh = form.maThuocTinh.value.trim();
-  const tenThuocTinh = form.tenThuocTinh.value.trim();
-
-  const idx = store.data.thuocTinh.findIndex(t => t.maThuocTinh === maThuocTinh);
-  if (idx >= 0) {
-    store.data.thuocTinh[idx].tenThuocTinh = tenThuocTinh;
-    showToast('Đã cập nhật thuộc tính: ' + maThuocTinh, 'success');
-  } else {
-    store.data.thuocTinh.push({ maThuocTinh, tenThuocTinh });
-    showToast('Đã thêm thuộc tính mới: ' + maThuocTinh, 'success');
-  }
-  store.save();
-  closeModal('modal-thuoctinh');
-  renderThuocTinh();
-}
-
-function deleteThuocTinh(maTT) {
-  const hasDetails = store.data.chiTietThuocTinh.some(c => c.maThuocTinh === maTT);
-  if (hasDetails) {
-    alert('Không thể xóa! Thuộc tính này đã được gán giá trị cho một số sản phẩm.');
-    return;
-  }
-  if (confirm('Bạn chắc chắn muốn xóa thuộc tính ' + maTT + '?')) {
-    store.data.thuocTinh = store.data.thuocTinh.filter(t => t.maThuocTinh !== maTT);
-    store.save();
-    renderThuocTinh();
-    showToast('Đã xóa thuộc tính!', 'success');
+  const code = form.maThuocTinh.value.trim();
+  const fields = { tenThuocTinh: form.tenThuocTinh.value.trim() };
+  try {
+    if (form.maThuocTinh.readOnly) {
+      await api.put('/thuoctinh/' + encodeURIComponent(code), fields);
+    } else {
+      await api.post('/thuoctinh', { maThuocTinh: code, ...fields });
+    }
+    AdminRealtimeData.isLoaded = false;
+    closeModal('modal-thuoctinh');
+    await renderThuocTinh();
+    showToast('Đã lưu thuộc tính', 'success');
+  } catch (err) {
+    showToast('Không lưu được thuộc tính: ' + err.message, 'error');
   }
 }
 
-function openGanSpecsModal(maHang) {
+async function deleteThuocTinh(code) {
+  if (!confirm('Bạn chắc chắn muốn xóa thuộc tính ' + code + '?')) return;
+  try {
+    await api.delete('/thuoctinh/' + encodeURIComponent(code));
+    AdminRealtimeData.isLoaded = false;
+    await renderThuocTinh();
+    showToast('Đã xóa thuộc tính', 'success');
+  } catch (err) {
+    showToast('Không xóa được thuộc tính: ' + err.message, 'error');
+  }
+}
+
+async function openGanSpecsModal(maHang) {
   const prod = store.data.matHang.find(m => m.maHang === maHang);
   if (!prod) return;
 
@@ -4101,7 +3584,13 @@ function openGanSpecsModal(maHang) {
   const container = document.getElementById('ganspecs-fields-container');
   if (!container) return;
 
-  const curSpecs = store.data.chiTietThuocTinh.filter(c => c.maHang === maHang);
+  let curSpecs;
+  try {
+    curSpecs = await api.get('/mathang/' + encodeURIComponent(maHang) + '/thongso');
+  } catch (err) {
+    showToast('Không tải được thông số: ' + err.message, 'error');
+    return;
+  }
 
   container.innerHTML = store.data.thuocTinh.map(tt => {
     const existing = curSpecs.find(c => c.maThuocTinh === tt.maThuocTinh);
@@ -4118,43 +3607,45 @@ function openGanSpecsModal(maHang) {
   if (modal) modal.classList.remove('hidden');
 }
 
-function saveGanSpecs(e) {
+async function saveGanSpecs(e) {
   e.preventDefault();
   const maHang = document.getElementById('ganspecs-maHang').value;
   const container = document.getElementById('ganspecs-fields-container');
-  const inputs = container.querySelectorAll('input[data-tt]');
-
-  store.data.chiTietThuocTinh = store.data.chiTietThuocTinh.filter(c => c.maHang !== maHang);
-  inputs.forEach(inp => {
-    const val = inp.value.trim();
-    if (val) {
-      store.data.chiTietThuocTinh.push({
-        maHang: maHang,
-        maThuocTinh: inp.dataset.tt,
-        giaTri: val
-      });
-    }
-  });
-
-  store.save();
-  closeModal('modal-ganspecs');
-  renderThuocTinh();
-  showToast('Đã cập nhật thông số kỹ thuật cho mặt hàng!', 'success');
+  const specs = Array.from(container.querySelectorAll('input[data-tt]'), input => ({
+    maThuocTinh: input.dataset.tt,
+    giaTri: input.value.trim()
+  })).filter(spec => spec.giaTri);
+  try {
+    await api.put('/mathang/' + encodeURIComponent(maHang) + '/thongso', specs);
+    closeModal('modal-ganspecs');
+    showToast('Đã cập nhật thông số kỹ thuật', 'success');
+  } catch (err) {
+    showToast('Không lưu được thông số: ' + err.message, 'error');
+  }
 }
 
 // -------------------------------------------------------------
 // 21. TÀI KHOẢN VÀ PHÂN QUYỀN (FR04, FR05, BR22, BR23)
 // -------------------------------------------------------------
-function renderTaiKhoan() {
+async function renderTaiKhoan() {
   const tbodyTK = document.getElementById('table-taikhoan-body');
   const tbodyPQ = document.getElementById('table-phanquyen-body');
+  try {
+    [store.data.taiKhoan, store.data.phanQuyen] = await Promise.all([
+      api.get('/taikhoan'), api.get('/phanquyen')
+    ]);
+  } catch (err) {
+    if (tbodyTK) tbodyTK.innerHTML = '<tr><td colspan="6" class="p-3 text-rose-600">Không tải được tài khoản</td></tr>';
+    if (tbodyPQ) tbodyPQ.innerHTML = '<tr><td colspan="4" class="p-3 text-rose-600">Không tải được phân quyền</td></tr>';
+    return;
+  }
 
   if (tbodyTK) {
     tbodyTK.innerHTML = store.data.taiKhoan.map(tk => {
       const uName = tk.username || tk.tenDangNhap || '-';
       const nv = store.data.nhanVien.find(n => n.maNV === tk.maNV);
       const displayName = tk.hoTen || tk.tenNhanVien || (nv ? nv.hoTen : tk.maNV || '-');
-      const dateStr = Format.date(tk.ngayTao || '2026-09-01');
+      const dateStr = tk.ngayTao ? Format.date(tk.ngayTao) : '—';
 
       return `
         <tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors">
@@ -4191,6 +3682,7 @@ function renderTaiKhoan() {
       try {
         const updated = await api.put('/taikhoan/' + encodeURIComponent(account.username), { maQuyen: select.value });
         Object.assign(account, updated);
+        await renderTaiKhoan();
       } catch (error) {
         select.value = account.maQuyen;
         alert(error.message);
@@ -4222,7 +3714,7 @@ async function openTaiKhoanModal() {
   if (!modal) return;
   try {
     [store.data.nhanVien, store.data.phanQuyen, store.data.taiKhoan] = await Promise.all([
-      api.get('/nhanvien?pageSize=100'), api.get('/phanquyen'), api.get('/taikhoan')
+      getAdminPages('/nhanvien'), api.get('/phanquyen'), api.get('/taikhoan')
     ]);
   } catch (error) {
     alert(error.message);
@@ -4266,7 +3758,6 @@ async function toggleLockTaiKhoan(username, curStatus) {
   if (tk) {
     tk.trangThai = newStatus;
   }
-  store.save();
   renderTaiKhoan();
   showToast((newStatus === 'bi_khoa' ? 'Đã khóa tài khoản: ' : 'Đã mở khóa tài khoản: ') + username, 'info');
 }
@@ -4615,6 +4106,7 @@ function initAdminDashboard() {
     }
   });
 
+  AdminRealtimeData.setupRealtimeListeners();
   renderDashboard();
 
   // Khởi tạo và đồng bộ ngôn ngữ i18n
@@ -4626,9 +4118,6 @@ function initAdminDashboard() {
       showToast(cur === 'vi' ? 'Đã đổi sang Tiếng Việt 🇻🇳' : 'Switched language to English 🇬🇧', 'info');
     });
   }
-
-  // Tự động đồng bộ toàn bộ cơ sở dữ liệu từ Backend Spring Boot
-  store.syncFromBackend();
 
   // Lắng nghe tìm kiếm mặt hàng
   const searchMatHang = document.getElementById('search-mathang-input');
@@ -5170,8 +4659,9 @@ async function editThamSo(maTS, currentValue, donVi) {
 }
 
 // 6. TRA CỨU BẢO HÀNH ACTION
-async function traCuuBaoHanhAction() {
-  const input = document.getElementById('tracuu-imei-input') || document.querySelector('input[placeholder*="IMEI"]');
+async function traCuuBaoHanhAction(event) {
+  event?.preventDefault();
+  const input = document.getElementById('input-tracuu-imei');
   const imei = input ? input.value.trim() : '';
   if (!imei) {
     alert('Vui lòng nhập số IMEI 15 chữ số để tra cứu');
@@ -5183,7 +4673,7 @@ async function traCuuBaoHanhAction() {
     resultBox.classList.remove('hidden');
   }
   try {
-    const res = await api.get('/baohanh/trangthai/' + encodeURIComponent(imei));
+    const res = await api.get('/baohanh/imei/' + encodeURIComponent(imei));
     if (resultBox) {
       resultBox.innerHTML = `
         <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl space-y-2">
@@ -5194,7 +4684,6 @@ async function traCuuBaoHanhAction() {
             </span>
           </div>
           <div class="text-xs text-slate-600 grid grid-cols-2 gap-2">
-            <div>Mã sổ: <strong>${res.maBH}</strong></div>
             <div>Số IMEI: <strong class="font-mono">${res.soIMEI}</strong></div>
             <div>Bắt đầu: <strong>${res.ngayBD ? res.ngayBD.substring(0, 10) : '-'}</strong></div>
             <div>Hết hạn: <strong>${res.ngayKT ? res.ngayKT.substring(0, 10) : '-'}</strong></div>
@@ -5492,29 +4981,15 @@ async function showAdminOrderDetail(maDH) {
   const modal = document.getElementById('modal-admin-order-detail');
   if (!modal) return;
 
-  // Find from cache first
-  let order = (cachedDonHangList || []).find(o => o.maDH === maDH)
-           || (AdminRealtimeData.orders || []).find(o => o.maDH === maDH);
-
-  // Try fetching full detail from backend (includes Shipping)
-  let shipping = null;
+  const path = '/donhangonline/' + encodeURIComponent(maDH);
+  let order, shipping;
   try {
-    // /api/donhangonline returns list; use orders/{maDH} for full detail (needs phone)
-    // We fetch shipping separately
-    const shippingData = await api.get('/donhangonline/' + encodeURIComponent(maDH) + '/shipping').catch(() => null);
-    if (shippingData) shipping = shippingData;
-  } catch (e) {}
-
-  if (!order) {
-    // Fallback: try backend list
-    try {
-      const list = await api.get('/donhangonline').catch(() => []);
-      order = (list || []).find(o => o.maDH === maDH);
-    } catch (e) {}
-  }
-
-  if (!order) {
-    showToast('Không tìm thấy thông tin đơn hàng #' + maDH, 'error');
+    [order, shipping] = await Promise.all([
+      api.get(path),
+      api.get(path + '/shipping').catch(() => null)
+    ]);
+  } catch (err) {
+    showToast('Không tải được đơn hàng #' + maDH + ': ' + err.message, 'error');
     return;
   }
 
@@ -5775,8 +5250,14 @@ async function bulkApproveOrders() {
 }
 window.bulkApproveOrders = bulkApproveOrders;
 
-function exportDonHangExcel() {
-  const list = AdminRealtimeData.orders || cachedDonHangList || [];
+async function exportDonHangExcel() {
+  let list;
+  try {
+    list = await getAdminPages('/donhangonline');
+  } catch (err) {
+    showToast('Không tải được đơn hàng: ' + err.message, 'error');
+    return;
+  }
   if (!list || list.length === 0) {
     showToast('Không có dữ liệu đơn hàng để xuất!', 'info');
     return;
@@ -5833,8 +5314,14 @@ function exportDonHangExcel() {
   downloadWorkbook(workbook, 'Danh_Sach_Don_Hang');
 }
 
-function exportMatHangExcel() {
-  const list = AdminRealtimeData.products || store.data.matHang || [];
+async function exportMatHangExcel() {
+  let list;
+  try {
+    list = await getAdminPages('/mathang');
+  } catch (err) {
+    showToast('Không tải được mặt hàng: ' + err.message, 'error');
+    return;
+  }
   if (!list || list.length === 0) {
     showToast('Không có dữ liệu mặt hàng để xuất!', 'info');
     return;
@@ -5848,7 +5335,6 @@ function exportMatHangExcel() {
     'Hãng / Thương Hiệu': m.tenLoai || m.nhanHieu || '',
     'Đơn Vị Tính': m.dvt || 'Cái',
     'Giá Bán (VNĐ)': Number(m.donGia) || 0,
-    'Giá Gốc (VNĐ)': Number(m.giaGoc) || 0,
     'Tồn Kho Tức Thời': Number(m.tonKho) || 0,
     'Bảo Hành (Tháng)': m.thoiHanBaoHanh || 12,
     'Quản Lý IMEI': m.quanLyImei ? 'Có' : 'Không'
@@ -5874,14 +5360,12 @@ function exportMatHangExcel() {
 }
 
 async function exportHoaDonExcel() {
-  let list = [];
+  let list;
   try {
-    const res = await api.get('/hoadon').catch(() => []);
-    if (Array.isArray(res) && res.length > 0) list = res;
-  } catch (e) {}
-
-  if (list.length === 0) {
-    list = store.data.hoaDon || [];
+    list = await getAdminPages('/hoadon');
+  } catch (err) {
+    showToast('Không tải được hóa đơn: ' + err.message, 'error');
+    return;
   }
 
   if (list.length === 0) {
@@ -5922,8 +5406,14 @@ async function exportHoaDonExcel() {
   downloadWorkbook(workbook, 'So_Hoa_Don_Ban_Hang');
 }
 
-function exportTonKhoExcel() {
-  const list = AdminRealtimeData.products || store.data.matHang || [];
+async function exportTonKhoExcel() {
+  let list;
+  try {
+    list = await getAdminPages('/tonkho');
+  } catch (err) {
+    showToast('Không tải được tồn kho: ' + err.message, 'error');
+    return;
+  }
   if (!list || list.length === 0) {
     showToast('Không có dữ liệu tồn kho để xuất!', 'info');
     return;
@@ -5933,7 +5423,7 @@ function exportTonKhoExcel() {
     const stock = Number(p.tonKho) || 0;
     let status = 'Còn hàng';
     if (stock <= 0) status = 'Hết hàng';
-    else if (stock <= 10) status = 'Cảnh báo sắp hết';
+    else if (p.canhBao) status = 'Cảnh báo sắp hết';
 
     return {
       'STT': idx + 1,
@@ -5944,7 +5434,8 @@ function exportTonKhoExcel() {
       'Đơn Giá (VNĐ)': Number(p.donGia) || 0,
       'Số Lượng Tồn Kho': stock,
       'Tình Trạng Kho': status,
-      'Quản Lý IMEI': p.quanLyImei ? 'IMEI từng máy' : 'Số lượng thông thường'
+      'Tổng Nhập': p.tongNhap,
+      'Tổng Bán': p.tongBan
     };
   });
 
@@ -6040,7 +5531,7 @@ function playAdminChatChime() {
 
 function getAdminStaffInfo() {
   const curUser = (window.cellphonesAuth || window.Auth) ? (window.cellphonesAuth || window.Auth).getUser() : null;
-  const staffId = curUser?.maNV || curUser?.maNhanVien || (window.AdminRealtimeData?.data?.nhanVien?.[0]?.maNV) || 'NV001';
+  const staffId = curUser?.maNV || curUser?.maNhanVien || null;
   const staffName = curUser?.tenNhanVien || curUser?.username || 'Nhân viên CSKH';
   return { staffId, staffName };
 }
@@ -6497,6 +5988,10 @@ async function sendAdminChatMessage(e) {
   }
 
   const { staffId } = getAdminStaffInfo();
+  if (!staffId) {
+    showToast('Không xác định được nhân viên đang đăng nhập', 'error');
+    return;
+  }
 
   try {
     input.value = '';
@@ -6519,6 +6014,10 @@ async function sendAdminChatMessage(e) {
 async function assignActiveChatSession() {
   if (!adminChatActiveSessionId) return;
   const { staffId } = getAdminStaffInfo();
+  if (!staffId) {
+    showToast('Không xác định được nhân viên đang đăng nhập', 'error');
+    return;
+  }
 
   try {
     const res = await fetch(`${API_BASE}/chat/admin/sessions/${adminChatActiveSessionId}/assign`, {
@@ -6594,7 +6093,7 @@ function toggleCustomerInfoPane() {
   }
 }
 
-function renderAdminCustomerPane(session) {
+async function renderAdminCustomerPane(session) {
   const typeBadge = document.getElementById('cust-pane-type-badge');
   const nameEl = document.getElementById('cust-pane-name');
   const phoneEl = document.getElementById('cust-pane-phone');
@@ -6618,24 +6117,26 @@ function renderAdminCustomerPane(session) {
     }
   }
 
-  // Tra cứu các đơn hàng online gần nhất của khách
+  if (countEl) countEl.textContent = '—';
+  if (listEl) listEl.textContent = 'Đang tải đơn hàng…';
+  const activeSession = adminChatActiveSessionId;
   let matchedOrders = [];
   try {
-    const ordersStr = localStorage.getItem('cellphones_online_orders');
-    const localOrders = ordersStr ? JSON.parse(ordersStr) : [];
-    const allOrders = (window.AdminRealtimeData && window.AdminRealtimeData.orders) || localOrders || [];
-
-    if (session.khachHangSdt) {
-      const cleanPhone = session.khachHangSdt.trim();
-      matchedOrders = allOrders.filter(o => 
-        (o.sdt && o.sdt.trim() === cleanPhone) || 
-        (o.khachHangSdt && o.khachHangSdt.trim() === cleanPhone) ||
+    const phone = session.khachHangSdt?.trim();
+    if (phone || session.maKH) {
+      const allOrders = await getAdminPages('/donhangonline');
+      matchedOrders = allOrders.filter(o =>
+        (phone && o.sdtNguoiNhan?.trim() === phone) ||
         (session.maKH && o.maKH === session.maKH)
       );
     }
-  } catch (e) {
-    console.warn('Lỗi tra cứu đơn khách:', e);
+  } catch (err) {
+    if (activeSession === adminChatActiveSessionId && listEl) {
+      listEl.textContent = 'Không tải được đơn hàng';
+    }
+    return;
   }
+  if (activeSession !== adminChatActiveSessionId) return;
 
   if (countEl) countEl.textContent = `${matchedOrders.length} đơn`;
 
@@ -6650,7 +6151,7 @@ function renderAdminCustomerPane(session) {
         const maDH = o.maDH || 'DH-???';
         const tongTien = o.tongTien ? (o.tongTien.toLocaleString('vi-VN') + 'đ') : '0đ';
         const trangThai = o.trangThai || 'Chờ xác nhận';
-        const ngay = o.ngayTao ? fmtLocalDateTime(o.ngayTao, true) : 'Gần đây';
+        const ngay = o.ngayDat ? fmtLocalDateTime(o.ngayDat, true) : '—';
 
         return `
           <div class="p-2.5 bg-white rounded-xl border border-slate-200/80 hover:border-blue-300 transition-colors text-xs space-y-1">
@@ -6838,14 +6339,16 @@ async function renderProductPerformance(queryParams) {
 
   try {
     const [topSelling, slowMoving, topCustomers] = await Promise.all([
-      api.get('/dashboard/top-selling' + fullQuery).catch(() => []),
-      api.get('/dashboard/slow-moving' + fullQuery).catch(() => []),
-      api.get('/dashboard/top-customers' + fullQuery).catch(() => [])
+      api.get('/dashboard/top-selling' + fullQuery).catch(() => null),
+      api.get('/dashboard/slow-moving' + fullQuery).catch(() => null),
+      api.get('/dashboard/top-customers' + fullQuery).catch(() => null)
     ]);
 
     // 1. Render Top Selling (Tone trung tính, ngang rộng rãi thoáng mắt)
     if (topContainer) {
-      if (!Array.isArray(topSelling) || topSelling.length === 0) {
+      if (!Array.isArray(topSelling)) {
+        topContainer.textContent = 'Không tải được dữ liệu';
+      } else if (topSelling.length === 0) {
         topContainer.innerHTML = '<div class="text-center py-8 text-slate-400 italic">Chưa có giao dịch bán hàng trong kỳ này</div>';
       } else {
         const maxSold = topSelling[0]?.soLuongBan || 1;
@@ -6888,7 +6391,9 @@ async function renderProductPerformance(queryParams) {
 
     // 2. Render Slow Moving (Ngang rộng rãi, nút kích cầu tiện lợi)
     if (slowContainer) {
-      if (!Array.isArray(slowMoving) || slowMoving.length === 0) {
+      if (!Array.isArray(slowMoving)) {
+        slowContainer.textContent = 'Không tải được dữ liệu';
+      } else if (slowMoving.length === 0) {
         slowContainer.innerHTML = '<div class="text-center py-8 text-slate-400 italic">Không có mặt hàng tồn đọng cần cảnh báo</div>';
       } else {
         slowContainer.innerHTML = slowMoving.map((p, idx) => {
@@ -6926,7 +6431,9 @@ async function renderProductPerformance(queryParams) {
 
     // 3. Render Top Customers (Khách hàng mua nhiều nhất - Sang trọng, rõ ràng)
     if (custContainer) {
-      if (!Array.isArray(topCustomers) || topCustomers.length === 0) {
+      if (!Array.isArray(topCustomers)) {
+        custContainer.textContent = 'Không tải được dữ liệu';
+      } else if (topCustomers.length === 0) {
         custContainer.innerHTML = '<div class="text-center py-8 text-slate-400 italic">Chưa có dữ liệu giao dịch khách hàng</div>';
       } else {
         custContainer.innerHTML = topCustomers.map((c, idx) => {

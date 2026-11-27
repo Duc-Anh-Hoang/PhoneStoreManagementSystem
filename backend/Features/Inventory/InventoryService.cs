@@ -60,19 +60,25 @@ public class InventoryService : IInventoryService
             .OrderBy(v => v.MaHang)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
+            .Select(v => new
+            {
+                Stock = v,
+                Dvt = _context.MatHangs.Where(m => m.MaHang == v.MaHang).Select(m => m.Dvt).FirstOrDefault()
+            })
             .ToListAsync();
 
-        var items = list.Select(v => new TonKhoDto
+        var items = list.Select(row => new TonKhoDto
         {
-            MaHang = v.MaHang,
-            TenHang = v.TenHang,
-            MaNhom = v.MaNhom,
-            MaLoai = v.MaLoai,
-            DonGia = v.DonGia,
-            TongNhap = v.TongNhap,
-            TongBan = v.TongBan,
-            TonKho = v.TonKho,
-            CanhBao = v.TonKho <= AppConstants.InventoryConstants.CanhBaoTonToiThieu
+            MaHang = row.Stock.MaHang,
+            TenHang = row.Stock.TenHang,
+            Dvt = row.Dvt,
+            MaNhom = row.Stock.MaNhom,
+            MaLoai = row.Stock.MaLoai,
+            DonGia = row.Stock.DonGia,
+            TongNhap = row.Stock.TongNhap,
+            TongBan = row.Stock.TongBan,
+            TonKho = row.Stock.TonKho,
+            CanhBao = row.Stock.TonKho <= AppConstants.InventoryConstants.CanhBaoTonToiThieu
         }).ToList();
 
         return (items, totalCount);
@@ -140,6 +146,12 @@ public class InventoryService : IInventoryService
         {
             var mh = query.MaHang.Trim();
             baseQuery = baseQuery.Where(i => i.MaHang == mh);
+        }
+
+        if (!string.IsNullOrWhiteSpace(query.SoPN))
+        {
+            var soPN = query.SoPN.Trim();
+            baseQuery = baseQuery.Where(i => i.SoPN == soPN);
         }
 
         // 2. Lọc theo trạng thái (con_hang, da_ban, tra_hang)
