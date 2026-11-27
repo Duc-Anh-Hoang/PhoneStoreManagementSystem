@@ -50,6 +50,8 @@ services:
       SPX_TRACKING_URL: ${SPX_TRACKING_URL:-https://spx.vn/track?{tracking_code}}
     ports:
       - "${BACKEND_PORT:-8080}:8080"
+    volumes:
+      - ./database:/app/database:ro
     depends_on:
       postgres:
         condition: service_healthy

@@ -44,6 +44,35 @@ public class PaymentController : ControllerBase
     }
 
     /// <summary>
+    /// Xác nhận thanh toán nhanh ở chế độ Demo (chỉ hoạt động khi bật Payment:DemoAutoConfirm)
+    /// </summary>
+    [HttpPost("demo-confirm/{maDH}")]
+    [AllowAnonymous]
+    public async Task<IActionResult> DemoConfirmPayment(string maDH)
+    {
+        var demoEnabled = _configuration.GetValue<bool>("Payment:DemoAutoConfirm");
+        if (!demoEnabled)
+        {
+            return StatusCode(403, new { message = "Chức năng xác nhận demo đang tắt." });
+        }
+
+        var status = await _paymentService.GetPaymentStatusAsync(maDH);
+        if (status.IsPaid)
+        {
+            return Ok(new { success = true, isPaid = true, tongTien = status.TongTien, trangThai = status.TrangThai });
+        }
+
+        await _paymentService.ConfirmOrderPaymentAsync(maDH, new ConfirmPaymentRequest
+        {
+            TransactionId = $"DEMO_{maDH}_{DateTimeOffset.UtcNow.ToUnixTimeSeconds()}",
+            Amount = status.TongTien
+        });
+
+        var updated = await _paymentService.GetPaymentStatusAsync(maDH);
+        return Ok(new { success = true, isPaid = updated.IsPaid, tongTien = updated.TongTien, trangThai = updated.TrangThai });
+    }
+
+    /// <summary>
     /// Kiểm tra trạng thái thanh toán đơn hàng (phục vụ Realtime polling phía Client)
     /// </summary>
     [HttpGet("status/{maDH}")]

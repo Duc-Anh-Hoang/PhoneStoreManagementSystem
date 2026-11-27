@@ -290,6 +290,108 @@ CREATE INDEX IF NOT EXISTS IX_order_status_history_order ON order_status_history
         }
     }
 
+    private static string? ResolveDatabaseSqlPath(params string[] relativeParts)
+    {
+        var baseRoots = new[]
+        {
+            Path.Combine(AppContext.BaseDirectory, "database"),
+            Path.Combine(Directory.GetCurrentDirectory(), "database"),
+            Path.Combine(Directory.GetCurrentDirectory(), "..", "database"),
+            "/app/database"
+        };
+        foreach (var root in baseRoots)
+        {
+            var full = Path.GetFullPath(Path.Combine(new[] { root }.Concat(relativeParts).ToArray()));
+            if (File.Exists(full)) return full;
+        }
+        return null;
+    }
+
+    private static async Task SeedFullCatalogAndStockIfEmptyAsync(AppDbContext context, ILogger logger)
+    {
+        var previousTimeout = context.Database.GetCommandTimeout();
+        try
+        {
+            context.Database.SetCommandTimeout(180);
+
+            // Đảm bảo cột gia_tri đủ rộng cho thông số kỹ thuật dài trong 05-seed-products.sql
+            await context.Database.ExecuteSqlRawAsync("ALTER TABLE chitietthuoctinh ALTER COLUMN gia_tri TYPE TEXT;");
+
+            var productCount = await context.MatHangs.CountAsync();
+            if (productCount < 100)
+            {
+                var productsSqlPath = ResolveDatabaseSqlPath("initdb", "05-seed-products.sql");
+                if (productsSqlPath != null)
+                {
+                    logger.LogInformation("Đang tự động nạp 3.547 sản phẩm từ {Path}...", productsSqlPath);
+                    var sql = await File.ReadAllTextAsync(productsSqlPath);
+                    await context.Database.ExecuteSqlRawAsync(sql);
+                    logger.LogInformation("Đã nạp xong danh mục 3.547 sản phẩm.");
+                }
+            }
+
+            var hasFullStockBatch = await context.PhieuNhaps.AnyAsync(p => p.SoPN == "PN_TONKHO_ALL");
+            if (!hasFullStockBatch)
+            {
+                var stockSqlPath = ResolveDatabaseSqlPath("seed_full_stock.sql");
+                if (stockSqlPath != null)
+                {
+                    await context.Database.ExecuteSqlRawAsync("""
+                        INSERT INTO mathang (mahang, tenhang, dongia, dvt, manhom, maloai, quanlyimei, thoihanbaohanh)
+                        VALUES
+                          ('REC_DT02', 'iPhone 15 Pro Max 256GB (Thu cũ)', 26990000, 'Cái', 'DIENTHOAI', 'APPLE', true, 12),
+                          ('S24256', 'Samsung Galaxy S24 256GB', 22990000, 'Cái', 'DIENTHOAI', 'SAMSUNG', true, 12),
+                          ('XM14256', 'Xiaomi 14 256GB', 19990000, 'Cái', 'DIENTHOAI', 'XIAOMI', true, 12),
+                          ('SAC_ANKER', 'Củ sạc nhanh Anker 20W', 350000, 'Cái', 'PHUKIEN', 'KHAC', false, 12)
+                        ON CONFLICT (mahang) DO NOTHING;
+                        """);
+                    logger.LogInformation("Đang tự động nạp tồn kho & IMEI đầy đủ từ {Path}...", stockSqlPath);
+                    var sql = await File.ReadAllTextAsync(stockSqlPath);
+                    await context.Database.ExecuteSqlRawAsync(sql);
+                    logger.LogInformation("Đã nạp xong tồn kho & IMEI đầy đủ.");
+                }
+            }
+
+            // Bổ sung tồn kho & IMEI cho các model bị thiếu trong seed_full_stock.sql (ví dụ MH101..MH112, MH106)
+            var hasGapStock = await context.PhieuNhaps.AnyAsync(p => p.SoPN == "PN_TONKHO_GAP");
+            if (!hasGapStock)
+            {
+                await context.Database.ExecuteSqlRawAsync("""
+                    INSERT INTO PhieuNhap (SOPN, NGAYNHAP, MANCC, MANV)
+                    VALUES ('PN_TONKHO_GAP', NOW() - INTERVAL '5 days', 'NCC_AP', 'NV001')
+                    ON CONFLICT (SOPN) DO NOTHING;
+
+                    INSERT INTO ChiTietPhieuNhap (SOPN, MAHANG, SLNHAP, DONGIA_NHAP)
+                    SELECT 'PN_TONKHO_GAP', m.mahang, 15, GREATEST(1000, ROUND(m.dongia * 0.8))
+                    FROM mathang m
+                    WHERE NOT EXISTS (SELECT 1 FROM chitietphieunhap c WHERE c.mahang = m.mahang)
+                    ON CONFLICT (SOPN, MAHANG) DO NOTHING;
+
+                    INSERT INTO imei (maimei, mahang, sopn, soimei, trangthai)
+                    SELECT 'IMGAP_' || m.mahang || '_' || LPAD(gs::text, 2, '0'),
+                           m.mahang,
+                           'PN_TONKHO_GAP',
+                           '3599' || LPAD(abs(hashtext(m.mahang))::text, 9, '0') || LPAD(gs::text, 2, '0'),
+                           'con_hang'
+                    FROM mathang m
+                    CROSS JOIN generate_series(1, 15) AS gs
+                    WHERE m.quanlyimei = true
+                      AND NOT EXISTS (SELECT 1 FROM imei i WHERE i.mahang = m.mahang AND i.trangthai = 'con_hang')
+                    ON CONFLICT (maimei) DO NOTHING;
+                    """);
+                logger.LogInformation("Đã bổ sung tồn kho & IMEI cho các model còn thiếu.");
+            }
+        }
+        catch (Exception ex)
+        {
+            logger.LogWarning(ex, "Cảnh báo khi tự động nạp catalog/tồn kho: {Message}", ex.Message);
+        }
+        finally
+        {
+            context.Database.SetCommandTimeout(previousTimeout);
+        }
+    }
+
     public static async Task SeedAsync(AppDbContext context, ILogger logger, bool seedSampleData)
     {
         try
@@ -302,6 +404,9 @@ CREATE INDEX IF NOT EXISTS IX_order_status_history_order ON order_status_history
 
             // 0. Đảm bảo schema bảng TraHang, TraHangLichSu, IMEI constraint và Views luôn được nâng cấp đầy đủ
             await EnsureSchemaUpgradedAsync(context, logger);
+
+            // 0b. Tự động nạp 3.549 sản phẩm (05-seed-products.sql) & tồn kho đầy đủ (seed_full_stock.sql) nếu DB chưa có
+            await SeedFullCatalogAndStockIfEmptyAsync(context, logger);
 
             // 1. Seed ThamSo (kiểm tra độc lập)
             if (!await context.ThamSos.AnyAsync())

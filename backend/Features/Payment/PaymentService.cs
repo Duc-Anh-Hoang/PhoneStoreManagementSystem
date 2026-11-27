@@ -60,7 +60,11 @@ public class PaymentService : IPaymentService
 
         var bankId = _configuration["VietQR:BankId"];
         var bankBin = _configuration["VietQR:BankBin"];
-        var accountNumber = _configuration["VietQR:AccountNumber"];
+        if (string.IsNullOrWhiteSpace(bankBin) && string.Equals(bankId, "MB", StringComparison.OrdinalIgnoreCase))
+        {
+            bankBin = "970422";
+        }
+        var accountNumber = _configuration["VietQR:AccountNumber"] ?? _configuration["VietQR:AccountNo"];
         var accountName = _configuration["VietQR:AccountName"];
         if (string.IsNullOrWhiteSpace(bankId) || string.IsNullOrWhiteSpace(bankBin) ||
             string.IsNullOrWhiteSpace(accountNumber) || string.IsNullOrWhiteSpace(accountName))

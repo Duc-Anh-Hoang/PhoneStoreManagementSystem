@@ -3,15 +3,17 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using PhoneStoreAPI.Common.Constants;
 using PhoneStoreAPI.Data;
+using PhoneStoreAPI.Features.OnlineOrders.Hubs;
 
 namespace PhoneStoreAPI.Features.TradeIn;
 
 [ApiController]
 [Route("api/trade-in/bookings")]
-public class TradeInController(AppDbContext db) : ControllerBase
+public class TradeInController(AppDbContext db, IHubContext<OrderHub> hubContext) : ControllerBase
 {
     [HttpPost, AllowAnonymous, EnableRateLimiting("checkout"), RequestSizeLimit(16384)]
     public async Task<IActionResult> Create(BookingRequest request, CancellationToken ct)
@@ -31,7 +33,22 @@ public class TradeInController(AppDbContext db) : ControllerBase
                    trade_in_bookings.target_product, trade_in_bookings.used_device) =
                   (excluded.name, excluded.phone, excluded.branch, excluded.target_product, excluded.used_device)
             """, ct);
-        return updated == 0 ? Conflict(new { message = "Mã phiếu đã được sử dụng." }) : Ok(new { code });
+        if (updated == 0) return Conflict(new { message = "Mã phiếu đã được sử dụng." });
+
+        try
+        {
+            await hubContext.Clients.Group(OrderHub.AdminGroup).SendAsync("ReceiveTradeInBooking", new
+            {
+                code,
+                name = request.Name,
+                phone = request.Phone,
+                branch = request.Branch,
+                createdAt = DateTime.UtcNow
+            }, ct);
+        }
+        catch { /* Không làm gián đoạn phản hồi nếu SignalR chưa có client */ }
+
+        return Ok(new { code });
     }
 
     [HttpGet, Authorize(Roles = $"{AppConstants.Roles.Admin},{AppConstants.Roles.Manager},{AppConstants.Roles.Sales}")]

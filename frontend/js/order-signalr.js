@@ -256,7 +256,9 @@
   };
 
   window.onHeaderNotificationClick = function (id, maDH) {
-    const list = getStoredNotifications(isAdminPage).map(n => n.id === id ? { ...n, unread: false } : n);
+    const rawList = getStoredNotifications(isAdminPage);
+    const clickedItem = rawList.find(n => n.id === id);
+    const list = rawList.map(n => n.id === id ? { ...n, unread: false } : n);
     saveStoredNotifications(list, isAdminPage);
     renderHeaderNotifications();
 
@@ -264,7 +266,16 @@
     if (pop) pop.classList.add('hidden');
 
     if (isAdminPage) {
-      if (maDH && typeof window.showAdminOrderDetail === 'function') {
+      if (clickedItem && clickedItem.targetSection) {
+        if (typeof window.renderSection === 'function') {
+          window.renderSection(clickedItem.targetSection);
+        } else if (typeof window.switchSection === 'function') {
+          window.switchSection(clickedItem.targetSection);
+        }
+        if (clickedItem.targetSection === 'view-chat' && clickedItem.chatSessionId && typeof window.selectAdminChatSession === 'function') {
+          setTimeout(() => window.selectAdminChatSession(clickedItem.chatSessionId), 150);
+        }
+      } else if (maDH && typeof window.showAdminOrderDetail === 'function') {
         window.showAdminOrderDetail(maDH);
       } else {
         if (typeof window.switchSection === 'function') {
@@ -506,6 +517,98 @@
       toast.classList.remove('opacity-0', 'translate-y-2');
     });
 
+    setTimeout(() => {
+      if (toast.parentElement) {
+        toast.classList.add('opacity-0', 'translate-x-4');
+        setTimeout(() => toast.remove(), 300);
+      }
+    }, 10000);
+  }
+
+  // Thông báo realtime tổng quát cho Admin (Chat mới, Tin nhắn khách, Thu cũ, Thanh toán...)
+  function notifyAdminRealtimeEvent(opts) {
+    if (!isAdminPage || !opts) return;
+
+    if (!opts.silent) {
+      playChime(opts.chimeType || 'new_order');
+    }
+
+    addNotificationItem({
+      id: opts.id || `admin_evt_${Date.now()}`,
+      maDH: opts.maDH || '',
+      targetSection: opts.targetSection || '',
+      chatSessionId: opts.chatSessionId || '',
+      title: opts.title || 'Thông báo mới',
+      message: (opts.message || '').replace(/<[^>]+>/g, ''),
+      time: formatVNTime(new Date()),
+      icon: opts.icon || 'fa-solid fa-bell',
+      bgClass: opts.bgClass || 'bg-blue-100',
+      colorClass: opts.colorClass || 'text-blue-700'
+    }, true);
+
+    let container = document.getElementById('signalr-admin-toast-container');
+    if (!container) {
+      container = document.createElement('div');
+      container.id = 'signalr-admin-toast-container';
+      container.className = 'fixed top-16 right-5 z-[99999] flex flex-col gap-3 max-w-[430px] w-full pointer-events-none p-3';
+      document.body.appendChild(container);
+    }
+
+    const existing = opts.id ? container.querySelector(`[data-admin-evt="${opts.id}"]`) : null;
+    if (existing) existing.remove();
+
+    const toast = document.createElement('div');
+    if (opts.id) toast.dataset.adminEvt = opts.id;
+    toast.className = 'pointer-events-auto bg-white rounded-2xl shadow-2xl border-2 border-blue-600 p-4 transition-all duration-300 transform translate-y-2 opacity-0 flex items-start gap-3.5';
+
+    toast.innerHTML = `
+      <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center flex-shrink-0 shadow-md">
+        <i class="${opts.icon || 'fa-solid fa-bell'} text-lg"></i>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center justify-between gap-2 mb-1">
+          <span class="text-xs font-black tracking-wide text-blue-900 uppercase truncate">${opts.title || 'THÔNG BÁO MỚI'}</span>
+          ${opts.badge ? `<span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 flex-shrink-0">${opts.badge}</span>` : ''}
+        </div>
+        <p class="text-xs sm:text-[13px] text-slate-700 leading-snug font-medium mb-2">${opts.message || ''}</p>
+        <div class="flex items-center justify-between text-[11px] text-slate-400">
+          <span>${formatVNTime(new Date())}</span>
+          <button type="button" class="btn-goto-evt px-2.5 py-1 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-[11px] cursor-pointer shadow-xs">
+            ${opts.actionLabel || 'Xử lý ngay &rarr;'}
+          </button>
+        </div>
+      </div>
+      <button type="button" class="btn-close-toast text-slate-400 hover:text-slate-600 p-1 -mr-1 -mt-1 cursor-pointer">
+        <i class="fa-solid fa-xmark text-sm"></i>
+      </button>
+    `;
+
+    const gotoBtn = toast.querySelector('.btn-goto-evt');
+    if (gotoBtn) {
+      gotoBtn.onclick = () => {
+        if (opts.targetSection) {
+          if (typeof window.renderSection === 'function') window.renderSection(opts.targetSection);
+          else if (typeof window.switchSection === 'function') window.switchSection(opts.targetSection);
+          if (opts.targetSection === 'view-chat' && opts.chatSessionId && typeof window.selectAdminChatSession === 'function') {
+            setTimeout(() => window.selectAdminChatSession(opts.chatSessionId), 150);
+          }
+        } else if (opts.maDH && typeof window.showAdminOrderDetail === 'function') {
+          window.showAdminOrderDetail(opts.maDH);
+        }
+        toast.remove();
+      };
+    }
+
+    const closeBtn = toast.querySelector('.btn-close-toast');
+    if (closeBtn) {
+      closeBtn.onclick = () => {
+        toast.classList.add('opacity-0', 'translate-x-4');
+        setTimeout(() => toast.remove(), 300);
+      };
+    }
+
+    container.appendChild(toast);
+    requestAnimationFrame(() => toast.classList.remove('opacity-0', 'translate-y-2'));
     setTimeout(() => {
       if (toast.parentElement) {
         toast.classList.add('opacity-0', 'translate-x-4');
@@ -793,11 +896,37 @@
 
     connection.on('ReceiveOrderPaid', function (data) {
       if (isAdminPage && data && data.maDH) {
-        playChime('payment_success');
-        if (typeof showToast === 'function') {
-          showToast(`Đơn hàng #${data.maDH} vừa được thanh toán thành công!`, 'success');
-        }
+        notifyAdminRealtimeEvent({
+          id: `admin_paid_${data.maDH}_${Date.now()}`,
+          maDH: data.maDH,
+          title: `Đã thanh toán đơn #${data.maDH}`,
+          badge: data.maDH,
+          message: `Đơn hàng <b>#${data.maDH}</b> vừa thanh toán VietQR thành công!`,
+          icon: 'fa-solid fa-circle-check',
+          bgClass: 'bg-emerald-100',
+          colorClass: 'text-emerald-700',
+          actionLabel: 'Xem đơn ngay →',
+          chimeType: 'payment_success'
+        });
         window.dispatchEvent(new CustomEvent('samamobile:order_paid', { detail: data }));
+      }
+    });
+
+    connection.on('ReceiveTradeInBooking', function (data) {
+      if (isAdminPage && data && data.code) {
+        notifyAdminRealtimeEvent({
+          id: `admin_tradein_${data.code}`,
+          targetSection: 'view-thucu',
+          title: 'PHIẾU THU CŨ ĐỔI MỚI!',
+          badge: data.code,
+          message: `Khách hàng <b>${data.name || 'Khách'}</b> (${data.phone || ''}) vừa đặt lịch thu cũ tại <b>${data.branch || 'Cửa hàng'}</b>.`,
+          icon: 'fa-solid fa-mobile-screen-button',
+          bgClass: 'bg-blue-100',
+          colorClass: 'text-blue-700',
+          actionLabel: 'Xem phiếu thu cũ →',
+          chimeType: 'new_order'
+        });
+        window.dispatchEvent(new CustomEvent('samamobile:trade_in_created', { detail: data }));
       }
     });
 
@@ -981,7 +1110,8 @@
       if (connection && connection.state === signalR.HubConnectionState.Connected && phone) {
         connection.invoke('JoinCustomerGroup', phone).catch(() => {});
       }
-    }
+    },
+    notifyAdminEvent: notifyAdminRealtimeEvent
   };
 
 })();

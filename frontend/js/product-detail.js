@@ -2320,13 +2320,184 @@
   }
   window.showCopyNotification = showCopyNotification;
 
-  // Render Sản phẩm mua kèm theo danh mục filter tabs (Screenshot 2)
-  var ALL_ADDONS = [
-    { id: 'ADD-01', cat: 'case', name: 'Ốp lưng từ tính MagSafe Chống va đập', price: 190000, img: 'https://i.hoanghamobile.vn/Uploads/2024/09/10/ip16-xanh-mong-ket.png' },
-    { id: 'ADD-02', cat: 'glass', name: 'Kính cường lực Full màn hình 9H', price: 150000, img: 'https://i.hoanghamobile.vn/Uploads/2025/01/23/image-removebg-preview.png' },
-    { id: 'ADD-03', cat: 'charger', name: 'Củ sạc nhanh 45W Type-C SamaSuperFast', price: 390000, img: 'https://i.hoanghamobile.vn/Uploads/2026/03/21/a1638-den.png' },
-    { id: 'ADD-04', cat: 'battery', name: 'Pin sạc dự phòng 10.000mAh 30W Qi2', price: 490000, img: 'https://i.hoanghamobile.vn/Uploads/2026/03/21/a1638-den.png' }
+  // Tự động gợi ý Phụ kiện mua kèm phù hợp theo từng loại thiết bị & hãng từ allProductsMeta
+  var DEFAULT_UNIVERSAL_ADDONS = [
+    { id: 'MH1575', cat: 'charger', name: 'Củ sạc chính hãng Apple 20W Type-C', price: 450000, img: 'https://i.hoanghamobile.vn/Uploads/2023/10/02/20w.png' },
+    { id: 'MH1566', cat: 'battery', name: 'Sạc dự phòng UGREEN 10000mAh 55W PB727 tích hợp cáp Type C', price: 790000, img: 'https://i.hoanghamobile.vn/Uploads/2026/10/21/ugreen-10000mah-55w-pb727-1-160819717.png' },
+    { id: 'MH1550', cat: 'glass', name: 'Cổng chuyển đổi Baseus UltraJoy Series 7-Port HUB Docking Station', price: 420000, img: 'https://i.hoanghamobile.vn/Uploads/2024/09/10/ip16-xanh-mong-ket.png' },
+    { id: 'MH1568', cat: 'battery', name: 'Sạc Dự Phòng AUKEY 20000mAh 35W PB-Y92L', price: 850000, img: 'https://i.hoanghamobile.vn/Uploads/2026/10/21/ugreen-10000mah-55w-pb727-1-160819717.png' }
   ];
+  var currentAddonsList = DEFAULT_UNIVERSAL_ADDONS;
+
+  function classifyAddonCategory(name) {
+    const n = (name || '').toLowerCase();
+    if (/ốp lưng|bao da|túi|balo/.test(n)) return 'case';
+    if (/cường lực|dán màn|cáp|hub|cổng chuyển/.test(n)) return 'glass';
+    if (/củ sạc|bộ sạc|adapter/.test(n)) return 'charger';
+    if (/dự phòng|pin sạc/.test(n)) return 'battery';
+    return 'case';
+  }
+
+  function buildDynamicAddons(prod) {
+    const metaVals = Object.values(allProductsMeta || {});
+    if (!metaVals.length || !prod) return DEFAULT_UNIVERSAL_ADDONS;
+
+    const pName = (prod.tenHang || '').toLowerCase();
+    const pGroup = (prod.maNhom || prod.tenNhom || '').toLowerCase();
+    const pBrand = (prod.nhanHieu || '').toLowerCase();
+
+    const isTablet = pGroup.includes('tablet') || pGroup.includes('máy tính bảng') || pName.includes('ipad') || pName.includes('tab ');
+    const isLaptop = pGroup.includes('laptop') || pName.includes('macbook') || pName.includes('laptop');
+    const isWatch = pGroup.includes('dongho') || pGroup.includes('đồng hồ') || pName.includes('watch');
+    const isPhone = !isTablet && !isLaptop && !isWatch && (pGroup.includes('dienthoai') || pGroup.includes('điện thoại'));
+
+    const accessories = metaVals.filter(x =>
+      x && x.maHang && x.tenHang && Number(x.donGia) > 0 &&
+      (x.maNhom === 'PHUKIEN' || (x.tenNhom || '').toLowerCase().includes('phụ kiện')) &&
+      !/thay pin|sửa chữa|ép kính/i.test(x.tenHang)
+    );
+
+    const scoreItem = (x) => {
+      const n = x.tenHang.toLowerCase();
+      let s = 0;
+
+      if (isTablet) {
+        if (/đồng hồ|watch|47mm|43mm|40mm|iphone|galaxy s|redmi/.test(n)) return -100;
+        if (pName.includes('ipad') && /ipad/.test(n)) s += 50;
+        else if (pName.includes('galaxy tab') && /galaxy tab/.test(n)) s += 50;
+        else if (/ipad|galaxy tab/.test(n)) return -50; // không gợi ý phụ kiện hãng khác
+        if (/bao da|bàn phím|túi|tablet|hub|cổng chuyển/.test(n)) s += 30;
+        if (/củ sạc|sạc nhanh|20w|30w|45w|65w/.test(n)) s += 20;
+        if (/dự phòng/.test(n)) s += 15;
+      } else if (isLaptop) {
+        if (/đồng hồ|watch|47mm|43mm|iphone|ipad|ốp lưng/.test(n)) return -100;
+        if (/hub|docking|cổng chuyển|chuột|bàn phím|balo|túi/.test(n)) s += 40;
+        if (/100w|140w|65w|gan|dự phòng/.test(n)) s += 25;
+      } else if (isWatch) {
+        if (/iphone|ipad|macbook|laptop|ốp lưng|bao da/.test(n)) return -100;
+        if (/đồng hồ|watch|dây đeo|47mm|43mm|40mm/.test(n)) s += 50;
+        if (pBrand && n.includes(pBrand)) s += 20;
+      } else if (isPhone) {
+        if (/đồng hồ|watch|47mm|43mm|40mm|ipad|macbook|tablet/.test(n)) return -100;
+        if (pName.includes('iphone')) {
+          if (/samsung|galaxy|xiaomi|oppo/.test(n)) return -80;
+          if (/iphone/.test(n)) s += 40;
+          if (pName.includes('18') && n.includes('18')) s += 30;
+          else if (pName.includes('17') && n.includes('17')) s += 30;
+          else if (pName.includes('16') && n.includes('16')) s += 30;
+          else if (pName.includes('15') && n.includes('15')) s += 30;
+        } else if (pBrand) {
+          if (n.includes(pBrand)) s += 40;
+          else if (/iphone|apple/.test(n) && !/củ sạc|dự phòng|cáp/.test(n)) return -50;
+        }
+        if (/ốp lưng|cường lực/.test(n)) s += 20;
+        if (/củ sạc|dự phòng|cáp/.test(n)) s += 15;
+      } else {
+        if (/củ sạc|dự phòng|cáp|hub/.test(n)) s += 25;
+      }
+
+      if (x.anhChinh) s += 5;
+      return s;
+    };
+
+    const ranked = accessories
+      .map(x => ({ item: x, score: scoreItem(x) }))
+      .filter(r => r.score > 0)
+      .sort((a, b) => b.score - a.score);
+
+    // Chọn đa dạng theo nhóm (case, glass/hub, charger, battery) tối đa 4 món
+    const picked = [];
+    const usedIds = new Set();
+    const usedCats = new Set();
+
+    for (const r of ranked) {
+      const cat = classifyAddonCategory(r.item.tenHang);
+      if (!usedCats.has(cat) && !usedIds.has(r.item.maHang)) {
+        usedCats.add(cat);
+        usedIds.add(r.item.maHang);
+        picked.push({
+          id: r.item.maHang,
+          cat,
+          name: r.item.tenHang,
+          price: Number(r.item.donGia),
+          img: r.item.anhChinh || '../images/default-phone.png'
+        });
+        if (picked.length >= 4) break;
+      }
+    }
+
+    // Bổ sung nếu chưa đủ 4 món
+    for (const r of ranked) {
+      if (picked.length >= 4) break;
+      if (!usedIds.has(r.item.maHang)) {
+        usedIds.add(r.item.maHang);
+        picked.push({
+          id: r.item.maHang,
+          cat: classifyAddonCategory(r.item.tenHang),
+          name: r.item.tenHang,
+          price: Number(r.item.donGia),
+          img: r.item.anhChinh || '../images/default-phone.png'
+        });
+      }
+    }
+
+    return picked.length > 0 ? picked : DEFAULT_UNIVERSAL_ADDONS;
+  }
+
+  window.addAddonToCart = function (addonId, btnEl) {
+    const item = (currentAddonsList || []).find(x => x.id === addonId) || DEFAULT_UNIVERSAL_ADDONS.find(x => x.id === addonId);
+    if (!item) return;
+
+    const origPrice = Math.round(item.price * 1.25);
+    const cartItem = {
+      id: item.id + '_Tiêu chuẩn_Mặc định',
+      maHang: item.id,
+      tenHang: item.name,
+      name: item.name,
+      donGia: item.price,
+      giaGoc: origPrice,
+      hinhAnh: item.img,
+      soLuong: 1,
+      mauSac: 'Mặc định',
+      phienBan: 'Mua kèm',
+      price: item.price,
+      oldPrice: origPrice,
+      image: item.img,
+      qty: 1,
+      colorName: 'Mặc định',
+      variantName: 'Mua kèm'
+    };
+
+    if (window.CellphoneSCart || window.Cart) {
+      const cart = window.CellphoneSCart || window.Cart;
+      cart.addItem(cartItem);
+    } else {
+      try {
+        const raw = localStorage.getItem('cellphones_cart');
+        const list = raw ? JSON.parse(raw) : [];
+        const existing = list.find(it => it.id === cartItem.id || it.maHang === cartItem.maHang);
+        if (existing) {
+          existing.qty = (Number(existing.qty || existing.soLuong) || 1) + 1;
+          existing.soLuong = existing.qty;
+        } else {
+          list.push(cartItem);
+        }
+        localStorage.setItem('cellphones_cart', JSON.stringify(list));
+        window.dispatchEvent(new CustomEvent('samamobile:cart_updated'));
+      } catch (e) {}
+      showCopyNotification('Đã thêm phụ kiện: ' + item.name + ' vào giỏ hàng!');
+    }
+
+    if (btnEl) {
+      const origHtml = btnEl.innerHTML;
+      btnEl.innerHTML = '<i class="fa-solid fa-check text-xs"></i> <span>Đã thêm</span>';
+      btnEl.classList.add('!bg-emerald-600', '!text-white', '!border-emerald-600');
+      setTimeout(() => {
+        btnEl.innerHTML = origHtml;
+        btnEl.classList.remove('!bg-emerald-600', '!text-white', '!border-emerald-600');
+      }, 1500);
+    }
+  };
 
   window.filterAddons = function (cat) {
     const tabs = document.querySelectorAll('.addon-tab');
@@ -2343,7 +2514,13 @@
     const container = document.getElementById('addons-container');
     if (!container) return;
 
-    const list = cat === 'all' ? ALL_ADDONS : ALL_ADDONS.filter(it => it.cat === cat);
+    currentAddonsList = buildDynamicAddons(currentProduct);
+    const list = cat === 'all' ? currentAddonsList : currentAddonsList.filter(it => it.cat === cat);
+
+    if (list.length === 0) {
+      container.innerHTML = '<div class="p-6 text-center text-sm text-slate-400">Không có phụ kiện trong nhóm này</div>';
+      return;
+    }
 
     container.innerHTML = list.map(item => {
       const origPrice = Math.round(item.price * 1.25);
@@ -2360,7 +2537,7 @@
               <span class="text-[10px] font-bold text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded border border-rose-200">-20%</span>
             </div>
           </div>
-          <button type="button" onclick="showCopyNotification('Đã thêm phụ kiện: ${item.name} vào giỏ hàng!')" class="addon-btn-add px-4 py-2 rounded-xl text-xs sm:text-sm font-bold text-[#0066FF] bg-white border-2 border-[#0066FF] hover:bg-[#0066FF] hover:text-white flex-shrink-0 cursor-pointer shadow-2xs transition-all active:scale-95 flex items-center gap-1.5">
+          <button type="button" onclick="window.addAddonToCart('${item.id}', this)" class="addon-btn-add px-4 py-2 rounded-xl text-xs sm:text-sm font-bold text-[#0066FF] bg-white border-2 border-[#0066FF] hover:bg-[#0066FF] hover:text-white flex-shrink-0 cursor-pointer shadow-2xs transition-all active:scale-95 flex items-center gap-1.5">
             <i class="fa-solid fa-plus text-xs"></i> <span>Thêm</span>
           </button>
         </div>

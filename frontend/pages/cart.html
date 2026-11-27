@@ -1153,47 +1153,47 @@
   <!-- =========================================================================
        4. KHU VỰC TAB 2: QUẢN LÝ ĐƠN HÀNG, THEO DÕI & ĐƠN ĐÃ HỦY (ORDERS VIEW)
        ========================================================================= -->
-  <div id="orders-view-container" class="hidden flex-1 max-w-6xl w-full mx-auto px-3 sm:px-6 py-4 sm:py-5 space-y-3.5">
+  <div id="orders-view-container" class="hidden flex-1 max-w-6xl w-full mx-auto px-3 sm:px-6 py-5 sm:py-6 space-y-5">
     
     <!-- Tiêu đề và Thanh tra cứu nhanh đơn hàng -->
-    <div class="bg-white rounded-xl p-3.5 sm:p-4 border border-slate-200/80 shadow-2xs space-y-3">
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-2.5">
+    <div class="bg-white rounded-2xl p-4 sm:p-5 border border-blue-100 shadow-xs space-y-4">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div>
-          <h1 class="text-sm sm:text-base font-bold text-slate-900 tracking-tight flex items-center gap-2">
-            <i class="fa-solid fa-boxes-stacked text-[#0066FF] text-sm"></i>
+          <h1 class="text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2.5">
+            <i class="fa-solid fa-boxes-stacked text-[#0066FF] text-lg"></i>
             <span>Đơn Hàng Đã Đặt & Theo Dõi Hành Trình</span>
           </h1>
-          <p class="text-[11px] sm:text-xs text-slate-500 mt-0.5">Kiểm tra tiến độ giao hàng, lịch sử đơn hàng đã đặt và quản lý đơn hủy</p>
+          <p class="text-xs sm:text-sm text-slate-600 mt-1">Kiểm tra tiến độ giao hàng, lịch sử đơn hàng đã đặt và quản lý đơn hủy</p>
         </div>
 
         <!-- Ô tra cứu mã đơn hàng hoặc SĐT -->
-        <div class="flex items-center gap-1.5 w-full md:w-72">
+        <div class="flex items-center gap-2 w-full md:w-80">
           <div class="relative flex-1">
-            <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2 text-slate-400 text-[11px]"></i>
-            <input type="text" id="order-search-input" onkeyup="window.handleOrderSearch(event)" placeholder="Nhập Mã đơn (DH-...) hoặc SĐT..." class="w-full pl-7 pr-3 py-1.5 rounded-lg border border-slate-200 text-xs focus:outline-none focus:border-[#0066FF] font-medium text-slate-800 placeholder:text-slate-400">
+            <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-sm"></i>
+            <input type="text" id="order-search-input" onkeyup="window.handleOrderSearch(event)" placeholder="Nhập Mã đơn (DH-...) hoặc SĐT..." class="w-full pl-9 pr-3.5 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-[#0066FF] font-medium text-slate-800 placeholder:text-slate-400">
           </div>
-          <button type="button" onclick="window.handleOrderSearch()" class="px-3.5 py-1.5 rounded-lg bg-[#0066FF] hover:bg-[#0052cc] text-white text-xs font-bold shadow-2xs transition-all active:scale-95 cursor-pointer flex-shrink-0">
+          <button type="button" onclick="window.handleOrderSearch()" class="px-4 py-2 rounded-xl bg-[#0066FF] hover:bg-[#0052cc] text-white text-sm font-bold shadow-2xs transition-all active:scale-95 cursor-pointer flex-shrink-0">
             Lọc
           </button>
         </div>
       </div>
 
       <!-- Bộ lọc trạng thái (Tabs lọc: Tất cả | Chờ xác nhận | Đang giao | Đã giao | Đã hủy) -->
-      <div class="flex items-center gap-1.5 overflow-x-auto pb-0.5 no-scrollbar pt-2 border-t border-slate-100 text-xs">
-        <button type="button" onclick="window.filterOrdersByStatus('all', this)" class="order-filter-btn px-2.5 py-1 rounded-lg bg-[#0066FF] text-white shadow-2xs cursor-pointer whitespace-nowrap transition-all text-xs font-semibold">
+      <div class="flex items-center gap-2 overflow-x-auto pb-0.5 no-scrollbar pt-3 border-t border-slate-100 text-sm">
+        <button type="button" onclick="window.filterOrdersByStatus('all', this)" class="order-filter-btn px-3.5 py-2 rounded-xl bg-[#0066FF] text-white shadow-2xs cursor-pointer whitespace-nowrap transition-all text-sm font-bold">
           Tất cả
         </button>
-        <button type="button" onclick="window.filterOrdersByStatus('cho_xac_nhan', this)" class="order-filter-btn px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer whitespace-nowrap transition-all text-xs font-medium">
-          <i class="fa-regular fa-clock text-amber-600 mr-1 text-[10px]"></i> Chờ xác nhận (<span id="count-status-pending">0</span>)
+        <button type="button" onclick="window.filterOrdersByStatus('cho_xac_nhan', this)" class="order-filter-btn px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer whitespace-nowrap transition-all text-sm font-semibold">
+          <i class="fa-regular fa-clock text-amber-600 mr-1.5 text-xs"></i> Chờ xác nhận (<span id="count-status-pending">0</span>)
         </button>
-        <button type="button" onclick="window.filterOrdersByStatus('dang_giao', this)" class="order-filter-btn px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer whitespace-nowrap transition-all text-xs font-medium">
-          <i class="fa-solid fa-truck-fast text-blue-600 mr-1 text-[10px]"></i> Đang giao hàng (<span id="count-status-shipping">0</span>)
+        <button type="button" onclick="window.filterOrdersByStatus('dang_giao', this)" class="order-filter-btn px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer whitespace-nowrap transition-all text-sm font-semibold">
+          <i class="fa-solid fa-truck-fast text-blue-600 mr-1.5 text-xs"></i> Đang giao hàng (<span id="count-status-shipping">0</span>)
         </button>
-        <button type="button" onclick="window.filterOrdersByStatus('da_giao', this)" class="order-filter-btn px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer whitespace-nowrap transition-all text-xs font-medium">
-          <i class="fa-solid fa-circle-check text-emerald-600 mr-1 text-[10px]"></i> Đã giao (<span id="count-status-delivered">0</span>)
+        <button type="button" onclick="window.filterOrdersByStatus('da_giao', this)" class="order-filter-btn px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer whitespace-nowrap transition-all text-sm font-semibold">
+          <i class="fa-solid fa-circle-check text-emerald-600 mr-1.5 text-xs"></i> Đã giao (<span id="count-status-delivered">0</span>)
         </button>
-        <button type="button" onclick="window.filterOrdersByStatus('da_huy', this)" class="order-filter-btn px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer whitespace-nowrap transition-all text-xs font-medium">
-          <i class="fa-solid fa-ban text-rose-600 mr-1 text-[10px]"></i> Đơn đã hủy (<span id="count-status-cancelled">0</span>)
+        <button type="button" onclick="window.filterOrdersByStatus('da_huy', this)" class="order-filter-btn px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer whitespace-nowrap transition-all text-sm font-semibold">
+          <i class="fa-solid fa-ban text-rose-600 mr-1.5 text-xs"></i> Đơn đã hủy (<span id="count-status-cancelled">0</span>)
         </button>
       </div>
     </div>
@@ -1447,7 +1447,7 @@
   <script src="../js/chat-widget.js?v=1.0"></script>
   <script src="../js/auth.js?v=4.0"></script>
   <script src="../js/customer-portal.js?v=4.0"></script>
-  <script src="../js/cart-page.js?v=7.6"></script>
+  <script src="../js/cart-page.js?v=7.7"></script>
   <script src="../js/recently-viewed.js?v=6.5"></script>
   <script src="../js/floating-promo.js?v=1.2"></script>
 

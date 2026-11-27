@@ -35,8 +35,8 @@
       badges: ['A20 Pro', '256GB', '6.3"']
     },
     {
-      id: 'SAMPLE-dien-thoai-1',
-      maHang: 'SAMPLE-dien-thoai-1',
+      id: 'MH112',
+      maHang: 'MH112',
       tenHang: 'Samsung Galaxy S25 Ultra - 12GB/256GB',
       donGia: 25790000,
       giaGoc: 33990000,
@@ -55,10 +55,10 @@
       badges: ['Unisoc T7280', '5000mAh', '6.9"']
     },
     {
-      id: 'SAMPLE-laptop-1',
-      maHang: 'SAMPLE-laptop-1',
-      tenHang: 'MacBook Air 13 M3 2024 - 16GB / 256GB SSD',
-      donGia: 27490000,
+      id: 'MH365',
+      maHang: 'MH365',
+      tenHang: 'MacBook Air M4 13 inch 16GB/512GB',
+      donGia: 28790000,
       giaGoc: 31990000,
       anhChinh: 'https://i.hoanghamobile.vn/Uploads/2026/03/04/macbook-air-13-in-m5-starlight-pdp-image-position-1-vn-vi.jpg',
       member_price: 27150000,

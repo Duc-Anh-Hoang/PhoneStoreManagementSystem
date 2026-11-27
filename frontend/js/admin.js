@@ -109,12 +109,21 @@ const AdminRealtimeData = {
     this.isLoading = true;
 
     try {
-      const [products, categories, brands] = await Promise.all([
+      const [products, categories, brands, metaRes] = await Promise.all([
         getAdminPages('/mathang'),
         api.get('/nhomhang'),
-        api.get('/loaihang')
+        api.get('/loaihang'),
+        fetch('../data/products-meta.json').then(r => r.ok ? r.json() : fetch('/data/products-meta.json').then(r2 => r2.ok ? r2.json() : {})).catch(() => ({}))
       ]);
-      this.products = products;
+      const metaMap = (metaRes && typeof metaRes === 'object') ? metaRes : {};
+      this.products = (products || []).map(p => {
+        const meta = metaMap[p.maHang];
+        return {
+          ...p,
+          anhChinh: p.anhChinh || p.hinhAnh || meta?.anhChinh || '',
+          nhanHieu: p.nhanHieu || p.tenLoai || meta?.nhanHieu || ''
+        };
+      });
       this.categories = categories.map(item => ({ ...item, count: item.soLuongMatHang }));
       this.brands = brands.map(item => ({ ...item, count: item.soLuongMatHang }));
 
@@ -186,6 +195,22 @@ const AdminRealtimeData = {
         showToast(`🔔 Đơn hàng mới: ${newOrder.tenNguoiNhan} - ${Format.currency(newOrder.tongTien)}!`, 'success');
         this.refreshUI();
       }
+    });
+
+    window.addEventListener('samamobile:trade_in_created', () => {
+      if (currentActiveSection === 'view-thucu' && typeof window.renderThuCuTable === 'function') {
+        window.renderThuCuTable();
+      }
+    });
+
+    window.addEventListener('samamobile:order_paid', async () => {
+      await this.refreshOrders();
+      this.refreshUI();
+    });
+
+    window.addEventListener('samamobile:order_cancelled', async () => {
+      await this.refreshOrders();
+      this.refreshUI();
     });
   },
 
@@ -476,23 +501,23 @@ function renderSection(sectionId) {
     currentActiveSection = 'view-dashboard';
   }
 
-  // Cập nhật trạng thái active sidebar (Tone màu chuẩn: Primary #1E3A8A, Active #EFF6FF, Border #2563EB)
+  // Cập nhật trạng thái active sidebar (Tone màu Trắng & Xanh dương sáng rõ)
   document.querySelectorAll('.admin-nav-link').forEach(link => {
     const isTarget = link.getAttribute('data-target') === sectionId || link.getAttribute('data-target') === currentActiveSection;
     const icon = link.querySelector('i');
     if (isTarget) {
-      link.classList.add('bg-[#EFF6FF]', 'text-[#1E3A8A]', 'font-bold', 'border-l-4', 'border-[#2563EB]');
-      link.classList.remove('text-slate-600', 'hover:bg-[#F8FAFC]', 'hover:text-slate-900', 'hover:bg-[#F9FAFB]', 'bg-[#eafff5]', 'text-[#064e29]', 'border-[#80ffbf]', 'bg-blue-600', 'text-white', 'bg-[#F0FDF4]', 'text-[#15803D]', 'bg-[#dbf9eb]', 'text-[#00483d]');
+      link.classList.add('bg-blue-600', 'text-white', 'font-bold', 'shadow-md', 'shadow-blue-600/20');
+      link.classList.remove('text-slate-700', 'text-slate-300', 'hover:bg-blue-50', 'hover:text-blue-700', 'hover:bg-slate-800/80', 'hover:text-white', 'text-slate-600', 'hover:bg-[#F8FAFC]', 'hover:text-slate-900', 'hover:bg-[#F9FAFB]', 'hover:bg-slate-50', 'bg-[#EFF6FF]', 'text-[#1E3A8A]', 'border-l-4', 'border-blue-300', 'border-[#2563EB]');
       if (icon) {
-        icon.classList.remove('text-slate-400', 'text-[#064e29]', 'text-[#0a4a1f]', 'text-[#00483d]', 'text-[#15803D]');
-        icon.classList.add('text-[#2563EB]');
+        icon.classList.remove('text-slate-400', 'text-blue-500', 'text-[#2563EB]');
+        icon.classList.add('text-white');
       }
     } else {
-      link.classList.remove('bg-[#EFF6FF]', 'text-[#1E3A8A]', 'font-bold', 'border-l-4', 'border-[#2563EB]', 'bg-[#eafff5]', 'text-[#064e29]', 'border-[#80ffbf]', 'bg-[#dbf9eb]', 'text-[#00483d]', 'bg-blue-600', 'text-white', 'bg-[#F0FDF4]', 'text-[#15803D]');
-      link.classList.add('text-slate-600', 'hover:bg-[#F8FAFC]', 'hover:text-slate-900');
+      link.classList.remove('bg-blue-600', 'text-white', 'font-bold', 'shadow-md', 'shadow-blue-600/20', 'border-l-4', 'border-blue-300', 'shadow-lg', 'shadow-blue-600/25', 'bg-[#EFF6FF]', 'text-[#1E3A8A]', 'border-[#2563EB]', 'text-slate-300', 'hover:bg-slate-800/80', 'hover:text-white', 'text-slate-600');
+      link.classList.add('text-slate-700', 'hover:bg-blue-50', 'hover:text-blue-700');
       if (icon) {
-        icon.classList.remove('text-[#2563EB]', 'text-[#1E3A8A]', 'text-[#064e29]', 'text-[#0a4a1f]', 'text-[#00483d]', 'text-[#15803D]');
-        icon.classList.add('text-slate-400');
+        icon.classList.remove('text-white', 'text-[#2563EB]', 'text-[#1E3A8A]');
+        icon.classList.add('text-blue-500');
       }
     }
   });
@@ -1082,9 +1107,10 @@ async function renderMatHangTable(page = 1, keyword = null, category = null, bra
       tonKhoClass = 'bg-amber-50 text-amber-700 border-amber-200 font-bold';
     }
 
-    const thumbImg = m.anhChinh
-      ? `<img src="${m.anhChinh}" alt="${m.tenHang}" class="w-9 h-9 object-contain rounded-lg border border-slate-200 bg-white p-0.5 flex-shrink-0" onerror="this.onerror=null;this.src='https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-tu-nhien-1.png'">`
-      : `<div class="w-9 h-9 rounded-lg bg-slate-100 text-slate-400 flex items-center justify-center text-xs flex-shrink-0"><i class="fa-solid fa-mobile"></i></div>`;
+    const imgSrc = m.anhChinh || m.hinhAnh || '';
+    const thumbImg = imgSrc
+      ? `<img src="${imgSrc}" alt="${m.tenHang}" class="w-11 h-11 object-contain rounded-xl border border-blue-100 bg-white p-1 flex-shrink-0 shadow-2xs" onerror="this.onerror=null;this.src='https://i.hoanghamobile.vn/Uploads/2024/09/10/iphone-16-pro-tu-nhien-1.png'">`
+      : `<div class="w-11 h-11 rounded-xl bg-blue-50 text-blue-500 border border-blue-100 flex items-center justify-center text-sm flex-shrink-0"><i class="fa-solid fa-mobile-screen-button"></i></div>`;
 
     return `
       <tr class="border-b border-slate-200 hover:bg-slate-50/80 transition-colors">
@@ -1267,16 +1293,7 @@ async function renderDonHangTable(filter = 'all', keyword = '') {
   tbody.innerHTML = orders.map(o => {
     const ngay = fmtLocalDateTime(o.ngayDat);
     let actions = '';
-    if (o.trangThai === 'cho_thanh_toan') {
-      actions = `
-        <button onclick="confirmPaymentAdmin('${o.maDH}')" class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-slate-800 hover:bg-slate-900 text-white font-medium rounded-lg text-xs transition-colors cursor-pointer" title="Xác nhận khách đã chuyển khoản thành công">
-          <i class="fa-solid fa-check text-[10px]"></i> Xác nhận tiền
-        </button>
-        <button onclick="cancelOrder('${o.maDH}')" class="inline-flex items-center px-2 py-1.5 text-slate-500 hover:text-rose-600 hover:bg-rose-50 border border-slate-200 font-medium rounded-lg text-xs transition-colors cursor-pointer" title="Hủy đơn">
-          Hủy
-        </button>
-      `;
-    } else if (o.trangThai === 'cho_xac_nhan') {
+    if (o.trangThai === 'cho_thanh_toan' || o.trangThai === 'cho_xac_nhan') {
       actions = `
         <button onclick="approveOrder('${o.maDH}')" class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-slate-800 hover:bg-slate-900 text-white font-medium rounded-lg text-xs transition-colors cursor-pointer" title="Duyệt đơn và đẩy sang giao hàng GHN">
           <i class="fa-solid fa-check text-[10px]"></i> Duyệt đơn
@@ -2247,24 +2264,24 @@ async function renderTraHangTable() {
   const tbody = document.getElementById('table-trahang-body');
   if (!tbody) return;
 
-  tbody.innerHTML = '<tr><td colspan="8" class="p-4 text-center text-slate-500">Đang tải phiếu đổi trả...</td></tr>';
+  tbody.innerHTML = '<tr><td colspan="9" class="p-4 text-center text-slate-500">Đang tải phiếu đổi trả...</td></tr>';
 
   try {
     const list = await getAdminPages('/trahang');
     if (!list || list.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="8" class="p-5 text-center text-slate-400 font-medium">Chưa có phiếu đổi trả nào phát sinh trong hệ thống</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="9" class="p-5 text-center text-slate-400 font-medium">Chưa có phiếu đổi trả nào phát sinh trong hệ thống</td></tr>';
       return;
     }
 
     const formatBadgeTrangThai = (tt) => {
       switch (tt) {
-        case 'tiep_nhan': return '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium bg-[#FEFCE8] text-[#854D0E] whitespace-nowrap"><span class="w-1.5 h-1.5 rounded-full bg-[#EAB308] shrink-0"></span>1. Chờ kỹ thuật</span>';
-        case 'da_kiem_tra': return '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium bg-[#FEFCE8] text-[#854D0E] whitespace-nowrap"><span class="w-1.5 h-1.5 rounded-full bg-[#EAB308] shrink-0"></span>2. Chờ duyệt</span>';
-        case 'da_duyet': return '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium bg-[#FEFCE8] text-[#854D0E] whitespace-nowrap"><span class="w-1.5 h-1.5 rounded-full bg-[#EAB308] shrink-0"></span>3. Chờ hoàn tất</span>';
-        case 'tu_choi': return '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium bg-[#FEF2F2] text-[#991B1B] whitespace-nowrap"><span class="w-1.5 h-1.5 rounded-full bg-[#EF4444] shrink-0"></span>Từ chối</span>';
-        case 'hoan_tat': return '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium bg-[#F0FDF4] text-[#166534] whitespace-nowrap"><span class="w-1.5 h-1.5 rounded-full bg-[#22C55E] shrink-0"></span>Đã hoàn tất</span>';
-        case 'da_huy': return '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium bg-[#FEF2F2] text-[#991B1B] whitespace-nowrap"><span class="w-1.5 h-1.5 rounded-full bg-[#EF4444] shrink-0"></span>Đã hủy</span>';
-        default: return `<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium bg-[#F1F5F9] text-[#475569] whitespace-nowrap"><span class="w-1.5 h-1.5 rounded-full bg-[#94A3B8] shrink-0"></span>${tt}</span>`;
+        case 'tiep_nhan': return '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#FEFCE8] text-[#854D0E] border border-amber-200 whitespace-nowrap"><span class="w-1.5 h-1.5 rounded-full bg-[#EAB308] shrink-0"></span>1. Chờ kỹ thuật</span>';
+        case 'da_kiem_tra': return '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#FEFCE8] text-[#854D0E] border border-amber-200 whitespace-nowrap"><span class="w-1.5 h-1.5 rounded-full bg-[#EAB308] shrink-0"></span>2. Chờ duyệt</span>';
+        case 'da_duyet': return '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 whitespace-nowrap"><span class="w-1.5 h-1.5 rounded-full bg-blue-600 shrink-0"></span>3. Chờ hoàn tất</span>';
+        case 'tu_choi': return '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#FEF2F2] text-[#991B1B] border border-rose-200 whitespace-nowrap"><span class="w-1.5 h-1.5 rounded-full bg-[#EF4444] shrink-0"></span>Từ chối</span>';
+        case 'hoan_tat': return '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#F0FDF4] text-[#166534] border border-emerald-200 whitespace-nowrap"><span class="w-1.5 h-1.5 rounded-full bg-[#22C55E] shrink-0"></span>Đã hoàn tất</span>';
+        case 'da_huy': return '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#FEF2F2] text-[#991B1B] border border-rose-200 whitespace-nowrap"><span class="w-1.5 h-1.5 rounded-full bg-[#EF4444] shrink-0"></span>Đã hủy</span>';
+        default: return `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#F1F5F9] text-[#475569] whitespace-nowrap"><span class="w-1.5 h-1.5 rounded-full bg-[#94A3B8] shrink-0"></span>${tt}</span>`;
       }
     };
 
@@ -2275,38 +2292,40 @@ async function renderTraHangTable() {
       let actionButtons = '';
       if (t.trangThai === 'tiep_nhan') {
         actionButtons = `
-          <button onclick="actionKiemTraTraHang('${t.maTR}')" class="px-2 py-1 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-[10px] font-bold shadow-sm transition-all">Kiểm tra KT</button>
-          <button onclick="actionHuyTraHang('${t.maTR}')" class="px-2 py-1 bg-slate-200 hover:bg-rose-100 text-slate-700 hover:text-rose-700 rounded-lg text-[10px] font-semibold transition-all">Hủy</button>
+          <button onclick="actionKiemTraTraHang('${t.maTR}')" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold shadow-xs transition-all cursor-pointer">Kiểm tra KT</button>
+          <button onclick="actionHuyTraHang('${t.maTR}')" class="px-3 py-1.5 bg-slate-100 hover:bg-rose-100 text-slate-700 hover:text-rose-700 rounded-lg text-xs font-semibold transition-all cursor-pointer">Hủy</button>
         `;
       } else if (t.trangThai === 'da_kiem_tra') {
         actionButtons = `
-          <button onclick="actionDuyetTraHang('${t.maTR}')" class="px-2.5 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-[10px] font-bold shadow-sm transition-all">
+          <button onclick="actionDuyetTraHang('${t.maTR}')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold shadow-xs transition-all cursor-pointer">
             <i class="fa-solid fa-stamp mr-1"></i>Phê duyệt
           </button>
-          <button onclick="actionHuyTraHang('${t.maTR}')" class="px-2 py-1 bg-slate-200 hover:bg-rose-100 text-slate-700 hover:text-rose-700 rounded-lg text-[10px] font-semibold transition-all">Hủy</button>
+          <button onclick="actionHuyTraHang('${t.maTR}')" class="px-3 py-1.5 bg-slate-100 hover:bg-rose-100 text-slate-700 hover:text-rose-700 rounded-lg text-xs font-semibold transition-all cursor-pointer">Hủy</button>
         `;
       } else if (t.trangThai === 'da_duyet') {
         actionButtons = `
-          <button onclick="actionHoanTatTraHang('${t.maTR}', '${t.hinhThucHoanTien}')" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[10px] font-bold shadow-sm transition-all">Hoàn tất</button>
+          <button onclick="actionHoanTatTraHang('${t.maTR}', '${t.hinhThucHoanTien}')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold shadow-xs transition-all cursor-pointer">Hoàn tất</button>
         `;
+      } else {
+        actionButtons = '<span class="text-xs text-slate-400">—</span>';
       }
 
       return `
-        <tr class="border-b border-slate-200 hover:bg-slate-50 transition-colors">
+        <tr class="border-b border-slate-200 hover:bg-blue-50/40 transition-colors">
           <td class="p-3.5 font-mono font-bold text-xs text-[#15803D] whitespace-nowrap">${t.maTR}</td>
           <td class="p-3.5 font-mono font-bold text-xs text-slate-700 whitespace-nowrap">${t.soHD || '-'}</td>
           <td class="p-3.5 font-mono font-bold text-xs text-indigo-700 whitespace-nowrap">${t.soIMEI || t.maIMEI || '-'}</td>
           <td class="p-3.5 text-xs text-slate-500 whitespace-nowrap">${ngay}</td>
-          <td class="p-3.5 text-xs text-slate-600 max-w-[200px] truncate" title="${t.lyDo || ''}">
-            <div class="font-medium text-slate-800">${t.lyDo || '-'}</div>
-            ${t.tenHang ? `<div class="text-[11px] text-slate-400 truncate">${t.tenHang}</div>` : ''}
-            ${t.ketQuaKiemTra ? `<div class="text-[10px] text-blue-600 font-medium">KT: ${t.ketQuaKiemTra}</div>` : ''}
+          <td class="p-3.5 text-xs text-slate-600 max-w-[240px]" title="${t.lyDo || ''}">
+            <div class="font-medium text-slate-800 line-clamp-2">${t.lyDo || '-'}</div>
+            ${t.tenHang ? `<div class="text-xs text-slate-400 truncate">${t.tenHang}</div>` : ''}
+            ${t.ketQuaKiemTra ? `<div class="text-xs text-blue-600 font-medium">KT: ${t.ketQuaKiemTra}</div>` : ''}
           </td>
           <td class="p-3.5 text-xs text-center whitespace-nowrap">${Format.statusBadge(t.hinhThucHoanTien)}</td>
           <td class="p-3.5 text-xs text-slate-600 whitespace-nowrap">${t.tenNV || t.tenNhanVien || t.maNV || '-'}</td>
+          <td class="p-3.5 text-xs text-center whitespace-nowrap">${badgeTT}</td>
           <td class="p-3.5 text-xs text-right whitespace-nowrap">
-            <div class="inline-flex items-center gap-1.5 flex-wrap justify-end">
-              ${badgeTT}
+            <div class="inline-flex items-center gap-1.5 justify-end">
               ${actionButtons}
             </div>
           </td>
@@ -2315,7 +2334,7 @@ async function renderTraHangTable() {
     }).join('');
   } catch (err) {
     console.warn('Lỗi kết nối API /trahang:', err);
-    tbody.innerHTML = '<tr><td colspan="8" class="p-5 text-center text-rose-500 font-medium">Lỗi tải danh sách đổi trả: ' + (err.message || 'Không thể tải') + '</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="9" class="p-5 text-center text-rose-500 font-medium">Lỗi tải danh sách đổi trả: ' + (err.message || 'Không thể tải') + '</td></tr>';
   }
 }
 
@@ -5088,24 +5107,108 @@ async function showAdminOrderDetail(maDH) {
       }
     }
 
-    // In vận đơn GHN (A5)
+    // In vận đơn GHN (A5) - hỗ trợ cả GHN thật và in phiếu A5 nội bộ khi chạy Mock/Local
     const printBtn = document.getElementById('aod-print-ghn-btn');
     if (printBtn) {
       if (shipping.carrier === 'GHN' && shipping.trackingCode) {
         printBtn.classList.remove('hidden');
         printBtn.onclick = async () => {
           printBtn.disabled = true;
-          printBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i>Đang lấy mã in...';
+          printBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i>Đang tạo phiếu in...';
           try {
-            const res = await api.post('/ghn/orders/' + encodeURIComponent(shipping.trackingCode) + '/print-url', {});
-            if (res && res.url) {
-              window.open(res.url, '_blank');
-            } else {
-              showToast('Không lấy được link in vận đơn GHN.', 'error');
+            if (!String(shipping.trackingCode).toUpperCase().startsWith('GHNMOCK')) {
+              const res = await api.post('/ghn/orders/' + encodeURIComponent(shipping.trackingCode) + '/print-url', {});
+              if (res && res.url) {
+                window.open(res.url, '_blank');
+                printBtn.disabled = false;
+                printBtn.innerHTML = '<i class="fa-solid fa-print mr-1"></i>In vận đơn GHN (A5)';
+                return;
+              }
             }
           } catch (e) {
-            showToast('Lỗi khi sinh mã in vận đơn GHN.', 'error');
+            console.warn('Chưa có GHN Token hoặc đơn Mock, chuyển sang in phiếu A5 nội bộ:', e);
           }
+
+          // Fallback: Mở phiếu vận đơn A5 chuẩn để in ngay
+          const itemsList = Array.isArray(order.items) ? order.items : [];
+          const totalQty = itemsList.reduce((s, it) => s + (Number(it.soLuong) || 1), 0);
+          const isPaid = !!(order.daThanhToan || order.paymentStatus === 'paid');
+          const codAmount = (!isPaid && String(order.phuongThucThanhToan || '').toLowerCase() === 'cod')
+            ? Format.currency(order.tongTien || 0)
+            : '0 ₫ (Đã thanh toán)';
+          const itemRows = itemsList.map(it => `
+            <tr>
+              <td style="padding:6px 8px;border-bottom:1px solid #e2e8f0;">[${it.maHang || 'SP'}] ${it.tenHang || ''}</td>
+              <td style="padding:6px 8px;border-bottom:1px solid #e2e8f0;text-align:center;font-weight:bold;">${it.soLuong || 1}</td>
+            </tr>
+          `).join('');
+
+          const win = window.open('', '_blank', 'width=680,height=860');
+          if (win) {
+            win.document.write(`<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Phiếu In A5 - ${shipping.trackingCode}</title>
+  <style>
+    @page { size: A5 portrait; margin: 10mm; }
+    body { font-family: Arial, sans-serif; color: #0f172a; margin: 0; padding: 16px; }
+    .box { border: 2px solid #0f172a; border-radius: 6px; padding: 12px; max-width: 520px; margin: 0 auto; }
+    .row { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1.5px dashed #64748b; padding-bottom: 10px; margin-bottom: 10px; }
+    .code { font-family: monospace; font-size: 20px; font-weight: 900; letter-spacing: 1px; text-align: center; margin: 10px 0; }
+    .cod { font-size: 22px; font-weight: 900; color: #0f172a; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 6px; }
+    th { background: #f1f5f9; padding: 6px 8px; text-align: left; border-bottom: 1.5px solid #0f172a; }
+    .btn-print { display: block; margin: 16px auto 0; padding: 10px 24px; background: #2563eb; color: #fff; border: 0; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px; }
+    @media print { .btn-print { display: none; } }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <div class="row">
+      <div>
+        <div style="font-size:12px;color:#475569;font-weight:bold;">BÊN GỬI</div>
+        <div style="font-weight:bold;font-size:14px;">SamaMobile Store - 1800 6868</div>
+        <div style="font-size:12px;">241 Lê Văn Việt, P. Hiệp Phú, TP. Thủ Đức, TP.HCM</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:11px;color:#475569;">MÃ ĐƠN HÀNG</div>
+        <div style="font-weight:900;font-size:15px;font-family:monospace;">EXT: ${order.maDH}</div>
+      </div>
+    </div>
+    <div class="row">
+      <div>
+        <div style="font-size:12px;color:#475569;font-weight:bold;">BÊN NHẬN</div>
+        <div style="font-weight:bold;font-size:15px;">${order.tenNguoiNhan || ''} — ${order.sdtNguoiNhan || ''}</div>
+        <div style="font-size:13px;margin-top:2px;">${order.diaChiGiao || ''}</div>
+      </div>
+    </div>
+    <div class="row" style="align-items:center;">
+      <div>
+        <div style="font-size:12px;color:#475569;">Thu tiền người nhận (COD):</div>
+        <div class="cod">${codAmount}</div>
+        <div style="font-size:11px;color:#475569;margin-top:2px;">Cho xem hàng, không cho thử</div>
+      </div>
+      <div style="text-align:right;">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=${encodeURIComponent(shipping.trackingCode)}" alt="QR" width="84" height="84">
+      </div>
+    </div>
+    <div class="code">${shipping.trackingCode}</div>
+    <div style="font-size:12px;font-weight:bold;margin-top:8px;">Nội dung đơn hàng (Tổng SL: ${totalQty})</div>
+    <table>
+      <thead><tr><th>Sản phẩm</th><th style="text-align:center;width:60px;">SL</th></tr></thead>
+      <tbody>${itemRows}</tbody>
+    </table>
+  </div>
+  <button class="btn-print" onclick="window.print()">In Phiếu A5</button>
+  <script>setTimeout(() => window.print(), 400);</script>
+</body>
+</html>`);
+            win.document.close();
+          } else {
+            showToast('Trình duyệt đang chặn cửa sổ bật lên (Popup). Vui lòng cho phép mở popup để in.', 'warning');
+          }
+
           printBtn.disabled = false;
           printBtn.innerHTML = '<i class="fa-solid fa-print mr-1"></i>In vận đơn GHN (A5)';
         };
@@ -5622,16 +5725,45 @@ async function initAdminChatSignalR() {
 
 function handleAdminNewWaitingSession(data) {
   playAdminChatChime();
-  if (typeof showToast === 'function') {
+  if (window.OrderRealtime && typeof window.OrderRealtime.notifyAdminEvent === 'function') {
+    window.OrderRealtime.notifyAdminEvent({
+      id: `chat_wait_${data.maPhienChat}_${Date.now()}`,
+      targetSection: 'view-chat',
+      chatSessionId: data.maPhienChat,
+      title: 'KHÁCH HÀNG CẦN TƯ VẤN!',
+      badge: data.khachHangSdt || 'Chat mới',
+      message: `Khách hàng <b>${data.khachHangTen || 'Khách hàng'}</b> vừa mở phiên tư vấn trực tuyến.`,
+      icon: 'fa-solid fa-comments',
+      bgClass: 'bg-blue-100',
+      colorClass: 'text-blue-700',
+      actionLabel: 'Trả lời ngay →',
+      silent: true
+    });
+  } else if (typeof showToast === 'function') {
     showToast(`🔔 KHÁCH HÀNG MỚI: ${data.khachHangTen || 'Khách hàng'} vừa yêu cầu tư vấn!`, 'info');
   }
   loadAdminChatSessions(true);
 }
 
 function handleAdminNewIncomingMessage(data) {
-  if (data.maPhienChat !== adminChatActiveSessionId) {
+  const isViewingThisRoom = (currentActiveSection === 'view-chat' && data.maPhienChat === adminChatActiveSessionId);
+  if (!isViewingThisRoom) {
     playAdminChatChime();
-    if (typeof showToast === 'function') {
+    if (window.OrderRealtime && typeof window.OrderRealtime.notifyAdminEvent === 'function') {
+      window.OrderRealtime.notifyAdminEvent({
+        id: `chat_msg_${data.maPhienChat}`,
+        targetSection: 'view-chat',
+        chatSessionId: data.maPhienChat,
+        title: `TIN NHẮN MỚI TỪ ${data.khachHangTen || 'KHÁCH HÀNG'}`,
+        badge: data.khachHangSdt || 'Chat',
+        message: `"${(data.tinNhanMoi || '').substring(0, 120)}"`,
+        icon: 'fa-solid fa-comment-dots',
+        bgClass: 'bg-blue-100',
+        colorClass: 'text-blue-700',
+        actionLabel: 'Trả lời ngay →',
+        silent: true
+      });
+    } else if (typeof showToast === 'function') {
       showToast(`💬 ${data.khachHangTen || 'Khách hàng'}: "${data.tinNhanMoi}"`, 'info');
     }
   }

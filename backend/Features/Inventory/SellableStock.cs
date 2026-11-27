@@ -20,12 +20,24 @@ internal static class SellableStock
     public static async Task EnsureAvailableAsync(
         AppDbContext context, MatHang item, int quantity, string? excludedOrder = null)
     {
-        var available = await GetAvailableAsync(context, item, excludedOrder);
+        var (available, onHand, totalReserved) = await GetAvailabilityBreakdownAsync(context, item, excludedOrder);
         if (quantity > available)
-            throw new ConflictException($"Mặt hàng {item.TenHang} chỉ còn {available} sản phẩm khả dụng.");
+        {
+            var reason = onHand > available && totalReserved > 0
+                ? $" (kho còn {onHand}, đang giữ {totalReserved} cho đơn online chờ xử lý)"
+                : string.Empty;
+            throw new ConflictException($"Mặt hàng {item.TenHang} chỉ còn {available} sản phẩm khả dụng{reason}.");
+        }
     }
 
     public static async Task<int> GetAvailableAsync(AppDbContext context, MatHang item, string? excludedOrder = null)
+    {
+        var (available, _, _) = await GetAvailabilityBreakdownAsync(context, item, excludedOrder);
+        return available;
+    }
+
+    private static async Task<(int Available, int OnHand, int TotalReserved)> GetAvailabilityBreakdownAsync(
+        AppDbContext context, MatHang item, string? excludedOrder = null)
     {
         int onHand;
         if (item.QuanLyImei)
@@ -52,7 +64,8 @@ internal static class SellableStock
                 (i.Order!.Status == "PENDING_PAYMENT" || i.Order.Status == "PAID" ||
                  i.Order.Status == "CONFIRMED" || i.Order.Status == "SHIPPING" || i.Order.Status == "COMPLETED"))
             .SumAsync(i => i.Qty);
-        return Math.Max(0, onHand - reserved - checkoutReserved);
+        var totalReserved = reserved + checkoutReserved;
+        return (Math.Max(0, onHand - totalReserved), onHand, totalReserved);
     }
 
     public static async Task<bool> ReserveVariantAsync(AppDbContext context, long variantId, int qty, CancellationToken ct)

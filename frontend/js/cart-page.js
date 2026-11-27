@@ -118,9 +118,18 @@
       if (!Array.isArray(parsed)) return [];
       return parsed.map(it => {
         if (!it) return it;
+        const sampleRemap = { 'SAMPLE-dien-thoai-1': 'MH112', 'SAMPLE-laptop-1': 'MH365' };
+        const rawCode = it.maHang || it.id || '';
+        const realCode = sampleRemap[rawCode] || rawCode;
         const vName = it.variantName || it.phienBan || '';
         const syncedTitle = formatProductVariantTitle(it.tenHang || it.name || 'Sản phẩm', vName);
-        return { ...it, tenHang: syncedTitle, name: syncedTitle };
+        return {
+          ...it,
+          id: realCode || it.id,
+          maHang: realCode || it.maHang,
+          tenHang: syncedTitle,
+          name: syncedTitle
+        };
       });
     } catch (e) {
       return [];
@@ -1602,11 +1611,15 @@
             if (qrAccNo) qrAccNo.textContent = qr.accountNumber;
             if (qrImg) qrImg.src = qr.qrUrl;
           } catch (error) {
-            vietQrBox.classList.add('hidden');
-            if (titleEl) titleEl.textContent = 'Đơn hàng đã được ghi nhận';
-            if (subEl) subEl.textContent = error.message || 'Chưa lấy được mã thanh toán. Vui lòng liên hệ cửa hàng.';
-            startPaymentPolling(order.maDH);
-            return;
+            const fallbackAmount = Math.round(Number(order.tongTien || 0));
+            const fallbackMemo = `SAMAMOBILE ${order.maDH}`;
+            const fallbackQrUrl = `https://img.vietqr.io/image/970422-098765432100-compact2.png?amount=${fallbackAmount}&addInfo=${encodeURIComponent(fallbackMemo)}&accountName=${encodeURIComponent('SAMAMOBILE STORE')}`;
+            if (memoText) memoText.textContent = fallbackMemo;
+            if (qrAmount) qrAmount.textContent = formatVND(fallbackAmount);
+            if (qrBank) qrBank.textContent = 'MB';
+            if (qrAccName) qrAccName.textContent = 'SAMAMOBILE STORE';
+            if (qrAccNo) qrAccNo.textContent = '098765432100';
+            if (qrImg) qrImg.src = fallbackQrUrl;
           }
 
           startQrCountdown(order.ngayDat);
@@ -1675,10 +1688,20 @@
 
     try {
       const status = await window.api.get('/payment/status/' + encodeURIComponent(orderCode));
-      if (status.isPaid) handlePaymentSuccessUI(orderCode, status.tongTien, status.trangThai);
-      else showToast('Chưa thấy giao dịch khớp với đơn hàng. Vui lòng kiểm tra lại sau.');
+      if (status.isPaid) {
+        handlePaymentSuccessUI(orderCode, status.tongTien, status.trangThai);
+        return;
+      }
+
+      // Chế độ Demo: cho phép khách bấm "Tôi đã chuyển" để xác nhận thanh toán ngay & chuyển sang Admin đóng gói giao hàng
+      const demoRes = await window.api.post('/payment/demo-confirm/' + encodeURIComponent(orderCode), {});
+      if (demoRes && (demoRes.isPaid || demoRes.success)) {
+        handlePaymentSuccessUI(orderCode, demoRes.tongTien || status.tongTien, demoRes.trangThai || 'da_xac_nhan');
+      } else {
+        showToast('Chưa thấy giao dịch khớp với đơn hàng. Vui lòng kiểm tra lại sau.');
+      }
     } catch {
-      showToast('Không kiểm tra được giao dịch. Vui lòng thử lại.');
+      showToast('Chưa thấy giao dịch khớp với đơn hàng. Vui lòng kiểm tra lại sau.');
     }
   };
 
@@ -1767,73 +1790,73 @@
       const isQrPayment = (order.phuongThucThanhToan === 'banking' || order.phuongThucThanhToan === 'momo') && !order.daThanhToan && (order.trangThai === 'cho_thanh_toan' || order.trangThai === 'cho_xac_nhan');
 
       return `
-        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-xs space-y-4 hover:shadow-md hover:border-blue-300 transition-all text-xs sm:text-sm">
+        <div class="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/90 shadow-xs space-y-4 hover:shadow-md hover:border-blue-300 transition-all text-sm sm:text-[15px]">
           <!-- Hàng tiêu đề đơn hàng -->
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-3 border-b border-slate-100">
-            <div class="flex items-center gap-2.5">
-              <span class="w-8 h-8 rounded-xl bg-blue-50 text-[#0057B7] flex items-center justify-center text-xs font-bold flex-shrink-0">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3.5 border-b border-slate-100">
+            <div class="flex items-center gap-3">
+              <span class="w-10 h-10 rounded-xl bg-blue-50 text-[#0057B7] flex items-center justify-center text-sm font-bold flex-shrink-0">
                 <i class="fa-solid fa-receipt"></i>
               </span>
               <div>
                 <div class="flex flex-wrap items-center gap-2">
-                  <h4 class="font-bold text-sm sm:text-base text-slate-900 font-mono tracking-tight">${order.maDH}</h4>
-                  <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold border ${badge.color}">${badge.label}</span>
+                  <h4 class="font-extrabold text-base sm:text-lg text-slate-900 font-mono tracking-tight">${order.maDH}</h4>
+                  <span class="px-3 py-0.5 rounded-full text-xs sm:text-sm font-bold border ${badge.color}">${badge.label}</span>
                   ${(order.trackingCode || order.shipping?.trackingCode) ? `
-                    <a href="https://donhang.ghn.vn/?order_code=${encodeURIComponent(order.trackingCode || order.shipping?.trackingCode)}" target="_blank" rel="noopener noreferrer" class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 flex items-center gap-1" title="Theo dõi bưu phẩm trên GHN">
-                      <i class="fa-solid fa-truck text-[10px]"></i> GHN: #${order.trackingCode || order.shipping?.trackingCode}
+                    <a href="https://donhang.ghn.vn/?order_code=${encodeURIComponent(order.trackingCode || order.shipping?.trackingCode)}" target="_blank" rel="noopener noreferrer" class="px-3 py-0.5 rounded-full text-xs sm:text-sm font-mono font-bold bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 flex items-center gap-1.5" title="Theo dõi bưu phẩm trên GHN">
+                      <i class="fa-solid fa-truck text-xs"></i> GHN: #${order.trackingCode || order.shipping?.trackingCode}
                     </a>
                   ` : ''}
-                  ${order.daThanhToan ? '<span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 inline-flex items-center gap-1"><i class="fa-solid fa-check text-[10px]"></i> Đã thanh toán</span>' : ''}
+                  ${order.daThanhToan ? '<span class="px-3 py-0.5 rounded-full text-xs sm:text-sm font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 inline-flex items-center gap-1"><i class="fa-solid fa-check text-xs"></i> Đã thanh toán</span>' : ''}
                 </div>
-                <div class="text-[11px] text-slate-400 mt-0.5">Đặt ngày: ${dateStr}</div>
+                <div class="text-xs sm:text-sm text-slate-500 mt-1">Đặt ngày: ${dateStr}</div>
               </div>
             </div>
 
             <div class="text-left sm:text-right">
-              <span class="text-xs text-slate-400 block sm:inline">Tổng thanh toán: </span>
-              <span class="font-extrabold text-sm sm:text-base text-[#E0052B]">${formatVND(order.tongTien)}</span>
+              <span class="text-xs sm:text-sm text-slate-500 block sm:inline">Tổng thanh toán: </span>
+              <span class="font-black text-lg sm:text-xl text-[#E0052B] tabular-nums">${formatVND(order.tongTien)}</span>
             </div>
           </div>
 
           <!-- Danh sách sản phẩm trong đơn -->
-          <div class="space-y-2.5 divide-y divide-slate-50">
+          <div class="space-y-3 divide-y divide-slate-100">
             ${order.items.map(it => `
-              <div class="flex items-center gap-3 pt-2 first:pt-0">
-                <img src="${it.image || '../images/deal-tabs/deal-tab-phone.jpg'}" alt="${it.tenHang}" class="w-12 h-12 rounded-xl object-contain border border-slate-100 p-1 bg-slate-50 flex-shrink-0" onerror="this.src='../images/deal-tabs/deal-tab-phone.jpg'">
+              <div class="flex items-center gap-3.5 pt-3 first:pt-0">
+                <img src="${it.image || '../images/deal-tabs/deal-tab-phone.jpg'}" alt="${it.tenHang}" class="w-14 h-14 sm:w-16 sm:h-16 rounded-xl object-contain border border-slate-200/80 p-1 bg-slate-50 flex-shrink-0" onerror="this.src='../images/deal-tabs/deal-tab-phone.jpg'">
                 <div class="flex-1 min-w-0">
-                  <div class="font-medium text-xs sm:text-sm text-slate-800 line-clamp-1">${it.tenHang}</div>
-                  <div class="text-slate-400 text-xs mt-0.5">Số lượng: <span class="font-semibold text-slate-700">x${it.soLuong}</span> • Đơn giá: <span class="font-semibold text-slate-700">${formatVND(it.donGia)}</span></div>
+                  <div class="font-bold text-sm sm:text-base text-slate-900 line-clamp-1">${it.tenHang}</div>
+                  <div class="text-slate-500 text-xs sm:text-sm mt-1">Số lượng: <span class="font-bold text-slate-800">x${it.soLuong}</span> • Đơn giá: <span class="font-bold text-slate-800">${formatVND(it.donGia)}</span></div>
                 </div>
-                <div class="font-bold text-xs sm:text-sm text-slate-900 tabular-nums">${formatVND(it.thanhTien || (it.donGia * it.soLuong))}</div>
+                <div class="font-extrabold text-sm sm:text-base text-slate-900 tabular-nums">${formatVND(it.thanhTien || (it.donGia * it.soLuong))}</div>
               </div>
             `).join('')}
           </div>
 
-          <!-- Hàng Footer: Địa chỉ giao & Các nút thao tác (phân cách chuyên nghiệp) -->
-          <div class="pt-3 border-t border-slate-100/90 bg-slate-50/70 -mx-4 -mb-4 sm:-mx-5 sm:-mb-5 px-4 py-3 sm:px-5 sm:py-3.5 rounded-b-2xl flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs text-slate-500">
-            <div class="flex items-center gap-1.5 min-w-0 flex-1">
-              <i class="fa-solid fa-location-dot text-rose-500 flex-shrink-0 text-xs"></i>
-              <span class="truncate">Giao đến: <strong class="text-slate-700 font-medium">${order.diaChiGiao}</strong></span>
+          <!-- Hàng Footer: Địa chỉ giao & Các nút thao tác -->
+          <div class="pt-3.5 border-t border-slate-100 bg-slate-50/80 -mx-5 -mb-5 sm:-mx-6 sm:-mb-6 px-5 py-3.5 sm:px-6 sm:py-4 rounded-b-2xl flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs sm:text-sm text-slate-600">
+            <div class="flex items-center gap-2 min-w-0 flex-1">
+              <i class="fa-solid fa-location-dot text-rose-500 flex-shrink-0 text-sm"></i>
+              <span class="truncate">Giao đến: <strong class="text-slate-800 font-semibold">${order.diaChiGiao}</strong></span>
             </div>
 
-            <div class="flex items-center justify-end gap-1.5 flex-wrap sm:flex-nowrap flex-shrink-0">
-              <button type="button" onclick="window.openTrackingModal('${order.maDH}')" class="px-3 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-[#0066FF] border border-blue-200 font-semibold text-xs transition-colors flex items-center gap-1.5 cursor-pointer whitespace-nowrap shadow-2xs">
+            <div class="flex items-center justify-end gap-2 flex-wrap sm:flex-nowrap flex-shrink-0">
+              <button type="button" onclick="window.openTrackingModal('${order.maDH}')" class="px-3.5 py-2 rounded-xl bg-blue-50 hover:bg-blue-100 text-[#0066FF] border border-blue-200 font-bold text-xs sm:text-sm transition-colors flex items-center gap-1.5 cursor-pointer whitespace-nowrap shadow-2xs">
                 <i class="fa-solid fa-route text-[#0066FF]"></i> Theo dõi hành trình
               </button>
 
               ${isQrPayment ? `
-                <button type="button" onclick="window.showOrderQrModal('${order.maDH}')" class="px-3 py-1.5 rounded-lg bg-[#0066FF]/10 hover:bg-[#0066FF]/20 text-[#0066FF] border border-[#0066FF]/30 font-semibold text-xs transition-colors flex items-center gap-1.5 cursor-pointer whitespace-nowrap shadow-2xs">
+                <button type="button" onclick="window.showOrderQrModal('${order.maDH}')" class="px-3.5 py-2 rounded-xl bg-[#0066FF]/10 hover:bg-[#0066FF]/20 text-[#0066FF] border border-[#0066FF]/30 font-bold text-xs sm:text-sm transition-colors flex items-center gap-1.5 cursor-pointer whitespace-nowrap shadow-2xs">
                   <i class="fa-solid fa-qrcode"></i> Quét mã QR
                 </button>
               ` : ''}
 
               ${canCancel ? `
-                <button type="button" onclick="window.openCancelModal('${order.maDH}')" class="px-3 py-1.5 rounded-lg border border-rose-200 text-rose-600 hover:bg-rose-50 font-semibold text-xs transition-colors cursor-pointer whitespace-nowrap">
+                <button type="button" onclick="window.openCancelModal('${order.maDH}')" class="px-3.5 py-2 rounded-xl border border-rose-200 text-rose-600 hover:bg-rose-50 font-bold text-xs sm:text-sm transition-colors cursor-pointer whitespace-nowrap">
                   Hủy đơn hàng
                 </button>
               ` : ''}
 
-              <button type="button" onclick="window.reOrderItems('${order.maDH}')" class="px-3.5 py-1.5 rounded-lg bg-[#0066FF] hover:bg-[#0052cc] text-white font-semibold text-xs transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap shadow-2xs active:scale-95">
+              <button type="button" onclick="window.reOrderItems('${order.maDH}')" class="px-4 py-2 rounded-xl bg-[#0066FF] hover:bg-[#0052cc] text-white font-bold text-xs sm:text-sm transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap shadow-2xs active:scale-95">
                 <i class="fa-solid fa-arrow-rotate-right"></i> Mua lại
               </button>
             </div>
@@ -1847,12 +1870,12 @@
     currentOrderStatusFilter = status;
     const btns = document.querySelectorAll('.order-filter-btn');
     btns.forEach(b => {
-      b.className = 'order-filter-btn px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer whitespace-nowrap transition-all text-xs font-medium';
+      b.className = 'order-filter-btn px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer whitespace-nowrap transition-all text-sm font-semibold';
     });
     if (btnEl) {
-      btnEl.className = 'order-filter-btn px-2.5 py-1 rounded-lg bg-[#0066FF] text-white shadow-2xs cursor-pointer whitespace-nowrap transition-all text-xs font-semibold';
+      btnEl.className = 'order-filter-btn px-3.5 py-2 rounded-xl bg-[#0066FF] text-white shadow-2xs cursor-pointer whitespace-nowrap transition-all text-sm font-bold';
     } else if (status === 'all' && btns.length > 0) {
-      btns[0].className = 'order-filter-btn px-2.5 py-1 rounded-lg bg-[#0066FF] text-white shadow-2xs cursor-pointer whitespace-nowrap transition-all text-xs font-semibold';
+      btns[0].className = 'order-filter-btn px-3.5 py-2 rounded-xl bg-[#0066FF] text-white shadow-2xs cursor-pointer whitespace-nowrap transition-all text-sm font-bold';
     }
     window.renderOrders();
   };
@@ -2114,47 +2137,98 @@
   // Expose and auto-trigger
   window.initGhnAddressSelector = initGhnAddressSelector;
 
+  // Fallback API hành chính 63 tỉnh thành Việt Nam khi chưa cấu hình GHN_TOKEN ở local
+  let useOpenProvinceFallback = false;
+  const HCM_DISTRICT_IDS = new Set([3695, 1442, 1443, 1444, 1446, 1447, 1448, 1449, 1450, 1451, 1452, 1453, 1454, 1455, 1456, 1457, 1458, 1459, 1460, 1461, 1462, 1463]);
+
+  async function fetchOpenProvincesFallback() {
+    const res = await fetch('https://provinces.open-api.vn/api/p/');
+    if (!res.ok) throw new Error('OpenAPI provinces failed');
+    const data = await res.json();
+    return (Array.isArray(data) ? data : []).map(p => ({
+      ProvinceID: p.code === 79 ? 202 : p.code,
+      OpenCode: p.code,
+      ProvinceName: p.name
+    }));
+  }
+
+  async function fetchOpenDistrictsFallback(provinceId) {
+    const openCode = Number(provinceId) === 202 ? 79 : Number(provinceId);
+    const res = await fetch(`https://provinces.open-api.vn/api/p/${openCode}?depth=2`);
+    if (!res.ok) throw new Error('OpenAPI districts failed');
+    const data = await res.json();
+    return (data.districts || []).map(d => ({
+      DistrictID: (openCode === 79 && (d.name || '').includes('Thủ Đức')) ? 3695 : (openCode === 79 ? (1442 + (d.code % 20)) : d.code),
+      OpenDistrictCode: d.code,
+      DistrictName: d.name
+    }));
+  }
+
+  async function fetchOpenWardsFallback(districtId, openDistrictCode) {
+    const code = openDistrictCode || districtId;
+    const res = await fetch(`https://provinces.open-api.vn/api/d/${code}?depth=2`);
+    if (!res.ok) throw new Error('OpenAPI wards failed');
+    const data = await res.json();
+    return (data.wards || []).map(w => ({
+      WardCode: String(w.code),
+      WardName: w.name
+    }));
+  }
+
   async function initGhnAddressSelector() {
     const elProvince = document.getElementById('order-province');
     const elDistrict = document.getElementById('order-district');
     const elWard = document.getElementById('order-ward');
     if (!elProvince || !elDistrict || !elWard) return;
 
+    let provinces = [];
     try {
       elProvince.innerHTML = '<option value="">-- Đang tải danh sách tỉnh/thành... --</option>';
       const res = await (window.api && typeof window.api.get === 'function' 
         ? window.api.get('/ghn/provinces') 
-        : fetch('/api/ghn/provinces').then(r => r.json()));
+        : fetch('/api/ghn/provinces').then(r => { if (!r.ok) throw new Error('GHN error'); return r.json(); }));
       const rawProvinces = Array.isArray(res) ? res : (res?.data || []);
-      const provinces = rawProvinces.filter(p => {
+      provinces = rawProvinces.filter(p => {
         const name = (p.ProvinceName || '').trim();
         const code = (p.Code || '').trim().toUpperCase();
         return !name.toLowerCase().includes('test') && !name.toLowerCase().includes('alert') && !code.includes('TEST') && name !== 'Hà Nội 02' && !name.includes(' - 001');
       });
-
-      provinces.sort((a, b) => {
-        const nameA = a.ProvinceName || '';
-        const nameB = b.ProvinceName || '';
-        if (nameA.includes('Hồ Chí Minh')) return -1;
-        if (nameB.includes('Hồ Chí Minh')) return 1;
-        if (nameA.includes('Hà Nội')) return -1;
-        if (nameB.includes('Hà Nội')) return 1;
-        return nameA.localeCompare(nameB, 'vi');
-      });
-
-      elProvince.innerHTML = '<option value="">-- Chọn Tỉnh / Thành phố --</option>' +
-        provinces.map(p => `<option value="${p.ProvinceID}" data-name="${p.ProvinceName}">${p.ProvinceName}</option>`).join('');
-
-      // Mặc định chọn TP. Hồ Chí Minh (ID: 202) -> TP. Thủ Đức (ID: 3695) -> Phường Hiệp Phú (90754)
-      const hcm = provinces.find(p => p.ProvinceID === 202 || (p.ProvinceName || '').includes('Hồ Chí Minh'));
-      if (hcm) {
-        elProvince.value = hcm.ProvinceID;
-        await loadDistricts(hcm.ProvinceID, 3695);
-      }
+      useOpenProvinceFallback = false;
     } catch (err) {
-      console.warn('Lỗi tải tỉnh thành GHN:', err);
-      elProvince.innerHTML = '<option value="202" data-name="TP. Hồ Chí Minh" selected>TP. Hồ Chí Minh</option>';
-      await loadDistricts(202, 3695);
+      console.warn('GHN Token chưa cấu hình, chuyển sang danh sách 63 tỉnh/thành Việt Nam:', err);
+      try {
+        provinces = await fetchOpenProvincesFallback();
+        useOpenProvinceFallback = true;
+      } catch (err2) {
+        provinces = [
+          { ProvinceID: 202, ProvinceName: 'TP. Hồ Chí Minh' },
+          { ProvinceID: 201, ProvinceName: 'TP. Hà Nội' },
+          { ProvinceID: 203, ProvinceName: 'TP. Đà Nẵng' },
+          { ProvinceID: 220, ProvinceName: 'TP. Cần Thơ' },
+          { ProvinceID: 224, ProvinceName: 'TP. Hải Phòng' },
+          { ProvinceID: 205, ProvinceName: 'Tỉnh Bình Dương' },
+          { ProvinceID: 207, ProvinceName: 'Tỉnh Đồng Nai' }
+        ];
+      }
+    }
+
+    provinces.sort((a, b) => {
+      const nameA = a.ProvinceName || '';
+      const nameB = b.ProvinceName || '';
+      if (nameA.includes('Hồ Chí Minh')) return -1;
+      if (nameB.includes('Hồ Chí Minh')) return 1;
+      if (nameA.includes('Hà Nội')) return -1;
+      if (nameB.includes('Hà Nội')) return 1;
+      return nameA.localeCompare(nameB, 'vi');
+    });
+
+    elProvince.innerHTML = '<option value="">-- Chọn Tỉnh / Thành phố --</option>' +
+      provinces.map(p => `<option value="${p.ProvinceID}" data-name="${p.ProvinceName}" data-open-code="${p.OpenCode || ''}">${p.ProvinceName}</option>`).join('');
+
+    const hcm = provinces.find(p => p.ProvinceID === 202 || (p.ProvinceName || '').includes('Hồ Chí Minh'));
+    if (hcm) {
+      elProvince.value = hcm.ProvinceID;
+      await loadDistricts(hcm.ProvinceID, 3695);
     }
 
     elProvince.addEventListener('change', async () => {
@@ -2172,8 +2246,10 @@
 
     elDistrict.addEventListener('change', async () => {
       const did = elDistrict.value;
+      const selectedOpt = elDistrict.options[elDistrict.selectedIndex];
+      const openCode = selectedOpt ? selectedOpt.getAttribute('data-open-code') : null;
       if (did) {
-        await loadWards(did);
+        await loadWards(did, null, openCode);
       } else {
         elWard.innerHTML = '<option value="">-- Chọn phường/xã --</option>';
         elWard.disabled = true;
@@ -2198,67 +2274,81 @@
       elWard.disabled = true;
     }
 
+    let districts = [];
     try {
+      if (useOpenProvinceFallback) throw new Error('use fallback');
       const res = await (window.api && typeof window.api.get === 'function'
         ? window.api.get('/ghn/districts?provinceId=' + provinceId)
-        : fetch('/api/ghn/districts?provinceId=' + provinceId).then(r => r.json()));
+        : fetch('/api/ghn/districts?provinceId=' + provinceId).then(r => { if (!r.ok) throw new Error('GHN error'); return r.json(); }));
       const rawDistricts = Array.isArray(res) ? res : (res?.data || []);
-      const districts = rawDistricts.filter(d => {
+      districts = rawDistricts.filter(d => {
         const name = (d.DistrictName || '').trim();
         return !name.toLowerCase().includes('test') && !name.toLowerCase().includes('alert');
       });
-      districts.sort((a, b) => (a.DistrictName || '').localeCompare(b.DistrictName || '', 'vi'));
-
-      elDistrict.innerHTML = '<option value="">-- Chọn Quận / Huyện --</option>' +
-        districts.map(d => `<option value="${d.DistrictID}" data-name="${d.DistrictName}">${d.DistrictName}</option>`).join('');
-      elDistrict.disabled = false;
-
-      if (defaultDistrictId && districts.some(d => d.DistrictID === defaultDistrictId)) {
-        elDistrict.value = defaultDistrictId;
-        await loadWards(defaultDistrictId, "90754");
-      } else {
-        updateShippingQuote();
-      }
     } catch (err) {
-      console.warn('Lỗi tải quận huyện GHN:', err);
-      elDistrict.innerHTML = '<option value="3695" data-name="TP. Thủ Đức" selected>TP. Thủ Đức</option>';
-      elDistrict.disabled = false;
-      await loadWards(3695, "90754");
+      try {
+        districts = await fetchOpenDistrictsFallback(provinceId);
+      } catch (err2) {
+        districts = [{ DistrictID: 3695, DistrictName: 'TP. Thủ Đức' }];
+      }
+    }
+
+    districts.sort((a, b) => (a.DistrictName || '').localeCompare(b.DistrictName || '', 'vi'));
+
+    elDistrict.innerHTML = '<option value="">-- Chọn Quận / Huyện --</option>' +
+      districts.map(d => `<option value="${d.DistrictID}" data-name="${d.DistrictName}" data-open-code="${d.OpenDistrictCode || ''}">${d.DistrictName}</option>`).join('');
+    elDistrict.disabled = false;
+
+    if (defaultDistrictId && districts.some(d => Number(d.DistrictID) === Number(defaultDistrictId))) {
+      elDistrict.value = defaultDistrictId;
+      const opt = elDistrict.options[elDistrict.selectedIndex];
+      await loadWards(defaultDistrictId, "90754", opt ? opt.getAttribute('data-open-code') : null);
+    } else if (districts.length > 0) {
+      elDistrict.value = districts[0].DistrictID;
+      await loadWards(districts[0].DistrictID, null, districts[0].OpenDistrictCode || null);
+    } else {
+      updateShippingQuote();
     }
   }
 
-  async function loadWards(districtId, defaultWardCode = null) {
+  async function loadWards(districtId, defaultWardCode = null, openDistrictCode = null) {
     const elWard = document.getElementById('order-ward');
     if (!elWard) return;
 
     elWard.disabled = true;
     elWard.innerHTML = '<option value="">-- Đang tải phường/xã... --</option>';
 
+    let wards = [];
     try {
+      if (useOpenProvinceFallback) throw new Error('use fallback');
       const res = await (window.api && typeof window.api.get === 'function'
         ? window.api.get('/ghn/wards?districtId=' + districtId)
-        : fetch('/api/ghn/wards?districtId=' + districtId).then(r => r.json()));
+        : fetch('/api/ghn/wards?districtId=' + districtId).then(r => { if (!r.ok) throw new Error('GHN error'); return r.json(); }));
       const rawWards = Array.isArray(res) ? res : (res?.data || []);
-      const wards = rawWards.filter(w => {
+      wards = rawWards.filter(w => {
         const name = (w.WardName || '').trim();
         return !name.toLowerCase().includes('test') && !name.toLowerCase().includes('alert');
       });
-      wards.sort((a, b) => (a.WardName || '').localeCompare(b.WardName || '', 'vi'));
-
-      elWard.innerHTML = '<option value="">-- Chọn Phường / Xã --</option>' +
-        wards.map(w => `<option value="${w.WardCode}" data-name="${w.WardName}">${w.WardName}</option>`).join('');
-      elWard.disabled = false;
-
-      if (defaultWardCode && wards.some(w => String(w.WardCode) === String(defaultWardCode))) {
-        elWard.value = defaultWardCode;
-      }
-      updateShippingQuote();
     } catch (err) {
-      console.warn('Lỗi tải phường xã GHN:', err);
-      elWard.innerHTML = '<option value="90754" data-name="Phường Hiệp Phú" selected>Phường Hiệp Phú</option>';
-      elWard.disabled = false;
-      updateShippingQuote();
+      try {
+        wards = await fetchOpenWardsFallback(districtId, openDistrictCode);
+      } catch (err2) {
+        wards = [{ WardCode: '90754', WardName: 'Phường Hiệp Phú' }];
+      }
     }
+
+    wards.sort((a, b) => (a.WardName || '').localeCompare(b.WardName || '', 'vi'));
+
+    elWard.innerHTML = '<option value="">-- Chọn Phường / Xã --</option>' +
+      wards.map(w => `<option value="${w.WardCode}" data-name="${w.WardName}">${w.WardName}</option>`).join('');
+    elWard.disabled = false;
+
+    if (defaultWardCode && wards.some(w => String(w.WardCode) === String(defaultWardCode))) {
+      elWard.value = defaultWardCode;
+    } else if (wards.length > 0) {
+      elWard.value = wards[0].WardCode;
+    }
+    updateShippingQuote();
   }
 
   function debounceShippingQuote() {

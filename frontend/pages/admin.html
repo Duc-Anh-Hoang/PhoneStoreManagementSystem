@@ -91,24 +91,28 @@
   </script>
 
   <style>
-    /* Design Tokens (CSS Variables) */
+    /* Design Tokens (CSS Variables) - Tone Trắng & Xanh Dương sáng rõ cho nhân viên */
     :root {
       /* spacing scale */
       --space-1: 4px;  --space-2: 8px;  --space-3: 12px;
       --space-4: 16px; --space-5: 24px;
 
       /* typography */
-      --fs-body: 14px;
-      --fs-label: 12px;     /* tiêu đề thẻ, in hoa */
+      --fs-body: 14.5px;
+      --fs-label: 12.5px;   /* tiêu đề thẻ */
       --fs-kpi: 26px;       /* số liệu lớn */
       --fs-h1: 20px;
 
       /* layout */
-      --sidebar-w: 248px;
-      --sidebar-w-collapsed: 72px;
-      --header-h: 64px;
-      --page-pad: 24px;
+      --sidebar-w: 264px;
+      --sidebar-w-collapsed: 74px;
+      --header-h: 68px;
+      --page-pad: 22px;
       --row-h: 52px;
+    }
+
+    body {
+      font-size: var(--fs-body);
     }
 
     /* Chế độ hiển thị Gọn (Compact Density) */
@@ -116,17 +120,38 @@
       --space-4: 12px;
       --space-5: 16px;
       --page-pad: 16px;
-      --row-h: 42px;
+      --row-h: 44px;
       --fs-kpi: 22px;
-      --fs-body: 13px;
+      --fs-body: 13.5px;
     }
     body.density-compact .admin-nav-link {
-      min-height: 36px !important;
+      min-height: 38px !important;
       padding-top: 6px !important;
       padding-bottom: 6px !important;
     }
     body.density-compact .metric-card {
-      padding: 12px 16px !important;
+      padding: 14px 16px !important;
+    }
+
+    /* Bảng & Form sáng rõ, dễ đọc (Tone Trắng - Xanh dương) */
+    body:not(.density-compact) .admin-view-section table th {
+      font-size: 12.5px !important;
+      padding: 12px 14px !important;
+      background-color: #EFF6FF !important;
+      color: #1E3A8A !important;
+      border-bottom: 2px solid #BFDBFE !important;
+    }
+    body:not(.density-compact) .admin-view-section table th.sticky {
+      background-color: #EFF6FF !important;
+    }
+    body:not(.density-compact) .admin-view-section table td {
+      font-size: 14px !important;
+      padding: 12px 14px !important;
+    }
+    body:not(.density-compact) .admin-view-section input:not([type="checkbox"]):not([type="radio"]),
+    body:not(.density-compact) .admin-view-section select,
+    body:not(.density-compact) .admin-view-section textarea {
+      font-size: 14px !important;
     }
 
     /* Accessibility focus ring */
@@ -148,8 +173,8 @@
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 999px; }
     ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
-    aside ::-webkit-scrollbar-thumb { background: #E2E8F0; }
-    aside ::-webkit-scrollbar-thumb:hover { background: #CBD5E1; }
+    aside ::-webkit-scrollbar-thumb { background: #DBEAFE; }
+    aside ::-webkit-scrollbar-thumb:hover { background: #93C5FD; }
 
     /* Top horizontal scrollbar matching bottom scrollbar */
     .table-top-scrollbar {
@@ -175,7 +200,7 @@
     }
 
     .glass-topbar {
-      background: rgba(255, 255, 255, 0.92);
+      background: rgba(255, 255, 255, 0.96);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
     }
@@ -184,7 +209,8 @@
     }
     .metric-card:hover {
       transform: translateY(-2px);
-      box-shadow: 0 10px 20px -8px rgba(15, 23, 42, 0.08);
+      box-shadow: 0 10px 24px -8px rgba(37, 99, 235, 0.16);
+      border-color: #3B82F6 !important;
     }
     
     /* Đảm bảo toàn bộ badge không bị bẻ dòng */
@@ -193,6 +219,7 @@
       display: inline-flex !important;
       align-items: center !important;
       justify-content: center !important;
+      font-size: 12px !important;
     }
 
     /* Sidebar thu gọn (Collapsed state) */
@@ -209,6 +236,9 @@
     #admin-sidebar.sidebar-collapsed .sidebar-brand-full {
       display: none !important;
     }
+    #admin-sidebar.sidebar-collapsed .sidebar-brand-mini {
+      display: flex !important;
+    }
     #admin-sidebar.sidebar-collapsed .sidebar-header-box {
       justify-content: center !important;
       padding-left: 0.5rem !important;
@@ -222,9 +252,10 @@
     }
     #admin-sidebar.sidebar-collapsed .admin-nav-link i {
       margin: 0 !important;
-      font-size: 15px;
+      font-size: 16px;
     }
-    #admin-sidebar.sidebar-collapsed #nav-badge-donhang {
+    #admin-sidebar.sidebar-collapsed #nav-badge-donhang,
+    #admin-sidebar.sidebar-collapsed #nav-badge-chat {
       position: absolute !important;
       top: 6px !important;
       right: 14px !important;
@@ -237,25 +268,26 @@
     }
     #admin-sidebar.sidebar-collapsed .sidebar-footer-link {
       justify-content: center !important;
-      padding: 8px 0 !important;
+      padding: 10px 0 !important;
     }
 
     /* Group header & chevron */
     .nav-group-header {
-      font-size: 11px;
-      margin: 16px 0 6px 0;
-      padding: 0 10px;
+      font-size: 11.5px;
+      margin: 12px 0 6px 0;
+      padding: 8px 12px 2px 12px;
+      border-top: 1px solid #EFF6FF;
       cursor: pointer;
       user-select: none;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      color: #94A3B8;
-      font-weight: 700;
-      letter-spacing: 0.05em;
+      color: #2563EB;
+      font-weight: 800;
+      letter-spacing: 0.06em;
     }
     .nav-group-header:hover {
-      color: #475569;
+      color: #1D4ED8;
     }
     .group-chevron {
       transition: transform 0.2s ease;
@@ -264,39 +296,39 @@
       display: none !important;
     }
 
-    /* Menu item compact height ~40-44px */
+    /* Menu item rộng rãi, chữ to rõ dễ bấm */
     .admin-nav-link {
-      min-height: 40px;
-      padding: 8px 12px;
-      font-size: var(--fs-body);
+      min-height: 42px;
+      padding: 9px 13px;
+      font-size: 14.5px;
+      border-radius: 10px;
     }
   </style>
 </head>
 <body class="h-full font-sans text-slate-900 antialiased flex overflow-hidden bg-[#F8FAFC]">
-    <!-- MÀN HÌNH ĐĂNG NHẬP QUẢN TRỊ (PHƯƠNG ÁN 2: FORM ĐƠN TỐI GIẢN Ở GIỮA MÀN HÌNH) -->
-  <div id="admin-login-screen" class="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto bg-gradient-to-br from-[#E0F2FE] via-[#F0FDF4] to-[#E0E7FF]">
+    <!-- MÀN HÌNH ĐĂNG NHẬP QUẢN TRỊ (TONE TRẮNG & XANH DƯƠNG SÁNG RÕ) -->
+  <div id="admin-login-screen" class="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto bg-gradient-to-br from-[#EFF6FF] via-white to-[#DBEAFE]">
     
-    <!-- Khung Card Đăng Nhập Đơn Rộng 420px Đặt Giữa Màn Hình -->
-    <div class="relative w-full max-w-[420px] bg-white/95 backdrop-blur-xl rounded-3xl shadow-[0_20px_50px_-12px_rgba(0,87,183,0.2)] border border-white/80 p-6 sm:p-8 my-auto transition-all animate-in fade-in zoom-in-95 duration-200">
+    <!-- Khung Card Đăng Nhập Đơn Rộng 440px Đặt Giữa Màn Hình -->
+    <div class="relative w-full max-w-[440px] bg-white rounded-3xl shadow-[0_20px_50px_-12px_rgba(37,99,235,0.22)] border border-blue-100 p-6 sm:p-8 my-auto transition-all animate-in fade-in zoom-in-95 duration-200">
       
-      <!-- 1. Logo & Badge Nội Bộ -->
-      <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-5">
-        <a href="../index.html" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 shadow-sm hover:bg-slate-800 transition-colors" title="Xem trang bán hàng">
-          <i class="fa-solid fa-mobile-screen text-blue-400 text-sm"></i>
-          <span class="font-black text-white text-xs tracking-wider">PHONE STORE</span>
+      <!-- 1. Logo SAMAMOBILE từ trang Index & Badge Nội Bộ -->
+      <div class="flex items-center justify-between pb-4 border-b border-blue-50 mb-5">
+        <a href="../index.html" class="inline-flex items-center px-3.5 py-2 rounded-xl bg-gradient-to-r from-[#0B45A6] to-[#2563EB] shadow-md hover:opacity-95 transition-opacity" title="SAMAMOBILE.COM - Xem trang bán hàng">
+          <img src="../images/samamobile-logo.png" alt="SAMAMOBILE.COM" class="h-7 w-auto object-contain drop-shadow">
         </a>
-        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#E0F2FE] text-[#0057B7] border border-[#BAE6FD]">
-          <i class="fa-solid fa-lock text-[10px]"></i> Nội Bộ
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200">
+          <i class="fa-solid fa-lock text-[11px]"></i> Nội Bộ
         </span>
       </div>
 
       <!-- 2. Tiêu đề -->
       <div class="space-y-1 mb-5">
-        <h2 class="text-xl sm:text-2xl font-black text-slate-800 tracking-tight flex items-center gap-2">
+        <h2 class="text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2">
           <span>Đăng Nhập Quản Trị</span>
-          <span class="text-[#0057B7] text-lg"><i class="fa-solid fa-circle-check"></i></span>
+          <span class="text-blue-600 text-lg"><i class="fa-solid fa-circle-check"></i></span>
         </h2>
-        <p class="text-xs text-slate-500 font-medium">Nhập thông tin nhân viên để tiếp tục</p>
+        <p class="text-sm text-slate-500 font-medium">Nhập tài khoản nhân viên để vào hệ thống</p>
       </div>
 
       <!-- Thông báo lỗi (nếu có) -->
@@ -368,41 +400,41 @@
 
 
   <!-- =========================================================================
-       SIDEBAR NAVIGATION (Tone màu chuẩn: Primary #1E3A8A, Accent #F97316, Active #EFF6FF + #2563EB)
+       SIDEBAR NAVIGATION (Tone màu Trắng & Xanh Dương sáng rõ - Logo SAMAMOBILE.COM)
        ========================================================================= -->
-  <aside id="admin-sidebar" class="bg-white text-slate-600 flex flex-col flex-shrink-0 z-30 shadow-sm select-none border-r border-slate-200">
+  <aside id="admin-sidebar" class="bg-white text-slate-700 flex flex-col flex-shrink-0 z-30 shadow-sm select-none border-r border-blue-100">
     
-    <!-- Logo & Thương hiệu -->
-    <div class="sidebar-header-box h-16 px-3.5 flex items-center justify-between border-b border-slate-200 bg-white">
-      <a href="admin.html" class="sidebar-brand-full flex items-center gap-2 group min-w-0">
-        <div class="h-9 px-2.5 rounded-lg bg-slate-900 flex items-center gap-1.5 shadow-sm flex-shrink-0">
-          <i class="fa-solid fa-mobile-screen text-blue-400 text-xs"></i>
-          <span class="font-black text-white text-[11px] tracking-wider">PHONESTORE</span>
-        </div>
-        <span class="sidebar-brand-text text-[#1E3A8A] bg-[#EFF6FF] px-1.5 py-0.5 rounded text-[10px] font-black tracking-wider">ADMIN</span>
+    <!-- Logo & Thương hiệu (Lấy từ Header trang Index trên nền xanh dương) -->
+    <div class="sidebar-header-box h-[68px] px-4 flex items-center justify-between border-b border-blue-700/20 bg-gradient-to-r from-[#0B45A6] to-[#1D4ED8]">
+      <a href="admin.html" class="sidebar-brand-full flex items-center gap-2 group min-w-0" title="SAMAMOBILE.COM - Quản trị hệ thống">
+        <img src="../images/samamobile-logo.png" alt="SAMAMOBILE.COM" class="h-7 w-auto object-contain drop-shadow flex-shrink-0">
+        <span class="sidebar-brand-text text-blue-900 bg-white px-2 py-0.5 rounded-md text-[10px] font-black tracking-wider shadow-xs">ADMIN</span>
+      </a>
+      <a href="admin.html" class="sidebar-brand-mini hidden items-center justify-center w-10 h-10 rounded-xl bg-white text-blue-700 font-black text-xs tracking-wider shadow-md" title="SAMAMOBILE ADMIN">
+        SM
       </a>
       <div class="flex items-center gap-1">
-        <button id="btn-collapse-sidebar" type="button" onclick="window.toggleSidebarCollapse()" class="hidden lg:flex p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer" title="Thu gọn / Mở rộng thanh bên" aria-label="Thu gọn thanh bên">
-          <i id="icon-sidebar-collapse" class="fa-solid fa-bars-staggered text-xs"></i>
+        <button id="btn-collapse-sidebar" type="button" onclick="window.toggleSidebarCollapse()" class="hidden lg:flex p-2 text-blue-100 hover:text-white hover:bg-white/15 rounded-lg transition-colors cursor-pointer" title="Thu gọn / Mở rộng thanh bên" aria-label="Thu gọn thanh bên">
+          <i id="icon-sidebar-collapse" class="fa-solid fa-bars-staggered text-sm"></i>
         </button>
-        <button id="btn-close-sidebar" type="button" class="lg:hidden p-1.5 text-slate-400 hover:text-slate-700 rounded-lg" aria-label="Đóng thanh bên">
-          <i class="fa-solid fa-xmark text-sm"></i>
+        <button id="btn-close-sidebar" type="button" class="lg:hidden p-2 text-blue-100 hover:text-white rounded-lg" aria-label="Đóng thanh bên">
+          <i class="fa-solid fa-xmark text-base"></i>
         </button>
       </div>
     </div>
 
     <!-- Navigation Links Menu -->
-    <nav class="flex-1 overflow-y-auto px-2.5 py-3 space-y-3.5 text-xs font-medium">
+    <nav class="flex-1 overflow-y-auto px-3 py-3.5 space-y-2 font-medium">
 
       <!-- TỔNG QUAN -->
       <div>
-        <div class="nav-group-header" onclick="window.toggleNavGroup('group-tongquan')" title="Bấm để thu gọn/mở rộng nhóm">
+        <div class="nav-group-header !border-t-0 !mt-0 !pt-1" onclick="window.toggleNavGroup('group-tongquan')" title="Bấm để thu gọn/mở rộng nhóm">
           <span class="nav-link-text">TỔNG QUAN</span>
-          <i id="chevron-group-tongquan" class="fa-solid fa-chevron-down text-[9px] group-chevron"></i>
+          <i id="chevron-group-tongquan" class="fa-solid fa-chevron-down text-[10px] group-chevron"></i>
         </div>
-        <div id="group-tongquan" class="nav-group-content space-y-0.5">
-          <a href="#" data-target="view-dashboard" onclick="renderSection('view-dashboard'); return false;" class="admin-nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg bg-[#EFF6FF] text-[#1E3A8A] font-bold border-l-4 border-[#2563EB] transition-colors" title="Dashboard">
-            <i class="fa-solid fa-chart-pie text-xs w-4 text-[#2563EB]"></i>
+        <div id="group-tongquan" class="nav-group-content space-y-1">
+          <a href="#" data-target="view-dashboard" onclick="renderSection('view-dashboard'); return false;" class="admin-nav-link flex items-center gap-3 bg-blue-600 text-white font-bold shadow-md shadow-blue-600/20 transition-all" title="Dashboard">
+            <i class="fa-solid fa-chart-pie text-sm w-5 text-center text-white"></i>
             <span class="nav-link-text">Dashboard</span>
           </a>
         </div>
@@ -411,41 +443,42 @@
       <!-- BÁN HÀNG -->
       <div>
         <div class="nav-group-header" onclick="window.toggleNavGroup('group-banhang')" title="Bấm để thu gọn/mở rộng nhóm">
-          <span class="nav-link-text">BÁN HÀNG</span>
-          <i id="chevron-group-banhang" class="fa-solid fa-chevron-down text-[9px] group-chevron"></i>
+          <span class="nav-link-text">BÁN HÀNG & ĐƠN</span>
+          <i id="chevron-group-banhang" class="fa-solid fa-chevron-down text-[10px] group-chevron"></i>
         </div>
-        <div id="group-banhang" class="nav-group-content space-y-0.5">
-          <a href="#" data-target="view-hoadon" onclick="renderSection('view-hoadon'); return false;" class="admin-nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#F9FAFB] hover:text-slate-900 transition-colors" title="Bán tại quầy">
-            <i class="fa-solid fa-cash-register text-xs w-4 text-slate-400"></i>
-            <span class="nav-link-text whitespace-nowrap">Bán tại quầy</span>
+        <div id="group-banhang" class="nav-group-content space-y-1">
+          <a href="#" data-target="view-hoadon" onclick="renderSection('view-hoadon'); return false;" class="admin-nav-link flex items-center gap-3 text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition-all" title="Bán tại quầy">
+            <i class="fa-solid fa-cash-register text-sm w-5 text-center text-blue-500"></i>
+            <span class="nav-link-text whitespace-nowrap">Bán tại quầy (POS)</span>
           </a>
-          <a href="#" data-target="view-hoadon-list" onclick="renderSection('view-hoadon-list'); return false;" class="admin-nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#F9FAFB] hover:text-slate-900 transition-colors" title="Hóa đơn">
-            <i class="fa-solid fa-file-invoice-dollar text-xs w-4 text-slate-400"></i>
-            <span class="nav-link-text whitespace-nowrap">Hóa đơn</span>
+          <a href="#" data-target="view-hoadon-list" onclick="renderSection('view-hoadon-list'); return false;" class="admin-nav-link flex items-center gap-3 text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition-all" title="Hóa đơn">
+            <i class="fa-solid fa-file-invoice-dollar text-sm w-5 text-center text-blue-500"></i>
+            <span class="nav-link-text whitespace-nowrap">Sổ hóa đơn</span>
           </a>
-          <a href="#" data-target="view-thucu" onclick="renderSection('view-thucu'); return false;" class="admin-nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-50" title="Phiếu thu cũ">
-            <i class="fa-solid fa-mobile-screen-button"></i><span class="nav-link-text">Phiếu thu cũ</span>
+          <a href="#" data-target="view-thucu" onclick="renderSection('view-thucu'); return false;" class="admin-nav-link flex items-center gap-3 text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition-all" title="Phiếu thu cũ">
+            <i class="fa-solid fa-mobile-screen-button text-sm w-5 text-center text-blue-500"></i>
+            <span class="nav-link-text whitespace-nowrap">Phiếu thu cũ</span>
           </a>
-          <a href="#" data-target="view-donhang" onclick="renderSection('view-donhang'); return false;" class="admin-nav-link flex items-center justify-between gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#F9FAFB] hover:text-slate-900 transition-colors" title="Đơn hàng online">
-            <div class="flex items-center gap-2.5 min-w-0">
-              <i class="fa-solid fa-cart-shopping text-xs w-4 text-slate-400"></i>
+          <a href="#" data-target="view-donhang" onclick="renderSection('view-donhang'); return false;" class="admin-nav-link flex items-center justify-between gap-2.5 text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition-all" title="Đơn hàng online">
+            <div class="flex items-center gap-3 min-w-0">
+              <i class="fa-solid fa-cart-shopping text-sm w-5 text-center text-blue-500"></i>
               <span class="nav-link-text whitespace-nowrap">Đơn hàng online</span>
             </div>
-            <span id="nav-badge-donhang" class="hidden px-2 py-0.5 text-[10px] font-extrabold rounded-full bg-rose-500 text-white animate-pulse">0</span>
+            <span id="nav-badge-donhang" class="hidden px-2 py-0.5 text-[11px] font-extrabold rounded-full bg-rose-500 text-white animate-pulse">0</span>
           </a>
-          <a href="#" onclick="openOrderSettingsModal(); return false;" class="admin-nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#F9FAFB] hover:text-slate-900 transition-colors" title="Cấu hình tự động duyệt">
-            <i class="fa-solid fa-sliders text-xs w-4 text-slate-400"></i>
+          <a href="#" onclick="openOrderSettingsModal(); return false;" class="admin-nav-link flex items-center gap-3 text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition-all" title="Cấu hình tự động duyệt">
+            <i class="fa-solid fa-sliders text-sm w-5 text-center text-blue-500"></i>
             <span class="nav-link-text whitespace-nowrap">Cấu hình tự duyệt</span>
           </a>
-          <a href="#" data-target="view-chat" onclick="renderSection('view-chat'); return false;" class="admin-nav-link flex items-center justify-between gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#F9FAFB] hover:text-slate-900 transition-colors" title="Tư vấn trực tuyến">
-            <div class="flex items-center gap-2.5 min-w-0">
-              <i class="fa-solid fa-comments text-xs w-4 text-slate-400"></i>
+          <a href="#" data-target="view-chat" onclick="renderSection('view-chat'); return false;" class="admin-nav-link flex items-center justify-between gap-2.5 text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition-all" title="Tư vấn trực tuyến">
+            <div class="flex items-center gap-3 min-w-0">
+              <i class="fa-solid fa-comments text-sm w-5 text-center text-blue-500"></i>
               <span class="nav-link-text whitespace-nowrap">Tư vấn trực tuyến</span>
             </div>
-            <span id="nav-badge-chat" class="hidden px-2 py-0.5 text-[10px] font-extrabold rounded-full bg-blue-600 text-white animate-pulse">0</span>
+            <span id="nav-badge-chat" class="hidden px-2 py-0.5 text-[11px] font-extrabold rounded-full bg-blue-600 text-white animate-pulse">0</span>
           </a>
-          <a href="#" data-target="view-trahang" onclick="renderSection('view-trahang'); return false;" class="admin-nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#F9FAFB] hover:text-slate-900 transition-colors" title="Đổi trả hàng">
-            <i class="fa-solid fa-rotate-left text-xs w-4 text-slate-400"></i>
+          <a href="#" data-target="view-trahang" onclick="renderSection('view-trahang'); return false;" class="admin-nav-link flex items-center gap-3 text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition-all" title="Đổi trả hàng">
+            <i class="fa-solid fa-rotate-left text-sm w-5 text-center text-blue-500"></i>
             <span class="nav-link-text whitespace-nowrap">Đổi trả hàng</span>
           </a>
         </div>
@@ -454,24 +487,24 @@
       <!-- KHO -->
       <div>
         <div class="nav-group-header" onclick="window.toggleNavGroup('group-kho')" title="Bấm để thu gọn/mở rộng nhóm">
-          <span class="nav-link-text">KHO</span>
-          <i id="chevron-group-kho" class="fa-solid fa-chevron-down text-[9px] group-chevron"></i>
+          <span class="nav-link-text">QUẢN LÝ KHO</span>
+          <i id="chevron-group-kho" class="fa-solid fa-chevron-down text-[10px] group-chevron"></i>
         </div>
-        <div id="group-kho" class="nav-group-content space-y-0.5">
-          <a href="#" data-target="view-nhapkho" onclick="renderSection('view-nhapkho'); return false;" class="admin-nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#F9FAFB] hover:text-slate-900 transition-colors" title="Nhập kho">
-            <i class="fa-solid fa-dolly text-xs w-4 text-slate-400"></i>
+        <div id="group-kho" class="nav-group-content space-y-1">
+          <a href="#" data-target="view-nhapkho" onclick="renderSection('view-nhapkho'); return false;" class="admin-nav-link flex items-center gap-3 text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition-all" title="Nhập kho">
+            <i class="fa-solid fa-dolly text-sm w-5 text-center text-blue-500"></i>
             <span class="nav-link-text whitespace-nowrap">Nhập kho</span>
           </a>
-          <a href="#" data-target="view-tonkho" onclick="renderSection('view-tonkho'); return false;" class="admin-nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#F9FAFB] hover:text-slate-900 transition-colors" title="Tồn kho">
-            <i class="fa-solid fa-warehouse text-xs w-4 text-slate-400"></i>
+          <a href="#" data-target="view-tonkho" onclick="renderSection('view-tonkho'); return false;" class="admin-nav-link flex items-center gap-3 text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition-all" title="Tồn kho">
+            <i class="fa-solid fa-warehouse text-sm w-5 text-center text-blue-500"></i>
             <span class="nav-link-text whitespace-nowrap">Tồn kho</span>
           </a>
-          <a href="#" data-target="view-imei" onclick="renderSection('view-imei'); return false;" class="admin-nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#F9FAFB] hover:text-slate-900 transition-colors" title="Tra cứu IMEI">
-            <i class="fa-solid fa-barcode text-xs w-4 text-slate-400"></i>
+          <a href="#" data-target="view-imei" onclick="renderSection('view-imei'); return false;" class="admin-nav-link flex items-center gap-3 text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition-all" title="Tra cứu IMEI">
+            <i class="fa-solid fa-barcode text-sm w-5 text-center text-blue-500"></i>
             <span class="nav-link-text whitespace-nowrap">Tra cứu IMEI</span>
           </a>
-          <a href="#" data-target="view-nhacungcap" onclick="renderSection('view-nhacungcap'); return false;" class="admin-nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#F9FAFB] hover:text-slate-900 transition-colors" title="Nhà cung cấp">
-            <i class="fa-solid fa-truck-field text-xs w-4 text-slate-400"></i>
+          <a href="#" data-target="view-nhacungcap" onclick="renderSection('view-nhacungcap'); return false;" class="admin-nav-link flex items-center gap-3 text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition-all" title="Nhà cung cấp">
+            <i class="fa-solid fa-truck-field text-sm w-5 text-center text-blue-500"></i>
             <span class="nav-link-text whitespace-nowrap">Nhà cung cấp</span>
           </a>
         </div>
@@ -481,15 +514,15 @@
       <div>
         <div class="nav-group-header" onclick="window.toggleNavGroup('group-baohanh')" title="Bấm để thu gọn/mở rộng nhóm">
           <span class="nav-link-text">BẢO HÀNH</span>
-          <i id="chevron-group-baohanh" class="fa-solid fa-chevron-down text-[9px] group-chevron"></i>
+          <i id="chevron-group-baohanh" class="fa-solid fa-chevron-down text-[10px] group-chevron"></i>
         </div>
-        <div id="group-baohanh" class="nav-group-content space-y-0.5">
-          <a href="#" data-target="view-tracuu-baohanh" onclick="renderSection('view-tracuu-baohanh'); return false;" class="admin-nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#F9FAFB] hover:text-slate-900 transition-colors" title="Tra cứu bảo hành">
-            <i class="fa-solid fa-shield-halved text-xs w-4 text-slate-400"></i>
+        <div id="group-baohanh" class="nav-group-content space-y-1">
+          <a href="#" data-target="view-tracuu-baohanh" onclick="renderSection('view-tracuu-baohanh'); return false;" class="admin-nav-link flex items-center gap-3 text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition-all" title="Tra cứu bảo hành">
+            <i class="fa-solid fa-shield-halved text-sm w-5 text-center text-blue-500"></i>
             <span class="nav-link-text whitespace-nowrap">Tra cứu bảo hành</span>
           </a>
-          <a href="#" data-target="view-baohanh" onclick="renderSection('view-baohanh'); return false;" class="admin-nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#F9FAFB] hover:text-slate-900 transition-colors" title="Tiếp nhận & sửa chữa">
-            <i class="fa-solid fa-screwdriver-wrench text-xs w-4 text-slate-400"></i>
+          <a href="#" data-target="view-baohanh" onclick="renderSection('view-baohanh'); return false;" class="admin-nav-link flex items-center gap-3 text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition-all" title="Tiếp nhận & sửa chữa">
+            <i class="fa-solid fa-screwdriver-wrench text-sm w-5 text-center text-blue-500"></i>
             <span class="nav-link-text whitespace-nowrap">Tiếp nhận & sửa chữa</span>
           </a>
         </div>
@@ -498,28 +531,28 @@
       <!-- DANH MỤC -->
       <div>
         <div class="nav-group-header" onclick="window.toggleNavGroup('group-danhmuc')" title="Bấm để thu gọn/mở rộng nhóm">
-          <span class="nav-link-text">DANH MỤC</span>
-          <i id="chevron-group-danhmuc" class="fa-solid fa-chevron-down text-[9px] group-chevron"></i>
+          <span class="nav-link-text">SẢN PHẨM & KHÁCH</span>
+          <i id="chevron-group-danhmuc" class="fa-solid fa-chevron-down text-[10px] group-chevron"></i>
         </div>
-        <div id="group-danhmuc" class="nav-group-content space-y-0.5">
-          <a href="#" data-target="view-mathang" onclick="renderSection('view-mathang'); return false;" class="admin-nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#F9FAFB] hover:text-slate-900 transition-colors" title="Sản phẩm">
-            <i class="fa-solid fa-mobile-screen-button text-xs w-4 text-slate-400"></i>
+        <div id="group-danhmuc" class="nav-group-content space-y-1">
+          <a href="#" data-target="view-mathang" onclick="renderSection('view-mathang'); return false;" class="admin-nav-link flex items-center gap-3 text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition-all" title="Sản phẩm">
+            <i class="fa-solid fa-mobile-screen-button text-sm w-5 text-center text-blue-500"></i>
             <span class="nav-link-text whitespace-nowrap">Sản phẩm</span>
           </a>
-          <a href="#" data-target="view-nhomloai" onclick="renderSection('view-nhomloai'); return false;" class="admin-nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#F9FAFB] hover:text-slate-900 transition-colors" title="Hãng & Loại hàng">
-            <i class="fa-solid fa-sitemap text-xs w-4 text-slate-400"></i>
+          <a href="#" data-target="view-nhomloai" onclick="renderSection('view-nhomloai'); return false;" class="admin-nav-link flex items-center gap-3 text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition-all" title="Hãng & Loại hàng">
+            <i class="fa-solid fa-sitemap text-sm w-5 text-center text-blue-500"></i>
             <span class="nav-link-text whitespace-nowrap">Hãng & Loại hàng</span>
           </a>
-          <a href="#" data-target="view-thuoctinh" onclick="renderSection('view-thuoctinh'); return false;" class="admin-nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#F9FAFB] hover:text-slate-900 transition-colors" title="Thông số kỹ thuật">
-            <i class="fa-solid fa-microchip text-xs w-4 text-slate-400"></i>
+          <a href="#" data-target="view-thuoctinh" onclick="renderSection('view-thuoctinh'); return false;" class="admin-nav-link flex items-center gap-3 text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition-all" title="Thông số kỹ thuật">
+            <i class="fa-solid fa-microchip text-sm w-5 text-center text-blue-500"></i>
             <span class="nav-link-text whitespace-nowrap">Thông số kỹ thuật</span>
           </a>
-          <a href="#" data-target="view-khachhang" onclick="renderSection('view-khachhang'); return false;" class="admin-nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#F9FAFB] hover:text-slate-900 transition-colors" title="Khách hàng">
-            <i class="fa-solid fa-users text-xs w-4 text-slate-400"></i>
+          <a href="#" data-target="view-khachhang" onclick="renderSection('view-khachhang'); return false;" class="admin-nav-link flex items-center gap-3 text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition-all" title="Khách hàng">
+            <i class="fa-solid fa-users text-sm w-5 text-center text-blue-500"></i>
             <span class="nav-link-text whitespace-nowrap">Khách hàng</span>
           </a>
-          <a href="#" data-target="view-khuyenmai" onclick="renderSection('view-khuyenmai'); return false;" class="admin-nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#F9FAFB] hover:text-slate-900 transition-colors" title="Khuyến mãi">
-            <i class="fa-solid fa-tags text-xs w-4 text-slate-400"></i>
+          <a href="#" data-target="view-khuyenmai" onclick="renderSection('view-khuyenmai'); return false;" class="admin-nav-link flex items-center gap-3 text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition-all" title="Khuyến mãi">
+            <i class="fa-solid fa-tags text-sm w-5 text-center text-blue-500"></i>
             <span class="nav-link-text whitespace-nowrap">Khuyến mãi</span>
           </a>
         </div>
@@ -529,19 +562,19 @@
       <div>
         <div class="nav-group-header" onclick="window.toggleNavGroup('group-hethong')" title="Bấm để thu gọn/mở rộng nhóm">
           <span class="nav-link-text">HỆ THỐNG</span>
-          <i id="chevron-group-hethong" class="fa-solid fa-chevron-down text-[9px] group-chevron"></i>
+          <i id="chevron-group-hethong" class="fa-solid fa-chevron-down text-[10px] group-chevron"></i>
         </div>
-        <div id="group-hethong" class="nav-group-content space-y-0.5">
-          <a href="#" data-target="view-nhanvien" onclick="renderSection('view-nhanvien'); return false;" class="admin-nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#F9FAFB] hover:text-slate-900 transition-colors" title="Nhân viên">
-            <i class="fa-solid fa-id-badge text-xs w-4 text-slate-400"></i>
+        <div id="group-hethong" class="nav-group-content space-y-1">
+          <a href="#" data-target="view-nhanvien" onclick="renderSection('view-nhanvien'); return false;" class="admin-nav-link flex items-center gap-3 text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition-all" title="Nhân viên">
+            <i class="fa-solid fa-id-badge text-sm w-5 text-center text-blue-500"></i>
             <span class="nav-link-text whitespace-nowrap">Nhân viên</span>
           </a>
-          <a href="#" data-target="view-taikhoan" onclick="renderSection('view-taikhoan'); return false;" class="admin-nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#F9FAFB] hover:text-slate-900 transition-colors" title="Tài khoản & Phân quyền">
-            <i class="fa-solid fa-user-shield text-xs w-4 text-slate-400"></i>
+          <a href="#" data-target="view-taikhoan" onclick="renderSection('view-taikhoan'); return false;" class="admin-nav-link flex items-center gap-3 text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition-all" title="Tài khoản & Phân quyền">
+            <i class="fa-solid fa-user-shield text-sm w-5 text-center text-blue-500"></i>
             <span class="nav-link-text whitespace-nowrap">Tài khoản & Phân quyền</span>
           </a>
-          <a href="#" data-target="view-thamso" onclick="renderSection('view-thamso'); return false;" class="admin-nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#F9FAFB] hover:text-slate-900 transition-colors" title="Tham số hệ thống">
-            <i class="fa-solid fa-sliders text-xs w-4 text-slate-400"></i>
+          <a href="#" data-target="view-thamso" onclick="renderSection('view-thamso'); return false;" class="admin-nav-link flex items-center gap-3 text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition-all" title="Tham số hệ thống">
+            <i class="fa-solid fa-sliders text-sm w-5 text-center text-blue-500"></i>
             <span class="nav-link-text whitespace-nowrap">Tham số hệ thống</span>
           </a>
         </div>
@@ -549,10 +582,10 @@
 
     </nav>
 
-    <!-- Footer Sidebar: Quay về Landing page (Chỉ 1 mũi tên theo Bước 1) -->
-    <div class="p-2.5 border-t border-slate-200 bg-white">
-      <a href="/home" onclick="if(window.location.protocol==='file:'){this.href='../index.html';}" class="sidebar-footer-link w-full flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-slate-50 hover:bg-slate-100 text-slate-700 font-medium text-xs transition-colors border border-slate-200" title="Về trang bán hàng">
-        <i class="fa-solid fa-arrow-left text-[11px]"></i>
+    <!-- Footer Sidebar: Quay về Landing page -->
+    <div class="p-3 border-t border-blue-100 bg-blue-50/40">
+      <a href="/home" onclick="if(window.location.protocol==='file:'){this.href='../index.html';}" class="sidebar-footer-link w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-white hover:bg-blue-600 text-blue-700 hover:text-white font-bold text-sm transition-colors border border-blue-200 shadow-2xs" title="Về trang bán hàng">
+        <i class="fa-solid fa-arrow-left text-xs"></i>
         <span class="whitespace-nowrap nav-link-text">Về trang bán hàng</span>
       </a>
     </div>
@@ -564,97 +597,104 @@
        ========================================================================= -->
   <div class="flex-1 flex flex-col h-full overflow-hidden">
     
-    <!-- Top Header Bar (Khung cố định, thanh lịch, tối giản) -->
-    <header class="h-16 bg-white border-b border-slate-200 px-4 sm:px-6 flex items-center justify-between flex-shrink-0 z-20">
+    <!-- Top Header Bar (Tone Trắng & Xanh Dương - Sáng rõ, có lối tắt nhanh cho nhân viên) -->
+    <header class="h-[68px] bg-white border-b border-blue-100 px-4 sm:px-6 flex items-center justify-between flex-shrink-0 z-20 shadow-2xs">
       
-      <!-- Left: Title & Realtime JSON Status (Gọn gàng) -->
+      <!-- Left: Title & Realtime JSON Status -->
       <div class="flex items-center gap-3 min-w-0 flex-1">
         <!-- Mobile Sidebar Toggle -->
-        <button id="btn-toggle-sidebar" class="lg:hidden p-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-100 flex-shrink-0" aria-label="Mở menu">
-          <i class="fa-solid fa-bars text-sm"></i>
+        <button id="btn-toggle-sidebar" class="lg:hidden p-2 rounded-xl border border-blue-100 text-blue-700 hover:bg-blue-50 flex-shrink-0" aria-label="Mở menu">
+          <i class="fa-solid fa-bars text-base"></i>
         </button>
 
-        <div class="min-w-0 flex items-center gap-2.5">
-          <div class="min-w-0">
-            <h1 class="text-sm sm:text-base font-bold text-slate-900 truncate">Quản Trị Cửa Hàng Điện Thoại</h1>
-            <p class="text-[11px] text-slate-400 mt-0.5 truncate" id="admin-section-title">Dashboard</p>
-          </div>
-          <!-- Realtime badge: Chấm xanh + Tooltip theo Bước 3 -->
-          <span id="realtime-status-pill" class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[11px] font-semibold border border-emerald-200 cursor-help" title="Kết nối dữ liệu thời gian thực (Realtime JSON Active)">
+        <div class="min-w-0 flex items-center gap-2.5 flex-wrap">
+          <h1 class="text-base sm:text-lg font-extrabold text-slate-900 truncate tracking-tight">Quản Trị Cửa Hàng</h1>
+          <span id="admin-section-title" class="px-2.5 py-0.5 rounded-lg bg-blue-50 text-blue-700 border border-blue-200 text-xs sm:text-sm font-bold truncate">Dashboard</span>
+          <!-- Realtime badge -->
+          <span id="realtime-status-pill" class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200 cursor-help" title="Kết nối dữ liệu thời gian thực (Realtime Active)">
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span class="hidden sm:inline text-[11px]">Realtime</span>
+            <span>Realtime</span>
           </span>
         </div>
       </div>
 
-      <!-- Right: Actions, Notification, Density Toggle & Unified User Dropdown (Bước 3) -->
+      <!-- Right: Quick Staff Shortcuts, Notification, Density Toggle & User Dropdown -->
       <div class="flex items-center gap-2 sm:gap-2.5 flex-shrink-0 ml-2">
-        
-        <!-- Nút chuyển đổi mật độ hiển thị (Gọn / Thoải mái theo Bước 7) -->
-        <button type="button" onclick="window.toggleDisplayDensity()" class="w-9 h-9 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-600 hover:text-slate-900 flex items-center justify-center transition-colors cursor-pointer" title="Chuyển đổi giao diện Gọn / Thoải mái" aria-label="Đổi mật độ hiển thị">
-          <i id="density-icon" class="fa-solid fa-compress text-xs"></i>
-        </button>
-        
-        
 
+        <!-- Lối tắt nhanh trên Topbar cho nhân viên -->
+        <div class="hidden md:flex items-center gap-2 mr-1">
+          <button type="button" onclick="renderSection('view-hoadon')" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-sm shadow-blue-600/20 transition-all cursor-pointer">
+            <i class="fa-solid fa-cash-register text-xs"></i>
+            <span>Bán Tại Quầy</span>
+          </button>
+          <button type="button" onclick="renderSection('view-donhang')" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 font-bold text-xs sm:text-sm transition-all cursor-pointer">
+            <i class="fa-solid fa-cart-shopping text-xs"></i>
+            <span>Đơn Online</span>
+          </button>
+        </div>
+        
+        <!-- Nút chuyển đổi mật độ hiển thị (Gọn / Thoải mái) -->
+        <button type="button" onclick="window.toggleDisplayDensity()" class="w-10 h-10 rounded-xl border border-blue-100 hover:bg-blue-50 text-blue-700 flex items-center justify-center transition-colors cursor-pointer" title="Chuyển đổi giao diện Gọn / Thoải mái" aria-label="Đổi mật độ hiển thị">
+          <i id="density-icon" class="fa-solid fa-compress text-sm"></i>
+        </button>
         
         <!-- Chuông Thông báo Realtime Admin -->
         <div class="relative flex-shrink-0">
-          <button id="btn-notification-toggle" type="button" onclick="window.toggleNotificationPopover && window.toggleNotificationPopover(event)" class="w-9 h-9 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 flex items-center justify-center relative cursor-pointer transition-colors" title="Thông báo đơn hàng">
-            <i class="fa-solid fa-bell text-sm"></i>
-            <span id="notification-badge" class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-rose-500 text-white text-[10px] font-extrabold flex items-center justify-center ring-2 ring-white">1</span>
+          <button id="btn-notification-toggle" type="button" onclick="window.toggleNotificationPopover && window.toggleNotificationPopover(event)" class="w-10 h-10 rounded-xl border border-blue-100 hover:bg-blue-50 text-blue-700 flex items-center justify-center relative cursor-pointer transition-colors" title="Thông báo đơn hàng">
+            <i class="fa-solid fa-bell text-base"></i>
+            <span id="notification-badge" class="hidden absolute -top-1 -right-1 min-w-[19px] h-[19px] px-1 rounded-full bg-rose-500 text-white text-[11px] font-extrabold flex items-center justify-center ring-2 ring-white">1</span>
           </button>
-          <div id="notification-popover" class="hidden absolute right-0 top-full mt-2 w-80 sm:w-96 bg-white rounded-2xl border border-slate-200 shadow-2xl z-50 overflow-hidden divide-y divide-slate-100">
-            <div class="px-4 py-3 bg-slate-50 flex items-center justify-between">
-              <span class="font-bold text-xs text-slate-800"><i class="fa-solid fa-bell text-blue-600 mr-1.5"></i>Thông báo Đơn hàng</span>
-              <span id="notification-count-badge" class="hidden text-[10px] bg-blue-100 text-[#1E3A8A] font-bold px-2 py-0.5 rounded-full">0 tin mới</span>
+          <div id="notification-popover" class="hidden absolute right-0 top-full mt-2 w-80 sm:w-96 bg-white rounded-2xl border border-blue-100 shadow-2xl z-50 overflow-hidden divide-y divide-slate-100">
+            <div class="px-4 py-3 bg-blue-600 text-white flex items-center justify-between">
+              <span class="font-bold text-sm"><i class="fa-solid fa-bell mr-1.5"></i>Thông báo Đơn hàng</span>
+              <span id="notification-count-badge" class="hidden text-xs bg-white text-blue-700 font-bold px-2 py-0.5 rounded-full">0 tin mới</span>
             </div>
-            <div id="notification-list" class="max-h-80 overflow-y-auto divide-y divide-slate-100 text-xs text-slate-700">
+            <div id="notification-list" class="max-h-80 overflow-y-auto divide-y divide-slate-100 text-sm text-slate-700">
               <div id="notification-empty" class="py-8 px-4 text-center text-slate-400 space-y-2">
                 <i class="fa-regular fa-bell-slash text-2xl text-slate-300"></i>
-                <p class="text-xs">Hiện chưa có thông báo mới</p>
+                <p class="text-sm">Hiện chưa có thông báo mới</p>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Menu Người Dùng Thả Xuống (Avatar + Tên + Chức vụ + Đăng xuất gộp lại theo Bước 3) -->
+        <!-- Menu Người Dùng Thả Xuống -->
         <div class="relative flex-shrink-0">
-          <button id="btn-user-menu-toggle" type="button" onclick="window.toggleUserMenuDropdown(event)" class="flex items-center gap-2 p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl hover:bg-slate-100 border border-transparent hover:border-slate-200 transition-colors cursor-pointer select-none" aria-haspopup="true" aria-expanded="false">
-            <div id="admin-avatar-icon" class="w-8 h-8 rounded-lg bg-slate-800 text-white font-bold flex items-center justify-center text-xs flex-shrink-0 shadow-xs">
+          <button id="btn-user-menu-toggle" type="button" onclick="window.toggleUserMenuDropdown(event)" class="flex items-center gap-2.5 p-1.5 sm:px-3 sm:py-1.5 rounded-xl hover:bg-blue-50/70 border border-blue-100 transition-colors cursor-pointer select-none" aria-haspopup="true" aria-expanded="false">
+            <div id="admin-avatar-icon" class="w-9 h-9 rounded-lg bg-blue-600 text-white font-black flex items-center justify-center text-sm flex-shrink-0 shadow-xs">
               QL
             </div>
-            <div class="text-left text-xs hidden lg:block max-w-[160px]">
-              <div id="admin-user-fullname" class="font-bold text-slate-800 truncate" title="Nguyễn Văn Quản">Nguyễn Văn Quản</div>
-              <div id="admin-user-title" class="text-slate-500 text-[10px] truncate">Quản lý cửa hàng</div>
+            <div class="text-left hidden lg:block max-w-[170px]">
+              <div id="admin-user-fullname" class="font-bold text-slate-900 text-sm truncate" title="Nguyễn Văn Quản">Nguyễn Văn Quản</div>
+              <div id="admin-user-title" class="text-blue-600 text-xs font-semibold truncate">Quản lý cửa hàng</div>
             </div>
-            <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 ml-0.5 hidden sm:inline"></i>
+            <i class="fa-solid fa-chevron-down text-xs text-slate-400 ml-0.5 hidden sm:inline"></i>
           </button>
 
           <!-- Dropdown card -->
-          <div id="admin-user-dropdown-menu" class="hidden absolute right-0 top-full mt-2 w-64 bg-white rounded-2xl border border-slate-200 shadow-xl z-50 overflow-hidden divide-y divide-slate-100 animate-in fade-in zoom-in-95 duration-150">
-            <div class="p-3.5 bg-slate-50/80">
-              <div class="font-bold text-slate-800 text-xs" id="dropdown-user-name">Nguyễn Văn Quản</div>
-              <div class="text-[11px] text-slate-500 mt-0.5 flex items-center gap-1.5">
-                <span id="dropdown-user-role" class="px-1.5 py-0.5 rounded bg-blue-100 text-blue-700 font-semibold text-[10px]">Quản lý</span>
-                <span id="dropdown-user-manv" class="font-mono text-slate-400 text-[10px]">NV001</span>
+          <div id="admin-user-dropdown-menu" class="hidden absolute right-0 top-full mt-2 w-72 sm:w-80 bg-white rounded-2xl border border-blue-100 shadow-xl z-50 overflow-hidden divide-y divide-slate-100 animate-in fade-in zoom-in-95 duration-150">
+            <div class="p-4 bg-gradient-to-r from-[#0B45A6] to-[#2563EB] text-white">
+              <div class="font-bold text-base" id="dropdown-user-name">Nguyễn Văn Quản</div>
+              <div class="text-xs text-blue-100 mt-1.5 flex items-center gap-2">
+                <span id="dropdown-user-role" class="px-2.5 py-0.5 rounded-md bg-white text-blue-700 font-bold text-xs">Quản lý</span>
+                <span id="dropdown-user-manv" class="font-mono text-blue-100 text-xs">NV001</span>
               </div>
             </div>
-            <div class="p-1.5">
-              <a href="/home" onclick="if(window.location.protocol==='file:'){this.href='../index.html';}" class="flex items-center gap-2.5 px-3 py-2 text-xs text-slate-700 hover:bg-slate-50 rounded-xl transition-colors">
-                <i class="fa-solid fa-shop text-slate-400 w-4 text-center"></i>
+            <div class="p-2 space-y-1">
+              <a href="/home" onclick="if(window.location.protocol==='file:'){this.href='../index.html';}" class="flex items-center gap-3 px-3.5 py-2.5 text-sm font-medium text-slate-700 hover:bg-blue-50 rounded-xl transition-colors">
+                <i class="fa-solid fa-shop text-blue-600 w-4 text-center"></i>
                 <span>Xem trang bán hàng</span>
               </a>
-              <button type="button" onclick="window.toggleDisplayDensity()" class="w-full flex items-center justify-between px-3 py-2 text-xs text-slate-700 hover:bg-slate-50 rounded-xl transition-colors text-left cursor-pointer">
-                <span class="flex items-center gap-2.5">
-                  <i class="fa-solid fa-sliders text-slate-400 w-4 text-center"></i>
+              <button type="button" onclick="window.toggleDisplayDensity()" class="w-full flex items-center justify-between gap-3 px-3.5 py-2.5 text-sm font-medium text-slate-700 hover:bg-blue-50 rounded-xl transition-colors text-left cursor-pointer">
+                <span class="flex items-center gap-3 whitespace-nowrap">
+                  <i class="fa-solid fa-sliders text-blue-600 w-4 text-center"></i>
                   <span>Mật độ hiển thị</span>
                 </span>
-                <span id="dropdown-density-label" class="text-[10px] font-bold text-slate-400">Thoải mái</span>
+                <span id="dropdown-density-label" class="px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-xs font-bold whitespace-nowrap flex-shrink-0">Thoải mái</span>
               </button>
             </div>
-            <div class="p-1.5">
-              <button type="button" onclick="window.doLogout ? window.doLogout() : ((window.CellphoneSAuth || window.Auth) ? (window.CellphoneSAuth || window.Auth).logout() : null)" class="w-full flex items-center gap-2.5 px-3 py-2 text-xs text-rose-600 hover:bg-rose-50 rounded-xl font-semibold transition-colors text-left cursor-pointer">
+            <div class="p-2">
+              <button type="button" onclick="window.doLogout ? window.doLogout() : ((window.CellphoneSAuth || window.Auth) ? (window.CellphoneSAuth || window.Auth).logout() : null)" class="w-full flex items-center gap-3 px-3.5 py-2.5 text-sm text-rose-600 hover:bg-rose-50 rounded-xl font-bold transition-colors text-left cursor-pointer">
                 <i class="fa-solid fa-arrow-right-from-bracket text-rose-500 w-4 text-center"></i>
                 <span>Đăng xuất</span>
               </button>
@@ -664,106 +704,168 @@
       </div>
     </header>
 
-    <!-- Dynamic Main Content Area (Padding --page-pad chuẩn theo Bước 7) -->
-    <main class="flex-1 overflow-y-auto space-y-5 bg-slate-50/60" style="padding: var(--page-pad);">
+    <!-- Dynamic Main Content Area -->
+    <main class="flex-1 overflow-y-auto space-y-5 bg-[#F4F8FF]" style="padding: var(--page-pad);">
       
       <!-- =====================================================================
            SECTION 1: DASHBOARD OVERVIEW
            ===================================================================== -->
       <section id="view-dashboard" class="admin-view-section space-y-5">
 
-        <!-- Header Dashboard: Tiêu đề & Bộ Lọc Thời Gian (Tháng, Tuần, Năm, Ngày) -->
-        <div class="flex flex-col xl:flex-row xl:items-center justify-between gap-3 bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200/80 shadow-card-sleek">
-          <div>
-            <h2 class="text-sm sm:text-base font-bold text-slate-800 flex items-center gap-2">
-              <i class="fa-solid fa-chart-line text-slate-700"></i>
-              <span>Tổng Quan Hoạt Động & Doanh Thu</span>
+        <!-- LỐI TẮT NGHIỆP VỤ NHÂN VIÊN (TONE TRẮNG & XANH DƯƠNG SÁNG SỦA, DỄ BẤM) -->
+        <div class="bg-gradient-to-r from-[#0B45A6] via-[#1D4ED8] to-[#2563EB] rounded-2xl p-4 sm:p-5 text-white shadow-md">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-3.5">
+            <h2 class="!text-white text-base sm:text-lg font-extrabold flex items-center gap-2">
+              <i class="fa-solid fa-bolt text-blue-200"></i>
+              <span>Thao Tác Nhanh Cho Nhân Viên</span>
             </h2>
-            <p class="text-xs text-slate-500 mt-0.5" id="dash-filter-desc">Số liệu doanh thu thuần, tồn kho và đơn hàng đồng bộ thời gian thực.</p>
+            <span class="text-xs sm:text-sm text-blue-100">Chọn nhanh nghiệp vụ cần xử lý ngay</span>
           </div>
-          <div class="flex flex-wrap items-center gap-2 self-start xl:self-auto flex-shrink-0">
-            <!-- Nút chọn nhanh thời gian -->
-            <div class="inline-flex items-center p-1 bg-slate-100 rounded-xl border border-slate-200 text-xs">
-              <button type="button" onclick="setDashboardTimeFilter('today')" data-filter="today" class="dash-time-btn px-2.5 py-1 rounded-lg font-medium text-slate-600 hover:text-slate-900 transition-all cursor-pointer">Hôm nay</button>
-              <button type="button" onclick="setDashboardTimeFilter('week')" data-filter="week" class="dash-time-btn px-2.5 py-1 rounded-lg font-medium text-slate-600 hover:text-slate-900 transition-all cursor-pointer">Tuần này</button>
-              <button type="button" onclick="setDashboardTimeFilter('month')" data-filter="month" class="dash-time-btn px-2.5 py-1 rounded-lg font-medium text-slate-600 hover:text-slate-900 transition-all cursor-pointer">Tháng này</button>
-              <button type="button" onclick="setDashboardTimeFilter('year')" data-filter="year" class="dash-time-btn px-2.5 py-1 rounded-lg font-medium text-slate-600 hover:text-slate-900 transition-all cursor-pointer">Năm nay</button>
-              <button type="button" onclick="setDashboardTimeFilter('all')" data-filter="all" class="dash-time-btn px-2.5 py-1 rounded-lg font-semibold bg-white text-slate-900 shadow-2xs transition-all cursor-pointer">Toàn bộ</button>
-            </div>
-
-            <!-- Tùy chọn khoảng ngày cụ thể -->
-            <div class="hidden sm:inline-flex items-center gap-1.5 p-1 bg-white rounded-xl border border-slate-200 text-xs shadow-2xs">
-              <input type="date" id="dash-date-from" class="px-1.5 py-0.5 text-xs text-slate-700 border-none outline-none focus:ring-0 bg-transparent" title="Từ ngày">
-              <span class="text-slate-400 text-[11px]">-</span>
-              <input type="date" id="dash-date-to" class="px-1.5 py-0.5 text-xs text-slate-700 border-none outline-none focus:ring-0 bg-transparent" title="Đến ngày">
-              <button type="button" onclick="applyDashboardCustomDate()" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-900 text-white font-medium text-[11px] transition-colors cursor-pointer" title="Lọc theo khoảng ngày">Lọc</button>
-            </div>
-
-            <span id="dash-last-updated" class="text-[11px] text-slate-400 font-mono hidden md:inline">Cập nhật lúc --:--:--</span>
-            <button type="button" onclick="renderDashboard()" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-xl text-xs font-medium transition-all shadow-2xs cursor-pointer" title="Tải lại toàn bộ số liệu dashboard" aria-label="Làm mới số liệu">
-              <i class="fa-solid fa-rotate text-xs text-slate-500"></i>
-              <span class="hidden sm:inline">Làm mới</span>
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+            <button type="button" onclick="renderSection('view-hoadon')" class="flex items-center gap-3 p-3.5 rounded-xl bg-white hover:bg-blue-50 text-slate-900 shadow-sm transition-all text-left cursor-pointer group">
+              <div class="w-10 h-10 rounded-xl bg-blue-100 group-hover:bg-blue-600 text-blue-600 group-hover:text-white flex items-center justify-center flex-shrink-0 text-base transition-colors">
+                <i class="fa-solid fa-cash-register"></i>
+              </div>
+              <div class="min-w-0">
+                <div class="font-bold text-sm text-slate-900 truncate">Bán Tại Quầy</div>
+                <div class="text-xs text-slate-500 truncate">Lập hóa đơn POS</div>
+              </div>
+            </button>
+            <button type="button" onclick="renderSection('view-donhang')" class="flex items-center gap-3 p-3.5 rounded-xl bg-white hover:bg-blue-50 text-slate-900 shadow-sm transition-all text-left cursor-pointer group">
+              <div class="w-10 h-10 rounded-xl bg-blue-100 group-hover:bg-blue-600 text-blue-600 group-hover:text-white flex items-center justify-center flex-shrink-0 text-base transition-colors">
+                <i class="fa-solid fa-cart-shopping"></i>
+              </div>
+              <div class="min-w-0">
+                <div class="font-bold text-sm text-slate-900 truncate">Đơn Online</div>
+                <div class="text-xs text-slate-500 truncate">Duyệt & giao hàng</div>
+              </div>
+            </button>
+            <button type="button" onclick="renderSection('view-nhapkho')" class="flex items-center gap-3 p-3.5 rounded-xl bg-white hover:bg-blue-50 text-slate-900 shadow-sm transition-all text-left cursor-pointer group">
+              <div class="w-10 h-10 rounded-xl bg-blue-100 group-hover:bg-blue-600 text-blue-600 group-hover:text-white flex items-center justify-center flex-shrink-0 text-base transition-colors">
+                <i class="fa-solid fa-dolly"></i>
+              </div>
+              <div class="min-w-0">
+                <div class="font-bold text-sm text-slate-900 truncate">Nhập Kho</div>
+                <div class="text-xs text-slate-500 truncate">Nhập máy & IMEI</div>
+              </div>
+            </button>
+            <button type="button" onclick="renderSection('view-tracuu-baohanh')" class="flex items-center gap-3 p-3.5 rounded-xl bg-white hover:bg-blue-50 text-slate-900 shadow-sm transition-all text-left cursor-pointer group">
+              <div class="w-10 h-10 rounded-xl bg-blue-100 group-hover:bg-blue-600 text-blue-600 group-hover:text-white flex items-center justify-center flex-shrink-0 text-base transition-colors">
+                <i class="fa-solid fa-shield-halved"></i>
+              </div>
+              <div class="min-w-0">
+                <div class="font-bold text-sm text-slate-900 truncate">Bảo Hành</div>
+                <div class="text-xs text-slate-500 truncate">Tra cứu & tiếp nhận</div>
+              </div>
+            </button>
+            <button type="button" onclick="renderSection('view-chat')" class="col-span-2 sm:col-span-1 flex items-center gap-3 p-3.5 rounded-xl bg-white hover:bg-blue-50 text-slate-900 shadow-sm transition-all text-left cursor-pointer group">
+              <div class="w-10 h-10 rounded-xl bg-blue-100 group-hover:bg-blue-600 text-blue-600 group-hover:text-white flex items-center justify-center flex-shrink-0 text-base transition-colors">
+                <i class="fa-solid fa-comments"></i>
+              </div>
+              <div class="min-w-0">
+                <div class="font-bold text-sm text-slate-900 truncate">Tư Vấn Chat</div>
+                <div class="text-xs text-slate-500 truncate">Hỗ trợ khách hàng</div>
+              </div>
             </button>
           </div>
         </div>
 
+        <!-- Header Dashboard: Xếp 2 hàng gọn gàng để không bao giờ bị ép chữ hay tràn nút -->
+        <div class="bg-white p-4 sm:p-5 rounded-2xl border border-blue-100 shadow-card-sleek space-y-3.5">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <h2 class="text-base sm:text-lg font-extrabold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-chart-line text-blue-600"></i>
+                <span>Tổng Quan Hoạt Động & Doanh Thu</span>
+              </h2>
+              <p class="text-xs sm:text-sm text-slate-500 mt-0.5" id="dash-filter-desc">Số liệu doanh thu thuần, tồn kho và đơn hàng đồng bộ thời gian thực.</p>
+            </div>
+            <div class="flex items-center gap-2.5 flex-shrink-0">
+              <span id="dash-last-updated" class="text-xs text-slate-400 font-mono">Cập nhật lúc --:--:--</span>
+              <button type="button" onclick="renderDashboard()" class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs sm:text-sm font-bold transition-all shadow-xs cursor-pointer" title="Tải lại toàn bộ số liệu dashboard" aria-label="Làm mới số liệu">
+                <i class="fa-solid fa-rotate text-xs"></i>
+                <span>Làm mới</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center justify-between gap-2.5 pt-2.5 border-t border-slate-100">
+            <!-- Nút chọn nhanh thời gian -->
+            <div class="inline-flex flex-wrap items-center p-1 bg-blue-50/70 rounded-xl border border-blue-100 text-xs sm:text-sm">
+              <button type="button" onclick="setDashboardTimeFilter('today')" data-filter="today" class="dash-time-btn px-3 py-1.5 rounded-lg font-medium text-slate-600 hover:text-blue-700 transition-all cursor-pointer">Hôm nay</button>
+              <button type="button" onclick="setDashboardTimeFilter('week')" data-filter="week" class="dash-time-btn px-3 py-1.5 rounded-lg font-medium text-slate-600 hover:text-blue-700 transition-all cursor-pointer">Tuần này</button>
+              <button type="button" onclick="setDashboardTimeFilter('month')" data-filter="month" class="dash-time-btn px-3 py-1.5 rounded-lg font-medium text-slate-600 hover:text-blue-700 transition-all cursor-pointer">Tháng này</button>
+              <button type="button" onclick="setDashboardTimeFilter('year')" data-filter="year" class="dash-time-btn px-3 py-1.5 rounded-lg font-medium text-slate-600 hover:text-blue-700 transition-all cursor-pointer">Năm nay</button>
+              <button type="button" onclick="setDashboardTimeFilter('all')" data-filter="all" class="dash-time-btn px-3 py-1.5 rounded-lg font-bold bg-white text-blue-700 shadow-2xs transition-all cursor-pointer">Toàn bộ</button>
+            </div>
+
+            <!-- Tùy chọn khoảng ngày cụ thể -->
+            <div class="inline-flex items-center gap-1.5 p-1 bg-white rounded-xl border border-blue-200 text-xs sm:text-sm shadow-2xs">
+              <input type="date" id="dash-date-from" class="px-2 py-1 text-xs sm:text-sm text-slate-700 border-none outline-none focus:ring-0 bg-transparent" title="Từ ngày">
+              <span class="text-slate-400 text-xs">-</span>
+              <input type="date" id="dash-date-to" class="px-2 py-1 text-xs sm:text-sm text-slate-700 border-none outline-none focus:ring-0 bg-transparent" title="Đến ngày">
+              <button type="button" onclick="applyDashboardCustomDate()" class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition-colors cursor-pointer" title="Lọc theo khoảng ngày">Lọc</button>
+            </div>
+          </div>
+        </div>
+
         
-        <!-- Thống kê nhanh 4 Card KPI (Gọn gàng, trung tính, xếp 4 thẻ một hàng trên >= 1280px) -->
+        <!-- Thống kê nhanh 4 Card KPI (Tone Trắng & Xanh dương, chữ rõ không bị cắt) -->
         <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
           
-          <!-- Card 1: Doanh thu -> Xem danh sách Hóa đơn -->
-          <div role="button" tabindex="0" onclick="renderSection('view-hoadon-list')" onkeydown="if(event.key==='Enter'||event.key===' '){renderSection('view-hoadon-list');event.preventDefault();}" class="metric-card bg-white p-4 sm:p-[18px_20px] rounded-2xl border border-slate-200/80 shadow-card-sleek hover:-translate-y-0.5 hover:shadow-md cursor-pointer transition-all flex flex-col justify-between" title="Bấm để xem danh sách Hóa đơn">
-            <div class="flex items-center justify-between gap-3 min-w-0">
+          <!-- Card 1: Doanh thu -->
+          <div role="button" tabindex="0" onclick="renderSection('view-hoadon-list')" onkeydown="if(event.key==='Enter'||event.key===' '){renderSection('view-hoadon-list');event.preventDefault();}" class="metric-card bg-white p-4 sm:p-5 rounded-2xl border border-blue-100 border-t-4 border-t-blue-600 shadow-card-sleek cursor-pointer transition-all flex flex-col justify-between" title="Bấm để xem danh sách Hóa đơn">
+            <div class="flex items-start justify-between gap-2.5 min-w-0">
               <div class="min-w-0 flex-1">
-                <div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider truncate">Tổng Doanh Thu Bán</div>
-                <div id="dash-revenue" class="kpi-number text-lg sm:text-xl xl:text-2xl font-bold text-slate-900 mt-1 font-mono tracking-tight truncate whitespace-nowrap">Đang tính...</div>
-                <div class="text-[11px] text-slate-500 font-normal mt-1 flex items-center gap-1 truncate whitespace-nowrap">
-                  <span id="dash-revenue-sub-text" class="truncate">Đồng bộ từ đơn thực tế</span>
+                <div class="text-xs font-bold text-blue-700 uppercase tracking-wide leading-snug">Tổng Doanh Thu Bán</div>
+                <div id="dash-revenue" class="kpi-number text-xl sm:text-2xl font-black text-slate-900 mt-1.5 font-mono tracking-tight truncate">Đang tính...</div>
+                <div class="text-xs text-slate-500 font-medium mt-1.5 truncate">
+                  <span id="dash-revenue-sub-text">Đồng bộ từ đơn thực tế</span>
                 </div>
               </div>
-              <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center text-base">
+              <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-blue-50 text-blue-600 border border-blue-100 flex items-center justify-center text-base">
                 <i class="fa-solid fa-sack-dollar"></i>
               </div>
             </div>
           </div>
 
-          <!-- Card 2: Đơn online chờ duyệt -> Xem Đơn hàng online đã lọc Chờ xác nhận -->
-          <div id="kpi-card-pending" role="button" tabindex="0" onclick="window.navigateToDonHangWithFilter('cho_xac_nhan')" onkeydown="if(event.key==='Enter'||event.key===' '){window.navigateToDonHangWithFilter('cho_xac_nhan');event.preventDefault();}" class="metric-card bg-white p-4 sm:p-[18px_20px] rounded-2xl border border-slate-200/80 shadow-card-sleek hover:-translate-y-0.5 hover:shadow-md cursor-pointer transition-all flex flex-col justify-between" title="Bấm để xem các đơn hàng Chờ xác nhận">
-            <div class="flex items-center justify-between gap-3 min-w-0">
+          <!-- Card 2: Đơn online chờ duyệt -->
+          <div id="kpi-card-pending" role="button" tabindex="0" onclick="window.navigateToDonHangWithFilter('cho_xac_nhan')" onkeydown="if(event.key==='Enter'||event.key===' '){window.navigateToDonHangWithFilter('cho_xac_nhan');event.preventDefault();}" class="metric-card bg-white p-4 sm:p-5 rounded-2xl border border-blue-100 border-t-4 border-t-sky-500 shadow-card-sleek cursor-pointer transition-all flex flex-col justify-between" title="Bấm để xem các đơn hàng Chờ xác nhận">
+            <div class="flex items-start justify-between gap-2.5 min-w-0">
               <div class="min-w-0 flex-1">
-                <div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider truncate">Đơn Online Chờ Duyệt</div>
-                <div id="dash-pending-orders" class="kpi-number text-lg sm:text-xl xl:text-2xl font-bold text-slate-900 mt-1 truncate whitespace-nowrap">—</div>
-                <div id="dash-pending-orders-sub" class="text-[11px] text-slate-500 font-normal mt-1 truncate whitespace-nowrap">Cần xác nhận & xuất hóa đơn</div>
+                <div class="text-xs font-bold text-blue-700 uppercase tracking-wide leading-snug">Đơn Online Chờ Duyệt</div>
+                <div id="dash-pending-orders" class="kpi-number text-xl sm:text-2xl font-black text-slate-900 mt-1.5 truncate">—</div>
+                <div id="dash-pending-orders-sub" class="text-xs text-slate-500 font-medium mt-1.5 truncate">Cần xác nhận & xuất hóa đơn</div>
               </div>
-              <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center text-base">
+              <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-sky-50 text-sky-600 border border-sky-100 flex items-center justify-center text-base">
                 <i class="fa-solid fa-hourglass-half"></i>
               </div>
             </div>
           </div>
 
-          <!-- Card 3: Tồn kho thực tế -> Xem Tồn kho -->
-          <div id="kpi-card-stock" role="button" tabindex="0" onclick="renderSection('view-tonkho')" onkeydown="if(event.key==='Enter'||event.key===' '){renderSection('view-tonkho');event.preventDefault();}" class="metric-card bg-white p-4 sm:p-[18px_20px] rounded-2xl border border-slate-200/80 shadow-card-sleek hover:-translate-y-0.5 hover:shadow-md cursor-pointer transition-all flex flex-col justify-between" title="Bấm để xem kho hàng & tồn kho máy">
-            <div class="flex items-center justify-between gap-3 min-w-0">
+          <!-- Card 3: Tồn kho thực tế -->
+          <div id="kpi-card-stock" role="button" tabindex="0" onclick="renderSection('view-tonkho')" onkeydown="if(event.key==='Enter'||event.key===' '){renderSection('view-tonkho');event.preventDefault();}" class="metric-card bg-white p-4 sm:p-5 rounded-2xl border border-blue-100 border-t-4 border-t-blue-600 shadow-card-sleek cursor-pointer transition-all flex flex-col justify-between" title="Bấm để xem kho hàng & tồn kho máy">
+            <div class="flex items-start justify-between gap-2.5 min-w-0">
               <div class="min-w-0 flex-1">
-                <div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider truncate">Tổng Tồn Kho</div>
-                <div id="dash-total-stock" class="kpi-number text-lg sm:text-xl xl:text-2xl font-bold text-slate-900 mt-1 truncate whitespace-nowrap">—</div>
-                <div id="dash-total-stock-sub" class="text-[11px] text-slate-500 font-normal mt-1 truncate whitespace-nowrap">Kho hàng thực tế từ Database</div>
+                <div class="text-xs font-bold text-blue-700 uppercase tracking-wide leading-snug">Tổng Tồn Kho</div>
+                <div id="dash-total-stock" class="kpi-number text-xl sm:text-2xl font-black text-slate-900 mt-1.5 truncate">—</div>
+                <div id="dash-total-stock-sub" class="text-xs text-slate-500 font-medium mt-1.5 truncate">Kho hàng thực tế từ Database</div>
               </div>
-              <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center text-base">
+              <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-blue-50 text-blue-600 border border-blue-100 flex items-center justify-center text-base">
                 <i class="fa-solid fa-warehouse"></i>
               </div>
             </div>
           </div>
 
-          <!-- Card 4: Tổng mặt hàng đang kinh doanh -> Xem Mặt hàng -->
-          <div role="button" tabindex="0" onclick="renderSection('view-mathang')" onkeydown="if(event.key==='Enter'||event.key===' '){renderSection('view-mathang');event.preventDefault();}" class="metric-card bg-white p-4 sm:p-[18px_20px] rounded-2xl border border-slate-200/80 shadow-card-sleek hover:-translate-y-0.5 hover:shadow-md cursor-pointer transition-all flex flex-col justify-between" title="Bấm để xem danh mục sản phẩm kinh doanh">
-            <div class="flex items-center justify-between gap-3 min-w-0">
+          <!-- Card 4: Tổng mặt hàng đang kinh doanh -->
+          <div role="button" tabindex="0" onclick="renderSection('view-mathang')" onkeydown="if(event.key==='Enter'||event.key===' '){renderSection('view-mathang');event.preventDefault();}" class="metric-card bg-white p-4 sm:p-5 rounded-2xl border border-blue-100 border-t-4 border-t-sky-500 shadow-card-sleek cursor-pointer transition-all flex flex-col justify-between" title="Bấm để xem danh mục sản phẩm kinh doanh">
+            <div class="flex items-start justify-between gap-2.5 min-w-0">
               <div class="min-w-0 flex-1">
-                <div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider truncate">Mặt Hàng Kinh Doanh</div>
-                <div id="dash-total-products" class="kpi-number text-lg sm:text-xl xl:text-2xl font-bold text-slate-900 mt-1 truncate whitespace-nowrap">—</div>
-                <div id="dash-total-products-sub" class="text-[11px] text-slate-500 font-normal mt-1 truncate whitespace-nowrap"></div>
+                <div class="text-xs font-bold text-blue-700 uppercase tracking-wide leading-snug">Mặt Hàng Kinh Doanh</div>
+                <div id="dash-total-products" class="kpi-number text-xl sm:text-2xl font-black text-slate-900 mt-1.5 truncate">—</div>
+                <div id="dash-total-products-sub" class="text-xs text-slate-500 font-medium mt-1.5 truncate"></div>
               </div>
-              <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center text-base">
+              <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-sky-50 text-sky-600 border border-sky-100 flex items-center justify-center text-base">
                 <i class="fa-solid fa-mobile-screen"></i>
               </div>
             </div>
@@ -963,7 +1065,7 @@
                   <th class="p-3.5 w-36 min-w-[130px] whitespace-nowrap text-center">Quản Lý IMEI</th>
                   <th class="p-3.5 w-28 min-w-[100px] whitespace-nowrap text-center">Bảo Hành</th>
                   <th class="p-3.5 w-28 min-w-[90px] whitespace-nowrap text-center">Tồn Kho</th>
-                  <th class="p-3.5 w-28 min-w-[110px] whitespace-nowrap text-right">Thao Tác</th>
+                  <th class="p-3.5 min-w-[140px] whitespace-nowrap text-right">Thao Tác</th>
                 </tr>
               </thead>
               <tbody id="table-mathang-body"></tbody>
@@ -1432,19 +1534,20 @@
           </button>
         </div>
 
-        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-card-sleek p-5">
-          <div class="overflow-x-auto rounded-xl border border-slate-200/80">
-            <table class="w-full text-left border-collapse min-w-[950px]">
+        <div class="bg-white rounded-2xl border border-blue-100 shadow-card-sleek p-5">
+          <div class="overflow-x-auto rounded-xl border border-blue-100">
+            <table class="w-full text-left border-collapse min-w-[1080px]">
               <thead>
-                <tr class="bg-slate-50/90 text-slate-500 text-[11px] font-extrabold uppercase tracking-wider border-b border-slate-200">
-                  <th class="p-3.5 w-32 min-w-[120px] whitespace-nowrap">Mã Phiếu Trả</th>
-                  <th class="p-3.5 w-32 min-w-[110px] whitespace-nowrap">Số Hóa Đơn</th>
-                  <th class="p-3.5 w-44 min-w-[160px] whitespace-nowrap font-mono">Số IMEI Thu Hồi</th>
-                  <th class="p-3.5 w-32 min-w-[120px] whitespace-nowrap">Ngày Trả</th>
+                <tr class="bg-blue-50 text-blue-900 text-xs font-extrabold uppercase tracking-wider border-b border-blue-200">
+                  <th class="p-3.5 whitespace-nowrap">Mã Phiếu Trả</th>
+                  <th class="p-3.5 whitespace-nowrap">Số Hóa Đơn</th>
+                  <th class="p-3.5 whitespace-nowrap font-mono">Số IMEI Thu Hồi</th>
+                  <th class="p-3.5 whitespace-nowrap">Ngày Trả</th>
                   <th class="p-3.5 min-w-[200px]">Lý Do Đổi Trả</th>
-                  <th class="p-3.5 w-36 min-w-[130px] whitespace-nowrap text-center">Hình Thức</th>
-                  <th class="p-3.5 w-36 min-w-[130px] whitespace-nowrap">Nhân Viên</th>
-                  <th class="p-3.5 w-32 min-w-[120px] text-right whitespace-nowrap">Thao Tác</th>
+                  <th class="p-3.5 whitespace-nowrap text-center">Hình Thức</th>
+                  <th class="p-3.5 whitespace-nowrap">Nhân Viên</th>
+                  <th class="p-3.5 whitespace-nowrap text-center">Trạng Thái</th>
+                  <th class="p-3.5 min-w-[170px] text-right whitespace-nowrap">Thao Tác</th>
                 </tr>
               </thead>
               <tbody id="table-trahang-body"></tbody>
@@ -1906,69 +2009,106 @@
       </section>
 
       <!-- =====================================================================
-           SECTION: TÀI KHOẢN VÀ PHÂN QUYỀN (FR04, FR05)
+           SECTION: TÀI KHOẢN VÀ PHÂN QUYỀN (FR04, FR05 - CHIA 2 TAB RỘNG RÃI)
            ===================================================================== -->
-      <section id="view-taikhoan" class="admin-view-section hidden space-y-6">
-        <div>
-          <h2 class="text-xl font-extrabold text-navy tracking-tight">Tài Khoản & Phân Quyền Hệ Thống</h2>
-          <p class="text-xs text-slate-500 mt-0.5">Quản lý tài khoản đăng nhập (khóa/mở khóa, đặt lại mật khẩu) và phân quyền 5 vai trò hệ thống</p>
-        </div>
-
-        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
-          <!-- Bảng 1: Quản lý Tài khoản nhân viên (FR04) -->
-          <div class="xl:col-span-2 bg-white rounded-2xl border border-slate-200/80 shadow-card-sleek p-5 space-y-4">
-            <div class="flex items-center justify-between border-b pb-3">
-              <div>
-                <h3 class="font-bold text-navy text-sm"><i class="fa-solid fa-users-gear text-[#16A34A] mr-2"></i>Tài Khoản Đăng Nhập</h3>
-                <p class="text-[11px] text-slate-400 mt-0.5">Có sửa, khóa / mở khóa, đặt lại mật khẩu, không xóa tài khoản</p>
-              </div>
-              <button onclick="openTaiKhoanModal()" class="px-3.5 py-1.5 bg-[#16A34A] hover:bg-[#15803D] text-white font-bold text-xs rounded-xl shadow-sm transition-colors">
-                <i class="fa-solid fa-plus mr-1"></i>Tạo Tài Khoản
-              </button>
-            </div>
-            <div class="overflow-x-auto rounded-xl border border-slate-200/80">
-              <table class="w-full text-left border-collapse text-xs min-w-[700px]">
-                <thead>
-                  <tr class="bg-slate-50 text-slate-500 text-[11px] font-bold uppercase border-b">
-                    <th class="p-3">Tài Khoản</th>
-                    <th class="p-3">Nhân Viên</th>
-                    <th class="p-3">Chức Vụ</th>
-                    <th class="p-3 text-center">Trạng Thái</th>
-                    <th class="p-3">Ngày Tạo</th>
-                    <th class="p-3 text-right">Thao Tác Nghiệp Vụ</th>
-                  </tr>
-                </thead>
-                <tbody id="table-taikhoan-body"></tbody>
-              </table>
-            </div>
+      <section id="view-taikhoan" class="admin-view-section hidden space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Tài Khoản & Phân Quyền Hệ Thống</h2>
+            <p class="text-sm text-slate-500 mt-0.5">Quản lý tài khoản đăng nhập (khóa/mở khóa, đặt lại mật khẩu) và phân quyền vai trò hệ thống</p>
           </div>
 
-          <!-- Bảng 2: Phân quyền vai trò (PhanQuyen - FR05) -->
-          <div class="bg-white rounded-2xl border border-slate-200/80 shadow-card-sleek p-5 space-y-4">
-            <div class="flex items-center justify-between border-b pb-3">
-              <div>
-                <h3 class="font-bold text-navy text-sm"><i class="fa-solid fa-shield-halved text-slate-600 mr-2"></i>Vai Trò & Quyền</h3>
-                <p class="text-[11px] text-slate-400 mt-0.5">Xóa chức vụ chỉ áp dụng khi chưa có nhân viên trực thuộc</p>
-              </div>
-              <button onclick="openPhanQuyenModal()" class="px-3 py-1.5 bg-[#2563EB] hover:bg-blue-700 text-white font-medium text-xs rounded-xl shadow-sm transition-colors">
-                <i class="fa-solid fa-plus mr-1"></i>Thêm Quyền
-              </button>
-            </div>
-            <div class="overflow-x-auto rounded-xl border border-slate-200/80">
-              <table class="w-full text-left border-collapse text-xs">
-                <thead>
-                  <tr class="bg-slate-50 text-slate-500 text-[11px] font-bold uppercase border-b">
-                    <th class="p-3 w-16">Mã</th>
-                    <th class="p-3">Tên Vai Trò</th>
-                    <th class="p-3 text-center w-20">Nhân Sự</th>
-                    <th class="p-3 text-right w-28">Thao Tác</th>
-                  </tr>
-                </thead>
-                <tbody id="table-phanquyen-body"></tbody>
-              </table>
-            </div>
+          <!-- 2 Tab chuyển đổi rõ ràng -->
+          <div class="inline-flex items-center p-1 bg-blue-50/80 rounded-xl border border-blue-200 self-start sm:self-auto">
+            <button type="button" id="btn-tk-tab-accounts" onclick="window.switchTaiKhoanTab('accounts')" class="px-4 py-2 rounded-lg text-sm font-bold bg-blue-600 text-white shadow-xs transition-all cursor-pointer flex items-center gap-2">
+              <i class="fa-solid fa-users-gear"></i>
+              <span>Tài Khoản Đăng Nhập</span>
+            </button>
+            <button type="button" id="btn-tk-tab-roles" onclick="window.switchTaiKhoanTab('roles')" class="px-4 py-2 rounded-lg text-sm font-semibold text-slate-700 hover:text-blue-700 transition-all cursor-pointer flex items-center gap-2">
+              <i class="fa-solid fa-shield-halved"></i>
+              <span>Vai Trò & Quyền</span>
+            </button>
           </div>
         </div>
+
+        <!-- TAB 1: Quản lý Tài khoản nhân viên (Full width) -->
+        <div id="taikhoan-panel-accounts" class="bg-white rounded-2xl border border-blue-100 shadow-card-sleek p-5 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3.5">
+            <div>
+              <h3 class="font-bold text-slate-900 text-base"><i class="fa-solid fa-users-gear text-blue-600 mr-2"></i>Danh Sách Tài Khoản Đăng Nhập</h3>
+              <p class="text-xs text-slate-500 mt-0.5">Có sửa chức vụ, khóa / mở khóa, đặt lại mật khẩu, không xóa tài khoản</p>
+            </div>
+            <button onclick="openTaiKhoanModal()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-xl shadow-xs transition-colors cursor-pointer self-start sm:self-auto">
+              <i class="fa-solid fa-plus mr-1.5"></i>Tạo Tài Khoản
+            </button>
+          </div>
+          <div class="overflow-x-auto rounded-xl border border-blue-100">
+            <table class="w-full text-left border-collapse min-w-[820px]">
+              <thead>
+                <tr class="bg-blue-50 text-blue-900 text-xs font-extrabold uppercase border-b border-blue-200">
+                  <th class="p-3.5 whitespace-nowrap">Tài Khoản</th>
+                  <th class="p-3.5 whitespace-nowrap">Nhân Viên</th>
+                  <th class="p-3.5 whitespace-nowrap">Chức Vụ</th>
+                  <th class="p-3.5 text-center whitespace-nowrap">Trạng Thái</th>
+                  <th class="p-3.5 whitespace-nowrap">Ngày Tạo</th>
+                  <th class="p-3.5 min-w-[230px] text-right whitespace-nowrap">Thao Tác Nghiệp Vụ</th>
+                </tr>
+              </thead>
+              <tbody id="table-taikhoan-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB 2: Phân quyền vai trò (Full width) -->
+        <div id="taikhoan-panel-roles" class="hidden bg-white rounded-2xl border border-blue-100 shadow-card-sleek p-5 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3.5">
+            <div>
+              <h3 class="font-bold text-slate-900 text-base"><i class="fa-solid fa-shield-halved text-blue-600 mr-2"></i>Danh Sách Vai Trò & Phân Quyền</h3>
+              <p class="text-xs text-slate-500 mt-0.5">Xóa chức vụ chỉ áp dụng khi chưa có nhân viên trực thuộc</p>
+            </div>
+            <button onclick="openPhanQuyenModal()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-xl shadow-xs transition-colors cursor-pointer self-start sm:self-auto">
+              <i class="fa-solid fa-plus mr-1.5"></i>Thêm Quyền
+            </button>
+          </div>
+          <div class="overflow-x-auto rounded-xl border border-blue-100">
+            <table class="w-full text-left border-collapse min-w-[680px]">
+              <thead>
+                <tr class="bg-blue-50 text-blue-900 text-xs font-extrabold uppercase border-b border-blue-200">
+                  <th class="p-3.5 w-32 whitespace-nowrap">Mã</th>
+                  <th class="p-3.5 min-w-[260px]">Tên Vai Trò & Mô Tả</th>
+                  <th class="p-3.5 text-center w-28 whitespace-nowrap">Nhân Sự</th>
+                  <th class="p-3.5 min-w-[140px] text-right whitespace-nowrap">Thao Tác</th>
+                </tr>
+              </thead>
+              <tbody id="table-phanquyen-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <script>
+          window.switchTaiKhoanTab = function (tab) {
+            const accPanel = document.getElementById('taikhoan-panel-accounts');
+            const rolePanel = document.getElementById('taikhoan-panel-roles');
+            const btnAcc = document.getElementById('btn-tk-tab-accounts');
+            const btnRole = document.getElementById('btn-tk-tab-roles');
+            if (!accPanel || !rolePanel) return;
+
+            const activeCls = 'px-4 py-2 rounded-lg text-sm font-bold bg-blue-600 text-white shadow-xs transition-all cursor-pointer flex items-center gap-2';
+            const inactiveCls = 'px-4 py-2 rounded-lg text-sm font-semibold text-slate-700 hover:text-blue-700 transition-all cursor-pointer flex items-center gap-2';
+
+            if (tab === 'roles') {
+              accPanel.classList.add('hidden');
+              rolePanel.classList.remove('hidden');
+              if (btnAcc) btnAcc.className = inactiveCls;
+              if (btnRole) btnRole.className = activeCls;
+            } else {
+              rolePanel.classList.add('hidden');
+              accPanel.classList.remove('hidden');
+              if (btnAcc) btnAcc.className = activeCls;
+              if (btnRole) btnRole.className = inactiveCls;
+            }
+          };
+        </script>
       </section>
 
     </main>
@@ -3110,7 +3250,7 @@
   <script src="../js/api.js?v=3.6"></script>
   <script src="../js/order-signalr.js?v=1.3"></script>
   <script src="../js/auth.js?v=3.6"></script>
-  <script src="../js/admin.js?v=4.11"></script>
+  <script src="../js/admin.js?v=4.12"></script>
 
   <script>
     // Mobile sidebar toggle handler
@@ -3132,80 +3272,80 @@
   <!-- =========================================================================
        MODAL CẤU HÌNH TỰ ĐỘNG DUYỆT ĐƠN HÀNG (plan (8).md)
        ========================================================================= -->
-  <div id="modal-order-settings" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4 hidden">
-    <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-slate-200 space-y-5 animate-in fade-in zoom-in-95">
-      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-        <div class="flex items-center gap-2.5">
-          <span class="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-sm font-bold">
+  <div id="modal-order-settings" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/45 backdrop-blur-xs p-4 hidden">
+    <div class="bg-white rounded-2xl max-w-2xl w-full p-6 sm:p-7 shadow-2xl border border-blue-100 space-y-5 animate-in fade-in zoom-in-95">
+      <div class="flex items-center justify-between pb-3.5 border-b border-blue-50">
+        <div class="flex items-center gap-3">
+          <span class="w-11 h-11 rounded-xl bg-blue-50 text-blue-600 border border-blue-100 flex items-center justify-center text-base font-bold">
             <i class="fa-solid fa-sliders"></i>
           </span>
           <div>
-            <h3 class="font-bold text-slate-900 text-base">Cấu Hình Tự Động Duyệt Đơn (Engine)</h3>
-            <p class="text-xs text-slate-500">Quy tắc tự duyệt đơn hàng và bộ lọc rủi ro theo plan (8).md</p>
+            <h3 class="font-extrabold text-slate-900 text-lg sm:text-xl">Cấu Hình Tự Động Duyệt Đơn (Engine)</h3>
+            <p class="text-sm text-slate-500">Quy tắc tự duyệt đơn hàng và bộ lọc rủi ro</p>
           </div>
         </div>
-        <button onclick="closeOrderSettingsModal()" class="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 flex items-center justify-center cursor-pointer">
-          <i class="fa-solid fa-xmark text-sm"></i>
+        <button onclick="closeOrderSettingsModal()" class="w-9 h-9 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 flex items-center justify-center cursor-pointer">
+          <i class="fa-solid fa-xmark text-base"></i>
         </button>
       </div>
 
-      <div class="space-y-4 max-h-[65vh] overflow-y-auto pr-1 text-xs">
+      <div class="space-y-4 max-h-[68vh] overflow-y-auto pr-1 text-sm">
         <!-- Công tắc bật tắt -->
-        <div class="flex items-center justify-between p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+        <div class="flex items-center justify-between p-4 rounded-xl bg-blue-50/70 border border-blue-200">
           <div>
-            <div class="font-bold text-slate-800 text-sm">Công tắc tự duyệt đơn khẩn cấp</div>
-            <div class="text-slate-500 text-[11px]">Bật/Tắt tính năng tự duyệt toàn hệ thống</div>
+            <div class="font-bold text-slate-900 text-base">Công tắc tự duyệt đơn khẩn cấp</div>
+            <div class="text-slate-600 text-xs sm:text-sm mt-0.5">Bật/Tắt tính năng tự duyệt toàn hệ thống</div>
           </div>
           <label class="relative inline-flex items-center cursor-pointer">
             <input type="checkbox" id="setting-auto-enabled" class="sr-only peer" checked>
-            <div class="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+            <div class="w-12 h-7 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[3px] after:left-[3px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-[22px] after:w-[22px] after:transition-all peer-checked:bg-blue-600"></div>
           </label>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label class="block font-semibold text-slate-700 mb-1">Thời gian chờ tự duyệt COD (phút)</label>
-            <input type="number" id="setting-delay-minutes" class="w-full px-3 py-2 border border-slate-200 rounded-xl focus:border-blue-500 outline-none" value="15">
-            <span class="text-[10px] text-slate-400">Thời gian để khách có thể đổi ý/hủy trước khi xuất kho</span>
+            <label class="block text-sm font-bold text-slate-800 mb-1.5">Thời gian chờ tự duyệt COD (phút)</label>
+            <input type="number" id="setting-delay-minutes" class="w-full px-3.5 py-2.5 text-base font-semibold text-slate-900 border border-slate-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-500/15 outline-none" value="15">
+            <span class="block text-xs text-slate-500 mt-1">Thời gian để khách có thể đổi ý/hủy trước khi xuất kho</span>
           </div>
           <div>
-            <label class="block font-semibold text-slate-700 mb-1">Ngưỡng giữ lại đơn COD (VNĐ)</label>
-            <input type="number" id="setting-cod-hold" class="w-full px-3 py-2 border border-slate-200 rounded-xl focus:border-blue-500 outline-none" value="5000000">
-            <span class="text-[10px] text-slate-400">COD từ mức này chuyển Chờ xác nhận (nhân viên gọi)</span>
+            <label class="block text-sm font-bold text-slate-800 mb-1.5">Ngưỡng giữ lại đơn COD (VNĐ)</label>
+            <input type="number" id="setting-cod-hold" class="w-full px-3.5 py-2.5 text-base font-semibold text-slate-900 border border-slate-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-500/15 outline-none" value="5000000">
+            <span class="block text-xs text-slate-500 mt-1">COD từ mức này chuyển Chờ xác nhận (nhân viên gọi)</span>
           </div>
           <div>
-            <label class="block font-semibold text-slate-700 mb-1">Hạn mức COD tối đa (VNĐ)</label>
-            <input type="number" id="setting-cod-max" class="w-full px-3 py-2 border border-slate-200 rounded-xl focus:border-blue-500 outline-none" value="30000000">
-            <span class="text-[10px] text-slate-400">COD vượt mức này gắn cờ đỏ, bắt cọc/chuyển khoản</span>
+            <label class="block text-sm font-bold text-slate-800 mb-1.5">Hạn mức COD tối đa (VNĐ)</label>
+            <input type="number" id="setting-cod-max" class="w-full px-3.5 py-2.5 text-base font-semibold text-slate-900 border border-slate-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-500/15 outline-none" value="30000000">
+            <span class="block text-xs text-slate-500 mt-1">COD vượt mức này gắn cờ đỏ, bắt cọc/chuyển khoản</span>
           </div>
           <div>
-            <label class="block font-semibold text-slate-700 mb-1">Đơn tối thiểu thành khách tin cậy</label>
-            <input type="number" id="setting-min-completed" class="w-full px-3 py-2 border border-slate-200 rounded-xl focus:border-blue-500 outline-none" value="2">
-            <span class="text-[10px] text-slate-400">Số đơn hoàn thành đạt giá trị để thành khách tin cậy</span>
+            <label class="block text-sm font-bold text-slate-800 mb-1.5">Đơn tối thiểu thành khách tin cậy</label>
+            <input type="number" id="setting-min-completed" class="w-full px-3.5 py-2.5 text-base font-semibold text-slate-900 border border-slate-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-500/15 outline-none" value="2">
+            <span class="block text-xs text-slate-500 mt-1">Số đơn hoàn thành đạt giá trị để thành khách tin cậy</span>
           </div>
           <div>
-            <label class="block font-semibold text-slate-700 mb-1">Giá trị đơn tối thiểu tính tin cậy (VNĐ)</label>
-            <input type="number" id="setting-min-value" class="w-full px-3 py-2 border border-slate-200 rounded-xl focus:border-blue-500 outline-none" value="1000000">
-            <span class="text-[10px] text-slate-400">Chỉ đơn từ mức này mới tăng điểm tin cậy</span>
+            <label class="block text-sm font-bold text-slate-800 mb-1.5">Giá trị đơn tối thiểu tính tin cậy (VNĐ)</label>
+            <input type="number" id="setting-min-value" class="w-full px-3.5 py-2.5 text-base font-semibold text-slate-900 border border-slate-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-500/15 outline-none" value="1000000">
+            <span class="block text-xs text-slate-500 mt-1">Chỉ đơn từ mức này mới tăng điểm tin cậy</span>
           </div>
           <div>
-            <label class="block font-semibold text-slate-700 mb-1">Hạn mức theo đơn cũ (Bội số)</label>
-            <input type="number" id="setting-multiplier" class="w-full px-3 py-2 border border-slate-200 rounded-xl focus:border-blue-500 outline-none" value="2">
-            <span class="text-[10px] text-slate-400">Đơn tự duyệt tối đa = bội số đơn lớn nhất đã mua</span>
+            <label class="block text-sm font-bold text-slate-800 mb-1.5">Hạn mức theo đơn cũ (Bội số)</label>
+            <input type="number" id="setting-multiplier" class="w-full px-3.5 py-2.5 text-base font-semibold text-slate-900 border border-slate-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-500/15 outline-none" value="2">
+            <span class="block text-xs text-slate-500 mt-1">Đơn tự duyệt tối đa = bội số đơn lớn nhất đã mua</span>
           </div>
           <div class="sm:col-span-2">
-            <label class="block font-semibold text-slate-700 mb-1">Số lần Boom hàng để tự động Blacklist</label>
-            <input type="number" id="setting-blacklist-failed" class="w-full px-3 py-2 border border-slate-200 rounded-xl focus:border-blue-500 outline-none" value="2">
-            <span class="text-[10px] text-slate-400">Khách boom từ bấy nhiêu lần sẽ tự động bị khóa COD</span>
+            <label class="block text-sm font-bold text-slate-800 mb-1.5">Số lần Boom hàng để tự động Blacklist</label>
+            <input type="number" id="setting-blacklist-failed" class="w-full px-3.5 py-2.5 text-base font-semibold text-slate-900 border border-slate-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-500/15 outline-none" value="2">
+            <span class="block text-xs text-slate-500 mt-1">Khách boom từ bấy nhiêu lần sẽ tự động bị khóa COD</span>
           </div>
         </div>
       </div>
 
-      <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-100">
-        <button onclick="closeOrderSettingsModal()" class="px-4 py-2 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 font-semibold cursor-pointer">
+      <div class="flex items-center justify-end gap-3 pt-3.5 border-t border-slate-100">
+        <button onclick="closeOrderSettingsModal()" class="px-5 py-2.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 text-sm font-bold cursor-pointer">
           Hủy bỏ
         </button>
-        <button onclick="saveOrderSettings()" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-xs cursor-pointer flex items-center gap-1.5">
+        <button onclick="saveOrderSettings()" class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold shadow-xs cursor-pointer flex items-center gap-2">
           <i class="fa-solid fa-floppy-disk"></i> Lưu cấu hình
         </button>
       </div>
