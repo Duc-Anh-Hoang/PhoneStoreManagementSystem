@@ -88,6 +88,58 @@ public class DashboardService : IDashboardService
         decimal tongDoanhThu = Math.Max(0, grossTotal - refundTotal);
         int tongHoaDon = activeInvoices.Count;
 
+        // Chi phí nhập hàng trong kỳ (loại trừ 2 phiếu seed catalog ban đầu để không làm nhiễu số liệu nhập thực tế)
+        var pnQuery = _context.PhieuNhaps
+            .AsNoTracking()
+            .Where(p => p.SoPN != "PN_TONKHO_ALL" && p.SoPN != "PN_TONKHO_GAP");
+        if (tuNgay.HasValue)
+        {
+            pnQuery = pnQuery.Where(p => p.NgayNhap >= tuNgay.Value);
+        }
+        if (denNgay.HasValue)
+        {
+            pnQuery = pnQuery.Where(p => p.NgayNhap <= denNgay.Value);
+        }
+        var activeImports = await pnQuery
+            .Select(p => new
+            {
+                p.SoPN,
+                TongNhap = p.ChiTietPhieuNhaps.Sum(c => (decimal)c.SlNhap * c.DonGiaNhap)
+            })
+            .ToListAsync();
+        int soPhieuNhap = activeImports.Count;
+        decimal tongChiPhiNhap = activeImports.Sum(p => p.TongNhap);
+
+        // Giá vốn nhập của các sản phẩm đã bán trong kỳ (tránh âm vô lý khi hàng nhập vẫn đang tồn kho)
+        var activeSoHDs = activeInvoices.Select(h => h.SoHD).ToHashSet();
+        var avgImportCostByProduct = await _context.ChiTietPhieuNhaps
+            .AsNoTracking()
+            .GroupBy(c => c.MaHang)
+            .Select(g => new
+            {
+                MaHang = g.Key,
+                AvgCost = g.Sum(x => x.SlNhap) > 0
+                    ? g.Sum(x => (decimal)x.SlNhap * x.DonGiaNhap) / g.Sum(x => x.SlNhap)
+                    : 0m
+            })
+            .ToDictionaryAsync(x => x.MaHang, x => x.AvgCost);
+
+        var soldItemsInPeriod = await _context.ChiTietHoaDons
+            .AsNoTracking()
+            .Where(c => activeSoHDs.Contains(c.SoHD))
+            .Select(c => new { c.MaHang, c.SlBan, FallbackPrice = c.DonGiaBan })
+            .ToListAsync();
+
+        decimal cogsInPeriod = soldItemsInPeriod.Sum(item =>
+        {
+            var unitCost = avgImportCostByProduct.TryGetValue(item.MaHang, out var avg) && avg > 0
+                ? avg
+                : item.FallbackPrice * 0.8m;
+            return unitCost * item.SlBan;
+        });
+
+        decimal doanhThuTong = Math.Round(grossTotal - refundTotal - cogsInPeriod, 0, MidpointRounding.AwayFromZero);
+
         var taiQuayInvoices = activeInvoices.Where(h => h.KenhBan == "tai_quay").ToList();
         var onlineInvoices = activeInvoices.Where(h => h.KenhBan == "online").ToList();
         var taiQuayHDSet = invoices.Where(h => h.KenhBan == "tai_quay").Select(h => h.SoHD).ToHashSet();
@@ -159,6 +211,9 @@ public class DashboardService : IDashboardService
             DoanhThuGop = grossTotal,
             TongTienHoanTra = refundTotal,
             SoDonHoanTra = activeRefunds.Count,
+            TongChiPhiNhap = tongChiPhiNhap,
+            SoPhieuNhap = soPhieuNhap,
+            DoanhThuTong = doanhThuTong,
             SoHoaDonHomNay = soHoaDonHomNay,
             TongHoaDon = tongHoaDon,
             SoHoaDonTaiQuay = taiQuayInvoices.Count,

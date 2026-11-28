@@ -724,14 +724,17 @@ async function renderDashboard() {
     ]);
     if (requestId !== dashboardRequestId) return;
 
-    const totalRev = summary?.tongDoanhThu;
+    const totalRev = summary?.doanhThuGop ?? summary?.tongDoanhThu;
     const totalInvoices = summary?.tongHoaDon;
     const posRev = summary?.doanhThuTaiQuay;
     const onlineRev = summary?.doanhThuOnline;
     const posInvoicesCount = summary?.soHoaDonTaiQuay;
     const onlineInvoicesCount = summary?.soHoaDonOnline;
-    const refundAmount = summary?.tongTienHoanTra;
+    const refundAmount = summary?.tongTienHoanTra || 0;
     const refundCount = summary?.soDonHoanTra;
+    const importCost = summary?.tongChiPhiNhap || 0;
+    const importCount = summary?.soPhieuNhap || 0;
+    const netTotal = summary?.doanhThuTong ?? ((totalRev || 0) - refundAmount - importCost);
     const loadError = 'Không tải được dữ liệu';
     const formatCount = (count, unit) => typeof count === 'number'
       ? count.toLocaleString('vi-VN') + ' ' + unit
@@ -739,6 +742,25 @@ async function renderDashboard() {
 
     const revEl = document.getElementById('dash-revenue');
     if (revEl) revEl.textContent = summary ? Format.currency(totalRev) : '—';
+
+    const importEl = document.getElementById('dash-import-cost');
+    if (importEl) importEl.textContent = summary ? Format.currency(importCost) : '—';
+    const importSubEl = document.getElementById('dash-import-cost-sub');
+    if (importSubEl) {
+      importSubEl.textContent = summary
+        ? `${importCount} phiếu nhập trong kỳ`
+        : loadError;
+    }
+
+    const netEl = document.getElementById('dash-net-total');
+    if (netEl) {
+      netEl.textContent = summary ? Format.currency(netTotal) : '—';
+      netEl.className = `kpi-number text-xl sm:text-2xl font-black mt-1.5 font-mono tracking-tight truncate ${netTotal < 0 ? 'text-rose-600' : 'text-emerald-700'}`;
+    }
+    const netSubEl = document.getElementById('dash-net-total-sub');
+    if (netSubEl) {
+      netSubEl.textContent = summary ? 'Lợi nhuận sau giá vốn & trả hàng' : loadError;
+    }
 
     const revSubText = document.getElementById('dash-revenue-sub-text');
     if (revSubText) {

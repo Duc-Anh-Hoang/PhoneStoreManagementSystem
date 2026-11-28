@@ -8,6 +8,9 @@ public class DashboardSummaryDto
     public decimal DoanhThuGop { get; set; }
     public decimal TongTienHoanTra { get; set; }
     public int SoDonHoanTra { get; set; }
+    public decimal TongChiPhiNhap { get; set; }
+    public int SoPhieuNhap { get; set; }
+    public decimal DoanhThuTong { get; set; }
     public int SoHoaDonHomNay { get; set; }
     public int TongHoaDon { get; set; }
     public int SoHoaDonTaiQuay { get; set; }
