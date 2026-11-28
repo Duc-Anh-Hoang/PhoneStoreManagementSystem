@@ -734,7 +734,8 @@ async function renderDashboard() {
     const refundCount = summary?.soDonHoanTra;
     const importCost = summary?.tongChiPhiNhap || 0;
     const importCount = summary?.soPhieuNhap || 0;
-    const netTotal = summary?.doanhThuTong ?? ((totalRev || 0) - refundAmount - importCost);
+    const cogs = summary?.giaVonBanHang || 0;
+    const netTotal = summary?.doanhThuTong ?? ((totalRev || 0) - refundAmount - cogs);
     const loadError = 'Không tải được dữ liệu';
     const formatCount = (count, unit) => typeof count === 'number'
       ? count.toLocaleString('vi-VN') + ' ' + unit
@@ -759,7 +760,14 @@ async function renderDashboard() {
     }
     const netSubEl = document.getElementById('dash-net-total-sub');
     if (netSubEl) {
-      netSubEl.textContent = summary ? 'Lợi nhuận sau giá vốn & trả hàng' : loadError;
+      if (!summary) {
+        netSubEl.textContent = loadError;
+      } else {
+        netSubEl.textContent = refundAmount > 0
+          ? `Giá vốn: ${Format.currency(cogs)} · Trả: ${Format.currency(refundAmount)}`
+          : `Giá vốn hàng bán: ${Format.currency(cogs)}`;
+        netSubEl.title = `Bán ${Format.currency(totalRev)} - Giá vốn ${Format.currency(cogs)}${refundAmount > 0 ? ' - Trả ' + Format.currency(refundAmount) : ''} = ${Format.currency(netTotal)}`;
+      }
     }
 
     const revSubText = document.getElementById('dash-revenue-sub-text');

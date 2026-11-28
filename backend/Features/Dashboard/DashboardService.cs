@@ -88,10 +88,8 @@ public class DashboardService : IDashboardService
         decimal tongDoanhThu = Math.Max(0, grossTotal - refundTotal);
         int tongHoaDon = activeInvoices.Count;
 
-        // Chi phí nhập hàng trong kỳ (loại trừ 2 phiếu seed catalog ban đầu để không làm nhiễu số liệu nhập thực tế)
-        var pnQuery = _context.PhieuNhaps
-            .AsNoTracking()
-            .Where(p => p.SoPN != "PN_TONKHO_ALL" && p.SoPN != "PN_TONKHO_GAP");
+        // Tổng chi phí nhập hàng trong kỳ (khớp 100% với danh sách Phiếu Nhập Kho)
+        var pnQuery = _context.PhieuNhaps.AsNoTracking();
         if (tuNgay.HasValue)
         {
             pnQuery = pnQuery.Where(p => p.NgayNhap >= tuNgay.Value);
@@ -138,7 +136,8 @@ public class DashboardService : IDashboardService
             return unitCost * item.SlBan;
         });
 
-        decimal doanhThuTong = Math.Round(grossTotal - refundTotal - cogsInPeriod, 0, MidpointRounding.AwayFromZero);
+        decimal giaVonBanHang = Math.Round(cogsInPeriod, 0, MidpointRounding.AwayFromZero);
+        decimal doanhThuTong = grossTotal - refundTotal - giaVonBanHang;
 
         var taiQuayInvoices = activeInvoices.Where(h => h.KenhBan == "tai_quay").ToList();
         var onlineInvoices = activeInvoices.Where(h => h.KenhBan == "online").ToList();
@@ -213,6 +212,7 @@ public class DashboardService : IDashboardService
             SoDonHoanTra = activeRefunds.Count,
             TongChiPhiNhap = tongChiPhiNhap,
             SoPhieuNhap = soPhieuNhap,
+            GiaVonBanHang = giaVonBanHang,
             DoanhThuTong = doanhThuTong,
             SoHoaDonHomNay = soHoaDonHomNay,
             TongHoaDon = tongHoaDon,
